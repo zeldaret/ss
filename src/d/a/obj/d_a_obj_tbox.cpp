@@ -1152,7 +1152,7 @@ int dAcTbox_c::create() {
     mLightInfo.mClr.b = 0;
 
     mLightInfo.SetScale(0.f);
-    mLightInfo.SetPosition(position);
+    mLightInfo.SetPosition(mPosition);
     mLightInfo.mPos.y += 100.0f;
 
     return SUCCEEDED;
@@ -1218,7 +1218,7 @@ int dAcTbox_c::actorExecute() {
         v1 *= field_0x11E8;
         v2 *= field_0x11E8;
         mCcD3.Set(v1, v2);
-        mCcD3.Set(position, mRotation.y);
+        mCcD3.Set(mPosition, mRotation.y);
         mVec3_c cylC;
         f32 width, height;
         getCylParams(&cylC, &width, &height);
@@ -1280,7 +1280,7 @@ int dAcTbox_c::actorExecute() {
         v1 *= field_0x11E8;
         v2 *= field_0x11E8;
         mCcD1.Set(v1, v2);
-        mCcD1.Set(position, mRotation.y);
+        mCcD1.Set(mPosition, mRotation.y);
         if (field_0x120C == 1) {
             mCcD2.OnTgSet();
             switch ((u32)mVariant) {
@@ -1366,7 +1366,7 @@ int dAcTbox_c::actorExecuteInEvent() {
             fn_8026DAC0(a1);
             dAcPy_c *link = dAcPy_c::LINK;
             if (field_0x120B < 3) {
-                mVec3_c pos = link->position;
+                mVec3_c pos = link->mPosition;
                 f32 f9 = cLib::addCalcPosXZ(&pos, v1, 0.25, 200.0f, 0.1f);
                 s16 rot2 = link->mRotation.y;
                 s16 d = sLib::addCalcAngle(&rot2, a1, 2, 0x3FFF, 1);
@@ -1404,7 +1404,7 @@ int dAcTbox_c::actorExecuteInEvent() {
         v1 *= field_0x11E8;
         v2 *= field_0x11E8;
         mCcD3.Set(v1, v2);
-        mCcD3.Set(position, mRotation.y);
+        mCcD3.Set(mPosition, mRotation.y);
         mVec3_c cylC;
         f32 width, height;
         getCylParams(&cylC, &width, &height);
@@ -1466,7 +1466,7 @@ int dAcTbox_c::actorExecuteInEvent() {
         v1 *= field_0x11E8;
         v2 *= field_0x11E8;
         mCcD1.Set(v1, v2);
-        mCcD1.Set(position, mRotation.y);
+        mCcD1.Set(mPosition, mRotation.y);
         if (field_0x120C == 1) {
             mCcD2.OnTgSet();
             switch ((u32)mVariant) {
@@ -1599,9 +1599,9 @@ int dAcTbox_c::fn_8026B370() const {
 
 void dAcTbox_c::fn_8026B380(mVec3_c &out) const {
     if (mVariant == BOSS) {
-        out.x = position.x;
-        out.y = position.y;
-        out.z = position.z;
+        out.x = mPosition.x;
+        out.y = mPosition.y;
+        out.z = mPosition.z;
     } else {
         fn_8026DAD0(&sVec1, &out);
     }
@@ -2369,14 +2369,14 @@ void dAcTbox_c::unregisterDowsing() {
 
 void dAcTbox_c::spawnAppearEffect() {
     dJEffManager_c::spawnEffect(
-        PARTICLE_RESOURCE_ID_MAPPING_208_, position, &mRotation, nullptr, nullptr, nullptr, 0, 0
+        PARTICLE_RESOURCE_ID_MAPPING_208_, mPosition, &mRotation, nullptr, nullptr, nullptr, 0, 0
     );
 }
 
 bool dAcTbox_c::checkIsClear() const {
     f32 fs[] = {
-        position.y,
-        position.y,
+        mPosition.y,
+        mPosition.y,
     };
     fs[0] += 20.0f;
     fs[1] += 60.0f;
@@ -2631,7 +2631,7 @@ bool dAcTbox_c::checkForLinkBonk() {
     }
 
     mVec3_c linkPos;
-    PSMTXMultVec(mCcD3.mInvMtx, link->position, linkPos);
+    PSMTXMultVec(mCcD3.mInvMtx, link->mPosition, linkPos);
     mVec3_c ccLo, ccHi;
     getCCBounds(&ccLo, &ccHi);
     // Math performed in local coordinate space
@@ -2669,7 +2669,7 @@ bool dAcTbox_c::checkForLinkBonk() {
 
 void dAcTbox_c::fn_8026E630() {
     mVec3_c offset = mVec3_c::Ey * 10.0f;
-    mVec3_c checkPos = position + offset;
+    mVec3_c checkPos = mPosition + offset;
     // TODO reference vs pointer
     if (dBgS_ObjGndChk::CheckPos(checkPos) && &dBgS_ObjGndChk::GetInstance()) {
         cBgS_PolyInfo p = dBgS_ObjGndChk::GetInstance();

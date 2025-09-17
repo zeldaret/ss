@@ -39,7 +39,7 @@ int dAcOfenceBoko_c::doDelete() {
 int dAcOfenceBoko_c::actorExecute() {
     // Putting these in a single if fails to match ;-;
     if (!field_0x560) {
-        if (dBgS_ObjGndChk::CheckPos(position + mVec3_c::Ey * 100.f)) {
+        if (dBgS_ObjGndChk::CheckPos(mPosition + mVec3_c::Ey * 100.f)) {
             mCollision.mRoomId = dBgS_ObjGndChk::GetRoomID();
             roomid = mCollision.mRoomId;
             field_0x560 = true;

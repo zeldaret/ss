@@ -17,7 +17,7 @@ int dTgSwArea_c::create() {
     mRotation.x = 0;
     mRotation.z = 0;
 
-    matrixCreateFromPosRotYScale(area, position, mRotation.y, mScale, nullptr, 0.0f);
+    matrixCreateFromPosRotYScale(area, mPosition, mRotation.y, mScale, nullptr, 0.0f);
     return SUCCEEDED;
 }
 
@@ -32,7 +32,7 @@ bool isValidStoryFlag(u16 storyflag) {
 }
 
 int dTgSwArea_c::actorExecute() {
-    if (checkIfVec3fInMatrix(area, dAcPy_c::LINK->position)) {
+    if (checkIfVec3fInMatrix(area, dAcPy_c::LINK->mPosition)) {
         SceneflagManager::sInstance->setFlag(roomid, setSceneflag);
         SceneflagManager::sInstance->unsetFlag(roomid, unsetSceneflag);
 
@@ -46,12 +46,12 @@ int dTgSwArea_c::actorExecute() {
 
         if (scale < 1.0f) {
             scale = 50.0f;
-            matrixCreateFromPosRotYScale(area, position, mRotation.y, mScale, nullptr, scale);
+            matrixCreateFromPosRotYScale(area, mPosition, mRotation.y, mScale, nullptr, scale);
         }
     } else {
         if (scale > 1.0f) {
             scale = 0.0f;
-            matrixCreateFromPosRotYScale(area, position, mRotation.y, mScale, nullptr, scale);
+            matrixCreateFromPosRotYScale(area, mPosition, mRotation.y, mScale, nullptr, scale);
         }
 
         if (isTemporary) {

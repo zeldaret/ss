@@ -123,9 +123,9 @@ int dAcEsm_c::actorCreate() {
         field_0xB78 = 200.f * field_0xB78;
     }
 
-    mStartingPos.set(position.x, position.y, position.z);
-    mHomePos1.set(position.x, position.y, position.z);
-    mEffPos.set(position.x, position.y, position.z);
+    mStartingPos.set(mPosition.x, mPosition.y, mPosition.z);
+    mHomePos1.set(mPosition.x, mPosition.y, mPosition.z);
+    mEffPos.set(mPosition.x, mPosition.y, mPosition.z);
 
     CREATE_ALLOCATOR(dAcEsm_c);
 
@@ -172,9 +172,9 @@ int dAcEsm_c::actorCreate() {
 
     mSph.SetStts(mStts);
 
-    position.CopyTo(poscopy2);
-    position.CopyTo(mPosCopy1);
-    position.CopyTo(poscopy3);
+    mPosition.CopyTo(poscopy2);
+    mPosition.CopyTo(mPosCopy1);
+    mPosition.CopyTo(poscopy3);
     poscopy3.y += 50.f;
 
     mRotCopy.set(mRotation);
@@ -223,8 +223,8 @@ int dAcEsm_c::actorCreate() {
         forwardAccel = -3.f;
     }
     calcVelocity();
-    position += velocity;
-    position += mStts.GetCcMove();
+    mPosition += velocity;
+    mPosition += mStts.GetCcMove();
 
     mObjAcch.CrrPos(*dBgS::GetInstance());
     fn_187_4CC0();
@@ -416,8 +416,8 @@ int dAcEsm_c::actorExecute() {
 
                 // TODO: Maybe Inline - Common Pattern. Check GetCcMove
                 calcVelocity();
-                position += velocity;
-                position += mStts.GetCcMove();
+                mPosition += velocity;
+                mPosition += mStts.GetCcMove();
 
                 mObjAcch.CrrPos(*dBgS::GetInstance());
                 fn_187_44C0();
@@ -468,8 +468,8 @@ int dAcEsm_c::actorExecute() {
 
     if (0 == sLib::calcTimer(&mTimer_0xBC4)) {
         calcVelocity();
-        position += velocity;
-        position += mStts.GetCcMove();
+        mPosition += velocity;
+        mPosition += mStts.GetCcMove();
     }
 
     if (!mStateMgr.isState(StateID_Absorption)) {
@@ -657,8 +657,8 @@ int dAcEsm_c::actorExecute() {
 
     MTXMultVec(nodeMtx, center, mHomePos1);
 
-    position.CopyTo(poscopy3);
-    position.CopyTo(poscopy2);
+    mPosition.CopyTo(poscopy3);
+    mPosition.CopyTo(poscopy2);
     poscopy2.y += 130.f * mScaleTarget.y;
     poscopy3.y += 260.f * mScaleTarget.y;
 
@@ -725,7 +725,7 @@ int dAcEsm_c::draw() {
 
     s8 var = 0;
     mQuat_c q(mVec3_c(0.f, 50.f, 0.f), mScale.x * (var + 240.f));
-    drawShadow(mShadowCircle, nullptr, mWorldMtx, &q, -1, -1, -1, -1, -1, position.y - mObjAcch.GetGroundH());
+    drawShadow(mShadowCircle, nullptr, mWorldMtx, &q, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     return SUCCEEDED;
 }
 
@@ -754,7 +754,7 @@ void dAcEsm_c::initializeState_Walk() {
 
     endPos.y += 10.f;
     if (dBgS_ObjLinChk::LineCross(&mHomePos1, &endPos, nullptr)) {
-        mStartingPos.set(position.x, position.y, position.z);
+        mStartingPos.set(mPosition.x, mPosition.y, mPosition.z);
     }
 
     if (mType == SM_YELLOW) {
@@ -854,8 +854,8 @@ void dAcEsm_c::fn_187_3F60() {
 }
 
 bool dAcEsm_c::fn_187_4090() {
-    mVec3_c pos(position.x, position.y + 20.f, position.z);
-    if (velocity.y <= 0.f && dBgS_ObjGndChk::CheckPos(pos) && dBgS_ObjGndChk::GetGroundHeight() + 5.f > position.y) {
+    mVec3_c pos(mPosition.x, mPosition.y + 20.f, mPosition.z);
+    if (velocity.y <= 0.f && dBgS_ObjGndChk::CheckPos(pos) && dBgS_ObjGndChk::GetGroundHeight() + 5.f > mPosition.y) {
         forwardSpeed = 0.f;
         field_0xB6C = 1.5f;
         if (field_0xB84) {
@@ -870,7 +870,7 @@ bool dAcEsm_c::fn_187_4090() {
         startSound(SE_ESm_LAND);
 
         if (field_0xBA0 == 0) {
-            if (fn_800301b0(position, mRotation.y, true, 10.f) == 3 /* TODO: Enum?*/) {
+            if (fn_800301b0(mPosition, mRotation.y, true, 10.f) == 3 /* TODO: Enum?*/) {
                 int code = dBgS::GetInstance()->GetSpecialCode(dBgS_ObjGndChk::GetInstance());
                 if (code != POLY_ATTR_SAND_SHALLOW && code != POLY_ATTR_SAND_MED) {
                     mHealth = 0;
@@ -889,9 +889,9 @@ void dAcEsm_c::fn_187_4200() {
     if (mType == SM_BLUE || field_0xBCC != 0 | field_0xBA0 != 0) {
         return;
     }
-    mVec3_c pos(position.x, position.y + 20.f, position.z);
+    mVec3_c pos(mPosition.x, mPosition.y + 20.f, mPosition.z);
 
-    if (dBgS_ObjGndChk::CheckPos(pos) && position.y - dBgS_ObjGndChk::GetGroundHeight() >= 700.f) {
+    if (dBgS_ObjGndChk::CheckPos(pos) && mPosition.y - dBgS_ObjGndChk::GetGroundHeight() >= 700.f) {
         if (field_0xBA0 == 0) {
             field_0xBA0 = 1;
         }
@@ -969,7 +969,7 @@ void dAcEsm_c::fn_187_4540(int param0) {
         mScaleTarget *= 0.5f;
         mScale *= 0.5f;
 
-        rot.y = (s16)cLib::targetAngleY(position, player->position) + cM::rndFX(1024.f);
+        rot.y = (s16)cLib::targetAngleY(mPosition, player->mPosition) + cM::rndFX(1024.f);
 
         if (field_0xB98 != 2) {
             rot.y = fn_187_5150(false);
@@ -979,7 +979,7 @@ void dAcEsm_c::fn_187_4540(int param0) {
         mVec3_c spawnPos;
         mHitPos.CopyTo(spawnPos);
         if (field_0xB98 == 1 || field_0xB98 == 2) {
-            position.CopyTo(spawnPos);
+            mPosition.CopyTo(spawnPos);
         }
 
         f32 scale = 0.9999f;
@@ -1132,7 +1132,7 @@ void dAcEsm_c::fn_187_4CC0() {
     sLib::addCalcAngle(mRotUnk.x.ref(), mTargetRotX, 4, 0x800);
     sLib::addCalcAngle(mRotUnk.z.ref(), mTargetRotZ, 4, 0x800);
 
-    mWorldMtx.transS(position.x, position.y, position.z);
+    mWorldMtx.transS(mPosition.x, mPosition.y, mPosition.z);
     mWorldMtx.XrotM(mRotUnk.x);
     mWorldMtx.ZrotM(mRotUnk.z);
     mWorldMtx.ZXYrotM(mRotation.x, mRotation.y, mRotation.z);
@@ -1329,7 +1329,7 @@ void dAcEsm_c::fn_187_61B0(u8 param0) {
         } break;
         case 3: {
             mMtx_c mtx_scale;
-            MTXTrans(mtx_trans, position.x, position.y, position.z);
+            MTXTrans(mtx_trans, mPosition.x, mPosition.y, mPosition.z);
             MTXScale(mtx_scale, mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
             mtx_trans += mtx_scale;
 
@@ -1350,7 +1350,7 @@ void dAcEsm_c::fn_187_61B0(u8 param0) {
         } break;
         case 4: {
             mMtx_c mtx_scale;
-            MTXTrans(mtx_trans, position.x, position.y, position.z);
+            MTXTrans(mtx_trans, mPosition.x, mPosition.y, mPosition.z);
             mtx_trans.YrotM(mRotation.y);
             MTXScale(mtx_scale, mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
             mtx_trans += mtx_scale;

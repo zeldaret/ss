@@ -250,14 +250,14 @@ void dAcOivyRope_c::executeState_RopeCut() {
         mStateMgr.changeState(StateID_PlayerGrip);
     } else {
         if (mField_0xFCE != 0 && --mField_0xFCE == 0) {
-            position = mTightropeEnd;
+            mPosition = mTightropeEnd;
         }
         fn_256_8590();
         fn_256_C740();
     }
 }
 void dAcOivyRope_c::finalizeState_RopeCut() {
-    position = mTightropeEnd;
+    mPosition = mTightropeEnd;
     mField_0xFCE = 0;
 }
 
@@ -442,7 +442,7 @@ void dAcOivyRope_c::fn_256_AE00() {
 
             m.getTranslation(mPnts2[i]);
             mVec3_c tmp = mPnts2[i];
-            mVec3_c tmp2 = tmp - position;
+            mVec3_c tmp2 = tmp - mPosition;
 
             m.copyFrom(mWorldMtx);
             m.YrotM(mField_0xFDC);
@@ -653,7 +653,7 @@ f32 dAcOivyRope_c::fn_256_C200(int ang) {
 void dAcOivyRope_c::fn_256_C410() {
     fn_256_3E70();
     if (mStateMgr.isState(StateID_RopeReturn)) {
-        mVec3_c diff = dAcPy_c::GetLink()->position - mTightropeEnd;
+        mVec3_c diff = dAcPy_c::GetLink()->mPosition - mTightropeEnd;
         if (diff.squareMagXZ() > 90000.f) {
             return;
         }
@@ -664,8 +664,8 @@ void dAcOivyRope_c::fn_256_C410() {
     }
 
     int count = mSegmentCount - 9;
-    f32 f2 = dAcPy_c::GetLink()->position.y - 100.f;
-    f32 f = 150.f + dAcPy_c::GetLink()->position.y;
+    f32 f2 = dAcPy_c::GetLink()->mPosition.y - 100.f;
+    f32 f = 150.f + dAcPy_c::GetLink()->mPosition.y;
     if (count < 0) {
         count = 0;
     }
@@ -689,7 +689,7 @@ void dAcOivyRope_c::fn_256_C740() {
     const f32 f2 = (1.f - mField_0x1040) * 4.f + 1.1f;
     if (mField_0xFA4 <= f2) {
         const mVec3_c &pnt = fn_256_D730(mSegmentCount - 1);
-        const mVec3_c diff = pnt - dAcPy_c::GetLink()->position;
+        const mVec3_c diff = pnt - dAcPy_c::GetLink()->mPosition;
         const f32 diffmag = diff.squareMagXZ();
         if (diffmag < 28900.f) {
             fn_256_C980(450.f, 200.f);
@@ -721,7 +721,7 @@ void dAcOivyRope_c::fn_256_C980(f32 f0, f32 f1) {
 UNKTYPE dAcOivyRope_c::fn_256_C9B0(UNKTYPE) {}
 
 void dAcOivyRope_c::fn_256_CD40() {
-    position = poscopy3 = poscopy2 = fn_256_D730(mSegmentCount - 1);
+    mPosition = poscopy3 = poscopy2 = fn_256_D730(mSegmentCount - 1);
 
     mCps1.Set(sCpsSrc);
     mCps1.SetStts(mStts);
@@ -729,9 +729,9 @@ void dAcOivyRope_c::fn_256_CD40() {
 
     mCps1.SetTgInfo_0x1(0xB);
 
-    mVec3_c tmp = position;
+    mVec3_c tmp = mPosition;
     tmp.y -= 50.f;
-    mCps1.cM3dGLin::Set(position, tmp);
+    mCps1.cM3dGLin::Set(mPosition, tmp);
 
     mCps1.OnTg_0x200000();
 }
@@ -832,7 +832,7 @@ void dAcOivyRope_c::fn_256_D2B0() {
 }
 
 void dAcOivyRope_c::fn_256_D3D0(mVec3_c &pOut1, mVec3_c &pOut2, s16 param2, bool bool0, f32 float0) {
-    mVec3_c playerPos = dAcPy_c::GetLink()->position;
+    mVec3_c playerPos = dAcPy_c::GetLink()->mPosition;
     mVec3_c playerCenter = dAcPy_c::GetLink()->getCenterTranslation();
 
     if (bool0) {

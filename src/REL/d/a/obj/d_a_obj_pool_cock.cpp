@@ -49,8 +49,8 @@ int dAcOPoolCock_c::doDelete() {
 int dAcOPoolCock_c::actorExecute() {
     mStateMgr.executeState();
     calcVelocity();
-    position += velocity;
-    position += mStts.mCcMove;
+    mPosition += velocity;
+    mPosition += mStts.mCcMove;
     updateMatrix();
 
     mMtx_c mdl1Transform(mWorldMtx);

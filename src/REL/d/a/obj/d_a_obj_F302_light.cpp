@@ -106,8 +106,8 @@ void dAcOF302Light_c::finalizeState_Wait() {}
 
 void dAcOF302Light_c::initializeState_SwitchOn() {
     mMdl.setAnm(mAnmMatClr[1]);
-    mTimeArea.check(roomid, position, 0, 30.f, 0.1f);
-    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position)) {
+    mTimeArea.check(roomid, mPosition, 0, 30.f, 0.1f);
+    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, mPosition)) {
         mAnmMatClr[1].setRate(1.f, 0);
         mAnmMatClr[1].setFrame(40.f, 0);
     } else {
@@ -116,8 +116,8 @@ void dAcOF302Light_c::initializeState_SwitchOn() {
 }
 
 void dAcOF302Light_c::executeState_SwitchOn() {
-    mTimeArea.check(roomid, position, 0, 30.f, 0.1f);
-    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position)) {
+    mTimeArea.check(roomid, mPosition, 0, 30.f, 0.1f);
+    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, mPosition)) {
         mAnmMatClr[1].setRate(1.f, 0);
     } else {
         if (mAnmMatClr[1].getFrame(0) == 0.f) {

@@ -18,7 +18,7 @@ int dTgTouchTag::create() {
     mActivatorIndex = !(getActivatorIndex() == 0xF) ? getActivatorIndex() : 0;
     mZoneFlag = getZoneFlag();
     mChkFlag = getChkFlag();
-    matrixCreateFromPosRotYScale(mAreaOfEffect, position, mRotation.y, mScale, nullptr, 0.0f);
+    matrixCreateFromPosRotYScale(mAreaOfEffect, mPosition, mRotation.y, mScale, nullptr, 0.0f);
     mStateMgr.changeState(StateID_Wait);
     return SUCCEEDED;
 }
@@ -48,7 +48,7 @@ void dTgTouchTag::executeState_Wait() {
     dAcBase_c *actor = static_cast<dAcBase_c *>(fManager_c::searchBaseByProfName(ACTIVATORS[mActivatorIndex], nullptr));
 
     while (actor != nullptr) {
-        if (actor->roomid == roomid && checkIfVec3fInMatrix(mAreaOfEffect, actor->position)) {
+        if (actor->roomid == roomid && checkIfVec3fInMatrix(mAreaOfEffect, actor->mPosition)) {
             mFlagTimer = 5;
             if (mZoneFlag != 0xFF) {
                 SceneflagManager::sInstance->setFlag(roomid, mZoneFlag);

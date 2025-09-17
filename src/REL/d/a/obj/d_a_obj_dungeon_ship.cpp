@@ -176,7 +176,7 @@ int dAcODungeonShip_c::actorExecute() {
     // I hate whatever this stupid pattern in actors is with
     // redundant casts and adding 0.0f to stuff
     int tempZero = 0;
-    mVec3_c offsetPosition(position.x, position.y + 1200.0f + tempZero, position.z);
+    mVec3_c offsetPosition(mPosition.x, mPosition.y + 1200.0f + tempZero, mPosition.z);
 
     f32 scale = tempZero + 2100.0f;
     mVec3_c directedScale = mVec3_c::Ex * scale;
@@ -191,7 +191,7 @@ int dAcODungeonShip_c::actorExecute() {
     mMdl.calc(false);
     if (field_0x8D8) {
         mEffects[0].createContinuousEffect(
-            PARTICLE_RESOURCE_ID_MAPPING_682_, position, &mRotation, nullptr, nullptr, nullptr
+            PARTICLE_RESOURCE_ID_MAPPING_682_, mPosition, &mRotation, nullptr, nullptr, nullptr
         );
     }
 
@@ -281,8 +281,8 @@ void dAcODungeonShip_c::executeState_Transparency() {
         // f32 distToLink = getSquareDistanceTo(link->position);
         f32 dist2 = 100000000.0f;
         f32 dist1 = 225000000.0f;
-        bool isWithinDist2 = getSquareDistanceTo(link->position) < dist2;
-        bool isWithinDist1 = getSquareDistanceTo(link->position) < dist1;
+        bool isWithinDist2 = getSquareDistanceTo(link->mPosition) < dist2;
+        bool isWithinDist1 = getSquareDistanceTo(link->mPosition) < dist1;
         s32 tmp1 = fn_485_1960();
         bool tmp2 = tmp1 < 0x1555;
         if (isWithinDist1 && field_0x868 == 0 && field_0x862 == 0 && tmp2) {
@@ -370,7 +370,7 @@ void dAcODungeonShip_c::executeState_AppearEvent() {
                         }
                         mVec3_c vec;
                         if (mEvent.getSingleVecData(&vec, 'pos0', 0) == 1) {
-                            position = vec;
+                            mPosition = vec;
                         }
                         field_0x8D8 = 0;
                     }
@@ -431,7 +431,7 @@ void dAcODungeonShip_c::fn_485_1660() {
     field_0x856 = 1;
     if (mPath.init(mPathIdx, roomid, 0, 0, false, time, speed, unk)) {
         mPath.setSegment(0, time);
-        position = mPath.getPosition();
+        mPosition = mPath.getPosition();
         mOldPosition = mPath.getPosition();
     }
 }
@@ -443,7 +443,7 @@ void dAcODungeonShip_c::fn_485_1720() {
     mPath.setSpeed(forwardSpeed);
     mPath.execute();
     // TODO
-    position = mPath.getPosition();
+    mPosition = mPath.getPosition();
 
     mVec3_c tmp;
     mPath.getDirection(tmp);
@@ -479,7 +479,7 @@ u32 dAcODungeonShip_c::fn_485_1960() {
     }
     mVec3_c v = mVec3_c::Ez;
     v.rotY(angle.y + mAng(-0x4000));
-    mVec3_c dist = link->position - position;
+    mVec3_c dist = link->mPosition - mPosition;
     dist.y = 0.0f;
     dist.normalizeRS();
     s16 a1 = cLib::targetAngleY(mVec3_c::Zero, v);
@@ -507,7 +507,7 @@ void dAcODungeonShip_c::fn_485_1DF0() {
     const dAcPy_c *link = dAcPy_c::GetLink();
     if (link != nullptr) {
         // unused, stack problems
-        mVec3_c dist = position - link->position;
+        mVec3_c dist = mPosition - link->mPosition;
         fn_485_1960();
         field_0x858 = 30.0f;
         sLib::addCalc(&forwardSpeed, 30.0f, 0.02f, 1.0f, 0.1f);

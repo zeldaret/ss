@@ -197,7 +197,7 @@ int dAcOChair_c::draw() {
 void dAcOChair_c::initializeState_Wait() {}
 
 void dAcOChair_c::executeState_Wait() {
-    const f32 height_diff = position.y - dAcPy_c::GetLink()->position.y;
+    const f32 height_diff = mPosition.y - dAcPy_c::GetLink()->mPosition.y;
     if (!isBench() || (50.f < height_diff && height_diff < 60.f)) {
         if (field_0xB1A && field_0xB1B) {
             if (dAcPy_c::GetLink()->checkActionFlagsCont(0x1000)) {
@@ -244,7 +244,7 @@ dAcOChair_c::ChairType dAcOChair_c::getChairType(u8 &param) {
 void dAcOChair_c::updateChairPos() {
     if (mChairType != CHAIR_E) {
         if (isBench()) {
-            poscopy2 = position;
+            poscopy2 = mPosition;
         } else {
             mMdl.getNodeWorldMtxMultVecZero(mSeatNodeID, poscopy2);
         }
@@ -256,7 +256,7 @@ void dAcOChair_c::updateChairPos() {
             work.rotY(getRelativeYRotationToPlayer());
             work.z = 0.f;
             work.rotY(mRotation.y);
-            poscopy2 = position;
+            poscopy2 = mPosition;
             if (work.squareMagXZ() < 10000.f) {
                 poscopy2 += work;
             } else {

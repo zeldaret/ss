@@ -60,10 +60,10 @@ extern const u16 PARTICLE_RESOURCE_ID_MAPPING_967_;
 int dAcOtriforce_c::actorExecute() {
     int zero = 0;
     mVec3_c offset = mVec3_c::Ey * (mStartingOffset.sin() * getBounceScalar());
-    position = mStartingPos + offset;
+    mPosition = mStartingPos + offset;
     mStartingOffset.mVal += 0x16C;
 
-    mCollision.SetC(position.x, position.y + 90.0f + zero, position.z);
+    mCollision.SetC(mPosition.x, mPosition.y + 90.0f + zero, mPosition.z);
 
     dCcS::GetInstance()->Set(&mCollision);
     updateMatrix();

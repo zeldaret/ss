@@ -124,8 +124,8 @@ int dAcOtubo_c::actorPostCreate() {
 
         setActorProperty(0x4);
 
-        if (dBgS_ObjGndChk ::CheckPos(position + mVec3_c::Ey * 50.f)) {
-            position.y = dBgS_ObjGndChk::GetGroundHeight();
+        if (dBgS_ObjGndChk ::CheckPos(mPosition + mVec3_c::Ey * 50.f)) {
+            mPosition.y = dBgS_ObjGndChk::GetGroundHeight();
         }
     }
 
@@ -142,8 +142,8 @@ int dAcOtubo_c::actorExecute() {
     if (mTimer_0x9F4 != 0) {
         mField_0x9DC = 0.f;
 
-        if (dBgS_ObjGndChk::CheckPos(position + mVec3_c::Ey * 500.f)) {
-            if (dBgS_ObjGndChk::GetGroundHeight() - position.y > 5.f) {
+        if (dBgS_ObjGndChk::CheckPos(mPosition + mVec3_c::Ey * 500.f)) {
+            if (dBgS_ObjGndChk::GetGroundHeight() - mPosition.y > 5.f) {
                 bOffGround = true;
                 mSph.ClrTgSet();
             } else if (sLib::calcTimer(&mTimer_0x9F4) == 0) {
@@ -162,9 +162,9 @@ int dAcOtubo_c::actorExecute() {
     if (!bOffGround) {
         if (!checkCarryType()) {
             calcVelocity();
-            position += velocity;
-            position += mStts.GetCcMove();
-            mField_0x9DC += position.y - mOldPosition.y;
+            mPosition += velocity;
+            mPosition += mStts.GetCcMove();
+            mField_0x9DC += mPosition.y - mOldPosition.y;
             adjustRoll();
         }
         GetLinkage().bushTpFunc(mObjAcch);
@@ -182,7 +182,7 @@ int dAcOtubo_c::actorExecute() {
 
     mMdl.setLocalMtx(mWorldMtx);
     mMdl.calc(false);
-    poscopy2 = position + mVec3_c(0.f, 28.f, 0.f);
+    poscopy2 = mPosition + mVec3_c(0.f, 28.f, 0.f);
     poscopy3 = poscopy2;
     poscopy3.y += 48.f;
     mbField_0x9EB = 0;
@@ -204,7 +204,7 @@ int dAcOtubo_c::draw() {
     static mQuat_c quat(0.f, 30.f, 0.f, 40.f);
 
     if (yoffset >= 0.f) {
-        drawShadow(mShdw, nullptr, mWorldMtx, &quat, -1, -1, -1, -1, -1, position.y - mObjAcch.GetGroundH());
+        drawShadow(mShdw, nullptr, mWorldMtx, &quat, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     }
     return SUCCEEDED;
 }
@@ -214,7 +214,7 @@ void dAcOtubo_c::executeState_Wait() {
     if (mObjAcch.ChkGroundLanding()) {
         if (!mbField_0x9EF || !EventManager::isInEvent()) {
             if (mField_0x9F6 == 2) {
-                dJEffManager_c::spawnGroundEffect(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+                dJEffManager_c::spawnGroundEffect(mPosition, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
             }
             if (mbField_0x9F3) {
                 startSound(SE_Tubo_PUT);
@@ -223,7 +223,7 @@ void dAcOtubo_c::executeState_Wait() {
             if (checkOnLava()) {
                 if (mField_0x9F6 != 2) {
                     dJEffManager_c::spawnGroundEffect(
-                        position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0
+                        mPosition, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0
                     );
                 }
                 startSound(SE_O_FALL_LAVA_S);
@@ -334,11 +334,11 @@ void dAcOtubo_c::executeState_Put() {
     }
 }
 void dAcOtubo_c::finalizeState_Put() {
-    if (dBgS_ObjGndChk::CheckPos(position + mVec3_c::Ey * 10.f)) {
-        mbField_0x9F3 = nw4r::math::FAbs(position.y - dBgS_ObjGndChk::GetGroundHeight()) < 100.f;
+    if (dBgS_ObjGndChk::CheckPos(mPosition + mVec3_c::Ey * 10.f)) {
+        mbField_0x9F3 = nw4r::math::FAbs(mPosition.y - dBgS_ObjGndChk::GetGroundHeight()) < 100.f;
     }
-    if (!(dBgS_ObjGndChk::CheckPos(position + mVec3_c::Ey * 10.f) &&
-          nw4r::math::FAbs(position.y - dBgS_ObjGndChk::GetGroundHeight()) < 100.f)) {
+    if (!(dBgS_ObjGndChk::CheckPos(mPosition + mVec3_c::Ey * 10.f) &&
+          nw4r::math::FAbs(mPosition.y - dBgS_ObjGndChk::GetGroundHeight()) < 100.f)) {
         mSph.OnAtSet();
     }
     forwardSpeed = 0.f;
@@ -357,7 +357,7 @@ void dAcOtubo_c::initializeState_Slope() {
 }
 void dAcOtubo_c::executeState_Slope() {
     if (mObjAcch.ChkGroundLanding()) {
-        dJEffManager_c::spawnGroundEffect(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
     } else if (mObjAcch.ChkGndHit()) {
         mField_0x9DC = 0.f;
         addPickupTarget();
@@ -388,8 +388,8 @@ void dAcOtubo_c::finalizeState_Slope() {}
 
 void dAcOtubo_c::initializeState_Rebirth() {
     SpecialItemDropMgr *mgr = SpecialItemDropMgr::GetInstance();
-    mgr->giveSpecialDropItem(getParams2UpperByte(), roomid, &position, 0, mRotation.y, -1);
-    mField_0x9AC = position;
+    mgr->giveSpecialDropItem(getParams2UpperByte(), roomid, &mPosition, 0, mRotation.y, -1);
+    mField_0x9AC = mPosition;
     obj_pos = &mField_0x9AC;
     mField_0x9F6 = 0;
     mRotation = rot_copy;
@@ -435,7 +435,7 @@ void dAcOtubo_c::executeState_Rebirth() {
 void dAcOtubo_c::finalizeState_Rebirth() {
     mSph.OnCoSet();
     mSph.OnTgSet();
-    obj_pos = &position;
+    obj_pos = &mPosition;
     clearObjectProperty(0x200);
     setActorProperty(0x1);
 }
@@ -451,7 +451,7 @@ void dAcOtubo_c::destroy() {
     if (!boolParam) {
         return;
     }
-    fn_80022BE0(dLightEnv_c::GetPInstance(), position);
+    fn_80022BE0(dLightEnv_c::GetPInstance(), mPosition);
     GetLinkage().fn_80050EA0(this);
 
     dEmitterBase_c *fx_thing = dJEffManager_c::spawnEffect(
@@ -461,7 +461,7 @@ void dAcOtubo_c::destroy() {
         fx_thing->attachEmitterCallbackId(mSubtype != 0 ? dJEffManager_c::TsuboB : dJEffManager_c::TsuboA);
     }
     fx_thing = dJEffManager_c::spawnEffect(
-        PARTICLE_RESOURCE_ID_MAPPING_116_, position, nullptr, nullptr, nullptr, nullptr, 0, 0
+        PARTICLE_RESOURCE_ID_MAPPING_116_, mPosition, nullptr, nullptr, nullptr, nullptr, 0, 0
     );
     if (fx_thing) {
         fx_thing->bindShpEmitter(mSubtype != 0 ? dJEffManager_c::TsuboB : dJEffManager_c::TsuboA, false);
@@ -484,7 +484,7 @@ void dAcOtubo_c::calcRoll() {
     bool onLog = checkOnLog_0xE4E();
     if (mbMovingForward || onLog) {
         if (onLog) {
-            velocity = position - mOldPosition;
+            velocity = mPosition - mOldPosition;
             forwardSpeed = EGG::Math<f32>::sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
             angle.y = cM::atan2s(velocity.x, velocity.z);
         }
@@ -540,7 +540,7 @@ void dAcOtubo_c::adjustRoll() {
         mField_0x9D8 *= 0.75f;
     }
 
-    position += vel;
+    mPosition += vel;
 }
 
 void dAcOtubo_c::fn_272_2670() {
@@ -683,13 +683,13 @@ mVec3_c dAcOtubo_c::getCenter() const {
     mVec3_c dir;
     PSMTXMultVecSR(m, mVec3_c::Ey, dir);
 
-    return position + dir * 28.f;
+    return mPosition + dir * 28.f;
 }
 
 void dAcOtubo_c::fn_272_2E60(const mVec3_c &vel) {
     if (mField_0x8F0.fn_80051780(mSph)) {
         if (mSph.ChkCoHit()) {
-            position += mStts.GetCcMove();
+            mPosition += mStts.GetCcMove();
             mField_0x8F0.fn_800051630();
         }
         forwardSpeed = 0.f;
@@ -809,7 +809,7 @@ bool dAcOtubo_c::checkCarryType() const {
 }
 
 bool dAcOtubo_c::checkSubmerged() {
-    return mObjAcch.ChkWaterIn() && position.y + 28.f < mObjAcch.mWtr.GetGroundH();
+    return mObjAcch.ChkWaterIn() && mPosition.y + 28.f < mObjAcch.mWtr.GetGroundH();
 }
 
 bool dAcOtubo_c::fn_272_38A0() {

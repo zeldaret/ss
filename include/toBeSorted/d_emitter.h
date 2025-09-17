@@ -198,11 +198,11 @@ private:
     }
 
     f32 getActorGroundPos(dAcObjBase_c *obj) const {
-        return obj->position.y + mDepth;
+        return obj->mPosition.y + mDepth;
     }
 
     f32 getActorCeilPos(dAcObjBase_c *obj) const {
-        return obj->position.y + mHeight;
+        return obj->mPosition.y + mHeight;
     }
 
 public:

@@ -176,7 +176,7 @@ int dAcOTowerHandD101_c::actorPostCreate() {
     dAcObjBase_c *ac = dAcObjBase_c::getNextObject(&dAcItem_c::sItemList, nullptr);
     f32 distLimit = 90000.0f;
     while (handClosed && ac != nullptr) {
-        if (PSVECSquareDistance(pos, ac->position) < distLimit) {
+        if (PSVECSquareDistance(pos, ac->mPosition) < distLimit) {
             handClosed = false;
             mHeldItem.link(static_cast<dAcItem_c *>(ac));
         } else {
@@ -210,11 +210,11 @@ int dAcOTowerHandD101_c::actorExecute() {
     UNKWORD w = link->IfCurrentActionToActor(this, 0x3D);
     bool b = getItem(item);
     if (!b && item->isStateWait()) {
-        f32 dist = PSVECSquareDistance(item->position, link->position);
+        f32 dist = PSVECSquareDistance(item->mPosition, link->mPosition);
         if (w == 0 && dist < 15625.0f) {
             item->getItemFromBWheelItem();
         } else {
-            item->setItemPosition(item->position);
+            item->setItemPosition(item->mPosition);
         }
     }
 
@@ -545,7 +545,7 @@ void dAcOTowerHandD101_c::eventCallback(void *arg) {
 }
 
 void dAcOTowerHandD101_c::calcItemPosition(const mVec3_c &offset, mVec3_c &outPosition) const {
-    transformMtx(position, mRotation, offset, outPosition);
+    transformMtx(mPosition, mRotation, offset, outPosition);
 }
 
 void dAcOTowerHandD101_c::initializeState_RemainOpen() {
@@ -572,7 +572,7 @@ void dAcOTowerHandD101_c::executeState_RemainOpen() {
     dAcPy_c *link = dAcPy_c::LINK;
     mVec3_c pos;
     getItemPos(pos);
-    f32 linkDistToItem = PSVECSquareDistance(pos, link->position);
+    f32 linkDistToItem = PSVECSquareDistance(pos, link->mPosition);
     if (EventManager::isInEvent() && getEventStuff().getCurrentEventCommand() == 'wait') {
         return;
     }
@@ -597,14 +597,14 @@ void dAcOTowerHandD101_c::finalizeState_RemainOpen() {}
 void dAcOTowerHandD101_c::initializeState_Close() {
     mMdl.getAnm().setPlayState(m3d::PLAY_MODE_1);
     mMdl.setRate(getCloseRate());
-    mEffects.createEffect(PARTICLE_RESOURCE_ID_MAPPING_573_, position, nullptr, nullptr, nullptr, nullptr);
+    mEffects.createEffect(PARTICLE_RESOURCE_ID_MAPPING_573_, mPosition, nullptr, nullptr, nullptr, nullptr);
     startSound(SE_TowerHa_CLENCH);
 }
 void dAcOTowerHandD101_c::executeState_Close() {
     dAcPy_c *link = dAcPy_c::LINK;
     mVec3_c pos;
     getItemPos(pos);
-    f32 linkDistToItem = PSVECSquareDistance(pos, link->position);
+    f32 linkDistToItem = PSVECSquareDistance(pos, link->mPosition);
     if (EventManager::isInEvent() && getEventStuff().getCurrentEventCommand() == 'wait') {
         mStateMgr.changeState(StateID_Open);
         return;
@@ -656,7 +656,7 @@ void dAcOTowerHandD101_c::executeState_Open() {
     dAcPy_c *link = dAcPy_c::LINK;
     mVec3_c pos;
     getItemPos(pos);
-    f32 linkDistToItem = PSVECSquareDistance(pos, link->position);
+    f32 linkDistToItem = PSVECSquareDistance(pos, link->mPosition);
     if (EventManager::isInEvent() && getEventStuff().getCurrentEventCommand() == 'wait') {
         if (mMdl.getAnm().isStop()) {
             mStateMgr.changeState(StateID_RemainOpen);
@@ -714,7 +714,7 @@ void dAcOTowerHandD101_c::executeState_RemainClosed() {
     dAcPy_c *link = dAcPy_c::LINK;
     mVec3_c pos;
     getItemPos(pos);
-    f32 linkDistToItem = PSVECSquareDistance(pos, link->position);
+    f32 linkDistToItem = PSVECSquareDistance(pos, link->mPosition);
     if (EventManager::isInEvent() && getEventStuff().getCurrentEventCommand() == 'wait') {
         mStateMgr.changeState(StateID_Open);
         return;
@@ -771,7 +771,7 @@ void dAcOTowerHandD101_c::executeState_Hold() {
         sLib::addCalcScaledDiff(&value, i * 0.25f, 0.5f, 1.0f);
         doSomethingHold(value);
         mMtx_c tmpMtx1;
-        tmpMtx1.transS(position);
+        tmpMtx1.transS(mPosition);
         // Different address calculation here
         tmpMtx1.ZXYrotM(mRotation.x, mRotation.y, mRotation.z);
         mVec3_c linkVec;

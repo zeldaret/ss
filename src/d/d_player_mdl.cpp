@@ -1892,15 +1892,15 @@ void daPlayerModelBase_c::setPosCopy3() {
     static const Vec posCopy3v2 = {0.0f, 95.0f, 0.0f};
     static const Vec posCopy3v3 = {0.0f, 14.0f, 0.0f};
     if (checkCurrentAction(/* FREE_FALL*/ 0x13) || checkCurrentAction(/* WALKING_ON_TIGHTROPE */ 0x81)) {
-        poscopy3 = position;
+        poscopy3 = mPosition;
         poscopy3.y += 180.0f;
     } else if (checkCurrentAction(/* BEING_PULLED_BY_CLAWS */ 0x5A)) {
         poscopy3 = poscopy2;
     } else if (checkActionFlags(FLG0_SWING_ROPE)) {
-        poscopy3 = position;
+        poscopy3 = mPosition;
     } else if (checkActionFlagsCont(0x20000000) || checkCurrentAction(0x70) ||
                checkCurrentAction(/* HANG_ON_ZIP */ 0x85)) {
-        poscopy3 = position;
+        poscopy3 = mPosition;
         poscopy3.y -= 100.0f;
     } else {
         // TODO maybe fakematch, is there a way to avoid this goto?
@@ -1921,7 +1921,7 @@ void daPlayerModelBase_c::setPosCopy3() {
             }
             case 0x09: {
                 // SLIDING
-                poscopy3 = position + mVec3_c(posCopy3v2);
+                poscopy3 = mPosition + mVec3_c(posCopy3v2);
                 break;
             }
             default: {
@@ -1932,7 +1932,7 @@ void daPlayerModelBase_c::setPosCopy3() {
                 const Vec *v;
                 if (checkActionFlags(FLG0_IN_WATER) || checkCurrentAction(/* SWIM_DASH_INFO_AIR */ 0x57)) {
                     v = &posCopy3v3;
-                    f = position.y;
+                    f = mPosition.y;
                 } else {
                     if (checkCurrentAction(/* VOID_SAND */ 0x4C)) {
                         v = &posCopy3v3;
@@ -1942,9 +1942,9 @@ void daPlayerModelBase_c::setPosCopy3() {
                     f = mtx.m[1][3];
                 }
                 poscopy3.copyFrom(v);
-                poscopy3.x += position.x;
+                poscopy3.x += mPosition.x;
                 poscopy3.y += f;
-                poscopy3.z += position.z;
+                poscopy3.z += mPosition.z;
                 break;
             }
         }

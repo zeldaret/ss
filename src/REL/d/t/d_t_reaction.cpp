@@ -154,7 +154,7 @@ void dTgReaction_c::finalizeState_Wait() {}
 
 void dTgReaction_c::checkForBonkItem() {
     if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x2000)) {
-        mVec3_c diff = position - dAcPy_c::LINK->position;
+        mVec3_c diff = mPosition - dAcPy_c::LINK->mPosition;
         f32 dist = diff.x * diff.x + diff.z * diff.z;
         f32 rad = mScale.x * 100.0f;
         if (!(dist < rad * rad)) {
@@ -164,7 +164,7 @@ void dTgReaction_c::checkForBonkItem() {
         if (getReactType() == REACT_4) {
             if (field_0x4DD == 0) {
                 mVec3_c c = mVec3_c::Ez * rad;
-                mVec3_c c2 = position;
+                mVec3_c c2 = mPosition;
                 c.rotY(mRotation.y);
                 c2 += c;
                 c2.y += field_0x4E4;
@@ -177,7 +177,7 @@ void dTgReaction_c::checkForBonkItem() {
             }
         } else {
             u32 uVar3;
-            mVec3_c pos = position;
+            mVec3_c pos = mPosition;
             int p = getParam0x08();
             if (p == 0) {
                 uVar3 = 6;
@@ -205,11 +205,11 @@ void dTgReaction_c::checkForBonkItem() {
 void dTgReaction_c::checkForBubble() {
     if (mCollision.ChkTgHit() && mCollision.ChkTgAtHitType(AT_TYPE_BUBBLE)) {
         if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x40)) {
-            mVec3_c spawnPos = position;
+            mVec3_c spawnPos = mPosition;
             dAcObjBase_c::create(fProfile::OBJ_BUBBLE, roomid, 0x4, &spawnPos, nullptr, nullptr, 0xFFFFFFFF);
         }
     }
-    mCollision.SetC(position);
+    mCollision.SetC(mPosition);
     dCcS::GetInstance()->Set(&mCollision);
 }
 
@@ -225,7 +225,7 @@ void dTgReaction_c::checkForSlingBellowsItem() {
                 uVar3 = 5;
             }
         }
-        mVec3_c spawnPos = position;
+        mVec3_c spawnPos = mPosition;
         spawnPos.y += field_0x4E4;
         if (fn_578_DB0(spawnPos, uVar3)) {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
@@ -233,7 +233,7 @@ void dTgReaction_c::checkForSlingBellowsItem() {
         SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
         onDelete();
     }
-    mCollision.SetC(position);
+    mCollision.SetC(mPosition);
     dCcS::GetInstance()->Set(&mCollision);
 }
 
@@ -262,7 +262,7 @@ bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 velocity_typ
         max = angle;
         min = SOME_ANG;
     } else {
-        max = (s16)cLib::targetAngleY(dAcPy_c::LINK->position, pos) + 0x4000;
+        max = (s16)cLib::targetAngleY(dAcPy_c::LINK->mPosition, pos) + 0x4000;
         min = -0x8000;
     }
 

@@ -59,7 +59,7 @@ int dAcOFlyingClawshotTarget_c::actorCreate() {
 
     mSph.Set(src);
     mSph.SetStts(mStts);
-    mSph.SetC(position);
+    mSph.SetC(mPosition);
     mState = 0;
 
     mVec3_c min, max;
@@ -73,7 +73,7 @@ int dAcOFlyingClawshotTarget_c::actorPostCreate() {
     mVec3_c v = mVec3_c::Ez;
     v.rotX(mRotation.x);
     v.rotY(mRotation.y);
-    mVec3_c diff = dAcPy_c::LINK->position - position;
+    mVec3_c diff = dAcPy_c::LINK->mPosition - mPosition;
     diff.normalize();
     if (!mToLink.Set(v, diff)) {
         mToLink.set(1.f, 0.f, 0.f, 0.f);
@@ -87,7 +87,7 @@ int dAcOFlyingClawshotTarget_c::actorExecute() {
     mVec3_c markPoint;
     PSMTXMultVec(mWorldMtx, mMarkPoint, markPoint);
 
-    f32 dist_to = markPoint.squareDistance(player->position);
+    f32 dist_to = markPoint.squareDistance(player->mPosition);
 
     if (checkObjectProperty(0x4)) {
         player->vt_0x0DC(this, mMarkPoint);
@@ -108,7 +108,7 @@ int dAcOFlyingClawshotTarget_c::actorExecute() {
         mToLink = q * mToLink;
 
     } else {
-        mVec3_c vec = player->position - position;
+        mVec3_c vec = player->mPosition - mPosition;
         vec.normalize();
 
         mVec3_c v2;
@@ -155,7 +155,7 @@ int dAcOFlyingClawshotTarget_c::actorExecute() {
     mWorldMtx += mtx;
     mMdl.setLocalMtx(mWorldMtx);
     mMdl.calc(false);
-    mSph.SetC(position);
+    mSph.SetC(mPosition);
     dCcS::GetInstance()->Set(&mSph);
 
     return SUCCEEDED;

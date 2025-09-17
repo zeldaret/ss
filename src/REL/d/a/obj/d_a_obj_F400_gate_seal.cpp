@@ -55,7 +55,7 @@ int dAcOF400GateSeal_c::actorPostCreate() {
     dAcOdoor_c *door;
 
     while (notDone && parent != nullptr) {
-        if (10000.0f < PSVECSquareDistance(position, parent->position)) {
+        if (10000.0f < PSVECSquareDistance(mPosition, parent->mPosition)) {
             parent = (dAcOdoor_c *)fManager_c::searchBaseByProfName(fProfile::OBJ_DOOR, parent);
             door = parent;
         } else {

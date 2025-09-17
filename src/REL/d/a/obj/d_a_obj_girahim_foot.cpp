@@ -85,7 +85,7 @@ void dAcOgirahimFoot_c::executeState_Appear() {
         return;
     }
 
-    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_77_, position, nullptr, &mScale, nullptr, nullptr, 0, 0);
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_77_, mPosition, nullptr, &mScale, nullptr, nullptr, 0, 0);
 
     deleteRequest();
 }

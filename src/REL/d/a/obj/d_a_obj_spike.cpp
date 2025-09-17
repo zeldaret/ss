@@ -74,7 +74,7 @@ int dAcOspike_c::doDelete() {
 
 int dAcOspike_c::actorExecute() {
     mStateMgr.executeState();
-    mCollision.cM3dGUnk::Set(position, mRotation.y);
+    mCollision.cM3dGUnk::Set(mPosition, mRotation.y);
     dCcS::GetInstance()->Set(&mCollision);
     return 1;
 }

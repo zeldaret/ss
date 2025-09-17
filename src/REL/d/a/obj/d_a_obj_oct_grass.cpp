@@ -49,8 +49,8 @@ int dAcOOctGrass_c::create() {
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     spawnOcGrsL();
-    poscopy2 = position;
-    poscopy3 = position;
+    poscopy2 = mPosition;
+    poscopy3 = mPosition;
     poscopy3.y += 20.0f;
     mStateMgr.changeState(StateID_Wait);
     boundingBox.Set(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 100.0f, 50.0f));
@@ -81,6 +81,7 @@ void dAcOOctGrass_c::spawnOcGrsL() {
     }
 
     dAcObjBase_c::create(
-        "OcGrsL", getRoomId(), type & 0xF, &position, nullptr, nullptr, getParams2_ignoreLower(), 0xFFFF, viewclip_index
+        "OcGrsL", getRoomId(), type & 0xF, &mPosition, nullptr, nullptr, getParams2_ignoreLower(), 0xFFFF,
+        viewclip_index
     );
 }

@@ -78,7 +78,7 @@ void dSoundSource_c::setup() {
     if (mIsSetup) {
         return;
     }
-    SetPosition(mpActor->position);
+    SetPosition(mpActor->mPosition);
     resetCachedRelativePositions();
     initVolumeFade();
     if (mSourceCategory == SND_SOURCE_CATEGORY_PLAYER) {

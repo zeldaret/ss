@@ -16,7 +16,7 @@ int dTgTimeAreaCheck_c::doDelete() {
 }
 
 int dTgTimeAreaCheck_c::actorExecute() {
-    f32 result = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(roomid, position, nullptr, 10.0f);
+    f32 result = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(roomid, mPosition, nullptr, 10.0f);
     if (result > 0.0f) {
         if (mPastSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mPastSceneFlag)) {
             SceneflagManager::sInstance->setFlag(roomid, mPastSceneFlag);

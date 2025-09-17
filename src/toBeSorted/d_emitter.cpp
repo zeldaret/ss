@@ -1250,7 +1250,7 @@ void dWaterEffect_c::execute(f32 water, f32 ground) {
     if (b) {
         if (!mIsInWater) {
             mIsInWater = true;
-            mVec3_c pos(ac->position.x, water, ac->position.z);
+            mVec3_c pos(ac->mPosition.x, water, ac->mPosition.z);
             mVec3_c scale(mScale, mScale, mScale);
             if (mIsSmall || water - ground < 50.0f) {
                 // For small objects or shallow water, create a
@@ -1270,7 +1270,7 @@ void dWaterEffect_c::execute(f32 water, f32 ground) {
 
     if (mIsInWater && getActorCeilPos(ac) > water) {
         // Spawn effect while in water
-        mVec3_c pos(ac->position.x, water, ac->position.z);
+        mVec3_c pos(ac->mPosition.x, water, ac->mPosition.z);
         mVec3_c scale(mScale, mScale, mScale);
         mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_127_, pos, nullptr, &scale, nullptr, nullptr);
         f32 rate = nw4r::math::FAbs(ac->forwardSpeed) * 0.02f;

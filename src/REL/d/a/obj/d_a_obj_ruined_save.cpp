@@ -32,7 +32,7 @@ int dAcOruinedSave_c::create() {
     CREATE_ALLOCATOR(dAcOruinedSave_c);
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
-    poscopy2 = position;
+    poscopy2 = mPosition;
     poscopy2.y += 300.0f;
     poscopy3 = poscopy2;
     field_0x40C = 0;

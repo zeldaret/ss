@@ -60,7 +60,7 @@ int dAcOcloudDive_c::actorExecute() {
     mStateMgr.executeState();
     mCollider.SetR(mRadius);
     mCollider.SetH(height);
-    mCollider.SetC(position - mVec3_c(0.0f, height / 2, 0.0f));
+    mCollider.SetC(mPosition - mVec3_c(0.0f, height / 2, 0.0f));
     dCcS::GetInstance()->Set(&mCollider);
     return SUCCEEDED;
 }
@@ -98,7 +98,7 @@ bool dAcOcloudDive_c::fn_350_760() {
     bool ret = false;
     bool temp = false;
 
-    mVec3_c deltaPosition = dAcPy_c::GetLink()->position - position;
+    mVec3_c deltaPosition = dAcPy_c::GetLink()->mPosition - mPosition;
     f32 distance = EGG::Math<f32>::sqrt(deltaPosition.squareMagXZ());
 
     if (distance <= mRadius) {

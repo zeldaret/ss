@@ -39,7 +39,7 @@ int dAcOhole_c::create() {
     mObjAcch.Set(this, 1, &mAcchCir);
     mAcchCir.SetWall(100.0f, 100.0f);
     mObjAcch.CrrPos(*dBgS::GetInstance());
-    dBgS_ObjGndChk::CheckPos(position);
+    dBgS_ObjGndChk::CheckPos(mPosition);
     mStateMgr.changeState(StateID_Wait);
     return SUCCEEDED;
 }

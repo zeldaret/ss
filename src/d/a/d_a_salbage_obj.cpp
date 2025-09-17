@@ -51,8 +51,8 @@ void dSalvageIfObj_c::doDemoThrow() {
 int dAcSalbageObj_c::actorExecute() {
     executeInternal();
     calcVelocity();
-    position += velocity;
-    position += mStts.GetCcMove();
+    mPosition += velocity;
+    mPosition += mStts.GetCcMove();
     if (isInStateWait()) {
         updateCc();
     }
@@ -248,7 +248,7 @@ bool dAcSalbageObj_c::shouldBeActiveDowsingTarget() const {
 }
 
 void dAcSalbageObj_c::updateCc() {
-    mCcCyl.SetC(position);
+    mCcCyl.SetC(mPosition);
     mCcCyl.SetR(getCcRadius());
     mCcCyl.SetH(getCcHeight());
     dCcS::GetInstance()->Set(&mCcCyl);
@@ -262,13 +262,13 @@ void dAcSalbageObj_c::updateBgAcchCir() {
 void dAcSalbageObj_c::calcMtxFromSalbageNpc(mMtx_c &ret) {
     dAcNpcSlb_c *npc = dSalvageMgr_c::sInstance->mSlbRef.get();
     if (npc == nullptr) {
-        ret.transS(position.x, position.y, position.z);
+        ret.transS(mPosition.x, mPosition.y, mPosition.z);
         ret.ZXYrotM(mRotation);
     } else {
         ret = npc->getCarriedObjMtx();
         mMtx_c rotMtx = dSalvageMgr_c::sInstance->getCarryRotMtx2(mSalvageIf.getSalvageObjId());
         MTXConcat(ret, rotMtx, ret);
-        ret.getTranslation(position);
+        ret.getTranslation(mPosition);
     }
 }
 
@@ -277,7 +277,7 @@ mMtx_c dAcSalbageObj_c::calcWorldMtx() {
     if (mSalvageIf.isCarried()) {
         calcMtxFromSalbageNpc(ret);
     } else {
-        ret.transS(position);
+        ret.transS(mPosition);
         ret.ZXYrotM(mRotation);
     }
 
@@ -301,9 +301,9 @@ void dAcSalbageObj_c::updateMdl() {
     }
 
     f32 scale = mScale.x;
-    poscopy3 = position;
+    poscopy3 = mPosition;
     poscopy3.y += getPoscopy3YOffset() * scale;
-    poscopy2 = position;
+    poscopy2 = mPosition;
     poscopy2.y += getPoscopy2YOffset() * scale;
 }
 
@@ -319,7 +319,7 @@ void dAcSalbageObj_c::initializeState_Wait() {
 void dAcSalbageObj_c::executeState_Wait() {
     if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() != mSalvageIf.getSalvageObjId()) {
         if (!dSalvageMgr_c::sInstance->mSlbRef.isLinked()) {
-            mVec3_c pos(position.x, position.y + 100000.0f, position.z);
+            mVec3_c pos(mPosition.x, mPosition.y + 100000.0f, mPosition.z);
             dAcObjBase_c::create(fProfile::NPC_SLB, roomid, 0xFFFFFD01, &pos, nullptr, nullptr, -1);
         }
 
@@ -359,7 +359,7 @@ void dAcSalbageObj_c::initializeState_DemoThrow() {
     mWorldSRMtx.m[1][3] = 0.0f;
     mWorldSRMtx.m[2][3] = 0.0f;
 
-    mWorldMtx.getTranslation(position);
+    mWorldMtx.getTranslation(mPosition);
     field_0x938 = 0.0f;
 
     mVec3_c result;

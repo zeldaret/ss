@@ -7,7 +7,6 @@
 #include "m/m_mtx.h"
 #include "rvl/MTX/mtx.h"
 
-
 SPECIAL_ACTOR_PROFILE(COL_BOMSLD, dTgColBombShield, fProfile::COL_BOMSLD, 0x12, 0, 0);
 
 STATE_DEFINE(dTgColBombShield, Wait);
@@ -23,7 +22,7 @@ int dTgColBombShield::create() {
     mScale.x += offset;
     mScale.y += offset;
     mScale.z += offset;
-    mColMtx.transS(position.x, position.y + mScale.y * 0.5f - 0.05f, position.z);
+    mColMtx.transS(mPosition.x, mPosition.y + mScale.y * 0.5f - 0.05f, mPosition.z);
     mColMtx.ZXYrotM(mRotation.x, mRotation.y, mRotation.z);
     mMtx_c tmp;
     PSMTXScale(tmp, mScale.x, mScale.y, mScale.z);

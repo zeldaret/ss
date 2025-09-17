@@ -9,7 +9,7 @@ const f32 dTgNoEffectArea_c::sFloat2 = 100.0f;
 
 int dTgNoEffectArea_c::create() {
     mScale *= 0.01f;
-    PSMTXTrans(mMtx, position.x, position.y, position.z);
+    PSMTXTrans(mMtx, mPosition.x, mPosition.y, mPosition.z);
     mMtx.YrotM(mRotation.y);
     PSMTXInverse(mMtx, mMtx);
     addToList(sList);

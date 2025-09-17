@@ -18,7 +18,7 @@
 #include "toBeSorted/d_emitter.h"
 
 void dAcOInsect_c::kill() {
-    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_394_, position, nullptr, nullptr, nullptr, nullptr, 0, 0);
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_394_, mPosition, nullptr, nullptr, nullptr, nullptr, 0, 0);
     startSound(SE_Insect_DISAPPEAR);
     deleteRequest();
 }
@@ -26,12 +26,12 @@ void dAcOInsect_c::kill() {
 bool dAcOInsect_c::checkForLinkScare() {
     if (dAcPy_c::LINK != nullptr) {
         if (dAcPy_c::LINK->getCurrentAction() == 12 /* Rolling */) { // TODO (Player Action Enum)
-            if (dAcPy_c::LINK->getDistanceTo(position) < 50.f) {
+            if (dAcPy_c::LINK->getDistanceTo(mPosition) < 50.f) {
                 mLinkNearby = 1;
                 return true;
             }
         } else if (dAcPy_c::LINK->forwardSpeed > 1.f) {
-            if (dAcPy_c::LINK->getDistanceTo(position) < 30.f) {
+            if (dAcPy_c::LINK->getDistanceTo(mPosition) < 30.f) {
                 mLinkNearby = 1;
                 return true;
             }
@@ -42,13 +42,13 @@ bool dAcOInsect_c::checkForLinkScare() {
 }
 
 void dAcOInsect_c::checkDeath(dBgS_Acch &acch) {
-    if (acch.ChkWaterHit() && acch.mWtr.GetGroundH() >= position.y) {
+    if (acch.ChkWaterHit() && acch.mWtr.GetGroundH() >= mPosition.y) {
         kill();
     }
     if (acch.ChkGroundLanding() && dBgS::GetInstance()->GetSpecialCode(acch.mGnd) == POLY_ATTR_LAVA) {
         kill();
     }
-    if (position.y < pos_copy.y - 5000.f) {
+    if (mPosition.y < pos_copy.y - 5000.f) {
         deleteRequest();
     }
 }
@@ -83,7 +83,7 @@ bool dAcOInsect_c::checkPlayerRadius(f32 rad) {
 }
 
 bool dAcOInsect_c::checkPlayerElevationDiff(f32 dist) {
-    if (dAcPy_c::LINK != nullptr && fabsf(dAcPy_c::LINK->position.y - position.y) > dist) {
+    if (dAcPy_c::LINK != nullptr && fabsf(dAcPy_c::LINK->mPosition.y - mPosition.y) > dist) {
         return false;
     }
     return true;
@@ -139,7 +139,7 @@ void dAcOInsect_c::addAttentionTarget() {
 }
 
 void dAcOInsect_c::preAttention() {
-    poscopy2 = position;
+    poscopy2 = mPosition;
     poscopy2.y += 20.f;
     poscopy3 = poscopy2;
 }
@@ -156,7 +156,7 @@ bool dAcOInsect_c::isLinkCloseAndFlag() {
     dAcPy_c *link = dAcPy_c::LINK;
     if (link != nullptr && link->checkFlags0x350(0x2000)) {
         f32 d = dAcOInsect_0x94();
-        return getSquareDistanceTo(link->position) < d;
+        return getSquareDistanceTo(link->mPosition) < d;
     }
     return false;
 }
@@ -207,7 +207,7 @@ bool dAcOInsect_c::fn_8018FAD0() {
     } else {
         f32 clampSpeed = speed < 5.0f ? forwardSpeed > 0.f ? forwardSpeed : -5.f : 5.f;
 
-        mVec3_c pos0 = position + field_0x360;
+        mVec3_c pos0 = mPosition + field_0x360;
         mVec3_c pos1 = pos0 + field_0x36C * forwardSpeed;
         int linType = fn_801900B0(pos0, pos1);
         field_0x410[0] = pos0;
@@ -236,7 +236,7 @@ int dAcOInsect_c::fn_801900B0(const mVec3_c &point0, const mVec3_c &point1) {
         return 2;
     }
 
-    position = dBgS_ObjLinChk::GetInstance().GetLinEnd();
+    mPosition = dBgS_ObjLinChk::GetInstance().GetLinEnd();
     mPlane_0x3A8 = pla;
     field_0x3BC = 1;
     fn_8018FDF0(pla.GetN());
@@ -261,7 +261,7 @@ bool dAcOInsect_c::fn_80190180(mAng &outAng) {
     angs[3] = 0xE000;
 
     if (field_0x3BF != 0) {
-        f32 len = fabsf(field_0x33C.y + field_0x35C * 0.5f - position.y);
+        f32 len = fabsf(field_0x33C.y + field_0x35C * 0.5f - mPosition.y);
         for (int i = 0; i < 4; i++) {
             // mVec3_c tmp2 = field_0x3C0.multVec(vecs[i] * 20.0f);
             f32 len2 = fabsf(field_0x33C.y + field_0x35C * 0.5f - field_0x3C0.multVec(vecs[i] * 20.0f).y);
@@ -271,7 +271,7 @@ bool dAcOInsect_c::fn_80190180(mAng &outAng) {
             }
         }
     } else if (field_0x3BE != 0) {
-        mVec3_c dir = field_0x33C - position;
+        mVec3_c dir = field_0x33C - mPosition;
         f32 len = dir.squareMagXZ();
         for (int i = 0; i < 4; i++) {
             // mVec3_c tmp2 = field_0x3C0.multVec(vecs[i] * 20.0f);

@@ -509,7 +509,7 @@ bool SpecialItemDropMgr::spawnSpecialDropItem(int specialItemId, int roomid, mVe
         max = rot;
         min = SOME_ANG;
     } else {
-        max = (s16)cLib::targetAngleY(dAcPy_c::LINK->position, *pos) + 0x4000;
+        max = (s16)cLib::targetAngleY(dAcPy_c::LINK->mPosition, *pos) + 0x4000;
         min = -0x8000;
     }
 

@@ -3,11 +3,10 @@
 #include "d/a/d_a_player.h"
 #include "toBeSorted/area_math.h"
 
-
 SPECIAL_ACTOR_PROFILE(TAG_TIME_DOOR_BEAM, dTgTimeDoorBeam_c, fProfile::TAG_TIME_DOOR_BEAM, 0x252, 0, 0);
 
 int dTgTimeDoorBeam_c::create() {
-    matrixCreateFromPosRotYScale(matrix, position, mRotation.y, mScale, nullptr, 0.0f);
+    matrixCreateFromPosRotYScale(matrix, mPosition, mRotation.y, mScale, nullptr, 0.0f);
     return SUCCEEDED;
 }
 
@@ -28,5 +27,5 @@ bool dTgTimeDoorBeam_c::checkPlayerPosInMtx() {
         return false;
     }
 
-    return checkIfVec3fInMatrix(matrix, dAcPy_c::LINK->position);
+    return checkIfVec3fInMatrix(matrix, dAcPy_c::LINK->mPosition);
 }

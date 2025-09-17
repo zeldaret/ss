@@ -23,7 +23,7 @@ int dTgSndAr_c::create() {
 
     switch (getTypeFromParams()) {
         case 0:
-            PSMTXTrans(mtx.m, position.x, position.y, position.z);
+            PSMTXTrans(mtx.m, mPosition.x, mPosition.y, mPosition.z);
             mtx.YrotM(mRotation.y);
             PSMTXInverse(mtx.m, mtx.m);
             break;
@@ -36,7 +36,7 @@ int dTgSndAr_c::create() {
             break;
         }
         dAcBase_c *ac = static_cast<dAcBase_c *>(base);
-        if (!ac->isActorPlayer() && checkPosInArea(ac->position)) {
+        if (!ac->isActorPlayer() && checkPosInArea(ac->mPosition)) {
             ac->setTgSndAreaFlag(mParams & 0xFF);
         }
     }
@@ -49,7 +49,7 @@ int dTgSndAr_c::doDelete() {
 
 int dTgSndAr_c::actorExecute() {
     dAcBase_c *link = dAcPy_c::LINK;
-    if (link != nullptr && checkPosInArea(link->position)) {
+    if (link != nullptr && checkPosInArea(link->mPosition)) {
         link->setTgSndAreaFlag(mParams & 0xFF);
     }
     if (dSnd3DManager_c::GetInstance() != nullptr) {
@@ -102,17 +102,17 @@ bool dTgSndAr_c::checkAlg0(const mVec3_c &pos) {
 bool dTgSndAr_c::checkAlg1(const mVec3_c &pos) {
     f32 tgtDist = mScale.x * 100.0f;
     f32 tgtDist2 = tgtDist * tgtDist;
-    return PSVECSquareDistance(position, pos) < tgtDist2;
+    return PSVECSquareDistance(mPosition, pos) < tgtDist2;
 }
 
 // Cylinder
 bool dTgSndAr_c::checkAlg2(const mVec3_c &pos) {
-    if (pos.y < position.y || pos.y > (position.y + 100.0f * mScale.y)) {
+    if (pos.y < mPosition.y || pos.y > (mPosition.y + 100.0f * mScale.y)) {
         return false;
     }
 
     f32 radius = mScale.x * 100.0f;
-    mVec3_c diff = pos - position;
+    mVec3_c diff = pos - mPosition;
 
     f32 dist = diff.x * diff.x + diff.z * diff.z;
     f32 r2 = radius * radius;

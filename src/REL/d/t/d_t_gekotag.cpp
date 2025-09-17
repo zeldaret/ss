@@ -59,7 +59,7 @@ void dTgGekoTag::doExecute() {
         return;
     }
 
-    if (dAcPy_c::LINK->getSquareDistanceTo(position) < mNoSpawnRadius * mNoSpawnRadius) {
+    if (dAcPy_c::LINK->getSquareDistanceTo(mPosition) < mNoSpawnRadius * mNoSpawnRadius) {
         return;
     }
     field_0x1FD = 0xFF;
@@ -76,7 +76,7 @@ void dTgGekoTag::doExecute() {
         if (mRefs[i].get() == nullptr) {
             if (mTimer2 == 0) {
                 dAcObjBase_c *b =
-                    dAcObjBase_c::create(fProfile::E_GEKO, roomid, gekoParm, &position, &gekoRot, nullptr, 0xFFFFFFFF);
+                    dAcObjBase_c::create(fProfile::E_GEKO, roomid, gekoParm, &mPosition, &gekoRot, nullptr, 0xFFFFFFFF);
 
                 if (b != nullptr) {
                     mRefs[i].link(static_cast<dAcEgeko_c *>(b));

@@ -14,7 +14,7 @@ STATE_DEFINE(dAcTWoodArea_c, Wait);
 
 int dAcTWoodArea_c::actorCreate() {
     mStateMgr.changeState(StateID_Init);
-    PSMTXTrans(mWorldMtx.m, position.x, position.y, position.z);
+    PSMTXTrans(mWorldMtx.m, mPosition.x, mPosition.y, mPosition.z);
     boundingBox.mMin = mVec3_c(-0.0f, -0.0f, -0.0f);
     boundingBox.mMax = mVec3_c(0.0f, 0.0f, 0.0f);
     return SUCCEEDED;
@@ -57,13 +57,13 @@ void dAcTWoodArea_c::initializeState_Wait() {}
 void dAcTWoodArea_c::executeState_Wait() {
     if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x2000)) {
         // This is a bit messed up
-        mVec3_c dist = position - dAcPy_c::LINK->position;
+        mVec3_c dist = mPosition - dAcPy_c::LINK->mPosition;
         f32 attachRadius = getAttachRadius();
         attachRadius = attachRadius * attachRadius;
         if (dist.x * dist.x + dist.z * dist.z < attachRadius) {
             bool someEffectThing = subtype != 1 ? (mParams & 0xF) != 0 ? false : true : true;
             if (someEffectThing) {
-                mVec3_c tmp(position.x, position.y + getAttachHeight(), position.z);
+                mVec3_c tmp(mPosition.x, mPosition.y + getAttachHeight(), mPosition.z);
                 dJEffManager_c::spawnEffect(
                     PARTICLE_RESOURCE_ID_MAPPING_8_, tmp, nullptr, nullptr, nullptr, nullptr, 0, 0
                 );
@@ -85,7 +85,7 @@ void dAcTWoodArea_c::attachCloseObjects(ProfileName profID) {
 
         dAcObjBase_c *obj = static_cast<dAcObjBase_c *>(base);
         if (obj->canBeLinkedToWoodTag()) {
-            if (!(obj->getSquareDistanceTo(position) > attachRadius)) {
+            if (!(obj->getSquareDistanceTo(mPosition) > attachRadius)) {
                 if (!attachObject(obj)) {
                     return;
                 }

@@ -64,7 +64,7 @@ void dAcOwaterSpout_c::initializeState_Wait() {
     if (mParams == 1) {
         return;
     }
-    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_213_, position, nullptr, &mScale, nullptr, nullptr, 0, 0);
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_213_, mPosition, nullptr, &mScale, nullptr, nullptr, 0, 0);
 }
 void dAcOwaterSpout_c::executeState_Wait() {
     if (mMdl.getAnm().isStop()) {

@@ -36,7 +36,7 @@ int dAcODecoB_c::doDelete() {
 
 int dAcODecoB_c::actorExecute() {
     mStateMgr.executeState();
-    PSMTXTrans(mWorldMtx, position.x, position.y, position.z);
+    PSMTXTrans(mWorldMtx, mPosition.x, mPosition.y, mPosition.z);
     mWorldMtx.ZXYrotM(mRotation);
     mMdl.setLocalMtx(mWorldMtx);
     return SUCCEEDED;
@@ -53,7 +53,7 @@ f32 dAcODecoB_c::lbl_611_data_34 = 0.95f;
 
 void dAcODecoB_c::executeState_Wait() {
     if (dAcPy_c::GetLink() != nullptr && dAcPy_c::GetLink()->checkFlags0x350(0x2000)) {
-        mVec3_c deltaPosition = dAcPy_c::GetLink()->position - position;
+        mVec3_c deltaPosition = dAcPy_c::GetLink()->mPosition - mPosition;
         f32 distance = EGG::Math<f32>::sqrt(deltaPosition.squareMagXZ());
         distance = (2000.0f - distance) / 2000.0f;
         if (distance < 0.0f) {

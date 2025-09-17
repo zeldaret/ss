@@ -15,7 +15,7 @@ int dTgAction_c::create() {
     mEnableFlag1 = (mParams >> 6) & 0xFF;
     mEnableFlag2 = (mParams >> 14) & 0xFF;
     mType = (mParams >> 0) & 0x3F;
-    matrixCreateFromPosRotYScale(mActiveMtx, position, mRotation.y, mScale, nullptr, 0.f);
+    matrixCreateFromPosRotYScale(mActiveMtx, mPosition, mRotation.y, mScale, nullptr, 0.f);
     return SUCCEEDED;
 }
 
@@ -26,14 +26,14 @@ int dTgAction_c::doDelete() {
 void dTgAction_c::setActiveArea(f32 scale) {
     if (mScaleIncrease < 0.1f) {
         mScaleIncrease = scale;
-        matrixCreateFromPosRotYScale(mActiveMtx, position, mRotation.y, mScale, nullptr, mScaleIncrease);
+        matrixCreateFromPosRotYScale(mActiveMtx, mPosition, mRotation.y, mScale, nullptr, mScaleIncrease);
     }
 }
 
 void dTgAction_c::resetActiveArea() {
     if (mScaleIncrease > 0.f) {
         mScaleIncrease = 0.f;
-        matrixCreateFromPosRotYScale(mActiveMtx, position, mRotation.y, mScale, nullptr, 0.f);
+        matrixCreateFromPosRotYScale(mActiveMtx, mPosition, mRotation.y, mScale, nullptr, 0.f);
         field_0x134 = 0;
     }
 }

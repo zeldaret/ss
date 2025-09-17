@@ -114,7 +114,7 @@ int dAcOsw_c::actorCreate() {
 
 int dAcOsw_c::actorPostCreate() {
     if (mCanBeSeen) {
-        field_0x5A0.check(roomid, position, 0, 30.0f, 0.1f);
+        field_0x5A0.check(roomid, mPosition, 0, 30.0f, 0.1f);
         if (field_0x5A0.field_0x00 <= 0.0f) {
             mHidden = true;
             mScale.set(0.0f, 0.0f, 0.0f);
@@ -127,8 +127,8 @@ int dAcOsw_c::actorPostCreate() {
     dAcBase_c *parent = nullptr;
     do {
         parent = static_cast<dAcBase_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_VSD, parent));
-        if (parent != nullptr && nw4r::math::FAbs(parent->position.y - position.y) < 30.0f) {
-            if (getSquareDistanceTo(parent->position) < 900.0f) {
+        if (parent != nullptr && nw4r::math::FAbs(parent->mPosition.y - mPosition.y) < 30.0f) {
+            if (getSquareDistanceTo(parent->mPosition) < 900.0f) {
                 mObjRef.link(static_cast<dAcOScatterSand_tmp *>(parent));
                 break;
             }
@@ -153,12 +153,12 @@ int dAcOsw_c::doDelete() {
 int dAcOsw_c::actorExecute() {
     mStateMgr.executeState();
     if (mCanBeSeen) {
-        field_0x5A0.check(roomid, position, 0, 30.0f, 0.1f);
+        field_0x5A0.check(roomid, mPosition, 0, 30.0f, 0.1f);
         if (field_0x5A0.field_0x00 <= 0.0f) {
             if (mScale.x >= 1.0f) {
                 if (!mHidden) {
                     dJEffManager_c::spawnEffect(
-                        PARTICLE_RESOURCE_ID_MAPPING_754_, position, &mRotation, nullptr, nullptr, nullptr, 0, 0
+                        PARTICLE_RESOURCE_ID_MAPPING_754_, mPosition, &mRotation, nullptr, nullptr, nullptr, 0, 0
                     );
                     startSound(SE_TIMESLIP_TIMESLIP_REV);
                     mHidden = true;
@@ -173,7 +173,7 @@ int dAcOsw_c::actorExecute() {
             if (mScale.x <= 0.0f) {
                 if (!mShown) {
                     dJEffManager_c::spawnEffect(
-                        PARTICLE_RESOURCE_ID_MAPPING_754_, position, &mRotation, nullptr, nullptr, nullptr, 0, 0
+                        PARTICLE_RESOURCE_ID_MAPPING_754_, mPosition, &mRotation, nullptr, nullptr, nullptr, 0, 0
                     );
                     startSound(SE_TIMESLIP_TIMESLIP);
                     mShown = true;

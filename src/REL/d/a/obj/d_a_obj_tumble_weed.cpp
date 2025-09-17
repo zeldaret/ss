@@ -108,11 +108,11 @@ int dAcOTumbleWeed_c::actorExecute() {
     dLightEnv_c::GetInstance().setWind(mField_0x968, mField_0x980);
 
     calcVelocity();
-    position += velocity;
-    position += mStts.GetCcMove();
+    mPosition += velocity;
+    mPosition += mStts.GetCcMove();
 
     mObjAcch.CrrPos(*dBgS::GetInstance());
-    mField_0x974 += position.y - mOldPosition.y;
+    mField_0x974 += mPosition.y - mOldPosition.y;
     if (checkCollect()) {
         dAcPy_c::LINK->bugNetCollectTreasure(ITEM_TUMBLE_WEED);
         killNoItemDrop();
@@ -157,7 +157,7 @@ int dAcOTumbleWeed_c::draw() {
 
     static mQuat_c shadowRot(0.f, 30.f, 0.f, 50.f);
     if (0.f < mScale.x) {
-        drawShadow(mShdw, nullptr, mShadowMtx, &shadowRot, -1, -1, -1, -1, -1, position.y - mObjAcch.GetGroundH());
+        drawShadow(mShdw, nullptr, mShadowMtx, &shadowRot, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     }
 
     return SUCCEEDED;
@@ -286,7 +286,7 @@ void dAcOTumbleWeed_c::calcMatrix() {
 
     mMtx_c mtx0, mtx1, mtx2;
     mShadowMtx.copyFrom(mWorldMtx);
-    mtx1.transS(getPosition() - position);
+    mtx1.transS(getPosition() - mPosition);
     mShadowMtx += mtx1;
     mtx0.fromQuat(mField_0x910);
     mtx2.transS(0.f, 40.f, 0.f);
@@ -388,7 +388,7 @@ mVec3_c dAcOTumbleWeed_c::getPosition() const {
     mVec3_c vec;
     mtx.ZXYrotS(mRotation.x, mRotation.y, mRotation.z);
     PSMTXMultVecSR(mtx, mVec3_c::Ey, vec);
-    return position + vec * 40.f;
+    return mPosition + vec * 40.f;
 }
 
 void float_ordering2() {

@@ -27,8 +27,8 @@ bool dAcOTowerGearD101_c::createHeap() {
         return false;
     }
     fn_80067340(field_0x3A0, &mdl, "model0");
-    position = field_0x3A0;
-    position.rotY(mRotation.y);
+    mPosition = field_0x3A0;
+    mPosition.rotY(mRotation.y);
 
     return true;
 }
@@ -50,7 +50,7 @@ int dAcOTowerGearD101_c::actorCreate() {
     );
 
     initTransform();
-    if (dBgS_WtrChk::CheckPos(&position, true, 500.0f, -500.0f)) {
+    if (dBgS_WtrChk::CheckPos(&mPosition, true, 500.0f, -500.0f)) {
         field_0x3F4 = mVec3_c::Zero;
         field_0x3F4.y = dBgS_WtrChk::GetWaterHeight();
     } else {
@@ -120,7 +120,7 @@ void dAcOTowerGearD101_callback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip 
 void dAcOTowerGearD101_c::initTransform() {
     mWorldMtx.transS(mVec3_c::Zero);
     mMtx_c mtx1;
-    mtx1.transS(position);
+    mtx1.transS(mPosition);
     mWorldMtx += mtx1;
     field_0x3C4.transS(mVec3_c::Zero);
     field_0x3C4.ZXYrotM(mRotation.x, mRotation.y, mRotation.z);

@@ -87,7 +87,7 @@ int dAcOTarzanPole_c::actorExecute() {
 
     mVec = mVec3_c::Ex * sXOffset + mVec3_c::Ey * sYOffset;
     mVec.rotY(mRotation.y);
-    poscopy2 = position + mVec;
+    poscopy2 = mPosition + mVec;
     poscopy3 = poscopy2 + mVec3_c::Ey * 20.0f;
 
     // 0x400000 corresponds to dAcPy_FLG0::FLG0_SWING_ROPE

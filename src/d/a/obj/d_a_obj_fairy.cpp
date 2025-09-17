@@ -53,7 +53,7 @@ int dAcObjFairy_c::draw() {
         if (!isCuring()) {
             static mQuat_c rot(0.0f, 0.0f, 0.0f, 10.0f);
             f32 f = field_0x4B0;
-            drawShadow(mShadow, nullptr, mWorldMtx, &rot, -1, -1, -1, -1, -1, position.y - f);
+            drawShadow(mShadow, nullptr, mWorldMtx, &rot, -1, -1, -1, -1, -1, mPosition.y - f);
         }
     }
 
@@ -102,7 +102,7 @@ void dAcObjFairy_c::finalizeState_CatchDemo() {
 bool dAcObjFairy_c::shouldAvoidLink() const {
     // TODO shuffles
     if (dAcPy_c::LINK->isUsingBugnet()) {
-        mVec3_c dist = dAcPy_c::LINK->getBugNetPos() - position;
+        mVec3_c dist = dAcPy_c::LINK->getBugNetPos() - mPosition;
         bool isClose = false;
         if (dist.mag() < 100.0f && velocity.dot(dist) > 0.0f) {
             isClose = true;

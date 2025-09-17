@@ -116,7 +116,7 @@ int dAcOSeatSword_c::actorExecute() {
 
     if (mStateMgr.isState(StateID_Wait)) {
         actorExecuteCommon();
-        mCyl.SetC(position);
+        mCyl.SetC(mPosition);
         dCcS::GetInstance()->Set(&mCyl);
     }
 
@@ -170,7 +170,7 @@ void dAcOSeatSword_c::registerInEvent() {
         mAng3_c ang = mRotation;
         ang.y += someAng;
         vec.rotY(mRotation.y);
-        vec += position;
+        vec += mPosition;
         player->setPosRot(&vec, &ang, 0, 1, 0);
         mField_0x7E8.set(0);
         updateSwordMdl();
@@ -225,8 +225,8 @@ void dAcOSeatSword_c::actorExecuteCommon() {
 
     mEffPos.rotY(player->mRotation.y);
 
-    mEffPos += player->position;
-    mEffPos.y = position.y;
+    mEffPos += player->mPosition;
+    mEffPos.y = mPosition.y;
 
     mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_76_, mEffPos, &mRotation, &mScale, nullptr, nullptr);
     mEff.setGlobalAlpha(mField_0x7E4);

@@ -55,7 +55,7 @@ int dAcEhb_leaf_c::create() {
         clearActorProperty(0x1);
     }
 
-    mStartingPos = position;
+    mStartingPos = mPosition;
 
     return SUCCEEDED;
 }

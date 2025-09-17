@@ -40,7 +40,7 @@ int dAcOappearBridge_c::create() {
     dBgS::GetInstance()->Regist(&mCollision, this);
     mAreaIdx = mParams & 0xFF;
     mEventId = (mParams >> 8) & 0xFF;
-    mSoundPosition = position + positionOffset;
+    mSoundPosition = mPosition + positionOffset;
     obj_pos = &mSoundPosition;
     mSceneCallback.attach(mModel);
     mModel.setAnm(mSrtAnm);
@@ -73,7 +73,7 @@ void dAcOappearBridge_c::initializeState_Wait() {
     dBgS::GetInstance()->Release(&mCollision);
 }
 void dAcOappearBridge_c::executeState_Wait() {
-    if (checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->position, nullptr)) {
+    if (checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->mPosition, nullptr)) {
         mStateMgr.changeState(StateID_Appear);
     }
 }
@@ -104,7 +104,7 @@ void dAcOappearBridge_c::executeState_Appear() {
     }
     mSrtAnm.play();
     mClrAnm.play();
-    if (!checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->position, nullptr)) {
+    if (!checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->mPosition, nullptr)) {
         mStateMgr.changeState(StateID_Disappear);
     }
 }
@@ -120,7 +120,7 @@ void dAcOappearBridge_c::executeState_Disappear() {
     }
     mSrtAnm.play();
     mClrAnm.play();
-    if (checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->position, nullptr)) {
+    if (checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->mPosition, nullptr)) {
         mStateMgr.changeState(StateID_Appear);
     } else {
         if (mClrAnm.isStop(0)) {

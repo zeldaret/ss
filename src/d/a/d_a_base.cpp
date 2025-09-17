@@ -49,7 +49,7 @@ dAcBase_c::dAcBase_c()
     : heap_allocator(),
       mpActorInfo(s_Create_ActorInfo),
       sound_list(),
-      obj_pos(&position),
+      obj_pos(&mPosition),
       params2(s_Create_Params2),
       obj_id(s_Create_UnkFlags),
       viewclip_index(s_Create_ViewClipIdx),
@@ -178,7 +178,7 @@ int dAcBase_c::create() {
 // 8002c8f0
 void dAcBase_c::postCreate(fBase_c::MAIN_STATE_e state) {
     if (state == SUCCESS) {
-        pos_copy = position;
+        pos_copy = mPosition;
         rot_copy = mRotation;
         room_id_copy = roomid;
     }
@@ -302,7 +302,7 @@ bool dAcBase_c::restorePosRotFromCopy() {
     if (roomid != room_id_copy) {
         return 0;
     }
-    position = pos_copy;
+    mPosition = pos_copy;
     mRotation = rot_copy;
     return 1;
 }
@@ -314,7 +314,7 @@ u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
     }
 
     if (spawnPos == nullptr) {
-        spawnPos = &position;
+        spawnPos = &mPosition;
     }
 
     u32 param2Copy = params2;
@@ -410,7 +410,7 @@ void dAcBase_c::forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *p
 
 // 8002d190
 mAng dAcBase_c::getXZAngleToPlayer() {
-    return cLib::targetAngleY(this->position, dAcPy_c::LINK->position);
+    return cLib::targetAngleY(this->mPosition, dAcPy_c::LINK->mPosition);
 }
 
 // 8002d1d0
@@ -419,7 +419,7 @@ bool dAcBase_c::getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDis
     bool isWithinThreshhold = false;
 
     if (actor != nullptr) {
-        distSquared = PSVECSquareDistance(position, actor->position);
+        distSquared = PSVECSquareDistance(mPosition, actor->mPosition);
 
         if (distSquared <= distThresh * distThresh) {
             isWithinThreshhold = true;
@@ -443,9 +443,9 @@ bool dAcBase_c::getDistanceAndAngleToActor(
     mAng angleToActorY(0), angleToActorX(0);
 
     if (actor != nullptr) {
-        distSquared = PSVECSquareDistance(position, actor->position);
-        angleToActorY.set(cLib::targetAngleY(position, actor->position));
-        angleToActorX.set(cLib::targetAngleX(position, actor->position));
+        distSquared = PSVECSquareDistance(mPosition, actor->mPosition);
+        angleToActorY.set(cLib::targetAngleY(mPosition, actor->mPosition));
+        angleToActorX.set(cLib::targetAngleX(mPosition, actor->mPosition));
 
         if ((distSquared <= distThresh * distThresh)) {
             if (mAng::abs((s32)(mRotation.y - angleToActorY)) <= yAngle &&
@@ -472,7 +472,7 @@ bool dAcBase_c::getDistanceAndAngleToActor(
 
 // 8002d3e0
 bool dAcBase_c::isWithinPlayerRadius(f32 radius) const {
-    f32 dist_diff = getSquareDistanceTo(dAcPy_c::LINK->position);
+    f32 dist_diff = getSquareDistanceTo(dAcPy_c::LINK->mPosition);
     return dist_diff < radius * radius;
 }
 
@@ -485,19 +485,19 @@ bool dAcBase_c::getDistanceAndAngleToPlayer(
 
 // 8002d470
 f32 dAcBase_c::getDistToPlayer() {
-    return EGG::Math<f32>::sqrt(PSVECSquareDistance(position, dAcPy_c::LINK->position));
+    return EGG::Math<f32>::sqrt(PSVECSquareDistance(mPosition, dAcPy_c::LINK->mPosition));
 }
 
 // 8002d4a0
 f32 dAcBase_c::getSquareDistToPlayer() {
-    return PSVECSquareDistance(position, dAcPy_c::LINK->position);
+    return PSVECSquareDistance(mPosition, dAcPy_c::LINK->mPosition);
 }
 
 // Some weirdness with the float registers being used
 // 8002d4b0
 void dAcBase_c::updateRoomId(f32 yOffset) {
     if (getConnectParent()->profile_name != fProfile::ROOM) {
-        mVec3_c actorPos(position.x, position.y + yOffset, position.z);
+        mVec3_c actorPos(mPosition.x, mPosition.y + yOffset, mPosition.z);
 
         if (dBgS_ObjGndChk::CheckPos(actorPos)) {
             roomid = dBgS_ObjGndChk::GetRoomID();
@@ -547,7 +547,7 @@ bool dAcBase_c::startBgHitSound(u32 soundId, const cBgS_PolyInfo &info, const mV
     }
     return mpSoundSource->startBgHitSound(
         soundId, dBgS::GetInstance()->GetPolyAtt0(info), dBgS::GetInstance()->GetPolyAtt1(info),
-        position != nullptr ? position : &this->position
+        position != nullptr ? position : &this->mPosition
     );
 }
 
@@ -555,7 +555,7 @@ bool dAcBase_c::startSoundAtPosition(u32 soundId, const mVec3_c *position) {
     if (mpSoundSource == nullptr) {
         return false;
     }
-    return mpSoundSource->startSoundAtPosition(soundId, position != nullptr ? position : &this->position);
+    return mpSoundSource->startSoundAtPosition(soundId, position != nullptr ? position : &this->mPosition);
 }
 
 bool dAcBase_c::holdSound(u32 soundId) {
@@ -661,7 +661,7 @@ dAcBase_c *dAcBase_c::createActor(
     u32 actorParams2, s32 actorRoomid, dBase_c *actorRef
 ) {
     if (actorPosition == nullptr) {
-        actorPosition = &position;
+        actorPosition = &mPosition;
     }
 
     if (actorRotation == nullptr) {
@@ -692,7 +692,7 @@ dAcBase_c *dAcBase_c::createActorStage(
     u32 actorParams2, s32 actorRoomid, dBase_c *actorRef
 ) {
     if (actorPosition == nullptr) {
-        actorPosition = &position;
+        actorPosition = &mPosition;
     }
 
     if (actorRotation == nullptr) {

@@ -82,7 +82,7 @@ void dAcBoomerang_c::atHitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, 
     }
 
     if (!i_objInfB->ChkTgBonk()) {
-        field_0x8D8 = position - i_actorB->position;
+        field_0x8D8 = mPosition - i_actorB->mPosition;
         field_0x8D8.y = 0.f;
 
         if (cM::isZero(field_0x8D8.normalize())) {
@@ -275,7 +275,7 @@ void dAcBoomerang_c::placeOnArm() {
     mWorldMtx += m;
     mWorldMtx.ZYXrotM(mAng::fromDeg(90.f), 0, mAng::fromDeg(90.f));
     mMdl.setLocalMtx(mWorldMtx);
-    mWorldMtx.getTranslation(position);
+    mWorldMtx.getTranslation(mPosition);
     mWorldMtx.getTranslation(mOldPosition);
 }
 
@@ -427,7 +427,7 @@ void dAcBoomerang_c::initializeState_Move() {
     mRotation.z.set(0);
     field_0x8B2 = 0;
 
-    mOldPosition = position;
+    mOldPosition = mPosition;
     mOldPosition.y += 60.f;
 
     field_0x8BC = dPad::ex_c::m_current_ex->mMPLS.getVerticalAngle();
@@ -571,7 +571,7 @@ int dAcBoomerang_c::draw() {
     if (!mStateMgr.isState(StateID_Wait)) {
         mProc.entry();
         static mQuat_c shadow(mVec3_c::Zero, 50.f);
-        drawShadow(mShadow, nullptr, mWorldMtx, &shadow, -1, -1, -1, -1, -1, position.y - mAcch.GetGroundH());
+        drawShadow(mShadow, nullptr, mWorldMtx, &shadow, -1, -1, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
     }
     return SUCCEEDED;
 }

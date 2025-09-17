@@ -13,7 +13,7 @@
 SPECIAL_ACTOR_PROFILE(GATE2GND_TAG, dTgGateToGround_c, fProfile::GATE2GND_TAG, 0x22, 0, 0);
 
 int dTgGateToGround_c::create() {
-    matrixCreateFromPosRotYScale(matrix, position, mRotation.y, mScale, nullptr, 0.0f);
+    matrixCreateFromPosRotYScale(matrix, mPosition, mRotation.y, mScale, nullptr, 0.0f);
 
     delayFrames = 0;
 
@@ -47,7 +47,7 @@ int dTgGateToGround_c::actorExecute() {
 
     player = dAcPy_c::LINK;
 
-    if (checkIfVec3fInMatrix(matrix, player->position)) {
+    if (checkIfVec3fInMatrix(matrix, player->mPosition)) {
         if (player->getRidingActorType() != dAcPy_c::RIDING_LOFTWING) {
             if (delayFrames > 15) {
                 Event e("CloudHole", 100, 0, nullptr, nullptr);

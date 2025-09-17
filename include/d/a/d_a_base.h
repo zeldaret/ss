@@ -74,7 +74,7 @@ public:
     /* 0xB5 */ s8 viewclip_index;
     /* 0xB6 */ u8 subtype;
     /* 0xB8 */ mAng3_c mRotation;
-    /* 0xC0 */ mVec3_c position;
+    /* 0xC0 */ mVec3_c mPosition;
     /* 0xCC */ mVec3_c mScale;
     /* 0xD8 */ u32 actor_properties;
     /* 0xDC */ dAcRef_c<dAcBase_c> actor_node;
@@ -111,7 +111,7 @@ public:
     dAcBase_c();
 
     void setPosition(const mVec3_c &r) {
-        position = r;
+        mPosition = r;
     }
     void setScale(const mVec3_c &r) {
         mScale = r;
@@ -121,30 +121,30 @@ public:
     }
 
     void copyPosition() {
-        pos_copy = position;
+        pos_copy = mPosition;
     }
     void copyRotation() {
         rot_copy = mRotation;
     }
 
     mVec3_c &GetPosition() {
-        return position;
+        return mPosition;
     }
     mAng3_c &GetRotation() {
         return mRotation;
     }
 
     mVec3_c GetPostionDifference(const dAcBase_c &other) {
-        return position - other.position;
+        return mPosition - other.mPosition;
     }
 
     f32 getSquareDistanceTo(const mVec3_c &point) const {
-        mVec3_c diff = position - point;
+        mVec3_c diff = mPosition - point;
         return diff.x * diff.x + diff.z * diff.z;
     }
 
     f32 getDistanceTo(const mVec3_c &to) const {
-        return position.distance(to);
+        return mPosition.distance(to);
     }
 
     bool IsOutOfRange(const mVec3_c &point, f32 radius) {

@@ -68,7 +68,7 @@ mVec3_c dTgFairy_c::calcLocation(const f32 &offset) {
     v.x = mScale.x * calcRnd(0.5f, offset);
     v.z = mScale.z * calcRnd(0.5f, offset);
     v.rotY(mRotation.y);
-    return position + v;
+    return mPosition + v;
 }
 
 float dTgFairy_c::calcRnd(const f32 &a, const f32 &b) {

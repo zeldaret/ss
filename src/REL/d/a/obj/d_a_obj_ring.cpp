@@ -27,7 +27,7 @@ int dAcOring_c::create() {
     mModel.setLocalMtx(mWorldMtx);
     forwardAccel = -5.0f;
     forwardMaxSpeed = -40.0f;
-    field_0x38C = dAcPy_c::LINK->position.y;
+    field_0x38C = dAcPy_c::LINK->mPosition.y;
     mStateMgr.changeState(StateID_Move);
     return SUCCEEDED;
 }
@@ -39,8 +39,8 @@ int dAcOring_c::doDelete() {
 int dAcOring_c::actorExecute() {
     mStateMgr.executeState();
     calcVelocity();
-    position += velocity;
-    position += mStts.mCcMove;
+    mPosition += velocity;
+    mPosition += mStts.mCcMove;
     updateMatrix();
     mModel.setLocalMtx(mWorldMtx);
     return SUCCEEDED;
@@ -58,7 +58,7 @@ void dAcOring_c::executeState_Move() {
         return;
     }
     mRotation.addX(0x1000);
-    if (field_0x38C >= position.y) {
+    if (field_0x38C >= mPosition.y) {
         deleteRequest();
     }
 }

@@ -150,7 +150,7 @@ int dAcOBlockUnderground::actorCreate() {
         if (shouldSetCylTgType()) {
             mCyl->mTg.mSrc.mType = getCylTgType();
         }
-        mCyl->SetC(position);
+        mCyl->SetC(mPosition);
     }
     mBgW.Move();
     mVec3_c min, max;
@@ -177,10 +177,10 @@ int dAcOBlockUnderground::actorExecute() {
 
             if (getSubtype() == 1) {
                 spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_461_);
-                dSndSmallEffectMgr_c::GetInstance()->playSoundAtPosition(SE_BlockUg_BROKEN_BOMB, position);
+                dSndSmallEffectMgr_c::GetInstance()->playSoundAtPosition(SE_BlockUg_BROKEN_BOMB, mPosition);
             } else {
                 spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_462_);
-                dSndSmallEffectMgr_c::GetInstance()->playSoundAtPosition(SE_BlockUg_BROKEN_CLAW, position);
+                dSndSmallEffectMgr_c::GetInstance()->playSoundAtPosition(SE_BlockUg_BROKEN_CLAW, mPosition);
             }
 
             u8 firstSceneFlag = getFirstSceneFlag();
@@ -288,6 +288,6 @@ bool dAcOBlockUnderground::hasCyl() {
 }
 
 void dAcOBlockUnderground::spawnEffect(u16 effectResourceId) const {
-    mVec3_c pos(position.x, position.y + 50.f, position.z);
+    mVec3_c pos(mPosition.x, mPosition.y + 50.f, mPosition.z);
     dJEffManager_c::spawnEffect(effectResourceId, pos, nullptr, nullptr, nullptr, nullptr, 0, 0);
 }

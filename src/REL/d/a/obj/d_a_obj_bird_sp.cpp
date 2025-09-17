@@ -44,20 +44,20 @@ int dAcObjBirdSp_c::actorExecute() {
         matrix.ZXYrotS(mRotation);
         PSMTXMultVec(matrix.m, posChange, posChange);
 
-        f32 angle = (position - dBird_c::getInstance()->position).dot(posChange);
+        f32 angle = (mPosition - dBird_c::getInstance()->mPosition).dot(posChange);
         if (angle < 0.0f) {
             posChange = -posChange;
         }
 
         posChange *= 1000.0f;
-        posChange += position;
-        posChange -= dBird_c::getInstance()->position;
+        posChange += mPosition;
+        posChange -= dBird_c::getInstance()->mPosition;
         dBird_c::getInstance()->accelerateTowards(posChange);
     }
 
-    mCollider.SetC(position);
+    mCollider.SetC(mPosition);
     dCcS::GetInstance()->Set(&mCollider);
-    mWorldMtx.transS(position.x, position.y, position.z);
+    mWorldMtx.transS(mPosition.x, mPosition.y, mPosition.z);
     mWorldMtx.ZXYrotM(mRotation);
 
     return SUCCEEDED;

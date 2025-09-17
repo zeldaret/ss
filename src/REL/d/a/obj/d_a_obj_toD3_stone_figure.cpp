@@ -48,7 +48,7 @@ int dAcOtoD3StoneFigure_c::create() {
     mCollision.Set(sCcSrc);
     mCollision.SetStts(mStts);
     int zero = 0;
-    mCollision.SetC(position);
+    mCollision.SetC(mPosition);
     mCollision.SetR(dAcOtoD3StoneFigure_c::sRadius + zero);
     mCollision.SetH(dAcOtoD3StoneFigure_c::sHeight + zero);
     dCcS::GetInstance()->Set(&mCollision);
@@ -56,10 +56,10 @@ int dAcOtoD3StoneFigure_c::create() {
 
     // ???
     f32 a, b, c;
-    c = position.z;
+    c = mPosition.z;
     b = getYPos();
     b += zero;
-    a = position.x;
+    a = mPosition.x;
     poscopy2.x = a;
     poscopy2.y = b;
     poscopy2.z = c;

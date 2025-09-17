@@ -9,7 +9,7 @@ SPECIAL_ACTOR_PROFILE(TAG_HEAT_RESIST, dTgHeatResist_c, fProfile::TAG_HEAT_RESIS
 int dTgHeatResist_c::create() {
     mInverted = static_cast<u8>(mParams & 0x3);
 
-    matrixCreateFromPosRotYScale(matrix, position, mRotation.y, mScale, nullptr, 0.0f);
+    matrixCreateFromPosRotYScale(matrix, mPosition, mRotation.y, mScale, nullptr, 0.0f);
     return SUCCEEDED;
 }
 
@@ -21,11 +21,11 @@ int dTgHeatResist_c::actorExecute() {
     dAcPy_c *player = dAcPy_c::LINK;
 
     if (mInverted == 1) {
-        if (!checkIfVec3fInMatrix(matrix, player->position)) {
+        if (!checkIfVec3fInMatrix(matrix, player->mPosition)) {
             player->onForceOrPreventActionFlags(0x8000000);
         }
     } else {
-        if (checkIfVec3fInMatrix(matrix, player->position)) {
+        if (checkIfVec3fInMatrix(matrix, player->mPosition)) {
             player->onForceOrPreventActionFlags(0x8000000);
         }
     }
