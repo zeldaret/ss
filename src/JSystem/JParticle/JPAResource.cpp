@@ -42,7 +42,7 @@ JPAResource::JPAResource() {
     mpCalcEmitterFuncListNum = 0;
     mTDB1Num = 0;
     mKeyBlockNum = 0;
-    fieldBlockNum = 0;
+    mFieldBlockNum = 0;
     mUsrIdx = 0;
 }
 
@@ -753,7 +753,7 @@ bool JPAResource::calc(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
     } else {
         calcKey(work);
 
-        for (int i = fieldBlockNum - 1; i >= 0; i--) {
+        for (int i = mFieldBlockNum - 1; i >= 0; i--) {
             mpFieldBlocks[i]->initOpParam();
         }
 
@@ -770,7 +770,7 @@ bool JPAResource::calc(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
             (*mpCalcEmitterFuncList[i])(work);
         }
 
-        for (int i = fieldBlockNum - 1; i >= 0; i--) {
+        for (int i = mFieldBlockNum - 1; i >= 0; i--) {
             mpFieldBlocks[i]->prepare(work);
         }
 
@@ -1059,7 +1059,7 @@ void JPAResource::calc_c(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
 /* 80276684-80276700 270FC4 007C+00 0/0 2/2 0/0 .text
  * calcField__11JPAResourceFP18JPAEmitterWorkDataP15JPABaseParticle */
 void JPAResource::calcField(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
-    for (int i = fieldBlockNum - 1; i >= 0; i--) {
+    for (int i = mFieldBlockNum - 1; i >= 0; i--) {
         mpFieldBlocks[i]->calc(work, ptcl);
     }
 }
