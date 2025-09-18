@@ -17,13 +17,13 @@ const char *const dAcOislandLOD_c::resMdlNames[5] = {
 SPECIAL_ACTOR_PROFILE(OBJ_ISLAND_LOD, dAcOislandLOD_c, fProfile::OBJ_ISLAND_LOD, 0x211, 0, 3);
 
 bool dAcOislandLOD_c::createHeap() {
-    mMdlLodIdx = params & 0xf;
+    mMdlLodIdx = mParams & 0xf;
     void *data = getOarcResFile(dAcOislandLOD_c::resFilenames[mMdlLodIdx]);
     mResFile = nw4r::g3d::ResFile(data);
     dStage_c::bindStageResToFile(&mResFile);
     dStage_c::bindSkyCmnToResFile(&mResFile);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(dAcOislandLOD_c::resMdlNames[mMdlLodIdx]);
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     return true;
 }
 
@@ -33,7 +33,7 @@ int dAcOislandLOD_c::create() {
     mMdl.setLocalMtx(mWorldMtx);
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     mCullingDistance = 500000.0;
     return SUCCEEDED;
 }

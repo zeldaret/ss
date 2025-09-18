@@ -23,19 +23,19 @@ private:
     void doExecute();
 
     s32 getNumGeko() const {
-        return (params >> 16) & 0xF;
+        return (mParams >> 16) & 0xF;
     }
 
     s32 getNoSpawnRadiusParm() const {
-        return params & 0xFF;
+        return mParams & 0xFF;
     }
 
     u8 getGekoParam() const {
-        return (params >> 20) & 0x3;
+        return (mParams >> 20) & 0x3;
     }
 
     u8 getParm3() const {
-        return (params >> 22) & 0xFF;
+        return (mParams >> 22) & 0xFF;
     }
 
     f32 getNoSpawnRadius() const {

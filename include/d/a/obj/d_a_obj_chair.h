@@ -59,7 +59,7 @@ public:
     // Might be an inline from dAcBase_c?
     mAng getRelativeYRotationToPlayer() {
         mAng a = getXZAngleToPlayer();
-        return a - rotation.y;
+        return a - mRotation.y;
     }
 
 private:

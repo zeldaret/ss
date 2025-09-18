@@ -13,7 +13,7 @@ bool dAcOropeBase_c::createHeap() {
     void *data = getOarcResFile("PracticeWood");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("RopeBase");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     mMdl.calc(true);
@@ -26,7 +26,7 @@ int dAcOropeBase_c::create() {
     CREATE_ALLOCATOR(dAcOropeBase_c);
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
-    boundingBox.Set(mVec3_c(-525.0f, -0.0f, -500.0f), mVec3_c(-325.0f, 700.0f, -300.0f));
+    mBoundingBox.Set(mVec3_c(-525.0f, -0.0f, -500.0f), mVec3_c(-325.0f, 700.0f, -300.0f));
     return SUCCEEDED;
 }
 
@@ -35,7 +35,7 @@ int dAcOropeBase_c::doDelete() {
 }
 
 int dAcOropeBase_c::actorExecute() {
-    if (checkObjectProperty(2)) {
+    if (checkObjectProperty(OBJ_PROP_0x2)) {
         field_0x35C = true;
     } else {
         field_0x35C = false;

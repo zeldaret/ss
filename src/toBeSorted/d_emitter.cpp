@@ -371,13 +371,13 @@ bool EffectsStruct::areAllEmittersDone() {
 }
 
 void EffectsStruct::execute() {
-    if (mpOwner != nullptr && (mpOwner->delete_request || mpOwner->lifecycle_state == fBase_c::TO_BE_DELETED)) {
+    if (mpOwner != nullptr && (mpOwner->mDeleteRequest || mpOwner->mLifecycleState == fBase_c::TO_BE_DELETED)) {
         mpOwner = nullptr;
     }
     if (dJEffManager_c::shouldBePaused(mpOwner)) {
         if (!checkFlag(EMITTER_0x10)) {
             stopCalcEmitters();
-            if (mpOwner != nullptr && !mpOwner->isBasePropertyFlag(0x100)) {
+            if (mpOwner != nullptr && !mpOwner->checkBaseProperty(0x100)) {
                 if (!mpEmitterHead->checkStatus(JPAEmtrStts_StopDraw)) {
                     onFlag(EMITTER_0x20);
                     stopDrawParticles();
@@ -403,10 +403,10 @@ void EffectsStruct::execute() {
 }
 
 bool EffectsStruct::getOwnerPolyAttrs(s32 *pOut1, s32 *pOut2) {
-    if (mpOwner != nullptr && mpOwner->group_type == fBase_c::ACTOR) {
+    if (mpOwner != nullptr && mpOwner->mGroupType == fBase_c::ACTOR) {
         dAcBase_c *actor = static_cast<dAcBase_c *>(mpOwner);
-        *pOut1 = actor->polyAttr0;
-        *pOut2 = actor->polyAttr1;
+        *pOut1 = actor->mPolyAttr0;
+        *pOut2 = actor->mPolyAttr1;
         return true;
     } else {
         *pOut1 = 0;
@@ -519,8 +519,8 @@ void dMassObjEmitterCallback_c::executeAfter(JPABaseEmitter *emitter) {
 void dMassObjEmitterCallback_c::execute() {
     for (s32 i = field_0x654 - 1; i >= 0; i--) {
         if (field_0x588[i] != nullptr) {
-            if (!dJEffManager_c::shouldBePaused(field_0x588[i]) || field_0x588[i]->delete_request ||
-                field_0x588[i]->lifecycle_state == fBase_c::TO_BE_DELETED) {
+            if (!dJEffManager_c::shouldBePaused(field_0x588[i]) || field_0x588[i]->mDeleteRequest ||
+                field_0x588[i]->mLifecycleState == fBase_c::TO_BE_DELETED) {
                 if (field_0x654 != 0 && i != field_0x654 - 1) {
                     field_0x588[i] = field_0x588[field_0x654 - 1];
                     field_0x268[i] = field_0x268[field_0x654 - 1];
@@ -884,8 +884,8 @@ void dJEffManager_c::draw() {
 }
 
 bool dJEffManager_c::shouldBePaused(dBase_c *owner) {
-    return owner != nullptr && !owner->isBasePropertyFlag(dBase_c::BASE_PROP_0x4) &&
-           (EventManager::isInEvent() || owner->isProcControlFlag(fBase_c::DISABLE_EXECUTE) ||
+    return owner != nullptr && !owner->checkBaseProperty(dBase_c::BASE_PROP_0x4) &&
+           (EventManager::isInEvent() || owner->checkProcControl(fBase_c::DISABLE_EXECUTE) ||
             // TODO execute control flags
             (owner->s_ExecuteControlFlags & 0x6fb));
 }
@@ -1183,8 +1183,9 @@ bool EffectsStruct::createEffect(
 
 // TODO: Document polyAttr1 and GROUND enum
 dJEffManager_c::GroundEffect_e dJEffManager_c::polyAttrsToGroundEffectIdx(s32 polyAttr0, s32 polyAttr1) {
-    if (polyAttr0 == POLY_ATT_0_NONE || (polyAttr0 == POLY_ATT_0_GRASS && polyAttr1 == 1) || (polyAttr0 == POLY_ATT_0_LOTUS) ||
-        (polyAttr0 == POLY_ATT_0_METAL && polyAttr1 == 1) || (polyAttr0 == POLY_ATT_0_TUTA) || (polyAttr0 == POLY_ATT_0_DEATH && polyAttr1 != 1) ||
+    if (polyAttr0 == POLY_ATT_0_NONE || (polyAttr0 == POLY_ATT_0_GRASS && polyAttr1 == 1) ||
+        (polyAttr0 == POLY_ATT_0_LOTUS) || (polyAttr0 == POLY_ATT_0_METAL && polyAttr1 == 1) ||
+        (polyAttr0 == POLY_ATT_0_TUTA) || (polyAttr0 == POLY_ATT_0_DEATH && polyAttr1 != 1) ||
         (polyAttr0 == POLY_ATT_0_LIFE && (polyAttr1 == 1 || polyAttr1 == 3)) || polyAttr0 == POLY_ATT_0_MAX) {
         return GROUND_6;
     } else if (polyAttr0 == POLY_ATT_0_DEATH) {
@@ -1249,7 +1250,7 @@ void dWaterEffect_c::execute(f32 water, f32 ground) {
     if (b) {
         if (!mIsInWater) {
             mIsInWater = true;
-            mVec3_c pos(ac->position.x, water, ac->position.z);
+            mVec3_c pos(ac->mPosition.x, water, ac->mPosition.z);
             mVec3_c scale(mScale, mScale, mScale);
             if (mIsSmall || water - ground < 50.0f) {
                 // For small objects or shallow water, create a
@@ -1269,10 +1270,10 @@ void dWaterEffect_c::execute(f32 water, f32 ground) {
 
     if (mIsInWater && getActorCeilPos(ac) > water) {
         // Spawn effect while in water
-        mVec3_c pos(ac->position.x, water, ac->position.z);
+        mVec3_c pos(ac->mPosition.x, water, ac->mPosition.z);
         mVec3_c scale(mScale, mScale, mScale);
         mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_127_, pos, nullptr, &scale, nullptr, nullptr);
-        f32 rate = nw4r::math::FAbs(ac->forwardSpeed) * 0.02f;
+        f32 rate = nw4r::math::FAbs(ac->mSpeed) * 0.02f;
         rate = rate > 0.95f ? 0.95f : rate;
         mEff.setRate(rate + 0.05f);
     }

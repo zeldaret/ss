@@ -3,8 +3,8 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/d_font_manager.h"
-#include "d/d_message.h"
 #include "d/d_lyt_hio.h"
+#include "d/d_message.h"
 #include "d/d_textwindow_unk.h"
 #include "d/lyt/d_lyt_util_items.h"
 #include "d/lyt/d_textbox.h"
@@ -25,6 +25,7 @@
 #include "toBeSorted/file_manager.h"
 
 #include <libc.h>
+
 
 #define READ_U8(src, off) (*((const u8 *)((const u8 *)src + off)))
 #define READ_S8(src, off) (*((const s8 *)((const u8 *)src + off)))
@@ -1569,9 +1570,9 @@ void dTagProcessor_c::somethingWithScrapperAndMusic(wchar_t *src) {
         dAcBase_c *parent = nullptr;
         while ((parent = ac = static_cast<dAcBase_c *>(fManager_c::searchBaseByGroupType(fBase_c::ACTOR, parent))) !=
                nullptr) {
-            if ((ac->profile_name >= fProfile::NPC_SLFB && ac->profile_name <= fProfile::NPC_SLFL) ||
-                (ac->profile_name >= fProfile::NPC_SLB && ac->profile_name <= fProfile::FLY_SLB) ||
-                ac->profile_name == fProfile::NPC_SLB2 || ac->profile_name == fProfile::NPC_DRBC) {
+            if ((ac->mProfileName >= fProfile::NPC_SLFB && ac->mProfileName <= fProfile::NPC_SLFL) ||
+                (ac->mProfileName >= fProfile::NPC_SLB && ac->mProfileName <= fProfile::FLY_SLB) ||
+                ac->mProfileName == fProfile::NPC_SLB2 || ac->mProfileName == fProfile::NPC_DRBC) {
                 dSndPlayerMgr_c::GetInstance()->setMsgActor(dLytMsgWindow_c::getInstance()->getMsgIdx(), ac);
                 return;
             }

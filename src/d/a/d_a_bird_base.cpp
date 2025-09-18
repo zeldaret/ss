@@ -22,9 +22,9 @@ int dAcBirdBase_c::draw() {
 }
 
 void dAcBirdBase_c::updateMatrixBird() {
-    mWorldMtx.transS(position);
+    mWorldMtx.transS(mPosition);
     mWorldMtx.concat(field_0xF80);
-    mWorldMtx.ZrotM(rotation.z);
+    mWorldMtx.ZrotM(mRotation.z);
     mWorldMtx.scaleM(field_0xF50.x, field_0xF50.y, field_0xF50.z);
     mMdl.getModel().setLocalMtx(mWorldMtx);
     mMdl.getModel().calc(false);
@@ -83,7 +83,7 @@ void dAcBirdBase_c::executeBirdAction() {
 
 bool dAcBirdBase_c::chkWallGndRoofHit() {
     mVec3_c tmp;
-    tmp.set(position); // unused
+    tmp.set(mPosition); // unused
 
     if (--mChkWallGndRoofTimer <= 0) {
         mChkWallGndRoofTimer = cM::rndInt(10) + 20;
@@ -99,8 +99,8 @@ bool dAcBirdBase_c::chkWallGndRoofHit() {
 void dAcBirdBase_c::handleWallGndRoofHit() {
     dBgS_ObjLinChk linChk;
     mVec3_c start, end;
-    start.set(position);
-    end.set(position);
+    start.set(mPosition);
+    end.set(mPosition);
 
     mVec3_c v1;
     mMtx_c m1;
@@ -108,7 +108,7 @@ void dAcBirdBase_c::handleWallGndRoofHit() {
 
     mAng rot1 = field_0xF5C.atan2sX_Z();
     if (mObjAcch2.ChkGndHit()) {
-        end.set(position);
+        end.set(mPosition);
         v1.set(0.0f, 0.0f, 10000.0f);
         m1.YrotS(rot1);
         m1.XrotM(-0x4000);
@@ -121,7 +121,7 @@ void dAcBirdBase_c::handleWallGndRoofHit() {
             return;
         }
 
-        end.set(position);
+        end.set(mPosition);
         v1.set(0.0f, 0.0f, 10000.0f);
         m1.YrotS(rot1);
         m1.XrotM(0x4000);
@@ -145,7 +145,7 @@ void dAcBirdBase_c::handleWallGndRoofHit() {
         return;
     }
 
-    end.set(position);
+    end.set(mPosition);
     v1.set(0.0f, 0.0f, 10000.0f);
     v1.rotY(rot1 - mAng(0x4000));
     end += v1;
@@ -156,7 +156,7 @@ void dAcBirdBase_c::handleWallGndRoofHit() {
         return;
     }
 
-    end.set(position);
+    end.set(mPosition);
     v1.set(0.0f, 0.0f, 10000.0f);
     m2.YrotS(rot1);
     m2.XrotM(0xC000);
@@ -169,7 +169,7 @@ void dAcBirdBase_c::handleWallGndRoofHit() {
         return;
     }
 
-    end.set(position);
+    end.set(mPosition);
     v1.set(0.0f, 0.0f, 10000.0f);
     m2.YrotS(rot1);
     m2.XrotM(0x4000);

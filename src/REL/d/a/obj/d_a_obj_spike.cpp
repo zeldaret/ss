@@ -20,7 +20,7 @@ STATE_DEFINE(dAcOspike_c, Wait);
 bool dAcOspike_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(getOarcResFile("SpikeD101"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("SpikeD101");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120));
     return true;
 }
 
@@ -40,8 +40,8 @@ int dAcOspike_c::create() {
     mCollision.SetAtVec(tmp);
 
     mMtx_c mtx;
-    mtx.XrotS(rotation.x);
-    mtx.ZrotM(rotation.z);
+    mtx.XrotS(mRotation.x);
+    mtx.ZrotM(mRotation.z);
     mVec3_c tmp2, tmp3;
     PSMTXMultVecSR(mtx.m, sVec1, tmp2);
     PSMTXMultVecSR(mtx.m, sVec2, tmp3);
@@ -64,7 +64,7 @@ int dAcOspike_c::create() {
 
     mCollision.cM3dGUnk::Set(tmp2, tmp3);
     mStateMgr.changeState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-10.0f, -250.0f, -480.0f), mVec3_c(80.0f, 260.0f, 490.0f));
+    mBoundingBox.Set(mVec3_c(-10.0f, -250.0f, -480.0f), mVec3_c(80.0f, 260.0f, 490.0f));
     return SUCCEEDED;
 }
 
@@ -74,7 +74,7 @@ int dAcOspike_c::doDelete() {
 
 int dAcOspike_c::actorExecute() {
     mStateMgr.executeState();
-    mCollision.cM3dGUnk::Set(position, rotation.y);
+    mCollision.cM3dGUnk::Set(mPosition, mRotation.y);
     dCcS::GetInstance()->Set(&mCollision);
     return 1;
 }

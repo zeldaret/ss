@@ -11,7 +11,7 @@ const f32 dAcOJunkRep_c::sSomeFloat = 0.0f;
 
 bool dAcOJunkRep_c::loadMdl(m3d::smdl_c &mdl, const char *name) {
     nw4r::g3d::ResMdl resMdl = mResFile.GetResMdl(name);
-    return mdl.create(resMdl, &heap_allocator, 0x120);
+    return mdl.create(resMdl, &mAllocator, 0x120);
 }
 
 bool dAcOJunkRep_c::getState() {
@@ -34,12 +34,12 @@ bool dAcOJunkRep_c::createHeap() {
 int dAcOJunkRep_c::create() {
     CREATE_ALLOCATOR(dAcOJunkRep_c);
 
-    forwardAccel = -1.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = -1.0f;
+    mMaxSpeed = -40.0f;
 
     mStateMgr.changeState(StateID_Wait);
 
-    boundingBox.Set(mVec3_c(-30.0f, -0.0f, -20.0f), mVec3_c(30.0f, 120.0f, 20.0f));
+    mBoundingBox.Set(mVec3_c(-30.0f, -0.0f, -20.0f), mVec3_c(30.0f, 120.0f, 20.0f));
 
     return SUCCEEDED;
 }

@@ -51,7 +51,7 @@ bool dAcArrow_c::createHeap() {
         mdl = mResFile.GetResMdl("EquipArrow");
     }
     // ?
-    bool ok = mModel.create(mdl, &heap_allocator, 0x120);
+    bool ok = mModel.create(mdl, &mAllocator, 0x120);
     if (!ok) {
         ok = false;
     }
@@ -61,7 +61,7 @@ bool dAcArrow_c::createHeap() {
 extern "C" void fn_8025E5E0(void *);
 
 int dAcArrow_c::create() {
-    mSubType = params & 0xFF;
+    mSubType = mParams & 0xFF;
     CREATE_ALLOCATOR(dAcArrow_c);
 
     field_0x67C |= 4;
@@ -79,7 +79,7 @@ int dAcArrow_c::create() {
         mStateMgr.changeState(StateID_Wait);
     }
 
-    boundingBox.Set(mVec3_c(-6.0f, -6.0f, 0.0f), mVec3_c(6.0f, 6.0f, 110.0f));
+    mBoundingBox.Set(mVec3_c(-6.0f, -6.0f, 0.0f), mVec3_c(6.0f, 6.0f, 110.0f));
     field_0x684 = -1;
     field_0x68A = 300;
     f32 rnd = cM::rndF(20.0f);

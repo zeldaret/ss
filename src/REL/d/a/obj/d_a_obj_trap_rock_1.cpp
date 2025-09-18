@@ -17,7 +17,7 @@ bool dAcOtrapRock1_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(getOarcResFile("TrapRockRoll"));
     nw4r::g3d::ResMdl m = mResFile.GetResMdl("TrapRockRoll");
 
-    TRY_CREATE(mMdl.create(m, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(m, &mAllocator, 0x120));
     mMdl.setPriorityDraw(0x1C, 0x09);
     void *dzb = getOarcFile("TrapRockRoll", "dzb/TrapRockRoll.dzb");
     void *plc = getOarcFile("TrapRockRoll", "dat/TrapRockRoll.plc");
@@ -26,21 +26,21 @@ bool dAcOtrapRock1_c::createHeap() {
 }
 
 int dAcOtrapRock1_c::create() {
-    mActivationSceneFlag = params & 0xFF;
-    mReturnSceneFlag = (params >> 8) & 0xFF;
+    mActivationSceneFlag = mParams & 0xFF;
+    mReturnSceneFlag = (mParams >> 8) & 0xFF;
     CREATE_ALLOCATOR(dAcOtrapRock1_c);
 
     mBgW.SetCrrFunc(dBgS_MoveBGProc_Typical);
     dBgS::GetInstance()->Regist(&mBgW, this);
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = 0.0f;
+    mMaxSpeed = -40.0f;
     mStateMgr.changeState(StateID_TrapWait);
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
     static mVec3_c offset = mVec3_c(50.0f, 50.0f, 50.0f);
     min -= offset;
     max += offset;
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
 
     return SUCCEEDED;
 }
@@ -64,7 +64,7 @@ int dAcOtrapRock1_c::draw() {
 
 void dAcOtrapRock1_c::initializeState_TrapWait() {}
 void dAcOtrapRock1_c::executeState_TrapWait() {
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, mActivationSceneFlag)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActivationSceneFlag)) {
         mStateMgr.changeState(StateID_TrapAction);
     }
 }
@@ -79,21 +79,21 @@ void dAcOtrapRock1_c::initializeState_TrapAction() {
 }
 
 void dAcOtrapRock1_c::executeState_TrapAction() {
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, mReturnSceneFlag)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mReturnSceneFlag)) {
         mStateMgr.changeState(StateID_TrapReturn);
     } else if (field_0x59E == 0 || mFrameCounter > 4) {
-        // After 5 frames, move rotation.x to 0x4000, then stay until return
-        bool reachedPoint = sLib::chaseAngle(&rotation.x.mVal, 0x4000, 0x14);
+        // After 5 frames, move mRotation.x to 0x4000, then stay until return
+        bool reachedPoint = sLib::chaseAngle(&mRotation.x.mVal, 0x4000, 0x14);
         if (reachedPoint) {
             return;
         }
     } else {
         f32 ratio;
-        if (mFrameCounter == 0 && rotation.x < 0x4000) {
+        if (mFrameCounter == 0 && mRotation.x < 0x4000) {
             ratio = 0.1f;
         } else {
             f32 b = field_0x5A0;
-            f32 r = (rotation.x - 0x4000) / b;
+            f32 r = (mRotation.x - 0x4000) / b;
             ratio = nw4r::math::FAbs(r);
         }
         if (ratio > 1.0f) {
@@ -111,10 +111,10 @@ void dAcOtrapRock1_c::executeState_TrapAction() {
             newAng = -sSomeValue;
         }
 
-        rotation.x += (int)newAng;
-        if (field_0x59E > 0 && rotation.x > field_0x59E + 0x4000 ||
-            field_0x59E < 0 && rotation.x < field_0x59E + 0x4000) {
-            rotation.x = field_0x59E + 0x4000;
+        mRotation.x += (int)newAng;
+        if (field_0x59E > 0 && mRotation.x > field_0x59E + 0x4000 ||
+            field_0x59E < 0 && mRotation.x < field_0x59E + 0x4000) {
+            mRotation.x = field_0x59E + 0x4000;
             u8 r6 = field_0x5A5;
             field_0x5A5 = r6 - (r6 * 2);
             field_0x5A0 = field_0x59E;
@@ -132,7 +132,7 @@ void dAcOtrapRock1_c::executeState_TrapAction() {
 void dAcOtrapRock1_c::finalizeState_TrapAction() {}
 void dAcOtrapRock1_c::initializeState_TrapReturn() {}
 void dAcOtrapRock1_c::executeState_TrapReturn() {
-    bool reachedReturnPoint = sLib::chaseAngle(&rotation.x.mVal, 0, 0x222);
+    bool reachedReturnPoint = sLib::chaseAngle(&mRotation.x.mVal, 0, 0x222);
     if (reachedReturnPoint) {
         mStateMgr.changeState(StateID_TrapWait);
     }

@@ -10,7 +10,7 @@ STATE_DEFINE(dAcOPumpkinLeaf_c, Wait);
 bool dAcOPumpkinLeaf_c::createHeap() {
     mBrres = nw4r::g3d::ResFile(getOarcResFile("Pumpkin"));
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("Leaf");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120, 1, nullptr));
     return true;
 }
 
@@ -19,13 +19,13 @@ int dAcOPumpkinLeaf_c::create() {
         return FAILED;
     }
 
-    forwardAccel = -1.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = -1.0f;
+    mMaxSpeed = -40.0f;
     updateMatrix();
     mStateMgr.changeState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 50.0f, 50.0f));
+    mBoundingBox.Set(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 50.0f, 50.0f));
     dAcObjBase_c::create(
-        "PmpknBd", getRoomId(), 0, &position, &rotation, &mScale, getParams2_ignoreLower(), -1, viewclip_index
+        "PmpknBd", getRoomId(), 0, &mPosition, &mRotation, &mScale, getParams2_ignoreLower(), -1, mViewClipIdx
     );
     return SUCCEEDED;
 }

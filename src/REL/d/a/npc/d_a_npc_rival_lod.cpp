@@ -10,7 +10,7 @@ STATE_DEFINE(dAcNpcRivalLOD_c, Wait);
 
 bool dAcNpcRivalLOD_c::createHeap() {
     void *oarc = getOarcFile("RivalLOD", "g3d/model.brres");
-    TRY_CREATE(mMdl.create(oarc, "RivalLOD", "RivalLOD_wait", &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(oarc, "RivalLOD", "RivalLOD_wait", &mAllocator, 0x120));
     return true;
 }
 int dAcNpcRivalLOD_c::create() {
@@ -18,10 +18,10 @@ int dAcNpcRivalLOD_c::create() {
         return FAILED;
     }
     0.0f; // float order, cool
-    forwardAccel = -1.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = -1.0f;
+    mMaxSpeed = -40.0f;
     setState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-110.0f, -30.0f, -130.0f), mVec3_c(130.0f, 190.0f, 110.0f));
+    mBoundingBox.Set(mVec3_c(-110.0f, -30.0f, -130.0f), mVec3_c(130.0f, 190.0f, 110.0f));
     return SUCCEEDED;
 }
 

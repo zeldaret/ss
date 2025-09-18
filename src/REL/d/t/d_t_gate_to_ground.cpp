@@ -13,7 +13,7 @@
 SPECIAL_ACTOR_PROFILE(GATE2GND_TAG, dTgGateToGround_c, fProfile::GATE2GND_TAG, 0x22, 0, 0);
 
 int dTgGateToGround_c::create() {
-    matrixCreateFromPosRotYScale(matrix, position, rotation.y, mScale, nullptr, 0.0f);
+    matrixCreateFromPosRotYScale(matrix, mPosition, mRotation.y, mScale, nullptr, 0.0f);
 
     delayFrames = 0;
 
@@ -25,7 +25,7 @@ int dTgGateToGround_c::create() {
             u8 c;
         };
     } v;
-    v.val = params;
+    v.val = mParams;
     params_FF_FF_00_00 = v.a;
     params_00_00_FF_00 = v.b;
     params_00_00_00_FF = v.c;
@@ -47,7 +47,7 @@ int dTgGateToGround_c::actorExecute() {
 
     player = dAcPy_c::LINK;
 
-    if (checkIfVec3fInMatrix(matrix, player->position)) {
+    if (checkIfVec3fInMatrix(matrix, player->mPosition)) {
         if (player->getRidingActorType() != dAcPy_c::RIDING_LOFTWING) {
             if (delayFrames > 15) {
                 Event e("CloudHole", 100, 0, nullptr, nullptr);
@@ -58,7 +58,7 @@ int dTgGateToGround_c::actorExecute() {
         } else {
             if (params_00_00_00_FF != -1) {
                 cam = dScGame_c::getCamera(0);
-                fn_80080960(cam->getField_0xD98(), params_00_00_00_FF, 0, roomid, 0);
+                fn_80080960(cam->getField_0xD98(), params_00_00_00_FF, 0, mRoomID, 0);
             }
             delayFrames = 0;
         }

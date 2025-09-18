@@ -18,7 +18,7 @@ public:
 
 private:
     u8 getModelType() {
-        return params & 0xF;
+        return mParams & 0xF;
     }
 
     /* 0x330 */ nw4r::g3d::ResFile mRes;

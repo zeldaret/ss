@@ -33,7 +33,7 @@ bool dAcOFruitGutsLeaf_c::createHeap() {
         return false;
     }
 
-    TRY_CREATE(mMdl.create(m, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(m, &mAllocator, 0x120));
 
     return true;
 }
@@ -49,13 +49,13 @@ int dAcOFruitGutsLeaf_c::actorCreate() {
         mMdl.setPriorityDraw(0x7F, 0x7F);
     }
 
-    boundingBox.Set(bbMin, bbMax);
+    mBoundingBox.Set(bbMin, bbMax);
 
     return SUCCEEDED;
 }
 
 int dAcOFruitGutsLeaf_c::actorPostCreate() {
-    if (hideInPast() && !dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position)) {
+    if (hideInPast() && !dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, mPosition)) {
         mScale.x = 0.0f;
         mScale.y = 0.0f;
         mScale.z = 0.0f;
@@ -69,7 +69,7 @@ int dAcOFruitGutsLeaf_c::actorPostCreate() {
 }
 int dAcOFruitGutsLeaf_c::actorExecute() {
     if (hideInPast()) {
-        if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position)) {
+        if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, mPosition)) {
             if (mScale.x != 1.0f) {
                 sLib::chase(&mScale.x, 1.0f, 0.05f);
                 mScale.z = mScale.x;
@@ -99,9 +99,9 @@ bool dAcOFruitGutsLeaf_c::hideInPast() {
 }
 
 s32 dAcOFruitGutsLeaf_c::getType() {
-    return params & 0xFF;
+    return mParams & 0xFF;
 }
 
 s32 dAcOFruitGutsLeaf_c::getPastBehavior() {
-    return (params >> 8) & 1;
+    return (mParams >> 8) & 1;
 }

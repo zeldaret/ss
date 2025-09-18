@@ -31,22 +31,22 @@ struct Quatf {
         return Quatf(lhs.w * rhs.w - lhs.v.dot(rhs.v), tmp1);
     }
 
-    /* 8049b390 */ void set(f32 fw, f32 fx, f32 fy, f32 fz);
-    /*          */ void set(f32 f, const Vector3f &vec);
-    /*          */ void setRPY(const EGG::Vector3f &rpy);
-    /*          */ Vector3f calcRPY();
-    /*          */ void setRPY(f32 roll, f32 pitch, f32 yaw);
-    /* 8049b3b0 */ void setAxisRotation(const Vector3f &, f32);
-    /* 8049b450 */ f32 norm();
-    /* 8049b480 */ void normalise();
-    /* 8049b500 */ Quatf conjugate() const;
-    /*          */ Quatf inverse();
-    /* 8049b550 */ Vector3f rotateVector(const Vector3f &);
-    /*          */ Vector3f rotateVectorInv(const Vector3f &);
-    /* 8049b800 */ void slerpTo(const Quatf &, f32, Quatf &out) const;
-    /* 8049b800 */ void limitSlerpTo(const Quatf &, f32, f32, Quatf &out) const;
-    /*          */ void makeVectorRotationLimit(Vector3f &, Vector3f &, f32);
-    /* 8049bbb0 */ void makeVectorRotation(const Vector3f &, const Vector3f &);
+    void set(f32 fw, f32 fx, f32 fy, f32 fz);
+    void set(f32 f, const Vector3f &vec);      // not in SS
+    void setRPY(const EGG::Vector3f &rpy);     // not in SS
+    Vector3f calcRPY();                        // not in SS
+    void setRPY(f32 roll, f32 pitch, f32 yaw); // not in SS
+    void setAxisRotation(const Vector3f &, f32);
+    f32 norm();
+    void normalise();
+    Quatf conjugate() const;
+    Quatf inverse(); // not in SS
+    Vector3f rotateVector(const Vector3f &);
+    Vector3f rotateVectorInv(const Vector3f &); // not in SS
+    void slerpTo(const Quatf &, f32, Quatf &out) const;
+    void limitSlerpTo(const Quatf &, f32, f32, Quatf &out) const;
+    void makeVectorRotationLimit(Vector3f &, Vector3f &, f32); // not in SS
+    void makeVectorRotation(const Vector3f &, const Vector3f &);
 
     void multScalar(f32 s) {
         w *= s;

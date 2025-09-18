@@ -67,18 +67,18 @@ bool dAcODungeonShip_c::createHeap() {
     const char *arcName = "ShipDungeon";
     mRes = nw4r::g3d::ResFile(getOarcResFile(arcName));
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("ShipDungeonN");
-    if (!mMdl.fn_8001F3B0(mdl, &heap_allocator, 0x120)) {
+    if (!mMdl.fn_8001F3B0(mdl, &mAllocator, 0x120)) {
         return false;
     }
 
     nw4r::g3d::ResAnmChr anmChr = mRes.GetResAnmChr("ShipDungeonN");
-    if (!mAnmChr.create(mdl, anmChr, &heap_allocator, nullptr)) {
+    if (!mAnmChr.create(mdl, anmChr, &mAllocator, nullptr)) {
         return false;
     }
     mMdl.setAnm(mAnmChr);
 
     nw4r::g3d::ResAnmClr anmClr = mRes.GetResAnmClr("ShipDungeonN");
-    if (!mAnmMatClr.create(mdl, anmClr, &heap_allocator, nullptr, 1)) {
+    if (!mAnmMatClr.create(mdl, anmClr, &mAllocator, nullptr, 1)) {
         return false;
     }
 
@@ -95,10 +95,10 @@ bool dAcODungeonShip_c::createHeap() {
     }
 
     // wat
-    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (params >> 0x10) & 0xFF)) {
+    if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, (mParams >> 0x10) & 0xFF)) {
         goto ok;
     } else {
-        bool result = mBg.InitMapStuff(&heap_allocator);
+        bool result = mBg.InitMapStuff(&mAllocator);
         if (result == false) {
             return false;
         }
@@ -112,7 +112,7 @@ int dAcODungeonShip_c::create() {
         return FAILED;
     }
 
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, (params >> 0x10) & 0xFF)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, (mParams >> 0x10) & 0xFF)) {
         mIsDocked = true;
     }
 
@@ -120,7 +120,7 @@ int dAcODungeonShip_c::create() {
         return FAILED;
     }
 
-    mPathIdx = params & 0xFF;
+    mPathIdx = mParams & 0xFF;
     if (mPathIdx == 0xFF) {
         return FAILED;
     }
@@ -129,10 +129,10 @@ int dAcODungeonShip_c::create() {
     mStts.SetRank(2);
     mCc.Set(sCcSrc);
     mCc.SetStts(mStts);
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = 0.0f;
-    boundingBox.Set(mVec3_c(-6000.0f, -500.0f, -2000.0f), mVec3_c(5000.0f, 4000.0f, 2000.0f));
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, (params >> 0x10) & 0xFF)) {
+    mAcceleration = 0.0f;
+    mMaxSpeed = 0.0f;
+    mBoundingBox.Set(mVec3_c(-6000.0f, -500.0f, -2000.0f), mVec3_c(5000.0f, 4000.0f, 2000.0f));
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, (mParams >> 0x10) & 0xFF)) {
         dBgS::GetInstance()->RegistBg(&mBg, this);
         mStateMgr.changeState(StateID_End);
     } else {
@@ -144,7 +144,7 @@ int dAcODungeonShip_c::create() {
     mEffects[1].init(this);
     field_0x8D9 = 0;
 
-    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (params >> 0x10) & 0xFF)) {
+    if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, (mParams >> 0x10) & 0xFF)) {
         mDowsingOffset.set(0.0f, 500.0f, 0.0f);
         mDowsingTarget.initialize(DowsingTarget::SLOT_STORY_EVENT, 0, &mDowsingOffset, 10000.0);
         mDowsingTarget.doRegister();
@@ -152,10 +152,10 @@ int dAcODungeonShip_c::create() {
     }
 
     mCullingDistance = 200000.0f;
-    clearActorProperty(0x1);
-    mAppearEventFromParam = (params >> 0x18);
-    field_0x849 = rotation.x;
-    rotation.x = 0;
+    unsetActorProperty(AC_PROP_0x1);
+    mAppearEventFromParam = (mParams >> 0x18);
+    field_0x849 = mRotation.x;
+    mRotation.x = 0;
     updateMatrix();
     mBg.Move();
     return SUCCEEDED;
@@ -176,11 +176,11 @@ int dAcODungeonShip_c::actorExecute() {
     // I hate whatever this stupid pattern in actors is with
     // redundant casts and adding 0.0f to stuff
     int tempZero = 0;
-    mVec3_c offsetPosition(position.x, position.y + 1200.0f + tempZero, position.z);
+    mVec3_c offsetPosition(mPosition.x, mPosition.y + 1200.0f + tempZero, mPosition.z);
 
     f32 scale = tempZero + 2100.0f;
     mVec3_c directedScale = mVec3_c::Ex * scale;
-    directedScale.rotY(rotation.y);
+    directedScale.rotY(mRotation.y);
 
     f32 extent = tempZero + 1800.0f;
     mCc.Set(offsetPosition + directedScale, offsetPosition - directedScale, extent);
@@ -191,7 +191,7 @@ int dAcODungeonShip_c::actorExecute() {
     mMdl.calc(false);
     if (field_0x8D8) {
         mEffects[0].createContinuousEffect(
-            PARTICLE_RESOURCE_ID_MAPPING_682_, position, &rotation, nullptr, nullptr, nullptr
+            PARTICLE_RESOURCE_ID_MAPPING_682_, mPosition, &mRotation, nullptr, nullptr, nullptr
         );
     }
 
@@ -249,7 +249,7 @@ void dAcODungeonShip_c::executeState_Transparency() {
         } else if (mNumTimesHit == 2) {
             field_0x863 = 0;
             mNumTimesHit++;
-            SceneflagManager::sInstance->setFlag(roomid, (params >> 0x10) & 0xFF);
+            SceneflagManager::sInstance->setFlag(mRoomID, (mParams >> 0x10) & 0xFF);
             mAppearEvent = mAppearEventFromParam;
             field_0x8D8 = 1;
             mStateMgr.changeState(StateID_AppearEvent);
@@ -281,8 +281,8 @@ void dAcODungeonShip_c::executeState_Transparency() {
         // f32 distToLink = getSquareDistanceTo(link->position);
         f32 dist2 = 100000000.0f;
         f32 dist1 = 225000000.0f;
-        bool isWithinDist2 = getSquareDistanceTo(link->position) < dist2;
-        bool isWithinDist1 = getSquareDistanceTo(link->position) < dist1;
+        bool isWithinDist2 = getSquareDistanceTo(link->mPosition) < dist2;
+        bool isWithinDist1 = getSquareDistanceTo(link->mPosition) < dist1;
         s32 tmp1 = fn_485_1960();
         bool tmp2 = tmp1 < 0x1555;
         if (isWithinDist1 && field_0x868 == 0 && field_0x862 == 0 && tmp2) {
@@ -309,14 +309,14 @@ void dAcODungeonShip_c::executeState_Transparency() {
             field_0x858 *= -1;
         }
     }
-    sLib::addCalc(&forwardSpeed, field_0x858, 0.02f, 1.0f, 0.1f);
+    sLib::addCalc(&mSpeed, field_0x858, 0.02f, 1.0f, 0.1f);
     fn_485_1720();
 }
 void dAcODungeonShip_c::finalizeState_Transparency() {}
 
 void dAcODungeonShip_c::initializeState_AppearEvent() {
     if (mAppearEvent != 0xFF) {
-        Event ev(mAppearEvent, roomid, 0x100001, (void *)&eventIn_Wrapper, (void *)&eventEnd_Wrapper);
+        Event ev(mAppearEvent, mRoomID, 0x100001, (void *)&eventIn_Wrapper, (void *)&eventEnd_Wrapper);
         mEvent.scheduleEvent(ev, 0);
     }
 }
@@ -366,11 +366,11 @@ void dAcODungeonShip_c::executeState_AppearEvent() {
                         f32 f;
                         if (mEvent.getSingleFloatData(&f, 'ang0', 0) == 1) {
                             mAng ang = mAng::fromDeg(f);
-                            rotation.y = ang;
+                            mRotation.y = ang;
                         }
                         mVec3_c vec;
                         if (mEvent.getSingleVecData(&vec, 'pos0', 0) == 1) {
-                            position = vec;
+                            mPosition = vec;
                         }
                         field_0x8D8 = 0;
                     }
@@ -379,7 +379,7 @@ void dAcODungeonShip_c::executeState_AppearEvent() {
                 default: mEvent.advanceNext(); break;
             }
         } else {
-            Event ev(mAppearEvent, roomid, 0x100001, (void *)&eventIn_Wrapper, (void *)&eventEnd_Wrapper);
+            Event ev(mAppearEvent, mRoomID, 0x100001, (void *)&eventIn_Wrapper, (void *)&eventEnd_Wrapper);
             mEvent.scheduleEvent(ev, 0);
         }
     } else {
@@ -429,9 +429,9 @@ void dAcODungeonShip_c::fn_485_1660() {
     f32 speed = 0.0f;
     f32 unk = 0.0001f;
     field_0x856 = 1;
-    if (mPath.init(mPathIdx, roomid, 0, 0, false, time, speed, unk)) {
+    if (mPath.init(mPathIdx, mRoomID, 0, 0, false, time, speed, unk)) {
         mPath.setSegment(0, time);
-        position = mPath.getPosition();
+        mPosition = mPath.getPosition();
         mOldPosition = mPath.getPosition();
     }
 }
@@ -440,19 +440,19 @@ static u32 rot_7fff = 0x7FFF;
 static u32 rot_4000 = 0x4000;
 
 void dAcODungeonShip_c::fn_485_1720() {
-    mPath.setSpeed(forwardSpeed);
+    mPath.setSpeed(mSpeed);
     mPath.execute();
     // TODO
-    position = mPath.getPosition();
+    mPosition = mPath.getPosition();
 
     mVec3_c tmp;
     mPath.getDirection(tmp);
-    rotation.y = cM::atan2s(tmp.x, tmp.z);
+    mRotation.y = cM::atan2s(tmp.x, tmp.z);
     if (mPath.CheckFlag(0x40000000)) {
-        rotation.y += rot_7fff;
+        mRotation.y += rot_7fff;
     }
-    rotation.y += rot_4000;
-    angle.y = rotation.y;
+    mRotation.y += rot_4000;
+    mAngle.y = mRotation.y;
 
     int factor = 0x12C;
     f32 tmp2 = nw4r::math::SinIdx((field_0x850 * 800));
@@ -478,8 +478,8 @@ u32 dAcODungeonShip_c::fn_485_1960() {
         return 0;
     }
     mVec3_c v = mVec3_c::Ez;
-    v.rotY(angle.y + mAng(-0x4000));
-    mVec3_c dist = link->position - position;
+    v.rotY(mAngle.y + mAng(-0x4000));
+    mVec3_c dist = link->mPosition - mPosition;
     dist.y = 0.0f;
     dist.normalizeRS();
     s16 a1 = cLib::targetAngleY(mVec3_c::Zero, v);
@@ -507,10 +507,10 @@ void dAcODungeonShip_c::fn_485_1DF0() {
     const dAcPy_c *link = dAcPy_c::GetLink();
     if (link != nullptr) {
         // unused, stack problems
-        mVec3_c dist = position - link->position;
+        mVec3_c dist = mPosition - link->mPosition;
         fn_485_1960();
         field_0x858 = 30.0f;
-        sLib::addCalc(&forwardSpeed, 30.0f, 0.02f, 1.0f, 0.1f);
+        sLib::addCalc(&mSpeed, 30.0f, 0.02f, 1.0f, 0.1f);
         fn_485_1720();
     }
 }

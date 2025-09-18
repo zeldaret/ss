@@ -17,13 +17,13 @@ public:
     STATE_FUNC_DECLARE(dAcOlog_c, Shake);
 
     u8 getField_0xE4E() const {
-        return mField_0xE4E;
+        return field_0xE4E;
     }
 
 private:
     // TODO: Fixup stuff
     /* 0x330 */ u8 _330[0xE4E - 0x330];
-    /* 0xE4E */ u8 mField_0xE4E;
+    /* 0xE4E */ u8 field_0xE4E;
     /* 0x??? */ STATE_MGR_DECLARE(dAcOlog_c);
 };
 

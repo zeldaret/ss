@@ -21,11 +21,11 @@ bool dAcOappearBridge_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(getOarcResFile("TongueStage"));
     dStage_c::bindStageResToFile(&mResFile);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("TongueStage");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x128));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x128));
     nw4r::g3d::ResAnmTexSrt srt = mResFile.GetResAnmTexSrt("TongueStage");
-    TRY_CREATE(mSrtAnm.create(mdl, srt, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mSrtAnm.create(mdl, srt, &mAllocator, nullptr, 1));
     nw4r::g3d::ResAnmClr clr = mResFile.GetResAnmClr("TongueStage");
-    TRY_CREATE(mClrAnm.create(mdl, clr, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mClrAnm.create(mdl, clr, &mAllocator, nullptr, 1));
     cBgD_t *dzb = (cBgD_t *)getOarcFile("TongueStage", "dzb/TongueStage.dzb");
     PLC *plc = (PLC *)getOarcFile("TongueStage", "dat/TongueStage.plc");
     updateMatrix();
@@ -38,10 +38,10 @@ bool dAcOappearBridge_c::createHeap() {
 int dAcOappearBridge_c::create() {
     CREATE_ALLOCATOR(dAcOappearBridge_c);
     dBgS::GetInstance()->Regist(&mCollision, this);
-    mAreaIdx = params & 0xFF;
-    mEventId = (params >> 8) & 0xFF;
-    mSoundPosition = position + positionOffset;
-    obj_pos = &mSoundPosition;
+    mAreaIdx = mParams & 0xFF;
+    mEventId = (mParams >> 8) & 0xFF;
+    mSoundPosition = mPosition + positionOffset;
+    mpPosition = &mSoundPosition;
     mSceneCallback.attach(mModel);
     mModel.setAnm(mSrtAnm);
     mModel.setAnm(mClrAnm);
@@ -50,7 +50,7 @@ int dAcOappearBridge_c::create() {
     mStateMgr.changeState(StateID_Wait);
     mModel.setPriorityDraw(0x1C, 0x9);
 
-    boundingBox.Set(mVec3_c(-3000.0f, -200.0f, -600.0f), mVec3_c(50.0f, 800.0f, 600.0f));
+    mBoundingBox.Set(mVec3_c(-3000.0f, -200.0f, -600.0f), mVec3_c(50.0f, 800.0f, 600.0f));
 
     return SUCCEEDED;
 }
@@ -73,7 +73,7 @@ void dAcOappearBridge_c::initializeState_Wait() {
     dBgS::GetInstance()->Release(&mCollision);
 }
 void dAcOappearBridge_c::executeState_Wait() {
-    if (checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->position, nullptr)) {
+    if (checkPosInArea(mAreaIdx, mRoomID, dAcPy_c::LINK->mPosition, nullptr)) {
         mStateMgr.changeState(StateID_Appear);
     }
 }
@@ -86,7 +86,7 @@ void dAcOappearBridge_c::finalizeState_Wait() {
     if (mEventId != 0xFF) {
         u32 f1 = FLAGS_1;
         u32 f2 = FLAGS_2;
-        Event ev = Event(mEventId, roomid, f2 & ~f1, nullptr, nullptr);
+        Event ev = Event(mEventId, mRoomID, f2 & ~f1, nullptr, nullptr);
         mActorEvent.scheduleEvent(ev, 0);
     }
 }
@@ -104,7 +104,7 @@ void dAcOappearBridge_c::executeState_Appear() {
     }
     mSrtAnm.play();
     mClrAnm.play();
-    if (!checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->position, nullptr)) {
+    if (!checkPosInArea(mAreaIdx, mRoomID, dAcPy_c::LINK->mPosition, nullptr)) {
         mStateMgr.changeState(StateID_Disappear);
     }
 }
@@ -120,7 +120,7 @@ void dAcOappearBridge_c::executeState_Disappear() {
     }
     mSrtAnm.play();
     mClrAnm.play();
-    if (checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->position, nullptr)) {
+    if (checkPosInArea(mAreaIdx, mRoomID, dAcPy_c::LINK->mPosition, nullptr)) {
         mStateMgr.changeState(StateID_Appear);
     } else {
         if (mClrAnm.isStop(0)) {

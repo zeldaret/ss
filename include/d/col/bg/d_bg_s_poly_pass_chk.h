@@ -43,7 +43,7 @@ public:
         return mBellows;
     }
     bool Chk0xE() {
-        return mField_0xE;
+        return field_0xE;
     }
 
     void ClrObj() {
@@ -77,7 +77,7 @@ public:
         mBellows = false;
     }
     void Clr0xE() {
-        mField_0xE = false;
+        field_0xE = false;
     }
 
     void SetObj() {
@@ -111,7 +111,7 @@ public:
         mBellows = true;
     }
     void Set0xE() {
-        mField_0xE = true;
+        field_0xE = true;
     }
 
     void SetPassChkInfo(dBgS_PolyPassChk &chk);
@@ -127,7 +127,7 @@ private:
     /* 0xB */ bool mClawshot;
     /* 0xC */ bool mUnderwaterRoof;
     /* 0xD */ bool mBellows;
-    /* 0xE */ bool mField_0xE;
+    /* 0xE */ bool field_0xE;
 };
 
 #endif

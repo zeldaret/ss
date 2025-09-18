@@ -82,10 +82,10 @@ public:
     struct Shape {
         ~Shape();
 
-        /* 0x00 */ int mField_0x00;
-        /* 0x04 */ mVec3_c mField_0x04;
-        /* 0x10 */ mVec3_c mField_0x10;
-        /* 0x1C */ mVec3_c mField_0x1C;
+        /* 0x00 */ int field_0x00;
+        /* 0x04 */ mVec3_c field_0x04;
+        /* 0x10 */ mVec3_c field_0x10;
+        /* 0x1C */ mVec3_c field_0x1C;
     };
     cCcD_ShapeAttr();
     /* vt 0x08 */ virtual ~cCcD_ShapeAttr();
@@ -286,8 +286,8 @@ public:
     /* 0x04 */ int mAtOldApid;
     /* 0x08 */ int mTgApid;
     /* 0x0C */ int mTgOldApid;
-    /* 0x10 */ mVec3_c mField_0x10;
-    /* 0x1C */ mVec3_c mField_0x1C;
+    /* 0x10 */ mVec3_c field_0x10;
+    /* 0x1C */ mVec3_c field_0x1C;
     /* 0x28 */ mVec3_c mCcMove;
     /* 0x34 */ dAcObjBase_c *mpActor;
     /* 0x38 */ int mRank;
@@ -318,17 +318,17 @@ public:
 };
 
 struct cCcD_SrcGObjTgInfo {
-    /* 0x00 */ u8 mField_0x0;
-    /* 0x01 */ u8 mField_0x1;
-    /* 0x02 */ u16 mField_0x2;
+    /* 0x00 */ u8 field_0x0;
+    /* 0x01 */ u8 field_0x1;
+    /* 0x02 */ u16 field_0x2;
 };
 
 struct cCcD_SrcGObjTg {
     /* 0x00 */ u32 mType;
     /* 0x04 */ u32 mSPrm;
     /* 0x08 */ cCcD_SrcGObjTgInfo mInfo;
-    /* 0x0C */ u16 mField_0x0C;
-    /* 0x0E */ u16 mField_0x0E;
+    /* 0x0C */ u16 field_0x0C;
+    /* 0x0E */ u16 field_0x0E;
 };
 
 enum dCcD_ObjAtType {
@@ -378,8 +378,8 @@ enum cCcD_AtModifiers_e {
     /* 0x 0000 0400 */ AT_MOD_CURSED = (1 << 10),
 };
 struct cCcD_SrcGObjAtInfo {
-    /* 0x00 */ u8 mField_0x0;
-    /* 0x01 */ u8 mField_0x1;
+    /* 0x00 */ u8 field_0x0;
+    /* 0x01 */ u8 field_0x1;
     /* 0x02 */ u16 mModifier;
 };
 
@@ -392,11 +392,11 @@ struct cCcD_SrcGObjAt {
     /* 0x04 */ u32 mSPrm;
     /* 0x08 */ cCcD_SrcGObjAtInfo mInfo;
     /* 0x0C */ u8 mDamage;
-    /* 0x0D */ u8 mField_0xD;
-    /* 0x0E */ u8 mField_0xE;
-    /* 0x0F */ u8 mField_0xF;
-    /* 0x10 */ u16 mField_0x10;
-    /* 0x12 */ s16 mField_0x12;
+    /* 0x0D */ u8 field_0xD;
+    /* 0x0E */ u8 field_0xE;
+    /* 0x0F */ u8 field_0xF;
+    /* 0x10 */ u16 field_0x10;
+    /* 0x12 */ s16 field_0x12;
 };
 
 struct cCcD_SrcGObjCo {
@@ -567,7 +567,7 @@ public:
     /* 0x30 */ mVec3_c mHitPos;
     /* 0x3C */ mVec3_c mVec;
     /* 0x48 */ cCcD_SrcGObjTg mTgHitSrc;
-    /* 0x58 */ cCcD_HitCallback mField_0x58;
+    /* 0x58 */ cCcD_HitCallback field_0x58;
 };
 
 class cCcD_ObjTg : public cCcD_GAtTgCoCommonBase {
@@ -589,11 +589,11 @@ public:
     }
 
     void SetFlag_0xA(u16 flag) {
-        mSrc.mField_0x0E = flag;
+        mSrc.field_0x0E = flag;
     }
 
     u16 GetFlag_0xA(u16 mask) const {
-        return mSrc.mField_0x0E & mask;
+        return mSrc.field_0x0E & mask;
     }
     void ClrSet() {
         OffSPrm(1);
@@ -603,7 +603,7 @@ public:
     }
 
     void Set_0x4C(u32 f) {
-        mField_0x4C = f;
+        field_0x4C = f;
     }
 
     u32 MskType(u32 mask) const {
@@ -654,15 +654,15 @@ public:
     }
 
     void Set_0x4B(u8 val) {
-        mField_0x4B = val;
+        field_0x4B = val;
     }
 
     void SetInfo_0x1(u8 val) {
-        mSrc.mInfo.mField_0x1 = val;
+        mSrc.mInfo.field_0x1 = val;
     }
 
     void SetInfo_0x2(u16 val) {
-        mSrc.mInfo.mField_0x2 = val;
+        mSrc.mInfo.field_0x2 = val;
     }
 
 public:
@@ -671,14 +671,14 @@ public:
     /* 0x38 */ mVec3_c mHitPos;
     /* 0x44 */ s16 *mShieldFrontRangeYAngle;
     /* 0x48 */ s16 mShieldRange;
-    /* 0x4A */ u8 mField_0x4A;
-    /* 0x4B */ u8 mField_0x4B;
-    /* 0x4C */ u32 mField_0x4C;
-    /* 0x50 */ u32 mField_0x50;
-    /* 0x54 */ cCcD_ShieldChkCallback mField_0x54;
+    /* 0x4A */ u8 field_0x4A;
+    /* 0x4B */ u8 field_0x4B;
+    /* 0x4C */ u32 field_0x4C;
+    /* 0x50 */ u32 field_0x50;
+    /* 0x54 */ cCcD_ShieldChkCallback field_0x54;
     /* 0x58 */ cCcD_SrcGObjAt mAtHitSrc;
-    /* 0x6C */ mVec3_c mField_0x6C;
-    /* 0x78 */ cCcD_HitCallback mField_0x78;
+    /* 0x6C */ mVec3_c field_0x6C;
+    /* 0x78 */ cCcD_HitCallback field_0x78;
 };
 
 class cCcD_ObjCo : public cCcD_GAtTgCoCommonBase {
@@ -719,7 +719,7 @@ public:
     /* 0x1C */ cCcD_SrcGObjCo mSrc;
     /* 0x20 */ u32 mGrp;
     /* 0x24 */ cCcD_SrcGObjCo mCoHitSrc;
-    /* 0x28 */ cCcD_HitCallback mField_0x28_callback;
+    /* 0x28 */ cCcD_HitCallback field_0x28_callback;
 };
 
 // Maybe ?
@@ -736,7 +736,7 @@ public:
     /* 0x05C */ cCcD_ObjTg mTg;
     /* 0x0D8 */ cCcD_ObjCo mCo;
     /* 0x104 */ cCcD_Stts *mStts;
-    /* 0x108 */ u32 mField_0x108;
+    /* 0x108 */ u32 field_0x108;
 
 public:
     cCcD_Obj();

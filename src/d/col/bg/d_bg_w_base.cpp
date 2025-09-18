@@ -67,7 +67,7 @@ BOOL dBgW_Base::InitMapStuff(mAllocator_c *pAllocator) {
 }
 
 bool dBgW_Base::fn_8034AD70() const {
-    u8 val = mField_0x18.field_0x00;
+    u8 val = field_0x18.field_0x00;
     if (val == 0 || val == 2) {
         return true;
     }
@@ -75,7 +75,7 @@ bool dBgW_Base::fn_8034AD70() const {
 }
 
 bool dBgW_Base::fn_8034ADA0() const {
-    return mField_0x18.field_0x00 <= 1;
+    return field_0x18.field_0x00 <= 1;
 }
 
 bool dBgW_Base::UpdateDraw(mAllocator_c * /* unused */) {

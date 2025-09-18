@@ -2,7 +2,6 @@
 
 namespace EGG {
 
-/* 8049b390 */
 void Quatf::set(f32 fw, f32 fx, f32 fy, f32 fz) {
     w = fw;
     v.x = fx;
@@ -73,7 +72,6 @@ void Quatf::setRPY(f32 roll, f32 pitch, f32 yaw) {
     setRPY(Vector3f(roll, pitch, yaw));
 }
 
-/* 8049b3b0 */
 void Quatf::setAxisRotation(const Vector3f &axis, f32 rot) {
     2.0f; // force sdata2 ordering
     const f32 half_angle = rot * 0.5f;
@@ -82,12 +80,10 @@ void Quatf::setAxisRotation(const Vector3f &axis, f32 rot) {
     set(cos, sin * axis.x, sin * axis.y, sin * axis.z);
 }
 
-/* 8049b450 */
 f32 Quatf::norm() {
     return w * w + v.dot(v);
 }
 
-/* 8049b480 */
 void Quatf::normalise() {
     f32 mag = Math<f32>::sqrt(norm());
     if (mag > 0.0f) {
@@ -95,7 +91,6 @@ void Quatf::normalise() {
     }
 }
 
-/* 8049b500 */
 Quatf Quatf::conjugate() const {
     Quatf q;
     q.w = w;
@@ -103,7 +98,6 @@ Quatf Quatf::conjugate() const {
     return q;
 }
 
-/* 8049b550 */
 Vector3f Quatf::rotateVector(const Vector3f &vec) {
     Quatf conj, mult;
     conj = conjugate();
@@ -120,7 +114,6 @@ Vector3f Quatf::rotateVector(const Vector3f &vec) {
 //     return ret;
 // }
 
-/* 8049b800 */
 void Quatf::slerpTo(const Quatf &q2, f32 t, Quatf &out) const {
     f32 dot = v.x * q2.v.x + v.y * q2.v.y + v.z * q2.v.z + w * q2.w;
 
@@ -162,7 +155,6 @@ void Quatf::slerpTo(const Quatf &q2, f32 t, Quatf &out) const {
     out.w = a * w + b * q2.w;
 }
 
-/* 8049b9d0 */
 void Quatf::limitSlerpTo(const Quatf &q2, f32 t, f32 t2, Quatf &out) const {
     t2 *= 0.5f;
 
@@ -210,7 +202,6 @@ void Quatf::limitSlerpTo(const Quatf &q2, f32 t, f32 t2, Quatf &out) const {
     out.w = a * w + b * q2.w;
 }
 
-/* 8049bbb0 */
 void Quatf::makeVectorRotation(const Vector3f &from, const Vector3f &to) {
     Vector3f cross = from.cross(to);
     f32 t0 = (from.dot(to) + 1) * 2.0f;

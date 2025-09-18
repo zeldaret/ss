@@ -226,13 +226,13 @@ enum SHIELD_TYPE_e {
 };
 
 struct ItemFlagStruct {
-    u8 mField_0x00;
-    u8 mField_0x01;
-    u8 mField_0x02;
-    u8 mField_0x03;
+    u8 field_0x00;
+    u8 field_0x01;
+    u8 field_0x02;
+    u8 field_0x03;
     u16 mFlag;
     u8 mFlagKind;
-    u8 mField_0x07;
+    u8 field_0x07;
 };
 class dAcItemBase_c : public dAcObjBase_c {
 public:

@@ -7,12 +7,10 @@
 // clang-format on
 namespace dDvd {
 
-/** 800520f0 */
 void create(s32 priority, EGG::Heap *archiveHeap, EGG::Heap *commandHeap, EGG::Heap *threadHeap) {
     mDvd::create(priority, archiveHeap, commandHeap, threadHeap);
 }
 
-/** 80052100 */
 loader_c::loader_c() {
     mpCommand = nullptr;
     mSize = -1;
@@ -20,10 +18,8 @@ loader_c::loader_c() {
     mpBuffer = nullptr;
 }
 
-/** 80052130 */
 loader_c::~loader_c() {}
 
-/** 80052170 */
 void *loader_c::request(const char *path, u8 mountDirection, EGG::Heap *heap) {
     if (mpBuffer != nullptr) {
         return mpBuffer;
@@ -50,7 +46,6 @@ void *loader_c::request(const char *path, u8 mountDirection, EGG::Heap *heap) {
     }
 }
 
-/** 800522a0 */
 void loader_c::remove() {
     if (mpHeap != nullptr && mpBuffer != nullptr) {
         mpHeap->free(mpBuffer);

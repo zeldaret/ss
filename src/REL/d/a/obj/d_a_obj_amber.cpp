@@ -28,7 +28,7 @@ bool dAcOAmber_c::createHeap() {
         return false;
     }
 
-    return mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr);
+    return mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr);
 }
 
 int dAcOAmber_c::actorCreate() {
@@ -37,21 +37,21 @@ int dAcOAmber_c::actorCreate() {
 
 int dAcOAmber_c::actorPostCreate() {
     CREATE_ALLOCATOR(dAcOAmber_c);
-    if (dBgS_ObjGndChk::CheckPos(position + mVec3_c::Ey * 10.0f)) {
+    if (dBgS_ObjGndChk::CheckPos(mPosition + mVec3_c::Ey * 10.0f)) {
         mLightingInfo.mLightingCode = dBgS_ObjGndChk::GetLightingCode();
         if (&dBgS_ObjGndChk::GetInstance() != nullptr) {
             setPolyAttrs(dBgS_ObjGndChk::GetInstance());
         }
     }
     mMdl.getBounds(&mMin, &mMax);
-    boundingBox.Set(mMin, mMax);
+    mBoundingBox.Set(mMin, mMax);
     mShadowRot.v = (mMin + mMax) * 0.5f;
     mShadowRot.w = ((mMax - mMin) * 0.5f).mag();
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
-    mVec3_c chkPos = position + mVec3_c::Ey * mMax.y;
+    mVec3_c chkPos = mPosition + mVec3_c::Ey * mMax.y;
     if (dBgS_ObjGndChk::CheckPos(chkPos)) {
-        f32 deltaHeight = position.y - dBgS_ObjGndChk::GetGroundHeight();
+        f32 deltaHeight = mPosition.y - dBgS_ObjGndChk::GetGroundHeight();
         field_0x37c = deltaHeight < 0.0f ? 0.0f : deltaHeight;
     } else {
         field_0x37c = 1.0e+9f;
@@ -70,10 +70,10 @@ int dAcOAmber_c::draw() {
 void dAcOAmber_c::registerInEvent() {
     const char *eventName = EventManager::sInstance->getCurrentEventName();
     if (strequals(eventName, "TimeDoorIn") || strequals(eventName, "TimeDoorOut")) {
-        mObjectActorFlags |= 0x200;
+        setObjectProperty(OBJ_PROP_0x200);
     }
 }
 
 void dAcOAmber_c::unkVirtFunc_0x6C() {
-    mObjectActorFlags &= ~0x200;
+    unsetObjectProperty(OBJ_PROP_0x200);
 }

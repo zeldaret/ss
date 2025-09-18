@@ -39,15 +39,15 @@ private:
     bool mTargetActive;           // 0x124
 
     u16 getTriggerSceneFlag() {
-        return params & 0xFF;
+        return mParams & 0xFF;
     }
 
     u16 getUntriggerSceneFlag() {
-        return params >> 0x8 & 0xFF;
+        return mParams >> 0x8 & 0xFF;
     }
 
     DowsingOption getDowsingOption() {
-        return (DowsingOption)(params >> 0x10 & 0xF);
+        return (DowsingOption)(mParams >> 0x10 & 0xF);
     }
 
     u32 getDowsingOptionNum() {
@@ -55,11 +55,11 @@ private:
     }
 
     u16 getUntriggerStoryFlag() {
-        return params >> 0x14 & 0x7FF;
+        return mParams >> 0x14 & 0x7FF;
     }
 
     u16 getTriggerStoryFlag() {
-        return rotation.z.mVal & 0x7FF;
+        return mRotation.z.mVal & 0x7FF;
     }
 };
 

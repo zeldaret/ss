@@ -7,7 +7,6 @@ namespace EGG {
 bool DvdRipper::sErrorRetry = true;
 DvdRipper::UnkCallback DvdRipper::sCallback;
 
-/* 80494680 */
 u8 *DvdRipper::loadToMainRAM(
     s32 entryNum, u8 *dst, Heap *heap, EAllocDirection allocDir, u32 offset, u32 *amountRead, u32 *fileSize
 ) {
@@ -18,7 +17,6 @@ u8 *DvdRipper::loadToMainRAM(
     return loadToMainRAM(&file, dst, heap, allocDir, offset, amountRead, fileSize);
 }
 
-/* 80494730 */
 u8 *DvdRipper::loadToMainRAM(
     const char *path, u8 *dst, Heap *heap, EAllocDirection allocDir, u32 offset, u32 *amountRead, u32 *fileSize
 ) {
@@ -29,7 +27,6 @@ u8 *DvdRipper::loadToMainRAM(
     return loadToMainRAM(&file, dst, heap, allocDir, offset, amountRead, fileSize);
 }
 
-/* 804947e0 */
 u8 *DvdRipper::loadToMainRAM(
     DvdFile *pFile, u8 *pOut, Heap *pHeap, EAllocDirection allocDir, u32 offset, u32 *pRead, u32 *pSize
 ) {
@@ -107,7 +104,6 @@ u8 *DvdRipper::loadToMainRAM(
     return pOut;
 }
 
-/* 804949b0 */
 void *DvdRipper::loadToMainRAMDecomp(
     DvdFile *file, StreamDecomp *decompressor, u8 *pOut, Heap *heap, EAllocDirection allocDir, s32 offset, u32 size,
     u32 chunkSize, u32 *pRead, u32 *pSize

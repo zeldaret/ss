@@ -31,13 +31,13 @@ bool dAcOtoD3StoneFigure_c::createHeap() {
     const char *modelName = getModelName();
     mResFile = nw4r::g3d::ResFile(getOarcResFile("BirdObjD3"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(modelName);
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120));
     return true;
 }
 
 int dAcOtoD3StoneFigure_c::create() {
     mIsSkyKeepAlreadyOpen = isStoneOfTrialsPlaced();
-    mExitId = params & 0xFF;
+    mExitId = mParams & 0xFF;
     updateMatrix();
     if (!initAllocatorWork1Heap(-1, "dAcOtoD3StoneFigure_c::m_allocator", 0x20)) {
         return FAILED;
@@ -48,7 +48,7 @@ int dAcOtoD3StoneFigure_c::create() {
     mCollision.Set(sCcSrc);
     mCollision.SetStts(mStts);
     int zero = 0;
-    mCollision.SetC(position);
+    mCollision.SetC(mPosition);
     mCollision.SetR(dAcOtoD3StoneFigure_c::sRadius + zero);
     mCollision.SetH(dAcOtoD3StoneFigure_c::sHeight + zero);
     dCcS::GetInstance()->Set(&mCollision);
@@ -56,17 +56,17 @@ int dAcOtoD3StoneFigure_c::create() {
 
     // ???
     f32 a, b, c;
-    c = position.z;
+    c = mPosition.z;
     b = getYPos();
     b += zero;
-    a = position.x;
-    poscopy2.x = a;
-    poscopy2.y = b;
-    poscopy2.z = c;
-    poscopy3.x = a;
-    poscopy3.y = b;
-    poscopy3.z = c;
-    // poscopy3 = poscopy2;
+    a = mPosition.x;
+    mPositionCopy2.x = a;
+    mPositionCopy2.y = b;
+    mPositionCopy2.z = c;
+    mPositionCopy3.x = a;
+    mPositionCopy3.y = b;
+    mPositionCopy3.z = c;
+    // mPositionCopy3 = mPositionCopy2;
     mCollision.SetTg_0x4C(0x2000);
 
     if (!mIsSkyKeepAlreadyOpen) {
@@ -97,7 +97,7 @@ int dAcOtoD3StoneFigure_c::draw() {
 
 void dAcOtoD3StoneFigure_c::initializeState_OneEye() {
     if (dScGame_c::currentSpawnInfo.getTimeOfDay() == SpawnInfo::NIGHT) {
-        rotation.y.mVal += -0x8000;
+        mRotation.y.mVal += -0x8000;
         updateMatrix();
         mMdl.setLocalMtx(mWorldMtx);
     }
@@ -105,7 +105,7 @@ void dAcOtoD3StoneFigure_c::initializeState_OneEye() {
 
 void dAcOtoD3StoneFigure_c::executeState_OneEye() {
     if (EventManager::isInEvent(this, "D3OpenStart")) {
-        dScGame_c::GetInstance()->triggerExit(roomid, mExitId);
+        dScGame_c::GetInstance()->triggerExit(mRoomID, mExitId);
     } else {
         if (hasStoneOfTrials() && dScGame_c::currentSpawnInfo.getTimeOfDay() != SpawnInfo::NIGHT) {
             // These are interaction related

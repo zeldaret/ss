@@ -8,7 +8,7 @@
 class cBgS_LinChk : public cBgS_Chk, public cBgS_PolyInfo {
 public:
     /* 0x54 */ cM3dGLin mLin;
-    /* 0x6C */ mVec3_c mField_0x6C;
+    /* 0x6C */ mVec3_c field_0x6C;
     /* 0x78 */ bool mFrontFlag;
     /* 0x79 */ bool mBackFlag;
     /* 0x7A */ bool mHit;

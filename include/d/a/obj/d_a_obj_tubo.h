@@ -20,7 +20,7 @@
 
 class dAcOtubo_c : public dAcObjBase_c {
 public:
-    dAcOtubo_c() : mStateMgr(*this, sStateID::null), mField_0x8F0(this) {}
+    dAcOtubo_c() : mStateMgr(*this, sStateID::null), field_0x8F0(this) {}
     virtual ~dAcOtubo_c() {}
 
     virtual int doDelete() override;
@@ -58,22 +58,22 @@ public:
     bool checkOnLog_0xE4E() const;
 
     u8 getSubtype() const {
-        return params & 0xF; // 0 -> Tubo00, Else -> Tubo01
+        return mParams & 0xF; // 0 -> Tubo00, Else -> Tubo01
     }
 
     int getParams_0x3000() const {
-        return params >> 12 & 0x3;
+        return mParams >> 12 & 0x3;
     }
     u8 getParams_0xC000() const {
-        return params >> 14 & 0x3;
+        return mParams >> 14 & 0x3;
     }
 
     u8 getSceneflag() const {
-        return params >> 4 & 0xFF;
+        return mParams >> 4 & 0xFF;
     }
 
     bool checkSceneflag() {
-        return SceneflagManager::sInstance->checkFlag(roomid, mSceneflag);
+        return SceneflagManager::sInstance->checkFlag(mRoomID, mSceneflag);
     }
 
     STATE_FUNC_DECLARE(dAcOtubo_c, Wait);
@@ -90,26 +90,26 @@ private:
     /* 0x3B4 */ dBgS_ObjAcch mObjAcch;
     /* 0x764 */ dCcD_Sph mSph;
     /* 0x8B4 */ STATE_MGR_DECLARE(dAcOtubo_c);
-    /* 0x8F0 */ dAcObjRef_unk mField_0x8F0;
+    /* 0x8F0 */ dAcObjRef_unk field_0x8F0;
     /* 0x91C */ dWaterEffect_c mEff_0x91C;
     /* 0x964 */ dAcRef_c<dAcNpcCeLady_c> mCeLady;
     /* 0x970 */ dAcRef_c<dAcNpcCeFriend_c> mCeFriend;
     /* 0x97C */ mQuat_c mQuat_0x97C;
     /* 0x98C */ mQuat_c mQuat_0x98C;
     /* 0x99C */ mQuat_c mQuat_0x99C;
-    /* 0x9AC */ mVec3_c mField_0x9AC;
-    /* 0x9B8 */ mVec3_c mField_0x9B8;
-    /* 0x9C4 */ mAng mField_0x9C4;
-    /* 0x9C6 */ mAng mField_0x9C6;
-    /* 0x9C8 */ mAng mField_0x9C8;
-    /* 0x9CA */ mAng mField_0x9CA;
-    /* 0x9CC */ mAng mField_0x9CC;
-    /* 0x9D0 */ f32 mField_0x9D0;
-    /* 0x9D4 */ f32 mField_0x9D4;
-    /* 0x9D8 */ f32 mField_0x9D8;
-    /* 0x9DC */ f32 mField_0x9DC;
-    /* 0x9E0 */ f32 mField_0x9E0;
-    /* 0x9E4 */ f32 mField_0x9E4;
+    /* 0x9AC */ mVec3_c field_0x9AC;
+    /* 0x9B8 */ mVec3_c field_0x9B8;
+    /* 0x9C4 */ mAng field_0x9C4;
+    /* 0x9C6 */ mAng field_0x9C6;
+    /* 0x9C8 */ mAng field_0x9C8;
+    /* 0x9CA */ mAng field_0x9CA;
+    /* 0x9CC */ mAng field_0x9CC;
+    /* 0x9D0 */ f32 field_0x9D0;
+    /* 0x9D4 */ f32 field_0x9D4;
+    /* 0x9D8 */ f32 field_0x9D8;
+    /* 0x9DC */ f32 field_0x9DC;
+    /* 0x9E0 */ f32 field_0x9E0;
+    /* 0x9E4 */ f32 field_0x9E4;
     /* 0x9E8 */ u16 mTimer_0x9E8;
     /* 0x9EA */ bool mbMovingForward;
     /* 0x9EB */ bool mbField_0x9EB;
@@ -123,11 +123,11 @@ private:
     /* 0x9F2 */ bool mbField_0x9F3;
     /* 0x9F4 */ u8 mTimer_0x9F4;
     /* 0x9F5 */ u8 mTimer_0x9F5;
-    /* 0x9F6 */ u8 mField_0x9F6;
+    /* 0x9F6 */ u8 field_0x9F6;
     /* 0x9F7 */ u8 mTimer_0x9F7;
     /* 0x9F8 */ u8 mSceneflag;
     /* 0x9F9 */ u8 mSubtype;
-    /* 0x9FC */ int mField_0x9FC;
+    /* 0x9FC */ int field_0x9FC;
 
     static dCcD_SrcSph sSphSrc;
 };

@@ -25,7 +25,7 @@ public:
 
 private:
     f32 getYPos() {
-        return position.y + sHeight;
+        return mPosition.y + sHeight;
     }
 
     const char *getModelName() const;

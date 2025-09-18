@@ -51,8 +51,8 @@ void dSalvageIfObj_c::doDemoThrow() {
 int dAcSalbageObj_c::actorExecute() {
     executeInternal();
     calcVelocity();
-    position += velocity;
-    position += mStts.GetCcMove();
+    mPosition += mVelocity;
+    mPosition += mStts.GetCcMove();
     if (isInStateWait()) {
         updateCc();
     }
@@ -155,9 +155,9 @@ void dAcSalbageObj_c::initSalbageObj() {
     } else {
         switch (mBehavior) {
             case BEHAVIOR_CARRY: {
-                forwardSpeed = 0.0f;
-                velocity.set(0.0f, 0.0f, 0.0f);
-                forwardAccel = 0.0f;
+                mSpeed = 0.0f;
+                mVelocity.set(0.0f, 0.0f, 0.0f);
+                mAcceleration = 0.0f;
                 mSalvageIf.setHidden();
                 if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() != mSalvageIf.getSalvageObjId()) {
                     mStateMgr.changeState(StateID_Kill);
@@ -169,9 +169,9 @@ void dAcSalbageObj_c::initSalbageObj() {
                 break;
             }
             case BEHAVIOR_FLY: {
-                forwardSpeed = 0.0f;
-                velocity.set(0.0f, 0.0f, 0.0f);
-                forwardAccel = 0.0f;
+                mSpeed = 0.0f;
+                mVelocity.set(0.0f, 0.0f, 0.0f);
+                mAcceleration = 0.0f;
                 mStateMgr.changeState(StateID_Fly);
                 break;
             }
@@ -181,12 +181,12 @@ void dAcSalbageObj_c::initSalbageObj() {
                     return;
                 } else {
                     mBehavior = BEHAVIOR_STATIONARY;
-                    forwardAccel = -1.0f;
-                    forwardMaxSpeed = -40.0f;
+                    mAcceleration = -1.0f;
+                    mMaxSpeed = -40.0f;
                     initCcAndBg();
-                    forwardSpeed = 0.0f;
-                    forwardAccel = 0.0f;
-                    velocity.set(0.0f, 0.0f, 0.0f);
+                    mSpeed = 0.0f;
+                    mAcceleration = 0.0f;
+                    mVelocity.set(0.0f, 0.0f, 0.0f);
                     mStateMgr.changeState(StateID_Wait);
                 }
                 break;
@@ -248,7 +248,7 @@ bool dAcSalbageObj_c::shouldBeActiveDowsingTarget() const {
 }
 
 void dAcSalbageObj_c::updateCc() {
-    mCcCyl.SetC(position);
+    mCcCyl.SetC(mPosition);
     mCcCyl.SetR(getCcRadius());
     mCcCyl.SetH(getCcHeight());
     dCcS::GetInstance()->Set(&mCcCyl);
@@ -262,13 +262,13 @@ void dAcSalbageObj_c::updateBgAcchCir() {
 void dAcSalbageObj_c::calcMtxFromSalbageNpc(mMtx_c &ret) {
     dAcNpcSlb_c *npc = dSalvageMgr_c::sInstance->mSlbRef.get();
     if (npc == nullptr) {
-        ret.transS(position.x, position.y, position.z);
-        ret.ZXYrotM(rotation);
+        ret.transS(mPosition.x, mPosition.y, mPosition.z);
+        ret.ZXYrotM(mRotation);
     } else {
         ret = npc->getCarriedObjMtx();
         mMtx_c rotMtx = dSalvageMgr_c::sInstance->getCarryRotMtx2(mSalvageIf.getSalvageObjId());
         MTXConcat(ret, rotMtx, ret);
-        ret.getTranslation(position);
+        ret.getTranslation(mPosition);
     }
 }
 
@@ -277,8 +277,8 @@ mMtx_c dAcSalbageObj_c::calcWorldMtx() {
     if (mSalvageIf.isCarried()) {
         calcMtxFromSalbageNpc(ret);
     } else {
-        ret.transS(position);
-        ret.ZXYrotM(rotation);
+        ret.transS(mPosition);
+        ret.ZXYrotM(mRotation);
     }
 
     return ret;
@@ -301,10 +301,10 @@ void dAcSalbageObj_c::updateMdl() {
     }
 
     f32 scale = mScale.x;
-    poscopy3 = position;
-    poscopy3.y += getPoscopy3YOffset() * scale;
-    poscopy2 = position;
-    poscopy2.y += getPoscopy2YOffset() * scale;
+    mPositionCopy3 = mPosition;
+    mPositionCopy3.y += getPoscopy3YOffset() * scale;
+    mPositionCopy2 = mPosition;
+    mPositionCopy2.y += getPoscopy2YOffset() * scale;
 }
 
 void dAcSalbageObj_c::loadBehaviorFromParams() {
@@ -319,8 +319,8 @@ void dAcSalbageObj_c::initializeState_Wait() {
 void dAcSalbageObj_c::executeState_Wait() {
     if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() != mSalvageIf.getSalvageObjId()) {
         if (!dSalvageMgr_c::sInstance->mSlbRef.isLinked()) {
-            mVec3_c pos(position.x, position.y + 100000.0f, position.z);
-            dAcObjBase_c::create(fProfile::NPC_SLB, roomid, 0xFFFFFD01, &pos, nullptr, nullptr, -1);
+            mVec3_c pos(mPosition.x, mPosition.y + 100000.0f, mPosition.z);
+            dAcObjBase_c::create(fProfile::NPC_SLB, mRoomID, 0xFFFFFD01, &pos, nullptr, nullptr, -1);
         }
 
         if (dSalvageMgr_c::sInstance->startedQuestForSalvageObj(this)) {
@@ -359,18 +359,18 @@ void dAcSalbageObj_c::initializeState_DemoThrow() {
     mWorldSRMtx.m[1][3] = 0.0f;
     mWorldSRMtx.m[2][3] = 0.0f;
 
-    mWorldMtx.getTranslation(position);
+    mWorldMtx.getTranslation(mPosition);
     field_0x938 = 0.0f;
 
     mVec3_c result;
     MTXMultVecSR(mWorldSRMtx, mVec3_c::Ez, result);
-    rotation.y = result.atan2sX_Z();
-    rotation.x = -cM::atan2s(result.y, result.absXZ());
-    rotation.z = field_0x904;
-    angle.x = 0;
-    angle.y = rotation.y;
-    angle.z = 0;
-    forwardMaxSpeed = -40.0f;
+    mRotation.y = result.atan2sX_Z();
+    mRotation.x = -cM::atan2s(result.y, result.absXZ());
+    mRotation.z = field_0x904;
+    mAngle.x = 0;
+    mAngle.y = mRotation.y;
+    mAngle.z = 0;
+    mMaxSpeed = -40.0f;
     mBgObjAcch.Set(this, 1, &mBgAcchCir);
     mBgObjAcch.SetWaterNone();
     mBgObjAcch.SetRoofNone();

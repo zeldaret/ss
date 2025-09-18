@@ -3,12 +3,12 @@
 class ExtraWalletCounter : public Counter {
 public:
     ExtraWalletCounter();
-    /* 8016E220 */ ~ExtraWalletCounter() {}
-    /* 8016E280 */ virtual u16 getMax() const override {
+    ~ExtraWalletCounter() {}
+    virtual u16 getMax() const override {
         return 3;
     }
 };
 
-/* 80575640 */ ExtraWalletCounter EXTRA_WALLET_COUNTER;
+ExtraWalletCounter EXTRA_WALLET_COUNTER;
 
-/* 8016E260 */ ExtraWalletCounter::ExtraWalletCounter() : Counter(0x1fc) {}
+ExtraWalletCounter::ExtraWalletCounter() : Counter(0x1fc) {}

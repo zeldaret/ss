@@ -236,7 +236,7 @@ public:
 
     /* vt 0x080 */ virtual bool giveItem(u8 param, ITEM_ID item_id);
     /* vt 0x084 */ virtual void getPosCopy3(mVec3_c &outResult) {
-        outResult.copyFrom(poscopy3);
+        outResult.copyFrom(mPositionCopy3);
     }
     /* vt 0x088 */ virtual void acNpc_vt_0x88() {}
     /* vt 0x08C */ virtual void acNpc_vt_0x8C() {}

@@ -14,7 +14,7 @@ bool dAcOblade_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(data);
     dStage_c::bindStageResToFile(&mResFile);
     dStage_c::bindSkyCmnToResFile(&mResFile);
-    TRY_CREATE(mMdl.create(data, "StageF000Blade", "StageF000Blade", &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(data, "StageF000Blade", "StageF000Blade", &mAllocator, 0x120));
     return true;
 }
 
@@ -23,7 +23,7 @@ int dAcOblade_c::create() {
     mMdl.setAnm("StageF000Blade", m3d::PLAY_MODE_4);
     updateMatrix();
     mMdl.getModel().setLocalMtx(mWorldMtx);
-    boundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
+    mBoundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
     return SUCCEEDED;
 }
 

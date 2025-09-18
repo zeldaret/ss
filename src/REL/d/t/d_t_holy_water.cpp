@@ -2,7 +2,6 @@
 
 #include "d/a/d_a_player.h"
 
-
 SPECIAL_ACTOR_PROFILE(TAG_HOLY_WATER, dTgHolyWater_c, fProfile::TAG_HOLY_WATER, 0x0224, 0, 4);
 
 int dTgHolyWater_c::create() {
@@ -31,7 +30,7 @@ int dTgHolyWater_c::draw() {
 }
 
 bool dTgHolyWater_c::isLinkNearby() {
-    mVec3_c diff = dAcPy_c::LINK->position - (position + mVec3_c::Ey * mScale.y * 0.5f);
+    mVec3_c diff = dAcPy_c::LINK->mPosition - (mPosition + mVec3_c::Ey * mScale.y * 0.5f);
     diff.x /= mScale.x;
     diff.y /= mScale.y;
     diff.z /= mScale.z;

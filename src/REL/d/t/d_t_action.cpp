@@ -12,10 +12,10 @@
 SPECIAL_ACTOR_PROFILE(ACTION_TAG, dTgAction_c, fProfile::ACTION_TAG, 0x20, 0, 0);
 
 int dTgAction_c::create() {
-    mEnableFlag1 = (params >> 6) & 0xFF;
-    mEnableFlag2 = (params >> 14) & 0xFF;
-    mType = (params >> 0) & 0x3F;
-    matrixCreateFromPosRotYScale(mActiveMtx, position, rotation.y, mScale, nullptr, 0.f);
+    mEnableFlag1 = (mParams >> 6) & 0xFF;
+    mEnableFlag2 = (mParams >> 14) & 0xFF;
+    mType = (mParams >> 0) & 0x3F;
+    matrixCreateFromPosRotYScale(mActiveMtx, mPosition, mRotation.y, mScale, nullptr, 0.f);
     return SUCCEEDED;
 }
 
@@ -26,14 +26,14 @@ int dTgAction_c::doDelete() {
 void dTgAction_c::setActiveArea(f32 scale) {
     if (mScaleIncrease < 0.1f) {
         mScaleIncrease = scale;
-        matrixCreateFromPosRotYScale(mActiveMtx, position, rotation.y, mScale, nullptr, mScaleIncrease);
+        matrixCreateFromPosRotYScale(mActiveMtx, mPosition, mRotation.y, mScale, nullptr, mScaleIncrease);
     }
 }
 
 void dTgAction_c::resetActiveArea() {
     if (mScaleIncrease > 0.f) {
         mScaleIncrease = 0.f;
-        matrixCreateFromPosRotYScale(mActiveMtx, position, rotation.y, mScale, nullptr, 0.f);
+        matrixCreateFromPosRotYScale(mActiveMtx, mPosition, mRotation.y, mScale, nullptr, 0.f);
         field_0x134 = 0;
     }
 }
@@ -50,8 +50,8 @@ int dTgAction_c::actorExecute() {
             if (pObj == nullptr) {
                 break;
             }
-            if (pObj->profile_name == fProfile::BOMB) {
-                if (checkIfVec3fInMatrix(mActiveMtx, pObj->GetPosition())) {
+            if (pObj->mProfileName == fProfile::BOMB) {
+                if (checkIfVec3fInMatrix(mActiveMtx, pObj->getPosition())) {
                     reinterpret_cast<dAcBomb_c *>(pObj)->On_0xA3C(0x20000000);
                 }
             }
@@ -59,7 +59,7 @@ int dTgAction_c::actorExecute() {
     }
 
     // Check For Player Within Area
-    if (enabled && checkIfVec3fInMatrix(mActiveMtx, player->GetPosition())) {
+    if (enabled && checkIfVec3fInMatrix(mActiveMtx, player->getPosition())) {
         if (mType == FORCE_FADE_RESTART) {
             player->onFlags_0x358(0x10000000);
             setActiveArea(50.f);
@@ -74,7 +74,7 @@ int dTgAction_c::actorExecute() {
             player->onForceOrPreventActionFlags(0x400000);
             setActiveArea(15.f);
         } else if (mType == SHOW_DASH_PROMPT) {
-            if (mAng::abs(player->rotation.y - rotation.y) < (0x2000 + field_0x134)) {
+            if (mAng::abs(player->mRotation.y - mRotation.y) < (0x2000 + field_0x134)) {
                 player->onForceOrPreventActionFlags(0x20000000);
                 setActiveArea(50.f);
                 field_0x134.set(0x38E);

@@ -31,7 +31,7 @@ bool dAcOutajima_c::createHeap() {
 
     for (int i = 0; i < 2; i++) {
         m = mRes.GetResMdl(mMdlNames[i]);
-        TRY_CREATE(mMdls[i].create(m, &heap_allocator, 0x120));
+        TRY_CREATE(mMdls[i].create(m, &mAllocator, 0x120));
     }
 
     m = mRes.GetResMdl(mMdlNames[0]);
@@ -61,7 +61,7 @@ int dAcOutajima_c::create() {
     mVec3_c min;
     mVec3_c max;
     mMdls[0].getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     mCullingDistance = 500000.0f;
     mBgW.SetRideCallback(rideCallback);
 

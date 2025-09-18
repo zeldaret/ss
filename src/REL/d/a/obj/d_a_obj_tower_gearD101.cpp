@@ -23,12 +23,12 @@ bool dAcOTowerGearD101_c::createHeap() {
     mRes = nw4r::g3d::ResFile(getOarcResFile(name));
     dStage_c::bindStageResToFile(&mRes);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl(name);
-    if (!mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr)) {
+    if (!mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr)) {
         return false;
     }
     fn_80067340(field_0x3A0, &mdl, "model0");
-    position = field_0x3A0;
-    position.rotY(rotation.y);
+    mPosition = field_0x3A0;
+    mPosition.rotY(mRotation.y);
 
     return true;
 }
@@ -40,17 +40,17 @@ int dAcOTowerGearD101_c::actorCreate() {
     nw4r::g3d::ResMdl mdl = mMdl.getResMdl();
     mMdlCallback.init(mdl.GetResNode("model0").GetID());
     mMdl.setCallback(&mMdlCallback);
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = 0.0f;
+    mAcceleration = 0.0f;
+    mMaxSpeed = 0.0f;
     mStateMgr.changeState(StateID_Wait);
 
     mVec3_c s = field_0x3AC;
-    boundingBox.Set(
+    mBoundingBox.Set(
         mVec3_c(s.x * -200.0f, s.y * -200.0f, s.z * -50.0f), mVec3_c(s.x * 200.0f, s.y * 200.0f, s.z * 50.0f)
     );
 
     initTransform();
-    if (dBgS_WtrChk::CheckPos(&position, true, 500.0f, -500.0f)) {
+    if (dBgS_WtrChk::CheckPos(&mPosition, true, 500.0f, -500.0f)) {
         field_0x3F4 = mVec3_c::Zero;
         field_0x3F4.y = dBgS_WtrChk::GetWaterHeight();
     } else {
@@ -85,7 +85,7 @@ int dAcOTowerGearD101_c::draw() {
 
 void dAcOTowerGearD101_c::initializeState_Wait() {}
 void dAcOTowerGearD101_c::executeState_Wait() {
-    dAcOTowerD101_c *tower = static_cast<dAcOTowerD101_c *>(actor_node.get());
+    dAcOTowerD101_c *tower = static_cast<dAcOTowerD101_c *>(mActorNode.get());
     if (tower != nullptr) {
         f32 diff = tower->mGoalElevation - tower->mCurrentElevation;
         s32 scale5 = 0x50000;
@@ -120,15 +120,15 @@ void dAcOTowerGearD101_callback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip 
 void dAcOTowerGearD101_c::initTransform() {
     mWorldMtx.transS(mVec3_c::Zero);
     mMtx_c mtx1;
-    mtx1.transS(position);
+    mtx1.transS(mPosition);
     mWorldMtx += mtx1;
     field_0x3C4.transS(mVec3_c::Zero);
-    field_0x3C4.ZXYrotM(rotation.x, rotation.y, rotation.z);
+    field_0x3C4.ZXYrotM(mRotation.x, mRotation.y, mRotation.z);
     mMdl.setLocalMtx(field_0x3C4);
 }
 
 void dAcOTowerGearD101_c::playVisualEffect() {
     mEffects.createContinuousEffect(
-        PARTICLE_RESOURCE_ID_MAPPING_572_, field_0x3F4, &rotation, nullptr, nullptr, nullptr
+        PARTICLE_RESOURCE_ID_MAPPING_572_, field_0x3F4, &mRotation, nullptr, nullptr, nullptr
     );
 }

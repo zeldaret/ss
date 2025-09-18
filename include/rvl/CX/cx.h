@@ -48,20 +48,20 @@ typedef struct CXUncompContextLRC {
     u8 _[0x902C];
 } CXUncompContextLRC;
 
-/* 803cee90 */ void CXInitUncompContextRL(CXUncompContextRL *);
-/* 803ceec0 */ void CXInitUncompContextLZ(CXUncompContextLZ *);
-/* 803cef00 */ s32 CXReadUncompRL(CXUncompContextRL *, const void *, u32);
-/* 803cf1b0 */ s32 CXReadUncompLZ(CXUncompContextLZ *, const void *, u32);
-/* 803cf570 */ void CXInitUncompContextLH(CXUncompContextLH *);
-/* 803cf5b0 */ s32 CXReadUncompLH(CXUncompContextLH *, const void *, u32);
-/* 803cfda0 */ void RCAddCount_();
-/* 803cff90 */ void RCSearch_();
-/* 803d0030 */ void RCGetData_();
-/* 803d0140 */ void CXInitUncompContextLRC(CXUncompContextLRC *);
-/* 803d0390 */ s32 CXReadUncompLRC(CXUncompContextLRC *, const void *, u32);
-/* 803d0790 */ u32 CXGetUncompressedSize(const void *);
-/* 803d07d0 */ void CXUncompressLZ();
-/* 803d0920 */ void CXiLHVerifyTable();
+void CXInitUncompContextRL(CXUncompContextRL *);
+void CXInitUncompContextLZ(CXUncompContextLZ *);
+s32 CXReadUncompRL(CXUncompContextRL *, const void *, u32);
+s32 CXReadUncompLZ(CXUncompContextLZ *, const void *, u32);
+void CXInitUncompContextLH(CXUncompContextLH *);
+s32 CXReadUncompLH(CXUncompContextLH *, const void *, u32);
+void RCAddCount_();
+void RCSearch_();
+void RCGetData_();
+void CXInitUncompContextLRC(CXUncompContextLRC *);
+s32 CXReadUncompLRC(CXUncompContextLRC *, const void *, u32);
+u32 CXGetUncompressedSize(const void *);
+void CXUncompressLZ();
+void CXiLHVerifyTable();
 
 #ifdef __cplusplus
 }

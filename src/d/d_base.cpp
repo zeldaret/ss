@@ -1,28 +1,27 @@
 #include "d/d_base.h"
 
-// .sbss
-/* 805750c0 */ u32 dBase_c::s_ExecuteControlFlags;
-/* 805750c0 */ u32 dBase_c::s_DrawControlFlags;
-/* 805750c0 */ u32 dBase_c::s_NextExecuteControlFlags;
+u32 dBase_c::s_ExecuteControlFlags;
+u32 dBase_c::s_DrawControlFlags;
+u32 dBase_c::s_NextExecuteControlFlags;
 
 dBase_c::dBase_c() : fBase_c() {
-    baseProperties = (*fProfile::sProfileList)[profile_name]->mBaseProperties;
+    mBaseProperties = (*fProfile::sProfileList)[mProfileName]->mBaseProperties;
 }
 
 void dBase_c::postDraw(fBase_c::MAIN_STATE_e status) {
     if (status != CANCELED) {
-        baseProperties |= 0x100;
+        setBaseProperty(BASE_PROP_0x100);
     } else {
-        baseProperties &= ~0x100;
+        unsetBaseProperty(BASE_PROP_0x100);
     }
     fBase_c::postDraw(status);
 }
 
 int dBase_c::preExecute() {
-    if (fBase_c::preExecute() == 0) {
+    if (NOT_READY == fBase_c::preExecute()) {
         return NOT_READY;
     }
-    if (s_ExecuteControlFlags && !isBasePropertyFlag(s_ExecuteControlFlags)) {
+    if (s_ExecuteControlFlags && !checkBaseProperty(s_ExecuteControlFlags)) {
         return NOT_READY;
     }
     return SUCCEEDED;
@@ -30,9 +29,9 @@ int dBase_c::preExecute() {
 
 void dBase_c::postExecute(fBase_c::MAIN_STATE_e status) {
     if (status != CANCELED) {
-        baseProperties |= 0x4;
+        setBaseProperty(BASE_PROP_0x4);
     } else {
-        baseProperties &= ~0x4;
+        unsetBaseProperty(BASE_PROP_0x4);
     }
     fBase_c::postExecute(status);
 }
@@ -41,7 +40,7 @@ int dBase_c::preDraw() {
     if (fBase_c::preDraw() == NOT_READY) {
         return NOT_READY;
     }
-    if (s_DrawControlFlags && !isBasePropertyFlag(s_DrawControlFlags)) {
+    if (s_DrawControlFlags && !checkBaseProperty(s_DrawControlFlags)) {
         return NOT_READY;
     }
     return SUCCEEDED;
@@ -54,7 +53,7 @@ void dBase_c::resetFlags() {
 }
 
 bool dBase_c::isActorPlayer() {
-    return profile_name == fProfile::PLAYER;
+    return mProfileName == fProfile::PLAYER;
 }
 
 int dBase_c::loadAsyncCallback() {
@@ -77,5 +76,3 @@ dBase_c *dBase_c::createBase(ProfileName profName, dBase_c *parent, u32 param, u
 dBase_c *dBase_c::createRoot(ProfileName profName, u32 param, u8 groupType) {
     return static_cast<dBase_c *>(fBase_c::createRoot(profName, param, groupType));
 }
-
-// dBase_c::~dBase_c() {}

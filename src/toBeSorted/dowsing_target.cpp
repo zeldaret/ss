@@ -50,8 +50,8 @@ void DowsingTarget::reinitialize(DowsingSlot type) {
 void DowsingTarget::getPosition(mVec3_c &position) {
     mMtx_c mtx;
     mMtx_c mtx2;
-    PSMTXTrans(mtx.m, mpActor->position.x, mpActor->position.y, mpActor->position.z);
-    mtx.YrotM(mpActor->rotation.y);
+    PSMTXTrans(mtx.m, mpActor->mPosition.x, mpActor->mPosition.y, mpActor->mPosition.z);
+    mtx.YrotM(mpActor->mRotation.y);
     PSMTXScale(mtx2.m, mpActor->mScale.x, mpActor->mScale.y, mpActor->mScale.z);
     PSMTXConcat(mtx.m, mtx2.m, mtx.m);
     PSMTXMultVec(mtx.m, mOffset, position);

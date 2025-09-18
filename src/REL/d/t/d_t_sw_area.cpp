@@ -14,10 +14,10 @@ int dTgSwArea_c::create() {
 
     setStoryflag = getSetStoryflag();
     unsetStoryflag = getUnsetStoryflag();
-    rotation.x = 0;
-    rotation.z = 0;
+    mRotation.x = 0;
+    mRotation.z = 0;
 
-    matrixCreateFromPosRotYScale(area, position, rotation.y, mScale, nullptr, 0.0f);
+    matrixCreateFromPosRotYScale(area, mPosition, mRotation.y, mScale, nullptr, 0.0f);
     return SUCCEEDED;
 }
 
@@ -32,9 +32,9 @@ bool isValidStoryFlag(u16 storyflag) {
 }
 
 int dTgSwArea_c::actorExecute() {
-    if (checkIfVec3fInMatrix(area, dAcPy_c::LINK->position)) {
-        SceneflagManager::sInstance->setFlag(roomid, setSceneflag);
-        SceneflagManager::sInstance->unsetFlag(roomid, unsetSceneflag);
+    if (checkIfVec3fInMatrix(area, dAcPy_c::LINK->mPosition)) {
+        SceneflagManager::sInstance->setFlag(mRoomID, setSceneflag);
+        SceneflagManager::sInstance->unsetFlag(mRoomID, unsetSceneflag);
 
         if (isValidStoryFlag(setStoryflag)) {
             StoryflagManager::sInstance->setFlag(setStoryflag);
@@ -46,17 +46,17 @@ int dTgSwArea_c::actorExecute() {
 
         if (scale < 1.0f) {
             scale = 50.0f;
-            matrixCreateFromPosRotYScale(area, position, rotation.y, mScale, nullptr, scale);
+            matrixCreateFromPosRotYScale(area, mPosition, mRotation.y, mScale, nullptr, scale);
         }
     } else {
         if (scale > 1.0f) {
             scale = 0.0f;
-            matrixCreateFromPosRotYScale(area, position, rotation.y, mScale, nullptr, scale);
+            matrixCreateFromPosRotYScale(area, mPosition, mRotation.y, mScale, nullptr, scale);
         }
 
         if (isTemporary) {
-            SceneflagManager::sInstance->unsetFlag(roomid, setSceneflag);
-            SceneflagManager::sInstance->setFlag(roomid, unsetSceneflag);
+            SceneflagManager::sInstance->unsetFlag(mRoomID, setSceneflag);
+            SceneflagManager::sInstance->setFlag(mRoomID, unsetSceneflag);
 
             if (isValidStoryFlag(setStoryflag)) {
                 StoryflagManager::sInstance->unsetFlag(setStoryflag);

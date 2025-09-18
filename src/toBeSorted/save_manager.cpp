@@ -401,7 +401,7 @@ void SaveMgr::executeCreateFiles() {
             if (NandResultTracker::GetInstance()->isFailure(status)) {
                 return;
             }
-            if (dScGame_c::GetInstance() != nullptr && dScGame_c::GetInstance()->profile_name == fProfile::GAME) {
+            if (dScGame_c::GetInstance() != nullptr && dScGame_c::GetInstance()->mProfileName == fProfile::GAME) {
                 fileMgr->copySelectedFileSkipData();
             }
             fileMgr->setField0xA842(1);

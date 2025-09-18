@@ -12,18 +12,18 @@ typedef void *(*SphChk_Callback)(dBgS_SphChk *, cBgD_Vtx_t *, int, int, int, cM3
 
 class dBgS_SphChk : public cM3dGSph, public cBgS_PolyInfo, public cBgS_Chk, public dBgS_Chk {
 public:
-    /* 0x80 */ f32 mField_0x80;
-    /* 0x84 */ mVec3_c mField_0x84;
+    /* 0x80 */ f32 field_0x80;
+    /* 0x84 */ mVec3_c field_0x84;
     /* 0x90 */ cM3dGAab mAabb;
-    /* 0xA8 */ u32 mField_0xA8;
-    /* 0xAC */ void *mField_0xAC;
-    /* 0xB0 */ u32 mField_0xB0;
+    /* 0xA8 */ u32 field_0xA8;
+    /* 0xAC */ void *field_0xAC;
+    /* 0xB0 */ u32 field_0xB0;
     /* 0xB4 */ SphChk_Callback mCallback;
 
     void SetInfo(int i, void *pV, int a) {
-        mField_0xA8 = i;
-        mField_0xAC = pV;
-        mField_0xB0 = a;
+        field_0xA8 = i;
+        field_0xAC = pV;
+        field_0xB0 = a;
     }
 
     dBgS_SphChk();

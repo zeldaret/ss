@@ -3,12 +3,11 @@
 #include "d/flag/sceneflag_manager.h"
 #include "toBeSorted/time_area_mgr.h"
 
-
 SPECIAL_ACTOR_PROFILE(TAG_TIME_AREA_CHECK, dTgTimeAreaCheck_c, fProfile::TAG_TIME_AREA_CHECK, 0x01AC, 0, 0);
 
 int dTgTimeAreaCheck_c::create() {
-    mPastSceneFlag = params & 0xFF;
-    mPresentSceneFlag = (params >> 8) & 0xFF;
+    mPastSceneFlag = mParams & 0xFF;
+    mPresentSceneFlag = (mParams >> 8) & 0xFF;
     return SUCCEEDED;
 }
 
@@ -17,20 +16,20 @@ int dTgTimeAreaCheck_c::doDelete() {
 }
 
 int dTgTimeAreaCheck_c::actorExecute() {
-    f32 result = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(roomid, position, nullptr, 10.0f);
+    f32 result = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(mRoomID, mPosition, nullptr, 10.0f);
     if (result > 0.0f) {
-        if (mPastSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mPastSceneFlag)) {
-            SceneflagManager::sInstance->setFlag(roomid, mPastSceneFlag);
+        if (mPastSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mPastSceneFlag)) {
+            SceneflagManager::sInstance->setFlag(mRoomID, mPastSceneFlag);
         }
-        if (mPresentSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mPresentSceneFlag)) {
-            SceneflagManager::sInstance->unsetFlag(roomid, mPresentSceneFlag);
+        if (mPresentSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mPresentSceneFlag)) {
+            SceneflagManager::sInstance->unsetFlag(mRoomID, mPresentSceneFlag);
         }
     } else {
-        if (mPastSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mPastSceneFlag)) {
-            SceneflagManager::sInstance->unsetFlag(roomid, mPastSceneFlag);
+        if (mPastSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mPastSceneFlag)) {
+            SceneflagManager::sInstance->unsetFlag(mRoomID, mPastSceneFlag);
         }
-        if (mPresentSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mPresentSceneFlag)) {
-            SceneflagManager::sInstance->setFlag(roomid, mPresentSceneFlag);
+        if (mPresentSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mPresentSceneFlag)) {
+            SceneflagManager::sInstance->setFlag(mRoomID, mPresentSceneFlag);
         }
     }
     return SUCCEEDED;

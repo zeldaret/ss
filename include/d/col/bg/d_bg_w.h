@@ -6,8 +6,8 @@
 #include "d/col/bg/d_bg_w_base.h"
 #include "d/col/c/c_m3d_g_aab.h"
 #include "m/m_math.h" // IWYU pragma: export
-#include "rvl/MTX.h"  // IWYU pragma: export
 
+#include "rvl/MTX.h" // IWYU pragma: export
 
 class cBgS_GrpPassChk;
 class cBgS_PolyPassChk;
@@ -391,7 +391,7 @@ public:
     }
 
 private:
-    /* 0x1F8 */ u32 mField_0x1F8;
+    /* 0x1F8 */ u32 field_0x1F8;
     /* 0x1FC */ dBgW_CrrFunc mpCrrFunc;
     /* 0x200 */ dBgW_RideCallback mpRide_cb;
     /* 0x204 */ dBgW_ArrowStickCallback mpArrowStick_cb;

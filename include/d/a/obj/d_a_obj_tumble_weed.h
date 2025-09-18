@@ -34,7 +34,7 @@ public:
     void adjustTimeScale();
     void adjustTumble(const mVec3_c &dir);
     void calcWind();
-    mVec3_c getPosition() const;
+    mVec3_c getTumblePosition() const;
     void calcMatrix();
 
     void adjustAngle();
@@ -68,20 +68,20 @@ private:
     /* 0x504 */ dBgS_ObjAcch mObjAcch;
     /* 0x8B4 */ DowsingTarget mDowsingTarget;
     /* 0x8D4 */ STATE_MGR_DECLARE(dAcOTumbleWeed_c);
-    /* 0x910 */ mQuat_c mField_0x910;
+    /* 0x910 */ mQuat_c field_0x910;
     /* 0x920 */ TimeAreaStruct mTimeArea;
     /* 0x92C */ mMtx_c mShadowMtx;
     /* 0x95C */ mVec3_c mWind;
-    /* 0x968 */ mVec3_c mField_0x968;
-    /* 0x974 */ f32 mField_0x974;
-    /* 0x978 */ f32 mField_0x978;
-    /* 0x97C */ f32 mField_0x97C;
-    /* 0x980 */ f32 mField_0x980;
+    /* 0x968 */ mVec3_c field_0x968;
+    /* 0x974 */ f32 field_0x974;
+    /* 0x978 */ f32 field_0x978;
+    /* 0x97C */ f32 field_0x97C;
+    /* 0x980 */ f32 field_0x980;
     /* 0x984 */ f32 mSpeedTarget;
     /* 0x988 */ u16 mTumbleTimer;
     /* 0x98A */ u8 mWindTimer;
-    /* 0x98B */ u8 mField_0x98B;
-    /* 0x98C */ u8 mField_0x98C;
+    /* 0x98B */ u8 field_0x98B;
+    /* 0x98C */ u8 field_0x98C;
     /* 0x98D */ bool mbOnGround;
 
     static dCcD_SrcSph sSphSrc;

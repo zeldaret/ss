@@ -11,7 +11,7 @@ dBgS_PolyPassChk::dBgS_PolyPassChk() {
     mClawshot = false;
     mUnderwaterRoof = false;
     mBellows = false;
-    mField_0xE = false;
+    field_0xE = false;
 }
 
 dBgS_PolyPassChk::~dBgS_PolyPassChk() {}

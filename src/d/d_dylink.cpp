@@ -4,10 +4,10 @@
 #include "common.h"
 #include "m/m_dvd.h"
 #include "m/m_heap.h"
-#include "rvl/DVD.h"  // IWYU pragma: export
-#include "rvl/NAND.h" // IWYU pragma: export
 #include "string.h"
 
+#include "rvl/DVD.h"  // IWYU pragma: export
+#include "rvl/NAND.h" // IWYU pragma: export
 
 struct RelNamePtr {
     u16 relId;
@@ -42,7 +42,6 @@ NandChunkStatus status_1 = Success;
 NandChunkStatus status_2 = Success;
 char relsDir[] = "/rels";
 
-/** 80052E00 */
 int initDylinkHeap(int maxRelId, const RelNamePtr *dynNameTable, int dynNameTableNum, EGG::Heap *parentHeap) {
     cCc_frmHeap = mHeap::createFrmHeap(
         maxRelId * 0x10 + dynNameTableNum * 0x48, parentHeap, "ダイナミックリンク制御用ヒープ(dDyl::cCc_frmHeap)", 0x20,
@@ -80,7 +79,6 @@ int initDylinkHeap(int maxRelId, const RelNamePtr *dynNameTable, int dynNameTabl
     return 1;
 }
 
-/** 80052FA0 */
 bool isLinked(u16 relId) {
     return pDMC[relId] != nullptr ? pDMC[relId]->isLinked() : true;
 }

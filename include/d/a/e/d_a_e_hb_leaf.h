@@ -37,15 +37,15 @@ private:
     }
 
     void doCheck() {
-        mTimeAreaStruct.check(roomid, mStartingPos, 0, 10.0f, 0.2f);
+        mTimeAreaStruct.check(mRoomID, mStartingPos, 0, 10.0f, 0.2f);
     }
 
     int getParam1() {
-        return params & 7;
+        return mParams & 7;
     }
 
     int getParam2() {
-        return params >> 7 & 3;
+        return mParams >> 7 & 3;
     }
 };
 

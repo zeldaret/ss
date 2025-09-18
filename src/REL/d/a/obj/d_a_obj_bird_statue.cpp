@@ -18,7 +18,7 @@ bool dAcOBirdStatue_c::createHeap() {
         return false;
     }
 
-    return mMdl.create(mdl, &heap_allocator, 0, 1, nullptr);
+    return mMdl.create(mdl, &mAllocator, 0, 1, nullptr);
 }
 
 int dAcOBirdStatue_c::create() {
@@ -28,12 +28,12 @@ int dAcOBirdStatue_c::create() {
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     mVec3_c min, max;
-    mMdl.getBounds(&min,&max);
-    boundingBox.Set(min, max);
+    mMdl.getBounds(&min, &max);
+    mBoundingBox.Set(min, max);
     return SUCCEEDED;
 }
 
-int dAcOBirdStatue_c::draw(){
+int dAcOBirdStatue_c::draw() {
     dAcObjBase_c::drawModelType1(&mMdl);
     return SUCCEEDED;
 }

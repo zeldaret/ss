@@ -92,7 +92,7 @@ bool dAcOChest_c::createHeap() {
         void *insideMdlData = getOarcResFile("TansuInside");
         mResFile = nw4r::g3d::ResFile(insideMdlData);
         nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(INSIDE_MODEL_NAMES[getFromParams(0x10, 0xFF)]);
-        if (!mInsideMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr)) {
+        if (!mInsideMdl.create(mdl, &mAllocator, 0x120, 1, nullptr)) {
             return false;
         }
     }
@@ -105,7 +105,7 @@ bool dAcOChest_c::createHeap() {
     if (!ok) {
         return false;
     }
-    return mBgW.InitMapStuff(&heap_allocator);
+    return mBgW.InitMapStuff(&mAllocator);
 }
 
 int dAcOChest_c::create() {
@@ -116,23 +116,23 @@ int dAcOChest_c::create() {
     dBgS::GetInstance()->Regist(&mBgW, this);
     dBgS::GetInstance()->RegistBg(&mBgW, this);
 
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = 0.0f;
+    mAcceleration = 0.0f;
+    mMaxSpeed = 0.0f;
 
     mStateMgr.changeState(StateID_Wait);
 
-    boundingBox.Set(mVec3_c(-200.0f, -0.0f, -100.0f), mVec3_c(200.0f, 500.0f, 100.0f));
+    mBoundingBox.Set(mVec3_c(-200.0f, -0.0f, -100.0f), mVec3_c(200.0f, 500.0f, 100.0f));
 
     mAnmMdl.setAnm(getOpenOrClose(0), m3d::PLAY_MODE_4);
     mAnmMdl.setRate(0.0f);
 
-    poscopy2.y = position.y + 150.0f;
-    poscopy3 = poscopy2;
+    mPositionCopy2.y = mPosition.y + 150.0f;
+    mPositionCopy3 = mPositionCopy2;
     if ((s32)getFromParams(0x10, 0xFF) != 0xFF) {
         mInsideMdl.setLocalMtx(mWorldMtx);
     }
-    if (dScGame_c::isCurrentStage("F001r") && roomid == 1 && 900.0f < position.x && position.x < 1000.0f &&
-        -50.0f < position.y && position.y < 50.0f && -2730.0f < position.z && position.z < -2630.0f) {
+    if (dScGame_c::isCurrentStage("F001r") && mRoomID == 1 && 900.0f < mPosition.x && mPosition.x < 1000.0f &&
+        -50.0f < mPosition.y && mPosition.y < 50.0f && -2730.0f < mPosition.z && mPosition.z < -2630.0f) {
         mIsLinksCloset = true;
     }
 
@@ -202,7 +202,7 @@ void dAcOChest_c::executeState_OrderOpenEventAfter() {
         if (dAcItem_c::isRupee(itemId)) {
             dMessage_c::getInstance()->setField_0x2FC(0xFFFFFFFF);
         }
-        mField_0x65D = true;
+        field_0x65D = true;
         stateOpenUpdate2();
         mStateMgr.changeState(StateID_OpenEvent);
     }
@@ -233,26 +233,26 @@ void dAcOChest_c::doInteraction(s32 _unused) {
 }
 
 void dAcOChest_c::fn_326_C90() {
-    mWorldMtx.transS(position);
-    mWorldMtx.ZXYrotM(rotation);
+    mWorldMtx.transS(mPosition);
+    mWorldMtx.ZXYrotM(mRotation);
     mAnmMdl.getModel().setLocalMtx(mWorldMtx);
     mAnmMdl.getModel().calc(false);
 }
 
 void dAcOChest_c::changeStateOpen() {
-    if (mField_0x65D) {
+    if (field_0x65D) {
         return;
     }
     u32 flag = getFromParams(0, 0xFF);
     if (flag < 0xFF) {
-        SceneflagManager::sInstance->setFlag(roomid, flag);
+        SceneflagManager::sInstance->setFlag(mRoomID, flag);
     }
     fn_326_1470();
     mStateMgr.changeState(StateID_OpenEvent);
 }
 
 void dAcOChest_c::changeStateWait() {
-    if (!mField_0x65D) {
+    if (!field_0x65D) {
         return;
     }
     fn_326_1440();
@@ -319,7 +319,7 @@ bool dAcOChest_c::hasBeenOpened() {
     if (flag >= 0xFF) {
         return true;
     }
-    return (flag < 0xFF) && SceneflagManager::sInstance->checkBoolFlag(roomid, flag);
+    return (flag < 0xFF) && SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag);
 }
 
 void dAcOChest_c::stateOpenUpdate2() {
@@ -360,14 +360,14 @@ void dAcOChest_c::stateOpenUpdate2() {
             mVec3_c t(0.0f, 0.0f, 122.35f);
             s32 targetAngle = 0x7FFF;
             targetPosition = t;
-            targetAngle += rotation.y;
-            targetPosition.rotY(rotation.y);
-            targetPosition += position;
+            targetAngle += mRotation.y;
+            targetPosition.rotY(mRotation.y);
+            targetPosition += mPosition;
 
             if (player != nullptr) {
-                playerPosition = player->position;
+                playerPosition = player->mPosition;
                 cLib::addCalcPos(&playerPosition, targetPosition, 0.25f, 200.0f, 0.0f);
-                s16 YRot = rotation.y;
+                s16 YRot = mRotation.y;
                 sLib::addCalcAngle(&YRot, targetAngle, 4, 0x7FFF, 0);
 
                 if ((targetPosition.squareDistanceToXZ(playerPosition) < 25.0f) &&

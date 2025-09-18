@@ -19,11 +19,11 @@ bool dAcOwaterSpout_c::createHeap() {
     void *data = getOarcResFile("FX_WaterColumn");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("FX_WaterColumn");
-    TRY_CREATE(mMdl.create(data, "FX_WaterColumn", "FX_WaterColumn", &heap_allocator, 0x32C));
+    TRY_CREATE(mMdl.create(data, "FX_WaterColumn", "FX_WaterColumn", &mAllocator, 0x32C));
     nw4r::g3d::ResAnmTexSrt anmSrt = mResFile.GetResAnmTexSrt("FX_WaterColumn");
-    TRY_CREATE(mAnmSrt.create(mdl, anmSrt, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnmSrt.create(mdl, anmSrt, &mAllocator, nullptr, 1));
     nw4r::g3d::ResAnmClr anmClr = mResFile.GetResAnmClr("FX_WaterColumn");
-    TRY_CREATE(mAnmClr.create(mdl, anmClr, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnmClr.create(mdl, anmClr, &mAllocator, nullptr, 1));
     return true;
 }
 
@@ -35,11 +35,11 @@ int dAcOwaterSpout_c::create() {
     updateMatrix();
     mMdl.getModel().setLocalMtx(mWorldMtx);
     mStateMgr.changeState(StateID_Wait);
-    if (params == 1) {
+    if (mParams == 1) {
         mScale.y *= 4.0f;
     }
     mMdl.getModel().setScale(mScale);
-    boundingBox.Set(mVec3_c(-400.0f, -250.0f, -400.0f), mVec3_c(400.0f, 250.0f, 400.0f));
+    mBoundingBox.Set(mVec3_c(-400.0f, -250.0f, -400.0f), mVec3_c(400.0f, 250.0f, 400.0f));
     return SUCCEEDED;
 }
 
@@ -61,10 +61,10 @@ int dAcOwaterSpout_c::draw() {
 }
 
 void dAcOwaterSpout_c::initializeState_Wait() {
-    if (params == 1) {
+    if (mParams == 1) {
         return;
     }
-    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_213_, position, nullptr, &mScale, nullptr, nullptr, 0, 0);
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_213_, mPosition, nullptr, &mScale, nullptr, nullptr, 0, 0);
 }
 void dAcOwaterSpout_c::executeState_Wait() {
     if (mMdl.getAnm().isStop()) {

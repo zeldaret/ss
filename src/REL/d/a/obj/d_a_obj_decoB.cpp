@@ -16,17 +16,17 @@ bool dAcODecoB_c::createHeap() {
     void *data = getOarcResFile("DecoB");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("DecoB");
-    return mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr);
+    return mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr);
 }
 
 int dAcODecoB_c::create() {
     if (!initAllocatorWork1Heap(0x1000, "dAcODecoB_c::m_allocator", 0x20)) {
         return FAILED;
     }
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = 0.0f;
+    mAcceleration = 0.0f;
+    mMaxSpeed = 0.0f;
     mStateMgr.changeState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-350.0f, 100.0f, -100.0f), mVec3_c(350.0f, -300.0f, 100.0f));
+    mBoundingBox.Set(mVec3_c(-350.0f, 100.0f, -100.0f), mVec3_c(350.0f, -300.0f, 100.0f));
     return SUCCEEDED;
 }
 
@@ -36,8 +36,8 @@ int dAcODecoB_c::doDelete() {
 
 int dAcODecoB_c::actorExecute() {
     mStateMgr.executeState();
-    PSMTXTrans(mWorldMtx, position.x, position.y, position.z);
-    mWorldMtx.ZXYrotM(rotation);
+    PSMTXTrans(mWorldMtx, mPosition.x, mPosition.y, mPosition.z);
+    mWorldMtx.ZXYrotM(mRotation);
     mMdl.setLocalMtx(mWorldMtx);
     return SUCCEEDED;
 }
@@ -53,7 +53,7 @@ f32 dAcODecoB_c::lbl_611_data_34 = 0.95f;
 
 void dAcODecoB_c::executeState_Wait() {
     if (dAcPy_c::GetLink() != nullptr && dAcPy_c::GetLink()->checkFlags0x350(0x2000)) {
-        mVec3_c deltaPosition = dAcPy_c::GetLink()->position - position;
+        mVec3_c deltaPosition = dAcPy_c::GetLink()->mPosition - mPosition;
         f32 distance = EGG::Math<f32>::sqrt(deltaPosition.squareMagXZ());
         distance = (2000.0f - distance) / 2000.0f;
         if (distance < 0.0f) {
@@ -61,9 +61,9 @@ void dAcODecoB_c::executeState_Wait() {
         }
         field_0x38E = distance * 2048.0f;
     }
-    field_0x38E -= rotation.x * 0.05f;
+    field_0x38E -= mRotation.x * 0.05f;
     field_0x38E = field_0x38E * lbl_611_data_34;
-    rotation.x += field_0x38E;
+    mRotation.x += field_0x38E;
 }
 
 const f32 dAcODecoB_c::lbl_611_rodata_30 = 2000.0f;

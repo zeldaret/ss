@@ -16,10 +16,10 @@ int dAcInvisible::create() {
     mStts.SetRank(9);
     mSph.SetStts(mStts);
     mCps.SetStts(mStts);
-    forwardAccel = 0.0;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = 0.0;
+    mMaxSpeed = -40.0f;
     mStateMgr.changeState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
+    mBoundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
     return SUCCEEDED;
 }
 

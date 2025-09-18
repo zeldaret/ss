@@ -15,7 +15,7 @@ bool dAcOimpaDoor_c::createHeap() {
     void *data = getOarcFile("DoorG", "g3d/model.brres");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("DoorG");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     return true;
 }
 
@@ -25,7 +25,7 @@ int dAcOimpaDoor_c::create() {
     mMdl.setLocalMtx(mWorldMtx);
     mStateMgr.changeState(StateID_Wait);
     mMdl.setPriorityDraw(0x1C, 9);
-    boundingBox.Set(mVec3_c(-250.0f, 0.0f, -30.0f), mVec3_c(250.0f, 940.0f, 30.0f));
+    mBoundingBox.Set(mVec3_c(-250.0f, 0.0f, -30.0f), mVec3_c(250.0f, 940.0f, 30.0f));
     return SUCCEEDED;
 }
 

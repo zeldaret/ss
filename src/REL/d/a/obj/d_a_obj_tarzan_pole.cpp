@@ -33,7 +33,7 @@ bool dAcOTarzanPole_c::createHeap() {
 
     // Create model
     nw4r::g3d::ResMdl resMdl = mBrres.GetResMdl("WhipBar");
-    TRY_CREATE(mMdl.create(resMdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(resMdl, &mAllocator, 0x120, 1, nullptr));
 
     // Load Collider
     void *dzb = getOarcDZB("WhipBar", "WhipBar");
@@ -55,17 +55,17 @@ int dAcOTarzanPole_c::create() {
     mCollider.Set(sCcSrc);
     mCollider.SetStts(mStts);
 
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = 0.0f;
+    mMaxSpeed = -40.0f;
 
-    mFloat = (s32)(params & 0xFF) * 10.0f;
-    if ((s32)(params & 0xFF) == 0xFF) {
+    mFloat = (s32)(mParams & 0xFF) * 10.0f;
+    if ((s32)(mParams & 0xFF) == 0xFF) {
         mFloat = 0.0f;
     }
 
     mVec = mVec3_c::Ex * 400.0f;
-    mVec.rotY(rotation.y);
-    boundingBox.Set(mVec3_c(-0.0f, -120.0f, -110.0f), mVec3_c(500.0f, 140.0f, 110.0f));
+    mVec.rotY(mRotation.y);
+    mBoundingBox.Set(mVec3_c(-0.0f, -120.0f, -110.0f), mVec3_c(500.0f, 140.0f, 110.0f));
 
     return SUCCEEDED;
 }
@@ -82,20 +82,20 @@ int dAcOTarzanPole_c::actorExecute() {
     const dAcPy_c *player = dAcPy_c::GetLink();
     bool bVar = false;
     if (mCollider.ChkTgHit() && mCollider.ChkTgAtHitType(AT_TYPE_WHIP)) {
-        setObjectProperty(0x1000);
+        setObjectProperty(OBJ_PROP_0x1000);
     }
 
     mVec = mVec3_c::Ex * sXOffset + mVec3_c::Ey * sYOffset;
-    mVec.rotY(rotation.y);
-    poscopy2 = position + mVec;
-    poscopy3 = poscopy2 + mVec3_c::Ey * 20.0f;
+    mVec.rotY(mRotation.y);
+    mPositionCopy2 = mPosition + mVec;
+    mPositionCopy3 = mPositionCopy2 + mVec3_c::Ey * 20.0f;
 
     // 0x400000 corresponds to dAcPy_FLG0::FLG0_SWING_ROPE
     if (player != nullptr && !player->checkActionFlags(0x400000) && dAcItem_c::checkFlag(ITEM_WHIP)) {
         AttentionManager::GetInstance()->addUnk7Target(*this, 1, 1000.0f, 10.0f, -600.0, 200);
     }
 
-    mCollider.SetC(poscopy2);
+    mCollider.SetC(mPositionCopy2);
 
     dCcS::GetInstance()->Set(&mCollider);
     return SUCCEEDED;

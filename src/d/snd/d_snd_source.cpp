@@ -78,7 +78,7 @@ void dSoundSource_c::setup() {
     if (mIsSetup) {
         return;
     }
-    SetPosition(mpActor->position);
+    SetPosition(mpActor->mPosition);
     resetCachedRelativePositions();
     initVolumeFade();
     if (mSourceCategory == SND_SOURCE_CATEGORY_PLAYER) {
@@ -154,9 +154,9 @@ void dSoundSource_c::preCalc() {
         return;
     }
 
-    if (!mIsPaused && !mpActor->isBasePropertyFlag(dBase_c::BASE_PROP_0x4)) {
+    if (!mIsPaused && !mpActor->checkBaseProperty(dBase_c::BASE_PROP_0x4)) {
         setPause(true, 3);
-    } else if (mIsPaused && mpActor->isBasePropertyFlag(dBase_c::BASE_PROP_0x4)) {
+    } else if (mIsPaused && mpActor->checkBaseProperty(dBase_c::BASE_PROP_0x4)) {
         setPause(false, 3);
     }
 }
@@ -584,7 +584,7 @@ bool dSoundSource_c::startVoiceLine(const char *label) {
 }
 
 s32 dSoundSource_c::getRoomId() const {
-    return mpActor->roomid;
+    return mpActor->mRoomID;
 }
 
 void dSoundSource_c::stopSounds(u32 soundId, s32 fadeFrames) {

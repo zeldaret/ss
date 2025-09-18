@@ -29,7 +29,7 @@ bool dAcOF400GateSeal_c::createHeap() {
         return false;
     }
 
-    if (!mMdl.create(mdl, &heap_allocator, 0)) {
+    if (!mMdl.create(mdl, &mAllocator, 0)) {
         return false;
     }
 
@@ -38,7 +38,7 @@ bool dAcOF400GateSeal_c::createHeap() {
         return false;
     }
 
-    if (!mAnmClr.create(mdl, anmClr, &heap_allocator, 0, 1)) {
+    if (!mAnmClr.create(mdl, anmClr, &mAllocator, 0, 1)) {
         return false;
     }
 
@@ -55,7 +55,7 @@ int dAcOF400GateSeal_c::actorPostCreate() {
     dAcOdoor_c *door;
 
     while (notDone && parent != nullptr) {
-        if (10000.0f < PSVECSquareDistance(position, parent->position)) {
+        if (10000.0f < PSVECSquareDistance(mPosition, parent->mPosition)) {
             parent = (dAcOdoor_c *)fManager_c::searchBaseByProfName(fProfile::OBJ_DOOR, parent);
             door = parent;
         } else {
@@ -81,7 +81,7 @@ int dAcOF400GateSeal_c::actorPostCreate() {
     mMdl.setLocalMtx(mWorldMtx);
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     return SUCCEEDED;
 }
 
@@ -94,7 +94,7 @@ int dAcOF400GateSeal_c::actorExecute() {
         f32 frame = mAnmClr.getFrameStart(0);
         mAnmClr.setFrame(frame, 0);
     } else {
-        if (checkObjectProperty(2)) {
+        if (checkObjectProperty(OBJ_PROP_0x2)) {
             f32 frame = mAnmClr.getFrameMax(0);
             mAnmClr.setFrame(frame, 0);
         } else {
@@ -102,9 +102,9 @@ int dAcOF400GateSeal_c::actorExecute() {
         }
     }
     if (mAnmClr.isStop(0)) {
-        setObjectProperty(0x200);
+        setObjectProperty(OBJ_PROP_0x200);
     } else {
-        clearObjectProperty(0x200);
+        unsetObjectProperty(OBJ_PROP_0x200);
     }
     return SUCCEEDED;
 }

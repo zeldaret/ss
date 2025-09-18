@@ -15,12 +15,12 @@ public:
 
 class dSkinMat_c : public m3d::blineMat_c {
 public:
-    dSkinMat_c() : mField_0x4C(-1), mField_0x50(0xFF), mField_0x54(0xFF) {}
+    dSkinMat_c() : field_0x4C(-1), field_0x50(0xFF), field_0x54(0xFF) {}
     virtual void setupGX(bool bTransparent) override;
 
-    /* 0x4C */ s32 mField_0x4C;
-    /* 0x50 */ s32 mField_0x50;
-    /* 0x54 */ s32 mField_0x54;
+    /* 0x4C */ s32 field_0x4C;
+    /* 0x50 */ s32 field_0x50;
+    /* 0x54 */ s32 field_0x54;
 };
 
 #endif

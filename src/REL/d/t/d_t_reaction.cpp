@@ -41,15 +41,15 @@ int dTgReaction_c::create() {
         if (getSceneFlag() >= 0xFF) {
             return FAILED;
         }
-        if (SceneflagManager::sInstance->checkBoolFlag(roomid, getSceneFlag())) {
+        if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, getSceneFlag())) {
             return FAILED;
         }
     }
 
-    field_0x4E0 = rotation.x & 0xFF;
-    rotation.x = angle.x = 0;
+    field_0x4E0 = mRotation.x & 0xFF;
+    mRotation.x = mAngle.x = 0;
 
-    if (field_0x4E0 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, field_0x4E0)) {
+    if (field_0x4E0 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, field_0x4E0)) {
         return FAILED;
     }
 
@@ -127,7 +127,7 @@ int dTgReaction_c::doDelete() {
 }
 
 int dTgReaction_c::actorExecute() {
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, getSceneFlag())) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, getSceneFlag())) {
         onDelete();
         return SUCCEEDED;
     } else {
@@ -154,7 +154,7 @@ void dTgReaction_c::finalizeState_Wait() {}
 
 void dTgReaction_c::checkForBonkItem() {
     if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x2000)) {
-        mVec3_c diff = position - dAcPy_c::LINK->position;
+        mVec3_c diff = mPosition - dAcPy_c::LINK->mPosition;
         f32 dist = diff.x * diff.x + diff.z * diff.z;
         f32 rad = mScale.x * 100.0f;
         if (!(dist < rad * rad)) {
@@ -164,12 +164,12 @@ void dTgReaction_c::checkForBonkItem() {
         if (getReactType() == REACT_4) {
             if (field_0x4DD == 0) {
                 mVec3_c c = mVec3_c::Ez * rad;
-                mVec3_c c2 = position;
-                c.rotY(rotation.y);
+                mVec3_c c2 = mPosition;
+                c.rotY(mRotation.y);
                 c2 += c;
                 c2.y += field_0x4E4;
                 u32 newItemParms = dAcItem_c::createItemParams(ITEM_HEART_PIECE, 1, 0, getSceneFlag(), 1, 0xFF);
-                if (dAcObjBase_c::create(fProfile::ITEM, roomid, newItemParms, &c2, nullptr, nullptr, 0xFFFFFFFF)) {
+                if (dAcObjBase_c::create(fProfile::ITEM, mRoomID, newItemParms, &c2, nullptr, nullptr, 0xFFFFFFFF)) {
                     field_0x4DD = 1;
                     onDelete();
                     dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
@@ -177,7 +177,7 @@ void dTgReaction_c::checkForBonkItem() {
             }
         } else {
             u32 uVar3;
-            mVec3_c pos = position;
+            mVec3_c pos = mPosition;
             int p = getParam0x08();
             if (p == 0) {
                 uVar3 = 6;
@@ -186,7 +186,7 @@ void dTgReaction_c::checkForBonkItem() {
             } else if (p == 1) {
                 uVar3 = 5;
                 mVec3_c c = mVec3_c::Ez * rad;
-                c.rotY(rotation.y);
+                c.rotY(mRotation.y);
                 pos += c;
             } else {
                 uVar3 = 6;
@@ -196,7 +196,7 @@ void dTgReaction_c::checkForBonkItem() {
             if (fn_578_DB0(pos, uVar3)) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
             }
-            SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
+            SceneflagManager::sInstance->setFlag(mRoomID, getSceneFlag());
             onDelete();
         }
     }
@@ -205,11 +205,11 @@ void dTgReaction_c::checkForBonkItem() {
 void dTgReaction_c::checkForBubble() {
     if (mCollision.ChkTgHit() && mCollision.ChkTgAtHitType(AT_TYPE_BUBBLE)) {
         if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x40)) {
-            mVec3_c spawnPos = position;
-            dAcObjBase_c::create(fProfile::OBJ_BUBBLE, roomid, 0x4, &spawnPos, nullptr, nullptr, 0xFFFFFFFF);
+            mVec3_c spawnPos = mPosition;
+            dAcObjBase_c::create(fProfile::OBJ_BUBBLE, mRoomID, 0x4, &spawnPos, nullptr, nullptr, 0xFFFFFFFF);
         }
     }
-    mCollision.SetC(position);
+    mCollision.SetC(mPosition);
     dCcS::GetInstance()->Set(&mCollision);
 }
 
@@ -225,15 +225,15 @@ void dTgReaction_c::checkForSlingBellowsItem() {
                 uVar3 = 5;
             }
         }
-        mVec3_c spawnPos = position;
+        mVec3_c spawnPos = mPosition;
         spawnPos.y += field_0x4E4;
         if (fn_578_DB0(spawnPos, uVar3)) {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
         }
-        SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
+        SceneflagManager::sInstance->setFlag(mRoomID, getSceneFlag());
         onDelete();
     }
-    mCollision.SetC(position);
+    mCollision.SetC(mPosition);
     dCcS::GetInstance()->Set(&mCollision);
 }
 
@@ -262,7 +262,7 @@ bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 velocity_typ
         max = angle;
         min = SOME_ANG;
     } else {
-        max = (s16)cLib::targetAngleY(dAcPy_c::LINK->position, pos) + 0x4000;
+        max = (s16)cLib::targetAngleY(dAcPy_c::LINK->mPosition, pos) + 0x4000;
         min = -0x8000;
     }
 
@@ -275,11 +275,11 @@ bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 velocity_typ
     for (int i = 0; i < numHearts; i++) {
         ang.y = mAng(step) + cM::rndRange(rndMin, rndMax);
         if (velocity_type == 5) {
-            dAcItem_c::spawnItem(ITEM_HEART, roomid, pos, ang, 0xFFFFFFFF, 1);
+            dAcItem_c::spawnItem(ITEM_HEART, mRoomID, pos, ang, 0xFFFFFFFF, 1);
         } else if (velocity_type == 6) {
-            dAcItem_c::spawnItem(ITEM_HEART, roomid, pos, ang, 0xFFFFFFFF, 0);
+            dAcItem_c::spawnItem(ITEM_HEART, mRoomID, pos, ang, 0xFFFFFFFF, 0);
         } else {
-            dAcItem_c::spawnDrop(ITEM_HEART, roomid, pos, ang);
+            dAcItem_c::spawnDrop(ITEM_HEART, mRoomID, pos, ang);
         }
         step = mAng(step) - stepSize;
     }

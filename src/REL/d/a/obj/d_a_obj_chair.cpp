@@ -47,15 +47,15 @@ static dCcD_SrcCyl sChairColData = {
 bool dAcOChair_c::createHeap() {
     if (!isBench()) {
         mRes = nw4r::g3d::ResFile(getOarcResFile(CHAIR_FILES[mChairType]));
-        TRY_CREATE(mMdl.create(mRes.GetResMdl(CHAIR_FILES[mChairType]), &heap_allocator, 0x120, 1, NULL));
+        TRY_CREATE(mMdl.create(mRes.GetResMdl(CHAIR_FILES[mChairType]), &mAllocator, 0x120, 1, NULL));
     }
     return true;
 }
 
 int dAcOChair_c::create() {
-    u8 paramType = params & 0xF;
+    u8 paramType = mParams & 0xF;
     mChairType = getChairType(paramType);
-    mSceneflag = params >> 4;
+    mSceneflag = mParams >> 4;
 
     CREATE_ALLOCATOR(dAcOChair_c);
 
@@ -101,16 +101,16 @@ int dAcOChair_c::create() {
         mObjAcch.CrrPos(*dBgS::GetInstance());
     }
 
-    forwardAccel = -2.f;
-    forwardMaxSpeed = -40.f;
+    mAcceleration = -2.f;
+    mMaxSpeed = -40.f;
 
     field_0xB1B = 1;
     field_0xB1A = 1;
 
-    mChairRot = rotation.y;
+    mChairRot = mRotation.y;
     mStateMgr.changeState(StateID_Wait);
 
-    boundingBox.Set(mVec3_c(-60.f, -0.f, -60.f), mVec3_c(60.f, 160.f, 60.f));
+    mBoundingBox.Set(mVec3_c(-60.f, -0.f, -60.f), mVec3_c(60.f, 160.f, 60.f));
 
     return SUCCEEDED;
 }
@@ -134,9 +134,9 @@ int dAcOChair_c::actorExecute() {
     mStateMgr.executeState();
 
     // Calculate the HealCooldown (Heal link if needed)
-    if (!checkObjectProperty(0x8000)) {
+    if (!checkObjectProperty(OBJ_PROP_0x8000)) {
         if (!isBench()) {
-            mCyl.SetC(GetPosition());
+            mCyl.SetC(getPosition());
             dCcS::GetInstance()->Set(&mCyl);
         }
         mHealTimer = FIRST_HEAL_COOLDOWN;
@@ -148,34 +148,34 @@ int dAcOChair_c::actorExecute() {
     }
 
     // Set the flag that link is sitting
-    if (checkObjectProperty(0x8000) && isPlayerSitting()) {
-        if (mSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mSceneflag)) {
-            SceneflagManager::sInstance->setFlag(roomid, mSceneflag);
+    if (checkObjectProperty(OBJ_PROP_0x8000) && isPlayerSitting()) {
+        if (mSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag)) {
+            SceneflagManager::sInstance->setFlag(mRoomID, mSceneflag);
         }
     } else {
-        if (mSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mSceneflag)) {
-            SceneflagManager::sInstance->unsetFlag(roomid, mSceneflag);
+        if (mSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag)) {
+            SceneflagManager::sInstance->unsetFlag(mRoomID, mSceneflag);
         }
     }
 
     if (!isBench()) {
-        if (isChairTypeIdk0() && !checkObjectProperty(0x8000)) {
-            if (sLib::absDiff(GetRotation().y, getXZAngleToPlayer()) > 910) {
-                GetRotation().y = getXZAngleToPlayer();
+        if (isChairTypeIdk0() && !checkObjectProperty(OBJ_PROP_0x8000)) {
+            if (sLib::absDiff(getRotation().y, getXZAngleToPlayer()) > 910) {
+                getRotation().y = getXZAngleToPlayer();
             }
         }
 
         updateMatrix();
 
         if (isChairTypeIdk0()) {
-            mWorldMtx.YrotM(mChairRot - GetRotation().y);
+            mWorldMtx.YrotM(mChairRot - getRotation().y);
         }
         mMdl.setLocalMtx(mWorldMtx);
         mMdl.calc(false);
     } else {
-        if (isChairTypeIdk0() && !checkObjectProperty(0x8000)) {
-            if (sLib::absDiff(GetRotation().y, getXZAngleToPlayer()) > 910) {
-                GetRotation().y = getXZAngleToPlayer();
+        if (isChairTypeIdk0() && !checkObjectProperty(OBJ_PROP_0x8000)) {
+            if (sLib::absDiff(getRotation().y, getXZAngleToPlayer()) > 910) {
+                getRotation().y = getXZAngleToPlayer();
             }
         }
     }
@@ -197,7 +197,7 @@ int dAcOChair_c::draw() {
 void dAcOChair_c::initializeState_Wait() {}
 
 void dAcOChair_c::executeState_Wait() {
-    const f32 height_diff = position.y - dAcPy_c::GetLink()->position.y;
+    const f32 height_diff = mPosition.y - dAcPy_c::GetLink()->mPosition.y;
     if (!isBench() || (50.f < height_diff && height_diff < 60.f)) {
         if (field_0xB1A && field_0xB1B) {
             if (dAcPy_c::GetLink()->checkActionFlagsCont(0x1000)) {
@@ -207,7 +207,7 @@ void dAcOChair_c::executeState_Wait() {
                 return;
             }
             if (field_0xB1C && mChairType == CHAIR_E) {
-                const f32 mag = (mChairPos - poscopy2).squareMagXZ();
+                const f32 mag = (mChairPos - mPositionCopy2).squareMagXZ();
                 if (mag < 10000.f) {
                     return;
                 }
@@ -220,7 +220,7 @@ void dAcOChair_c::executeState_Wait() {
 void dAcOChair_c::finalizeState_Wait() {}
 
 dAcOChair_c::ChairType dAcOChair_c::getChairType(u8 &param) {
-    switch (actor_subtype) {
+    switch (mActorSubtype) {
         case 0: return CHAIR_A;
         case 1: return CHAIR_B;
         case 2: return CHAIR_C;
@@ -244,25 +244,25 @@ dAcOChair_c::ChairType dAcOChair_c::getChairType(u8 &param) {
 void dAcOChair_c::updateChairPos() {
     if (mChairType != CHAIR_E) {
         if (isBench()) {
-            poscopy2 = position;
+            mPositionCopy2 = mPosition;
         } else {
-            mMdl.getNodeWorldMtxMultVecZero(mSeatNodeID, poscopy2);
+            mMdl.getNodeWorldMtxMultVecZero(mSeatNodeID, mPositionCopy2);
         }
-        poscopy3 = poscopy2;
+        mPositionCopy3 = mPositionCopy2;
     } else {
         field_0xB1A = true;
-        if (!checkObjectProperty(0x8000)) {
+        if (!checkObjectProperty(OBJ_PROP_0x8000)) {
             mVec3_c work = mVec3_c::Ez * getDistToPlayer();
             work.rotY(getRelativeYRotationToPlayer());
             work.z = 0.f;
-            work.rotY(rotation.y);
-            poscopy2 = position;
+            work.rotY(mRotation.y);
+            mPositionCopy2 = mPosition;
             if (work.squareMagXZ() < 10000.f) {
-                poscopy2 += work;
+                mPositionCopy2 += work;
             } else {
                 field_0xB1A = false;
             }
         }
-        poscopy3 = poscopy2;
+        mPositionCopy3 = mPositionCopy2;
     }
 }

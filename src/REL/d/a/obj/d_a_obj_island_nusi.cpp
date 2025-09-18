@@ -30,7 +30,7 @@ bool dAcOislandNusi_c::createHeap() {
     dStage_c::bindSkyCmnToResFile(&mRes);
     for (int i = 0; i < 2; i++) {
         nw4r::g3d::ResMdl mdl = mRes.GetResMdl(sMdlNames[i]);
-        TRY_CREATE(mMdls[i].create(mdl, &heap_allocator, 0x160));
+        TRY_CREATE(mMdls[i].create(mdl, &mAllocator, 0x160));
     }
 
     mMdls[0].setOption(0x30001, 0);
@@ -43,7 +43,7 @@ bool dAcOislandNusi_c::createHeap() {
     }
     TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mBgW.Lock();
-    return mBgW.InitMapStuff(&heap_allocator);
+    return mBgW.InitMapStuff(&mAllocator);
 }
 
 int dAcOislandNusi_c::create() {
@@ -58,7 +58,7 @@ int dAcOislandNusi_c::create() {
 
     mMdls[0].setPriorityDraw(0x1C, 9);
     mMdls[1].setPriorityDraw(0x22, 9);
-    boundingBox.Set(mVec3_c(-4000.0f, -1200.0f, -2700.0f), mVec3_c(4800.0f, 3400.0f, 1700.0f));
+    mBoundingBox.Set(mVec3_c(-4000.0f, -1200.0f, -2700.0f), mVec3_c(4800.0f, 3400.0f, 1700.0f));
 
     mCullingDistance = 500000.0f;
 

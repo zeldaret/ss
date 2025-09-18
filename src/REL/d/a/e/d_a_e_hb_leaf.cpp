@@ -9,11 +9,11 @@ bool dAcEhb_leaf_c::createHeap() {
     // This is ever so slightly weird but our m_anmMdl really doesn't take ResFile by value
     // but only ever a single pointer.
     void *fp = getOarcResFile("Degubaba");
-    TRY_CREATE(mModel.create(fp, "degubaba_leaf", "shake2", &heap_allocator, 0x123));
+    TRY_CREATE(mModel.create(fp, "degubaba_leaf", "shake2", &mAllocator, 0x123));
     nw4r::g3d::ResFile f(fp);
     nw4r::g3d::ResMdl mdl = f.GetResMdl("degubaba_leaf");
     nw4r::g3d::ResAnmTexPat anm = f.GetResAnmTexPat("degubaba_leaf");
-    TRY_CREATE(mAnm.create(mdl, anm, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnm.create(mdl, anm, &mAllocator, nullptr, 1));
     mModel.getModel().setAnm(mAnm);
     return true;
 }
@@ -21,10 +21,10 @@ bool dAcEhb_leaf_c::createHeap() {
 int dAcEhb_leaf_c::create() {
     CREATE_ALLOCATOR(dAcEhb_leaf_c);
 
-    boundingBox.Set(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
+    mBoundingBox.Set(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
 
-    rotation.y = cM::rndF(65535.0f);
-    someRot = rotation.y.mVal;
+    mRotation.y = cM::rndF(65535.0f);
+    someRot = mRotation.y.mVal;
 
     switch (getParam1()) {
         case 0:
@@ -33,7 +33,7 @@ int dAcEhb_leaf_c::create() {
         case 2:  mType = 2; break;
         case 3:
         case 4:
-        case 5:  rotation.z.set(-0x8000); break;
+        case 5:  mRotation.z.set(-0x8000); break;
         default: break;
     }
 
@@ -52,10 +52,10 @@ int dAcEhb_leaf_c::create() {
     }
 
     if (mType != 0) {
-        clearActorProperty(0x1);
+        unsetActorProperty(AC_PROP_0x1);
     }
 
-    mStartingPos = position;
+    mStartingPos = mPosition;
 
     return SUCCEEDED;
 }

@@ -177,7 +177,7 @@ public:
         mPriority = priority;
     }
     void SetUnkBase(u8 val) {
-        mField_0x18.field_0x00 = val;
+        field_0x18.field_0x00 = val;
     }
     void OnStickWall() {
         field_0x24 |= 1;
@@ -217,7 +217,7 @@ public:
 
     // private:
     /* 0x08 */ cPartition mPartitionInfo;
-    /* 0x18 */ dBgW_Base_0x18 mField_0x18;
+    /* 0x18 */ dBgW_Base_0x18 field_0x18;
     /* 0x20 */ u16 field_0x20;
     /* 0x22 */ u16 field_0x22;
     /* 0x24 */ u16 field_0x24;

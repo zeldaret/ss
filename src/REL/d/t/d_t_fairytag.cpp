@@ -2,7 +2,6 @@
 
 #include "c/c_math.h"
 
-
 SPECIAL_ACTOR_PROFILE(T_FAIRY, dTgFairy_c, fProfile::T_FAIRY, 0x0296, 0, 0);
 
 bool dTgFairy_c::createHeap() {
@@ -11,7 +10,7 @@ bool dTgFairy_c::createHeap() {
 }
 
 int dTgFairy_c::create() {
-    mCount = params & 0x3F;
+    mCount = mParams & 0x3F;
     if (mCount == 0 || mCount == 7) {
         mCount = 1;
     }
@@ -38,7 +37,7 @@ int dTgFairy_c::draw() {
 }
 
 void dTgFairy_c::createFairies() {
-    u32 parms = params;
+    u32 parms = mParams;
     u32 someNum = (parms >> 6) & 0xFF;
     u32 fairyParams1 = (parms >> 14) & 0x3F;
     if (someNum > 100) {
@@ -54,7 +53,7 @@ void dTgFairy_c::createFairies() {
             mVec3_c v = calcLocation(f);
             v2 = v;
             dAcObjFairy_c *ac = static_cast<dAcObjFairy_c *>(
-                dAcObjBase_c::create("Fairy", roomid, fairyParams1, &v2, nullptr, nullptr, -1, -1, viewclip_index)
+                dAcObjBase_c::create("Fairy", mRoomID, fairyParams1, &v2, nullptr, nullptr, -1, -1, mViewClipIdx)
             );
             if (ac != nullptr) {
                 mpFairyRefs[i].link(ac);
@@ -68,8 +67,8 @@ mVec3_c dTgFairy_c::calcLocation(const f32 &offset) {
     v.y = mScale.y * 0.5f;
     v.x = mScale.x * calcRnd(0.5f, offset);
     v.z = mScale.z * calcRnd(0.5f, offset);
-    v.rotY(rotation.y);
-    return position + v;
+    v.rotY(mRotation.y);
+    return mPosition + v;
 }
 
 float dTgFairy_c::calcRnd(const f32 &a, const f32 &b) {

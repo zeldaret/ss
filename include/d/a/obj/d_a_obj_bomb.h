@@ -18,10 +18,10 @@
 // This may need its own file and could be independent of a bomb
 class UnkBombColInfo : public cBgS_PolyInfo {
 public:
-    UnkBombColInfo() : mField_0x10(0), mField_0x14(0), mField_0x18(0) {}
-    u32 mField_0x10;
-    u32 mField_0x14;
-    u32 mField_0x18;
+    UnkBombColInfo() : field_0x10(0), field_0x14(0), field_0x18(0) {}
+    u32 field_0x10;
+    u32 field_0x14;
+    u32 field_0x18;
 };
 
 class dAcBomb_c : public dAcObjBase_c {
@@ -70,9 +70,9 @@ public:
     /* 0xA08 */ EffectsStruct mEffect2;
     /* 0xA3C */ u32 field_0xA3C;
     /* 0xA40 */ u32 field_0xA40;
-    /* 0xA44 */ s16 mField_0xA44;
+    /* 0xA44 */ s16 field_0xA44;
     /* 0xA46 */ u8 _3[0xA50 - 0xA46];
-    /* 0xA50 */ f32 mField_0xA50;
+    /* 0xA50 */ f32 field_0xA50;
     /* 0xA54 */ u8 _4[0xA9C - 0xA54];
     /* 0xA9C */ STATE_MGR_DECLARE(dAcBomb_c);
 };

@@ -18,7 +18,7 @@ bool SoundInfo::initSource(s32 sourceType, const char *name, const mVec3_c *posP
     if (mpSource == nullptr) {
         return false;
     }
-    mpActor->sound_list.append(this);
+    mpActor->mSoundList.append(this);
     mpPosPtr = posPtr;
     return true;
 }
@@ -26,6 +26,6 @@ bool SoundInfo::initSource(s32 sourceType, const char *name, const mVec3_c *posP
 bool SoundInfo::startBgHitSound(u32 soundId, const cBgS_PolyInfo &info, const mVec3_c *position) {
     return mpSource->startBgHitSound(
         soundId, dBgS::GetInstance()->GetPolyAtt0(info), dBgS::GetInstance()->GetPolyAtt1(info),
-        position != nullptr ? position : &mpActor->position
+        position != nullptr ? position : &mpActor->mPosition
     );
 }

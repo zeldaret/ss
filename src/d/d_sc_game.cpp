@@ -140,7 +140,7 @@ sFPhaseBase::sFPhaseState dScGame_c::cb3() {
 }
 
 void dScGame_c::initializeState_Stanby() {
-    setProcControlFlag(ROOT_DISABLE_EXECUTE | ROOT_DISABLE_DRAW);
+    setProcControl(ROOT_DISABLE_EXECUTE | ROOT_DISABLE_DRAW);
     if (mReloadTrigger == fProfile::STAGE_MANAGER) {
         copySpawnNextToCurrent();
     }
@@ -206,7 +206,7 @@ bool dScGame_c::attemptDelete() {
     if (mStageMgrRef.p_owner == nullptr) {
         return true;
     } else {
-        if (!mStageMgrRef.p_owner->delete_request) {
+        if (!mStageMgrRef.p_owner->mDeleteRequest) {
             mStageMgrRef.p_owner->deleteRequest();
         }
         return false;

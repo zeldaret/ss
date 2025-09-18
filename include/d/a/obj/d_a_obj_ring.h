@@ -18,7 +18,7 @@ public:
     STATE_FUNC_DECLARE(dAcOring_c, Move);
 
     u8 getArgFromParams() {
-        u32 p = (params & 3);
+        u32 p = (mParams & 3);
         return p != 3 ? p : 0;
     }
 

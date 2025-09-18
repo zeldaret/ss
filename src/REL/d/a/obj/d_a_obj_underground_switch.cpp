@@ -24,12 +24,12 @@ bool dAcOUgSwitch_c::createHeap() {
 
     mRes = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("SwitchPass");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120));
 
     mRes = nw4r::g3d::ResFile(data);
     mdl = mRes.GetResMdl("SwitchPass");
     nw4r::g3d::ResAnmClr clr = mRes.GetResAnmClr("SwitchPass_Light");
-    TRY_CREATE(mAnmClr.create(mdl, clr, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnmClr.create(mdl, clr, &mAllocator, nullptr, 1));
 
     mMdl.setAnm(mAnmClr);
 
@@ -37,9 +37,9 @@ bool dAcOUgSwitch_c::createHeap() {
 }
 
 int dAcOUgSwitch_c::create() {
-    mActiveSceneFlag = params & 0xFF;
-    field_0x3BD = (params >> 8) & 0xFF;
-    setVariant((params >> 16) & 0xF);
+    mActiveSceneFlag = mParams & 0xFF;
+    field_0x3BD = (mParams >> 8) & 0xFF;
+    setVariant((mParams >> 16) & 0xF);
     if (!initAllocatorWork1Heap(0x1000, "dAcOUgSwitch_c::m_allocator", 0x20)) {
         return FAILED;
     }
@@ -48,7 +48,7 @@ int dAcOUgSwitch_c::create() {
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     mMdl.setPriorityDraw(0x82, 0x7F);
-    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, mActiveSceneFlag)) {
+    if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActiveSceneFlag)) {
         if (mVariant == 0) {
             mStateMgr.changeState(StateID_Active);
         } else {
@@ -57,7 +57,7 @@ int dAcOUgSwitch_c::create() {
     } else {
         mStateMgr.changeState(StateID_On);
     }
-    boundingBox.Set(mVec3_c(-50.0f, -20.0f, -50.0f), mVec3_c(50.0f, 20.0f, 50.0f));
+    mBoundingBox.Set(mVec3_c(-50.0f, -20.0f, -50.0f), mVec3_c(50.0f, 20.0f, 50.0f));
 
     return SUCCEEDED;
 }
@@ -74,11 +74,11 @@ int dAcOUgSwitch_c::actorExecute() {
 int dAcOUgSwitch_c::actorExecuteInEvent() {
     if (EventManager::isInEvent(this, "OnSwitchCount")) {
         if (mOnEventTimer != 0 && --mOnEventTimer == 0) {
-            if (mVariant == 0 && !SceneflagManager::sInstance->checkBoolFlag(roomid, mActiveSceneFlag)) {
-                SceneflagManager::sInstance->setFlag(roomid, mActiveSceneFlag);
+            if (mVariant == 0 && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActiveSceneFlag)) {
+                SceneflagManager::sInstance->setFlag(mRoomID, mActiveSceneFlag);
             } else {
-                if (mVariant == 1 && !SceneflagManager::sInstance->checkBoolFlag(roomid, field_0x3BD)) {
-                    SceneflagManager::sInstance->setFlag(roomid, field_0x3BD);
+                if (mVariant == 1 && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, field_0x3BD)) {
+                    SceneflagManager::sInstance->setFlag(mRoomID, field_0x3BD);
                 }
             }
             EventManager::finishEvent(this, "OnSwitchCount");
@@ -97,7 +97,7 @@ void dAcOUgSwitch_c::initializeState_Off() {
     mAnmClr.setFrame(0.0f, 0);
 }
 void dAcOUgSwitch_c::executeState_Off() {
-    if (mVariant == 1 && SceneflagManager::sInstance->checkBoolFlag(roomid, mActiveSceneFlag)) {
+    if (mVariant == 1 && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActiveSceneFlag)) {
         mStateMgr.changeState(StateID_Active);
     }
 }
@@ -106,7 +106,7 @@ void dAcOUgSwitch_c::initializeState_Active() {
     mAnmClr.setFrame(1.0f, 0);
 }
 void dAcOUgSwitch_c::executeState_Active() {
-    if (mVariant == 0 && !SceneflagManager::sInstance->checkBoolFlag(roomid, mActiveSceneFlag)) {
+    if (mVariant == 0 && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActiveSceneFlag)) {
         if (isWithinPlayerRadius(sActivationRadius) && dAcPy_c::LINK->checkActionFlags(dAcPy_c::FLG0_CRAWLING)) {
             mOnEventTimer = sEventTimer;
             startSound(SE_UgSwitc_ON_ZERO);
@@ -114,14 +114,14 @@ void dAcOUgSwitch_c::executeState_Active() {
         }
     }
     if (mVariant == 1) {
-        if (!SceneflagManager::sInstance->checkBoolFlag(roomid, field_0x3BD)) {
+        if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, field_0x3BD)) {
             if (isWithinPlayerRadius(sActivationRadius) && dAcPy_c::LINK->checkActionFlags(dAcPy_c::FLG0_CRAWLING)) {
                 mOnEventTimer = sEventTimer;
                 startSound(SE_UgSwitc_ON);
                 mStateMgr.changeState(StateID_On);
             }
         }
-        if (!SceneflagManager::sInstance->checkBoolFlag(roomid, mActiveSceneFlag)) {
+        if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActiveSceneFlag)) {
             mStateMgr.changeState(StateID_Off);
         }
     }
@@ -137,7 +137,7 @@ void dAcOUgSwitch_c::initializeState_On() {
     EventManager::alsoSetAsCurrentEvent(this, &event, nullptr);
 }
 void dAcOUgSwitch_c::executeState_On() {
-    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, mActiveSceneFlag)) {
+    if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActiveSceneFlag)) {
         if (mVariant == 0) {
             mStateMgr.changeState(StateID_Active);
         } else {

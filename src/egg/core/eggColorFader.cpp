@@ -1,11 +1,15 @@
 
 #include "egg/core/eggColorFader.h"
 
-/* 80497930 */
 EGG::ColorFader::ColorFader(
     float startX, float startY, float lengthX, float lengthY, nw4r::ut::Color color, Fader::EStatus initialStatus
 )
-    : mStartX(startX), mStartY(startY), mEndX(startX + lengthX), mEndY(startY + lengthY), mFrame(0x14), mFadeTimer(0),
+    : mStartX(startX),
+      mStartY(startY),
+      mEndX(startX + lengthX),
+      mEndY(startY + lengthY),
+      mFrame(0x14),
+      mFadeTimer(0),
       mFlags(0) {
     setColor(color);
     setStatus(initialStatus);

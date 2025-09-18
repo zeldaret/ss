@@ -17,7 +17,7 @@ public:
 
 private:
     int getTypeFromParams() {
-        return params >> 0x1C;
+        return mParams >> 0x1C;
     }
     bool checkPosInArea(mVec3_c &pos);
 

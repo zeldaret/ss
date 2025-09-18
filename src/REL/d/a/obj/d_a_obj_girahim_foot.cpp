@@ -19,7 +19,7 @@ bool dAcOgirahimFoot_c::createHeap() {
 
     nw4r::g3d::ResMdl resMdl = mRes.GetResMdl("Girahim_Foot");
 
-    TRY_CREATE(mMdl.create(resMdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(resMdl, &mAllocator, 0x120, 1, nullptr));
 
     return true;
 }
@@ -33,13 +33,13 @@ int dAcOgirahimFoot_c::create() {
 
     mStateMgr.changeState(StateID_Wait);
 
-    poscopy2.x = 13275.0f;
-    poscopy2.y = 2370.0f;
-    poscopy2.z = -11780.0f;
+    mPositionCopy2.x = 13275.0f;
+    mPositionCopy2.y = 2370.0f;
+    mPositionCopy2.z = -11780.0f;
 
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
 
     return SUCCEEDED;
 }
@@ -85,7 +85,7 @@ void dAcOgirahimFoot_c::executeState_Appear() {
         return;
     }
 
-    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_77_, position, nullptr, &mScale, nullptr, nullptr, 0, 0);
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_77_, mPosition, nullptr, &mScale, nullptr, nullptr, 0, 0);
 
     deleteRequest();
 }

@@ -35,7 +35,7 @@ int dAcKnightLeaderBird_c::create() {
     dAcBirdBase_c::resetBird();
     field_0xF40 = 0.15f;
     mStateMgr.changeState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-300.0f, 0.0f, -300.0f), mVec3_c(300.0f, 200.0f, 300.0f));
+    mBoundingBox.Set(mVec3_c(-300.0f, 0.0f, -300.0f), mVec3_c(300.0f, 200.0f, 300.0f));
 
     return SUCCEEDED;
 }
@@ -51,7 +51,7 @@ int dAcKnightLeaderBird_c::actorExecute() {
     fn_80176D30();
     fn_80176F80();
     updateMatrixBird();
-    
+
     updateSpineMtx();
 
     fn_80177EA0();
@@ -72,7 +72,6 @@ int dAcKnightLeaderBird_c::draw() {
     return SUCCEEDED;
 }
 
-
 void dAcKnightLeaderBird_c::updateSpineMtx() {
     static const char *sBirdLordSpineName = "Spine";
     u32 id = mMdl.getModel().getNodeID(sBirdLordSpineName);
@@ -85,9 +84,9 @@ void dAcKnightLeaderBird_c::updateSpineMtx() {
 }
 
 void dAcKnightLeaderBird_c::initializeState_Wait() {
-    forwardSpeed = 0.0f;
-    velocity.set(0.0f, 0.0f, 0.0f);
-    forwardAccel = 0.0f;
+    mSpeed = 0.0f;
+    mVelocity.set(0.0f, 0.0f, 0.0f);
+    mAcceleration = 0.0f;
     changeBirdAction(sBirdLordAnmName, BIRD_ACTION_GLIDE, m3d::PLAY_MODE_4, 8.0f);
 }
 void dAcKnightLeaderBird_c::executeState_Wait() {}

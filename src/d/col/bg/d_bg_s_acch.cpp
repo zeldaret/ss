@@ -7,7 +7,7 @@
 
 dBgS_AcchCir::dBgS_AcchCir() {
     mWallRR = 0.0f;
-    mField_0x44 = 0.0f;
+    field_0x44 = 0.0f;
     mWallH = 0.0f;
     mWallR = 0.0f;
     mWallHDirect = 0.0f;
@@ -37,20 +37,44 @@ void dBgS_AcchCir::SetWall(f32 wallH, f32 wallR) {
 }
 
 dBgS_Acch::dBgS_Acch()
-    : mFlags(0), mpPos(nullptr), mpOldPos(nullptr), mSpeed(0.0f, 0.0f, 0.0f), mpSpeed(nullptr), mpAngle(nullptr),
-      mpShapeAngle(nullptr), mBgIndex(0), mField_0x094(0), mField_0x098(0), mpMyObj(nullptr), mTblSize(0),
-      mpAcchCir(nullptr), mField_0x0A8(0.0f), mField_0x0AC(0.0f), mGroundHeight(-1e9f), mField_0x0B4(120.0f),
-      mField_0x0C8(0.0f), mField_0x0CC(0.0f), mRoofHeight(1e9f), mField_0x0D4(1.0f), mField_0x0D8(0.0f),
-      mpOutPolyInfo(nullptr), mRoofH_0x0E0(0.0f), mGroundH_0x0E4(0.0f), mField_0x0E8(1e9f), mField_0x1D0(-1.0f),
-      mField_0x2F4(1000.0f), mField_0x390(0), mField_0x394(0) {
+    : mFlags(0),
+      mpPos(nullptr),
+      mpOldPos(nullptr),
+      mSpeed(0.0f, 0.0f, 0.0f),
+      mpSpeed(nullptr),
+      mpAngle(nullptr),
+      mpShapeAngle(nullptr),
+      mBgIndex(0),
+      field_0x094(0),
+      field_0x098(0),
+      mpMyObj(nullptr),
+      mTblSize(0),
+      mpAcchCir(nullptr),
+      field_0x0A8(0.0f),
+      field_0x0AC(0.0f),
+      mGroundHeight(-1e9f),
+      field_0x0B4(120.0f),
+      field_0x0C8(0.0f),
+      field_0x0CC(0.0f),
+      mRoofHeight(1e9f),
+      field_0x0D4(1.0f),
+      field_0x0D8(0.0f),
+      mpOutPolyInfo(nullptr),
+      mRoofH_0x0E0(0.0f),
+      mGroundH_0x0E4(0.0f),
+      field_0x0E8(1e9f),
+      field_0x1D0(-1.0f),
+      field_0x2F4(1000.0f),
+      field_0x390(0),
+      field_0x394(0) {
     SetPolyPassChk(GetPolyPassChkInfo());
     SetGrpPassChk(GetGrpPassChkInfo());
 
     SetRoofNone();
-    mRoof.mField_0x7C = 1;
+    mRoof.field_0x7C = 1;
 
-    mField_0x398.set(0.0f, 0.0f, 0.0f);
-    mField_0x3A4.set(0.0f, 0.0f, 0.0f);
+    field_0x398.set(0.0f, 0.0f, 0.0f);
+    field_0x3A4.set(0.0f, 0.0f, 0.0f);
 }
 
 dBgS_Acch::~dBgS_Acch() {}
@@ -63,7 +87,7 @@ void dBgS_Acch::Set(
     mpOldPos = pOldPos;
     mpMyObj = pObj;
 
-    mActorId = pObj->unique_ID;
+    mActorId = pObj->mID;
     mpSpeed = pSpeed;
     if (pSpeed) {
         mSpeed = *pSpeed;
@@ -77,7 +101,7 @@ void dBgS_Acch::Set(
     mpShapeAngle = pShapeAngle;
     mGroundHeight = mpPos->y;
 
-    mField_0x1A8.Init();
+    field_0x1A8.Init();
 }
 
 void dBgS_Acch::Set(dAcObjBase_c *pObj, int tblSize, dBgS_AcchCir *pAcchCir) {
@@ -85,16 +109,16 @@ void dBgS_Acch::Set(dAcObjBase_c *pObj, int tblSize, dBgS_AcchCir *pAcchCir) {
     mpAcchCir = pAcchCir;
     mpMyObj = pObj;
     mActorId = pObj->getID();
-    mpPos = &pObj->GetPosition();
-    mpOldPos = &pObj->GetOldPosition();
-    mpSpeed = &pObj->GetVelocity();
+    mpPos = &pObj->getPosition();
+    mpOldPos = &pObj->getOldPosition();
+    mpSpeed = &pObj->getVelocity();
     if (mpSpeed) {
-        mSpeed = pObj->GetVelocity();
+        mSpeed = pObj->getVelocity();
     } else {
         mSpeed.set(0.0f, 0.0f, 0.0f);
     }
-    mpAngle = &pObj->GetAngle();
-    mpShapeAngle = &pObj->GetRotation();
+    mpAngle = &pObj->getAngle();
+    mpShapeAngle = &pObj->getRotation();
 }
 
 bool dBgS_Acch::fn_8033f5b0(mVec3_c *pPos, mVec3_c *pOldPos, f32 height) {
@@ -135,7 +159,7 @@ void dBgS_Acch::GroundCheck(dBgS &bgs, bool param2) {
         mVec3_c gnd_pos = *GetPos();
 
         // This Ordering is weird
-        f32 temp = (mField_0x0B4 - mField_0x0A8) + mField_0x0AC;
+        f32 temp = (field_0x0B4 - field_0x0A8) + field_0x0AC;
         if (mFlags & ACCH_FLAG_0x20000) {
             if (temp <= 1.1f) {
                 temp = 1.1f;
@@ -169,14 +193,14 @@ void dBgS_Acch::GroundCheck(dBgS &bgs, bool param2) {
                 }
             }
         }
-        mField_0x0AC = 0.0f;
+        field_0x0AC = 0.0f;
         if (gnd_pos.y > mRoofHeight) {
             gnd_pos.y = mRoofHeight + 0.25f;
         }
 
-        if (gnd_pos.y < mpPos->y + mField_0x0E8 &&
-            mpPos->y + mField_0x0E8 < (mField_0x0B4 - mField_0x0A8) + mField_0x0AC + mpPos->y) {
-            gnd_pos.y = mpPos->y + mField_0x0E8;
+        if (gnd_pos.y < mpPos->y + field_0x0E8 &&
+            mpPos->y + field_0x0E8 < (field_0x0B4 - field_0x0A8) + field_0x0AC + mpPos->y) {
+            gnd_pos.y = mpPos->y + field_0x0E8;
         }
 
         mGnd.SetExtChk(*this);
@@ -186,9 +210,9 @@ void dBgS_Acch::GroundCheck(dBgS &bgs, bool param2) {
         Clr_0x10000000();
         if (mGroundHeight != -1e9f) {
             dBgS::GetInstance()->SetLightingCode(GetMyObj(), mGnd);
-            mField_0x0CC = mGroundHeight + mField_0x0A8;
-            if (mField_0x0CC > mField_0x0C8) {
-                mpPos->y = mField_0x0CC;
+            field_0x0CC = mGroundHeight + field_0x0A8;
+            if (field_0x0CC > field_0x0C8) {
+                mpPos->y = field_0x0CC;
                 if (ChkClrSpeedY() && mpSpeed) {
                     mpSpeed->y = 0.0f;
                 }
@@ -223,11 +247,11 @@ void dBgS_Acch::RoofCheck(dBgS &bgs) {
     if (mGroundHeight == -1e9f) {
         return;
     }
-    if (mFlags & LINE_DOWN && mField_0x0CC > mField_0x0D8 &&
+    if (mFlags & LINE_DOWN && field_0x0CC > field_0x0D8 &&
         (mGroundHeight <= mRoofHeight || cM3d_IsZero(mGroundHeight - mRoofHeight))) {
         mpPos->y = (mGroundHeight + mRoofHeight) * 0.5f;
-    } else if (mpPos->y > mField_0x0D8 && mField_0x0D8 > mGroundHeight) {
-        mpPos->y = mField_0x0D8;
+    } else if (mpPos->y > field_0x0D8 && field_0x0D8 > mGroundHeight) {
+        mpPos->y = field_0x0D8;
     }
     if (mFlags & ROOF_NONE) {
         return;
@@ -243,7 +267,7 @@ void dBgS_Acch::RoofCheck(dBgS &bgs) {
 }
 
 void dBgS_Acch::GroundRoofProc(dBgS &bgs, bool param2) {
-    mField_0x0D8 = 1e9f;
+    field_0x0D8 = 1e9f;
     if (!(mFlags & ROOF_NONE)) {
         mRoof.SetExtChk(*this);
         ClrRoofHit();
@@ -253,11 +277,11 @@ void dBgS_Acch::GroundRoofProc(dBgS &bgs, bool param2) {
         mRoofHeight = bgs.RoofChk(&mRoof);
 
         if (mRoofHeight != 1e9f) {
-            if (mpPos->y + mField_0x0D4 > mRoofHeight) {
-                mField_0x0D8 = mRoofHeight - mField_0x0D4;
+            if (mpPos->y + field_0x0D4 > mRoofHeight) {
+                field_0x0D8 = mRoofHeight - field_0x0D4;
                 SetRoofHit();
-            } else if (mField_0x0C8 + mField_0x0D4 > mRoofHeight) {
-                mField_0x0D8 = mRoofHeight - mField_0x0D4;
+            } else if (field_0x0C8 + field_0x0D4 > mRoofHeight) {
+                field_0x0D8 = mRoofHeight - field_0x0D4;
                 SetRoofHit();
             }
         }
@@ -268,8 +292,8 @@ void dBgS_Acch::GroundRoofProc(dBgS &bgs, bool param2) {
         GroundCheck(bgs, param2);
         RoofCheck(bgs);
     } else {
-        if (mField_0x0D8 < mpPos->y) {
-            mpPos->y = mField_0x0D8;
+        if (field_0x0D8 < mpPos->y) {
+            mpPos->y = field_0x0D8;
         }
         mFlags &= ~ACCH_FLAG_0x10000000;
         mGroundHeight = -1e9f;
@@ -302,7 +326,7 @@ void dBgS_Acch::LineCheck(dBgS &bgs) {
     }
 
     cBgS_LinChk line;
-    mField_0x0E8 = 1e9f;
+    field_0x0E8 = 1e9f;
 
     int i = 0;
     do {
@@ -319,8 +343,8 @@ void dBgS_Acch::LineCheck(dBgS &bgs) {
             cirWallH = (mGroundH_0x0E4 - old_pos.y) + 0.25f;
         }
 
-        if (mField_0x0E8 > cirWallH) {
-            mField_0x0E8 = cirWallH;
+        if (field_0x0E8 > cirWallH) {
+            field_0x0E8 = cirWallH;
         }
 
         old_pos.y += cirWallH;
@@ -380,25 +404,25 @@ void dBgS_Acch::LineCheck(dBgS &bgs) {
 extern "C" void *fn_80359C80(dBgS_SphChk *, cBgD_Vtx_t *, int, int, int, cM3dGPla *, void *);
 
 void dBgS_Acch::SphCheck() {
-    f32 height = mField_0x1D0;
+    f32 height = field_0x1D0;
 
     mSph.SetExtChk(*this);
     mSph.mCallback = fn_80359C80;
 
     if (height < 0.0f) {
         height = 1e9f;
-        if (height > mField_0x0A8 && mField_0x0A8 > 0.0f) {
-            height = mField_0x0A8;
+        if (height > field_0x0A8 && field_0x0A8 > 0.0f) {
+            height = field_0x0A8;
         }
-        if (height > mField_0x0D4 && mField_0x0D4 > 1.0f) {
-            height = mField_0x0D4;
+        if (height > field_0x0D4 && field_0x0D4 > 1.0f) {
+            height = field_0x0D4;
         }
         height *= 0.8f;
     }
     mSph.Set(mpPos, height);
-    mField_0x1A8.Init();
-    dBgS::GetInstance()->SphChk(&mSph, &mField_0x1A8);
-    mField_0x1A8.CalcPos(mpPos);
+    field_0x1A8.Init();
+    dBgS::GetInstance()->SphChk(&mSph, &field_0x1A8);
+    field_0x1A8.CalcPos(mpPos);
 }
 
 void dBgS_Acch::CrrPos(dBgS &bgs) {
@@ -406,7 +430,7 @@ void dBgS_Acch::CrrPos(dBgS &bgs) {
         bgs.MoveBgCrrPos(mGnd, ChkGroundHit(), mpPos, mpAngle, mpShapeAngle, false, false);
 
         GroundCheckInit(bgs);
-        u32 prev = mField_0x394;
+        u32 prev = field_0x394;
 
         Init();
 
@@ -461,8 +485,8 @@ void dBgS_Acch::CalcWallBmdCyl() {
 }
 
 void dBgS_Acch::SetGroundUpY(f32 param_0) {
-    mField_0x0AC = param_0 - mField_0x0A8;
-    mField_0x0A8 = param_0;
+    field_0x0AC = param_0 - field_0x0A8;
+    field_0x0A8 = param_0;
 }
 
 bool dBgS_Acch::fn_80340ca0(cBgS_PolyInfo &info) const {
@@ -565,29 +589,29 @@ dBgS_AcchCir &dBgS_Acch::GetCir(int idx) {
 void dBgS_Acch::fn_80340f70(const mVec3_c *pVec) {
     bool adjusted = false;
 
-    if (mField_0x398.x > pVec->x) {
-        mField_0x398.x = pVec->x;
+    if (field_0x398.x > pVec->x) {
+        field_0x398.x = pVec->x;
         adjusted = true;
-    } else if (mField_0x3A4.x < pVec->x) {
-        mField_0x3A4.x = pVec->x;
+    } else if (field_0x3A4.x < pVec->x) {
+        field_0x3A4.x = pVec->x;
         adjusted = true;
     }
-    if (mField_0x398.z > pVec->z) {
-        mField_0x398.z = pVec->z;
+    if (field_0x398.z > pVec->z) {
+        field_0x398.z = pVec->z;
         adjusted = true;
-    } else if (mField_0x3A4.z < pVec->z) {
-        mField_0x3A4.z = pVec->z;
+    } else if (field_0x3A4.z < pVec->z) {
+        field_0x3A4.z = pVec->z;
         adjusted = true;
     }
 
-    if (!adjusted && mField_0x394 > 0) {
-        mField_0x394--;
+    if (!adjusted && field_0x394 > 0) {
+        field_0x394--;
     }
 }
 
 void dBgS_Acch::fn_80341000() {
-    mpPos->x += mField_0x398.x + mField_0x3A4.x;
-    mpPos->z += mField_0x398.z + mField_0x3A4.z;
+    mpPos->x += field_0x398.x + field_0x3A4.x;
+    mpPos->z += field_0x398.z + field_0x3A4.z;
 }
 
 dBgS_ObjAcch::dBgS_ObjAcch() {

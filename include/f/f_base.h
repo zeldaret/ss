@@ -7,7 +7,6 @@
 
 #include "c/c_list.h"
 #include "common.h"
-#include "egg/core/eggExpHeap.h"
 #include "egg/core/eggFrmHeap.h"
 #include "f/f_base_id.h"
 #include "f/f_helper_unk.h"
@@ -20,19 +19,19 @@
 // official name
 class fBase_c {
 public:
-    /* 0x00 */ fBaseID_e unique_ID;
-    /* 0x04 */ u32 params;               // params1
-    /* 0x08 */ ProfileName profile_name; // Actor Id
-    /* 0x0A */ u8 lifecycle_state;
-    /* 0x0B */ bool delete_request;
-    /* 0x0C */ s8 update_request;
-    /* 0x0D */ bool create_request;
-    /* 0x0E */ u8 group_type;
-    /* 0x0F */ u8 proc_control;
-    /* 0x10 */ fManager_c manager;
-    /* 0x50 */ fBaHelper_c *p_helper;
-    /* 0x54 */ cListMg_c actor_list;
-    /* 0x5C */ EGG::FrmHeap *p_heap;
+    /* 0x00 */ fBaseID_e mID;
+    /* 0x04 */ u32 mParams;
+    /* 0x08 */ ProfileName mProfileName;
+    /* 0x0A */ u8 mLifecycleState;
+    /* 0x0B */ bool mDeleteRequest;
+    /* 0x0C */ s8 mUpdateRequest;
+    /* 0x0D */ bool mCreateRequest;
+    /* 0x0E */ u8 mGroupType;
+    /* 0x0F */ u8 mProcControl;
+    /* 0x10 */ fManager_c mManager;
+    /* 0x50 */ fBaHelper_c *mpHelper;
+    /* 0x54 */ cListMg_c mActorList;
+    /* 0x5C */ EGG::FrmHeap *mpHeap;
     /* 0x60 */ // vtable
 public:
     enum UPDATE_STATUS_e {
@@ -70,94 +69,93 @@ public:
     };
 
     int getID() const {
-        return unique_ID;
+        return mID;
     }
 
-    bool isProcControlFlag(u8 flag) const {
-        return (proc_control & flag) != 0;
+    bool checkProcControl(u8 procControl) const {
+        return (mProcControl & procControl) != 0;
     }
-    void setProcControlFlag(u8 flag) {
-        proc_control |= flag;
+    void setProcControl(u8 procControl) {
+        mProcControl |= procControl;
     }
-    void clearProcControlFlag(u8 flag) {
-        proc_control &= ~flag;
+    void unsetProcControl(u8 procControl) {
+        mProcControl &= ~procControl;
     }
 
     void setParams() {
-        unique_ID = m_rootUniqueID;
-        params = m_tmpCtData.params;
-        profile_name = m_tmpCtData.prof_name;
-        group_type = m_tmpCtData.group_type;
+        mID = m_rootUniqueID;
+        mParams = m_tmpCtData.params;
+        mProfileName = m_tmpCtData.prof_name;
+        mGroupType = m_tmpCtData.group_type;
     }
 
     u32 getFromParams(u8 shift, u32 mask) {
-        return (params >> shift) & mask;
+        return (mParams >> shift) & mask;
     }
 
 public:
-    /* 802e12f0 */ fBase_c();
-    /* 802e23b0 */ static void *operator new(size_t);
-    /* 802e2410 */ static void operator delete(void *);
-
-public: // vtable 0x60
-    /* 0x08 | 802E15C0 */ virtual int create();
-    /* 0x0C | 802E15D0 */ virtual int preCreate();
-    /* 0x10 | 802E15E0 */ virtual void postCreate(MAIN_STATE_e state);
-    /* 0x14 | 802E1670 */ virtual int doDelete();
-    /* 0x18 | 802E1730 */ virtual int preDelete();
-    /* 0x1C | 802E17A0 */ virtual void postDelete(MAIN_STATE_e state);
-    /* 0x20 | 802E1910 */ virtual int execute();
-    /* 0x24 | 802E1920 */ virtual int preExecute();
-    /* 0x28 | 802E1950 */ virtual void postExecute(MAIN_STATE_e state);
-    /* 0x2C | 802E1A90 */ virtual int draw();
-    /* 0x30 | 802E1AA0 */ virtual int preDraw();
-    /* 0x34 | 802E1AD0 */ virtual void postDraw(MAIN_STATE_e state);
-    /* 0x38 | 802E1B90 */ virtual void deleteReady();
-    /* 0x3C | 802E20E0 */ virtual bool entryFrmHeap(size_t size, EGG::Heap *parentHeap);
-    /* 0x40 | 802E22E0 */ virtual bool entryFrmHeapNonAdjust(size_t size, EGG::Heap *parentHeap);
-    /* 0x44 | 802E23A0 */ virtual bool createHeap();
-    /* 0x48 | 802E1480 */ virtual ~fBase_c();
+    fBase_c();
+    static void *operator new(size_t);
+    static void operator delete(void *);
 
 public:
-    /* 802e1500 */ int
-    commonPack(int (fBase_c::*doFunc)(), int (fBase_c::*preFunc)(), void (fBase_c::*postFunc)(MAIN_STATE_e));
-    /* 802e1680 */ int createPack();
-    /* 802e1860 */ int deletePack();
-    /* 802e1960 */ int executePack();
-    /* 802e1ae0 */ int drawPack();
-    /* 802e1ba0 */ int connectProc();
-    /* 802e1e00 */ void deleteRequest();
-    /* 802e1e80 */ void forceUpdate();
-    /* 802e1f90 */ static fBase_c *getConnectRoot();
-    /* 802e1f90 */ static fBase_c *getConnectTreeNext(fBase_c *);
-    /* 802e1f90 */ fBase_c *getConnectParent() const;
-    /* 802e1fb0 */ fBase_c *getConnectChild() const;
-    /* 802e1fd0 */ fBase_c *getConnectBrNext() const;
-    /* 802e1ff0 */ void updateExecutePriority(u16 priority);
-    /* 802e2090 */ bool setConnectChild(fBase_c *child);
-    /* 802e2420 */ void runCreate();
-    /* 802e24a0 */ fBase_c *getChildProcessCreateState() const;
-    /* 802e2510 */ bool checkChildProcessCreateState() const;
+    /* vt 0x08 */ virtual int create();
+    /* vt 0x0C */ virtual int preCreate();
+    /* vt 0x10 */ virtual void postCreate(MAIN_STATE_e state);
+    /* vt 0x14 */ virtual int doDelete();
+    /* vt 0x18 */ virtual int preDelete();
+    /* vt 0x1C */ virtual void postDelete(MAIN_STATE_e state);
+    /* vt 0x20 */ virtual int execute();
+    /* vt 0x24 */ virtual int preExecute();
+    /* vt 0x28 */ virtual void postExecute(MAIN_STATE_e state);
+    /* vt 0x2C */ virtual int draw();
+    /* vt 0x30 */ virtual int preDraw();
+    /* vt 0x34 */ virtual void postDraw(MAIN_STATE_e state);
+    /* vt 0x38 */ virtual void deleteReady();
+    /* vt 0x3C */ virtual bool entryFrmHeap(size_t size, EGG::Heap *parentHeap);
+    /* vt 0x40 */ virtual bool entryFrmHeapNonAdjust(size_t size, EGG::Heap *parentHeap);
+    /* vt 0x44 */ virtual bool createHeap();
+    /* vt 0x48 */ virtual ~fBase_c();
 
 public:
-    /* 802e2540 */ static void setTmpCtData(ProfileName profName, fTrNdBa_c *connectParent, u32 param, u8 groupType);
-    /* 802e2560 */ static fBase_c *fBase_make(ProfileName profName, fTrNdBa_c *connectParent, u32 param, u8 groupType);
-    /* 802e2640 */ static fBase_c *createRoot(ProfileName profName, u32 param, u8 groupType);
-    /* 802e2600 */ static fBase_c *createChild(ProfileName profName, fBase_c *parent, u32 param, u8 groupType);
+    int commonPack(int (fBase_c::*doFunc)(), int (fBase_c::*preFunc)(), void (fBase_c::*postFunc)(MAIN_STATE_e));
+    int createPack();
+    int deletePack();
+    int executePack();
+    int drawPack();
+    int connectProc();
+    void deleteRequest();
+    void forceUpdate();
+    static fBase_c *getConnectRoot();
+    static fBase_c *getConnectTreeNext(fBase_c *);
+    fBase_c *getConnectParent() const;
+    fBase_c *getConnectChild() const;
+    fBase_c *getConnectBrNext() const;
+    void updateExecutePriority(u16 priority);
+    bool setConnectChild(fBase_c *child);
+    void runCreate();
+    fBase_c *getChildProcessCreateState() const;
+    bool checkChildProcessCreateState() const;
 
 public:
-    /* 80575ba8 */ static fLiMgBa_c m_forceExecuteList;
-    /* 80575bb0 */ static int (*sLoadAsyncCallback)();
-    /* 80575bb4 */ static void (*sUnloadCallback)();
+    static void setTmpCtData(ProfileName profName, fTrNdBa_c *connectParent, u32 param, u8 groupType);
+    static fBase_c *fBase_make(ProfileName profName, fTrNdBa_c *connectParent, u32 param, u8 groupType);
+    static fBase_c *createRoot(ProfileName profName, u32 param, u8 groupType);
+    static fBase_c *createChild(ProfileName profName, fBase_c *parent, u32 param, u8 groupType);
+
+public:
+    static fLiMgBa_c m_forceExecuteList;
+    static int (*sLoadAsyncCallback)();
+    static void (*sUnloadCallback)();
 
 private:
-    /* 80573fb8 */ static fBaseID_e m_rootUniqueID;
+    static fBaseID_e m_rootUniqueID;
 
     struct ConstructData {
-        /* 805b84c8 */ ProfileName prof_name;
-        /* 805b84cc */ fTrNdBa_c *connect_parent;
-        /* 805b84d0 */ u32 params;
-        /* 805b84d4 */ u8 group_type;
+        ProfileName prof_name;
+        fTrNdBa_c *connect_parent;
+        u32 params;
+        u8 group_type;
     };
 
     static ConstructData m_tmpCtData;

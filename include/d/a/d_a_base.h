@@ -59,209 +59,223 @@ public:
 // non-official name
 class dAcBase_c : public dBase_c {
 public:
+    enum AcProperties_e {
+        AC_PROP_0x1 = (1 << 0),
+        AC_PROP_0x4 = (1 << 2),
+        AC_PROP_0x100 = (1 << 8),
+        AC_PROP_0x400 = (1 << 10),
+        AC_PROP_0x800 = (1 << 11),
+        AC_PROP_0x2000000 = (1 << 25),
+        AC_PROP_0x4000000 = (1 << 26),
+        AC_PROP_0x8000000 = (1 << 27),
+        AC_PROP_0x10000000 = (1 << 28),
+        AC_PROP_0x40000000 = (1 << 30),
+    };
+
+public:
     typedef TList<SoundInfo, 12> SoundInfoList;
 
-    /* 0x68 */ mHeapAllocator_c heap_allocator;
+    /* 0x68 */ mHeapAllocator_c mAllocator;
     /* 0x84 */ const ActorInfo *mpActorInfo;
-    /* 0x88 */ SoundInfoList sound_list;
+    /* 0x88 */ SoundInfoList mSoundList;
     /* 0x94 */ RaiiPtr<dSoundSourceIf_c> mpSoundSource;
-    /* 0x98 */ mVec3_c *obj_pos;
-    /* 0x9C */ mVec3_c pos_copy;
-    /* 0xA8 */ u32 params2;
-    /* 0xAC */ mAng3_c rot_copy;
-    /* 0xB2 */ u16 obj_id; // enemydefeat flag / id on obj-map
-    /* 0xB4 */ s8 room_id_copy;
-    /* 0xB5 */ s8 viewclip_index;
-    /* 0xB6 */ u8 subtype;
-    /* 0xB8 */ mAng3_c rotation;
-    /* 0xC0 */ mVec3_c position;
+    /* 0x98 */ mVec3_c *mpPosition;
+    /* 0x9C */ mVec3_c mPositionCopy;
+    /* 0xA8 */ u32 mParams2;
+    /* 0xAC */ mAng3_c mRotationCopy;
+    /* 0xB2 */ u16 mObjID;
+    /* 0xB4 */ s8 mRoomIDCopy;
+    /* 0xB5 */ s8 mViewClipIdx;
+    /* 0xB6 */ u8 mSubtype;
+    /* 0xB8 */ mAng3_c mRotation;
+    /* 0xC0 */ mVec3_c mPosition;
     /* 0xCC */ mVec3_c mScale;
-    /* 0xD8 */ u32 actor_properties;
-    /* 0xDC */ dAcRef_c<dAcBase_c> actor_node;
+    /* 0xD8 */ u32 mActorProperties;
+    /* 0xDC */ dAcRef_c<dAcBase_c> mActorNode;
     /* 0xE8 */ u32 mTgSndAreaFlags;
-    /* 0xEC */ s8 roomid;
-    /* 0xED */ u8 actor_subtype;
-    /* 0xEE */ u8 polyAttr0;
-    /* 0xEF */ u8 polyAttr1;
-    /* 0xF0 */ u32 JStudio_actor;
+    /* 0xEC */ s8 mRoomID;
+    /* 0xED */ u8 mActorSubtype;
+    /* 0xEE */ u8 mPolyAttr0;
+    /* 0xEF */ u8 mPolyAttr1;
+    /* 0xF0 */ u32 mJStudioActor;
     /* 0xF4 */ char someStr[4];
     /* 0xF8 */ char field_0xf8[0xfc - 0xf8];
 
 public:
-    /* 80501544 */ // vtable
-    /* 0x08 | 8002c880 */ virtual int create();
-    /* 0x10 | 8002c8f0 */ virtual void postCreate(MAIN_STATE_e state);
-    /* 0x18 | 8002c940 */ virtual int preDelete();
-    /* 0x20 | 8002cc10 */ virtual int execute();                        // calls either actorExecute/executeInEvent
-    /* 0x24 | 8002cb10 */ virtual int preExecute();                     // looks at some actor properties
-    /* 0x28 | 8002ccc0 */ virtual void postExecute(MAIN_STATE_e state); // not fully understood
-    /* 0x44 | 8002c3a0 */ virtual bool createHeap();
-    /* 0x48 | 8002c590 */ virtual ~dAcBase_c();
-    /* 0x4C | 8002c860 */ virtual int actorCreate();         // name is assumed
-    /* 0x50 | 8002c870 */ virtual int actorPostCreate();     // name is assumed
-    /* 0x54 | 8002cca0 */ virtual int actorExecute();        // name is assumed
-    /* 0x58 | 8002ccb0 */ virtual int actorExecuteInEvent(); // name is assumed
-    /* 0x5C | 8002ce90 */ virtual void unkVirtFunc_0x5C();
-    /* 0x60 | 8002cea0 */ virtual void unkVirtFunc_0x60();
-    /* 0x64 | 8002ceb0 */ virtual bool restorePosRotFromCopy();
-    /* 0x68 | 8002db80 */ virtual void registerInEvent();
-    /* 0x6C | 8002db90 */ virtual void unkVirtFunc_0x6C();
-    /* 0x70 | 8002dba0 */ virtual void doInteraction(s32);
+    /* vt 0x08 */ virtual int create();
+    /* vt 0x10 */ virtual void postCreate(MAIN_STATE_e state);
+    /* vt 0x18 */ virtual int preDelete();
+    /* vt 0x20 */ virtual int execute();
+    /* vt 0x24 */ virtual int preExecute();
+    /* vt 0x28 */ virtual void postExecute(MAIN_STATE_e state);
+    /* vt 0x44 */ virtual bool createHeap();
+    /* vt 0x48 */ virtual ~dAcBase_c();
+
+    /* vt 0x4C */ virtual int actorCreate();
+    /* vt 0x50 */ virtual int actorPostCreate();
+    /* vt 0x54 */ virtual int actorExecute();
+    /* vt 0x58 */ virtual int actorExecuteInEvent();
+    /* vt 0x5C */ virtual void unkVirtFunc_0x5C();
+    /* vt 0x60 */ virtual void unkVirtFunc_0x60();
+    /* vt 0x64 */ virtual bool restorePosRotFromCopy();
+    /* vt 0x68 */ virtual void registerInEvent();
+    /* vt 0x6C */ virtual void unkVirtFunc_0x6C();
+    /* vt 0x70 */ virtual void doInteraction(s32);
 
 public:
-    /* 8002c3b0 */ dAcBase_c();
+    dAcBase_c();
 
-    void setPostion(const mVec3_c &r) {
-        position = r;
+    void setPosition(const mVec3_c &r) {
+        mPosition = r;
     }
-    void SetScale(const mVec3_c &r) {
+    void setScale(const mVec3_c &r) {
         mScale = r;
     }
-    void SetRotation(const mAng3_c &r) {
-        rotation = r;
+    void setRotation(const mAng3_c &r) {
+        mRotation = r;
     }
 
     void copyPosition() {
-        pos_copy = position;
+        mPositionCopy = mPosition;
     }
     void copyRotation() {
-        rot_copy = rotation;
+        mRotationCopy = mRotation;
     }
 
-    mVec3_c &GetPosition() {
-        return position;
+    mVec3_c &getPosition() {
+        return mPosition;
     }
-    mAng3_c &GetRotation() {
-        return rotation;
+    mAng3_c &getRotation() {
+        return mRotation;
     }
 
-    mVec3_c GetPostionDifference(const dAcBase_c &other) {
-        return position - other.position;
+    mVec3_c getPostionDifference(const dAcBase_c &other) {
+        return mPosition - other.mPosition;
     }
 
     f32 getSquareDistanceTo(const mVec3_c &point) const {
-        mVec3_c diff = position - point;
+        mVec3_c diff = mPosition - point;
         return diff.x * diff.x + diff.z * diff.z;
     }
 
     f32 getDistanceTo(const mVec3_c &to) const {
-        return position.distance(to);
+        return mPosition.distance(to);
     }
 
-    bool IsOutOfRange(const mVec3_c &point, f32 radius) {
+    bool checkBeyondRadius(const mVec3_c &point, f32 radius) {
         return getSquareDistanceTo(point) > radius;
     }
 
     u32 getRoomId() {
-        return roomid;
+        return mRoomID;
     }
 
-    void clearActorProperty(u32 property) {
-        actor_properties &= ~property;
+    void unsetActorProperty(u32 property) {
+        mActorProperties &= ~property;
     }
     void setActorProperty(u32 property) {
-        actor_properties |= property;
+        mActorProperties |= property;
     }
     bool checkActorProperty(u32 property) const {
-        return actor_properties & property;
+        return mActorProperties & property;
     }
 
 public:
-    // funcs found in TU
-    /* 8002c650 */ static void setTempCreateParams(
+    static void setTempCreateParams(
         mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent, u8 subtype, u16 unkFlag,
         s8 viewClipIdx, const ActorInfo *actorInfo
     );
 
-    /* 8002c690 */ dSoundSourceIf_c *createSoundSource();
-    /* 8002c710 */ int initAllocatorWork1Heap(int size, char *name, int align);
-    /* 8002c720 */ int initAllocator(int size, char *name, EGG::Heap *heap, int align);
-    /* 8002c7b0 */ bool addActorToRoom(s32 roomId);
-    /* 8002c840 */ void setTgSndAreaFlag(s32);
-    /* 8002cf10 */ u32 itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype);
-    /* 8002cf90 */ void fillUpperParams2Byte();
-    /* 8002cfa0 */ u32 getParams2_ignoreLower();
-    /* 8002cfb0 */ void setParams2Upper_ignoreLower(u32 val);
-    /* 8002cfc0 */ int getParams2UpperByte();
-    /* 8002cfd0 */ void setParams2UpperByte(u32 val);
-    /* 8002cff0 */ static u32 buildParams2(u32 lower, u32 upper);
-    /* 8002d010 */ u32 getParams2Lower() const;
-    /* 8002d020 */ static dAcBase_c *findActor(char *objName, dAcBase_c *parent);
-    /* 8002d0a0 */ static dAcBase_c *searchActor(dAcBase_c *parent);
+    dSoundSourceIf_c *createSoundSource();
+    int initAllocatorWork1Heap(int size, char *name, int align);
+    int initAllocator(int size, char *name, EGG::Heap *heap, int align);
+    bool addActorToRoom(s32 roomId);
+    void setTgSndAreaFlag(s32);
+    u32 itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype);
+    void fillUpperParams2Byte();
+    u32 getParams2_ignoreLower();
+    void setParams2Upper_ignoreLower(u32 val);
+    int getParams2UpperByte();
+    void setParams2UpperByte(u32 val);
+    static u32 buildParams2(u32 lower, u32 upper);
+    u32 getParams2Lower() const;
+    static dAcBase_c *findActor(char *objName, dAcBase_c *parent);
+    static dAcBase_c *searchActor(dAcBase_c *parent);
     // Kinda performs the code of the first param on every actor (second param is optional parent)
-    /* 8002d130 */ static void forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *parent);
-    /* 8002d190 */ mAng getXZAngleToPlayer();
+    static void forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *parent);
+    mAng getXZAngleToPlayer();
     // returns true if under the distThresh, False if not. the actual distance is returned in outDist
-    /* 8002d1d0 */ bool getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDist);
+    bool getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDist);
     // same concept as above
-    /* 8002d290 */ bool getDistanceAndAngleToActor(
+    bool getDistanceAndAngleToActor(
         dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
     );
-    /* 8002d3e0 */ bool isWithinPlayerRadius(f32 radius) const;
-    /* 8002d440 */ bool getDistanceAndAngleToPlayer(
+    bool isWithinPlayerRadius(f32 radius) const;
+    bool getDistanceAndAngleToPlayer(
         f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
     );
-    /* 8002d470 */ f32 getDistToPlayer();
-    /* 8002d4a0 */ f32 getSquareDistToPlayer();
-    /* 8002d4b0 */ void updateRoomId(f32 yOffs);
-    /* 8002d540 */ bool isRoomFlags_0x6_Set();
+    f32 getDistToPlayer();
+    f32 getSquareDistToPlayer();
+    void updateRoomId(f32 yOffs);
+    bool isRoomFlags_0x6_Set();
 
     // Start of SoundSource stuff
-    /* 8002d590 */ void setSoundSourceSubtype(u8 subType);
-    /* 8002d5b0 */ void FUN_8002d5b0();
-    /* 8002d5d0 */ bool startSound(u32 soundId);
-    /* 8002d600 */ bool startSoundWithFloatParam(u32 soundId, f32 param);
-    /* 8002d630 */ bool startBgHitSound(u32 soundId, const cBgS_PolyInfo &info, const mVec3_c *position);
-    /* 8002d6d0 */ bool startSoundAtPosition(u32 soundId, const mVec3_c *position);
-    /* 8002d710 */ bool holdSound(u32 soundId);
-    /* 8002d740 */ bool holdSoundWithIntParam(u32 soundId, s32 param);
-    /* 8002d770 */ bool holdSoundWithFloatParam(u32 soundId, f32 param);
-    /* 8002d7a0 */ bool holdSoundWithParams(u32 soundId, f32 fValue, s32 value);
-    /* 8002d7d0 */ void holdSoundSourceFlag(u32 mask);
-    /* 8002d7f0 */ void onSoundSourceFlag(u32 mask);
-    /* 8002d810 */ void offSoundSourceFlag(u32 mask);
-    /* 8002d830 */ bool isPlayingSound(u32 soundId);
-    /* 8002d860 */ void setBattleBgmRelated(UNKWORD val);
-    /* 8002d880 */ dSoundSourceIf_c *getSoundSource();
+    void setSoundSourceSubtype(u8 subType);
+    void FUN_8002d5b0();
+    bool startSound(u32 soundId);
+    bool startSoundWithFloatParam(u32 soundId, f32 param);
+    bool startBgHitSound(u32 soundId, const cBgS_PolyInfo &info, const mVec3_c *position);
+    bool startSoundAtPosition(u32 soundId, const mVec3_c *position);
+    bool holdSound(u32 soundId);
+    bool holdSoundWithIntParam(u32 soundId, s32 param);
+    bool holdSoundWithFloatParam(u32 soundId, f32 param);
+    bool holdSoundWithParams(u32 soundId, f32 fValue, s32 value);
+    void holdSoundSourceFlag(u32 mask);
+    void onSoundSourceFlag(u32 mask);
+    void offSoundSourceFlag(u32 mask);
+    bool isPlayingSound(u32 soundId);
+    void setBattleBgmRelated(UNKWORD val);
+    dSoundSourceIf_c *getSoundSource();
     // End of SoundSource stuff
 
-    /* 8002d890 */ void removeSoundInfo(SoundInfo *);
-    /* 8002d920 */ void setActorRef(dAcBase_c *);
+    void removeSoundInfo(SoundInfo *);
+    void setActorRef(dAcBase_c *);
+
     // next three funcs are related
-    /* 8002d930 */ void setEnemyDefeatFlag();
-    /* 8002d940 */ void changeLoadedEntitiesWithSet();
-    /* 8002d960 */ void changeLoadedEntitiesNoSet();
+    void setEnemyDefeatFlag();
+    void changeLoadedEntitiesWithSet();
+    void changeLoadedEntitiesNoSet();
 
-    /* 8002d980 */ dAcBase_c *createActor(
+    dAcBase_c *createActor(
         ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, s32 roomId,
         dBase_c *ref
     );
 
-    /* 8002da80 */ dAcBase_c *createActorStage(
+    dAcBase_c *createActorStage(
         ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, s32 roomId,
         dBase_c *ref
     );
 
-    /* 8002dc20 */ static void roundAngleToNearest90(s16 *, s16 *);
-    /* 8002dc50 */ void incrementKillCounter();
-    /* 8002dcd0 */ void killNoItemDrop();
-    /* 8002dd10 */ void killWithFlag();
-    /* 8002dd50 */ void killWithFlagNoItemDrop();
-    /* 8002dd90 */ void deleteWithFlagNoItemDrop();
-    /* 8002ddd0 */ void setPolyAttrs(cBgS_PolyInfo &p);
-    /* 8002de30 */ void setPolyAttrsDupe(cBgS_PolyInfo &p);
+    static void roundAngleToNearest90(s16 *, s16 *);
+    void incrementKillCounter();
+    void killNoItemDrop();
+    void killWithFlag();
+    void killWithFlagNoItemDrop();
+    void deleteWithFlagNoItemDrop();
+    void setPolyAttrs(cBgS_PolyInfo &p);
+    void setPolyAttrsDupe(cBgS_PolyInfo &p);
 
 public:
-    /* 80571920 */ static u32 s_Create_RoomId;
-    /* 80571924 */ static u32 s_Create_Params2;
-    /* 80571928 */ static u16 s_Create_UnkFlags;
-    /* 8057192A */ static u8 s_Create_ViewClipIdx;
-    /* 80575080 */ static mVec3_c *s_Create_Position;
-    /* 80575084 */ static mAng3_c *s_Create_Rotation;
-    /* 80575088 */ static mVec3_c *s_Create_Scale;
-    /* 8057508C */ static dAcBase_c *s_Create_Parent;
-    /* 80575090 */ static const ActorInfo *s_Create_ActorInfo;
-    /* 80575094 */ static u8 s_Create_Subtype;
+    static u32 s_Create_RoomId;
+    static u32 s_Create_Params2;
+    static u16 s_Create_UnkFlags;
+    static u8 s_Create_ViewClipIdx;
+    static mVec3_c *s_Create_Position;
+    static mAng3_c *s_Create_Rotation;
+    static mVec3_c *s_Create_Scale;
+    static dAcBase_c *s_Create_Parent;
+    static const ActorInfo *s_Create_ActorInfo;
+    static u8 s_Create_Subtype;
 };
 
 #endif

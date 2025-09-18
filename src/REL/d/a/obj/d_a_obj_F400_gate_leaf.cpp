@@ -1,4 +1,5 @@
 #include "d/a/obj/d_a_obj_F400_gate_leaf.h"
+
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/flag/storyflag_manager.h"
@@ -14,16 +15,16 @@ bool dAcOF400GateLeaf_c::createHeap() {
     }
 
     nw4r::g3d::ResFile resFile(data);
-    if (!resFile.IsValid()){
+    if (!resFile.IsValid()) {
         return false;
     }
 
     nw4r::g3d::ResMdl mdl = resFile.GetResMdl("F400GateLeaf");
-    if (!mdl.IsValid()){
+    if (!mdl.IsValid()) {
         return false;
     }
 
-    return mMdl.create(mdl, &heap_allocator, 0, 1, nullptr);
+    return mMdl.create(mdl, &mAllocator, 0, 1, nullptr);
 }
 
 int dAcOF400GateLeaf_c::create() {
@@ -37,8 +38,8 @@ int dAcOF400GateLeaf_c::create() {
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     mVec3_c min, max;
-    mMdl.getBounds(&min,&max);
-    boundingBox.Set(min, max);
+    mMdl.getBounds(&min, &max);
+    mBoundingBox.Set(min, max);
     return SUCCEEDED;
 }
 
@@ -52,5 +53,5 @@ int dAcOF400GateLeaf_c::draw() {
 }
 
 u16 dAcOF400GateLeaf_c::getStoryflag() {
-    return params & 0xffff;
+    return mParams & 0xffff;
 }

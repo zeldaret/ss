@@ -9,8 +9,8 @@
 class cM3dGCps : public cM3dGLin {
 public:
     /* 0x18 */ f32 mRadius;
-    /* 0x1C */ f32 mField_0x1C;
-    /* 0x20 */ u8 mField_0x20;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ u8 field_0x20;
     /* 0x24 */ u32 mFlags;
 
     cM3dGCps();

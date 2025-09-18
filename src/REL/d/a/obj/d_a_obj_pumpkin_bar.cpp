@@ -20,7 +20,7 @@ bool dAcOpumpkinBar_c::createHeap() {
     dStage_c::bindSkyCmnToResFile(&mResFile);
 
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("IslBar");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120));
 
     void *dzb = getOarcFile("IslBar", "dzb/IslBar.dzb");
     void *plc = getOarcFile("IslBar", "dat/IslBar.plc");
@@ -46,7 +46,7 @@ int dAcOpumpkinBar_c::create() {
     // This also works if a separate variable is used but I
     // think it's more likely that mCullingDistance got set twice.
     mCullingDistance = 100000.0f;
-    boundingBox.Set(mVec3_c(-2790.0f, -1450.0f, -8270.0f), mVec3_c(2880.0f, 2120.0f, 1370.0f));
+    mBoundingBox.Set(mVec3_c(-2790.0f, -1450.0f, -8270.0f), mVec3_c(2880.0f, 2120.0f, 1370.0f));
     mCullingDistance = 500000.0f;
     mBarCollision.SetRideCallback(barCollisionRideCallback);
     return SUCCEEDED;

@@ -509,7 +509,7 @@ void dLytGameOverMgr_c::executeState_Select() {
                     isSpecialMinigame = true;
                 }
 
-                if (params != 0 && !isSpecialMinigame) {
+                if (mParams != 0 && !isSpecialMinigame) {
                     dScGame_c::setReloaderType(1);
                     dScGame_c::sCopyFileBToCurrentAfterRespawn = true;
                     entrance = fileManager->getEntranceT1_FileB();

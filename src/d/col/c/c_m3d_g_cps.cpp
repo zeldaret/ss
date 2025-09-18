@@ -1,11 +1,13 @@
 #include "d/col/c/c_m3d_g_cps.h"
 
 #include "d/col/c/c_m3d.h"
+
 #include "nw4r/math.h" // IWYU pragma: export
 
+
 cM3dGCps::cM3dGCps() {
-    mField_0x1C = 0.0f;
-    mField_0x20 = 0;
+    field_0x1C = 0.0f;
+    field_0x20 = 0;
     mFlags = 0;
 }
 
@@ -14,11 +16,11 @@ void cM3dGCps::SetR(f32 r) {
         r = 0.0f;
     }
     mRadius = r;
-    mField_0x1C = (double)r; // huh
+    field_0x1C = (double)r; // huh
 }
 
 void cM3dGCps::Set_0x1C(f32 f) {
-    mField_0x1C = f;
+    field_0x1C = f;
 }
 
 void cM3dGCps::Set(const mVec3_c &start, const mVec3_c &end, f32 r) {

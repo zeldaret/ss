@@ -709,10 +709,10 @@ void daPlayerModelBase_c::allocFrmHeap(mHeapAllocator_c *allocator, u32 size, co
 }
 
 void daPlayerModelBase_c::allocExternalDataBuffers() {
-    mpExternalAnmCharBuffer = heap_allocator.alloc(0x2400 * 6);
-    mpAnmCharBuffer = heap_allocator.alloc(0x1000);
-    mpTexPatBuffer = heap_allocator.alloc(0x1000);
-    mpTexSrtBuffer = heap_allocator.alloc(0x1000);
+    mpExternalAnmCharBuffer = mAllocator.alloc(0x2400 * 6);
+    mpAnmCharBuffer = mAllocator.alloc(0x1000);
+    mpTexPatBuffer = mAllocator.alloc(0x1000);
+    mpTexSrtBuffer = mAllocator.alloc(0x1000);
 }
 
 void daPlayerModelBase_c::initModelHeaps() {
@@ -735,7 +735,7 @@ void daPlayerModelBase_c::updateSwordShieldModelsIfNeeded() {
 m3d::anmTexSrt_c *daPlayerModelBase_c::createAnmTexSrt(const char *resName, m3d::bmdl_c &mdl) {
     m3d::anmTexSrt_c *anm = new m3d::anmTexSrt_c();
     (void)mAlink2Res.GetResAnmTexSrt(resName);
-    anm->create(mdl.getResMdl(), mAlink2Res.GetResAnmTexSrt(resName), &heap_allocator, nullptr, 1);
+    anm->create(mdl.getResMdl(), mAlink2Res.GetResAnmTexSrt(resName), &mAllocator, nullptr, 1);
     mdl.setAnm(*anm);
     return anm;
 }
@@ -816,7 +816,7 @@ void daPlayerModelBase_c::loadBodyModels() {
 void daPlayerModelBase_c::loadBody() {
     loadBodyModels();
     nw4r::g3d::ResMdl bodyMdl = mMainMdl.getResMdl();
-    mAnmChrBlend.create(bodyMdl, 6, &heap_allocator);
+    mAnmChrBlend.create(bodyMdl, 6, &mAllocator);
     mAnmChrBlend.getAnimObj()->SetAnmFlag(nw4r::g3d::AnmObj::FLAG_USE_QUATERNION_ROTATION_BLEND, true);
 
     daPlBaseAnmChr_c *anms = mAnmChrs;
@@ -824,7 +824,7 @@ void daPlayerModelBase_c::loadBody() {
     nw4r::g3d::ResAnmChr resAnmChr26 = getExternalAnmChr(sAnimations[26].animName, mpExternalAnmCharBuffer, 0x2400);
     nw4r::g3d::AnmObjChr *animObj;
     for (s32 i = 0; i < 6; i++) {
-        anms->create2(bodyMdl, resAnmChr26, &heap_allocator);
+        anms->create2(bodyMdl, resAnmChr26, &mAllocator);
         anms->setAnm(mMainMdl, resAnmChr26, m3d::PLAY_MODE_0);
         f32 f;
         switch (i) {
@@ -848,7 +848,7 @@ void daPlayerModelBase_c::loadBody() {
 
     // "F_default"
     mFaceAnmChr.create(
-        mFaceMdl.getResMdl(), getExternalAnmChr(sFaceResNames[0], mpAnmCharBuffer, 0x1000), &heap_allocator, nullptr
+        mFaceMdl.getResMdl(), getExternalAnmChr(sFaceResNames[0], mpAnmCharBuffer, 0x1000), &mAllocator, nullptr
     );
     mFaceMdl.setAnm(mFaceAnmChr);
     mFaceAnmChrIdx1 = PLAYER_FACE_DEFAULT;
@@ -856,8 +856,7 @@ void daPlayerModelBase_c::loadBody() {
 
     // "Fmaba01"
     mFaceTexPat.create(
-        mFaceMdl.getResMdl(), getExternalAnmTexPat(sFaceResNames[1], mpTexPatBuffer, 0x1000), &heap_allocator, nullptr,
-        1
+        mFaceMdl.getResMdl(), getExternalAnmTexPat(sFaceResNames[1], mpTexPatBuffer, 0x1000), &mAllocator, nullptr, 1
     );
     mFaceMdl.setAnm(mFaceTexPat);
     mFaceAnmTexPatIdx1 = PLAYER_FACEMABA01;
@@ -865,7 +864,7 @@ void daPlayerModelBase_c::loadBody() {
 
     bool isInTrial = dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL;
     mFaceTexSrt.create(
-        mFaceMdl.getResMdl(), getExternalAnmTexSrt(sFaceResNames[0], mpTexSrtBuffer, 0x1000), &heap_allocator, nullptr,
+        mFaceMdl.getResMdl(), getExternalAnmTexSrt(sFaceResNames[0], mpTexSrtBuffer, 0x1000), &mAllocator, nullptr,
         isInTrial ? 2 : 1
     );
     mFaceMdl.setAnm(mFaceTexSrt);
@@ -1120,13 +1119,13 @@ void daPlayerModelBase_c::applyWorldRotationMaybe(
     } else {
         MTXTrans(work, v.x, v.y, v.z);
     }
-    work.YrotM(rotation.y);
+    work.YrotM(mRotation.y);
     if (order) {
         work.ZYXrotM(x, y, z);
     } else {
         work.ZXYrotM(x, y, z);
     }
-    work.YrotM(-rotation.y);
+    work.YrotM(-mRotation.y);
     mMtx_c translateBack;
     translateBack.transS(-v.x, -v.y, -v.z);
     MTXConcat(work, translateBack, work);
@@ -1190,9 +1189,9 @@ void daPlayerModelBase_c::adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, 
     if (checkCurrentAction(0xA9) && (nodeId == PLAYER_MAIN_NODE_ARM_R1 || nodeId == PLAYER_MAIN_NODE_ARM_R2)) {
         mMtx_c mtx;
         mtx.makeQ(mQuat1);
-        mtx.YrotM(-rotation.y);
+        mtx.YrotM(-mRotation.y);
         mMtx_c mtx2;
-        mtx2.YrotS(rotation.y);
+        mtx2.YrotS(mRotation.y);
         MTXConcat(mtx2, mtx, mtx);
 
         mMtx_c orig;
@@ -1208,9 +1207,9 @@ void daPlayerModelBase_c::adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, 
     } else if (mAnimations[3] == 0xE0 && nodeId == PLAYER_MAIN_NODE_ARM_R2) {
         mMtx_c mtx;
         mtx.makeQ(mQuat1);
-        mtx.YrotM(-rotation.y);
+        mtx.YrotM(-mRotation.y);
         mMtx_c mtx2;
-        mtx2.YrotS(rotation.y);
+        mtx2.YrotS(mRotation.y);
         MTXConcat(mtx2, mtx, mtx);
 
         mMtx_c orig;
@@ -1261,9 +1260,9 @@ void daPlayerModelBase_c::adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, 
     } else if ((nodeId == PLAYER_MAIN_NODE_ARM_R2 || nodeId == PLAYER_MAIN_NODE_HAND_R) && isMPPose()) {
         mMtx_c mtx;
         mtx.makeQ(mQuat2);
-        mtx.YrotM(-rotation.y);
+        mtx.YrotM(-mRotation.y);
         mMtx_c mtx2;
-        mtx2.YrotS(rotation.y);
+        mtx2.YrotS(mRotation.y);
         MTXConcat(mtx2, mtx, mtx);
 
         mMtx_c orig;
@@ -1529,11 +1528,11 @@ void daPlayerModelBase_c::headModelTimingB(u32 nodeId, nw4r::g3d::WorldMtxManip 
         mtx.setTranslation(v);
         result->SetMtxUnchecked(mtx);
     } else if (nodeId >= PLAYER_HEAD_NODE_HAIR_L) {
-        mAng oldYRot = rotation.y;
-        rotation.y = field_0x1256;
+        mAng oldYRot = mRotation.y;
+        mRotation.y = field_0x1256;
         u32 idx = nodeId - 1;
         applyWorldRotationMaybe(result, field_0x1238[idx], 0, field_0x1242[idx], nullptr, false);
-        rotation.y = oldYRot;
+        mRotation.y = oldYRot;
     }
 }
 
@@ -1861,7 +1860,7 @@ void daPlayerModelBase_c::updateCachedPositions() {
     static const Vec sPos1 = {12.0f, -8.0f, 0.0f};
     static const Vec sHeadPos = {0.0f, -28.0f, 0.0f};
 
-    mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sPos1, poscopy2);
+    mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sPos1, mPositionCopy2);
     mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sPosAboveLink, mPositionAboveLink);
     mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sHeadPos, mHeadTranslation);
 
@@ -1881,8 +1880,8 @@ void daPlayerModelBase_c::updateCachedPositions() {
     if (checkCurrentAction(/* DOWSE_LOOK */ 0x68)) {
         mVec3_c v(0.0f, 18.0f, 0.0f);
         v.rotX(field_0x1268);
-        v.rotY(rotation.y + field_0x126A);
-        poscopy2 += v;
+        v.rotY(mRotation.y + field_0x126A);
+        mPositionCopy2 += v;
     }
 }
 
@@ -1892,16 +1891,16 @@ void daPlayerModelBase_c::setPosCopy3() {
     static const Vec posCopy3v2 = {0.0f, 95.0f, 0.0f};
     static const Vec posCopy3v3 = {0.0f, 14.0f, 0.0f};
     if (checkCurrentAction(/* FREE_FALL*/ 0x13) || checkCurrentAction(/* WALKING_ON_TIGHTROPE */ 0x81)) {
-        poscopy3 = position;
-        poscopy3.y += 180.0f;
+        mPositionCopy3 = mPosition;
+        mPositionCopy3.y += 180.0f;
     } else if (checkCurrentAction(/* BEING_PULLED_BY_CLAWS */ 0x5A)) {
-        poscopy3 = poscopy2;
+        mPositionCopy3 = mPositionCopy2;
     } else if (checkActionFlags(FLG0_SWING_ROPE)) {
-        poscopy3 = position;
+        mPositionCopy3 = mPosition;
     } else if (checkActionFlagsCont(0x20000000) || checkCurrentAction(0x70) ||
                checkCurrentAction(/* HANG_ON_ZIP */ 0x85)) {
-        poscopy3 = position;
-        poscopy3.y -= 100.0f;
+        mPositionCopy3 = mPosition;
+        mPositionCopy3.y -= 100.0f;
     } else {
         // TODO maybe fakematch, is there a way to avoid this goto?
         if (checkActionFlags(FLG0_HANGING_LEDGE)) {
@@ -1914,14 +1913,14 @@ void daPlayerModelBase_c::setPosCopy3() {
             case 0x84: /* CLIMBING_ONTO_TIGHTROPE */ {
             label:
                 const nw4r::math::MTX34 *c = mHeadMdl.getLocalMtx();
-                poscopy3.x = c->_03;
-                poscopy3.y = c->_13;
-                poscopy3.z = c->_23;
+                mPositionCopy3.x = c->_03;
+                mPositionCopy3.y = c->_13;
+                mPositionCopy3.z = c->_23;
                 break;
             }
             case 0x09: {
                 // SLIDING
-                poscopy3 = position + mVec3_c(posCopy3v2);
+                mPositionCopy3 = mPosition + mVec3_c(posCopy3v2);
                 break;
             }
             default: {
@@ -1932,7 +1931,7 @@ void daPlayerModelBase_c::setPosCopy3() {
                 const Vec *v;
                 if (checkActionFlags(FLG0_IN_WATER) || checkCurrentAction(/* SWIM_DASH_INFO_AIR */ 0x57)) {
                     v = &posCopy3v3;
-                    f = position.y;
+                    f = mPosition.y;
                 } else {
                     if (checkCurrentAction(/* VOID_SAND */ 0x4C)) {
                         v = &posCopy3v3;
@@ -1941,10 +1940,10 @@ void daPlayerModelBase_c::setPosCopy3() {
                     }
                     f = mtx.m[1][3];
                 }
-                poscopy3.copyFrom(v);
-                poscopy3.x += position.x;
-                poscopy3.y += f;
-                poscopy3.z += position.z;
+                mPositionCopy3.copyFrom(v);
+                mPositionCopy3.x += mPosition.x;
+                mPositionCopy3.y += f;
+                mPositionCopy3.z += mPosition.z;
                 break;
             }
         }
@@ -1959,6 +1958,6 @@ bool daPlayerModelBase_c::fn_80061410() {
 // and this causes the vtable and all other weak functions to be here
 /* vt 0x114 */ void daPlayerModelBase_c::somethingWithCarriedActorFlags() {
     if (mCarriedActorRef.get() != nullptr) {
-        mCarriedActorRef.get()->setObjectProperty(0x200);
+        mCarriedActorRef.get()->setObjectProperty(OBJ_PROP_0x200);
     }
 }

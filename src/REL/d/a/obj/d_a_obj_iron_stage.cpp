@@ -8,7 +8,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_IRON_STAGE, dAcOironStage_c, fProfile::OBJ_IRON_STAGE,
 bool dAcOironStage_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(getOarcResFile("IronStage"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("IronStage");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120));
     cBgD_t *dzb = (cBgD_t *)getOarcFile("IronStage", "dzb/IronStage.dzb");
     PLC *plc = (PLC *)getOarcFile("IronStage", "dat/IronStage.plc");
     updateMatrix();
@@ -22,7 +22,7 @@ int dAcOironStage_c::create() {
     CREATE_ALLOCATOR(dAcOironStage_c);
     dBgS::GetInstance()->Regist(&mCollision, this);
     mModel.setPriorityDraw(0x1C, 0x9);
-    boundingBox.Set(mVec3_c(-460.0f, -210.0f, -260.0f), mVec3_c(460.0f, 210.0f, 260.0f));
+    mBoundingBox.Set(mVec3_c(-460.0f, -210.0f, -260.0f), mVec3_c(460.0f, 210.0f, 260.0f));
     mCullingDistance = 15000.0f;
     return SUCCEEDED;
 }

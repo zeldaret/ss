@@ -30,7 +30,7 @@ bool dAcOutajimaIsland_c::createHeap() {
     dStage_c::bindSkyCmnToResFile(&mRes);
     nw4r::g3d::ResMdl m = mRes.GetResMdl("IslPuzIslet00");
 
-    TRY_CREATE(mMdl.create(m, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(m, &mAllocator, 0x120));
 
     void *dzb = getOarcFile("IslPuzIslet00", "dzb/IslPuzIslet00.dzb");
     void *plc = getOarcFile("IslPuzIslet00", "dat/IslPuzIslet00.plc");
@@ -41,8 +41,8 @@ bool dAcOutajimaIsland_c::createHeap() {
 }
 
 int dAcOutajimaIsland_c::actorCreate() {
-    mInitialPos = position;
-    mInitialRot = rotation;
+    mInitialPos = mPosition;
+    mInitialRot = mRotation;
 
     mRingLayer = getRingLayer();
     mParam2 = getParm2();
@@ -61,7 +61,7 @@ int dAcOutajimaIsland_c::actorCreate() {
     mVec3_c min;
     mVec3_c max;
     mMdl.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     mCullingDistance = 500000.0f;
     return SUCCEEDED;
 }
@@ -113,7 +113,7 @@ void dAcOutajimaIsland_c::executeState_Wait() {
             holdSound(SE_UtaLand_MoveC);
         }
 
-        if (mOldPosition == position) {
+        if (mOldPosition == mPosition) {
             mPlaySound = false;
             if (mParam2 == 0 && !sPlatformsSettled) {
                 startSound(SE_UtaLand_StopOK);
@@ -135,7 +135,7 @@ void dAcOutajimaIsland_c::movePlatforms() {
 
     sLib::chaseAngle2(&field_0x5BE.x.mVal, field_0x5BC, field_0x5BE.y);
 
-    rotation.y = mInitialRot.y - field_0x5BE.x;
-    position.z = mInitialPos.z + ((mRingLayer - 1) * 1400.0f + 2500.0f) * rotation.y.cos();
-    position.x = mInitialPos.x + ((mRingLayer - 1) * 1400.0f + 2500.0f) * rotation.y.sin();
+    mRotation.y = mInitialRot.y - field_0x5BE.x;
+    mPosition.z = mInitialPos.z + ((mRingLayer - 1) * 1400.0f + 2500.0f) * mRotation.y.cos();
+    mPosition.x = mInitialPos.x + ((mRingLayer - 1) * 1400.0f + 2500.0f) * mRotation.y.sin();
 }

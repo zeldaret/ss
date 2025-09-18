@@ -18,7 +18,7 @@ bool dAcOmoleCover_c::createHeap() {
     dStage_c::bindStageResToFile(&mResFile);
     dStage_c::bindSkyCmnToResFile(&mResFile);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("StageF000MallCover");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     void *dzb = CurrentStageArcManager::GetInstance()->getData("dzb/StageF000MallCover.dzb");
     void *plc = CurrentStageArcManager::GetInstance()->getData("dat/StageF000MallCover.plc");
     updateMatrix();
@@ -32,7 +32,7 @@ int dAcOmoleCover_c::create() {
     CREATE_ALLOCATOR(dAcOmoleCover_c);
     dBgS::GetInstance()->Regist(&mBgW, this);
     mMdl.setPriorityDraw(0x1C, 9);
-    boundingBox.Set(mVec3_c(-1900.0f, 1100.0f, -5500.0f), mVec3_c(100.0f, 1700.0f, -1800.0f));
+    mBoundingBox.Set(mVec3_c(-1900.0f, 1100.0f, -5500.0f), mVec3_c(100.0f, 1700.0f, -1800.0f));
     mCullingDistance = FLOAT_MAX;
     return SUCCEEDED;
 }

@@ -33,11 +33,11 @@ private:
     void movePlatforms();
 
     s32 getParm2() {
-        return ((params >> 4) & 0xF);
+        return ((mParams >> 4) & 0xF);
     }
 
     s32 getRingLayer() {
-        return params & 0xF;
+        return mParams & 0xF;
     }
 
     /* 0x330 */ m3d::smdl_c mMdl;

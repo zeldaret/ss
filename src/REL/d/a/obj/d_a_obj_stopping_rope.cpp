@@ -14,7 +14,7 @@ bool dAcOStoppingRope_c::createHeap() {
     void *data = getOarcResFile("Crane");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("CraneN");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     void *dzb = getOarcFile("Crane", "dzb/Crane.dzb");
     void *plc = getOarcFile("Crane", "dat/Crane.plc");
     updateMatrix();

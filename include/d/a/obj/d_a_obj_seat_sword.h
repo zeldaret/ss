@@ -41,7 +41,7 @@ public:
     bool checkPlayerHasSword();
 
     u8 getSubtype() const {
-        return params & 0x3;
+        return mParams & 0x3;
     }
 
 private:
@@ -56,9 +56,9 @@ private:
     /* 0x774 */ EffectsStruct mEff;
     /* 0x7A8 */ mMtx_c mSwordMtx;
     /* 0x7D8 */ mVec3_c mEffPos;
-    /* 0x7E4 */ f32 mField_0x7E4;
-    /* 0x7E8 */ mAng mField_0x7E8;
-    /* 0x7EA */ u8 mField_0x7EA;
+    /* 0x7E4 */ f32 field_0x7E4;
+    /* 0x7E8 */ mAng field_0x7E8;
+    /* 0x7EA */ u8 field_0x7EA;
     /* 0x7EB */ u8 mSubtype;
     /* 0x7EC */ bool mbNoSword;
 

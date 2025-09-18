@@ -62,7 +62,7 @@ void dCcS::Dt() {
 
 bool dCcS::ChkRemoveActor(dAcObjBase_c *pActor) {
     bool ret = false;
-    if (pActor && (pActor->delete_request || pActor->lifecycle_state == fBase_c::TO_BE_DELETED)) {
+    if (pActor && (pActor->mDeleteRequest || pActor->mLifecycleState == fBase_c::TO_BE_DELETED)) {
         ret = true;
     }
     return ret;

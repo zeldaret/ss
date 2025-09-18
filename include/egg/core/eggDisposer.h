@@ -4,7 +4,9 @@
 // This file was adapted from https://github.com/riidefi/mkw/blob/master/source/egg/core/eggDisposer.hpp
 
 #include "common.h"
+
 #include "nw4r/ut.h"
+
 
 namespace EGG {
 
@@ -12,7 +14,7 @@ class Heap;
 class Disposer : private NonCopyable {
 public:
     /* vt 0x08 */ virtual ~Disposer();
-    /* 80496830 */ Disposer();
+    Disposer();
 
 public:
     enum eLifetime {

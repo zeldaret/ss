@@ -179,8 +179,8 @@ bool dBgWTime::SphChk(dBgS_SphChk *pSph, void *pDat) {
         sVtx[2].y = c.y;
         sVtx[2].z = c.z;
         pla = pSph->GetPlane();
-        pSph->mField_0x80 = dist;
-        pSph->mField_0x84.set(adj.x, adj.y, adj.z);
+        pSph->field_0x80 = dist;
+        pSph->field_0x84.set(adj.x, adj.y, adj.z);
         pSph->mCallback(pSph, sVtx, 0, 1, 2, &pla, pDat);
         return true;
     }

@@ -2,10 +2,10 @@
 
 namespace EGG {
 
-/* 80673b10 */ nw4r::ut::List Thread::sThreadList;
-/* 80576770 */ void (*Thread::sOldSwitchThreadCallback)(OSThread *, OSThread *);
+nw4r::ut::List Thread::sThreadList;
+void (*Thread::sOldSwitchThreadCallback)(OSThread *, OSThread *);
 
-/* 80496910 */ Thread::Thread(u32 stackSize, int msgCount, int priority, Heap *heap) {
+Thread::Thread(u32 stackSize, int msgCount, int priority, Heap *heap) {
     if (heap == nullptr) {
         heap = Heap::sCurrentHeap;
     }
@@ -20,7 +20,7 @@ namespace EGG {
     setCommonMesgQueue(msgCount, mContainingHeap);
 }
 
-/* 804969e0 */ Thread::Thread(OSThread *osThread, int msgCount) {
+Thread::Thread(OSThread *osThread, int msgCount) {
     mContainingHeap = nullptr;
     mOSThread = osThread;
     mStackSize = (u8 *)osThread->stackBegin - (u8 *)osThread->stackEnd;
@@ -30,7 +30,7 @@ namespace EGG {
     setCommonMesgQueue(msgCount, Heap::sCurrentHeap);
 }
 
-/* 80496a60 */ Thread::~Thread() {
+Thread::~Thread() {
     nw4r::ut::List_Remove(&sThreadList, this);
     if (mContainingHeap != nullptr) {
         if (!OSIsThreadTerminated(mOSThread)) {
@@ -43,7 +43,7 @@ namespace EGG {
     Heap::free(mMesgBuffer, nullptr);
 }
 
-/* 80496b20 */ Thread *Thread::findThread(OSThread *thread) {
+Thread *Thread::findThread(OSThread *thread) {
     Thread *ptr = nullptr;
     while ((ptr = (Thread *)nw4r::ut::List_GetNext(&sThreadList, ptr)) != nullptr) {
         if (ptr->mOSThread == thread) {
@@ -53,13 +53,13 @@ namespace EGG {
     return nullptr;
 }
 
-/* 80496b90 */ void Thread::initialize() {
+void Thread::initialize() {
     // TODO offsetof
     nw4r::ut::List_Init(&sThreadList, 0x44);
     sOldSwitchThreadCallback = OSSetSwitchThreadCallback(switchThreadCallback);
 }
 
-/* 80496bd0 */ void Thread::setThreadCurrentHeap(Heap *heap) {
+void Thread::setThreadCurrentHeap(Heap *heap) {
     OSDisableScheduler();
     OSThread *myThread = mOSThread;
     OSThread *currentThread = OSGetCurrentThread();
@@ -82,7 +82,7 @@ namespace EGG {
     OSEnableScheduler();
 }
 
-/* 80496c70 */ void Thread::switchThreadCallback(OSThread *from, OSThread *to) {
+void Thread::switchThreadCallback(OSThread *from, OSThread *to) {
     Thread *fromThread = from != nullptr ? findThread(from) : nullptr;
     Thread *toThread = to != nullptr ? findThread(to) : nullptr;
 
@@ -109,14 +109,14 @@ namespace EGG {
     }
 }
 
-/* 80496d60 */ void Thread::setCommonMesgQueue(int mesgCount, Heap *heap) {
+void Thread::setCommonMesgQueue(int mesgCount, Heap *heap) {
     mMesgCount = mesgCount;
     mMesgBuffer = Heap::alloc<OSMessage>(mesgCount, heap);
     OSInitMessageQueue(&mMesgQueue, mMesgBuffer, mMesgCount);
     nw4r::ut::List_Append(&sThreadList, this);
 }
 
-/* 80496dc0 */ void *Thread::start(void *arg) {
+void *Thread::start(void *arg) {
     Thread *thread = static_cast<Thread *>(arg);
     return thread->run();
 }

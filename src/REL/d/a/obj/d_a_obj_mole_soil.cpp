@@ -18,7 +18,7 @@ bool dAcOmoleSoil_c::createHeap() {
     }
     mBrres = file;
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("MogumaMud");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120, 1, nullptr));
     mModel.setPriorityDraw(0x1c, 9);
     return true;
 }
@@ -30,7 +30,7 @@ int dAcOmoleSoil_c::create() {
     dAcBase_c::mScale.set(sHalfScale, sHalfScale, sHalfScale);
     mStateMgr.changeState(StateID_Wait);
 
-    boundingBox.Set(mVec3_c(-100.0f, -0.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
+    mBoundingBox.Set(mVec3_c(-100.0f, -0.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
     return SUCCEEDED;
 }
 

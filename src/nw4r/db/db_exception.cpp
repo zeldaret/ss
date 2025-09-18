@@ -2,11 +2,11 @@
 
 #include "nw4r/db/db_directPrint.h"
 #include "nw4r/db/db_mapFile.h"
-#include "rvl/GX.h" // IWYU pragma: export
-#include "rvl/VI.h" // IWYU pragma: export
 #include "rvl/OS/OSError.h"
 #include "string.h"
 
+#include "rvl/GX.h" // IWYU pragma: export
+#include "rvl/VI.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace db {
@@ -383,7 +383,6 @@ void ShowSRR0Map_(const OSContext *ctx) {
     }
 }
 
-// 804ca0e4
 extern "C" int __fpclassifyf(float val);
 
 static void ShowFloatSub_(s32 reg, f32 val);

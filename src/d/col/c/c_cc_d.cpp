@@ -201,32 +201,32 @@ int cCcD_Stts::GetID() const {
 }
 
 void cCcD_Stts::PlusCcMove(f32 x, f32 y, f32 z) {
-    if (mField_0x10.x > x) {
-        mField_0x10.x = x;
-    } else if (mField_0x1C.x < x) {
-        mField_0x1C.x = x;
+    if (field_0x10.x > x) {
+        field_0x10.x = x;
+    } else if (field_0x1C.x < x) {
+        field_0x1C.x = x;
     }
 
-    if (mField_0x10.y > y) {
-        mField_0x10.y = y;
-    } else if (mField_0x1C.y < y) {
-        mField_0x1C.y = y;
+    if (field_0x10.y > y) {
+        field_0x10.y = y;
+    } else if (field_0x1C.y < y) {
+        field_0x1C.y = y;
     }
 
-    if (mField_0x10.z > z) {
-        mField_0x10.z = z;
-    } else if (mField_0x1C.z < z) {
-        mField_0x1C.z = z;
+    if (field_0x10.z > z) {
+        field_0x10.z = z;
+    } else if (field_0x1C.z < z) {
+        field_0x1C.z = z;
     }
 
-    mCcMove.x = mField_0x10.x + mField_0x1C.x;
-    mCcMove.y = mField_0x10.y + mField_0x1C.y;
-    mCcMove.z = mField_0x10.z + mField_0x1C.z;
+    mCcMove.x = field_0x10.x + field_0x1C.x;
+    mCcMove.y = field_0x10.y + field_0x1C.y;
+    mCcMove.z = field_0x10.z + field_0x1C.z;
 }
 
 void cCcD_Stts::ClrCcMove() {
-    mField_0x10 = mVec3_c::Zero;
-    mField_0x1C = mVec3_c::Zero;
+    field_0x10 = mVec3_c::Zero;
+    field_0x1C = mVec3_c::Zero;
     mCcMove = mVec3_c::Zero;
 }
 
@@ -309,7 +309,7 @@ void cCcD_GAtTgCoCommonBase::SubtractEffCounter() {
 // Collision Object
 ///////////////////////////////////////////////////////////////////////////////
 
-cCcD_Obj::cCcD_Obj() : mStts(0), mField_0x108(0) {}
+cCcD_Obj::cCcD_Obj() : mStts(0), field_0x108(0) {}
 
 cCcD_Obj::~cCcD_Obj() {
     mStts = 0;
@@ -487,11 +487,11 @@ bool cCcD_Obj::ChkTgBit25() const {
 }
 
 u16 cCcD_Obj::GetTgSoundID() const {
-    return mTg.mAtHitSrc.mField_0x10;
+    return mTg.mAtHitSrc.field_0x10;
 }
 
 s16 cCcD_Obj::GetTg_0x6A() const {
-    return mTg.mAtHitSrc.mField_0x12;
+    return mTg.mAtHitSrc.field_0x12;
 }
 
 bool cCcD_Obj::ChkTgBit8() const {
@@ -499,7 +499,7 @@ bool cCcD_Obj::ChkTgBit8() const {
 }
 
 u8 cCcD_Obj::GetTg_0x4A() const {
-    return mTg.mField_0x4A;
+    return mTg.field_0x4A;
 }
 
 dAcObjBase_c *cCcD_Obj::GetTgActor() {
@@ -546,10 +546,10 @@ bool cCcD_ShapeAttr::Calc(const mVec3_c &, const mVec3_c &, mVec3_c *pOut) {
 }
 
 void cCcD_ShapeAttr::GetShapeAccess(cCcD_ShapeAttr::Shape *pShape) const {
-    pShape->mField_0x00 = 4;
-    pShape->mField_0x04 = mVec3_c::Zero;
-    pShape->mField_0x10 = mVec3_c::Zero;
-    pShape->mField_0x1C = mVec3_c::Zero;
+    pShape->field_0x00 = 4;
+    pShape->field_0x04 = mVec3_c::Zero;
+    pShape->field_0x10 = mVec3_c::Zero;
+    pShape->field_0x1C = mVec3_c::Zero;
 }
 
 bool cCcD_ShapeAttr::GetPosBool(mVec3_c *pOut) const {
@@ -698,10 +698,10 @@ bool cCcD_TriAttr::GetNVec(const mVec3_c &pnt, mVec3_c *pOut) const {
 }
 
 void cCcD_TriAttr::GetShapeAccess(cCcD_ShapeAttr::Shape *pShape) const {
-    pShape->mField_0x00 = SHAPE_TRIANGLE;
-    pShape->mField_0x04 = GetPntA();
-    pShape->mField_0x10 = GetPntB();
-    pShape->mField_0x1C = GetPntC();
+    pShape->field_0x00 = SHAPE_TRIANGLE;
+    pShape->field_0x04 = GetPntA();
+    pShape->field_0x10 = GetPntB();
+    pShape->field_0x1C = GetPntC();
 }
 
 void cCcD_TriAttr::GetPos(nw4r::math::VEC3 *pOut) const {
@@ -797,8 +797,8 @@ bool cCcD_UnkAttr::CrossCo(cCcD_CpsAttr &cpsAttr, f32 *pOut) {
     mVec3_c pos;
     if (cM3dGUnk::Cross(cpsAttr, &pos)) {
         cpsAttr.SetVirtCenter(&pos);
-        *pOut = cpsAttr.CrossCoCommon(*this, mField_0xC4);
-        mField_0xC4 = 0.0f;
+        *pOut = cpsAttr.CrossCoCommon(*this, field_0xC4);
+        field_0xC4 = 0.0f;
     }
     return false;
 }
@@ -1034,9 +1034,9 @@ bool cCcD_CpsAttr::CrossAtTg(cCcD_UnkAttr &unkAttr, mVec3_c *pOut) {
 }
 
 void cCcD_CpsAttr::SetVirtCenter(mVec3_c *pOut) {
-    if (mField_0x20) {
+    if (field_0x20) {
         mVirtCenter = *pOut;
-        mField_0x20 = 0;
+        field_0x20 = 0;
     } else {
         f32 dist = cM3d_lineVsPosSuisenCross(*this, *pOut, &mVirtCenter);
         if (dist < 0.f) {
@@ -1049,7 +1049,7 @@ void cCcD_CpsAttr::SetVirtCenter(mVec3_c *pOut) {
 
 f32 cCcD_CpsAttr::CrossCoCommon(cCcD_ShapeAttr &attr, f32 r) {
     mVec3_c tmp = mVirtCenter - attr.GetCoP();
-    f32 mag = (r + mField_0x1C) - EGG::Math<f32>::sqrt(tmp.x * tmp.x + tmp.z * tmp.z);
+    f32 mag = (r + field_0x1C) - EGG::Math<f32>::sqrt(tmp.x * tmp.x + tmp.z * tmp.z);
 
     if (mag < 0.0f) {
         mag = 0.0f;
@@ -1063,7 +1063,7 @@ bool cCcD_CpsAttr::CrossCo(cCcD_CpsAttr &cpsAttr, f32 *pOut) {
     if (cM3d_Cross_CpsCps(*this, cpsAttr, &pos, nullptr, nullptr)) {
         SetVirtCenter(&pos);
         cpsAttr.SetVirtCenter(&pos);
-        *pOut = CrossCoCommon(cpsAttr, cpsAttr.mField_0x1C);
+        *pOut = CrossCoCommon(cpsAttr, cpsAttr.field_0x1C);
         cpsAttr.Set_0x1C(cpsAttr.GetR());
         return true;
     }
@@ -1095,8 +1095,8 @@ bool cCcD_CpsAttr::CrossCo(cCcD_UnkAttr &unkAttr, f32 *pOut) {
     mVec3_c pos;
     if (cM3dGCps::Cross(unkAttr, &pos)) {
         SetVirtCenter(&pos);
-        *pOut = CrossCoCommon(unkAttr, unkAttr.mField_0xC4);
-        unkAttr.mField_0xC4 = 0.0f;
+        *pOut = CrossCoCommon(unkAttr, unkAttr.field_0xC4);
+        unkAttr.field_0xC4 = 0.0f;
         return true;
     }
     return false;
@@ -1145,10 +1145,10 @@ void cCcD_CpsAttr::GetPos(nw4r::math::VEC3 *pOut) const {
 }
 
 void cCcD_CpsAttr::GetShapeAccess(cCcD_ShapeAttr::Shape *pShape) const {
-    pShape->mField_0x00 = SHAPE_CAPSULE;
-    pShape->mField_0x04 = GetStart();
-    pShape->mField_0x10 = GetEnd();
-    pShape->mField_0x1C.set(GetR(), 0.f, 0.f);
+    pShape->field_0x00 = SHAPE_CAPSULE;
+    pShape->field_0x04 = GetStart();
+    pShape->field_0x10 = GetEnd();
+    pShape->field_0x1C.set(GetR(), 0.f, 0.f);
 }
 
 void cCcD_CpsAttr::TranslateXZ(f32 x, f32 z) {
@@ -1277,10 +1277,10 @@ bool cCcD_CylAttr::GetNVec(const mVec3_c &param0, mVec3_c *pOut) const {
 }
 
 void cCcD_CylAttr::GetShapeAccess(cCcD_ShapeAttr::Shape *pShape) const {
-    pShape->mField_0x00 = SHAPE_CYLINDER;
-    pShape->mField_0x04 = GetC();
-    pShape->mField_0x10 = mVec3_c::Zero;
-    pShape->mField_0x1C.set(GetR(), GetH(), 0.f);
+    pShape->field_0x00 = SHAPE_CYLINDER;
+    pShape->field_0x04 = GetC();
+    pShape->field_0x10 = mVec3_c::Zero;
+    pShape->field_0x1C.set(GetR(), GetH(), 0.f);
 }
 
 void cCcD_CylAttr::GetPos(nw4r::math::VEC3 *pOut) const {
@@ -1403,10 +1403,10 @@ bool cCcD_SphAttr::GetNVec(const mVec3_c &param0, mVec3_c *param1) const {
 }
 
 void cCcD_SphAttr::GetShapeAccess(cCcD_ShapeAttr::Shape *pShape) const {
-    pShape->mField_0x00 = SHAPE_SPHERE;
-    pShape->mField_0x04 = GetC();
-    pShape->mField_0x10 = mVec3_c::Zero;
-    pShape->mField_0x1C.set(GetR(), 0.0f, 0.0f);
+    pShape->field_0x00 = SHAPE_SPHERE;
+    pShape->field_0x04 = GetC();
+    pShape->field_0x10 = mVec3_c::Zero;
+    pShape->field_0x1C.set(GetR(), 0.0f, 0.0f);
 }
 
 void cCcD_SphAttr::GetPos(nw4r::math::VEC3 *pPos) const {
@@ -1428,7 +1428,7 @@ void cCcD_SphAttr::TranslateXZ(f32 x, f32 z) {
 ///////////////////////////////////////////////////////////////////////////////
 
 cCcD_ObjAt::cCcD_ObjAt() {
-    mField_0x58 = 0;
+    field_0x58 = 0;
 }
 
 cCcD_ObjAt::~cCcD_ObjAt() {}
@@ -1450,20 +1450,20 @@ void cCcD_ObjAt::AdjustHitPos(f32 x, f32 z) {
 
 cCcD_ObjTg::cCcD_ObjTg()
     : mShieldFrontRangeYAngle(nullptr),
-      mField_0x4A(0),
-      mField_0x4B(0),
-      mField_0x4C(0),
-      mField_0x50(0),
-      mField_0x54(0),
-      mField_0x6C(0.f, 0.f, 0.f),
-      mField_0x78(0) {}
+      field_0x4A(0),
+      field_0x4B(0),
+      field_0x4C(0),
+      field_0x50(0),
+      field_0x54(0),
+      field_0x6C(0.f, 0.f, 0.f),
+      field_0x78(0) {}
 
 cCcD_ObjTg::~cCcD_ObjTg() {}
 
 void cCcD_ObjTg::Set(const cCcD_SrcGObjTg &src) {
     mEffCounter = 0;
     mSrc = src;
-    mField_0x4C = 0;
+    field_0x4C = 0;
     mHitPos = mVec3_c::Zero;
     mShieldFrontRangeYAngle = nullptr;
     mShieldRange = 0x4000;
@@ -1473,13 +1473,13 @@ void cCcD_ObjTg::AdjustHitPos(f32 x, f32 z) {
     mHitPos.x += x;
     mHitPos.z += z;
 
-    mField_0x6C.x += x;
-    mField_0x6C.z += z;
+    field_0x6C.x += x;
+    field_0x6C.z += z;
 }
 
 cCcD_ObjCo::cCcD_ObjCo() {
     mGrp = 0;
-    mField_0x28_callback = 0;
+    field_0x28_callback = 0;
 }
 
 cCcD_ObjCo::~cCcD_ObjCo() {}

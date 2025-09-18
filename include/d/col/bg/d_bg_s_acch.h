@@ -16,7 +16,7 @@ class dBgS_AcchCir : public cBgS_PolyInfo {
 private:
     /* 0x2C */ cM3dGCir m_cir;
     /* 0x40 */ f32 mWallRR;
-    /* 0x44 */ f32 mField_0x44;
+    /* 0x44 */ f32 field_0x44;
     /* 0x48 */ f32 mWallH;
     /* 0x4C */ f32 mWallR;
     /* 0x50 */ f32 mWallHDirect;
@@ -104,9 +104,9 @@ public:
 
 // TODO: Needs to be relocated when Known
 struct dBgS_Acch_0x1A8 {
-    u8 mField_0x00;
-    mVec3_c mField_0x04;
-    mVec3_c mField_0x10;
+    u8 field_0x00;
+    mVec3_c field_0x04;
+    mVec3_c field_0x10;
 
     dBgS_Acch_0x1A8();
 
@@ -153,7 +153,7 @@ public:
     dBgS_Acch();
 
     void Init() {
-        mField_0x394 = 0;
+        field_0x394 = 0;
         ClrGroundAway();
         ClrWallHit();
         ClrGroundLanding();
@@ -527,7 +527,7 @@ public:
     }
 
     void SetField_0xD4(f32 v) {
-        mField_0x0D4 = v;
+        field_0x0D4 = v;
     }
 
 public:
@@ -541,37 +541,37 @@ public:
     /* 0x064 */ cM3dGLin mLine;
     /* 0x07C */ cM3dGCyl mWallCyl;
     /* 0x090 */ int mBgIndex;
-    /* 0x094 */ void *mField_0x094;
-    /* 0x098 */ u32 mField_0x098;
+    /* 0x094 */ void *field_0x094;
+    /* 0x098 */ u32 field_0x098;
     /* 0x09C */ dAcObjBase_c *mpMyObj;
     /* 0x0A0 */ int mTblSize;
     /* 0x0A4 */ dBgS_AcchCir *mpAcchCir;
-    /* 0x0A8 */ f32 mField_0x0A8;
-    /* 0x0AC */ f32 mField_0x0AC;
+    /* 0x0A8 */ f32 field_0x0A8;
+    /* 0x0AC */ f32 field_0x0AC;
     /* 0x0B0 */ f32 mGroundHeight;
-    /* 0x0B4 */ f32 mField_0x0B4;
+    /* 0x0B4 */ f32 field_0x0B4;
     /* 0x0B8 */ cM3dGPla mPlane_0x0B8;
-    /* 0x0C8 */ f32 mField_0x0C8;
-    /* 0x0CC */ f32 mField_0x0CC;
+    /* 0x0C8 */ f32 field_0x0C8;
+    /* 0x0CC */ f32 field_0x0CC;
     /* 0x0D0 */ f32 mRoofHeight;
-    /* 0x0D4 */ f32 mField_0x0D4;
-    /* 0x0D8 */ f32 mField_0x0D8;
+    /* 0x0D4 */ f32 field_0x0D4;
+    /* 0x0D8 */ f32 field_0x0D8;
     /* 0x0DC */ cBgS_PolyInfo *mpOutPolyInfo;
     /* 0x0E0 */ f32 mRoofH_0x0E0;
     /* 0x0E4 */ f32 mGroundH_0x0E4;
-    /* 0x0E8 */ f32 mField_0x0E8;
+    /* 0x0E8 */ f32 field_0x0E8;
     /* 0x0EC */ dBgS_SphChk mSph;
-    /* 0x1A8 */ dBgS_Acch_0x1A8 mField_0x1A8;
+    /* 0x1A8 */ dBgS_Acch_0x1A8 field_0x1A8;
     /* 0x1C4 */ u8 _0[0x1D0 - 0x1C4];
-    /* 0x1D0 */ f32 mField_0x1D0;
+    /* 0x1D0 */ f32 field_0x1D0;
     /* 0x1D4 */ dBgS_GndChk mGnd;
     /* 0x264 */ dBgS_RoofChk mRoof;
-    /* 0x2F4 */ f32 mField_0x2F4;
+    /* 0x2F4 */ f32 field_0x2F4;
     /* 0x2F8 */ dBgS_WtrChk mWtr;
-    /* 0x390 */ u8 mField_0x390;
-    /* 0x394 */ s32 mField_0x394;
-    /* 0x398 */ mVec3_c mField_0x398;
-    /* 0x3A4 */ mVec3_c mField_0x3A4;
+    /* 0x390 */ u8 field_0x390;
+    /* 0x394 */ s32 field_0x394;
+    /* 0x398 */ mVec3_c field_0x398;
+    /* 0x3A4 */ mVec3_c field_0x3A4;
 };
 
 class dBgS_ObjAcch : public dBgS_Acch {

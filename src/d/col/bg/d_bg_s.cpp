@@ -262,7 +262,7 @@ bool cBgS::LineCross(cBgS_LinChk *pLine) {
     do {
         if (chkElm->CheckAll(pLine) && chkElm->mpBgW->LineCheck(pLine)) {
             const dAcObjBase_c *pObj = chkElm->mObj.get();
-            pLine->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->unique_ID : 0);
+            pLine->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->mID : 0);
             pLine->SetHit();
         }
 
@@ -290,7 +290,7 @@ f32 cBgS::GroundCross(cBgS_GndChk *pGnd) {
     do {
         if (chkElm->CheckAll(pGnd) && chkElm->mpBgW->GroundCross(pGnd)) {
             const dAcObjBase_c *pObj = chkElm->mObj.get();
-            pGnd->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->unique_ID : 0);
+            pGnd->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->mID : 0);
         }
         i++;
         chkElm++;
@@ -344,7 +344,7 @@ bool cBgS::ChkPolySafe(cBgS_PolyInfo const &info) const {
         return false;
     }
     const dAcObjBase_c *pObj = mChkElem[bgIndex].mObj.get();
-    return info.ChkSafe(mChkElem[bgIndex].mpBgW, pObj ? pObj->unique_ID : 0);
+    return info.ChkSafe(mChkElem[bgIndex].mpBgW, pObj ? pObj->mID : 0);
 }
 
 bool cBgS::GetTriPla(cBgS_PolyInfo const &info, cM3dGPla *pPlane) const {
@@ -431,7 +431,7 @@ void dBgS::ClrMoveFlag() {
     for (cBgS_ChkElm *chkElm = mChkElem; chkElm < end; chkElm++) {
         if (chkElm->mpBgW) {
             if (chkElm->mObj.get()) {
-                chkElm->mpBgW->CalcDiffShapeAngleY(chkElm->mObj.get()->rotation.y);
+                chkElm->mpBgW->CalcDiffShapeAngleY(chkElm->mObj.get()->mRotation.y);
             }
             chkElm->mpBgW->OffMoveFlag();
         }
@@ -446,7 +446,7 @@ bool dBgS::Regist(dBgW_Base *pBg, dAcObjBase_c *pObj) {
         return false;
     }
     if (pObj && pBg->ChkMoveBg()) {
-        pBg->SetOldShapeAngleY(pObj->rotation.y);
+        pBg->SetOldShapeAngleY(pObj->mRotation.y);
         pBg->SetRoomId(pObj->getRoomId());
     }
     return cBgS::Regist(pBg, pObj);
@@ -771,7 +771,7 @@ f32 dBgS::RoofChk(dBgS_RoofChk *pRoof) {
 
             if (pBgW->RoofChk(pRoof)) {
                 const dAcObjBase_c *pObj = chkElm->mObj.get();
-                pRoof->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->unique_ID : 0);
+                pRoof->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->mID : 0);
             }
         }
         ++i;
@@ -799,7 +799,7 @@ bool dBgS::SplGrpChk(dBgS_SplGrpChk *pSplGrp) {
                 if (pBgW->SplGrpChk(pSplGrp)) {
                     ret = true;
                     const dAcObjBase_c *pObj = chkElm->mObj.get();
-                    pSplGrp->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->unique_ID : 0);
+                    pSplGrp->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->mID : 0);
                     pSplGrp->OnFind();
                 }
             }
@@ -830,10 +830,10 @@ bool dBgS::SphChk(dBgS_SphChk *pSph, void *p1) {
             const dAcObjBase_c *pObj = chkElm->mObj.get();
             dBgW_Base *pBgW = chkElm->mpBgW;
 
-            pSph->SetInfo(i, pBgW, pObj ? pObj->unique_ID : 0);
+            pSph->SetInfo(i, pBgW, pObj ? pObj->mID : 0);
             if (pBgW->SphChk(pSph, p1)) {
                 const dAcObjBase_c *pObj = chkElm->mObj.get();
-                pSph->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->unique_ID : 0);
+                pSph->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->mID : 0);
                 ret = true;
             }
         }
@@ -870,9 +870,11 @@ void dBgS::MoveBgTransPos(
     dBgW_Base *pBg = mChkElem[bgIdx].mpBgW;
     if (pBg && ChkPolySafe(info)) {
         const dAcObjBase_c *pObj = GetInstance()->GetActorPointer(info);
-        if ((!pObj || (pObj->baseProperties & 4)) && pBg->ChkMoveFlag()) {
-            // TODO -> Check TransPos Params (void may be dAcObjBase_c)
-            pBg->TransPos(info, mChkElem[bgIdx].mObj.get(), param_1, i_pos, i_angle, i_shapeAngle);
+        if (pObj == nullptr || pObj->checkBaseProperty(dBase_c::BASE_PROP_0x4)) {
+            if (pBg->ChkMoveFlag()) {
+                // TODO -> Check TransPos Params (void may be dAcObjBase_c)
+                pBg->TransPos(info, mChkElem[bgIdx].mObj.get(), param_1, i_pos, i_angle, i_shapeAngle);
+            }
         }
     }
 }
@@ -1007,11 +1009,11 @@ void dBgS::UpdateScrollTex() {
     MapSrollText_t *scrollTex =
         (MapSrollText_t *)OarcManager::GetInstance()->getData(common_folder, MAP_SCROLL_TEX_FILE);
     for (int i = 0; i < 5; ++i, ++scrollTex) {
-        if (++mField_0x3864[i] >= scrollTex->mField_0x0E) {
-            mField_0x3864[i] = 0;
+        if (++field_0x3864[i] >= scrollTex->field_0x0E) {
+            field_0x3864[i] = 0;
         }
-        if (++mField_0x3878[i] >= scrollTex->mField_0x10) {
-            mField_0x3878[i] = 0;
+        if (++field_0x3878[i] >= scrollTex->field_0x10) {
+            field_0x3878[i] = 0;
         }
     }
 }
@@ -1183,7 +1185,7 @@ void dBgS::SetLightingCode(dAcObjBase_c *pObj, const cBgS_PolyInfo &info) {
 
 f32 dBgS::SetLightingCode(dAcObjBase_c *pObj, f32 height) {
     dBgS_ObjGndChk objGndChk;
-    mVec3_c pos = pObj->GetPosition();
+    mVec3_c pos = pObj->getPosition();
     pos.y += height;
     objGndChk.SetPos(&pos);
     f32 gndCross = GroundCross(&objGndChk);

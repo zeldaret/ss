@@ -15,34 +15,34 @@ STATE_DEFINE(dTgSw_c, Off);
 static const u8 D201_BossKeyPuzzleFlags[] = {0x25, 0x2E, 0x49, 0x4B};
 
 int dTgSw_c::create() {
-    mFirst2 = params & 0b11;
+    mFirst2 = mParams & 0b11;
     if (mFirst2 >= 2) {
         mFirst2 = 0;
     }
-    mSecond2 = (params >> 2) & 0b11;
+    mSecond2 = (mParams >> 2) & 0b11;
     if (mSecond2 >= 3) {
         mSecond2 = 0;
     }
-    mThird2 = (params >> 4) & 0b11;
+    mThird2 = (mParams >> 4) & 0b11;
     if (mThird2 >= 3) {
         mThird2 = 0;
     }
-    mSetSceneFlagId = (params >> 6) & 0xFF;
-    mTrigSceneFlagIdBegin = (params >> 14) & 0xFF;
-    mNumSwitchesToWin = (params >> 22) & 0x3F;
+    mSetSceneFlagId = (mParams >> 6) & 0xFF;
+    mTrigSceneFlagIdBegin = (mParams >> 14) & 0xFF;
+    mNumSwitchesToWin = (mParams >> 22) & 0x3F;
     mTrigSceneFlagIdEnd = mNumSwitchesToWin;
-    if ((int)(params >> 0x1C) < 0xF) {
-        mTrigSceneFlagIdEnd += (params >> 0x1C);
+    if ((int)(mParams >> 0x1C) < 0xF) {
+        mTrigSceneFlagIdEnd += (mParams >> 0x1C);
     }
 
     if (dScGame_c::isCurrentStage("D201")) {
-        if (roomid == 4) {
-            if (!SceneflagManager::sInstance->checkBoolFlag(roomid, 0x2F)) {
-                SceneflagManager::sInstance->unsetFlag(roomid, mSetSceneFlagId);
+        if (mRoomID == 4) {
+            if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, 0x2F)) {
+                SceneflagManager::sInstance->unsetFlag(mRoomID, mSetSceneFlagId);
                 resetAllSwitches();
                 const u8 *flag = D201_BossKeyPuzzleFlags;
                 for (u32 i = 0; i < 4; i++) {
-                    SceneflagManager::sInstance->unsetFlag(roomid, *flag);
+                    SceneflagManager::sInstance->unsetFlag(mRoomID, *flag);
                     flag++;
                 }
             }
@@ -50,7 +50,7 @@ int dTgSw_c::create() {
         }
     }
 
-    bool b = SceneflagManager::sInstance->checkUncommittedFlag(roomid, mSetSceneFlagId);
+    bool b = SceneflagManager::sInstance->checkUncommittedFlag(mRoomID, mSetSceneFlagId);
     mStateMgr.changeState(!b ? StateID_OnWait : StateID_OffWait);
     return SUCCEEDED;
 }
@@ -70,34 +70,34 @@ int dTgSw_c::draw() {
 
 void dTgSw_c::resetAllSwitches() {
     for (int i = mTrigSceneFlagIdBegin; i < mTrigSceneFlagIdBegin + mTrigSceneFlagIdEnd; i++) {
-        SceneflagManager::sInstance->unsetFlag(roomid, i);
+        SceneflagManager::sInstance->unsetFlag(mRoomID, i);
     }
     mCurrentFlagPosition = 0;
 }
 
 void dTgSw_c::resetSwitchesAfterCurrent() {
     for (int i = mTrigSceneFlagIdBegin + mCurrentFlagPosition; i < mTrigSceneFlagIdBegin + mTrigSceneFlagIdEnd; i++) {
-        SceneflagManager::sInstance->unsetFlag(roomid, i);
+        SceneflagManager::sInstance->unsetFlag(mRoomID, i);
     }
 }
 
 bool dTgSw_c::isPuzzleSolved() {
     for (int i = 0; i < mCurrentFlagPosition; i++) {
-        if (!SceneflagManager::sInstance->checkBoolFlag(roomid, mTrigSceneFlagIdBegin + i)) {
+        if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, mTrigSceneFlagIdBegin + i)) {
             mCurrentFlagPosition = i;
             field_0x192 = 1;
         }
     }
 
     if (field_0x192 == 0 &&
-        SceneflagManager::sInstance->checkBoolFlag(roomid, mTrigSceneFlagIdBegin + mCurrentFlagPosition)) {
+        SceneflagManager::sInstance->checkBoolFlag(mRoomID, mTrigSceneFlagIdBegin + mCurrentFlagPosition)) {
         mCurrentFlagPosition++;
     }
 
     s32 numCorrectFlags = mCurrentFlagPosition;
     for (int i = mCurrentFlagPosition; i < mTrigSceneFlagIdEnd; i++) {
         int t = i < mNumSwitchesToWin ? i : mNumSwitchesToWin;
-        if (SceneflagManager::sInstance->checkBoolFlag(roomid, mTrigSceneFlagIdBegin + t)) {
+        if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mTrigSceneFlagIdBegin + t)) {
             field_0x192 = 1;
             numCorrectFlags++;
         }
@@ -107,11 +107,11 @@ bool dTgSw_c::isPuzzleSolved() {
 }
 
 bool dTgSw_c::isLmfBossKeyPuzzle() {
-    return dScGame_c::isCurrentStage("D300_1") && roomid == 8 && mSetSceneFlagId == 0x1C;
+    return dScGame_c::isCurrentStage("D300_1") && mRoomID == 8 && mSetSceneFlagId == 0x1C;
 }
 
 void dTgSw_c::initializeState_OnWait() {
-    SceneflagManager::sInstance->unsetFlag(roomid, mSetSceneFlagId);
+    SceneflagManager::sInstance->unsetFlag(mRoomID, mSetSceneFlagId);
     field_0x192 = 0;
 }
 void dTgSw_c::executeState_OnWait() {
@@ -150,14 +150,14 @@ void dTgSw_c::executeState_On() {
 void dTgSw_c::finalizeState_On() {}
 
 void dTgSw_c::initializeState_OffWait() {
-    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, mSetSceneFlagId) && isLmfBossKeyPuzzle()) {
-        SceneflagManager::sInstance->setFlag(roomid, 0xC0);
+    if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSetSceneFlagId) && isLmfBossKeyPuzzle()) {
+        SceneflagManager::sInstance->setFlag(mRoomID, 0xC0);
     }
-    SceneflagManager::sInstance->setFlag(roomid, mSetSceneFlagId);
+    SceneflagManager::sInstance->setFlag(mRoomID, mSetSceneFlagId);
 }
 void dTgSw_c::executeState_OffWait() {
     if (mFirst2 == 1 && !isPuzzleSolved()) {
-        SceneflagManager::sInstance->unsetFlag(roomid, mSetSceneFlagId);
+        SceneflagManager::sInstance->unsetFlag(mRoomID, mSetSceneFlagId);
         mStateMgr.changeState(StateID_Off);
     }
 }
@@ -180,7 +180,7 @@ void dTgSw_c::executeState_Off() {
         }
 
         if (isLmfBossKeyPuzzle()) {
-            SceneflagManager::sInstance->setFlag(roomid, 0xC1);
+            SceneflagManager::sInstance->setFlag(mRoomID, 0xC1);
         }
         mStateMgr.changeState(StateID_OnWait);
     }

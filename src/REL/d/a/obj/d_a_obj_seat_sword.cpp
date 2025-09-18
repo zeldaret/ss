@@ -45,23 +45,23 @@ const Vec dAcOSeatSword_c::sEffectPos = {-20.f, 260.f, 30.f};
 bool dAcOSeatSword_c::createHeap() {
     if (mSubtype == 0) {
         const char *goddess_sword = daPlayerActBase_c::getSwordName(1);
-        mRes = dAcPy_c::getItemResFile(goddess_sword, heap_allocator);
-        TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(goddess_sword), &heap_allocator, 0x120, 1, nullptr));
+        mRes = dAcPy_c::getItemResFile(goddess_sword, mAllocator);
+        TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(goddess_sword), &mAllocator, 0x120, 1, nullptr));
     } else if (mSubtype == 1) {
         mRes = dAcPy_c::GetLink()->getSwordResFile();
         const char *sword_name = daPlayerActBase_c::getSwordName(daPlayerActBase_c::sCurrentSword);
-        TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(sword_name), &heap_allocator, 0x120, 1, nullptr));
+        TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(sword_name), &mAllocator, 0x120, 1, nullptr));
     }
 
     nw4r::g3d::ResFile mPedRes(getOarcResFile(SwordSeatNames[mSubtype]));
-    TRY_CREATE(mPedestalMdl.create(mPedRes.GetResMdl(SwordSeatNames[mSubtype]), &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mPedestalMdl.create(mPedRes.GetResMdl(SwordSeatNames[mSubtype]), &mAllocator, 0x120, 1, nullptr));
     void *dzb = getOarcDZB(SwordSeatNames[mSubtype], SwordSeatNames[mSubtype]);
     void *plc = getOarcPLC(SwordSeatNames[mSubtype], SwordSeatNames[mSubtype]);
     updateMatrix();
     mSwordMtx.copyFrom(mWorldMtx);
     TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, 1, &mWorldMtx, &mScale));
     if (mSubtype == 1) {
-        TRY_CREATE(mPedestalMdl_s.create(mPedRes.GetResMdl("SwordGrd_s"), &heap_allocator, 0x120, 1, nullptr));
+        TRY_CREATE(mPedestalMdl_s.create(mPedRes.GetResMdl("SwordGrd_s"), &mAllocator, 0x120, 1, nullptr));
     }
 
     return true;
@@ -86,11 +86,11 @@ int dAcOSeatSword_c::create() {
         mPedestalMdl_s.setPriorityDraw(0x22, 0x9);
     }
 
-    forwardAccel = 0.f;
-    forwardMaxSpeed = -40.f;
+    mAcceleration = 0.f;
+    mMaxSpeed = -40.f;
 
     if (mSubtype == 1) {
-        mField_0x7E8 = l_inGroundRot;
+        field_0x7E8 = l_inGroundRot;
     }
     updateSwordMdl();
     mEff.init(this);
@@ -102,7 +102,7 @@ int dAcOSeatSword_c::create() {
         mStateMgr.changeState(StateID_Wait);
     }
 
-    boundingBox.Set(mVec3_c(-75.f, -10.f, -75.f), mVec3_c(75.f, 200.f, 75.f));
+    mBoundingBox.Set(mVec3_c(-75.f, -10.f, -75.f), mVec3_c(75.f, 200.f, 75.f));
 
     return SUCCEEDED;
 }
@@ -116,7 +116,7 @@ int dAcOSeatSword_c::actorExecute() {
 
     if (mStateMgr.isState(StateID_Wait)) {
         actorExecuteCommon();
-        mCyl.SetC(position);
+        mCyl.SetC(mPosition);
         dCcS::GetInstance()->Set(&mCyl);
     }
 
@@ -125,7 +125,7 @@ int dAcOSeatSword_c::actorExecute() {
 
 int dAcOSeatSword_c::actorExecuteInEvent() {
     if (mbNoSword) {
-        sLib::chase(&mField_0x7E4, 255.f, 8.f);
+        sLib::chase(&field_0x7E4, 255.f, 8.f);
     }
     actorExecuteCommon();
 
@@ -153,26 +153,26 @@ int dAcOSeatSword_c::actorExecuteInEvent() {
 
 void dAcOSeatSword_c::doInteraction(s32 param0) {
     if (param0 == 5) {
-        mField_0x7EA = true;
+        field_0x7EA = true;
         Event evt((char *)sEventName, 0x190, 0x100001, nullptr, nullptr);
         mEvent.scheduleEvent(evt, 0);
     } else {
-        mField_0x7EA = false;
+        field_0x7EA = false;
     }
 }
 
 u32 someAng = 0x8000;
 void dAcOSeatSword_c::registerInEvent() {
     static const u32 rodata_stuff = {0};
-    if (mField_0x7EA == 1 && EventManager::isCurrentEvent(sEventName)) {
+    if (field_0x7EA == 1 && EventManager::isCurrentEvent(sEventName)) {
         dAcPy_c *player = dAcPy_c::LINK;
         mVec3_c vec = mVec3_c::Ez * 78.f;
-        mAng3_c ang = rotation;
+        mAng3_c ang = mRotation;
         ang.y += someAng;
-        vec.rotY(rotation.y);
-        vec += position;
+        vec.rotY(mRotation.y);
+        vec += mPosition;
         player->setPosRot(&vec, &ang, 0, 1, 0);
-        mField_0x7E8.set(0);
+        field_0x7E8.set(0);
         updateSwordMdl();
     }
 }
@@ -223,13 +223,13 @@ void dAcOSeatSword_c::actorExecuteCommon() {
     mEffPos.y = sEffectPos.y;
     mEffPos.z = sEffectPos.z;
 
-    mEffPos.rotY(player->rotation.y);
+    mEffPos.rotY(player->mRotation.y);
 
-    mEffPos += player->position;
-    mEffPos.y = position.y;
+    mEffPos += player->mPosition;
+    mEffPos.y = mPosition.y;
 
-    mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_76_, mEffPos, &rotation, &mScale, nullptr, nullptr);
-    mEff.setGlobalAlpha(mField_0x7E4);
+    mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_76_, mEffPos, &mRotation, &mScale, nullptr, nullptr);
+    mEff.setGlobalAlpha(field_0x7E4);
 }
 
 void dAcOSeatSword_c::updateSwordMdl() {
@@ -237,7 +237,7 @@ void dAcOSeatSword_c::updateSwordMdl() {
     mSwordMtx.copyFrom(mWorldMtx);
 
     if (mSubtype == 1) {
-        mSwordMtx.XrotM(mField_0x7E8);
+        mSwordMtx.XrotM(field_0x7E8);
     }
 
     mMtx_c mtx;

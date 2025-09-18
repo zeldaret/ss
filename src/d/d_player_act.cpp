@@ -78,13 +78,13 @@ void daPlayerActBase_c::setPosRot(const mVec3_c *pos, const mAng3_c *rot, bool f
     if (isInEvent() || force) {
         mStts.ClrCcMove();
         if (pos != nullptr) {
-            position = *pos;
-            mOldPosition = position;
-            velocity.y = 0.0f;
+            mPosition = *pos;
+            mOldPosition = mPosition;
+            mVelocity.y = 0.0f;
         }
         if (rot != nullptr) {
-            rotation = *rot;
-            angle.y = rotation.y;
+            mRotation = *rot;
+            mAngle.y = mRotation.y;
         }
     }
 }

@@ -25,7 +25,7 @@ bool dAcORailPost::createHeap() {
         return false;
     }
 
-    if (!mMdl.create(mdl, &heap_allocator, 0x20, 1, nullptr)) {
+    if (!mMdl.create(mdl, &mAllocator, 0x20, 1, nullptr)) {
         return false;
     }
 
@@ -46,7 +46,7 @@ int dAcORailPost::create() {
     CREATE_ALLOCATOR(dAcORailPost);
 
     mMdl.getBounds(&boundsMin, &boundsMax);
-    boundingBox.Set(boundsMin, boundsMax);
+    mBoundingBox.Set(boundsMin, boundsMax);
     mCullingDistance = 25000.0f;
 
     return SUCCEEDED;

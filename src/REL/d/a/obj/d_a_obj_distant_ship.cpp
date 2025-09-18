@@ -12,7 +12,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_DIS_SHIP, dAcOdistantShip_c, fProfile::OBJ_DIS_SHIP, 0
 bool dAcOdistantShip_c::createHeap() {
     const char *modelName = getModelName();
     mBrres = (nw4r::g3d::ResFile)CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres");
-    TRY_CREATE(mModel.create(mBrres.GetResMdl(modelName), &heap_allocator, 0x120, 1, 0));
+    TRY_CREATE(mModel.create(mBrres.GetResMdl(modelName), &mAllocator, 0x120, 1, 0));
     return SUCCEEDED;
 }
 
@@ -21,7 +21,7 @@ int dAcOdistantShip_c::create() {
     u8 flag = getFromParams(0, 0xFF);
     mSubtype = getFromParams(8, 0xF);
 
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, flag)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag)) {
         mIsVisible = true;
     }
 
@@ -29,7 +29,7 @@ int dAcOdistantShip_c::create() {
         CREATE_ALLOCATOR(dAcOdistantShip_c);
         updateMatrix();
         mModel.setLocalMtx(mWorldMtx);
-        boundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
+        mBoundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
     }
     return SUCCEEDED;
 }

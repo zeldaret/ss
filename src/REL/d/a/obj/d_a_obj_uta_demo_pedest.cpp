@@ -28,7 +28,7 @@ bool dAcOutaDemoPedest_c::createHeap() {
     dStage_c::bindStageResToFile(&mRes);
     dStage_c::bindSkyCmnToResFile(&mRes);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl(sMdlNames[mModelType]);
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120));
 
     return true;
 }
@@ -41,7 +41,7 @@ int dAcOutaDemoPedest_c::create() {
     mMdl.setPriorityDraw(0x1C, 9);
     mVec3_c l, u;
     mMdl.getBounds(&l, &u);
-    boundingBox.Set(l, u);
+    mBoundingBox.Set(l, u);
 
     return SUCCEEDED;
 }

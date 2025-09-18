@@ -24,11 +24,11 @@ bool dAcOF302Light_c::createHeap() {
     void *data = CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("Teniobj_0");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120));
 
     for (s32 i = 0; i < 2; i++) {
         nw4r::g3d::ResAnmClr resAnmClr = mResFile.GetResAnmClr(sResAnmClrNames[i]);
-        TRY_CREATE(mAnmMatClr[i].create(mdl, resAnmClr, &heap_allocator, nullptr, 1));
+        TRY_CREATE(mAnmMatClr[i].create(mdl, resAnmClr, &mAllocator, nullptr, 1));
         mAnmMatClr[i].setRate(0.f, 0);
     }
     return true;
@@ -37,16 +37,16 @@ bool dAcOF302Light_c::createHeap() {
 int dAcOF302Light_c::actorCreate() {
     field_0x440 = getFromParams(0, 0xFF);
     CREATE_ALLOCATOR(dAcOF302Light_c);
-    forwardAccel = 0.f;
-    forwardMaxSpeed = -40.f;
+    mAcceleration = 0.f;
+    mMaxSpeed = -40.f;
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
-    if (field_0x440 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, field_0x440)) {
+    if (field_0x440 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, field_0x440)) {
         mStateMgr.changeState(StateID_Wait);
     } else {
         mStateMgr.changeState(StateID_SwitchOn);
     }
-    boundingBox.Set(mVec3_c(-660.f, -40.f, -660.f), mVec3_c(660.f, 0.f, 660.f));
+    mBoundingBox.Set(mVec3_c(-660.f, -40.f, -660.f), mVec3_c(660.f, 0.f, 660.f));
     return SUCCEEDED;
 }
 
@@ -106,8 +106,8 @@ void dAcOF302Light_c::finalizeState_Wait() {}
 
 void dAcOF302Light_c::initializeState_SwitchOn() {
     mMdl.setAnm(mAnmMatClr[1]);
-    mTimeArea.check(roomid, position, 0, 30.f, 0.1f);
-    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position)) {
+    mTimeArea.check(mRoomID, mPosition, 0, 30.f, 0.1f);
+    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, mPosition)) {
         mAnmMatClr[1].setRate(1.f, 0);
         mAnmMatClr[1].setFrame(40.f, 0);
     } else {
@@ -116,8 +116,8 @@ void dAcOF302Light_c::initializeState_SwitchOn() {
 }
 
 void dAcOF302Light_c::executeState_SwitchOn() {
-    mTimeArea.check(roomid, position, 0, 30.f, 0.1f);
-    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position)) {
+    mTimeArea.check(mRoomID, mPosition, 0, 30.f, 0.1f);
+    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, mPosition)) {
         mAnmMatClr[1].setRate(1.f, 0);
     } else {
         if (mAnmMatClr[1].getFrame(0) == 0.f) {

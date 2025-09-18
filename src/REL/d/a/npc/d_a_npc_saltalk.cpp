@@ -36,15 +36,15 @@ int dAcNpcSltk_c::actorCreate() {
         field_0x750 = 0xFF;
     }
 
-    mAreaIndex = rotation.z & 0xFF;
+    mAreaIndex = mRotation.z & 0xFF;
     if (mAreaIndex < 0xFF) {
-        mpArea = getAreaForIndexInRoom(mAreaIndex, roomid);
+        mpArea = getAreaForIndexInRoom(mAreaIndex, mRoomID);
         if (mpArea == nullptr) {
             return FAILED;
         }
     }
 
-    rotation.set(0, 0, 0);
+    mRotation.set(0, 0, 0);
 
     field_0x758 = getParam2() * 100;
     field_0x75C = getParam3() * 100;
@@ -53,7 +53,7 @@ int dAcNpcSltk_c::actorCreate() {
 
     field_0x76C = 0;
 
-    boundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
+    mBoundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
 
     return SUCCEEDED;
 }
@@ -70,10 +70,10 @@ int dAcNpcSltk_c::actorPostCreate() {
         cursor = static_cast<dAcNpcSlb2_c *>(fManager_c::searchBaseByProfName(fProfile::NPC_SLB2, cursor));
         if (cursor != nullptr) {
             if (cursor->acNpc_vt_0x1F4()) {
-                f32 thisDist = cursor->getSquareDistanceTo(position);
+                f32 thisDist = cursor->getSquareDistanceTo(mPosition);
                 if (thisDist < closestDistance) {
                     closest = cursor;
-                    closestDistance = cursor->getSquareDistanceTo(position);
+                    closestDistance = cursor->getSquareDistanceTo(mPosition);
                 }
             }
         }
@@ -99,20 +99,20 @@ int dAcNpcSltk_c::draw() {
 }
 
 int dAcNpcSltk_c::getParam0_0() const {
-    return params & 0xFF;
+    return mParams & 0xFF;
 }
 int dAcNpcSltk_c::getParam0_1() const {
-    return params & 0xFF;
+    return mParams & 0xFF;
 }
 
 int dAcNpcSltk_c::getParam1() const {
-    return (params >> 8) & 0xFF;
+    return (mParams >> 8) & 0xFF;
 }
 int dAcNpcSltk_c::getParam2() const {
-    return (params >> 16) & 0xFF;
+    return (mParams >> 16) & 0xFF;
 }
 int dAcNpcSltk_c::getParam3() const {
-    return (params >> 24) & 0xFF;
+    return (mParams >> 24) & 0xFF;
 }
 int dAcNpcSltk_c::getParam4() const {
     return getParams2Lower() & 0xF;
@@ -130,15 +130,15 @@ bool dAcNpcSltk_c::isSomething1() const {
 
 bool dAcNpcSltk_c::checkSomething(mVec3_c pos) const {
     if (mAreaIndex != 0xFF) {
-        return checkPosInArea(mAreaIndex, roomid, pos, &mpArea) == 1;
+        return checkPosInArea(mAreaIndex, mRoomID, pos, &mpArea) == 1;
     } else {
-        mVec3_c dist = pos - position;
+        mVec3_c dist = pos - mPosition;
         if (dist.squareMagXZ() <= field_0x758 * field_0x758) {
-            f32 fDist = field_0x75C + position.y;
-            f32 fDist2 = position.y;
+            f32 fDist = field_0x75C + mPosition.y;
+            f32 fDist2 = mPosition.y;
             if (fDist <= fDist2) {
                 fDist2 = fDist;
-                fDist = position.y;
+                fDist = mPosition.y;
             }
             return pos.y <= fDist && pos.y >= fDist2;
         } else {
@@ -156,7 +156,7 @@ void dAcNpcSltk_c::executeState_Wait() {
     dAcNpcSlb2_c *slb = mRef.get();
     if (slb != nullptr) {
         if (isSomething0()) {
-            checkResult = checkSomething(link->position);
+            checkResult = checkSomething(link->mPosition);
             if (field_0x76C != 0) {
                 field_0x76C = checkResult;
             } else if (!EventManager::isInEvent() && !slb->fn_61_6A10() && checkResult) {
@@ -171,11 +171,11 @@ void dAcNpcSltk_c::executeState_Wait() {
 
             if (!checkResult) {
                 if (!link->checkActionFlags(0xC70852) || link->checkActionFlags(0x40000)) {
-                    mLinkPos = link->position;
+                    mLinkPos = link->mPosition;
                 }
             }
         } else if (isSomething1()) {
-            checkResult = checkSomething(slb->position);
+            checkResult = checkSomething(slb->mPosition);
             if (field_0x76C == 0 && checkResult) {
                 slb->fn_61_58C0(field_0x74C, field_0x750);
             }

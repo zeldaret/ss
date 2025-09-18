@@ -10,7 +10,7 @@ STATE_DEFINE(dAcOstageCover_c, Wait);
 bool dAcOstageCover_c::createHeap() {
     mBrres = nw4r::g3d::ResFile(CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres"));
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("StageCover");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120));
     return true;
 }
 
@@ -19,7 +19,7 @@ int dAcOstageCover_c::create() {
 
     mStateMgr.changeState(StateID_Wait);
     mModel.setPriorityDraw(0x1C, 9);
-    boundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
+    mBoundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
     return SUCCEEDED;
 }
 

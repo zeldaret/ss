@@ -16,7 +16,7 @@ int dTgGenkiDwsTgt_c::create() {
 
     u16 flag = getSceneFlagFromParams();
     if (flag < 0xFF) {
-        bool flagSet = SceneflagManager::sInstance->checkFlag(roomid, flag);
+        bool flagSet = SceneflagManager::sInstance->checkFlag(mRoomID, flag);
         if (flagSet) {
             return FAILED;
         }
@@ -24,9 +24,9 @@ int dTgGenkiDwsTgt_c::create() {
         return FAILED;
     }
 
-    int roomId_tmp = roomid;
+    int roomId_tmp = mRoomID;
     if (addActorToRoom(-1)) {
-        roomid = roomId_tmp;
+        mRoomID = roomId_tmp;
         changeLoadedEntitiesWithSet();
     } else {
         return FAILED;
@@ -46,12 +46,12 @@ int dTgGenkiDwsTgt_c::doDelete() {
 }
 
 int dTgGenkiDwsTgt_c::actorExecute() {
-    bool flag = SceneflagManager::sInstance->checkFlag(roomid, getSceneFlagFromParams());
+    bool flag = SceneflagManager::sInstance->checkFlag(mRoomID, getSceneFlagFromParams());
     if (flag) {
         deleteRequest();
     } else {
         if (dStage_c::GetInstance() != nullptr) {
-            dRoom_c *room = dStage_c::GetInstance()->getRoom(roomid);
+            dRoom_c *room = dStage_c::GetInstance()->getRoom(mRoomID);
             if (room != nullptr) {
                 if (room->checkFlag(8)) {
                     mDowsingTarget.doRegister();
@@ -65,5 +65,5 @@ int dTgGenkiDwsTgt_c::actorExecute() {
 }
 
 u16 dTgGenkiDwsTgt_c::getSceneFlagFromParams() {
-    return params & 0xFF;
+    return mParams & 0xFF;
 }

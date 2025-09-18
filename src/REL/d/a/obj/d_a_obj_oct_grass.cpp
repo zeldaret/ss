@@ -35,25 +35,25 @@ bool dAcOOctGrass_c::createHeap() {
         dStage_c::bindSkyCmnToResFile(&mResFile);
     }
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(GRASS_CUT_MODELS[typeIdx]);
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     return true;
 }
 
 int dAcOOctGrass_c::create() {
     CREATE_ALLOCATOR(dAcOOctGrass_c);
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = -40.0f;
-    if ((params & 0xF) != 0) {
+    mAcceleration = 0.0f;
+    mMaxSpeed = -40.0f;
+    if ((mParams & 0xF) != 0) {
         mMdl.setPriorityDraw(0x1C, 9);
     }
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     spawnOcGrsL();
-    poscopy2 = position;
-    poscopy3 = position;
-    poscopy3.y += 20.0f;
+    mPositionCopy2 = mPosition;
+    mPositionCopy3 = mPosition;
+    mPositionCopy3.y += 20.0f;
     mStateMgr.changeState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 100.0f, 50.0f));
+    mBoundingBox.Set(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 100.0f, 50.0f));
     return SUCCEEDED;
 }
 
@@ -81,6 +81,6 @@ void dAcOOctGrass_c::spawnOcGrsL() {
     }
 
     dAcObjBase_c::create(
-        "OcGrsL", getRoomId(), type & 0xF, &position, nullptr, nullptr, getParams2_ignoreLower(), 0xFFFF, viewclip_index
+        "OcGrsL", getRoomId(), type & 0xF, &mPosition, nullptr, nullptr, getParams2_ignoreLower(), 0xFFFF, mViewClipIdx
     );
 }

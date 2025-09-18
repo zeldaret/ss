@@ -14,7 +14,7 @@ bool dAcOPoolCock_c::createHeap() {
     dStage_c::bindStageResToFile(&mBrres);
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("PoolCockD101");
     for (int i = 0; i < 2; i++) {
-        TRY_CREATE(mModels[i].create(mdl, &heap_allocator, 0x120));
+        TRY_CREATE(mModels[i].create(mdl, &mAllocator, 0x120));
     }
     return true;
 }
@@ -22,19 +22,19 @@ bool dAcOPoolCock_c::createHeap() {
 int dAcOPoolCock_c::actorCreate() {
     CREATE_ALLOCATOR(dAcOPoolCock_c);
 
-    forwardAccel = -0.0f;
-    forwardMaxSpeed = -40.0f;
-    mOpenSceneflag = params & 0xFF;
+    mAcceleration = -0.0f;
+    mMaxSpeed = -40.0f;
+    mOpenSceneflag = mParams & 0xFF;
     mOpenDirection = mVec3_c::Ez;
-    mOpenDirection.rotY(rotation.y);
+    mOpenDirection.rotY(mRotation.y);
 
-    if (mOpenSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mOpenSceneflag)) {
+    if (mOpenSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOpenSceneflag)) {
         mOpenProgress = 400.0f;
     }
 
     mStateMgr.changeState(StateID_Wait);
 
-    boundingBox.Set(mVec3_c(-300.0f, -100.0f, -300.0f), mVec3_c(300.0f, 100.0f, 300.0f));
+    mBoundingBox.Set(mVec3_c(-300.0f, -100.0f, -300.0f), mVec3_c(300.0f, 100.0f, 300.0f));
     return SUCCEEDED;
 }
 
@@ -49,8 +49,8 @@ int dAcOPoolCock_c::doDelete() {
 int dAcOPoolCock_c::actorExecute() {
     mStateMgr.executeState();
     calcVelocity();
-    position += velocity;
-    position += mStts.mCcMove;
+    mPosition += mVelocity;
+    mPosition += mStts.mCcMove;
     updateMatrix();
 
     mMtx_c mdl1Transform(mWorldMtx);
@@ -85,7 +85,7 @@ int dAcOPoolCock_c::draw() {
 void dAcOPoolCock_c::initializeState_Wait() {}
 
 void dAcOPoolCock_c::executeState_Wait() {
-    if (mOpenSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mOpenSceneflag)) {
+    if (mOpenSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOpenSceneflag)) {
         sLib::chase(&mOpenProgress, 400.0f, 5.0f);
         if (!mHasActivatedVortex) {
             dAcOVortex_c *vortex = (dAcOVortex_c *)fManager_c::searchBaseByProfName(fProfile::OBJ_VORTEX, nullptr);

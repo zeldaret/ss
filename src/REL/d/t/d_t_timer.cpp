@@ -2,7 +2,6 @@
 
 #include "d/flag/sceneflag_manager.h"
 
-
 SPECIAL_ACTOR_PROFILE(TAG_TIMER, dTgTimer_c, fProfile::TAG_TIMER, 0x029F, 0, 0);
 
 // TODO counter abstraction
@@ -31,10 +30,10 @@ int dTgTimer_c::create() {
 }
 
 int dTgTimer_c::actorExecute() {
-    bool getFlag = SceneflagManager::sInstance->checkFlag(roomid, getCheckSceneflag());
+    bool getFlag = SceneflagManager::sInstance->checkFlag(mRoomID, getCheckSceneflag());
     if (getFlag) {
         if (checkShouldTrigger()) {
-            SceneflagManager::sInstance->setFlag(roomid, getSetSceneflag());
+            SceneflagManager::sInstance->setFlag(mRoomID, getSetSceneflag());
         } else {
             incrementTimer();
         }
@@ -45,19 +44,19 @@ int dTgTimer_c::actorExecute() {
 }
 
 int dTgTimer_c::getSubtypeFromParams() {
-    return params & 0xFF;
+    return mParams & 0xFF;
 }
 
 u16 dTgTimer_c::getTimerFromParams() {
-    return params >> 8 & 0xFF;
+    return mParams >> 8 & 0xFF;
 }
 
 u16 dTgTimer_c::getCheckSceneflag() {
-    return params >> 0x10 & 0xFF;
+    return mParams >> 0x10 & 0xFF;
 }
 
 u16 dTgTimer_c::getSetSceneflag() {
-    return params >> 0x18 & 0xFF;
+    return mParams >> 0x18 & 0xFF;
 }
 
 u16 dTgTimer_c::getTimer() {

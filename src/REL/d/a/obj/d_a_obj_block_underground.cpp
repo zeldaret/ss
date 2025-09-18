@@ -87,7 +87,7 @@ bool dAcOBlockUnderground::createHeap() {
         return false;
     }
 
-    if (!mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr)) {
+    if (!mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr)) {
         return false;
     }
 
@@ -117,7 +117,7 @@ bool dAcOBlockUnderground::createHeap() {
 
 int dAcOBlockUnderground::actorCreate() {
     u8 sceneFlag = getSecondSceneFlag();
-    if (sceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, sceneFlag)) {
+    if (sceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, sceneFlag)) {
         return FAILED;
     }
 
@@ -150,12 +150,12 @@ int dAcOBlockUnderground::actorCreate() {
         if (shouldSetCylTgType()) {
             mCyl->mTg.mSrc.mType = getCylTgType();
         }
-        mCyl->SetC(position);
+        mCyl->SetC(mPosition);
     }
     mBgW.Move();
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     return SUCCEEDED;
 }
 
@@ -172,25 +172,25 @@ int dAcOBlockUnderground::actorExecute() {
     if (hasCyl()) {
         if (mCyl->ChkTgHit()) {
             if (mUndergroundRef.p_owner != nullptr) {
-                mUndergroundRef.get()->fn_458_9D0(mField_0x57C, mField_0x57E);
+                mUndergroundRef.get()->fn_458_9D0(field_0x57C, field_0x57E);
             }
 
             if (getSubtype() == 1) {
                 spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_461_);
-                dSndSmallEffectMgr_c::GetInstance()->playSoundAtPosition(SE_BlockUg_BROKEN_BOMB, position);
+                dSndSmallEffectMgr_c::GetInstance()->playSoundAtPosition(SE_BlockUg_BROKEN_BOMB, mPosition);
             } else {
                 spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_462_);
-                dSndSmallEffectMgr_c::GetInstance()->playSoundAtPosition(SE_BlockUg_BROKEN_CLAW, position);
+                dSndSmallEffectMgr_c::GetInstance()->playSoundAtPosition(SE_BlockUg_BROKEN_CLAW, mPosition);
             }
 
             u8 firstSceneFlag = getFirstSceneFlag();
             if (firstSceneFlag < 0xFF) {
-                SceneflagManager::sInstance->setFlag(roomid, firstSceneFlag);
+                SceneflagManager::sInstance->setFlag(mRoomID, firstSceneFlag);
             }
 
             u8 secondSceneFlag = getSecondSceneFlag();
             if (secondSceneFlag < 0xFF) {
-                SceneflagManager::sInstance->setFlag(roomid, secondSceneFlag);
+                SceneflagManager::sInstance->setFlag(mRoomID, secondSceneFlag);
             }
 
             deleteRequest();
@@ -217,7 +217,7 @@ bool dAcOBlockUnderground::undergroundRefEquals(dAcOUnderground_c *underground) 
 }
 
 void dAcOBlockUnderground::setBlockUndergroundPosition(mVec3_c *pos) {
-    setPostion(*pos);
+    setPosition(*pos);
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     if (hasCyl()) {
@@ -226,17 +226,17 @@ void dAcOBlockUnderground::setBlockUndergroundPosition(mVec3_c *pos) {
     mBgW.Move();
 }
 
-void dAcOBlockUnderground::fn_459_840(u16 field_0x57C, u16 field_0x57E) {
-    mField_0x57C = field_0x57C;
-    mField_0x57E = field_0x57E;
+void dAcOBlockUnderground::fn_459_840(u16 _field_0x57C, u16 _field_0x57E) {
+    field_0x57C = _field_0x57C;
+    field_0x57E = _field_0x57E;
 }
 
 u16 dAcOBlockUnderground::getField_0x57C() {
-    return mField_0x57C;
+    return field_0x57C;
 }
 
 u16 dAcOBlockUnderground::getField_0x57E() {
-    return mField_0x57E;
+    return field_0x57E;
 }
 
 void dAcOBlockUnderground::registBg() {
@@ -288,6 +288,6 @@ bool dAcOBlockUnderground::hasCyl() {
 }
 
 void dAcOBlockUnderground::spawnEffect(u16 effectResourceId) const {
-    mVec3_c pos(position.x, position.y + 50.f, position.z);
+    mVec3_c pos(mPosition.x, mPosition.y + 50.f, mPosition.z);
     dJEffManager_c::spawnEffect(effectResourceId, pos, nullptr, nullptr, nullptr, nullptr, 0, 0);
 }

@@ -14,23 +14,23 @@ public:
 
 private:
     u8 getSetSceneflag() {
-        return params;
+        return mParams;
     }
 
     u8 getUnsetSceneflag() {
-        return params >> 0x8;
+        return mParams >> 0x8;
     }
 
     u8 getIsPersistent() {
-        return params >> 0x10 & 1;
+        return mParams >> 0x10 & 1;
     }
 
     mAng getSetStoryflag() {
-        return rotation.x & 0x7FF;
+        return mRotation.x & 0x7FF;
     }
 
     mAng getUnsetStoryflag() {
-        return rotation.z & 0x7FF;
+        return mRotation.z & 0x7FF;
     }
 
     mMtx_c area;

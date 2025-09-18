@@ -9,7 +9,7 @@ cBgS_LinChk::~cBgS_LinChk() {}
 void cBgS_LinChk::Ct() {
     mVec3_c set = mVec3_c::Zero;
     mLin.Set(set, set);
-    mField_0x6C = set;
+    field_0x6C = set;
     mPreRoofChk = false;
     mPreWallChk = false;
     mPreGroundChk = false;
@@ -20,7 +20,7 @@ void cBgS_LinChk::Ct() {
 
 void cBgS_LinChk::Set2(const mVec3_c &start, const mVec3_c &end, u32 id) {
     mLin.Set(start, end);
-    mField_0x6C = end;
+    field_0x6C = end;
     mActorId = id;
     mHit = false;
     ClearPi();

@@ -33,23 +33,23 @@ private:
     };
 
     u32 getSceneFlag() {
-        return params & 0xFF;
+        return mParams & 0xFF;
     }
 
     u32 getParam0x08() {
-        return (params >> 8) & 0xFF;
+        return (mParams >> 8) & 0xFF;
     }
 
     s32 getParam0x10() {
-        return (params >> 0x10) & 0xF;
+        return (mParams >> 0x10) & 0xF;
     }
 
     bool getParam0x14() {
-        return (params >> 0x14) & 0x1;
+        return (mParams >> 0x14) & 0x1;
     }
 
     ReactType getReactType() {
-        return (ReactType)(params >> 0x1C);
+        return (ReactType)(mParams >> 0x1C);
     }
 
     void onDelete();

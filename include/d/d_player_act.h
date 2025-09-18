@@ -177,10 +177,10 @@ public:
         return 0;
     }
     /* vt 0x160 */ virtual f32 getYPos() {
-        return position.y;
+        return mPosition.y;
     }
     /* vt 0x164 */ virtual f32 vt_0x164() {
-        return position.y;
+        return mPosition.y;
     }
     /* vt 0x168 */ virtual f32 getCurrentAnimFrame() const {
         return 0.0f;
@@ -195,10 +195,10 @@ public:
         return false;
     }
     /* vt 0x178 */ virtual const mAng3_c &getPointedAngle() const {
-        return rotation;
+        return mRotation;
     }
     /* vt 0x17C */ virtual const mVec3_c &getBellowsPosOrOtherVec3F() const {
-        return position;
+        return mPosition;
     }
     /* vt 0x180 */ virtual void setWindMillPos() {}
     /* vt 0x184 */ virtual bool isOffeset0x435eEqual0x20() {
@@ -228,10 +228,10 @@ public:
         return 0.0f;
     }
     /* vt 0x1A4 */ virtual const mVec3_c &vt_0x1A4() {
-        return poscopy3;
+        return mPositionCopy3;
     }
     /* vt 0x1A8 */ virtual f32 vt_0x1A8() {
-        return yoffset;
+        return mYOffset;
     }
     /* vt 0x1AC */ virtual f32 vt_0x1AC() {
         return 0.0f;
@@ -372,13 +372,13 @@ public:
     }
     /* vt 0x270 */ virtual void triggerExitRelated() {}
     /* vt 0x274 */ virtual mAng vt_0x274() {
-        return rotation.y;
+        return mRotation.y;
     }
     /* vt 0x278 */ virtual const mVec3_c &vt_0x278() const {
-        return position;
+        return mPosition;
     }
     /* vt 0x27C */ virtual const mVec3_c &getSwordPos() const {
-        return position;
+        return mPosition;
     }
     /* vt 0x280 */ virtual UNKWORD vt_0x280() {
         return 0;
@@ -387,7 +387,7 @@ public:
         return false;
     }
     /* vt 0x288 */ virtual const mVec3_c &getBugNetPos() const {
-        return position;
+        return mPosition;
     }
     /* vt 0x28C */ virtual bool isUsingBugnet1() {
         return false;

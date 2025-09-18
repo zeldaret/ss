@@ -12,12 +12,13 @@
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
-#include "toBeSorted/d_path.h"
 #include "toBeSorted/attention.h"
+#include "toBeSorted/d_path.h"
+
 
 class dAcOivyRope_c : public dAcObjBase_c {
 public:
-    dAcOivyRope_c() : mField_0x330(0), mStateMgr(*this, sStateID::null), mStts2(this), mEvent(*this, nullptr) {}
+    dAcOivyRope_c() : field_0x330(0), mStateMgr(*this, sStateID::null), mStts2(this), mEvent(*this, nullptr) {}
     virtual ~dAcOivyRope_c();
 
     virtual int create() override;
@@ -140,7 +141,7 @@ public:
     }
 
 private:
-    /* 0x 330 */ UNKWORD mField_0x330;
+    /* 0x 330 */ UNKWORD field_0x330;
     /* 0x 334 */ m3d::smdl_c mMdlArr[2];
     /* 0x 36C */ dShadowCircle_c mShadow;
     /* 0x 374 */ dCcD_Sph mSph;
@@ -158,91 +159,91 @@ private:
     /* 0x ED0 */ ActorEventRelated mEvent;
     /* 0x F20 */ mVec3_c mTightropeEnd;
     /* 0x F2C */ mVec3_c mTightropeStart;
-    /* 0x F38 */ mVec3_c mField_0xF38;
-    /* 0x F44 */ mVec3_c mField_0xF44;
-    /* 0x F50 */ mVec3_c mField_0xF50;
+    /* 0x F38 */ mVec3_c field_0xF38;
+    /* 0x F44 */ mVec3_c field_0xF44;
+    /* 0x F50 */ mVec3_c field_0xF50;
     /* 0x F5C */ u8 _F5C[0xF68 - 0xF5C];
-    /* 0x F68 */ mVec3_c mField_0xF68;
+    /* 0x F68 */ mVec3_c field_0xF68;
     /* 0x F74 */ u8 _F74[0xFA4 - 0xF74];
-    /* 0x FA4 */ f32 mField_0xFA4;
-    /* 0x FA8 */ f32 mField_0xFA8;
-    /* 0x FAC */ f32 mField_0xFAC;
-    /* 0x FB0 */ f32 mField_0xFB0;
-    /* 0x FB4 */ f32 mField_0xFB4;
+    /* 0x FA4 */ f32 field_0xFA4;
+    /* 0x FA8 */ f32 field_0xFA8;
+    /* 0x FAC */ f32 field_0xFAC;
+    /* 0x FB0 */ f32 field_0xFB0;
+    /* 0x FB4 */ f32 field_0xFB4;
     /* 0x FB8 */ f32 mDistance;
     /* 0x FBC */ f32 mOldDistance;
-    /* 0x FC0 */ UNKWORD mField_0xFC0;
-    /* 0x FC4 */ f32 mField_0xFC4;
-    /* 0x FC8 */ UNKWORD mField_0xFC8;
-    /* 0x FCC */ mAng mField_0xFCC;
-    /* 0x FCE */ u16 mField_0xFCE;
+    /* 0x FC0 */ UNKWORD field_0xFC0;
+    /* 0x FC4 */ f32 field_0xFC4;
+    /* 0x FC8 */ UNKWORD field_0xFC8;
+    /* 0x FCC */ mAng field_0xFCC;
+    /* 0x FCE */ u16 field_0xFCE;
     /* 0x FD0 */ u8 _FD0[0xFD2 - 0xFD0];
-    /* 0x FD2 */ s16 mField_0xFD2;
-    /* 0x FD4 */ s16 mField_0xFD4;
-    /* 0x FD6 */ s16 mField_0xFD6;
-    /* 0x FD8 */ s16 mField_0xFD8;
-    /* 0x FDA */ mAng mField_0xFDA;
-    /* 0x FDC */ s16 mField_0xFDC;
+    /* 0x FD2 */ s16 field_0xFD2;
+    /* 0x FD4 */ s16 field_0xFD4;
+    /* 0x FD6 */ s16 field_0xFD6;
+    /* 0x FD8 */ s16 field_0xFD8;
+    /* 0x FDA */ mAng field_0xFDA;
+    /* 0x FDC */ s16 field_0xFDC;
     /* 0x FDA */ u8 _FDE[0xFE2 - 0xFDE];
-    /* 0x FE2 */ s16 mField_0xFE2;
+    /* 0x FE2 */ s16 field_0xFE2;
     /* 0x FE4 */ u8 mDropsceneFlag;
     /* 0x FE5 */ u8 mWoodTagSceneflag;
     /* 0x FE6 */ u8 mSegmentCount;
     /* 0x FE7 */ u8 mSubtype;
     /* 0x FE8 */ bool mbField_0xFE8;
-    /* 0x FE9 */ u8 mField_0xFE9;
-    /* 0x FEA */ u8 mField_0xFEA;
-    /* 0x FEB */ u8 mField_0xFEB;
-    /* 0x FEC */ u8 mField_0xFEC;
+    /* 0x FE9 */ u8 field_0xFE9;
+    /* 0x FEA */ u8 field_0xFEA;
+    /* 0x FEB */ u8 field_0xFEB;
+    /* 0x FEC */ u8 field_0xFEC;
     /* 0x FED */ u8 mEventIdx;
-    /* 0x FEE */ u8 mField_0xFEE;
-    /* 0x FEF */ u8 mField_0xFEF;
-    /* 0x FF0 */ u8 mField_0xFF0[4];
-    /* 0x FF4 */ u8 mField_0xFF4;
-    /* 0x FF5 */ u8 mField_0xFF5;
-    /* 0x FF6 */ u8 mField_0xFF6;
-    /* 0x FF7 */ u8 mField_0xFF7;
-    /* 0x FF8 */ u8 mField_0xFF8;
+    /* 0x FEE */ u8 field_0xFEE;
+    /* 0x FEF */ u8 field_0xFEF;
+    /* 0x FF0 */ u8 field_0xFF0[4];
+    /* 0x FF4 */ u8 field_0xFF4;
+    /* 0x FF5 */ u8 field_0xFF5;
+    /* 0x FF6 */ u8 field_0xFF6;
+    /* 0x FF7 */ u8 field_0xFF7;
+    /* 0x FF8 */ u8 field_0xFF8;
     /* 0x FF9 */ u8 _FF9[0x1005 - 0xFF9];
-    /* 0x1005 */ u8 mField_0x1005;
+    /* 0x1005 */ u8 field_0x1005;
     /* 0x1006 */ u8 _1006[0x1010 - 0x1006];
-    /* 0x1010 */ mVec3_c mField_0x1010;
-    /* 0x101C */ mVec3_c mField_0x101C;
-    /* 0x1028 */ f32 mField_0x1028;
-    /* 0x102C */ f32 mField_0x102C;
-    /* 0x1030 */ mAng mField_0x1030;
-    /* 0x1032 */ mAng mField_0x1032;
+    /* 0x1010 */ mVec3_c field_0x1010;
+    /* 0x101C */ mVec3_c field_0x101C;
+    /* 0x1028 */ f32 field_0x1028;
+    /* 0x102C */ f32 field_0x102C;
+    /* 0x1030 */ mAng field_0x1030;
+    /* 0x1032 */ mAng field_0x1032;
     /* 0x1034 */ u8 _1034[0x1038 - 0x1034];
-    /* 0x1038 */ u8 mField_0x1038;
-    /* 0x1039 */ u8 mField_0x1039; // TODO make field enum
-    /* 0x103A */ s8 mField_0x103A;
-    /* 0x103B */ u8 mField_0x103B;
-    /* 0x103C */ u8 mField_0x103C;
-    /* 0x103D */ u8 mField_0x103D;
+    /* 0x1038 */ u8 field_0x1038;
+    /* 0x1039 */ u8 field_0x1039; // TODO make field enum
+    /* 0x103A */ s8 field_0x103A;
+    /* 0x103B */ u8 field_0x103B;
+    /* 0x103C */ u8 field_0x103C;
+    /* 0x103D */ u8 field_0x103D;
     /* 0x103E */ bool mDropped;
-    /* 0x1040 */ f32 mField_0x1040;
+    /* 0x1040 */ f32 field_0x1040;
     /* 0x1044 */ u8 _1044[0x1050 - 0x1044];
-    /* 0x1050 */ f32 mField_0x1050;
+    /* 0x1050 */ f32 field_0x1050;
     /* 0x1054 */ u8 _1054[0x105E - 0x1054];
-    /* 0x105E */ u8 mField_0x105E;
-    /* 0x105F */ u8 mField_0x105F;
-    /* 0x1060 */ u8 mField_0x1060;
-    /* 0x1061 */ u8 mField_0x1061;
-    /* 0x1062 */ u8 mField_0x1062;
-    /* 0x1064 */ f32 mField_0x1064;
-    /* 0x1068 */ f32 mField_0x1068;
-    /* 0x106C */ f32 mField_0x106C;
+    /* 0x105E */ u8 field_0x105E;
+    /* 0x105F */ u8 field_0x105F;
+    /* 0x1060 */ u8 field_0x1060;
+    /* 0x1061 */ u8 field_0x1061;
+    /* 0x1062 */ u8 field_0x1062;
+    /* 0x1064 */ f32 field_0x1064;
+    /* 0x1068 */ f32 field_0x1068;
+    /* 0x106C */ f32 field_0x106C;
     /* 0x1070 */ u8 _1070[0x1083 - 0x1070];
-    /* 0x1083 */ u8 mField_0x1083;
+    /* 0x1083 */ u8 field_0x1083;
     /* 0x1084 */ u8 _1084[0x1088 - 0x1084];
     /* 0x1088 */ dCcD_Cps mCpsArr2[16];
     /* 0x2788 */ mVec3_c *mPnts1;
     /* 0x278C */ mVec3_c *mPnts2;
-    /* 0x2790 */ u16 mField_0x2790;
-    /* 0x2792 */ u8 mField_0x2792;
+    /* 0x2790 */ u16 field_0x2790;
+    /* 0x2792 */ u8 field_0x2792;
     /* 0x2793 */ bool mbField_0x2793;
     /* 0x2794 */ u8 _2794[0x27C0 - 0x2794];
-    /* 0x27C0 */ f32 mField_0x27C0;
+    /* 0x27C0 */ f32 field_0x27C0;
     /* 0x27C4 */ bool mbField_0x27C4;
     /* 0x27C5 */ bool mbField_0x27C5;
 

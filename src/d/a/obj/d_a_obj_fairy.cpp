@@ -14,7 +14,7 @@ STATE_DEFINE(dAcObjFairy_c, CatchDemo);
 
 bool dAcObjFairy_c::createHeap() {
     void *file = getOarcResFile("PutFairy");
-    TRY_CREATE(mModel.create(file, "PutFairy", "PutFairy_fly", &heap_allocator, 0x120));
+    TRY_CREATE(mModel.create(file, "PutFairy", "PutFairy_fly", &mAllocator, 0x120));
 
     return true;
 }
@@ -27,7 +27,7 @@ int dAcObjFairy_c::create() {
     mStateMgr.changeState(StateID_CureStart);
     mStateMgr.changeState(StateID_Wait);
     mModel.getModel().setPriorityDraw(0x7F, 0x7F);
-    boundingBox.Set(mVec3_c(-20.0f, -200.0f, -20.0f), mVec3_c(20.0f, 20.0f, 20.0f));
+    mBoundingBox.Set(mVec3_c(-20.0f, -200.0f, -20.0f), mVec3_c(20.0f, 20.0f, 20.0f));
 
     return SUCCEEDED;
 }
@@ -53,7 +53,7 @@ int dAcObjFairy_c::draw() {
         if (!isCuring()) {
             static mQuat_c rot(0.0f, 0.0f, 0.0f, 10.0f);
             f32 f = field_0x4B0;
-            drawShadow(mShadow, nullptr, mWorldMtx, &rot, -1, -1, -1, -1, -1, position.y - f);
+            drawShadow(mShadow, nullptr, mWorldMtx, &rot, -1, -1, -1, -1, -1, mPosition.y - f);
         }
     }
 
@@ -67,13 +67,13 @@ void dAcObjFairy_c::finalizeState_Wait() {}
 void dAcObjFairy_c::initializeState_Avoid() {}
 void dAcObjFairy_c::executeState_Avoid() {}
 void dAcObjFairy_c::finalizeState_Avoid() {
-    setActorProperty(0x1);
+    setActorProperty(AC_PROP_0x1);
 }
 
 void dAcObjFairy_c::initializeState_PlayerAvoid() {}
 void dAcObjFairy_c::executeState_PlayerAvoid() {}
 void dAcObjFairy_c::finalizeState_PlayerAvoid() {
-    setActorProperty(0x1);
+    setActorProperty(AC_PROP_0x1);
 }
 
 void dAcObjFairy_c::initializeState_CureStart() {}
@@ -96,15 +96,15 @@ void dAcObjFairy_c::executeState_CatchDemo() {
 }
 void dAcObjFairy_c::finalizeState_CatchDemo() {
     field_0xB89 = 0;
-    clearObjectProperty(0x200);
+    unsetObjectProperty(OBJ_PROP_0x200);
 }
 
 bool dAcObjFairy_c::shouldAvoidLink() const {
     // TODO shuffles
     if (dAcPy_c::LINK->isUsingBugnet()) {
-        mVec3_c dist = dAcPy_c::LINK->getBugNetPos() - position;
+        mVec3_c dist = dAcPy_c::LINK->getBugNetPos() - mPosition;
         bool isClose = false;
-        if (dist.mag() < 100.0f && velocity.dot(dist) > 0.0f) {
+        if (dist.mag() < 100.0f && mVelocity.dot(dist) > 0.0f) {
             isClose = true;
         }
 

@@ -3,12 +3,12 @@
 #include "common.h"
 #include "egg/core/eggXfb.h"
 #include "nw4r/db/db_directPrint.h"
-#include "rvl/VI.h" // IWYU pragma: export
 
+#include "rvl/VI.h" // IWYU pragma: export
 
 namespace EGG {
 
-/* 80498af0 */ bool XfbManager::isRegisterd(Xfb &xfb) const {
+bool XfbManager::isRegisterd(Xfb &xfb) const {
     Xfb *x = mNextXfb;
     Xfb *iter = x;
 
@@ -23,7 +23,7 @@ namespace EGG {
     return false;
 }
 
-/* 80498b30 */ bool XfbManager::attach(Xfb *xfb) {
+bool XfbManager::attach(Xfb *xfb) {
     int interrupts = OSDisableInterrupts();
     bool u3 = 0;
 
@@ -47,7 +47,7 @@ namespace EGG {
     OSRestoreInterrupts(interrupts);
     return u3;
 }
-/* 80498c10 */ void XfbManager::copyEFB(bool bUpdate) {
+void XfbManager::copyEFB(bool bUpdate) {
     if (mNumXfbs == 1 && mToCopyXfb == nullptr) {
         mToCopyXfb = mNextXfb;
     }
@@ -75,7 +75,7 @@ namespace EGG {
     }
 }
 
-/* 80498d00 */ void XfbManager::setNextFrameBuffer() {
+void XfbManager::setNextFrameBuffer() {
     if (mToShowXfb != nullptr) {
         if (mNumXfbs_Copy > 2) {
             mNumXfbs_Copy -= 1;

@@ -49,19 +49,19 @@ public:
     /* 0x84 */ virtual bool hasPath() const {
         return getPath() >= 0 && getPath() < 0xFF;
     }
-    /* 0x88 */ virtual const char* getAnmArcNameBase() const {
+    /* 0x88 */ virtual const char *getAnmArcNameBase() const {
         return "BirdAnm";
     }
-    /* 0x8C */ virtual const char* getAnmArcNameLink() const {
+    /* 0x8C */ virtual const char *getAnmArcNameLink() const {
         return "BirdLinkAnm";
     }
-    /* 0x90 */ virtual const char* getAnmArcNameSpecial() const {
+    /* 0x90 */ virtual const char *getAnmArcNameSpecial() const {
         return "BirdLinkAnm";
     }
 
 protected:
     s32 getPath() const {
-        return params & 0xFF;
+        return mParams & 0xFF;
     }
 
     void updateMatrixBird();

@@ -21,7 +21,7 @@ dFader_c dScene_c::sFader;
 dScene_c::dScene_c() {
     lbl_80574FA0 = 0;
     lbl_80574FA4 = 0;
-    setProcControlFlag(ROOT_DISABLE_DRAW | ROOT_DISABLE_EXECUTE);
+    setProcControl(ROOT_DISABLE_DRAW | ROOT_DISABLE_EXECUTE);
     dPadNav::setNavEnabled(false, false);
 }
 
@@ -53,10 +53,10 @@ int dScene_c::preExecute() {
         }
         return NOT_READY;
     } else {
-        if ((proc_control & ROOT_DISABLE_EXECUTE)) {
+        if ((mProcControl & ROOT_DISABLE_EXECUTE)) {
             if (!checkChildProcessCreateState()) {
-                clearProcControlFlag(ROOT_DISABLE_EXECUTE);
-                clearProcControlFlag(ROOT_DISABLE_DRAW);
+                unsetProcControl(ROOT_DISABLE_EXECUTE);
+                unsetProcControl(ROOT_DISABLE_DRAW);
             }
             return NOT_READY;
         }
@@ -72,7 +72,7 @@ void dScene_c::postExecute(MAIN_STATE_e status) {
         dReset::Manage_c::GetInstance()->SetSoftResetScene();
     }
     dBase_c::postExecute(status);
-    if (proc_control & ROOT_DISABLE_EXECUTE) {
+    if (mProcControl & ROOT_DISABLE_EXECUTE) {
         lbl_80574FA0++;
         lbl_80574FA4++;
     }

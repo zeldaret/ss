@@ -22,16 +22,16 @@ int dTgTelop_c::actorExecute() {
         return SUCCEEDED;
     }
 
-    if (mTempflag != 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mTempflag)) {
+    if (mTempflag != 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mTempflag)) {
         return SUCCEEDED;
     }
 
-    if (mSceneflag != 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mSceneflag)) {
+    if (mSceneflag != 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag)) {
         return SUCCEEDED;
     }
 
     if (mTempflag != 0xFF) {
-        SceneflagManager::sInstance->setFlag(roomid, mTempflag);
+        SceneflagManager::sInstance->setFlag(mRoomID, mTempflag);
     }
 
     dLytAreaCaption_c::setArea(mArea);

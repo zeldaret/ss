@@ -34,7 +34,7 @@ static const char *const AcOstreamLava__AnmClrNames[] = {
 SPECIAL_ACTOR_PROFILE(OBJ_STREAM_LAVA, dAcOstreamLava_c, fProfile::OBJ_STREAM_LAVA, 0x1FA, 0, 6);
 
 bool dAcOstreamLava_c::createHeap() {
-    mSubtype = params & 0xF;
+    mSubtype = mParams & 0xF;
     mResFile = nw4r::g3d::ResFile(getOarcResFile(AcOstreamLava__OarcNames[mSubtype]));
     dStage_c::bindStageResToFile(&mResFile);
 
@@ -43,14 +43,14 @@ bool dAcOstreamLava_c::createHeap() {
     nw4r::g3d::ResAnmClr anmClr;
 
     mdl = mResFile.GetResMdl(AcOstreamLava__ModelNames[mSubtype]);
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x32C));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x32C));
 
     anmSrtWait = mResFile.GetResAnmTexSrt("Wait");
-    TRY_CREATE(mAnmTexSrtWait.create(mdl, anmSrtWait, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnmTexSrtWait.create(mdl, anmSrtWait, &mAllocator, nullptr, 1));
     mModel.setAnm(mAnmTexSrtWait);
 
     anmClr = mResFile.GetResAnmClr(AcOstreamLava__AnmClrNames[mSubtype]);
-    TRY_CREATE(mAnmMatClr.create(mdl, anmClr, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnmMatClr.create(mdl, anmClr, &mAllocator, nullptr, 1));
 
     void *dzb = getOarcFile(AcOstreamLava__OarcNames[mSubtype], AcOstreamLava__DbzNames[mSubtype]);
     void *plc = getOarcFile(AcOstreamLava__OarcNames[mSubtype], AcOstreamLava__PlcNames[mSubtype]);
@@ -60,7 +60,7 @@ bool dAcOstreamLava_c::createHeap() {
     TRY_CREATE(!mCollision.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mCollision.Lock();
 
-    TRY_CREATE(mCollision.InitMapStuff(&heap_allocator));
+    TRY_CREATE(mCollision.InitMapStuff(&mAllocator));
     return true;
 }
 
@@ -74,7 +74,7 @@ int dAcOstreamLava_c::create() {
     mHideActor = !getFromParams(0x14, 1);            // (params >> 0x14 & 1) == 0;
     mModel.setAnm(mAnmMatClr);
 
-    bool shouldStream = SceneflagManager::sInstance->checkFlag(roomid, mShouldStreamSceneflag);
+    bool shouldStream = SceneflagManager::sInstance->checkFlag(mRoomID, mShouldStreamSceneflag);
     if (shouldStream) {
         mStateMgr.changeState(StateID_Stream);
     } else {
@@ -84,12 +84,12 @@ int dAcOstreamLava_c::create() {
     mModel.setPriorityDraw(0x1C, 0x9);
     mVec3_c min, max;
     mModel.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     mCullingDistance = 50000.0f;
 
-    int roomId_tmp = roomid;
+    int roomId_tmp = mRoomID;
     if (addActorToRoom(-1)) {
-        roomid = roomId_tmp;
+        mRoomID = roomId_tmp;
         changeLoadedEntitiesWithSet();
     }
 
@@ -106,13 +106,13 @@ int dAcOstreamLava_c::actorExecute() {
     mStateMgr.executeState();
     mAnmMatClr.play();
 
-    dRoom_c *currentRoom = dStage_c::GetInstance()->getRoom(roomid);
+    dRoom_c *currentRoom = dStage_c::GetInstance()->getRoom(mRoomID);
 
     if (currentRoom->checkFlag(2)) {
-        setObjectProperty(0x200);
+        setObjectProperty(OBJ_PROP_0x200);
         return SUCCEEDED;
     } else {
-        clearObjectProperty(0x200);
+        unsetObjectProperty(OBJ_PROP_0x200);
         return SUCCEEDED;
     }
 }
@@ -131,7 +131,7 @@ void dAcOstreamLava_c::initializeState_Wait() {
 void dAcOstreamLava_c::executeState_Wait() {
     mAnmTexSrtWait.play();
 
-    bool shouldStream = SceneflagManager::sInstance->checkFlag(roomid, mShouldStreamSceneflag);
+    bool shouldStream = SceneflagManager::sInstance->checkFlag(mRoomID, mShouldStreamSceneflag);
     if (shouldStream) {
         mStateMgr.changeState(StateID_Stream);
     }
@@ -155,7 +155,7 @@ void dAcOstreamLava_c::finalizeState_Wait() {
         // Swaps the numbers in .data and swaps the operands in andc
         // u32 eventFlag = Event::makeEventFlag(0x100001, 0x1);
 
-        Event ev(mEventId, roomid, eventFlag, nullptr, nullptr);
+        Event ev(mEventId, mRoomID, eventFlag, nullptr, nullptr);
         mEvent.scheduleEvent(ev, 0);
     }
 }
@@ -167,7 +167,7 @@ void dAcOstreamLava_c::initializeState_Stream() {
 void dAcOstreamLava_c::executeState_Stream() {
     mAnmTexSrtWait.play();
 
-    bool shouldStream = SceneflagManager::sInstance->checkFlag(roomid, mShouldStreamSceneflag);
+    bool shouldStream = SceneflagManager::sInstance->checkFlag(mRoomID, mShouldStreamSceneflag);
     if (!shouldStream) {
         mStateMgr.changeState(StateID_Wait);
     }
