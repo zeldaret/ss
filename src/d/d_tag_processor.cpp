@@ -3,8 +3,8 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/d_font_manager.h"
-#include "d/d_message.h"
 #include "d/d_lyt_hio.h"
+#include "d/d_message.h"
 #include "d/d_textwindow_unk.h"
 #include "d/lyt/d_lyt_util_items.h"
 #include "d/lyt/d_textbox.h"
@@ -251,14 +251,14 @@ const u16 sMsgWindowFlags[2050] = {
 
 dTagProcessor_c::dTagProcessor_c() {
     field_0x82C = -1;
-    field_0x828 = -1;
-    field_0x90E = 0;
+    mCancelBtnIdx = -1;
+    mCurrentOptionIdx = 0;
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 256; j++) {
-            field_0x008[i][j] = 0;
+            mOptionBufs[i][j] = 0;
         }
-        field_0x808[i] = 0;
-        field_0x90F[i] = 0;
+        mOptionLengths[i] = 0;
+        mOptionSound[i] = 0;
     }
 
     field_0x904 = 0.0f;
@@ -326,7 +326,7 @@ dTagProcessor_c::dTagProcessor_c() {
     field_0xEEE = 0;
     field_0xEEF = 0;
     field_0xEE0 = 0;
-    field_0xEE1 = 0;
+    mIsShadowText = false;
     field_0xEE2 = 0;
     field_0xEE3 = 0;
     field_0xEE4 = 0;
@@ -355,11 +355,11 @@ void dTagProcessor_c::format(
 void dTagProcessor_c::formatV(
     dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen, void *unk, va_list list
 ) {
-    s32 state3 = 0;
-    s32 state4 = 0;
+    s32 optionIdx = 0;
+    bool isProcessingOption = false;
 
     s32 state1 = -1;
-    s32 state2 = -1;
+    s32 cancelBtnIdx = -1;
 
     f32 currScale, backupScale;
     backupScale = currScale = fn_800B8040(0, mMsgWindowSubtype);
@@ -370,8 +370,9 @@ void dTagProcessor_c::formatV(
         textBox->set0x1F8(0);
     }
 
-    s32 local_b4 = 0;
+    s32 optionLength = 0;
 
+    // 0xE TAG_CMD_0x0F0F0F0F 0x00 0x02
     StackThing x = {0x000E, 0x0F0F, 0x0F0F, 0x0002};
     wchar_t *writePtr = dest;
     if (textBox != nullptr) {
@@ -383,6 +384,7 @@ void dTagProcessor_c::formatV(
         dest[4] = mLineData.mNumLines;
     }
 
+    // 0xE TAG_CMD_0x0F0F0F0E 0x00 0x01
     StackThing yTmp;
     StackThing y = {0x000E, 0x0F0F, 0x0F0E, 0x0001};
 
@@ -401,16 +403,16 @@ void dTagProcessor_c::formatV(
             s32 cmd = 0;
             wchar_t *endPtr = nullptr;
             getTextCommand(c, src + 1, &cmdLen, &cmd, &endPtr);
-            bool bVar3 = false;
+            bool processingOption = false;
             switch (cmd) {
-                case 0x0F0F0F0F:
-                    if (state4 != 0 && field_0x90E != 0) {
+                case TAG_CMD_0x0F0F0F0F:
+                    if (isProcessingOption && mCurrentOptionIdx != 0) {
                         const wchar_t *t = src;
                         u32 len = (cmdLen / 2) + 1;
                         for (int i = 0; i < len; i++) {
-                            getTmpBuffer()[local_b4] = *(t++);
-                            onWriteTmpBuffer();
-                            local_b4++;
+                            getOptionBuf()[optionLength] = *(t++);
+                            onWriteOptionBuf();
+                            optionLength++;
                         }
                     } else {
                         const wchar_t *t = src;
@@ -420,67 +422,67 @@ void dTagProcessor_c::formatV(
                         }
                     }
                     break;
-                case 0x10000: {
+                case TAG_CMD_OPTION_0: {
                     u8 a = READ_U8(endPtr, 0);
                     u8 b = READ_U8(endPtr, 1);
                     switch (a) {
-                        case 0: state2 = 0; break;
+                        case 0: cancelBtnIdx = 0; break;
                         case 1: state1 = 0; break;
                     }
-                    field_0x90F[0] = b;
+                    mOptionSound[0] = b;
                     yTmp = y;
                     for (int i = 0; i < 4; i++) {
                         for (int j = 0; j < 256; j++) {
                             if (j < 4) {
-                                field_0x008[i][j] = yTmp.us[j];
+                                mOptionBufs[i][j] = yTmp.us[j];
                             } else {
-                                field_0x008[i][j] = 0;
+                                mOptionBufs[i][j] = 0;
                             }
                         }
-                        field_0x808[i] = 4;
+                        mOptionLengths[i] = 4;
                     }
-                    state3 = 1;
-                    bVar3 = true;
+                    optionIdx = 1;
+                    processingOption = true;
                 } break;
-                case 0x10001: {
+                case TAG_CMD_OPTION_1: {
                     u8 a = READ_U8(endPtr, 0);
                     u8 b = READ_U8(endPtr, 1);
                     switch (a) {
-                        case 0: state2 = 1; break;
+                        case 0: cancelBtnIdx = 1; break;
                         case 1: state1 = 1; break;
                     }
-                    field_0x90F[1] = b;
-                    state3 = 2;
-                    bVar3 = true;
+                    mOptionSound[1] = b;
+                    optionIdx = 2;
+                    processingOption = true;
                 } break;
-                case 0x10002: {
+                case TAG_CMD_OPTION_2: {
                     u8 a = READ_U8(endPtr, 0);
                     u8 b = READ_U8(endPtr, 1);
                     switch (a) {
-                        case 0: state2 = 2; break;
+                        case 0: cancelBtnIdx = 2; break;
                         case 1: state1 = 2; break;
                     }
-                    field_0x90F[2] = b;
-                    state3 = 3;
-                    bVar3 = true;
+                    mOptionSound[2] = b;
+                    optionIdx = 3;
+                    processingOption = true;
                 } break;
-                case 0x10003: {
+                case TAG_CMD_OPTION_3: {
                     u8 a = READ_U8(endPtr, 0);
                     u8 b = READ_U8(endPtr, 1);
                     switch (a) {
-                        case 0: state2 = 3; break;
+                        case 0: cancelBtnIdx = 3; break;
                         case 1: state1 = 3; break;
                     }
-                    field_0x90F[3] = b;
-                    state3 = 4;
-                    bVar3 = true;
+                    mOptionSound[3] = b;
+                    optionIdx = 4;
+                    processingOption = true;
                 } break;
                 case 0x10008:
                     if (textBox != nullptr) {
                         currScale = fn_800B8040(READ_U8(endPtr, 0), mMsgWindowSubtype);
                         currScale *= textBox->getMyScale();
                     }
-                    writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
+                    writePtr = writeTextNormal(src, writePtr, &optionLength, cmdLen, isProcessingOption);
                     break;
                 case 0x30000: {
                     if (textBox != nullptr) {
@@ -488,35 +490,45 @@ void dTagProcessor_c::formatV(
                         currScale *= dLyt_HIO_c::getField0x768();
                         currScale *= textBox->getMyScale();
                     }
-                    writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
+                    writePtr = writeTextNormal(src, writePtr, &optionLength, cmdLen, isProcessingOption);
                 } break;
                 case 0x10010: fn_800B5520(endPtr); break;
                 case 0x20004:
                     if (textBox != nullptr) {
                         saveIconWidth(textBox, endPtr, currScale);
                     }
-                    writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
+                    writePtr = writeTextNormal(src, writePtr, &optionLength, cmdLen, isProcessingOption);
                     break;
-                case 0x20000: writePtr = writeHeroname(writePtr, &local_b4, state4); break;
-                case 0x20001: writePtr = writeItem(writePtr, endPtr, &local_b4, state4); break;
-                case 0x20002: writePtr = writeStringArg(writePtr, endPtr, &local_b4, state4); break;
-                case 0x20003: writePtr = writeNumericArg(writePtr, endPtr, &local_b4, state4); break;
+                case TAG_CMD_WRITE_HERONAME:
+                    writePtr = writeHeroname(writePtr, &optionLength, isProcessingOption);
+                    break;
+                case TAG_CMD_WRITE_ITEM:
+                    writePtr = writeItem(writePtr, endPtr, &optionLength, isProcessingOption);
+                    break;
+                case TAG_CMD_WRITE_STRING_ARG:
+                    writePtr = writeStringArg(writePtr, endPtr, &optionLength, isProcessingOption);
+                    break;
+                case TAG_CMD_WRITE_NUMERIC_ARG:
+                    writePtr = writeNumericArg(writePtr, endPtr, &optionLength, isProcessingOption);
+                    break;
 
-                case 0x30004: writePtr = writeSingularOrPluralWord(writePtr, endPtr, &local_b4, state4); break;
+                case TAG_CMD_WRITE_WORD:
+                    writePtr = writeSingularOrPluralWord(writePtr, endPtr, &optionLength, isProcessingOption);
+                    break;
                 case 0x30001:
                     field_0xEF1 = 1;
-                    writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
+                    writePtr = writeTextNormal(src, writePtr, &optionLength, cmdLen, isProcessingOption);
                     break;
 
-                default: writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4); break;
+                default: writePtr = writeTextNormal(src, writePtr, &optionLength, cmdLen, isProcessingOption); break;
             }
 
-            if (bVar3) {
+            if (processingOption) {
                 field_0x82C = state1;
-                state4 = 1;
-                field_0x828 = state2;
-                field_0x90E = state3;
-                local_b4 = field_0x808[state3 - 1];
+                isProcessingOption = 1;
+                mCancelBtnIdx = cancelBtnIdx;
+                mCurrentOptionIdx = optionIdx;
+                optionLength = mOptionLengths[optionIdx - 1];
             }
             src += (cmdLen / 2) + 1;
         } else if (c == 0xF) {
@@ -530,11 +542,11 @@ void dTagProcessor_c::formatV(
             writePtr[2] = src[2];
             writePtr += 3;
             src += 3;
-        } else if (state4 != 0 && field_0x90E != 0) {
+        } else if (isProcessingOption != 0 && mCurrentOptionIdx != 0) {
             // Note: Return ignored here
-            writeSingleCharacter(c, &getTmpBuffer()[local_b4], &local_b4);
+            writeSingleCharacter(c, &getOptionBuf()[optionLength], &optionLength);
             src++;
-            onWriteTmpBuffer();
+            onWriteOptionBuf();
         } else {
             if (textBox != nullptr) {
                 if (c == L'\n') {
@@ -617,7 +629,7 @@ beginning:
             wchar_t *endPtr = nullptr;
             getTextCommand(c, src + 1, &cmdLen, &cmd, &endPtr);
             switch (cmd) {
-                case 0x0F0F0F0F: {
+                case TAG_CMD_0x0F0F0F0F: {
                     if (lineNum / getMaxNumLines(mMsgWindowSubtype) == unkArg) {
                         nw4r::lyt::Size fontSize = getTextBox()->GetFontSize();
                         posX = getMarginForCenteredLine(lineNum);
@@ -657,11 +669,11 @@ beginning:
                     }
                     lineNum++;
                 } break;
-                case 0x10000:
-                case 0x10001:
-                case 0x10002:
-                case 0x10003: b1 = true; break;
-                case 0x10008: {
+                case TAG_CMD_OPTION_0:
+                case TAG_CMD_OPTION_1:
+                case TAG_CMD_OPTION_2:
+                case TAG_CMD_OPTION_3: b1 = true; break;
+                case 0x10008:          {
                     if (b2) {
                         f32 newScale = fn_800B8040(READ_U8(endPtr, 0), mMsgWindowSubtype);
                         f32 baseScale = fn_800B8040(0, mMsgWindowSubtype);
@@ -786,33 +798,33 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
     wchar_t *endPtr = nullptr;
     getTextCommand(ch, ctx->str, &cmdLen, &cmd, &endPtr);
     switch (cmd) {
-        case 0x10000:
+        case TAG_CMD_OPTION_0:
             ctx->str += cmdLen / 2;
-            ctx->str += field_0x808[0];
+            ctx->str += mOptionLengths[0];
             return nw4r::ut::OPERATION_DEFAULT;
-        case 0x10001:
+        case TAG_CMD_OPTION_1:
             ctx->str += cmdLen / 2;
-            ctx->str += field_0x808[1];
+            ctx->str += mOptionLengths[1];
             return nw4r::ut::OPERATION_DEFAULT;
-        case 0x10002:
+        case TAG_CMD_OPTION_2:
             ctx->str += cmdLen / 2;
-            ctx->str += field_0x808[2];
+            ctx->str += mOptionLengths[2];
             return nw4r::ut::OPERATION_DEFAULT;
-        case 0x10003:
+        case TAG_CMD_OPTION_3:
             ctx->str += cmdLen / 2;
-            ctx->str += field_0x808[3];
+            ctx->str += mOptionLengths[3];
             return nw4r::ut::OPERATION_DEFAULT;
-        case 0x0F0F0F0F: fn_800B4FF0(rect, ctx, cmdLen, endPtr); break;
-        case 0x0F0F0F0E: field_0xEE2 = 1; break;
-        case 0x3:
-            if (field_0xEE1 == 0) {
+        case TAG_CMD_0x0F0F0F0F: fn_800B4FF0(rect, ctx, cmdLen, endPtr); break;
+        case TAG_CMD_0x0F0F0F0E: field_0xEE2 = 1; break;
+        case TAG_CMD_COLOR:
+            if (!mIsShadowText) {
                 setColor(rect, ctx, cmdLen, endPtr);
             }
             break;
-        case 0x2: setScale(rect, ctx, cmdLen, endPtr); break;
+        case TAG_CMD_SCALE: setScale(rect, ctx, cmdLen, endPtr); break;
         case 0x10004:
             // Pause
-            if (rect == nullptr && field_0xEE1 == 0) {
+            if (rect == nullptr && !mIsShadowText) {
                 if (field_0xEED == 0 && mNumericArgsCopy[8] == field_0x838) {
                     setFramesLeftOnPause(rect, ctx, cmdLen, endPtr);
                     field_0xEED = 1;
@@ -822,7 +834,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             }
             break;
         case 0x10005:
-            if (rect == nullptr && field_0xEE1 == 0) {
+            if (rect == nullptr && !mIsShadowText) {
                 if (field_0xEEE == 0 && mNumericArgsCopy[9] == field_0x83C) {
                     fn_800B5500(cmdLen, endPtr);
                     field_0xEEE = 1;
@@ -832,7 +844,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             }
             break;
         case 0x10007:
-            if (rect == nullptr && field_0xEE1 == 0) {
+            if (rect == nullptr && !mIsShadowText) {
                 if (field_0xEE5 == 0 && mNumericArgsCopy[0] == field_0x87C) {
                     fn_800B60E0(cmdLen, endPtr);
                     field_0xEE5 = 1;
@@ -844,7 +856,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
         case 0x10008: fn_800B61D0(rect, ctx, cmdLen, endPtr); break;
         case 0x30000: changeScale(rect, ctx, false); break;
         case 0x10009:
-            if (rect == nullptr && field_0xEE1 == 0) {
+            if (rect == nullptr && !mIsShadowText) {
                 if (field_0xEE6 == 0 && mNumericArgsCopy[1] == field_0x880) {
                     fn_800B6110(cmdLen, endPtr);
                     field_0xEE6 = 1;
@@ -854,7 +866,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             }
             break;
         case 0x1000A:
-            if (rect == nullptr && field_0xEE1 == 0) {
+            if (rect == nullptr && !mIsShadowText) {
                 if (field_0xEE7 == 0 && mNumericArgsCopy[2] == field_0x884) {
                     fn_800B6140(cmdLen, endPtr);
                     field_0xEE7 = 1;
@@ -865,7 +877,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             break;
         case 0x1000B:
             // Sound
-            if (rect == nullptr && field_0xEE1 == 0) {
+            if (rect == nullptr && !mIsShadowText) {
                 if (field_0xEE8 == 0 && mNumericArgsCopy[3] == field_0x888) {
                     playSound(cmdLen, endPtr);
                     field_0xEE8 = 1;
@@ -876,7 +888,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             break;
         case 0x1000C:
             // "entrypoint"
-            if (rect == nullptr && field_0xEE1 == 0) {
+            if (rect == nullptr && !mIsShadowText) {
                 if (field_0xEEA == 0 && mNumericArgsCopy[5] == field_0x890) {
                     fn_800B6170(cmdLen, endPtr);
                     field_0xEEA = 1;
@@ -886,7 +898,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             }
             break;
         case 0x1000D:
-            if (rect == nullptr && field_0xEE1 == 0) {
+            if (rect == nullptr && !mIsShadowText) {
                 if (field_0xEEB == 0 && mNumericArgsCopy[6] == field_0x894) {
                     fn_800B6190(cmdLen, endPtr);
                     field_0xEEB = 1;
@@ -896,7 +908,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             }
             break;
         case 0x1000E:
-            if (rect == nullptr && field_0xEE1 == 0) {
+            if (rect == nullptr && !mIsShadowText) {
                 if (field_0xEEC == 0 && mNumericArgsCopy[7] == field_0x898) {
                     fn_800B61B0(cmdLen, endPtr);
                     field_0xEEC = 1;
@@ -915,7 +927,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             }
             break;
         case 0x10011:
-            if (rect == nullptr && field_0xEE1 == 0) {
+            if (rect == nullptr && !mIsShadowText) {
                 if (field_0xEEF == 0 && mNumericArgsCopy[10] == field_0x840) {
                     fn_800B5540(endPtr);
                     field_0xEEF = 1;
@@ -1095,13 +1107,13 @@ void dTagProcessor_c::fn_800B5540(wchar_t *src) {
     dLytMsgWindow_c::getInstance()->onFlag0x820(sMsgWindowFlags[READ_U8(src, 0)]);
 }
 
-wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
+wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, bool isProcessingOption) {
     if (FileManager::GetInstance()->getHeroname()[0] != '\0') {
         for (int i = 0; FileManager::GetInstance()->getHeroname()[i] != '\0'; i++) {
-            if (arg != 0 && field_0x90E != 0) {
+            if (isProcessingOption && mCurrentOptionIdx != 0) {
                 wchar_t *heroName = FileManager::GetInstance()->getHeroname();
-                writeSingleCharacter(heroName[i], &getTmpBuffer()[*outArg], outArg);
-                onWriteTmpBuffer();
+                writeSingleCharacter(heroName[i], &getOptionBuf()[*outArg], outArg);
+                onWriteOptionBuf();
             } else {
                 wchar_t *heroName = FileManager::GetInstance()->getHeroname();
                 dest = writeSingleCharacter(heroName[i], dest, nullptr);
@@ -1111,7 +1123,7 @@ wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
     return dest;
 }
 
-wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
+wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, bool isProcessingOption) {
     int itemIndex = READ_U16(src, 0);
     wchar_t c;
 
@@ -1124,10 +1136,10 @@ wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s3
     while ((c = text[i]) != 0) {
         if (c == 0xE) {
             int len = ((text[i + 3] / 2) & 0x7F) + 4;
-            if (arg != 0 && field_0x90E != 0) {
+            if (isProcessingOption && mCurrentOptionIdx != 0) {
                 for (int j = 0; j < len; j++) {
-                    writeSingleCharacter(text[i], &getTmpBuffer()[*outArg], outArg);
-                    onWriteTmpBuffer();
+                    writeSingleCharacter(text[i], &getOptionBuf()[*outArg], outArg);
+                    onWriteOptionBuf();
                     i++;
                 }
             } else {
@@ -1137,9 +1149,9 @@ wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s3
                 }
             }
         } else {
-            if (arg != 0 && field_0x90E != 0) {
-                writeSingleCharacter(c, &getTmpBuffer()[*outArg], outArg);
-                onWriteTmpBuffer();
+            if (isProcessingOption && mCurrentOptionIdx != 0) {
+                writeSingleCharacter(c, &getOptionBuf()[*outArg], outArg);
+                onWriteOptionBuf();
             } else {
                 dest = writeSingleCharacter(c, dest, nullptr);
             }
@@ -1150,17 +1162,17 @@ wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s3
     return dest;
 }
 
-wchar_t *dTagProcessor_c::writeStringArg(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
+wchar_t *dTagProcessor_c::writeStringArg(wchar_t *dest, wchar_t *src, s32 *outArg, bool isProcessingOption) {
     s32 argIdx = READ_U32(src, 0);
     wchar_t c;
     int i = 0;
     while ((c = mStringArgs[argIdx][i]) != 0) {
         if (c == 0xE) {
             int len = ((mStringArgs[argIdx][i + 3] / 2) & 0x7F) + 4;
-            if (arg != 0 && field_0x90E != 0) {
+            if (isProcessingOption && mCurrentOptionIdx != 0) {
                 for (int j = 0; j < len; j++) {
-                    writeSingleCharacter(mStringArgs[argIdx][i], &getTmpBuffer()[*outArg], outArg);
-                    onWriteTmpBuffer();
+                    writeSingleCharacter(mStringArgs[argIdx][i], &getOptionBuf()[*outArg], outArg);
+                    onWriteOptionBuf();
                     i++;
                 }
             } else {
@@ -1170,9 +1182,9 @@ wchar_t *dTagProcessor_c::writeStringArg(wchar_t *dest, wchar_t *src, s32 *outAr
                 }
             }
         } else {
-            if (arg != 0 && field_0x90E != 0) {
-                writeSingleCharacter(c, &getTmpBuffer()[*outArg], outArg);
-                onWriteTmpBuffer();
+            if (isProcessingOption && mCurrentOptionIdx != 0) {
+                writeSingleCharacter(c, &getOptionBuf()[*outArg], outArg);
+                onWriteOptionBuf();
             } else {
                 dest = writeSingleCharacter(c, dest, nullptr);
             }
@@ -1187,7 +1199,7 @@ wchar_t *dTagProcessor_c::writeStringArg(wchar_t *dest, wchar_t *src, s32 *outAr
     return dest;
 }
 
-wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
+wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outArg, bool isProcessingOption) {
     int numZeroDigits = READ_U8(src, 4);
     bool writeZeroDigits = false;
     s32 argIdx = READ_U32(src, 0);
@@ -1203,9 +1215,9 @@ wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outA
         writeZeroDigits = true;
     }
     if (digit > 0 || writeZeroDigits) {
-        if (arg != 0 && field_0x90E != 0) {
-            getTmpBuffer()[*outArg] = '0' + digit;
-            onWriteTmpBuffer();
+        if (isProcessingOption && mCurrentOptionIdx != 0) {
+            getOptionBuf()[*outArg] = '0' + digit;
+            onWriteOptionBuf();
             (*outArg)++;
         } else {
             *(dest++) = '0' + digit;
@@ -1219,9 +1231,9 @@ wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outA
         writeZeroDigits = true;
     }
     if (digit > 0 || writeZeroDigits) {
-        if (arg != 0 && field_0x90E != 0) {
-            getTmpBuffer()[*outArg] = '0' + digit;
-            onWriteTmpBuffer();
+        if (isProcessingOption && mCurrentOptionIdx != 0) {
+            getOptionBuf()[*outArg] = '0' + digit;
+            onWriteOptionBuf();
             (*outArg)++;
         } else {
             *(dest++) = '0' + digit;
@@ -1235,9 +1247,9 @@ wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outA
         writeZeroDigits = true;
     }
     if (digit > 0 || writeZeroDigits) {
-        if (arg != 0 && field_0x90E != 0) {
-            getTmpBuffer()[*outArg] = '0' + digit;
-            onWriteTmpBuffer();
+        if (isProcessingOption && mCurrentOptionIdx != 0) {
+            getOptionBuf()[*outArg] = '0' + digit;
+            onWriteOptionBuf();
             (*outArg)++;
         } else {
             *(dest++) = '0' + digit;
@@ -1251,9 +1263,9 @@ wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outA
         writeZeroDigits = true;
     }
     if (digit > 0 || writeZeroDigits) {
-        if (arg != 0 && field_0x90E != 0) {
-            getTmpBuffer()[*outArg] = '0' + digit;
-            onWriteTmpBuffer();
+        if (isProcessingOption && mCurrentOptionIdx != 0) {
+            getOptionBuf()[*outArg] = '0' + digit;
+            onWriteOptionBuf();
             (*outArg)++;
         } else {
             *(dest++) = '0' + digit;
@@ -1262,9 +1274,9 @@ wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outA
     }
 
     digit = number;
-    if (arg != 0 && field_0x90E != 0) {
-        getTmpBuffer()[*outArg] = '0' + digit;
-        onWriteTmpBuffer();
+    if (isProcessingOption && mCurrentOptionIdx != 0) {
+        getOptionBuf()[*outArg] = '0' + digit;
+        onWriteOptionBuf();
         (*outArg)++;
     } else {
         *(dest++) = '0' + digit;
@@ -1272,7 +1284,7 @@ wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outA
     return dest;
 }
 
-wchar_t *dTagProcessor_c::writeSingularOrPluralWord(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
+wchar_t *dTagProcessor_c::writeSingularOrPluralWord(wchar_t *dest, wchar_t *src, s32 *outArg, bool isProcessingOption) {
     int itemIndex = READ_U8(src, 0);
     wchar_t c;
 
@@ -1289,10 +1301,10 @@ wchar_t *dTagProcessor_c::writeSingularOrPluralWord(wchar_t *dest, wchar_t *src,
     while ((c = text[i]) != 0) {
         if (c == 0xE) {
             int len = ((text[i + 3] / 2) & 0x7F) + 4;
-            if (arg != 0 && field_0x90E != 0) {
+            if (isProcessingOption && mCurrentOptionIdx != 0) {
                 for (int j = 0; j < len; j++) {
-                    writeSingleCharacter(text[i], &getTmpBuffer()[*outArg], outArg);
-                    onWriteTmpBuffer();
+                    writeSingleCharacter(text[i], &getOptionBuf()[*outArg], outArg);
+                    onWriteOptionBuf();
                     i++;
                 }
             } else {
@@ -1302,9 +1314,9 @@ wchar_t *dTagProcessor_c::writeSingularOrPluralWord(wchar_t *dest, wchar_t *src,
                 }
             }
         } else {
-            if (arg != 0 && field_0x90E != 0) {
-                writeSingleCharacter(c, &getTmpBuffer()[*outArg], outArg);
-                onWriteTmpBuffer();
+            if (isProcessingOption && mCurrentOptionIdx != 0) {
+                writeSingleCharacter(c, &getOptionBuf()[*outArg], outArg);
+                onWriteOptionBuf();
             } else {
                 dest = writeSingleCharacter(c, dest, nullptr);
             }
@@ -1497,7 +1509,7 @@ void dTagProcessor_c::drawPicture(
         mColor c2(0xF3, 0xEF, 0xE1, alpha);
         w->SetTextColor(c1, c2);
     }
-    if (field_0xEE1 != 0) {
+    if (mIsShadowText) {
         // #505050
         mColor c1(0x50, 0x50, 0x50, 0);
         mColor c2(0x50, 0x50, 0x50, 0x50);
@@ -1634,11 +1646,12 @@ void dTagProcessor_c::restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 wind
     ctx->writer->SetTextColor(c1, c2);
 }
 
-wchar_t *dTagProcessor_c::writeTextNormal(const wchar_t *src, wchar_t *dest, s32 *pArg, u8 cmdLen, s32 arg) {
-    if (arg != 0 && field_0x90E != 0) {
+wchar_t *
+dTagProcessor_c::writeTextNormal(const wchar_t *src, wchar_t *dest, s32 *pArg, u8 cmdLen, bool isProcessingOption) {
+    if (isProcessingOption && mCurrentOptionIdx != 0) {
         for (u32 i = 0; i < (cmdLen / 2 + 1); i++) {
-            getTmpBuffer()[*pArg] = *(src++);
-            onWriteTmpBuffer();
+            getOptionBuf()[*pArg] = *(src++);
+            onWriteOptionBuf();
             (*pArg)++;
         }
     } else {

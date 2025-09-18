@@ -133,6 +133,11 @@ public:
     bool fn_800F75E0() const;
     bool fn_800F7600() const;
 
+    void setSelectBtn(f32 angle, f32 length) {
+        mArrowRotation = angle;
+        mArrowLength = length;
+    }
+
 private:
     bool shouldCall() const;
     void fn_800F7300();

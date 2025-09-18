@@ -164,6 +164,11 @@ public:
         field_0x54E0 = value;
     }
 
+    void setSelectBtn(f32 angle, f32 length) {
+        mArrowRotation = angle;
+        mArrowLength = length;
+    }
+
 private:
     void setItemName(s32 id);
     void setMessage(s32 id);

@@ -94,6 +94,10 @@ struct mAng {
         return rad * sRadToAng;
     }
 
+    static f32 ang2deg_c(f32 rad) {
+        return rad * sAngToDeg;
+    }
+
     static f32 rad2deg(f32 rad) {
         return rad * (360.f / (2.f * M_PI));
     }

@@ -482,6 +482,31 @@ public:
         }
     }
 
+    static void setSelectBtn(f32 angle, f32 length) {
+        if (sInstance != nullptr) {
+            dLytMeterMain_c *main = &sInstance->mMain;
+            main->mItemSelect.setSelectBtn(angle, length);
+            main->mMinusBtn.setSelectBtn(angle, length);
+            main->mDowsing.setSelectBtn(angle, length);
+        }
+    }
+
+    static f32 getSelectBtnArrowAngle() {
+        if (sInstance != nullptr) {
+            return sInstance->mMain.mItemSelect.getArrowRotation();
+        } else {
+            return 0.0f;
+        }
+    }
+
+    static f32 getSelectBtnArrowLength() {
+        if (sInstance != nullptr) {
+            return sInstance->mMain.mItemSelect.getArrowLength();
+        } else {
+            return 0.0f;
+        }
+    }
+
     dLytMeterMain_c::BasicPosition_e getBasicPosition() const {
         return (dLytMeterMain_c::BasicPosition_e)mMain.mBasicPosition;
     }

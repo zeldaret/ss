@@ -141,7 +141,7 @@ bool dLytMsgWindow_c::build() {
     field_0x81C = 0;
     field_0x81D = 0;
 
-    field_0x824 = 0;
+    mNumOptions = 0;
     field_0x820 = 0;
 
     field_0x81E = 0;
@@ -160,7 +160,7 @@ bool dLytMsgWindow_c::remove() {
     mpTagProcessor = nullptr;
     mSelectBtn.remove();
     removeSubMsgManagers();
-    field_0x824 = 0;
+    mNumOptions = 0;
     mResAcc1.detach();
     mResAcc2.detach();
     return true;
@@ -493,36 +493,36 @@ static wchar_t *sBufs[4];
 
 void dLytMsgWindow_c::initializeState_WaitKeySelectQuestion() {
     // TODO regswaps
-    field_0x824 = mpTagProcessor->getField_0x90E();
+    mNumOptions = mpTagProcessor->getField_0x90E();
 
     mSelectBtn.setField_0x9B8(mpTagProcessor->getField_0x82C());
-    s32 tmp = mpTagProcessor->getField_0x828();
-    mSelectBtn.setField_0x9BC(tmp);
+    s32 tmp = mpTagProcessor->getCancelBtnIdx();
+    mSelectBtn.setCancelBtnIdx(tmp);
     mSelectBtn.setField_0x990(tmp);
     mSelectBtn.setTagProcessor(mpTagProcessor);
 
     for (s32 i = 0; i < 4; i++) {
-        sBufs[i] = mpTagProcessor->getBuf(i);
+        sBufs[i] = mpTagProcessor->getOptionString(i);
     }
 
-    mSelectBtn.fn_8011E5D0(field_0x824, true);
+    mSelectBtn.requestIn(mNumOptions, true);
 
-    for (s32 i = 0, option = 0; i < field_0x824; option++, i++) {
+    for (s32 i = 0, option = 0; i < mNumOptions; option++, i++) {
         for (s32 j = 0; j < 2; j++) {
             mSelectBtn.getSelectTextBox(option, j)->setTextWithGlobalTextProcessor(sBufs[i]);
         }
     }
 }
 void dLytMsgWindow_c::executeState_WaitKeySelectQuestion() {
-    s32 selection = mSelectBtn.getField_0x9B4();
+    s32 selection = mSelectBtn.getDecidedBtnIdx();
     if (selection >= 0) {
         if (mSelectBtn.isStateWait()) {
             bool doFiThing = false;
             mpTagProcessor->setField_0x90E(0);
             mpTagProcessor->setField_0x82C(-1);
-            mpTagProcessor->setField_0x828(-1);
+            mpTagProcessor->setCancelBtnIdx(-1);
             mSelectBtn.setTagProcessor(nullptr);
-            field_0x824 = 0;
+            mNumOptions = 0;
             mTextOptionSelection = selection;
             field_0x1220 = 0;
             if (FiContext::GetInstance() != nullptr) {
