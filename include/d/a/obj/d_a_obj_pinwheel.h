@@ -27,7 +27,6 @@ public:
 
 private:
     bool isBeingBlown();
-    static s16 decrement(s16 *value);
 
     /* 0x330 */ nw4r::g3d::ResFile mResFile;
     /* 0x334 */ m3d::smdl_c mMdl;

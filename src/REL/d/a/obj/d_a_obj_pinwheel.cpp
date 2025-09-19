@@ -10,6 +10,7 @@
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
+#include "s/s_Math.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_PINWHEEL, dAcOpinwheel_c, fProfile::OBJ_PINWHEEL, 0x1DD, 0, 2);
 
@@ -94,20 +95,13 @@ void dAcOpinwheel_c::executeState_Acceleration() {
     holdSound(SE_Pinwhel_ROLL_LV);
     mRotationSpeed += 0xA6;
     mRotation.z += mRotationSpeed;
-    if (decrement(&mStateTimer) == 0) {
+    if (sLib::calcTimer(&mStateTimer) == 0) {
         mStateMgr.changeState(StateID_RollMaxSpeed);
     } else if (!isBeingBlown()) {
         u16 stateTimer = 0x1E - mStateTimer;
         mStateMgr.changeState(StateID_Deceleration);
         mStateTimer = stateTimer;
     }
-}
-
-s16 dAcOpinwheel_c::decrement(s16 *value) {
-    if (*value != 0) {
-        (*value)--;
-    }
-    return *value;
 }
 
 void dAcOpinwheel_c::finalizeState_Acceleration() {}
@@ -120,7 +114,7 @@ void dAcOpinwheel_c::executeState_RollMaxSpeed() {
     holdSound(SE_Pinwhel_ROLL_LV);
     mRotation.z += mRotationSpeed;
     if (!isBeingBlown()) {
-        if (decrement(&mStateTimer) == 0) {
+        if (sLib::calcTimer(&mStateTimer) == 0) {
             mStateMgr.changeState(StateID_Deceleration);
         }
 
@@ -141,7 +135,7 @@ void dAcOpinwheel_c::executeState_Deceleration() {
     holdSound(SE_Pinwhel_ROLL_LV);
     mRotationSpeed -= 0xA6;
     mRotation.z += mRotationSpeed;
-    if (decrement(&mStateTimer) == 0) {
+    if (sLib::calcTimer(&mStateTimer) == 0) {
         mStateMgr.changeState(StateID_Wait);
     } else if (isBeingBlown()) {
         u16 stateTimer = 0x1E - mStateTimer;
