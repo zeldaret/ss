@@ -130,17 +130,6 @@ private:
     /* 0x10 */ dCursorHitCheck_c *mpHit;
 };
 
-/** A variant of the cursor position getter for dCsGame_c */
-class dCursorInterfaceGame_c : public dCursorInterface_c {
-public:
-    dCursorInterfaceGame_c() {}
-    virtual ~dCursorInterfaceGame_c() {}
-    virtual mVec2_c &getCursorPos();
-
-private:
-    /* 0x14 */ u8 _0x14[8];
-};
-
 /**
  * The cursor manager. Cursors and hit targets are registered here,
  * and this manager will track the target of each pointer.

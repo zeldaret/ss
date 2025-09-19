@@ -39,7 +39,7 @@ void dCsMgr_c::execute() {
         u32 mask = it->mCursorMask;
 
         if (mask) {
-            for (HitCheckList::Iterator chkIt = mList2.GetBeginIter(); chkIt != mList2.GetEndIter(); ++it) {
+            for (HitCheckList::Iterator chkIt = mList2.GetBeginIter(); chkIt != mList2.GetEndIter(); ++chkIt) {
                 if ((chkIt->mMask & mask) != 0) {
                     bool hit = chkIt->checkHit(x, y);
                     if (chkIt->checkOverrideCallback(hit)) {
