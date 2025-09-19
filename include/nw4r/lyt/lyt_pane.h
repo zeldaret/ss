@@ -71,6 +71,10 @@ public:
         mTranslate = value;
     }
 
+    const math::VEC3 &GetRotate() const {
+        return mRotate;
+    }
+
     void SetRotate(const nw4r::math::VEC3 &value) {
         mRotate = value;
     }

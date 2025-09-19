@@ -138,7 +138,7 @@ public:
     virtual mVec2_c &getCursorPos();
 
 private:
-    /* 0x14 */ u8 _0x14[8];
+    /* 0x14 */ mVec2_c field_0x14;
 };
 
 /**

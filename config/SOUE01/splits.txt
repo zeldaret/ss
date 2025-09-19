@@ -1404,6 +1404,7 @@ d/d_cs_game.cpp:
 	.ctors      start:0x804DB820 end:0x804DB824
 	.rodata     start:0x804EAC38 end:0x804EACF0
 	.data       start:0x8052E968 end:0x80530170
+	.sdata      start:0x80573448 end:0x80573460
 	.sbss       start:0x805757B0 end:0x805757B8
 	.sdata2     start:0x8057B5C0 end:0x8057B650
 	.bss        start:0x805B38B8 end:0x805B4178
