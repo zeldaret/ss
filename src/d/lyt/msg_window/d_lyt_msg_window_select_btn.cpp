@@ -1,11 +1,21 @@
 #include "d/lyt/msg_window/d_lyt_msg_window_select_btn.h"
 
 #include "common.h"
+#include "d/d_gfx.h"
+#include "d/d_lyt_hio.h"
 #include "d/d_pad.h"
 #include "d/d_pad_nav.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_cursor_stick.h"
+#include "d/lyt/d_lyt_system_window.h"
+#include "d/lyt/meter/d_lyt_meter.h"
+#include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
+#include "m/m_angle.h"
+#include "m/m_pad.h"
+#include "m/m_vec.h"
+#include "nw4r/math/math_types.h"
 
 STATE_DEFINE(dLytMsgWindowSelectBtnParts_c, Wait);
 STATE_DEFINE(dLytMsgWindowSelectBtnParts_c, On);
@@ -22,28 +32,572 @@ STATE_DEFINE(dLytMsgWindowSelectBtn_c, Out);
 
 SelectBtnHelper::SelectBtnHelper() {
     field_0x4C = -1;
-    field_0x50 = -1;
-    field_0x44 = field_0x48 = 0;
-    field_0x34 = field_0x3C = 0.0f;
-    field_0x38 = field_0x40 = 0.0f;
-    field_0x52 = 0;
-    field_0x51 = 1;
+    mSelectedBtnIdx = -1;
+    mButtonMode = 0;
+    mCursorSelectTimer = 0;
+    mAngX = mAngXCenter = 0.0f;
+    mAngY = mAngYCenter = 0.0f;
+    mIsNavEnabled = false;
+    mIsCursorActive = true;
 
-    panes[0] = 0;
-    panes[1] = 0;
-    panes[2] = 0;
-    panes[3] = 0;
-    panes[4] = 0;
-    panes[5] = 0;
-    panes[6] = 0;
-    panes[7] = 0;
-    panes[8] = 0;
+    panes[0] = nullptr;
+    panes[1] = nullptr;
+    panes[2] = nullptr;
+    panes[3] = nullptr;
+    panes[4] = nullptr;
+    panes[5] = nullptr;
+    panes[6] = nullptr;
+    panes[7] = nullptr;
+    panes[8] = nullptr;
 }
 SelectBtnHelper::~SelectBtnHelper() {}
 
+void SelectBtnHelper::init() {
+    field_0x24 = dPad::getDpdPosScreen();
+    fn_8011E110(field_0x24);
+    field_0x2C = dPad::getDpdPosScreen();
+    resetCursor();
+}
+
+void SelectBtnHelper::remove() {
+    // no-op
+}
+
+void SelectBtnHelper::resetCursor() {
+    mAngX = mAngXCenter = mAng::ang2deg_c(dPad::ex_c::getInstance()->mMPLS.getHorizontalAngle());
+    mAngY = mAngYCenter = mAng::ang2deg_c(dPad::ex_c::getInstance()->mMPLS.getVerticalAngle());
+}
+
+u8 SelectBtnHelper::execute() {
+    u8 ret = EXECUTE_NONE;
+    if (mIsCursorActive && hasNewFSStickButtonSelect() && !mIsNavEnabled) {
+        mIsNavEnabled = true;
+        dPadNav::setNavEnabled(true, false);
+        dPadNav::hidePointer();
+    }
+
+    if (mIsCursorActive != dPadNav::isPointerVisible()) {
+        mIsCursorActive = dPadNav::isPointerVisible();
+        if (mIsCursorActive == true) {
+            if (mIsNavEnabled) {
+                mIsNavEnabled = false;
+                dPadNav::setNavEnabled(false, false);
+            }
+            resetCursor();
+        }
+        ret = EXECUTE_SWITCH_CURSOR;
+    }
+
+    s8 btn = mSelectedBtnIdx;
+    if (mIsCursorActive) {
+        if (handleCursorInput()) {
+            return EXECUTE_RESET_CURSOR;
+        } else if (btn == -1 && mSelectedBtnIdx != -1) {
+            ret = EXECUTE_SWITCH_CURSOR;
+        }
+    } else {
+        handleButtonInput();
+        if (btn == -1 && mSelectedBtnIdx != -1) {
+            ret = EXECUTE_SWITCH_STICK;
+        }
+    }
+
+    return ret;
+}
+
+bool SelectBtnHelper::handleCursorInput() {
+    if (dPad::getDownTrigDown()) {
+        resetCursor();
+        return true;
+    }
+
+    mAngX = mAng::ang2deg_c(dPad::ex_c::getInstance()->mMPLS.getHorizontalAngle());
+    mAngY = mAng::ang2deg_c(dPad::ex_c::getInstance()->mMPLS.getVerticalAngle());
+
+    mVec2_c screenPos = dPad::getDpdPosScreen();
+    if (mCursorSelectTimer > 0) {
+        mCursorSelectTimer--;
+        if (mCursorSelectTimer == 0) {
+            fn_8011E110(screenPos);
+            field_0x2C = dPad::getDpdPosScreen();
+            mAngXCenter = mAngX;
+            mAngYCenter = mAngY;
+        }
+    } else {
+        s32 btn = calculatePointedAtButton(mAngX - mAngXCenter, mAngY - mAngYCenter);
+        if (mSelectedBtnIdx != btn) {
+            mSelectedBtnIdx = btn;
+            mCursorSelectTimer = dLyt_HIO_c::getInstance()->getField0x796();
+            if (mSelectedBtnIdx != -1) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR);
+                mPad::getCore()->startPatternRumble("**-*----", 0, false);
+            }
+            fn_8011E110(screenPos);
+            // TODO additional stack stores
+            field_0x2C = dPad::getDpdPosScreen();
+            mAngXCenter = mAngX;
+            mAngYCenter = mAngY;
+        }
+
+        f32 length = 0.0f;
+        f32 angle = 0.0f;
+        s32 selected = mSelectedBtnIdx;
+        mVec2_c v(
+            -(mAngX - mAngXCenter) / dLyt_HIO_c::getInstance()->getField0x778(),
+            (mAngY - mAngYCenter) / dLyt_HIO_c::getInstance()->getField0x780()
+        );
+
+        if (v.x > 1.0f) {
+            v.x = 1.0f;
+        }
+        if (v.x < -1.0f) {
+            v.x = -1.0f;
+        }
+        if (v.y > 1.0f) {
+            v.y = 1.0f;
+        }
+        if (v.y < -1.0f) {
+            v.y = -1.0f;
+        }
+
+        if (selected != -1) {
+            nw4r::math::MTX34 mtx0 = getRootPane()->GetGlobalMtx();
+            mVec2_c pos0 = mVec2_c(mtx0._03, mtx0._13);
+            nw4r::math::MTX34 mtxi = getPosPane(selected)->GetGlobalMtx();
+            mVec2_c posi = mVec2_c(mtxi._03, mtxi._13);
+            mVec2_c d1 = posi - pos0;
+            s16 ang = d1.ang();
+
+            mVec2_c adj;
+            adj.x = v.x * dLyt_HIO_c::getInstance()->getField0x770();
+            adj.y = v.y * dLyt_HIO_c::getInstance()->getField0x774();
+            mVec2_c d2 = posi + adj - pos0;
+            s16 ang2 = d2.ang();
+
+            angle = mAng::ang2deg_c(ang2) - mAng::ang2deg_c(ang);
+            length = d2.length() / d1.length();
+        }
+        if (length > 1.0f) {
+            length = 1.0f;
+        }
+
+        if ((mButtonMode == MODE_3_UP && selected == 0) || (mButtonMode == MODE_3_DOWN && selected == 1)) {
+            // "middle" button
+            length *= 0.53f;
+        }
+
+        dLytMeter_c::setSelectBtn(angle + getAngleForButtonIdx(selected), length);
+        dLytSystemWindow_c::setSelectBtn(angle + getAngleForButtonIdx(selected), length);
+    }
+    return false;
+}
+
+bool SelectBtnHelper::handleButtonInput() {
+    if (dPad::getDownTrigDown()) {
+        resetCursor();
+    }
+
+    s8 btn = mSelectedBtnIdx;
+    if (btn != -1) {
+#define IS(dir) (dPadNav::getFSStickNavDirection() == dPadNav::FS_STICK_##dir)
+
+        switch (mButtonMode) {
+            case MODE_2:
+                if (btn == 0) {
+                    if (IS(LEFT) || IS(UP_LEFT) || IS(DOWN_LEFT)) {
+                        btn = 1;
+                    }
+                } else if (btn == 1) {
+                    if (IS(RIGHT) || IS(UP_RIGHT) || IS(DOWN_RIGHT)) {
+                        btn = 0;
+                    }
+                }
+                break;
+            case MODE_3_UP:
+                if (btn == 0) {
+                    if (IS(RIGHT) || IS(DOWN_RIGHT)) {
+                        btn = 1;
+                    } else if (IS(LEFT) || IS(DOWN_LEFT)) {
+                        btn = 2;
+                    }
+                } else if (btn == 1) {
+                    if (IS(UP) || IS(UP_LEFT)) {
+                        btn = 0;
+                    } else if (IS(DOWN_LEFT) || IS(LEFT)) {
+                        btn = 2;
+                    }
+                } else if (btn == 2) {
+                    if (IS(UP) || IS(UP_RIGHT)) {
+                        btn = 0;
+                    } else if (IS(DOWN_RIGHT) || IS(RIGHT)) {
+                        btn = 1;
+                    }
+                }
+                break;
+            case MODE_4:
+                if (btn == 0) {
+                    if (IS(DOWN) || IS(DOWN_RIGHT)) {
+                        btn = 1;
+                    } else if (IS(LEFT) || IS(UP_LEFT)) {
+                        btn = 2;
+                    } else if (IS(DOWN_LEFT)) {
+                        btn = 3;
+                    }
+                } else if (btn == 1) {
+                    if (IS(UP) || IS(UP_RIGHT)) {
+                        btn = 0;
+                    } else if (IS(UP_LEFT)) {
+                        btn = 2;
+                    } else if (IS(LEFT) || IS(DOWN_LEFT)) {
+                        btn = 3;
+                    }
+                } else if (btn == 2) {
+                    if (IS(RIGHT) || IS(UP_RIGHT)) {
+                        btn = 0;
+                    } else if (IS(DOWN_RIGHT)) {
+                        btn = 1;
+                    } else if (IS(DOWN) || IS(DOWN_LEFT)) {
+                        btn = 3;
+                    }
+                } else if (btn == 3) {
+                    if (IS(UP_RIGHT)) {
+                        btn = 0;
+                    } else if (IS(RIGHT) || IS(DOWN_RIGHT)) {
+                        btn = 1;
+                    } else if (IS(UP) || IS(UP_LEFT)) {
+                        btn = 2;
+                    }
+                }
+                break;
+            case MODE_3_DOWN:
+                if (btn == 1) {
+                    if (IS(RIGHT) || IS(UP_RIGHT)) {
+                        btn = 0;
+                    } else if (IS(LEFT) || IS(UP_LEFT)) {
+                        btn = 2;
+                    }
+                } else if (btn == 0) {
+                    if (IS(DOWN) || IS(DOWN_LEFT)) {
+                        btn = 1;
+                    } else if (IS(UP_LEFT) || IS(LEFT)) {
+                        btn = 2;
+                    }
+                } else if (btn == 2) {
+                    if (IS(DOWN) || IS(DOWN_RIGHT)) {
+                        btn = 1;
+                    } else if (IS(UP_RIGHT) || IS(RIGHT)) {
+                        btn = 0;
+                    }
+                }
+                break;
+        }
+
+#undef IS
+    } else {
+#define IS(dir) (dPadNav::getFSStickDirectionTrig() == dPadNav::FS_STICK_##dir)
+
+        switch (mButtonMode) {
+            case MODE_2:
+                if (IS(UP_RIGHT) || IS(RIGHT) || IS(DOWN_RIGHT)) {
+                    btn = 0;
+                } else if (IS(UP_LEFT) || IS(LEFT) || IS(DOWN_LEFT)) {
+                    btn = 1;
+                }
+                break;
+            case MODE_3_UP:
+                if (IS(UP_RIGHT) || IS(UP) || IS(UP_LEFT)) {
+                    btn = 0;
+                } else if (IS(LEFT) || IS(DOWN_LEFT)) {
+                    btn = 2;
+                } else if (IS(RIGHT) || IS(DOWN_RIGHT)) {
+                    btn = 1;
+                }
+                break;
+            case MODE_4:
+                if (IS(UP_RIGHT) || IS(RIGHT)) {
+                    btn = 0;
+                } else if (IS(DOWN_RIGHT)) {
+                    btn = 1;
+                } else if (IS(DOWN_LEFT) || IS(LEFT)) {
+                    btn = 3;
+                } else if (IS(UP_LEFT)) {
+                    btn = 2;
+                }
+                break;
+            case MODE_3_DOWN:
+                if (IS(DOWN_RIGHT) || IS(DOWN) || IS(DOWN_LEFT)) {
+                    btn = 1;
+                } else if (IS(LEFT) || IS(UP_LEFT)) {
+                    btn = 2;
+                } else if (IS(RIGHT) || IS(UP_RIGHT)) {
+                    btn = 0;
+                }
+                break;
+        }
+
+#undef IS
+
+        if (btn == -1) {
+            // TODO
+            btn = field_0x4C != -1 ? field_0x4C : 0;
+        }
+    }
+
+    if (mSelectedBtnIdx != btn) {
+        mSelectedBtnIdx = btn;
+        if (mSelectedBtnIdx != -1) {
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR);
+            mPad::getCore()->startPatternRumble("**-*----", 0, false);
+            // TODO - pane array
+            dLytCursorStick_c::GetInstance()->setTargetPane(getBounding(btn));
+        }
+    }
+
+    return false;
+}
+
+f32 SelectBtnHelper::getAngleForButtonIdx(s32 idx) const {
+    f32 ret = 0.0f;
+    switch (mButtonMode) {
+        case MODE_2:
+            if (idx == 0) {
+                ret = -90.0f;
+            } else {
+                ret = 90.0f;
+            }
+            break;
+        case MODE_3_UP:
+            if (idx == 0) {
+                return 0.0f;
+            } else if (idx == 1) {
+                return -90.0f;
+            } else {
+                ret = 90.0f;
+            }
+            break;
+        case MODE_4:
+            if (idx == 0) {
+                return -75.0f;
+            } else if (idx == 1) {
+                return -105.0f;
+            } else if (idx == 2) {
+                return 75.0f;
+            } else {
+                ret = 105.0f;
+            }
+            break;
+        case MODE_3_DOWN:
+            if (idx == 1) {
+                return -180.0f;
+            } else if (idx == 0) {
+                return -90.0f;
+            } else {
+                ret = 90.0f;
+            }
+            break;
+    }
+
+    return ret;
+}
+
+bool SelectBtnHelper::hasNewFSStickButtonSelect() const {
+    if (dPadNav::getFSStickDirectionTrig() == dPadNav::FS_STICK_NONE) {
+        return false;
+    }
+
+#define TRIG(dir) (dPadNav::getFSStickDirectionTrig() == dPadNav::FS_STICK_##dir)
+
+    switch (mButtonMode) {
+        case MODE_2:
+            if (TRIG(UP) || TRIG(DOWN) ||
+                ((TRIG(RIGHT) || TRIG(UP_RIGHT) || TRIG(DOWN_RIGHT)) && mSelectedBtnIdx == 0) ||
+                ((TRIG(LEFT) || TRIG(UP_LEFT) || TRIG(DOWN_LEFT)) && mSelectedBtnIdx == 1)) {
+                return false;
+            }
+            break;
+        case MODE_3_UP:
+            if (((TRIG(UP) || TRIG(UP_RIGHT) || TRIG(UP_LEFT)) && mSelectedBtnIdx == 0) ||
+                ((TRIG(DOWN) || TRIG(DOWN_RIGHT) || TRIG(DOWN_LEFT)) && (mSelectedBtnIdx == 1 || mSelectedBtnIdx == 2)
+                ) ||
+                ((TRIG(RIGHT) || TRIG(UP_RIGHT) || TRIG(DOWN_RIGHT)) && mSelectedBtnIdx == 1) ||
+                ((TRIG(LEFT) || TRIG(UP_LEFT) || TRIG(DOWN_LEFT)) && mSelectedBtnIdx == 2)) {
+                return false;
+            }
+            break;
+        case MODE_3_DOWN:
+            if (((TRIG(UP) || TRIG(UP_LEFT) || TRIG(UP_RIGHT)) && (mSelectedBtnIdx == 0 || mSelectedBtnIdx == 2)) ||
+                ((TRIG(DOWN) || TRIG(DOWN_RIGHT) || TRIG(DOWN_LEFT)) && mSelectedBtnIdx == 1) ||
+                ((TRIG(RIGHT) || TRIG(UP_RIGHT) || TRIG(DOWN_RIGHT)) && mSelectedBtnIdx == 0) ||
+                ((TRIG(LEFT) || TRIG(UP_LEFT) || TRIG(DOWN_LEFT)) && mSelectedBtnIdx == 2)) {
+                return false;
+            }
+            break;
+        case MODE_4:
+            if ((TRIG(UP) && (mSelectedBtnIdx == 0 || mSelectedBtnIdx == 2)) ||
+                (TRIG(DOWN) && (mSelectedBtnIdx == 1 || mSelectedBtnIdx == 3)) ||
+                (TRIG(RIGHT) && (mSelectedBtnIdx == 0 || mSelectedBtnIdx == 1)) ||
+                (TRIG(LEFT) && (mSelectedBtnIdx == 2 || mSelectedBtnIdx == 3)) ||
+                (TRIG(UP_RIGHT) && mSelectedBtnIdx == 0) || (TRIG(UP_LEFT) && mSelectedBtnIdx == 2) ||
+                (TRIG(DOWN_RIGHT) && mSelectedBtnIdx == 1) || (TRIG(DOWN_LEFT) && mSelectedBtnIdx == 3)) {
+                return false;
+            }
+            break;
+    }
+
+#undef TRIG
+
+    return true;
+}
+
+s8 SelectBtnHelper::calculatePointedAtButton(f32 x, f32 y) {
+    s32 ret = mSelectedBtnIdx;
+    switch (mButtonMode) {
+        case MODE_2:
+            if (x <= -dLyt_HIO_c::getInstance()->getField0x778()) {
+                ret = 0;
+            } else if (x >= dLyt_HIO_c::getInstance()->getField0x778()) {
+                ret = 1;
+            }
+            if (mSelectedBtnIdx == 0 && x < 0) {
+                mAngXCenter = mAngX;
+            } else if (mSelectedBtnIdx == 1 && x > 0) {
+                mAngXCenter = mAngX;
+            }
+            break;
+        case MODE_3_UP:
+            if (y >= dLyt_HIO_c::getInstance()->getField0x780()) {
+                ret = 0;
+            } else if (x <= -dLyt_HIO_c::getInstance()->getField0x778()) {
+                ret = 1;
+            } else if (x >= dLyt_HIO_c::getInstance()->getField0x778()) {
+                ret = 2;
+            } else if (y <= -dLyt_HIO_c::getInstance()->getField0x780()) {
+                if (x < 0.0f) {
+                    ret = 1;
+                } else {
+                    ret = 2;
+                }
+            }
+            if (mSelectedBtnIdx == 0 && y > 0) {
+                mAngYCenter = mAngY;
+            } else if (mSelectedBtnIdx == 1 && x < 0) {
+                mAngXCenter = mAngX;
+            } else if (mSelectedBtnIdx == 2 && x > 0) {
+                mAngXCenter = mAngX;
+            }
+            break;
+        case MODE_4:
+            if (mSelectedBtnIdx == -1) {
+                if (y >= dLyt_HIO_c::getInstance()->getField0x780() &&
+                    x <= -dLyt_HIO_c::getInstance()->getField0x778()) {
+                    ret = 0;
+                } else if (y <= -dLyt_HIO_c::getInstance()->getField0x780() &&
+                           x <= -dLyt_HIO_c::getInstance()->getField0x778()) {
+                    ret = 1;
+                } else if (y >= dLyt_HIO_c::getInstance()->getField0x780() &&
+                           x >= dLyt_HIO_c::getInstance()->getField0x778()) {
+                    ret = 2;
+                } else if (y <= -dLyt_HIO_c::getInstance()->getField0x780() &&
+                           x >= dLyt_HIO_c::getInstance()->getField0x778()) {
+                    ret = 3;
+                }
+            } else if (mSelectedBtnIdx == 0) {
+                if (y <= -dLyt_HIO_c::getInstance()->getField0x784() &&
+                    x >= dLyt_HIO_c::getInstance()->getField0x77C()) {
+                    ret = 3;
+                } else if (y <= -dLyt_HIO_c::getInstance()->getField0x780()) {
+                    ret = 1;
+                } else if (x >= dLyt_HIO_c::getInstance()->getField0x778()) {
+                    ret = 2;
+                }
+            } else if (mSelectedBtnIdx == 1) {
+                if (y >= dLyt_HIO_c::getInstance()->getField0x784() &&
+                    x >= dLyt_HIO_c::getInstance()->getField0x77C()) {
+                    ret = 2;
+                } else if (y >= dLyt_HIO_c::getInstance()->getField0x780()) {
+                    ret = 0;
+                } else if (x >= dLyt_HIO_c::getInstance()->getField0x778()) {
+                    ret = 3;
+                }
+            } else if (mSelectedBtnIdx == 2) {
+                if (y <= -dLyt_HIO_c::getInstance()->getField0x784() &&
+                    x <= -dLyt_HIO_c::getInstance()->getField0x77C()) {
+                    ret = 1;
+                } else if (y <= -dLyt_HIO_c::getInstance()->getField0x780()) {
+                    ret = 3;
+                } else if (x <= -dLyt_HIO_c::getInstance()->getField0x778()) {
+                    ret = 0;
+                }
+            } else if (mSelectedBtnIdx == 3) {
+                if (y >= dLyt_HIO_c::getInstance()->getField0x784() &&
+                    x <= -dLyt_HIO_c::getInstance()->getField0x77C()) {
+                    ret = 0;
+                } else if (y >= dLyt_HIO_c::getInstance()->getField0x780()) {
+                    ret = 2;
+                } else if (x <= -dLyt_HIO_c::getInstance()->getField0x778()) {
+                    ret = 1;
+                }
+            }
+
+            if (mSelectedBtnIdx == 0 && y > 0.0f) {
+                mAngYCenter = mAngY;
+            } else if (mSelectedBtnIdx == 0 && x < 0.0f) {
+                mAngXCenter = mAngX;
+            } else if (mSelectedBtnIdx == 1 && y < 0.0f) {
+                mAngYCenter = mAngY;
+            } else if (mSelectedBtnIdx == 1 && x < 0.0f) {
+                mAngXCenter = mAngX;
+            } else if (mSelectedBtnIdx == 2 && y > 0.0f) {
+                mAngYCenter = mAngY;
+            } else if (mSelectedBtnIdx == 2 && x > 0.0f) {
+                mAngXCenter = mAngX;
+            } else if (mSelectedBtnIdx == 3 && y < 0.0f) {
+                mAngYCenter = mAngY;
+            } else if (mSelectedBtnIdx == 3 && x > 0.0f) {
+                mAngXCenter = mAngX;
+            }
+            break;
+        case MODE_3_DOWN:
+            if (y <= -dLyt_HIO_c::getInstance()->getField0x780()) {
+                ret = 1;
+            } else if (x <= -dLyt_HIO_c::getInstance()->getField0x778()) {
+                ret = 0;
+            } else if (x >= dLyt_HIO_c::getInstance()->getField0x778()) {
+                ret = 2;
+            } else if (y >= dLyt_HIO_c::getInstance()->getField0x780()) {
+                if (x < 0.0f) {
+                    ret = 0;
+                } else {
+                    ret = 2;
+                }
+            }
+            if (mSelectedBtnIdx == 1 && y < 0) {
+                mAngYCenter = mAngY;
+            } else if (mSelectedBtnIdx == 0 && x < 0) {
+                mAngXCenter = mAngX;
+            } else if (mSelectedBtnIdx == 2 && x > 0) {
+                mAngXCenter = mAngX;
+            }
+            break;
+    }
+
+    return ret;
+}
+
+void SelectBtnHelper::convertScreenPosToDpdPos(mVec2_c *pOutDpd, mVec2_c *screenPos) const {
+    pOutDpd->x = (screenPos->x - dGfx_c::getWidth4x3LeftF()) / (dGfx_c::getWidth4x3F() * 0.5f) - 1.0f;
+    pOutDpd->y = (screenPos->y - dGfx_c::getCurrentScreenTopF()) / (dGfx_c::getCurrentScreenHeightF() * -0.5f) - 1.0f;
+}
+
+void SelectBtnHelper::fn_8011E110(mVec2_c screenPos) const {
+    mVec2_c dpdPos;
+    convertScreenPosToDpdPos(&dpdPos, &screenPos);
+    dPad::ex_c::getInstance()->fn_80056580(mPad::getCurrentCoreID(), dpdPos);
+}
+
 void dLytMsgWindowSelectBtnParts_c::initializeState_Wait() {}
 void dLytMsgWindowSelectBtnParts_c::executeState_Wait() {
-    if (field_0x48 != 0) {
+    if (mShouldBeOn != 0) {
         for (int i = 0; i <= 1; i++) {
             mpAnms[i]->setForwardOnce();
             mpAnms[i]->setFrame(0.0f);
@@ -71,7 +625,7 @@ void dLytMsgWindowSelectBtnParts_c::finalizeState_On() {}
 
 void dLytMsgWindowSelectBtnParts_c::initializeState_Select() {}
 void dLytMsgWindowSelectBtnParts_c::executeState_Select() {
-    if (field_0x48 == 0) {
+    if (mShouldBeOn == 0) {
         for (int i = 0; i <= 1; i++) {
             mpAnms[i]->setBackwardsOnce();
             mpAnms[i]->setToStart();
@@ -99,7 +653,7 @@ void dLytMsgWindowSelectBtnParts_c::finalizeState_Off() {}
 
 void dLytMsgWindowSelectBtnParts_c::init() {
     mStateMgr.changeState(StateID_Wait);
-    field_0x48 = 0;
+    mShouldBeOn = 0;
     field_0x50 = 0;
     field_0x4C = 3;
 }
@@ -107,6 +661,14 @@ void dLytMsgWindowSelectBtnParts_c::init() {
 void dLytMsgWindowSelectBtnParts_c::execute() {
     mStateMgr.executeState();
     mpAnms[2]->play();
+}
+
+const char *d_lyt_msg_window_select_btn_string_order_1() {
+    return "N_allBtn_00";
+}
+
+const char *d_lyt_msg_window_select_btn_string_order_2() {
+    return "N_arrowIn_00";
 }
 
 #define SELECT_BTN_ANIM_IN 0
@@ -187,7 +749,7 @@ static const char *sDecideTextBoxes[2] = {
     "T_decideS_00",
 };
 
-static const char *sWindowName = "W_bgP_01";
+static const char *sWindowNames[] = {"W_bgP_01"};
 
 static const char *sBoundings[SELECT_BTN_NUM_BTNS] = {
     "B_btn_00",
@@ -201,40 +763,76 @@ static const char *sSelectPanes[7] = {
     "N_messageBtn_01", "N_messageBtn_02", "N_messageBtn_03",
 };
 
-void dLytMsgWindowSelectBtn_c::initializeState_Wait() {
-    field_0x9A4 = 0;
-    field_0x9B8 = -1;
-    field_0x9BC = -1;
+#define SELECT_BTN_PANE_ITEM_ARROW_0 0
+#define SELECT_BTN_PANE_ARROW_HAND 1
+#define SELECT_BTN_PANE_BTN_0 2
 
-    field_0x9CC = 0xFF;
-    field_0x9C0 = 10;
+void dLytMsgWindowSelectBtn_c::requestIn(s32 numBtns, bool playSound) {
+    mPlayInSound = playSound;
+    mBtnHelper.mSelectedBtnIdx = -1;
+
+    if (numBtns < 2) {
+        numBtns = 2;
+    } else if (numBtns > 4) {
+        numBtns = 4;
+    }
+
+    mNumBtns = numBtns;
+    switch (numBtns) {
+        case 2: field_0x9AC = 2; break;
+        case 3: field_0x9AC = 1; break;
+        case 4: field_0x9AC = 0; break;
+    }
+
+    mIsVisible = true;
+    if (mFlipBtnLayout == 1 && mNumBtns == 3) {
+        mAnm[SELECT_BTN_ANIM_MESSAGE_BTN].setFrame(3.0f);
+    } else {
+        mAnm[SELECT_BTN_ANIM_MESSAGE_BTN].setFrame(mNumBtns - 2);
+    }
+    mAnm[SELECT_BTN_ANIM_MESSAGE_BTN].setAnimEnable(true);
+    mAnm[SELECT_BTN_ANIM_IN].setAnimEnable(false);
+    mConfirmedBtnIdx = -1;
+    mStateMgr.changeState(StateID_In);
+}
+
+void dLytMsgWindowSelectBtn_c::initializeState_Wait() {
+    mIsVisible = false;
+    field_0x9B8 = -1;
+    mCancelBtnIdx = -1;
+
+    mCanceledViaBBtnIdx = 0xFF;
+    mWaitCancelTimer = 10;
     field_0x9CD = 1;
 }
 void dLytMsgWindowSelectBtn_c::executeState_Wait() {}
 void dLytMsgWindowSelectBtn_c::finalizeState_Wait() {}
 
 void dLytMsgWindowSelectBtn_c::initializeState_In() {
-    field_0x9A4 = 1;
-    field_0x9B4 = -1;
+    mIsVisible = true;
+    mDecidedBtnIdx = -1;
     for (int i = 0; i < 2; i++) {
         // "Select"
         mLyt.loadTextVariant(mpDecideTextBoxes[i], 1);
     }
 
-    mpWindow->UpdateSize(mpSizeBox, 32.0f);
+    mpWindow[0]->UpdateSize(mpSizeBox[0], 32.0f);
 
     for (int i = SELECT_BTN_ANIM_MESSAGE_BTN_CANCEL_0; i <= SELECT_BTN_ANIM_MESSAGE_BTN_CANCEL_3; i++) {
-        if (field_0x9BC == i - SELECT_BTN_ANIM_MESSAGE_BTN_CANCEL_0) {
+        if (mCancelBtnIdx == i - SELECT_BTN_ANIM_MESSAGE_BTN_CANCEL_0) {
             mAnm[i].setFrame(1.0f);
         } else {
             mAnm[i].setFrame(0.0f);
         }
     }
 
-    mBtnHelper.field_0x50 = -1;
-    mBtnHelper.field_0x51 = 1;
-    // ??????
-    f32 v = mBtnHelper.fn_8011D690(mBtnHelper.field_0x50);
+    mBtnHelper.mSelectedBtnIdx = -1;
+    mBtnHelper.mIsCursorActive = true;
+    if (mBtnHelper.getSelectedtBtnIdx() != -1) {
+        // unreachable but the call isn't eliminated
+        dLytCursorStick_c::GetInstance()->setTargetPane(mBtnHelper.getBounding(mBtnHelper.getSelectedtBtnIdx()));
+    }
+    dLytMeter_c::setSelectBtn(mBtnHelper.getAngleForButtonIdx(mBtnHelper.getSelectedtBtnIdx()), 0.0f);
 
     mLyt.findPane("N_allBtn_00")->SetVisible(true);
     mLyt.findPane("N_arrowIn_00")->SetVisible(true);
@@ -277,10 +875,10 @@ void dLytMsgWindowSelectBtn_c::initializeState_In() {
         mAnm[SELECT_BTN_ANIM_IN].setToEnd();
         field_0x9D1 = false;
     } else {
-        if (field_0x9CF != 0) {
-            if (field_0x9A0 == 1) {
+        if (mPlayInSound) {
+            if (mInSound == 1) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_CHOICE_START);
-            } else if (field_0x9A0 == 2) {
+            } else if (mInSound == 2) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_CHOICE_START_GAMEOVER);
             } else {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CHOICE_START);
@@ -300,65 +898,106 @@ void dLytMsgWindowSelectBtn_c::finalizeState_In() {
 }
 
 void dLytMsgWindowSelectBtn_c::initializeState_WaitSelect() {
-    if (field_0x9D0 == 0) {
+    if (!field_0x9D0) {
         field_0x9D0 = true;
         dSndPlayerMgr_c::GetInstance()->enterMsgWait();
     }
 
-    mBtnHelper.fn_8011C970();
-    mBtnHelper.field_0x48 = fn_8011FE50();
+    mBtnHelper.init();
+    mBtnHelper.mButtonMode = getSelectBtnMode();
 }
 
 void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
-    u8 v = mBtnHelper.fn_8011CAC0();
-    if (v == 1) {
+    u8 v = mBtnHelper.execute();
+    if (v == SelectBtnHelper::EXECUTE_SWITCH_CURSOR) {
         mStateMgr.changeState(StateID_CursorInOut);
         return;
-    } else if (v == 2) {
-        f32 f = mBtnHelper.fn_8011D690(mBtnHelper.field_0x50);
-        // TODO
+    } else if (v == SelectBtnHelper::EXECUTE_SWITCH_STICK) {
+        dLytMeter_c::setSelectBtn(mBtnHelper.getAngleForButtonIdx(mBtnHelper.getSelectedtBtnIdx()), 1.0f);
         for (int i = 0; i < 2; i++) {
             // "Confirm"
             mLyt.loadTextVariant(mpDecideTextBoxes[i], 0);
         }
 
-        mpWindow->UpdateSize(mpSizeBox, 32.0f);
-    } else if (v == 3) {
+        mpWindow[0]->UpdateSize(mpSizeBox[0], 32.0f);
+    } else if (v == SelectBtnHelper::EXECUTE_RESET_CURSOR) {
         field_0x9D1 = 1;
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_POINTER_RESET);
         mStateMgr.changeState(StateID_In);
         return;
     }
 
-    if (mBtnHelper.field_0x50 >= 0 && dPad::getDownTrigA()) {
-        field_0x9D0 = 0;
-        field_0x9B0 = mBtnHelper.field_0x50;
+    if (mBtnHelper.getSelectedtBtnIdx() >= 0 && dPad::getDownTrigA()) {
+        mConfirmedBtnIdx = mBtnHelper.getSelectedtBtnIdx();
+        field_0x9D0 = false;
         mStateMgr.changeState(StateID_WaitDecide);
-        // TODO
         if (mpTagProcessor != nullptr) {
-            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_CANCEL);
-        } else {
-            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
+            if (mpTagProcessor->getOptionSound(mBtnHelper.getSelectedtBtnIdx()) == 0) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_CANCEL);
+            } else {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
+            }
         }
         dSndPlayerMgr_c::GetInstance()->leaveMsgWait();
-    } else if (dPad::getDownTrigB()) {
-        f32 f = mBtnHelper.fn_8011D690(field_0x9BC);
-        // TODO
-        field_0x9CC = field_0x9BC;
-        field_0x9D0 = 0;
+    } else if (mCancelBtnIdx >= 0 && dPad::getDownTrigB()) {
+        dLytMeter_c::setSelectBtn(mBtnHelper.getAngleForButtonIdx(mCancelBtnIdx), 1.0f);
+        mCanceledViaBBtnIdx = mCancelBtnIdx;
+        field_0x9D0 = false;
         mStateMgr.changeState(StateID_WaitCancel);
-        // TODO
         if (mpTagProcessor != nullptr) {
-            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_CANCEL);
-        } else {
-            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
+            if (mpTagProcessor->getOptionSound(mCanceledViaBBtnIdx) == 0) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_CANCEL);
+            } else {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
+            }
         }
         dSndPlayerMgr_c::GetInstance()->leaveMsgWait();
     }
 }
-void dLytMsgWindowSelectBtn_c::finalizeState_WaitSelect() {}
+void dLytMsgWindowSelectBtn_c::finalizeState_WaitSelect() {
+    mBtnHelper.remove();
+    if (!field_0x9D0 && mBtnHelper.mIsNavEnabled) {
+        mBtnHelper.mIsNavEnabled = false;
+        dPadNav::setNavEnabled(false, false);
+    }
+}
 
-void dLytMsgWindowSelectBtn_c::initializeState_CursorInOut() {}
+void dLytMsgWindowSelectBtn_c::initializeState_CursorInOut() {
+    for (int i = 0; i < 2; i++) {
+        // "Confirm"
+        mLyt.loadTextVariant(mpDecideTextBoxes[i], 0);
+    }
+    mpWindow[0]->UpdateSize(mpSizeBox[0], 32.0f);
+
+    if (mBtnHelper.mIsCursorActive) {
+        mAnm[SELECT_BTN_ANIM_INOUT_CURSOR].setForwardOnce();
+        if (mBtnHelper.getSelectedtBtnIdx() != -1) {
+            f32 length = 1.0f;
+            if ((mBtnHelper.mButtonMode == SelectBtnHelper::MODE_3_UP && mBtnHelper.getSelectedtBtnIdx() == 0) ||
+                (mBtnHelper.mButtonMode == SelectBtnHelper::MODE_3_DOWN && mBtnHelper.getSelectedtBtnIdx() == 1)) {
+                // "middle" button
+                length *= 0.53f;
+            }
+            dLytMeter_c::setSelectBtn(mBtnHelper.getAngleForButtonIdx(mBtnHelper.getSelectedtBtnIdx()), length);
+        } else {
+            dLytMeter_c::setSelectBtn(mBtnHelper.getAngleForButtonIdx(mBtnHelper.getSelectedtBtnIdx()), 0.0f);
+        }
+    } else {
+        f32 length = 1.0f;
+        mAnm[SELECT_BTN_ANIM_INOUT_CURSOR].setBackwardsOnce();
+        if (mBtnHelper.getSelectedtBtnIdx() != -1) {
+            dLytCursorStick_c::GetInstance()->setTargetPane(mpBoundings[mBtnHelper.getSelectedtBtnIdx()]);
+            if ((mBtnHelper.mButtonMode == SelectBtnHelper::MODE_3_UP && mBtnHelper.getSelectedtBtnIdx() == 0) ||
+                (mBtnHelper.mButtonMode == SelectBtnHelper::MODE_3_DOWN && mBtnHelper.getSelectedtBtnIdx() == 1)) {
+                // "middle" button
+                length *= 0.53f;
+            }
+        }
+        dLytMeter_c::setSelectBtn(mBtnHelper.getAngleForButtonIdx(mBtnHelper.getSelectedtBtnIdx()), length);
+    }
+    mAnm[SELECT_BTN_ANIM_INOUT_CURSOR].setToStart();
+    mAnm[SELECT_BTN_ANIM_INOUT_CURSOR].setAnimEnable(true);
+}
 void dLytMsgWindowSelectBtn_c::executeState_CursorInOut() {
     if (mAnm[SELECT_BTN_ANIM_INOUT_CURSOR].isStop2()) {
         mAnm[SELECT_BTN_ANIM_INOUT_CURSOR].setAnimEnable(false);
@@ -371,18 +1010,18 @@ void dLytMsgWindowSelectBtn_c::executeState_CursorInOut() {
 void dLytMsgWindowSelectBtn_c::finalizeState_CursorInOut() {}
 
 void dLytMsgWindowSelectBtn_c::initializeState_WaitDecide() {
-    s32 decideAnm = field_0x9B0 + SELECT_BTN_ANIM_MESSAGE_BTN_DECIDE_OFFSET;
+    s32 decideAnm = mConfirmedBtnIdx + SELECT_BTN_ANIM_MESSAGE_BTN_DECIDE_OFFSET;
     mAnm[decideAnm].setAnimEnable(true);
     mAnm[decideAnm].setFrame(0.0f);
     mAnm[decideAnm].setForwardOnce();
 }
 void dLytMsgWindowSelectBtn_c::executeState_WaitDecide() {
-    s32 decideAnm = field_0x9B0 + SELECT_BTN_ANIM_MESSAGE_BTN_DECIDE_OFFSET;
+    s32 decideAnm = mConfirmedBtnIdx + SELECT_BTN_ANIM_MESSAGE_BTN_DECIDE_OFFSET;
     mAnm[decideAnm].play();
     if (mAnm[decideAnm].isStop2()) {
         mAnm[decideAnm].setAnimEnable(false);
-        field_0x9B4 = field_0x9B0;
-        if (field_0x99C == 1) {
+        mDecidedBtnIdx = mConfirmedBtnIdx;
+        if (mSkipOutAnim == 1) {
             mStateMgr.changeState(StateID_Wait);
         } else {
             mStateMgr.changeState(StateID_Out);
@@ -392,7 +1031,7 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitDecide() {
 void dLytMsgWindowSelectBtn_c::finalizeState_WaitDecide() {}
 
 void dLytMsgWindowSelectBtn_c::initializeState_WaitCancel() {
-    field_0x9C0 = 10;
+    mWaitCancelTimer = 10;
     mAnm[SELECT_BTN_ANIM_INOUT_CURSOR].setForwardOnce();
     mAnm[SELECT_BTN_ANIM_INOUT_CURSOR].setToEnd2();
     mAnm[SELECT_BTN_ANIM_INOUT_CURSOR].setAnimEnable(true);
@@ -401,8 +1040,8 @@ void dLytMsgWindowSelectBtn_c::initializeState_WaitCancel() {
     mpSelectPanes[0]->SetAlpha(0xFF);
 }
 void dLytMsgWindowSelectBtn_c::executeState_WaitCancel() {
-    if (--field_0x9C0 <= 0) {
-        field_0x9B0 = field_0x9CC;
+    if (--mWaitCancelTimer <= 0) {
+        mConfirmedBtnIdx = mCanceledViaBBtnIdx;
         mStateMgr.changeState(StateID_WaitDecide);
     }
 }
@@ -412,25 +1051,27 @@ void dLytMsgWindowSelectBtn_c::initializeState_Out() {
     mAnm[SELECT_BTN_ANIM_OUT].setAnimEnable(true);
     mAnm[SELECT_BTN_ANIM_OUT].setFrame(0.0f);
     mAnm[SELECT_BTN_ANIM_OUT].setForwardOnce();
-    field_0x9C8 = 0;
+    mStep = 0;
 }
 void dLytMsgWindowSelectBtn_c::executeState_Out() {
-    switch (field_0x9C8) {
+    switch (mStep) {
         case 0:
             mAnm[SELECT_BTN_ANIM_OUT].play();
             if (mAnm[SELECT_BTN_ANIM_OUT].isStop2()) {
-                field_0x9A4 = 0;
-                field_0x9C8 = 1;
+                mIsVisible = false;
+                mStep = 1;
             }
             break;
         case 1:
             mAnm[SELECT_BTN_ANIM_OUT].setAnimEnable(false);
-            field_0x9B4 = field_0x9B0;
+            mDecidedBtnIdx = mConfirmedBtnIdx;
             mStateMgr.changeState(StateID_Wait);
             break;
     }
 }
-void dLytMsgWindowSelectBtn_c::finalizeState_Out() {}
+void dLytMsgWindowSelectBtn_c::finalizeState_Out() {
+    mStep = 0;
+}
 
 bool dLytMsgWindowSelectBtn_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);
@@ -467,13 +1108,14 @@ bool dLytMsgWindowSelectBtn_c::build(d2d::ResAccIf_c *resAcc) {
         mpDecideTextBoxes[i] = mLyt.getTextBox(sDecideTextBoxes[i]);
     }
 
-    mpWindow = mLyt.getWindow(sWindowName);
-    mpSizeBox = mLyt.getSizeBoxInWindow(sWindowName);
-
-    mpWindow->UpdateSize(mpSizeBox, 32.0f);
+    for (int i = 0; i < 1; i++) {
+        mpWindow[i] = mLyt.getWindow(sWindowNames[i]);
+        mpSizeBox[i] = mLyt.getSizeBoxInWindow(sWindowNames[i]);
+        mpWindow[i]->UpdateSize(mpSizeBox[i], 32.0f);
+    }
 
     for (int i = 0; i < SELECT_BTN_NUM_BTNS; i++) {
-        mpBoundings[i] = mLyt.findPane(sBoundings[i]);
+        mpBoundings[i] = mLyt.findBounding(sBoundings[i]);
     }
 
     mpTagProcessor = nullptr;
@@ -492,7 +1134,7 @@ bool dLytMsgWindowSelectBtn_c::build(d2d::ResAccIf_c *resAcc) {
     mBtnHelper.panes[7] = mpBoundings[2];
     mBtnHelper.panes[8] = mpBoundings[3];
 
-    field_0x9C4 = 0;
+    mFlipBtnLayout = 0;
 
     mLyt.findPane("N_arrowIn_00")->SetVisible(true);
 
@@ -514,15 +1156,15 @@ bool dLytMsgWindowSelectBtn_c::build(d2d::ResAccIf_c *resAcc) {
 
     mStateMgr.changeState(StateID_Wait);
 
-    field_0x9A8 = -1;
-    field_0x9B0 = -1;
+    mNumBtns = -1;
+    mConfirmedBtnIdx = -1;
 
-    field_0x9D0 = 0;
+    field_0x9D0 = false;
     field_0x9D1 = 0;
-    field_0x99C = 0;
-    field_0x9A0 = 0;
+    mSkipOutAnim = 0;
+    mInSound = 0;
     field_0x9CE = 0;
-    field_0x9CF = 1;
+    mPlayInSound = true;
 
     return true;
 }
@@ -533,8 +1175,8 @@ bool dLytMsgWindowSelectBtn_c::remove() {
         mAnm[i].remove();
     }
 
-    if (mBtnHelper.field_0x52 != 0) {
-        mBtnHelper.field_0x52 = 0;
+    if (mBtnHelper.mIsNavEnabled) {
+        mBtnHelper.mIsNavEnabled = false;
         dPadNav::setNavEnabled(false, false);
     }
 
@@ -543,7 +1185,40 @@ bool dLytMsgWindowSelectBtn_c::remove() {
 
 bool dLytMsgWindowSelectBtn_c::execute() {
     if (*mStateMgr.getStateID() != StateID_Wait) {
-        // TODO
+        if (dLytMsgWindow_c::getInstance() != nullptr && dLytMsgWindow_c::getInstance()->getField_0x81B() != 0) {
+            mIsVisible = false;
+            mAnm[SELECT_BTN_ANIM_IN].setAnimEnable(true);
+            mAnm[SELECT_BTN_ANIM_IN].setFrame(0.0f);
+            mAnm[SELECT_BTN_ANIM_IN].setForwardOnce();
+            mAnm[SELECT_BTN_ANIM_OUT].setAnimEnable(true);
+            mAnm[SELECT_BTN_ANIM_OUT].setToEnd();
+            mAnm[SELECT_BTN_ANIM_OUT].setForwardOnce();
+            mLyt.calc();
+            mAnm[SELECT_BTN_ANIM_IN].setAnimEnable(false);
+            mAnm[SELECT_BTN_ANIM_OUT].setAnimEnable(false);
+            mStateMgr.changeState(StateID_Wait);
+            return true;
+        }
+
+        if (mCanceledViaBBtnIdx >= 0) {
+            for (int i = 0; i < SELECT_BTN_NUM_BTNS; i++) {
+                mParts[i].field_0x50 = 1;
+                if (mCanceledViaBBtnIdx == i) {
+                    mParts[i].mShouldBeOn = 1;
+                } else {
+                    mParts[i].mShouldBeOn = 0;
+                }
+            }
+        } else {
+            for (int i = 0; i < SELECT_BTN_NUM_BTNS; i++) {
+                mParts[i].field_0x50 = 0;
+                if (mBtnHelper.getSelectedtBtnIdx() == i) {
+                    mParts[i].mShouldBeOn = 1;
+                } else {
+                    mParts[i].mShouldBeOn = 0;
+                }
+            }
+        }
     }
 
     mStateMgr.executeState();
@@ -551,12 +1226,45 @@ bool dLytMsgWindowSelectBtn_c::execute() {
         mParts[i].execute();
     }
 
+    f32 angle = dLytMeter_c::getSelectBtnArrowAngle();
+    f32 length = dLytMeter_c::getSelectBtnArrowLength();
+
+    mVec3_c t1(0.0f, 0.0f, 0.0f);
+    t1.z = angle;
+    mpSelectPanes[SELECT_BTN_PANE_ITEM_ARROW_0]->SetRotate(t1);
+    // But rotate the button and the pointer back so that
+    // they point up
+    mVec3_c t2(0.0f, 0.0f, 0.0f);
+    t2.z = -angle;
+    mpSelectPanes[SELECT_BTN_PANE_ARROW_HAND]->SetRotate(t2);
+    mpSelectPanes[SELECT_BTN_PANE_BTN_0]->SetRotate(t2);
+
+    f32 frame0 = mAnm[SELECT_BTN_ANIM_ITEM_ARROW_0].getAnimDuration();
+    f32 frame1 = mAnm[SELECT_BTN_ANIM_ITEM_ARROW_1].getAnimDuration();
+
+    if (length < 0.0f) {
+        length = 0.0f;
+    }
+    if (length > 1.0f) {
+        length = 1.0f;
+    }
+
+    if (length > 0.0f) {
+        if (!mAnm[SELECT_BTN_ANIM_ITEM_ARROW_0].isEnabled()) {
+            mAnm[SELECT_BTN_ANIM_ITEM_ARROW_0].setAnimEnable(true);
+        }
+
+        if (field_0x9D0 == true && !mAnm[SELECT_BTN_ANIM_ITEM_ARROW_1].isEnabled()) {
+            mAnm[SELECT_BTN_ANIM_ITEM_ARROW_1].setAnimEnable(true);
+        }
+    }
+
     if (mAnm[SELECT_BTN_ANIM_ITEM_ARROW_0].isEnabled()) {
-        mAnm[SELECT_BTN_ANIM_ITEM_ARROW_0].play();
+        mAnm[SELECT_BTN_ANIM_ITEM_ARROW_0].setFrame(frame0 * length);
     }
 
     if (mAnm[SELECT_BTN_ANIM_ITEM_ARROW_1].isEnabled()) {
-        mAnm[SELECT_BTN_ANIM_ITEM_ARROW_1].play();
+        mAnm[SELECT_BTN_ANIM_ITEM_ARROW_1].setFrame(frame1 * length);
     }
 
     if (mAnm[SELECT_BTN_ANIM_LOOP_REMOCON].isEnabled()) {
@@ -569,8 +1277,16 @@ bool dLytMsgWindowSelectBtn_c::execute() {
 }
 
 bool dLytMsgWindowSelectBtn_c::draw() {
-    if (field_0x9A4 != 0) {
+    if (mIsVisible) {
         mLyt.addToDrawList();
     }
     return true;
+}
+
+s32 dLytMsgWindowSelectBtn_c::getSelectBtnMode() {
+    s32 mode = mNumBtns - 2;
+    if (mFlipBtnLayout == 1 && mNumBtns == 3) {
+        mode = SelectBtnHelper::MODE_3_DOWN;
+    }
+    return mode;
 }

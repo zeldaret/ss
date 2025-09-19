@@ -207,6 +207,19 @@ public:
         return field_0x5794;
     }
 
+    void setSelectBtn(f32 angle, f32 length) {
+        mArrowRotation = angle;
+        mArrowLength = length;
+    }
+
+    f32 getArrowRotation() const {
+        return mArrowRotation;
+    }
+
+    f32 getArrowLength() const {
+        return mArrowLength;
+    }
+
 private:
     void setBtnItem(s32 internalItem);
     void realizeSelectedWheelItem();
