@@ -130,7 +130,7 @@ public:
         return sInstance;
     }
 
-    bool fn_801BF5E0() const;
+    bool shouldDraw() const;
 
     /// @brief Item cursor.
     class lytItemCursor_c : public dCsGameLytBase2_c {
@@ -196,7 +196,7 @@ public:
             void enter();
             void execute();
 
-            void setParams(const mAng& rot, f32 v1, f32 v2);
+            void setParams(const mAng &rot, f32 v1, f32 v2);
             void setUnkWord(UNKWORD v);
 
             void moveEffectsIn();
@@ -346,6 +346,12 @@ public:
 
         void changeState(const sFStateID_c<lytItemCursor_c> &newState);
 
+        void pachinkoSetCharging(bool charging, f32 progress);
+        void dowsingSetParams(const mAng &rot, f32 v1, f32 v2);
+        void dowsingSetUnkWord(UNKWORD v);
+        void vacuumSetUnkFloat(f32 v);
+        void vacuumSetLocked(bool locked);
+        void clawshotsSetLocked(bool locked);
         void bowStartDrawOrCharge(f32 f1, f32 f2);
         void bowAimStart();
         void bowReady();
@@ -398,9 +404,16 @@ public:
     };
 
     void setNextCursorType(CursorType_e);
-    void setCursorTypeNoneMaybe();
-    void setCursorTypePointer();
+    void noneSet();
+    void pointerDefSet();
+    void pointerCatSet();
 
+    void pachinkoSetCharging(bool charging, f32 progress);
+    void dowsingSetParams(const mAng &rot, f32 v1, f32 v2);
+    void dowsingSetUnkWord(UNKWORD v);
+    void vacuumSetNotLocked(f32 v);
+    void vacuumSetLocked();
+    void clawshotsSetLocked(bool locked);
     void bowStartDrawOrCharge(f32 f1, f32 f2);
     void bowAimStart();
     void bowReady();

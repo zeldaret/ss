@@ -6,6 +6,7 @@
 #include "d/d_cursor_hit_check.h"
 #include "d/d_gfx.h"
 #include "d/d_pad.h"
+#include "d/d_pad_nav.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_map.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
@@ -20,7 +21,7 @@ SPECIAL_BASE_PROFILE(C_GAME, dCsGame_c, fProfile::C_GAME, 0x2BF, 0x06F9);
 
 struct dCsGame_HIO_c {
     dCsGame_HIO_c();
-    virtual ~dCsGame_HIO_c() {}
+    virtual ~dCsGame_HIO_c();
 
     /* 0x04 */ f32 field_0x04;
     /* 0x08 */ f32 field_0x08;
@@ -45,8 +46,6 @@ struct dCsGame_HIO_c {
     static const f32 sFloat2;
 };
 
-static dCsGame_HIO_c sHio;
-
 dCsGame_HIO_c::dCsGame_HIO_c() {
     field_0x04 = 0.0f;
     field_0x08 = 0.0f;
@@ -68,6 +67,9 @@ dCsGame_HIO_c::dCsGame_HIO_c() {
     field_0x40 = 5;
 }
 
+dCsGame_HIO_c::~dCsGame_HIO_c() {}
+
+static dCsGame_HIO_c sHio;
 dCsGame_c *dCsGame_c::sInstance;
 
 STATE_DEFINE(dCsGame_c::lytItemCursor_c, Invisible);
@@ -247,13 +249,37 @@ int dCsGame_c::draw() {
     return SUCCEEDED;
 }
 
-bool dCsGame_c::fn_801BF5E0() const {
+bool dCsGame_c::shouldDraw() const {
     return isCursorActive() & !isForcedHidden();
+}
+
+bool dCsGame_c::isForcedHidden() const {
+    // TODO - lots of EventManager inlines 
+    return false;
 }
 
 void dCsGame_c::setNextCursorType(CursorType_e cs) {
     mNextCursorActive = true;
     mNextCursorType = cs;
+}
+
+void dCsGame_c::noneSet() {
+    setNextCursorType(CS_NONE);
+}
+
+void dCsGame_c::pointerDefSet() {
+    if (dPadNav::isPointerVisible()) {
+        setNextCursorType(CS_POINTER_DEF);
+    }
+}
+
+void dCsGame_c::pointerCatSet() {
+    setNextCursorType(CS_POINTER_CAT);
+}
+
+void dCsGame_c::pachinkoSetCharging(bool charging, f32 progress) {
+    setNextCursorType(CS_PACHINKO);
+    mCursor.pachinkoSetCharging(charging, progress);
 }
 
 void dCsGame_c::bowStartDrawOrCharge(f32 f1, f32 f2) {
@@ -269,6 +295,31 @@ void dCsGame_c::bowAimStart() {
 void dCsGame_c::bowReady() {
     setNextCursorType(CS_BOW);
     mCursor.bowReady();
+}
+
+void dCsGame_c::dowsingSetParams(const mAng &rot, f32 v1, f32 v2) {
+    setNextCursorType(CS_DOWSING);
+    mCursor.dowsingSetParams(rot, v1, v2);
+}
+
+void dCsGame_c::dowsingSetUnkWord(UNKWORD v) {
+    mCursor.dowsingSetUnkWord(v);
+}
+
+void dCsGame_c::vacuumSetNotLocked(f32 v) {
+    setNextCursorType(CS_VACUUM);
+    mCursor.vacuumSetUnkFloat(v);
+    mCursor.vacuumSetLocked(false);
+}
+
+void dCsGame_c::vacuumSetLocked() {
+    setNextCursorType(CS_VACUUM);
+    mCursor.vacuumSetLocked(true);
+}
+
+void dCsGame_c::clawshotsSetLocked(bool locked) {
+    setNextCursorType(CS_HOOKSHOT);
+    mCursor.clawshotsSetLocked(locked);
 }
 
 void dCsGame_c::setCursorTypePlayerCam() {
@@ -450,6 +501,30 @@ void dCsGame_c::lytItemCursor_c::changeState(const sFStateID_c<lytItemCursor_c> 
     mStateMgr.changeState(newState);
 }
 
+void dCsGame_c::lytItemCursor_c::pachinkoSetCharging(bool charging, f32 progress) {
+    mPachinko.setCharging(charging, progress);
+}
+
+void dCsGame_c::lytItemCursor_c::dowsingSetParams(const mAng &rot, f32 v1, f32 v2) {
+    mDowsing.setParams(rot, v1, v2);
+}
+
+void dCsGame_c::lytItemCursor_c::dowsingSetUnkWord(UNKWORD v) {
+    mDowsing.setUnkWord(v);
+}
+
+void dCsGame_c::lytItemCursor_c::vacuumSetUnkFloat(f32 v) {
+    mVacuum.setUnkFloat(v);
+}
+
+void dCsGame_c::lytItemCursor_c::vacuumSetLocked(bool locked) {
+    mVacuum.setLocked(locked);
+}
+
+void dCsGame_c::lytItemCursor_c::clawshotsSetLocked(bool locked) {
+    mCrawShot.setLocked(locked);
+}
+
 void dCsGame_c::lytItemCursor_c::bowStartDrawOrCharge(f32 f1, f32 f2) {
     mBow.startDrawOrCharge(f1, f2);
 }
@@ -551,7 +626,7 @@ bool dCsGame_c::lytItemCursor_c::execute() {
     mAnmGroups[MAIN_ANIM_LOOP].setAnimEnable(true);
     mStateMgr.executeState();
 
-    if (dCsGame_c::GetInstance()->fn_801BF5E0() && mDrawCursorTrailThisFrame) {
+    if (dCsGame_c::GetInstance()->shouldDraw() && mDrawCursorTrailThisFrame) {
         f32 sqDist = mPositionThisFrame.squareDistance(mPositionLastFrame);
         if (sqDist > sHio.field_0x34 * sHio.field_0x34 ||
             (mEffects.hasEmitters() && sqDist > sHio.field_0x38 * sHio.field_0x38)) {
@@ -652,7 +727,7 @@ void dCsGame_c::lytItemCursor_c::lytDowsingCsr_c::enter() {
     mAnm[MAIN_ANIM_DOWSE_LOOP_1].setAnimEnable(true);
 }
 
-void dCsGame_c::lytItemCursor_c::lytDowsingCsr_c::setParams(const mAng& rot, f32 v1, f32 v2) {
+void dCsGame_c::lytItemCursor_c::lytDowsingCsr_c::setParams(const mAng &rot, f32 v1, f32 v2) {
     field_0xC0 = v1;
     if (field_0xC0 <= 0.999f) {
         mRotZ = rot;
@@ -1282,6 +1357,17 @@ void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::executeState_ToNormal() {
 }
 void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::finalizeState_ToNormal() {}
 
+void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::enter() {
+    mAnm[MAIN_ANIM_CURSOR].setFrame(4.0f);
+    mAnm[MAIN_ANIM_LOCK_LOOP].setAnimEnable(false);
+    mAnm[MAIN_ANIM_VACUUM_LOCK].setAnimEnable(true);
+    mAnm[MAIN_ANIM_VACUUM_LOCK].setFrame(0.0f);
+    mpLyt->animate();
+    mpLyt->calc();
+    mAnm[MAIN_ANIM_VACUUM_LOCK].setAnimEnable(false);
+    mStateMgr.changeState(StateID_Normal);
+}
+
 void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::setUnkFloat(f32 f) {
     if (f < 0.0f) {
         f = 0.0f;
@@ -1293,17 +1379,6 @@ void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::setUnkFloat(f32 f) {
 
 void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::setLocked(bool locked) {
     mLocked = locked;
-}
-
-void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::enter() {
-    mAnm[MAIN_ANIM_CURSOR].setFrame(4.0f);
-    mAnm[MAIN_ANIM_LOCK_LOOP].setAnimEnable(false);
-    mAnm[MAIN_ANIM_VACUUM_LOCK].setAnimEnable(true);
-    mAnm[MAIN_ANIM_VACUUM_LOCK].setFrame(0.0f);
-    mpLyt->animate();
-    mpLyt->calc();
-    mAnm[MAIN_ANIM_VACUUM_LOCK].setAnimEnable(false);
-    mStateMgr.changeState(StateID_Normal);
 }
 
 void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::init() {

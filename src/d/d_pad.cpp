@@ -7,8 +7,8 @@
 #include "d/d_cs_game.h"
 #include "d/d_gfx.h"
 #include "d/d_hbm.h"
-#include "d/d_pad_nav.h"
 #include "d/d_pad_manager.h"
+#include "d/d_pad_nav.h"
 #include "d/d_reset.h"
 #include "d/d_sc_game.h"
 #include "d/lyt/d_lyt_control_game.h"
@@ -222,8 +222,8 @@ void beginPad_BR() {
         KPADEnableMplsAccRevise(0);
         KPADSetMplsAccReviseParam(0, 0.03f, 0.4f);
 
-        if ((dCsGame_c::GetInstance() && dCsGame_c::GetInstance()->fn_801BF5E0() && !ex.field_0x22D0) ||
-            (dAcPy_c::GetLink() &&
+        if ((dCsGame_c::GetInstance() != nullptr && dCsGame_c::GetInstance()->shouldDraw() && !ex.field_0x22D0) ||
+            (dAcPy_c::GetLink() != nullptr &&
              dAcPy_c::GetLink()->checkActionFlagsCont(0x400 | 0x100 | 0x80 | 0x40 | 0x10 | 0x4 | 0x2 | 0x1) &&
              !dAcPy_c::GetLink()->vt_0x1C0() && !dLytMeter_c::GetMain()->getField_0x1377F()) ||
             ex.field_0x22CF) {
