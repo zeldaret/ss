@@ -16,6 +16,7 @@
 #include "s/s_StateInterfaces.hpp"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/d_emitter.h"
+#include "toBeSorted/event_manager_util.h"
 
 SPECIAL_BASE_PROFILE(C_GAME, dCsGame_c, fProfile::C_GAME, 0x2BF, 0x06F9);
 
@@ -254,8 +255,10 @@ bool dCsGame_c::shouldDraw() const {
 }
 
 bool dCsGame_c::isForcedHidden() const {
-    // TODO - lots of EventManager inlines 
-    return false;
+    return (
+        EventManagerNotDrawControl0x80() && EventManagerNotSkyKeepPuzzle() && EventManagerNotInShop() &&
+        EventManagerNotInDeposit() && !EventManagerIsMapOpenAndMessage() && !EventManagerIsMapOpenAnd0x9008Eq10()
+    );
 }
 
 void dCsGame_c::setNextCursorType(CursorType_e cs) {
@@ -501,6 +504,18 @@ void dCsGame_c::lytItemCursor_c::changeState(const sFStateID_c<lytItemCursor_c> 
     mStateMgr.changeState(newState);
 }
 
+void dCsGame_c::lytItemCursor_c::bowStartDrawOrCharge(f32 f1, f32 f2) {
+    mBow.startDrawOrCharge(f1, f2);
+}
+
+void dCsGame_c::lytItemCursor_c::bowAimStart() {
+    mBow.aimStart();
+}
+
+void dCsGame_c::lytItemCursor_c::bowReady() {
+    mBow.ready();
+}
+
 void dCsGame_c::lytItemCursor_c::pachinkoSetCharging(bool charging, f32 progress) {
     mPachinko.setCharging(charging, progress);
 }
@@ -523,18 +538,6 @@ void dCsGame_c::lytItemCursor_c::vacuumSetLocked(bool locked) {
 
 void dCsGame_c::lytItemCursor_c::clawshotsSetLocked(bool locked) {
     mCrawShot.setLocked(locked);
-}
-
-void dCsGame_c::lytItemCursor_c::bowStartDrawOrCharge(f32 f1, f32 f2) {
-    mBow.startDrawOrCharge(f1, f2);
-}
-
-void dCsGame_c::lytItemCursor_c::bowAimStart() {
-    mBow.aimStart();
-}
-
-void dCsGame_c::lytItemCursor_c::bowReady() {
-    mBow.ready();
 }
 
 void dCsGame_c::lytItemCursor_c::loadResAcc() {
@@ -646,7 +649,7 @@ void dCsGame_c::lytItemCursor_c::lytDowsingCsr_c::executeState_NotFind() {
     if (field_0xC0 < 0.9999f) {
         mAnm[MAIN_ANIM_DOWSE_IN_OUT].setAnimEnable(true);
         mAnm[MAIN_ANIM_DOWSE_IN_OUT].setForward();
-        mStateMgr.changeState(StateID_Find);
+        mStateMgr.changeState(StateID_ToFind);
     }
 }
 void dCsGame_c::lytItemCursor_c::lytDowsingCsr_c::finalizeState_NotFind() {}

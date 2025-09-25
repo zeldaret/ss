@@ -996,7 +996,7 @@ bool dLytMeterMain_c::remove() {
 void dLytMeterMain_c::fn_800D5290() {
     dLytMeter_c *meter = dLytMeter_c::GetInstance();
 
-    if (dLytMap_c::GetInstance() != nullptr && !dLytMap_c::GetInstance()->unkMeterCheck()) {
+    if (dLytMap_c::GetInstance() != nullptr && !dLytMap_c::GetInstance()->isSomeMapFieldEq2Or4Or5Or6()) {
         meter->setFlags(METER_BTN_PLUS);
     }
 

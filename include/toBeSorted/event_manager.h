@@ -1,14 +1,13 @@
-
 #ifndef EVENT_MANAGER_H
 #define EVENT_MANAGER_H
 
 #include "common.h"
-#include "d/a/obj/d_a_obj_base.h"
 #include "f/f_base.h"
 #include "sized_string.h"
 #include "toBeSorted/event.h"
 
 class dAcBase_c;
+class dAcObjBase_c;
 
 class EventManager {
 public:
@@ -53,7 +52,6 @@ public:
     static bool FUN_800a0ba0();
 
 private:
-
     /* 0x000 */ u8 _000[0x084 - 0x000];
     /* 0x084 */ Event mCurrentEvent;
     /* 0x0C4 */ u8 _0C4[0x184 - 0x0C4];
