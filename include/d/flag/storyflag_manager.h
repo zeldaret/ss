@@ -2,7 +2,7 @@
 #define D_FLAG_STORYFLAG_MANAGER_H
 
 #include "d/flag/baseflag_manager.h"
-#include "d/flag/storyflag_map.h"
+#include "d/flag/storyflag_map.h" // IWYU pragma: export
 #include "toBeSorted/file_manager.h"
 
 class StoryflagManager : public ItemStoryManagerBase {

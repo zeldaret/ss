@@ -197,7 +197,7 @@ enum StoryFlags_e {
      * Sealed Grounds layer 1 / Behind The Temple layer 1 / Goddess Statue layers 2&3)] Story Flag #36 (0x0024) - JP
      * 805ACD5D 0x10 / US 805A9ADD 0x10
      */
-    STORYFLAG_36,
+    STORYFLAG_HEROS_TUNIC_FI,
 
     /** [Horwell Z-target tutorial]
      *  Story Flag #37 (0x0025) - JP 805ACD65 0x08 / US 805A9AE5 0x08
@@ -1150,7 +1150,7 @@ enum StoryFlags_e {
     /** [Hero Mode]
      *  Story Flag #226 (0x00E2) - JP 805ACD72 0x08 / US 805A9AF2 0x08
      */
-    STORYFLAG_226,
+    STORYFLAG_HERO_MODE,
 
     /** [First Goddess Cube (Unlocks ability to skyward strike Goddess Cubes)]
      *  Story Flag #227 (0x00E3) - JP 805ACD72 0x20 / US 805A9AF2 0x20

@@ -69,14 +69,14 @@ void SaveMgr::init() {
     mCheckForFreeSpaceResult = 0;
     mCopyToFile = 0;
     mCopyFromFile = 0;
-    field_0x836 = 0;
+    mIsIdle = false;
     field_0x837 = 0;
     field_0x838 = 0;
     field_0x839 = 0;
     field_0x83A = 0;
     field_0x83B = 0;
     field_0x83C = 0;
-    field_0x83D = 0;
+    field_0x83D = false;
     field_0x83E = 0;
     mDelayTimer = 0;
     FileManager::GetInstance()->setField0xA840(1);
@@ -116,7 +116,7 @@ bool SaveMgr::checkForSave() {
     if (mCurrentState != STATE_MAX) {
         return false;
     }
-    field_0x836 = 0;
+    mIsIdle = false;
     initializeCheckForSave();
     return true;
 }
@@ -125,7 +125,7 @@ bool SaveMgr::checkForFreeSpace() {
     if (mCurrentState != STATE_MAX) {
         return false;
     }
-    field_0x836 = 0;
+    mIsIdle = false;
     initializeCheckForFreeSpace();
     return true;
 }
@@ -134,7 +134,7 @@ bool SaveMgr::createFiles() {
     if (mCurrentState != STATE_MAX) {
         return false;
     }
-    field_0x836 = 0;
+    mIsIdle = false;
     initializeCreateFiles();
     return true;
 }
@@ -143,7 +143,7 @@ bool SaveMgr::loadSave() {
     if (mCurrentState != STATE_MAX) {
         return false;
     }
-    field_0x836 = 0;
+    mIsIdle = false;
     initializeLoadSave();
     return true;
 }
@@ -155,7 +155,7 @@ bool SaveMgr::save(bool entranceT1LoadFlag, bool full) {
     if (FileManager::GetInstance()->get_0xA84C()) {
         return false;
     }
-    field_0x836 = 0;
+    mIsIdle = false;
     if (full == 1) {
         FileManager::GetInstance()->saveT1SaveInfo(entranceT1LoadFlag);
     } else {
@@ -174,7 +174,7 @@ bool SaveMgr::saveAfterCredits() {
     if (FileManager::GetInstance()->get_0xA84C()) {
         return false;
     }
-    field_0x836 = 0;
+    mIsIdle = false;
     dDvdUnk::FontUnk::GetInstance()->setNeedsPad(true);
     FileManager::GetInstance()->setFileTimes();
     FileManager::GetInstance()->saveAfterCredits();
@@ -187,7 +187,7 @@ bool SaveMgr::writeSkipDat() {
     if (mCurrentState != STATE_MAX) {
         return false;
     }
-    field_0x836 = 0;
+    mIsIdle = false;
     initializeWriteSkipDat();
     return true;
 }
@@ -196,7 +196,7 @@ bool SaveMgr::copySave(u8 to, u8 from) {
     if (mCurrentState != STATE_MAX) {
         return false;
     }
-    field_0x836 = 0;
+    mIsIdle = false;
     mCopyToFile = to;
     mCopyFromFile = from;
     initializeCopySave();
@@ -208,7 +208,7 @@ bool SaveMgr::clearSelectedFile() {
     if (mCurrentState != STATE_MAX) {
         return false;
     }
-    field_0x836 = 0;
+    mIsIdle = false;
     initializeClearSelectedFile();
     field_0x83F = 0;
     return true;
@@ -723,7 +723,7 @@ void SaveMgr::initializeWriteSave() {
     mDelayTimer = 0;
     dDvdUnk::FontUnk::GetInstance()->setNeedsPad(false);
     FileManager::GetInstance()->setField0xA84D(1);
-    field_0x83D = 1;
+    field_0x83D = true;
 }
 
 void SaveMgr::executeWriteSave() {
@@ -1216,7 +1216,7 @@ void SaveMgr::executeDeleteAllData() {
 
 void SaveMgr::initializeError() {
     FileManager::GetInstance()->setField0xA84D(0);
-    field_0x83D = 0;
+    field_0x83D = false;
     beginState(STATE_ERROR);
     dDvdUnk::FontUnk::GetInstance()->setNeedsPad(true);
     field_0x83F = 0;
@@ -1371,7 +1371,7 @@ void SaveMgr::executeError() {
 
 void SaveMgr::initializeNandError() {
     FileManager::GetInstance()->setField0xA84D(0);
-    field_0x83D = 0;
+    field_0x83D = false;
     dDvdUnk::FontUnk::GetInstance()->setNeedsPad(true);
     beginState(STATE_NAND_ERROR);
 }
@@ -1458,7 +1458,7 @@ void SaveMgr::executeNandError() {
                 dCsBase_c::GetInstance()->setDrawDirectly(false);
                 dReset::Manage_c::GetInstance()->SetInteriorReturnDataManager();
                 endState();
-                field_0x836 = 0;
+                mIsIdle = false;
             }
             break;
         }
@@ -1519,9 +1519,9 @@ void SaveMgr::beginState(SaveMgrState_e state) {
 }
 
 void SaveMgr::endState() {
-    field_0x836 = 1;
+    mIsIdle = true;
     FileManager::GetInstance()->setField0xA840(1);
-    field_0x83D = 0;
+    field_0x83D = false;
     dDvdUnk::FontUnk::GetInstance()->setNeedsPad(true);
     field_0x83B = 0;
     field_0x83C = 0;

@@ -124,8 +124,14 @@ public:
         return sInstance;
     }
 
+    bool isIdle() const {
+        return mIsIdle;
+    }
     bool getField_0x83D() const {
         return field_0x83D;
+    }
+    void setField_0x83D(bool v) {
+        field_0x83D = v;
     }
     bool getField_0x83F() const {
         return field_0x83F;
@@ -226,14 +232,14 @@ private:
     /* 0x830 */ s32 mDelayTimer;
     /* 0x834 */ u8 mCopyToFile;
     /* 0x835 */ u8 mCopyFromFile;
-    /* 0x836 */ u8 field_0x836;
+    /* 0x836 */ bool mIsIdle;
     /* 0x837 */ u8 field_0x837;
     /* 0x838 */ u8 field_0x838;
     /* 0x839 */ u8 field_0x839;
     /* 0x83A */ u8 field_0x83A;
     /* 0x83B */ u8 field_0x83B;
     /* 0x83C */ u8 field_0x83C;
-    /* 0x83D */ u8 field_0x83D;
+    /* 0x83D */ bool field_0x83D;
     /* 0x83E */ u8 field_0x83E;
     /* 0x83F */ u8 field_0x83F;
 

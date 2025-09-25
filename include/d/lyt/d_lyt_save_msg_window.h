@@ -11,6 +11,13 @@ public:
     dLytSaveMsgWindow_c();
     virtual ~dLytSaveMsgWindow_c() {}
 
+    enum Mode_e {
+        MODE_NONE,
+        MODE_2_BUTTONS,
+        MODE_3_BUTTONS,
+        MODE_4_BUTTONS,
+    };
+
     bool build(bool);
     bool remove();
     bool execute();
@@ -26,6 +33,30 @@ public:
 
     u8 getWillFinishOut() const {
         return mWillFinishOut;
+    }
+
+    void setField0x10B8(s32 val) {
+        field_0x10B8 = val;
+    }
+
+    void setField0x10BC(s32 val) {
+        field_0x10BC = val;
+    }
+
+    s32 getField0x10C4() const {
+        return field_0x10C4;
+    }
+
+    s32 getField0x10C8() const {
+        return field_0x10C8;
+    }
+
+    void setField0x10DC(u8 val) {
+        field_0x10DC = val;
+    }
+
+    void setSaveObjId(s32 id) {
+        mSaveobjId = id;
     }
 
 private:
