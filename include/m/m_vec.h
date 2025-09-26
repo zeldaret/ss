@@ -259,6 +259,9 @@ public:
     f32 absXZ() const {
         return EGG::Math<f32>::sqrt(squareMagXZ());
     }
+    f32 absXZTo(const mVec3_c &other) const {
+        return EGG::Math<f32>::sqrt(squareDistanceToXZ(other));
+    }
     s16 atan2sX_Z() const {
         return cM::atan2s(x, z);
     }

@@ -286,7 +286,7 @@ void dAcOFairy_c::executeState_Wait() {
 
     mVelocity.y = cM::minMaxLimit(mVelocity.y, -mMaxSpeedY, mMaxSpeedY);
 
-    f32 diff = (mOrigPosition - mPosition).absXZ();
+    f32 diff = mOrigPosition.absXZTo(mPosition);
     f32 yDiff = mPosition.y - mOrigPosition.y;
     yDiff = nw4r::math::FAbs(yDiff);
 
@@ -302,8 +302,6 @@ void dAcOFairy_c::executeState_Wait() {
         mVec3_c v = mOrigPosition - mPosition;
         v.normalize();
         f32 factor = 1.0f / mVelocity.mag();
-        // mVec3_c tmp = mVelocity * factor;
-        // TODO stack order problem - using tmp "works" but misses mfcr + srwi.
         if (v.dot(mVelocity * factor) < 0.9f) {
             mAngle.y += mTurnSpeedY;
         }

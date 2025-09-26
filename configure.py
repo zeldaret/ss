@@ -609,7 +609,7 @@ config.libs = [
             Object(NonMatching, "d/a/obj/d_a_obj_bomb.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_arrow.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_boomerang.cpp"),
-            Object(NonMatching, "d/a/obj/d_a_obj_fairy.cpp"),
+            Object(Matching, "d/a/obj/d_a_obj_fairy.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_tbox.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_time_area.cpp"),
             Object(Matching, "d/a/obj/d_a_obj_switch.cpp"),
