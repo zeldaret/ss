@@ -4,6 +4,7 @@
 #include "d/d_player_base.h"
 
 class dAcEnBase_c;
+class dAcOFairy_c;
 
 // Does this one have a vtable?
 // Name unknown
@@ -432,7 +433,7 @@ public:
     /* vt 0x2D4 */ virtual bool isBottleOut() {
         return false;
     }
-    /* vt 0x2D8 */ virtual bool isUsingBottle() {
+    /* vt 0x2D8 */ virtual bool isUsingBottle() const {
         return false;
     }
     /* vt 0x2DC */ virtual f32 getShieldRegenProgressMaybe() {
@@ -629,6 +630,7 @@ public:
     bool someTargetedActorCheck() const;
     static mAng fn_8005BA90();
     static mAng fn_8005BAA0();
+    static void fairyHeal(dAcOFairy_c *fairy);
     static void updateCurrentSword();
 
     static bool isOutOfStamina();

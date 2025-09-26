@@ -5,7 +5,7 @@
 SPECIAL_ACTOR_PROFILE(T_FAIRY, dTgFairy_c, fProfile::T_FAIRY, 0x0296, 0, 0);
 
 bool dTgFairy_c::createHeap() {
-    mpFairyRefs = new dAcRef_c<dAcObjFairy_c>[mCount]();
+    mpFairyRefs = new dAcRef_c<dAcOFairy_c>[mCount]();
     return static_cast<bool>(mpFairyRefs);
 }
 
@@ -52,7 +52,7 @@ void dTgFairy_c::createFairies() {
             mVec3_c v2;
             mVec3_c v = calcLocation(f);
             v2 = v;
-            dAcObjFairy_c *ac = static_cast<dAcObjFairy_c *>(
+            dAcOFairy_c *ac = static_cast<dAcOFairy_c *>(
                 dAcObjBase_c::create("Fairy", mRoomID, fairyParams1, &v2, nullptr, nullptr, -1, -1, mViewClipIdx)
             );
             if (ac != nullptr) {

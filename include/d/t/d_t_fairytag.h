@@ -20,7 +20,7 @@ private:
     mVec3_c calcLocation(const f32 &);
     f32 calcRnd(const f32 &, const f32 &);
 
-    dAcRef_c<dAcObjFairy_c> *mpFairyRefs;
+    dAcRef_c<dAcOFairy_c> *mpFairyRefs;
     s32 mCount;
 };
 

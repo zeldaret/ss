@@ -1286,8 +1286,8 @@ void daPlayerModelBase_c::adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, 
             mAng v1 = -3277;
             mAng v2 = 910;
             if (nodeId == PLAYER_MAIN_NODE_HAND_R) {
-                v1 *= -1;
-                v2 *= -1;
+                v1 *= (s32)-1;
+                v2 *= (s32)-1;
             }
             applyWorldRotationMaybe(result, 0xec17, v1, v2, nullptr, true);
         }

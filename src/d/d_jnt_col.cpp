@@ -279,7 +279,7 @@ void dJntCol_c::setArrowPosAndAngle(
     getAnmMtx(i_anmMtxIdx, &mtx);
     MTXMultVecSR(mtx, *i_srcPos, dstPos);
 
-    i_arrowPosP->x = dstPos.atan2sY_XZ();
+    i_arrowPosP->x = dstPos.atan2snY_XZ();
     i_arrowPosP->y = dstPos.atan2sX_Z();
     MTXMultVec(mtx, *param_0, *param_3);
 }

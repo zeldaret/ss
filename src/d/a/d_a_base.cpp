@@ -381,7 +381,7 @@ void dAcBase_c::forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *p
     }
 }
 
-mAng dAcBase_c::getXZAngleToPlayer() {
+mAng dAcBase_c::getXZAngleToPlayer() const {
     return cLib::targetAngleY(this->mPosition, dAcPy_c::LINK->mPosition);
 }
 
