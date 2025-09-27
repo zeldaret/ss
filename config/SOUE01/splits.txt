@@ -1571,6 +1571,7 @@ d/lyt/d_lyt_save_mgr.cpp:
 	.ctors      start:0x804DB864 end:0x804DB868
 	.rodata     start:0x804EE778 end:0x804EE790
 	.data       start:0x80538160 end:0x80538498
+	.sdata      start:0x80573B80 end:0x80573B88
 	.sbss       start:0x80575950 end:0x80575958
 	.bss        start:0x805B5F00 end:0x805B6000
 

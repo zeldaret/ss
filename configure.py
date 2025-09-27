@@ -627,7 +627,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/d_a_npc_str.cpp"),
             Object(Matching, "d/lyt/d_lyt_pause.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_game_over.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_save_mgr.cpp"),
+            Object(Matching, "d/lyt/d_lyt_save_mgr.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_drop_line.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_force_line.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_enemy_icon.cpp"),

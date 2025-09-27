@@ -1079,7 +1079,7 @@ bool dLytMeterMain_c::fn_800D5680() {
 }
 
 bool dLytMeterMain_c::fn_800D56B0() {
-    if (dLytSaveMgr_c::GetInstance() != nullptr && dLytSaveMgr_c::GetInstance()->fn_80285650()) {
+    if (dLytSaveMgr_c::GetInstance() != nullptr && dLytSaveMgr_c::GetInstance()->isBusy()) {
         return true;
     }
 
