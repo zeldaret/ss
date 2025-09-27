@@ -245,8 +245,11 @@ d/d_heap.cpp:
 	.sbss       start:0x805751A8 end:0x805751D0
 	.bss        start:0x80597740 end:0x80597758
 
+d/d_lang.cpp:
+	.text       start:0x80054F30 end:0x80054F88 align:16
+
 d/d_main.cpp:
-	.text       start:0x80054F30 end:0x80055170 align:16
+	.text       start:0x80054F90 end:0x80055170 align:16
 	.sbss       start:0x805751D0 end:0x805751E0
 
 d/d_pad.cpp:

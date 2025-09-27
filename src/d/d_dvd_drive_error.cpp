@@ -2,6 +2,7 @@
 
 #include "d/d_dvd_unk.h"
 #include "d/d_gfx.h"
+#include "d/d_lang.h"
 #include "d/d_lyt_hio.h"
 #include "d/d_reset.h"
 #include "egg/gfx/eggDrawGX.h"
@@ -64,8 +65,6 @@ static const wchar_t *sErrorsFr[] = {
     sErrFrDiskError,
 };
 
-extern "C" u8 fn_80054F30();
-
 void dDvdDriveError_c::draw() {
     EGG::Screen screen;
     screen.SetCanvasMode(EGG::Screen::CANVASMODE_0);
@@ -105,11 +104,11 @@ void dDvdDriveError_c::draw() {
         idx = 2;
     }
 
-    u8 lang = fn_80054F30();
+    u8 lang = getCurrentLanguage1();
     const wchar_t *str;
-    if (lang == 3) {
+    if (lang == D_LANG_FR) {
         str = sErrorsFr[idx];
-    } else if (lang == 4) {
+    } else if (lang == D_LANG_ES) {
         str = sErrorsEs[idx];
     } else {
         str = sErrorsEn[idx];

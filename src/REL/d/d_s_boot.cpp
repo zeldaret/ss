@@ -10,6 +10,7 @@
 #include "d/d_gfx.h"
 #include "d/d_hbm.h"
 #include "d/d_heap.h"
+#include "d/d_lang.h"
 #include "d/d_message.h"
 #include "d/d_pad.h"
 #include "d/d_pad_manager.h"
@@ -56,9 +57,6 @@ sFPhase<dScBoot_c>::phaseCallback dScBoot_c::sCallbacks[] = {&dScBoot_c::cb1, &d
 sFPhaseBase::sFPhaseState dScBoot_c::executeLoadPhase() {
     return mPhases.step();
 }
-
-extern "C" u8 getUsedLanguageNTSCNum();
-extern "C" u8 fn_80054F30();
 
 sFPhaseBase::sFPhaseState dScBoot_c::cb1() {
     LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("cursor", mHeap::g_archiveHeap);
@@ -134,12 +132,14 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb6() {
     LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("Main2D", nullptr);
     LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("DoButton", nullptr);
     LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("MenuHelp", nullptr);
-    u8 result = fn_80054F30();
+    u8 result = getCurrentLanguage1();
     s32 gameOverType;
-    if (result == 3) {
+    if (result == D_LANG_FR) {
         gameOverType = 1;
+    } else if (result == D_LANG_ES) {
+        gameOverType = 2;
     } else {
-        gameOverType = result == 4 ? 2 : 0;
+        gameOverType = 0;
     }
 
     if (gameOverType == 0) {
@@ -336,13 +336,13 @@ void dScBoot_c::drawCallback() {
 
 dScBoot_c::strap_c::strap_c() {
     SizedString<8> str;
-    u8 langNum = getUsedLanguageNTSCNum();
+    u8 langNum = getCurrentLanguage();
     mArcName.empty();
     mLytFileName.empty();
     mAnimFileName.empty();
-    if (langNum == 3) {
+    if (langNum == D_LANG_FR) {
         str = "F";
-    } else if (langNum == 4) {
+    } else if (langNum == D_LANG_ES) {
         str = "S";
     } else {
         str = "U";

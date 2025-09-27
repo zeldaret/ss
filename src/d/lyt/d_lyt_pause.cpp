@@ -358,7 +358,7 @@ void dLytPauseMain_c::initializeState_Select() {
         mpPauseText->requestIn();
     }
 }
-extern "C" void fn_80059F40(void *);
+
 void dLytPauseMain_c::executeState_Select() {
     switch (mStep) {
         case 0: {
