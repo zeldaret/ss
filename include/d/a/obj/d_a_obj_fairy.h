@@ -67,7 +67,7 @@ private:
     /* 0x7B0 */ dCcD_Sph mCcSph1;
     /* 0x900 */ dCcD_Sph mCcSph2;
     /* 0xA50 */ STATE_MGR_DECLARE(dAcOFairy_c);
-    /* 0xA8C */ EffectsStruct mEffects[2];
+    /* 0xA8C */ dEmitter_c mEffects[2];
     /* 0xAF4 */ mVec3_c mOrigPosition;  ///< The original position of the actor around which it is moving
     /* 0xB00 */ mVec3_c mSpawnPosition; ///< The (slightly randomized) spawn position
     /* 0xB0C */ u8 _0xB0C[0xB18 - 0xB0C];

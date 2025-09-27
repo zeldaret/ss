@@ -41,7 +41,7 @@ public:
     /* 0x35C */ dCcD_Cps mCcCps;
     /* 0x4CC */ dCcD_Sph mCcSph;
     /* 0x61C */ cBgS_PolyInfo mPolyInfo; // ??
-    /* 0x648 */ EffectsStruct mEffects;
+    /* 0x648 */ dEmitter_c mEffects;
     /* 0x67C */ u32 field_0x67C;
     /* 0x680 */ u8 mSubType;
     /* 0x681 */ u8 field_0x681;

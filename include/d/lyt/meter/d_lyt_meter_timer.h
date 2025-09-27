@@ -52,7 +52,7 @@ public:
     void resetBowlNuts();
     void updateDropLine(nw4r::lyt::Pane *pane);
 
-    void createEffect(s32 fruitIndex);
+    void startEffect(s32 fruitIndex);
     bool incrementTearCount();
     bool isAnyFruitAnimAtFrame(f32 f) const;
 

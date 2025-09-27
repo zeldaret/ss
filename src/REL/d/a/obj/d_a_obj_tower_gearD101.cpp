@@ -128,7 +128,7 @@ void dAcOTowerGearD101_c::initTransform() {
 }
 
 void dAcOTowerGearD101_c::playVisualEffect() {
-    mEffects.createContinuousEffect(
+    mEffects.holdEffect(
         PARTICLE_RESOURCE_ID_MAPPING_572_, field_0x3F4, &mRotation, nullptr, nullptr, nullptr
     );
 }

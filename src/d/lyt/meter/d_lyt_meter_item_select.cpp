@@ -2245,7 +2245,7 @@ void dLytMeterItemSelect_c::fn_800EF580() {
     nw4r::math::MTX34 mtx = mpPanes[11]->GetGlobalMtx();
     mVec3_c pos(mtx._03, mtx._13, 0.0f);
     mVec3_c scale(mEffectScale, mEffectScale, mEffectScale);
-    mEffects.createContinuousUIEffect(PARTICLE_RESOURCE_ID_MAPPING_717_, pos, nullptr, &scale, nullptr, nullptr);
+    mEffects.holdUIEffect(PARTICLE_RESOURCE_ID_MAPPING_717_, pos, nullptr, &scale, nullptr, nullptr);
 
     if (field_0x57C0 != 0) {
         mEffects.stopDrawParticles();

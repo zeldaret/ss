@@ -316,17 +316,17 @@ void dEmitterBase_c::bindShpEmitter(s32 id, bool unused) {
     }
 }
 
-EffectsStruct::EffectsStruct() : mpOwner(nullptr), mFlags(0), mEffect(0) {}
+dEmitter_c::dEmitter_c() : mpOwner(nullptr), mFlags(0), mEffect(0) {}
 
-EffectsStruct::EffectsStruct(dBase_c *base) : mpOwner(base), mFlags(0), mEffect(0) {}
+dEmitter_c::dEmitter_c(dBase_c *base) : mpOwner(base), mFlags(0), mEffect(0) {}
 
-EffectsStruct::~EffectsStruct() {
+dEmitter_c::~dEmitter_c() {
     mpOwner = nullptr;
     remove(false);
 }
 
-void EffectsStruct::remove(bool bForceDeleteEmitters) {
-    offFlag(EMITTER_0x1);
+void dEmitter_c::remove(bool bForceDeleteEmitters) {
+    offFlag(EMITTER_New);
     JPABaseEmitter *emitter = bForceDeleteEmitters ? mpEmitterHead : nullptr;
     deactivateEmitters();
     for (; emitter != nullptr; emitter = GetNextEmitter(emitter)) {
@@ -335,21 +335,21 @@ void EffectsStruct::remove(bool bForceDeleteEmitters) {
     removeFromActiveEmittersList();
 }
 
-void EffectsStruct::addToActiveEmittersList(u16 resourceId, bool bFlags) {
+void dEmitter_c::addToActiveEmittersList(u16 resourceId, bool create) {
     mEffect = resourceId;
     mFlags = 0;
     setImmortal();
     dJEffManager_c::sPlayingEffectsList.append(this);
-    onFlag(EMITTER_0x1);
-    if (bFlags) {
-        onFlag(EMITTER_0x4);
+    onFlag(EMITTER_New);
+    if (create) {
+        onFlag(EMITTER_OneShot);
     }
     if (dParticle::mgr_c::GetInstance()->getResUserWork(resourceId) & 0x4000) {
         onFlag(EMITTER_0x10);
     }
 }
 
-bool EffectsStruct::areAllEmittersDone() {
+bool dEmitter_c::areAllEmittersDone() {
     bool allDone = true;
 
     if (mpEmitterHead != nullptr) {
@@ -370,7 +370,7 @@ bool EffectsStruct::areAllEmittersDone() {
     return allDone;
 }
 
-void EffectsStruct::execute() {
+void dEmitter_c::execute() {
     if (mpOwner != nullptr && (mpOwner->mDeleteRequest || mpOwner->mLifecycleState == fBase_c::TO_BE_DELETED)) {
         mpOwner = nullptr;
     }
@@ -389,7 +389,7 @@ void EffectsStruct::execute() {
                 }
             }
         }
-        onFlag(EMITTER_0x1);
+        onFlag(EMITTER_New);
     } else {
         playCalcEmitters();
         if (checkFlag(EMITTER_0x20)) {
@@ -402,7 +402,7 @@ void EffectsStruct::execute() {
     }
 }
 
-bool EffectsStruct::getOwnerPolyAttrs(s32 *pOut1, s32 *pOut2) {
+bool dEmitter_c::getOwnerPolyAttrs(s32 *pOut1, s32 *pOut2) {
     if (mpOwner != nullptr && mpOwner->mGroupType == fBase_c::ACTOR) {
         dAcBase_c *actor = static_cast<dAcBase_c *>(mpOwner);
         *pOut1 = actor->mPolyAttr0;
@@ -415,11 +415,11 @@ bool EffectsStruct::getOwnerPolyAttrs(s32 *pOut1, s32 *pOut2) {
     }
 }
 
-void EffectsStruct::realizeAlpha() {
+void dEmitter_c::realizeAlpha() {
     setGlobalAlpha(mFadeTimer * (255.0f / mFadeDuration));
 }
 
-void EffectsStruct::setFading(u8 lifetime) {
+void dEmitter_c::setFading(u8 lifetime) {
     if (!checkFlag(EMITTER_Fading)) {
         mFadeTimer = lifetime;
         onFlag(EMITTER_Fading);
@@ -456,7 +456,6 @@ void dParticleFogProc_c::doDraw() {
     dJEffManager_c::draw(&info, mIdx);
 }
 
-extern "C" bool fn_80054AD0();
 void dEffect2D_c::draw() {
     f32 proj[GX_PROJECTION_SZ];
     GXGetProjectionv(proj);
@@ -470,7 +469,7 @@ void dEffect2D_c::draw() {
 
     C_MTXLightOrtho(mtx1, -h, h, -f, f, 0.5f, 0.5f, 0.5f, 0.5f);
 
-    MTXScale(mtx2, fn_80054AD0() ? dGfx_c::get16x9to4x3WidthScaleF() : 1.0f, 1.0f, 1.0f);
+    MTXScale(mtx2, dGfx_c::isTvMode4To3() ? dGfx_c::get16x9to4x3WidthScaleF() : 1.0f, 1.0f, 1.0f);
     MTXCopy(mtx2, info.mCamMtx);
     MTXCopy(mtx1, info.mPrjMtx);
     dJEffManager_c::draw(&info, mGroupId);
@@ -831,16 +830,18 @@ void dJEffManager_c::execute() {
         EffectsList::Iterator itNext = it;
         ++itNext;
         it->execute();
-        if (it->checkFlag(EffectsStruct::EMITTER_Fading)) {
+        if (it->checkFlag(dEmitter_c::EMITTER_Fading)) {
             it->realizeAlpha();
         }
-        if (it->checkFlag(EffectsStruct::EMITTER_0x1)) {
-            it->offFlag(EffectsStruct::EMITTER_0x1);
+        if (it->checkFlag(dEmitter_c::EMITTER_New)) {
+            // Make sure we don't remove an emitter that didn't even
+            // have a chance to spawn anything yet..
+            it->offFlag(dEmitter_c::EMITTER_New);
         } else {
             if (it->areAllEmittersDone()) {
                 it->remove(false);
             } else {
-                it->onFlag(EffectsStruct::EMITTER_0x2);
+                it->onFlag(dEmitter_c::EMITTER_Active);
             }
         }
         it = itNext;
@@ -972,40 +973,40 @@ dEmitterBase_c *dJEffManager_c::spawnEffect(
     return spawnEffectInternal(effectResourceId, transform, c1, c2, idx1, idx2);
 }
 
-bool EffectsStruct::createEffect(
+bool dEmitter_c::startEffect(
     u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2
 ) {
-    return createEffect(true, resourceId, pos, rot, scale, c1, c2);
+    return setupEffect(true, resourceId, pos, rot, scale, c1, c2);
 }
 
-bool EffectsStruct::createUIEffect(
-    u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2
-) {
-    mVec3_c adjustedPosition(pos.x * dGfx_c::getCurrentScreenTo4x3WidthScaleF(), pos.y, pos.z);
-    return createEffect(true, resourceId, adjustedPosition, rot, scale, c1, c2);
-}
-
-bool EffectsStruct::createEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2) {
-    return createEffect(true, resourceId, transform, c1, c2);
-}
-
-bool EffectsStruct::createContinuousEffect(
-    u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2
-) {
-    return createEffect(false, resourceId, pos, rot, scale, c1, c2);
-}
-
-bool EffectsStruct::createContinuousUIEffect(
+bool dEmitter_c::startUIEffect(
     u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2
 ) {
     mVec3_c adjustedPosition(pos.x * dGfx_c::getCurrentScreenTo4x3WidthScaleF(), pos.y, pos.z);
-    return createEffect(false, resourceId, adjustedPosition, rot, scale, c1, c2);
+    return setupEffect(true, resourceId, adjustedPosition, rot, scale, c1, c2);
 }
 
-bool EffectsStruct::createContinuousEffect(
+bool dEmitter_c::startEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2) {
+    return setupEffect(true, resourceId, transform, c1, c2);
+}
+
+bool dEmitter_c::holdEffect(
+    u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2
+) {
+    return setupEffect(false, resourceId, pos, rot, scale, c1, c2);
+}
+
+bool dEmitter_c::holdUIEffect(
+    u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2
+) {
+    mVec3_c adjustedPosition(pos.x * dGfx_c::getCurrentScreenTo4x3WidthScaleF(), pos.y, pos.z);
+    return setupEffect(false, resourceId, adjustedPosition, rot, scale, c1, c2);
+}
+
+bool dEmitter_c::holdEffect(
     u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2
 ) {
-    return createEffect(false, resourceId, transform, c1, c2);
+    return setupEffect(false, resourceId, transform, c1, c2);
 }
 
 bool dJEffManager_c::createMassObjEffect(
@@ -1128,52 +1129,52 @@ void dEmitterBase_c::loadColors(
     emitter->setGlobalEnvColor(r, g, b);
 }
 
-void EffectsStruct::removeFromActiveEmittersList() {
+void dEmitter_c::removeFromActiveEmittersList() {
     if (dJEffManager_c::sPlayingEffectsList.GetPosition(this) != dJEffManager_c::sPlayingEffectsList.GetEndIter()) {
         dJEffManager_c::sPlayingEffectsList.remove(this);
     }
 }
 
-bool EffectsStruct::createEffect(
-    bool bFlags, u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+bool dEmitter_c::setupEffect(
+    bool create, u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
     const GXColor *c2
 ) {
-    if (!bFlags && canReuse(resourceId)) {
+    if (!create && canReuse(resourceId)) {
         setPosRotScale(pos, rot, scale);
         s32 idx1 = 0;
         s32 idx2 = 0;
         getOwnerPolyAttrs(&idx1, &idx2);
         loadColors(c1, c2, idx1, idx2);
-        onFlag(EMITTER_0x1);
+        onFlag(EMITTER_New);
     } else {
         remove(false);
         s32 idx1 = 0;
         s32 idx2 = 0;
         getOwnerPolyAttrs(&idx1, &idx2);
         if (createEmitters(resourceId, pos, rot, scale, c1, c2, idx1, idx2)) {
-            addToActiveEmittersList(resourceId, bFlags);
+            addToActiveEmittersList(resourceId, create);
         }
     }
 
     return hasEmitters();
 }
 
-bool EffectsStruct::createEffect(
-    bool bFlags, u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2
+bool dEmitter_c::setupEffect(
+    bool create, u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2
 ) {
-    if (!bFlags && canReuse(resourceId)) {
+    if (!create && canReuse(resourceId)) {
         s32 idx1 = 0;
         s32 idx2 = 0;
         getOwnerPolyAttrs(&idx1, &idx2);
         loadColors(c1, c2, idx1, idx2);
-        onFlag(EMITTER_0x1);
+        onFlag(EMITTER_New);
     } else {
         remove(false);
         s32 idx1 = 0;
         s32 idx2 = 0;
         getOwnerPolyAttrs(&idx1, &idx2);
         if (createEmitters(resourceId, mVec3_c::Zero, nullptr, nullptr, c1, c2, idx1, idx2)) {
-            addToActiveEmittersList(resourceId, bFlags);
+            addToActiveEmittersList(resourceId, create);
         }
     }
     setTransform(transform);
@@ -1271,7 +1272,7 @@ void dWaterEffect_c::execute(f32 water, f32 ground) {
         // Spawn effect while in water
         mVec3_c pos(ac->mPosition.x, water, ac->mPosition.z);
         mVec3_c scale(mScale, mScale, mScale);
-        mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_127_, pos, nullptr, &scale, nullptr, nullptr);
+        mEff.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_127_, pos, nullptr, &scale, nullptr, nullptr);
         f32 rate = nw4r::math::FAbs(ac->mSpeed) * 0.02f;
         rate = rate > 0.95f ? 0.95f : rate;
         mEff.setRate(rate + 0.05f);

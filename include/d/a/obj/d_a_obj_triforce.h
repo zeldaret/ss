@@ -35,7 +35,7 @@ private:
     nw4r::g3d::ResFile mResFile;
     m3d::smdl_c mMdl;
     dCcD_Sph mCollision;
-    EffectsStruct mEffects;
+    dEmitter_c mEffects;
     m3d::anmTexSrt_c mAnm;
     mAng mStartingOffset;
 };

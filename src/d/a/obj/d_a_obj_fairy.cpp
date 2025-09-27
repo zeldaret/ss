@@ -213,7 +213,7 @@ int dAcOFairy_c::actorExecute() {
     }
 
     if (!field_0xB89) {
-        mEffects[0].createContinuousEffect(
+        mEffects[0].holdEffect(
             PARTICLE_RESOURCE_ID_MAPPING_331_, mPosition, nullptr, nullptr, nullptr, nullptr
         );
         if (!isCuring() && !dAcPy_c::GetLink()->checkActionFlagsCont(0x400000)) {
@@ -240,7 +240,7 @@ int dAcOFairy_c::actorExecute() {
     }
 
     if (isCuring() && !field_0xB89) {
-        mEffects[1].createContinuousEffect(
+        mEffects[1].holdEffect(
             PARTICLE_RESOURCE_ID_MAPPING_327_, mPosition, nullptr, nullptr, nullptr, nullptr
         );
     }
