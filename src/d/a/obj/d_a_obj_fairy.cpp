@@ -89,7 +89,7 @@ int dAcOFairy_c::create() {
     mMaxSpeedY = randMaxSpeedY();
     mSpeed = mMaxSpeedY;
 
-    field_0xB80 = getFromParams(0, 0xF);
+    mSpawnType = getFromParams(0, 0xF);
     field_0xB81 = getFromParams(4, 0x3);
 
     setSpawnPosition(calcInitialSpawnPosition());
@@ -110,7 +110,7 @@ int dAcOFairy_c::create() {
         mOldPosition = mPosition;
     }
 
-    if (field_0xB80 == 2 || field_0xB80 == 3) {
+    if (mSpawnType == SPAWN_MANUAL_RELEASE || mSpawnType == SPAWN_AUTO_RELEASE) {
         mStateMgr.changeState(StateID_CureStart);
     } else {
         mStateMgr.changeState(StateID_Wait);
@@ -123,10 +123,10 @@ int dAcOFairy_c::create() {
     dBgS_ObjGndChk chk;
     pos.y += 10.0f;
     if (chk.CheckPos(pos)) {
-        field_0xB6C = chk.GetGroundHeight();
-        mOrigPosition.y = field_0xB6C + 20.0f + 100.0f;
+        mOriginalGndHeight = chk.GetGroundHeight();
+        mOrigPosition.y = mOriginalGndHeight + 20.0f + 100.0f;
     }
-    field_0xB84 = 0x2D;
+    mPreventCatchAfterSpawnTimer = 45;
 
     if (isWithinPlayerRadius(200.0f)) {
         s16 ang = mVelocity.atan2sX_Z();
@@ -165,7 +165,7 @@ int dAcOFairy_c::actorExecute() {
             return SUCCEEDED;
         }
 
-        if (!sLib::calcTimer(&field_0xB84)) {
+        if (!sLib::calcTimer(&mPreventCatchAfterSpawnTimer)) {
             if (mCcSph2.ChkCoHit() && !isCuring() && !dAcPy_c::GetLink()->checkCurrentAction(/* SCOOP */ 0x9E)) {
                 if (!dAcItem_c::hasAnyFairy()) {
                     for (int i = 0; i < (int)ARRAY_LENGTH(mEffects); i++) {
@@ -276,7 +276,7 @@ int dAcOFairy_c::draw() {
 
 void dAcOFairy_c::initializeState_Wait() {
     mSpeed = mMaxSpeedY;
-    field_0xB82 = cM::rndInt(60) + 120;
+    mPreventAvoidTimer = cM::rndInt(60) + 120;
     mHasSetTurnSpeedY = false;
     field_0xB86 = false;
     mModel.setRate(1.0f);
@@ -307,7 +307,7 @@ void dAcOFairy_c::executeState_Wait() {
         }
     } else {
         mHasSetTurnSpeedY = false;
-        if (!sLib::calcTimer(&field_0xB82)) {
+        if (!sLib::calcTimer(&mPreventAvoidTimer)) {
             mAvoidTimer = cM::rndInt(30);
             mStateMgr.changeState(StateID_Avoid);
             return;
@@ -341,7 +341,8 @@ void dAcOFairy_c::executeState_Wait() {
         field_0xB86 = false;
     }
 
-    if (mVelocity.y < 0.0f && mPosition.y - field_0xB6C <= 50.0f) {
+    if (mVelocity.y < 0.0f && mPosition.y - mOriginalGndHeight <= 50.0f) {
+        // slow down when approaching ground
         mVelocity.y *= 0.7f;
     }
 
@@ -418,8 +419,11 @@ void dAcOFairy_c::finalizeState_PlayerAvoid() {
 void dAcOFairy_c::initializeState_CureStart() {
     mCureAngularSpeed = cM::rndInt(0x100) + 0x2000;
     mCureAngle = getXZAngleToPlayer();
-    mCurePosXZOffset = field_0xB80 == 3 ? 0.0f : 50.0f;
-    mCurePosYOffset = field_0xB80 == 3 ? 0.0f : 50.0f;
+    // If the fairy saves the player from death, it spawns directly
+    // at the player's position and circles outwards. Otherwise it directly
+    // starts 50 units away.
+    mCurePosXZOffset = mSpawnType == SPAWN_AUTO_RELEASE ? 0.0f : 50.0f;
+    mCurePosYOffset = mSpawnType == SPAWN_AUTO_RELEASE ? 0.0f : 50.0f;
 
     mCcSph2.ClrCoSet();
     mCcSph2.ClrTgSet();
@@ -427,14 +431,15 @@ void dAcOFairy_c::initializeState_CureStart() {
     mSpeed = 0.0f;
     mVelocity = mVec3_c::Zero;
     dAcPy_c::fairyHeal(this);
-    if (field_0xB80 != 3) {
+    if (mSpawnType != SPAWN_AUTO_RELEASE) {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_O_FAIRY_RECOVER);
     }
 }
 void dAcOFairy_c::executeState_CureStart() {
-    if (field_0xB80 == 3) {
-        sLib::chase(&field_0xB7C, 1.0f, 0.04f);
-        f32 f = cLib::easeInOut(field_0xB7C, 3.0f) * 50.0f;
+    if (mSpawnType == SPAWN_AUTO_RELEASE) {
+        // Start circling away from the player up to the normal distance
+        sLib::chase(&mAutoReleaseProgress, 1.0f, 0.04f);
+        f32 f = cLib::easeInOut(mAutoReleaseProgress, 3.0f) * 50.0f;
         mCurePosXZOffset = f;
         mCurePosYOffset = f;
 
@@ -451,7 +456,7 @@ void dAcOFairy_c::executeState_CureStart() {
         }
 
         holdSound(SE_O_FAIRY_FLY_LEV);
-        if (field_0xB7C == 1.0f) {
+        if (mAutoReleaseProgress == 1.0f) {
             mStateMgr.changeState(StateID_Cure);
         }
     } else {
@@ -470,15 +475,15 @@ void dAcOFairy_c::initializeState_Cure() {
     mCurePosXZOffset = 50.0f;
     mCurePosYOffset = 50.0f;
     mModel.setRate(15.0f);
-    field_0xB74 = cM::rnd() * 80.0f + 20.0f;
-    if (field_0xB80 == 3) {
+    mCurePosXZOffsetTarget = cM::rnd() * 80.0f + 20.0f;
+    if (mSpawnType == SPAWN_AUTO_RELEASE) {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_O_FAIRY_RECOVER);
     }
 }
 void dAcOFairy_c::executeState_Cure() {
-    calcCurePosition(field_0xB74, 160.0f);
+    calcCurePosition(mCurePosXZOffsetTarget, 160.0f);
     if (mCureAngle < mCureAngularSpeed) {
-        field_0xB74 = cM::rnd() * 80.0f + 20.0f;
+        mCurePosXZOffsetTarget = cM::rnd() * 80.0f + 20.0f;
     }
     if (mCurePosYOffset == 160.0f) {
         mStateMgr.changeState(StateID_CureEnd);
@@ -488,7 +493,7 @@ void dAcOFairy_c::finalizeState_Cure() {}
 
 void dAcOFairy_c::initializeState_CureEnd() {}
 void dAcOFairy_c::executeState_CureEnd() {
-    calcCurePosition(field_0xB74, 180.0f);
+    calcCurePosition(mCurePosXZOffsetTarget, 180.0f);
     sLib::chase(&mScale.x, 0.0f, 0.07f);
     mScale.y = mScale.z = mScale.x;
     if (mScale.x <= 0.0f) {
@@ -582,7 +587,7 @@ void dAcOFairy_c::calcCurePosition(const f32 &xzOffsetTarget, const f32 &yOffset
     mCurePosition.y += mCurePosYOffset;
     vecCylCalc(mCurePosition, mCureAngle, mCurePosXZOffset);
 
-    sLib::chase(&mCurePosXZOffset, xzOffsetTarget, field_0xB74 / 10.0f);
+    sLib::chase(&mCurePosXZOffset, xzOffsetTarget, mCurePosXZOffsetTarget / 10.0f);
     sLib::chase(&mCurePosYOffset, yOffsetTarget, 2.0f);
     mCureAngle += mCureAngularSpeed;
 

@@ -32,6 +32,15 @@ public:
     STATE_FUNC_DECLARE(dAcOFairy_c, CatchDemo);
 
 private:
+    enum SpawnType_e {
+        SPAWN_0,
+        SPAWN_1,
+        /** The player released the fairy from a bottle or the bug net */
+        SPAWN_MANUAL_RELEASE,
+        /** The previously bottled fairy saves the player from death */
+        SPAWN_AUTO_RELEASE,
+    };
+
     bool shouldAvoidBugNet() const;
     bool isCuring() const;
     bool canTargetWithBugNet() const;
@@ -61,7 +70,7 @@ private:
     /* 0xA8C */ EffectsStruct mEffects[2];
     /* 0xAF4 */ mVec3_c mOrigPosition;  ///< The original position of the actor around which it is moving
     /* 0xB00 */ mVec3_c mSpawnPosition; ///< The (slightly randomized) spawn position
-    /* 0xB0C */ mVec3_c field_0xB0C;
+    /* 0xB0C */ u8 _0xB0C[0xB18 - 0xB0C];
     /* 0xB18 */ mVec3_c mCurePosition; ///< When curing the player, holds the calculated
                                        ///< position that is applied in actorExecute
     /* 0xB24 */ mMtx_c field_0xB24;
@@ -72,23 +81,22 @@ private:
                                         ///< circular path around the player
     /* 0xB5C */ mAng mCureAngularSpeed; ///< When curing the player, holds the speed with which
                                         ///< the fairy is circling around the player
-    /* 0xB5E */ mAng field_0xB5E;
     /* 0xB60 */ u32 mPosYWaveAmplitude;
     /* 0xB64 */ f32 mMaxSpeedY;
     /* 0xB68 */ f32 targetSpeedY;
-    /* 0xB6C */ f32 field_0xB6C;
+    /* 0xB6C */ f32 mOriginalGndHeight;
     /* 0xB70 */ f32 mCurePosXZOffset;
-    /* 0xB74 */ f32 field_0xB74;
+    /* 0xB74 */ f32 mCurePosXZOffsetTarget;
     /* 0xB78 */ f32 mCurePosYOffset;
-    /* 0xB7C */ f32 field_0xB7C;
-    /* 0xB80 */ u8 field_0xB80;
+    /* 0xB7C */ f32 mAutoReleaseProgress;
+    /* 0xB80 */ u8 mSpawnType;
     /* 0xB81 */ u8 field_0xB81;
-    /* 0xB82 */ u8 field_0xB82;
+    /* 0xB82 */ u8 mPreventAvoidTimer;
     /* 0xB83 */ u8 mAvoidTimer;
-    /* 0xB84 */ u8 field_0xB84;
+    /* 0xB84 */ u8 mPreventCatchAfterSpawnTimer;
     /* 0xB85 */ bool mHasSetTurnSpeedY;
     /* 0xB86 */ bool field_0xB86;
-    /* 0xB87 */ u8 field_0xB87;
+    /* 0xB87 */ u8 _0xB87;
     /* 0xB88 */ bool field_0xB88;
     /* 0xB89 */ bool field_0xB89;
 };
