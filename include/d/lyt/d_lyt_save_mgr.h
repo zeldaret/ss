@@ -48,6 +48,10 @@ public:
         ACTION_MAX,
     };
 
+    bool isFinishedFadingIn() const {
+        return mIsFinishedFadingIn;
+    }
+
 private:
     static dLytSaveMgr_c *sInstance;
 

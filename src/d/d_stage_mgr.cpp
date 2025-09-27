@@ -9,6 +9,7 @@
 #include "d/d_stage_parse.h"
 #include "d/d_sys.h"
 #include "d/flag/flag_managers.h"
+#include "d/lyt/d_lyt_save_mgr.h"
 #include "d/snd/d_snd_state_mgr.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
@@ -229,21 +230,18 @@ void dStageMgr_c::finalizeState_ReadObjectSound() {
     dLast_c::setExecuteCallback(lastExecuteCallback);
 }
 
-extern "C" void *LYT_SAVE_MGR;
-extern "C" void fn_80285600(void *, int, int);
 void dStageMgr_c::initializeState_SceneChangeSave() {
     dScGame_c::GetInstance()->setSavePromptFlag(false);
-    if (LYT_SAVE_MGR != nullptr) {
-        fn_80285600(LYT_SAVE_MGR, 3, 0);
+    if (dLytSaveMgr_c::GetInstance() != nullptr) {
+        dLytSaveMgr_c::GetInstance()->setPrompt(dLytSaveMgr_c::PROMPT_SAVE_NORMAL, false);
     }
     dBase_c::s_NextExecuteControlFlags |= BASE_PROP_0x1;
     dSys_c::setFrameRate(2);
 }
 
 void dStageMgr_c::executeState_SceneChangeSave() {
-    if (LYT_SAVE_MGR != nullptr) {
-        // "isNotSaving???"
-        if (((u8 *)LYT_SAVE_MGR)[0x119C] == true) {
+    if (dLytSaveMgr_c::GetInstance() != nullptr) {
+        if (dLytSaveMgr_c::GetInstance()->isFinishedFadingIn() == true) {
             mStateMgr.changeState(StateID_RestartSceneWait);
         }
     } else {

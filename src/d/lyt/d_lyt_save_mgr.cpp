@@ -89,7 +89,7 @@ void dLytSaveMgr_c::finalizeState_Init() {}
 
 void dLytSaveMgr_c::initializeState_FadeOut() {
     if (mSavePrompt == PROMPT_HERO_MODE) {
-        StoryflagManager::sInstance->setFlag(STORYFLAG_490);
+        StoryflagManager::sInstance->setFlag(STORYFLAG_GAME_COMPLETE);
         if (StoryflagManager::sInstance->getFlag(STORYFLAG_HERO_MODE)) {
             // Skip hero mode prompt if we were in hero mode
             mSavePrompt = PROMPT_HERO_MODE_CONFIRM;
@@ -123,8 +123,8 @@ void dLytSaveMgr_c::executeState_FadeOut() {
     }
 
     if (mSavePrompt == PROMPT_SAVE_NORMAL) {
-        dBase_c::s_NextExecuteControlFlags |= 1;
-        dBase_c::s_DrawControlFlags |= 1;
+        dBase_c::s_NextExecuteControlFlags |= dBase_c::BASE_PROP_0x1;
+        dBase_c::s_DrawControlFlags |= dBase_c::BASE_PROP_0x1;
     }
 }
 void dLytSaveMgr_c::finalizeState_FadeOut() {}
@@ -604,8 +604,8 @@ void dLytSaveMgr_c::finalizeState_Select() {}
 void dLytSaveMgr_c::initializeState_FadeIn() {
     mStep = 0;
     if (mSavePrompt == PROMPT_SAVE_NORMAL) {
-        dBase_c::s_NextExecuteControlFlags &= ~1;
-        dBase_c::s_DrawControlFlags &= ~1;
+        dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x1;
+        dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x1;
     }
 }
 void dLytSaveMgr_c::executeState_FadeIn() {

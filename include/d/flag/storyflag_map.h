@@ -2472,7 +2472,7 @@ enum StoryFlags_e {
     /** [Skip last cutscene during credits (Groose appears in the Groosenator, re-enables groosenator to lanayru after
      * sky keep)] Story Flag #490 (0x01EA) - JP 805ACD93 0x01 / US 805A9B13 0x01
      */
-    STORYFLAG_490,
+    STORYFLAG_GAME_COMPLETE,
 
     /** [sets after finishing request for gorko at goddess wall (or S&Q) (unsets after getting new request)]
      *  Story Flag #491 (0x01EB) - JP 805ACD93 0x02 / US 805A9B13 0x02
