@@ -56,6 +56,10 @@ struct mAng {
         mVal *= other;
         return *this;
     }
+    mAng &operator*=(const f32 &other) {
+        mVal *= other;
+        return *this;
+    }
 
     static s32 abs(const mAng b) {
         return labs(b);

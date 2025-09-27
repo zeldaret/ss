@@ -218,7 +218,7 @@ public:
     static mVec3_c createProjectionXZ(const mAng3_c &ang, f32 scalar);
 
     inline f32 mag() const {
-        return PSVECMag(*this);
+        return VECMag(*this);
     }
 
     f32 distance(const mVec3_c &to) const {
@@ -259,11 +259,18 @@ public:
     f32 absXZ() const {
         return EGG::Math<f32>::sqrt(squareMagXZ());
     }
+    f32 absXZTo(const mVec3_c &other) const {
+        return EGG::Math<f32>::sqrt(squareDistanceToXZ(other));
+    }
     s16 atan2sX_Z() const {
         return cM::atan2s(x, z);
     }
-    s16 atan2sY_XZ() const {
+    s16 atan2snY_XZ() const {
         return cM::atan2s(-y, absXZ());
+    }
+
+    s16 atan2sY_XZ() const {
+        return cM::atan2s(y, absXZ());
     }
 
     f32 angle(const mVec3_c &other) const {

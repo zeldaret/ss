@@ -203,7 +203,7 @@ public:
     static dAcBase_c *searchActor(dAcBase_c *parent);
     // Kinda performs the code of the first param on every actor (second param is optional parent)
     static void forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *parent);
-    mAng getXZAngleToPlayer();
+    mAng getXZAngleToPlayer() const;
     // returns true if under the distThresh, False if not. the actual distance is returned in outDist
     bool getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDist);
     // same concept as above

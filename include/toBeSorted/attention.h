@@ -53,6 +53,8 @@ enum InteractionType {
     UNK_18,
     SIT,
     UNK_20,
+
+    UNK_0x58 = 0x58,
 };
 
 class AttentionInfo {

@@ -155,8 +155,6 @@ bool DowsingTarget::hasDowsingInSlot(int slot) {
     return false;
 }
 
-#define MYCLAMP(low, high, x) ((x) < (low) ? (low) : ((x) > (high) ? (high) : (x)))
-
 DowsingTarget *DowsingTarget::getDowsingInfo(
     const mVec3_c &playerPosition, const mVec3_c &dowsingDirection, f32 *p3, f32 *p4, f32 *intensity, int slot
 ) {
@@ -177,13 +175,13 @@ DowsingTarget *DowsingTarget::getDowsingInfo(
         targetDir.normalize();
 
         f32 dot = dwsDir.dot(targetDir);
-        dot = MYCLAMP(-1.0f, 1.0f, dot);
+        dot = cM::minMaxLimit(dot, -1.0f, 1.0f);
         f32 a = 1.0f - dot * dot <= 0.0f ? 0.0f : nw4r::math::FrSqrt(1.0f - dot * dot) * (1.0f - dot * dot);
 
         f32 f9 = (5461 - labs(cM::atan2s(a, dot))) * (1.0f / 5461.0f);
         if (!(f9 < 0.0f)) {
             f32 val;
-            f32 f10 = MYCLAMP(0.0f, 0.9f, proximity * 0.0001f) * 1.1111112f;
+            f32 f10 = cM::minMaxLimit(proximity * 0.0001f, 0.0f, 0.9f) * 1.1111112f;
             if (f9 > 0.85f) {
                 f9 = 0.85f;
             }

@@ -86,6 +86,8 @@ public:
 
     static void addRupees(s32 amount);
 
+    static bool hasAnyFairy();
+
     enum Trial_e {
         TRIAL_SKYLOFT,
         TRIAL_FARON,

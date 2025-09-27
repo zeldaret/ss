@@ -13,7 +13,9 @@ f32 addCalcPosXZ(mVec3_c *src, const mVec3_c &target, f32 scale, f32 maxStep, f3
 f32 addCalcPos(mVec3_c *src, const mVec3_c &target, f32 scale, f32 maxStep, f32 minStep);
 
 // made up name
+f32 easeIn(f32 value, f32 exponent);
 f32 easeOut(f32 value, f32 exponent);
+f32 easeInOut(f32 value, f32 exponent);
 
 } // namespace cLib
 

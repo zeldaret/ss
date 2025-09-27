@@ -430,14 +430,8 @@ void ex_c::fn_800562B0(s32 chan, mVec3_c &mpls) {
     }
 }
 
-// this looks like nw4r::ut::Clamp but the ternaries are swapped
-template <typename T>
-inline T WeirdClamp(T value, T min, T max) {
-    return value < min ? min : (value > max ? max : value);
-}
-
 void ex_c::fn_80056330(s32 chan) {
-    f32 mult = WeirdClamp(1.f - field_0x8C.y * field_0x8C.y, 0.f, 1.f);
+    f32 mult = cM::minMaxLimit(1.f - field_0x8C.y * field_0x8C.y, 0.f, 1.f);
 
     mVec3_c basis;
     if (field_0x53) {
@@ -520,9 +514,9 @@ void ex_c::fn_80056790(s32 chan) {
     v2.z = nw4r::ut::Max(v2.z, field_0x70.cos());
 
     s16 b1 = cM::atan2s(-v2.x, v2.z);
-    field_0x5C.x = WeirdClamp(b1 * (1.0f / field_0x70), -1.0f, 1.0f);
+    field_0x5C.x = cM::minMaxLimit(b1 * (1.0f / field_0x70), -1.0f, 1.0f);
     s16 b2 = cM::atan2s(-v2.y, v2.z);
-    field_0x5C.y = WeirdClamp(b2 * (1.0f / field_0x70), -f, f);
+    field_0x5C.y = cM::minMaxLimit(b2 * (1.0f / field_0x70), -f, f);
 
     if (field_0x51 != 0) {
         field_0x51--;
