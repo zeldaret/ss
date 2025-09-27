@@ -236,7 +236,7 @@ void dStageMgr_c::initializeState_SceneChangeSave() {
     if (LYT_SAVE_MGR != nullptr) {
         fn_80285600(LYT_SAVE_MGR, 3, 0);
     }
-    dBase_c::s_NextExecuteControlFlags |= 1;
+    dBase_c::s_NextExecuteControlFlags |= BASE_PROP_0x1;
     dSys_c::setFrameRate(2);
 }
 
@@ -252,8 +252,8 @@ void dStageMgr_c::executeState_SceneChangeSave() {
 }
 
 void dStageMgr_c::finalizeState_SceneChangeSave() {
-    dBase_c::s_NextExecuteControlFlags &= ~1;
-    dBase_c::s_DrawControlFlags &= ~1;
+    dBase_c::s_NextExecuteControlFlags &= ~BASE_PROP_0x1;
+    dBase_c::s_DrawControlFlags &= ~BASE_PROP_0x1;
 }
 
 void dStageMgr_c::initializeState_RestartSceneWait() {

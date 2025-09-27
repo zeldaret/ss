@@ -227,6 +227,10 @@ struct AnmGroupBase_c {
         return mpFrameCtrl->getAnimDuration();
     }
 
+    inline f32 getLastFrame() const {
+        return mpFrameCtrl->getAnimDuration() - 1.0f;
+    }
+
     inline f32 getFrame() const {
         return mpFrameCtrl->getFrame();
     }
@@ -292,18 +296,8 @@ struct AnmGroupBase_c {
         syncAnmFrame();
     }
 
-    inline void setRatio(f32 ratio) {
-        mpFrameCtrl->setRatio(ratio);
-        syncAnmFrame();
-    }
-
     inline f32 getRatio() const {
         return mpFrameCtrl->getRatio();
-    }
-
-    inline void setBackwardsRatio(f32 ratio) {
-        mpFrameCtrl->setBackwardsRatio(ratio);
-        syncAnmFrame();
     }
 
     inline f32 getNextFrame() const {

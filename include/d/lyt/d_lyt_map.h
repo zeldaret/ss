@@ -268,6 +268,7 @@ private:
 
 class dLytMapMain_c : public m2d::Base_c {
     friend class dLytMap_c;
+
 public:
     dLytMapMain_c();
     virtual ~dLytMapMain_c();
@@ -342,7 +343,7 @@ private:
     /* 0x8904 */ mVec3_c field_0x8904;
     /* 0x8910 */ mVec3_c field_0x8910;
     /* 0x891C */ mVec3_c field_0x891C;
-    
+
     /* 0x8928 */ u8 _0x8928[0x8930 - 0x8928];
 
     /* 0x8930 */ mVec3_c field_0x8930;
@@ -350,7 +351,7 @@ private:
 
     /* 0x8948 */ u8 idkfixmelater[0x4BC0];
     /* 0x8C94 */ s32 field_0x8C94;
-    
+
     // ...
 
     /* 0x8CC4 */ mVec3_c field_0x8CC4;
@@ -411,16 +412,13 @@ public:
 
     void build();
 
-    static bool isValid(s32 val) {
-        if (val >= 2 && val < 7) {
-            return true;
-        }
-        return false;
+    bool isSomeMapFieldEq2Or4Or5Or6() const {
+        return mMapMain.field_0x8C94 == 2 || mMapMain.field_0x8C94 == 4 || mMapMain.field_0x8C94 == 5 ||
+               mMapMain.field_0x8C94 == 6;
     }
 
-    bool unkMeterCheck() const {
-        s32 val = mMapMain.field_0x8C94;
-        return isValid(val) && ((1 << (val - 2)) & 0x1D);
+    bool isSomeMapFieldEq10() const {
+        return mMapMain.field_0x8C94 == 10;
     }
 
     void lightPillarRelated(s32 p1, s32 p2, s32 p3) {

@@ -112,8 +112,8 @@ bool dLytPauseMain_c::remove() {
         mpPauseBack = nullptr;
     }
 
-    dBase_c::s_NextExecuteControlFlags &= ~0x1;
-    dBase_c::s_DrawControlFlags &= ~0x1;
+    dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x1;
+    dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x1;
 
     return true;
 }
@@ -260,7 +260,7 @@ void dLytPauseMain_c::executeState_In() {
     }
 }
 void dLytPauseMain_c::finalizeState_In() {
-    dBase_c::s_DrawControlFlags |= 0x1;
+    dBase_c::s_DrawControlFlags |= dBase_c::BASE_PROP_0x1;
 }
 
 void dLytPauseMain_c::initializeState_Wait() {
@@ -462,7 +462,7 @@ void dLytPauseMain_c::finalizeState_GetDemo() {}
 void dLytPauseMain_c::initializeState_Out() {
     mPartStateChangeFlags = 0;
     mStep = 0;
-    dBase_c::s_DrawControlFlags &= ~0x1;
+    dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x1;
     mpArrow->requestOut();
 }
 void dLytPauseMain_c::executeState_Out() {
@@ -580,7 +580,7 @@ void dLytPauseMgr_c::executeState_None() {
         field_0x083A = true;
         mMain.requestIn();
         mStateMgr.changeState(StateID_In);
-        dBase_c::s_NextExecuteControlFlags |= 0x1;
+        dBase_c::s_NextExecuteControlFlags |= BASE_PROP_0x1;
         dLytMeter_c::GetInstance()->setMeterField_0x13750(3);
         dLytControlGame_c *lytControl = dLytControlGame_c::getInstance();
         if (lytControl->isPauseDemo()) {
@@ -600,7 +600,7 @@ void dLytPauseMgr_c::executeState_In() {
             mStateMgr.changeState(StateID_GetDemo);
         } else {
             mStateMgr.changeState(StateID_Wait);
-            dCsGame_c::GetInstance()->setCursorTypePointer();
+            dCsGame_c::GetInstance()->pointerDefSet();
         }
     }
 }
@@ -629,7 +629,7 @@ void dLytPauseMgr_c::executeState_Wait() {
         dPad::ex_c::getInstance()->centerCursor(mPad::getCurrentCoreID(), true);
     }
 
-    dCsGame_c::GetInstance()->setCursorTypePointer();
+    dCsGame_c::GetInstance()->pointerDefSet();
 
     if (dPad::getDownTrig1() ||
         (dLytControlGame_c::getInstance()->getCurrentPauseDisp() != dLytPauseMgr_c::DISP_00_INVENTORY &&
@@ -685,7 +685,7 @@ void dLytPauseMgr_c::executeState_Wait() {
     if (checkRing()) {
         if (mTimer >= 10) {
             mTimer = 0;
-            dCsGame_c::GetInstance()->setCursorTypeNoneMaybe();
+            dCsGame_c::GetInstance()->noneSet();
             mStateMgr.changeState(StateID_Ring);
         } else {
             mTimer++;
@@ -715,7 +715,7 @@ void dLytPauseMgr_c::initializeState_Change() {
 }
 void dLytPauseMgr_c::executeState_Change() {
     if (!sInstance->getField_0x083E()) {
-        dCsGame_c::GetInstance()->setCursorTypePointer();
+        dCsGame_c::GetInstance()->pointerDefSet();
     }
 
     if (mMain.isChangingState() == true) {
@@ -817,8 +817,8 @@ void dLytPauseMgr_c::initializeState_Out() {
 }
 void dLytPauseMgr_c::executeState_Out() {
     if (mMain.isChangingState() == true) {
-        dBase_c::s_NextExecuteControlFlags &= ~0x1;
-        dBase_c::s_DrawControlFlags &= ~0x1;
+        dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x1;
+        dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x1;
         mStateMgr.changeState(StateID_None);
     }
 }
