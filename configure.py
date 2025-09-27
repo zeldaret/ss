@@ -534,6 +534,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/msg_window/d_lyt_simple_window.cpp"),
             Object(Matching, "d/lyt/d_lyt_auto_caption.cpp"),
             Object(Matching, "d/lyt/d_lyt_auto_explain.cpp"),
+            Object(Matching, "d/lyt/d_lyt_map_global.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_map_capture.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_map.cpp"),
             Object(Matching, "d/lyt/d_lyt_note.cpp"),

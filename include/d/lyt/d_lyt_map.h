@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "d/d_cursor_hit_check.h"
+#include "d/d_message.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_map_capture.h"
 #include "egg/core/eggColorFader.h"
@@ -66,6 +67,8 @@ public:
     STATE_FUNC_DECLARE(dLytMapPinIcon_c, Remove);
 
 private:
+    void removeBeacon();
+
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMapPinIcon_c);
     /* 0x040 */ d2d::LytBase_c mLyt;
     /* 0x0D0 */ d2d::AnmGroup_c mAnmGroups[3];
@@ -326,7 +329,8 @@ public:
 private:
     /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMapMain_c);
     /* 0x004C */ u8 field_0x004C[0x00A4 - 0x004C];
-    /* 0x00A4 */ u8 field_0x00A4[0x010C - 0x00A4];
+    /* 0x00A4 */ dFlow_c mFlow;
+    /* 0x0108 */ u8 _0x108[0x10C - 0x108];
     /* 0x010C */ d2d::LytBase_c mLyt;
     /* 0x019C */ d2d::AnmGroup_c mAnmGroups[54];
     /* 0x0F1C */ LytMap0x80520B5C field_0xF1C;
@@ -349,7 +353,7 @@ private:
     /* 0x8930 */ mVec3_c field_0x8930;
     /* 0x893C */ mVec3_c field_0x893C;
 
-    /* 0x8948 */ u8 idkfixmelater[0x4BC0];
+    /* 0x8948 */ u8 idkfixmelater[0x4BA0];
     /* 0x8C94 */ s32 field_0x8C94;
 
     // ...

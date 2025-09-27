@@ -252,6 +252,10 @@ struct AnmGroupBase_c {
         return mpFrameCtrl->getRate();
     }
 
+    inline bool isBound() const {
+        return (mFlags & ANMGROUP_FLAG_BOUND) != 0;
+    }
+
     inline bool isEnabled() const {
         return (mFlags & ANMGROUP_FLAG_ENABLE) != 0;
     }

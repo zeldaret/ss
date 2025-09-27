@@ -25,7 +25,8 @@ public:
 
 private:
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMapCapture_c);
-    /* 0x040*/ UNKWORD field_0x040;
+    /* 0x040 */ UNKWORD field_0x040;
+    /* 0x044 */ u8 _0x040[0x064 - 0x044];
     /* 0x064 */ f32 field_0x064;
     /* 0x068 */ f32 field_0x068;
     /* 0x06C */ f32 field_0x06C;

@@ -908,12 +908,16 @@ d/lyt/d_lyt_auto_explain.cpp:
 	.sdata2     start:0x80579F10 end:0x80579F28
 	.bss        start:0x805AF2F0 end:0x805AF3F0
 
+d/lyt/d_lyt_map_global.cpp:
+	.text       start:0x8012D190 end:0x8012D4A8 align:16
+	.sbss       start:0x805754A0 end:0x805754A8
+	.sdata2     start:0x80579F28 end:0x80579F30
+
 d/lyt/d_lyt_map_capture.cpp:
-	.text       start:0x8012D190 end:0x8012DC28 align:16
+	.text       start:0x8012D4B0 end:0x8012DC28 align:16
 	.ctors      start:0x804DB768 end:0x804DB76C
 	.data       start:0x8051EA08 end:0x8051EAE0
-	.sbss       start:0x805754A0 end:0x805754A8
-	.sdata2     start:0x80579F28 end:0x80579F40
+	.sdata2     start:0x80579F30 end:0x80579F40
 	.bss        start:0x805AF3F0 end:0x805AF470
 
 d/lyt/d_lyt_map.cpp:

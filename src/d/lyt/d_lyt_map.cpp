@@ -3,8 +3,10 @@
 #include "common.h"
 #include "d/d_cursor_hit_check.h"
 #include "d/d_d2d.h"
+#include "d/d_pad.h"
 #include "d/d_pad_nav.h"
 #include "d/lyt/d2d.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "egg/core/eggColorFader.h"
 #include "m/m_video.h"
 #include "sized_string.h"
@@ -182,6 +184,7 @@ void dLytMapFader_c::draw() {
 #define LYT_MAP_PIN_ICON_ANIM_SCALE 0
 #define LYT_MAP_PIN_ICON_ANIM_ERASE 1
 #define LYT_MAP_PIN_ICON_ANIM_LOOP 2
+#define LYT_MAP_PIN_ICON_NUM_ANIMS 3
 
 void dLytMapPinIcon_c::initializeState_Wait() {
     mLyt.calc();
@@ -208,7 +211,7 @@ void dLytMapPinIcon_c::executeState_Wait() {
 void dLytMapPinIcon_c::finalizeState_Wait() {}
 
 void dLytMapPinIcon_c::initializeState_ToSelect() {
-    d2d::AnmGroup_c *m = &mAnmGroups[1];
+    d2d::AnmGroup_c *m = &mAnmGroups[LYT_MAP_PIN_ICON_ANIM_ERASE];
     m->bind(false);
     m->setFrame(0.0f);
 }
@@ -220,7 +223,33 @@ void dLytMapPinIcon_c::finalizeState_ToSelect() {
 }
 
 void dLytMapPinIcon_c::initializeState_Select() {}
-void dLytMapPinIcon_c::executeState_Select() {}
+void dLytMapPinIcon_c::executeState_Select() {
+    if (field_0x1D0->field_0x05 && dPad::getDownTrigC()) {
+        removeBeacon();
+        field_0x1D0->field_0x04 = false;
+        d2d::AnmGroup_c *m = &mAnmGroups[LYT_MAP_PIN_ICON_ANIM_ERASE];
+        if (m->isBound()) {
+            m->unbind();
+        }
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_BEACON_REMOVE);
+        mStateMgr.changeState(StateID_Remove);
+        return;
+    }
+
+    if (field_0x1BC == 0) {
+        d2d::AnmGroup_c *m = &mAnmGroups[LYT_MAP_PIN_ICON_ANIM_ERASE];
+        m->bind(false);
+        m->setFrame(0.0f);
+        mLyt.calc();
+        m->unbind();
+        mStateMgr.changeState(StateID_ToUnselect);
+    } else {
+        d2d::AnmGroup_c *m = &mAnmGroups[LYT_MAP_PIN_ICON_ANIM_ERASE];
+        if (m->isBound()) {
+        m->play();
+    }
+    }
+}
 void dLytMapPinIcon_c::finalizeState_Select() {}
 
 void dLytMapPinIcon_c::initializeState_ToUnselect() {}
@@ -255,7 +284,7 @@ bool dLytMapPinIcon_c::build(d2d::ResAccIf_c *resAcc) {
 
     d2d::AnmGroup_c *pAnmGroups = mAnmGroups;
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < LYT_MAP_PIN_ICON_NUM_ANIMS; i++) {
         pAnmGroups[i].init(sMapPinIconBrlanMap[i].mFile, resAcc, mLyt.getLayout(), sMapPinIconBrlanMap[i].mName);
         pAnmGroups[i].bind(false);
         pAnmGroups[i].setFrame(0.0f);
@@ -263,7 +292,7 @@ bool dLytMapPinIcon_c::build(d2d::ResAccIf_c *resAcc) {
 
     mLyt.calc();
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < LYT_MAP_PIN_ICON_NUM_ANIMS; i++) {
         pAnmGroups[i].unbind();
     }
 
@@ -285,7 +314,7 @@ bool dLytMapPinIcon_c::build(d2d::ResAccIf_c *resAcc) {
 
 bool dLytMapPinIcon_c::remove() {
     dCsMgr_c::GetInstance()->unregistCursorTarget(&mCsHitCheck);
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < LYT_MAP_PIN_ICON_NUM_ANIMS; i++) {
         mAnmGroups[i].remove();
     }
     return true;
@@ -295,7 +324,7 @@ bool dLytMapPinIcon_c::execute() {
     fn_8012EC30();
     mStateMgr.executeState();
     field_0x1BC = 0;
-    mAnmGroups[2].setFrame(field_0x1DC);
+    mAnmGroups[LYT_MAP_PIN_ICON_ANIM_LOOP].setFrame(field_0x1DC);
     // TODO something MapCapture
     mLyt.calc();
     mCsHitCheck.resetCachedHitboxes();
