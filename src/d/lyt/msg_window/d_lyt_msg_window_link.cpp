@@ -68,7 +68,7 @@ bool dLytMsgWindowLink_c::build(d2d::ResAccIf_c *resAcc1, d2d::ResAccIf_c *resAc
         mpTextboxes[i]->SetTextPositionV(0);
     }
 
-    mpTextboxes[1]->set0x1F6(1);
+    mpTextboxes[1]->setIsShadow(1);
 
     for (int i = 0; i < 1; i++) {
         mNodes[i].mpLytPane = &mBtn;

@@ -105,6 +105,10 @@ public:
         return field_0x815;
     }
 
+    u8 getField_0x81B() const {
+        return field_0x81B;
+    }
+
     s32 getTextOptionSelection() const {
         return mTextOptionSelection;
     }
@@ -195,7 +199,7 @@ private:
     /* 0x81E */ u8 field_0x81E;
 
     /* 0x820 */ u16 field_0x820;
-    /* 0x824 */ s32 field_0x824;
+    /* 0x824 */ s32 mNumOptions;
     /* 0x828 */ dLytMsgWindowCharData *field_0x828;
 
     /* 0x82C */ u32 mTextOptionSelection;

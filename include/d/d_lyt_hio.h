@@ -153,6 +153,34 @@ public:
         return sInstance;
     }
 
+    f32 getField0x770() const {
+        return field_0x770;
+    }
+
+    f32 getField0x774() const {
+        return field_0x774;
+    }
+
+    f32 getField0x778() const {
+        return field_0x778;
+    }
+
+    f32 getField0x77C() const {
+        return field_0x77C;
+    }
+
+    f32 getField0x780() const {
+        return field_0x780;
+    }
+
+    f32 getField0x784() const {
+        return field_0x784;
+    }
+
+    s32 getField0x796() const {
+        return field_0x796;
+    }
+
     s16 getMsgWindowWaitDelay() const {
         return mMsgWindowWaitDelay;
     }

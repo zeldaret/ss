@@ -29,6 +29,10 @@ public:
         mShouldBeOn = value;
     }
 
+    static dLytCursorStick_c *GetInstance() {
+        return sInstance;
+    }
+
 private:
     bool build_();
     bool remove_();

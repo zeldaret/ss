@@ -46,7 +46,13 @@
 
 #define STATE_MGR_DEFINE_UTIL_GETOLDSTATEID(class_name)                                                                \
     const sFStateID_c<class_name> &getOldStateID() const {                                                             \
-        return (sFStateID_c<class_name> &)*mStateMgr.getOldStateID();                                                                             \
+        return (sFStateID_c<class_name> &)*mStateMgr.getOldStateID();                                                  \
+    }
+
+// Use this when you need need sFStateID_c vtables to appear in a different order
+#define STATE_MGR_DEFINE_UTIL_INSTANCIATE_STATE(class_name)                                                            \
+    bool dummy_need_state_instanciation(const sFStateID_c<class_name> &value) const {                                  \
+        return value.isNull();                                                                                         \
     }
 
 // TODO this is probably not the whole solution.

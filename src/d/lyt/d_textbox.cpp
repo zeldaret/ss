@@ -261,7 +261,7 @@ void dTextBox_c::setTextWithGlobalTextProcessorV(const wchar_t *str, void *unk, 
     mpMyTagProcessor = dMessage_c::getGlobalTagProcessor();
     u32 outLen = 0;
     mWindowSubtype = mpMyTagProcessor->getMsgWindowSubtype();
-    mpMyTagProcessor->setField_0xEE1(field_0x1F6);
+    mpMyTagProcessor->setIsShadowText(mIsShadowTextBox);
     mpMyTagProcessor->setField_0xEE2(0);
     mpMyTagProcessor->setField_0xEE3(1);
 
@@ -283,7 +283,7 @@ void dTextBox_c::setTextWithTextProcessorV(const wchar_t *str, dTagProcessor_c *
     u32 outLen = 0;
     mpMyTagProcessor = tagProcessor;
     mWindowSubtype = mpMyTagProcessor->getMsgWindowSubtype();
-    mpMyTagProcessor->setField_0xEE1(field_0x1F6);
+    mpMyTagProcessor->setIsShadowText(mIsShadowTextBox);
     mpMyTagProcessor->setField_0xEE2(0);
     mpMyTagProcessor->setField_0xEE3(1);
 
@@ -325,7 +325,7 @@ void dTextBox_c::setMessageWithGlobalTextProcessorAndMsbtInfo(
     mpMyTagProcessor = dMessage_c::getGlobalTagProcessor();
     mpMyTagProcessor->setMsgWindowSubtype(dLytMsgWindow_c::MSG_WINDOW_34);
     mWindowSubtype = mpMyTagProcessor->getMsgWindowSubtype();
-    mpMyTagProcessor->setField_0xEE1(field_0x1F6);
+    mpMyTagProcessor->setIsShadowText(mIsShadowTextBox);
     mpMyTagProcessor->setField_0xEE2(0);
     mpMyTagProcessor->setField_0xEE3(1);
 
@@ -472,7 +472,7 @@ void dTextBox_c::init() {
     mIsWidthFixed = false;
     mFixedWidth = 0.0f;
     mHasTextWriter = true;
-    field_0x1F6 = 0;
+    mIsShadowTextBox = false;
     field_0x1F7 = 0;
     field_0x1F9 = false;
     field_0x1FA = 0;
@@ -522,7 +522,7 @@ bool dTextBox_c::hasDynamicText() {
         }
 
         if (userDatName == "copy" && myList->GetType() == nw4r::lyt::res::TYPE_STRING) {
-            field_0x1F6 = true;
+            mIsShadowTextBox = true;
             dTextBox_c *other = mpLytBase->getTextBox(myList->GetString());
             if (other != nullptr) {
                 u16 otherNum = other->GetExtUserDataNum();
@@ -607,7 +607,7 @@ void dTextBox_c::DrawSelf(const nw4r::lyt::DrawInfo &drawInfo) {
 
     if (mpMyTagProcessor != nullptr) {
         mpMyTagProcessor->setMsgWindowSubtype(mWindowSubtype);
-        mpMyTagProcessor->setField_0xEE1(field_0x1F6);
+        mpMyTagProcessor->setIsShadowText(mIsShadowTextBox);
         mpMyTagProcessor->setField_0xEE2(0);
         if (mAlpha != 0) {
             mpMyTagProcessor->setField_0xEE3(1);
