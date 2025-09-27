@@ -53,7 +53,7 @@ private:
     /* 0x3D8 */ dBgW mBgW;
     /* 0x5E8 */ dCcD_Cyl mCyl;
     /* 0x738 */ STATE_MGR_DECLARE(dAcOSeatSword_c);
-    /* 0x774 */ EffectsStruct mEff;
+    /* 0x774 */ dEmitter_c mEff;
     /* 0x7A8 */ mMtx_c mSwordMtx;
     /* 0x7D8 */ mVec3_c mEffPos;
     /* 0x7E4 */ f32 field_0x7E4;

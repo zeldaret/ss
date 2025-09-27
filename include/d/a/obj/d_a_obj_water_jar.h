@@ -24,7 +24,7 @@ private:
     /* 0x9C4 */ m3d::smdl_c mMdl1;
     /* 0x9E0 */ m3d::smdl_c mMdl2;
     /* 0x9FC */ m3d::anmChr_c mAnm;
-    /* 0xA34 */ EffectsStruct mEffect;
+    /* 0xA34 */ dEmitter_c mEffect;
     /* 0xA68 */ u8 _0xA68[0xA6C - 0xA68];
     /* 0xA6C */ dCcD_Cyl mCcCyl;
 };

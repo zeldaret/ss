@@ -228,7 +228,7 @@ void dAcOSeatSword_c::actorExecuteCommon() {
     mEffPos += player->mPosition;
     mEffPos.y = mPosition.y;
 
-    mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_76_, mEffPos, &mRotation, &mScale, nullptr, nullptr);
+    mEff.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_76_, mEffPos, &mRotation, &mScale, nullptr, nullptr);
     mEff.setGlobalAlpha(field_0x7E4);
 }
 

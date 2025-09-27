@@ -633,7 +633,7 @@ bool dCsGame_c::lytItemCursor_c::execute() {
         f32 sqDist = mPositionThisFrame.squareDistance(mPositionLastFrame);
         if (sqDist > sHio.field_0x34 * sHio.field_0x34 ||
             (mEffects.hasEmitters() && sqDist > sHio.field_0x38 * sHio.field_0x38)) {
-            mEffects.createContinuousUIEffect(
+            mEffects.holdUIEffect(
                 PARTICLE_RESOURCE_ID_MAPPING_31_, mPositionThisFrame, nullptr, nullptr, nullptr, nullptr
             );
         }
@@ -770,10 +770,10 @@ void dCsGame_c::lytItemCursor_c::lytDowsingCsr_c::updateEffects() {
         mVec2_c csPos = dPad::getDpdPosScreen();
         mVec3_c effectPos(csPos.x, csPos.y, 0.0f);
         mVec3_c effectScale(sHio.field_0x3C, sHio.field_0x3C, 1.0f);
-        mEffects1.createContinuousUIEffect(
+        mEffects1.holdUIEffect(
             PARTICLE_RESOURCE_ID_MAPPING_725_, mVec3_c::Zero, nullptr, nullptr, nullptr, nullptr
         );
-        mEffects2.createContinuousUIEffect(
+        mEffects2.holdUIEffect(
             PARTICLE_RESOURCE_ID_MAPPING_726_, effectPos, &mAng3_c::Zero, &effectScale, nullptr, nullptr
         );
         mEffects1.setGlobalAlpha(alpha);

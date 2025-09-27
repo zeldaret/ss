@@ -62,7 +62,7 @@ private:
     /* 0x3C2 */ s16 mPreviousTurnSpeed;
     /* 0x3C4 */ mMtx_c field_0x3C4;
     /* 0x3F4 */ mVec3_c field_0x3F4;
-    /* 0x400 */ EffectsStruct mEffects;
+    /* 0x400 */ dEmitter_c mEffects;
 };
 
 #endif

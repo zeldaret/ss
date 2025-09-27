@@ -532,7 +532,7 @@ int dAcBoomerang_c::actorExecute() {
     mPositionCopy3 = mPositionCopy2;
 
     if (checkField_0x8CC(FLAG_WING_EFFECT_ACTIVE)) {
-        mEff0.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_6_, mWorldMtx, nullptr, nullptr);
+        mEff0.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_6_, mWorldMtx, nullptr, nullptr);
         mEff1.setTransform(mWorldMtx);
 
         f32 ang = field_0x8E4.angle(mVelocity);
@@ -544,7 +544,7 @@ int dAcBoomerang_c::actorExecute() {
     }
 
     if (field_0x8B1 == 0 && (mStateMgr.isState(StateID_Move) || mStateMgr.isState(StateID_MoveCancelWait))) {
-        mEff2.createContinuousEffect(
+        mEff2.holdEffect(
             PARTICLE_RESOURCE_ID_MAPPING_5_, player->getPosition(), nullptr, nullptr, nullptr, nullptr
         );
     } else {
@@ -553,7 +553,7 @@ int dAcBoomerang_c::actorExecute() {
 
     if (checkField_0x8CC(FLAG_0x20) && !checkField_0x8CC(FLAG_CANCEL)) {
         if (mStateMgr.isState(StateID_Move) || mStateMgr.isState(StateID_MoveCancelWait)) {
-            mEff3.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_7_, mWorldMtx, nullptr, nullptr);
+            mEff3.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_7_, mWorldMtx, nullptr, nullptr);
             holdSound(SE_BE_HIT_LEAVES_LV);
         }
     }

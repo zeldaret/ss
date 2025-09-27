@@ -1334,7 +1334,7 @@ void dAcEsm_c::fn_187_61B0(u8 param0) {
             MTXScale(mtx_scale, mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
             mtx_trans += mtx_scale;
 
-            if (mEffArr[0].createEffect(sEmitterResArr[3], mtx_trans, &clr1, &clr2)) {
+            if (mEffArr[0].startEffect(sEmitterResArr[3], mtx_trans, &clr1, &clr2)) {
                 if (checkSize(SM_LARGE)) {
                     mEffArr[0].setRate(12.0f);
                     scale.set(1.7f, 1.7f, 1.7f);

@@ -66,8 +66,8 @@ public:
     /* 0x9B4 */ u8 _9B4[0x9B8 - 0x9B4];
     /* 0x9B8 */ dAcBomb_c *mSelfRef;
     /* 0x9BC */ u8 _9BC[0x9D4 - 0x9BC];
-    /* 0x9D4 */ EffectsStruct mEffect1;
-    /* 0xA08 */ EffectsStruct mEffect2;
+    /* 0x9D4 */ dEmitter_c mEffect1;
+    /* 0xA08 */ dEmitter_c mEffect2;
     /* 0xA3C */ u32 field_0xA3C;
     /* 0xA40 */ u32 field_0xA40;
     /* 0xA44 */ s16 field_0xA44;
