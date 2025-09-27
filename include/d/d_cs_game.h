@@ -442,12 +442,12 @@ private:
     /* 0x1F0 */ dCsGameLyt1_c mLyt1;
     /* 0x290 */ dCsGameLyt2_c mLyt2;
     /* 0x330 */ lytItemCursor_c mCursor;
-    /* 0x9A0 */ bool mCursorActive;
-    /* 0x9A1 */ bool field_0x9A1; // Compares to mCursorActive to change state
-    /* 0x9A2 */ bool field_0x9A2; // A way of signalling Lyt non-normal state.
-    /* 0x9A4 */ CursorType_e mActiveCursorType;
-    /* 0x9A8 */ bool mNextCursorActive;
-    /* 0x9AC */ CursorType_e mNextCursorType;
+    /* 0xCD0 */ bool mCursorActive;
+    /* 0xCD1 */ bool field_0x9A1; // Compares to mCursorActive to change state
+    /* 0xCD2 */ bool field_0x9A2; // A way of signalling Lyt non-normal state.
+    /* 0xCD4 */ CursorType_e mActiveCursorType;
+    /* 0xCD8 */ bool mNextCursorActive;
+    /* 0xCDC */ CursorType_e mNextCursorType;
 };
 
 #endif

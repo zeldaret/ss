@@ -112,8 +112,8 @@ bool dLytPauseMain_c::remove() {
         mpPauseBack = nullptr;
     }
 
-    dBase_c::s_NextExecuteControlFlags &= ~0x1;
-    dBase_c::s_DrawControlFlags &= ~0x1;
+    dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x1;
+    dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x1;
 
     return true;
 }
@@ -260,7 +260,7 @@ void dLytPauseMain_c::executeState_In() {
     }
 }
 void dLytPauseMain_c::finalizeState_In() {
-    dBase_c::s_DrawControlFlags |= 0x1;
+    dBase_c::s_DrawControlFlags |= dBase_c::BASE_PROP_0x1;
 }
 
 void dLytPauseMain_c::initializeState_Wait() {
@@ -462,7 +462,7 @@ void dLytPauseMain_c::finalizeState_GetDemo() {}
 void dLytPauseMain_c::initializeState_Out() {
     mPartStateChangeFlags = 0;
     mStep = 0;
-    dBase_c::s_DrawControlFlags &= ~0x1;
+    dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x1;
     mpArrow->requestOut();
 }
 void dLytPauseMain_c::executeState_Out() {
@@ -580,7 +580,7 @@ void dLytPauseMgr_c::executeState_None() {
         field_0x083A = true;
         mMain.requestIn();
         mStateMgr.changeState(StateID_In);
-        dBase_c::s_NextExecuteControlFlags |= 0x1;
+        dBase_c::s_NextExecuteControlFlags |= BASE_PROP_0x1;
         dLytMeter_c::GetInstance()->setMeterField_0x13750(3);
         dLytControlGame_c *lytControl = dLytControlGame_c::getInstance();
         if (lytControl->isPauseDemo()) {
@@ -817,8 +817,8 @@ void dLytPauseMgr_c::initializeState_Out() {
 }
 void dLytPauseMgr_c::executeState_Out() {
     if (mMain.isChangingState() == true) {
-        dBase_c::s_NextExecuteControlFlags &= ~0x1;
-        dBase_c::s_DrawControlFlags &= ~0x1;
+        dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x1;
+        dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x1;
         mStateMgr.changeState(StateID_None);
     }
 }

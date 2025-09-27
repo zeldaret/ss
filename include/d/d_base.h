@@ -19,6 +19,13 @@ public:
         BASE_PROP_0x40 = (1 << 6),
         BASE_PROP_0x80 = (1 << 7),
         BASE_PROP_0x100 = (1 << 8),
+        BASE_PROP_0x200 = (1 << 9),
+        BASE_PROP_0x400 = (1 << 10),
+
+        BASE_PROP_UNK_PARTICLE_1 = BASE_PROP_0x400 | BASE_PROP_0x200 | BASE_PROP_0x80 | BASE_PROP_0x40 |
+                                   BASE_PROP_0x20 | BASE_PROP_0x10 | BASE_PROP_0x8 | BASE_PROP_0x1,
+        BASE_PROP_UNK_PARTICLE_2 = BASE_PROP_0x400 | BASE_PROP_0x200 | BASE_PROP_0x80 | BASE_PROP_0x40 |
+                                   BASE_PROP_0x20 | BASE_PROP_0x10 | BASE_PROP_0x8 | BASE_PROP_0x2 | BASE_PROP_0x1,
     };
 
     // field from profile init

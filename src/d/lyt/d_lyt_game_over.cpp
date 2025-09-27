@@ -163,8 +163,8 @@ bool dLytGameOver_c::remove() {
     mResAcc2.detach();
     mResAcc1.detach();
 
-    dBase_c::s_NextExecuteControlFlags &= ~0x200;
-    dBase_c::s_DrawControlFlags &= ~0x200;
+    dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x200;
+    dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x200;
 
     return true;
 }
@@ -435,8 +435,8 @@ void dLytGameOverMgr_c::executeState_Select() {
             if (mTimer < 20) {
                 mTimer++;
                 if (mTimer == 20) {
-                    dBase_c::s_NextExecuteControlFlags |= 1;
-                    dBase_c::s_DrawControlFlags |= 1;
+                    dBase_c::s_NextExecuteControlFlags |= dBase_c::BASE_PROP_0x1;
+                    dBase_c::s_DrawControlFlags |= dBase_c::BASE_PROP_0x1;
                 }
             }
             if (mMain.isChangingState() == true) {
@@ -563,11 +563,11 @@ void dLytGameOverMgr_c::executeState_Select() {
             break;
         }
         case 100: {
-            dBase_c::s_NextExecuteControlFlags &= ~0x1;
-            dBase_c::s_DrawControlFlags &= ~0x1;
+            dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x1;
+            dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x1;
 
-            dBase_c::s_NextExecuteControlFlags |= 0x200;
-            dBase_c::s_DrawControlFlags |= 0x200;
+            dBase_c::s_NextExecuteControlFlags |= dBase_c::BASE_PROP_0x200;
+            dBase_c::s_DrawControlFlags |= dBase_c::BASE_PROP_0x200;
 
             mStep++;
             break;

@@ -856,7 +856,7 @@ void dJEffManager_c::execute() {
         sMassObjEmitters[i].execute();
     }
 
-    if ((dBase_c::s_ExecuteControlFlags & 0x6F9) == 0) {
+    if ((dBase_c::s_ExecuteControlFlags & (dBase_c::BASE_PROP_UNK_PARTICLE_1)) == 0) {
         for (int i = 0; i < 12; i++) {
             dParticle::mgr_c::GetInstance()->calc(i);
         }
@@ -886,8 +886,7 @@ void dJEffManager_c::draw() {
 bool dJEffManager_c::shouldBePaused(dBase_c *owner) {
     return owner != nullptr && !owner->checkBaseProperty(dBase_c::BASE_PROP_0x4) &&
            (EventManager::isInEvent() || owner->checkProcControl(fBase_c::DISABLE_EXECUTE) ||
-            // TODO execute control flags
-            (owner->s_ExecuteControlFlags & 0x6fb));
+            (owner->s_ExecuteControlFlags & dBase_c::BASE_PROP_UNK_PARTICLE_2));
 }
 
 void dJEffManager_c::draw(const JPADrawInfo *info, u32 groupId) {
