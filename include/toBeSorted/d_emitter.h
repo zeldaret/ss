@@ -1,5 +1,5 @@
-#ifndef EFFECTS_STRUCT_H
-#define EFFECTS_STRUCT_H
+#ifndef D_EMITTER_H
+#define D_EMITTER_H
 
 #include "JSystem/JParticle/JPADrawInfo.h"
 #include "JSystem/JParticle/JPAEmitter.h"
@@ -25,7 +25,7 @@ class dEmitterBase_c;
 class dEmitterCallback_c;
 class dParticleCallback_c;
 
-#include "toBeSorted/d_emmitter_resource_map.inc"
+#include "toBeSorted/d_emitter_resource_map.inc"
 
 class dEmitterBase_c {
     friend class dEmitterCallback_c;
@@ -83,22 +83,25 @@ public:
     void bindShpEmitter(s32 id, bool unused); // corresponds to setup at 8002b6b0
 };
 
-// Suggested name: dEmitter_c
-class EffectsStruct : public dEmitterBase_c {
+class dEmitter_c : public dEmitterBase_c {
 public:
     enum Flags_e {
-        EMITTER_0x1 = 0x1,
-        EMITTER_0x2 = 0x2,
-        EMITTER_0x4 = 0x4,
+        /** This emitter has been newly set up. */
+        EMITTER_New = 0x1,
+        /** This emitter actually does something. */
+        EMITTER_Active = 0x2,
+        /** This emitter will stop when it's done (not held). */
+        EMITTER_OneShot = 0x4,
+        /** This emitter has a changing alpha value */
         EMITTER_Fading = 0x8,
         EMITTER_0x10 = 0x10,
         EMITTER_0x20 = 0x20,
     };
 
     // vt at 0x1C
-    EffectsStruct();
-    EffectsStruct(dBase_c *);
-    virtual ~EffectsStruct();
+    dEmitter_c();
+    dEmitter_c(dBase_c *);
+    virtual ~dEmitter_c();
 
     inline void init(dBase_c *owner) {
         mpOwner = owner;
@@ -115,27 +118,25 @@ public:
 
     void remove(bool bForceDeleteEmitters);
 
-    // TODO maybe reconsider the naming here - the observation here is that a "continous" effect
-    // is typically called every frame, while the others are one-shot calls
-    bool createContinuousEffect(
+    bool holdEffect(
         u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
         const GXColor *c2
     );
-    bool createContinuousUIEffect(
+    bool holdUIEffect(
         u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
         const GXColor *c2
     );
-    bool createContinuousEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2);
+    bool holdEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2);
 
-    bool createEffect(
+    bool startEffect(
         u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
         const GXColor *c2
     );
-    bool createUIEffect(
+    bool startUIEffect(
         u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
         const GXColor *c2
     );
-    bool createEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2);
+    bool startEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2);
 
     bool hasEmitters() const {
         return mpEmitterHead != 0;
@@ -162,18 +163,18 @@ public:
 
 protected:
     bool canReuse(u16 resourceId) const {
-        return hasEmitters() && !checkFlag(EMITTER_0x2) && mEffect == resourceId;
+        return hasEmitters() && !checkFlag(EMITTER_Active) && mEffect == resourceId;
     }
 
-    bool createEffect(
-        bool bFlags, u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+    bool setupEffect(
+        bool create, u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
         const GXColor *c2
     );
-    bool createEffect(bool bFlags, u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2);
+    bool setupEffect(bool create, u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2);
     bool getOwnerPolyAttrs(s32 *pOut1, s32 *pOut2);
 
 public:
-    /* 0x24 */ TListNode<EffectsStruct> mNode;
+    /* 0x24 */ TListNode<dEmitter_c> mNode;
 
 protected:
     /* 0x28 */ dBase_c *mpOwner;
@@ -191,7 +192,7 @@ private:
     /* 0x04 */ f32 mHeight;
     /* 0x08 */ f32 mDepth;
     /* 0x0C */ f32 mScale;
-    /* 0x10 */ EffectsStruct mEff;
+    /* 0x10 */ dEmitter_c mEff;
 
     dAcObjBase_c *getActor() const {
         return static_cast<dAcObjBase_c *>(mEff.getOwner());
@@ -493,7 +494,7 @@ public:
         BWallF210,
     };
 
-    typedef TList<EffectsStruct, offsetof(EffectsStruct, mNode)> EffectsList;
+    typedef TList<dEmitter_c, offsetof(dEmitter_c, mNode)> EffectsList;
     static EffectsList sPlayingEffectsList;
     static CommonEmitterCallback sCommonEmitterCallbacks[2];
     static dShpEmitter_c sShpEmitters[47];

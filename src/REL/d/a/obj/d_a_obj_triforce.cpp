@@ -72,7 +72,7 @@ int dAcOtriforce_c::actorExecute() {
     PSMTXConcat(mWorldMtx.m, m, mWorldMtx.m);
     mMdl.setLocalMtx(mWorldMtx);
     mAnm.play();
-    mEffects.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_967_, mWorldMtx, nullptr, nullptr);
+    mEffects.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_967_, mWorldMtx, nullptr, nullptr);
     return 1;
 }
 

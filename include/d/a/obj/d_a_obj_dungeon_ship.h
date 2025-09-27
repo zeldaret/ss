@@ -92,7 +92,7 @@ private:
     /* 0x865 */ u8 mIsDocked;
     /* 0x868 */ s32 field_0x868;
     /* 0x86C */ u32 field_0x86C;
-    /* 0x870 */ EffectsStruct mEffects[2];
+    /* 0x870 */ dEmitter_c mEffects[2];
     /* 0x8D8 */ u8 field_0x8D8;
     /* 0x8D9 */ u8 field_0x8D9;
     /* 0x8DA */ u8 field_0x8DA;

@@ -213,8 +213,8 @@ public:
             /* 0x04 */ UI_STATE_MGR_DECLARE(lytDowsingCsr_c);
             /* 0x40 */ d2d::AnmGroups mAnm;
             /* 0x4C */ d2d::LytBase_c *mpLyt;
-            /* 0x50 */ EffectsStruct mEffects1;
-            /* 0x84 */ EffectsStruct mEffects2;
+            /* 0x50 */ dEmitter_c mEffects1;
+            /* 0x84 */ dEmitter_c mEffects2;
             /* 0xB8 */ nw4r::lyt::Pane *mpRingAllPane;
             /* 0xBC */ nw4r::lyt::Pane *mpDowsingPane;
             /* 0xC0 */ f32 field_0xC0;
@@ -385,7 +385,7 @@ public:
             Tmp<0x17> tmp;
         };
 
-        /* 0x048 */ EffectsStruct mEffects;
+        /* 0x048 */ dEmitter_c mEffects;
         /* 0x07C */ dEmitterCallbackCursorTrail_c mTrailCb;
         /* 0x0B0 */ mVec3_c mPositionThisFrame;
         /* 0x0BC */ mVec3_c mPositionLastFrame;

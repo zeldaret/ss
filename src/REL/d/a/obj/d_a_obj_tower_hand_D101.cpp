@@ -597,7 +597,7 @@ void dAcOTowerHandD101_c::finalizeState_RemainOpen() {}
 void dAcOTowerHandD101_c::initializeState_Close() {
     mMdl.getAnm().setPlayState(m3d::PLAY_MODE_1);
     mMdl.setRate(getCloseRate());
-    mEffects.createEffect(PARTICLE_RESOURCE_ID_MAPPING_573_, mPosition, nullptr, nullptr, nullptr, nullptr);
+    mEffects.startEffect(PARTICLE_RESOURCE_ID_MAPPING_573_, mPosition, nullptr, nullptr, nullptr, nullptr);
     startSound(SE_TowerHa_CLENCH);
 }
 void dAcOTowerHandD101_c::executeState_Close() {
