@@ -6,6 +6,7 @@
 #include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
 #include "d/d_base.h"
+#include "d/d_lang.h"
 #include "d/d_light_env.h"
 #include "d/d_lyt_hio.h"
 #include "d/d_player.h"
@@ -1776,13 +1777,12 @@ void dMessage_c::reset() {
     mMinigameTime = 0;
 }
 
-extern "C" u8 fn_80054F30();
 static SizedString<8> sCurrentLanguage;
 const char *dMessage_c::getLanguageIdentifier() {
-    u8 lang = fn_80054F30();
-    if (lang == 3) {
+    u8 lang = getCurrentLanguage1();
+    if (lang == D_LANG_FR) {
         sCurrentLanguage = "fr_US";
-    } else if (lang == 4) {
+    } else if (lang == D_LANG_ES) {
         sCurrentLanguage = "es_US";
     } else {
         sCurrentLanguage = "en_US";

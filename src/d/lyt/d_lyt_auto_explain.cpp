@@ -1,6 +1,7 @@
 #include "d/lyt/d_lyt_auto_explain.h"
 
 #include "common.h"
+#include "d/d_lang.h"
 #include "d/d_tag_processor.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_control_game.h"
@@ -45,11 +46,9 @@ void dLytAutoExplain_c::executeState_Invisible() {
 }
 void dLytAutoExplain_c::finalizeState_Invisible() {}
 
-extern "C" u8 fn_80054F30();
-
 void dLytAutoExplain_c::initializeState_In() {
     int numLines = mpTagProcessor->getNumLinesMaybe() - 1;
-    if (fn_80054F30() != 0 && numLines == 3) {
+    if (getCurrentLanguage1() != D_LANG_JP && numLines == 3) {
         numLines = 2;
     }
 

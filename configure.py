@@ -431,6 +431,7 @@ config.libs = [
             Object(Matching, "d/d_gfx.cpp"),
             Object(NonMatching, "d/d_gfx_measures.cpp"),
             Object(Matching, "d/d_heap.cpp"),
+            Object(Matching, "d/d_lang.cpp"),
             Object(NonMatching, "d/d_main.cpp"),
             Object(NonMatching, "d/d_pad.cpp"),
             Object(Matching, "d/d_pad_ex.cpp"),

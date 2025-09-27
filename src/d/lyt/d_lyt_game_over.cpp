@@ -3,6 +3,7 @@
 #include "common.h"
 #include "d/d_base.h"
 #include "d/d_fader.h"
+#include "d/d_lang.h"
 #include "d/d_message.h"
 #include "d/d_sc_game.h"
 #include "d/d_sc_title.h"
@@ -62,14 +63,12 @@ dLytGameOver_c::dLytGameOver_c() : mStateMgr(*this) {
     init();
 }
 
-extern "C" u8 fn_80054F30();
-
 bool dLytGameOver_c::build() {
-    u8 lang = fn_80054F30();
+    u8 lang = getCurrentLanguage1();
     s32 variant;
-    if (lang == 3) {
+    if (lang == D_LANG_FR) {
         variant = 1;
-    } else if (lang == 4) {
+    } else if (lang == D_LANG_ES) {
         variant = 2;
     } else {
         variant = 0;
