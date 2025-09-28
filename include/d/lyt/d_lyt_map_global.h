@@ -8,8 +8,45 @@ class dLytMapGlobal_c {
 public:
     dLytMapGlobal_c();
 
+    enum MapMode_e {
+        MAPMODE_WORLD = 0,
+        MAPMODE_PROVINCE = 1,
+        MAPMODE_STAGE = 3,
+        MAPMODE_ZOOM = 4,
+
+        // There probably are more special-purpose modes...
+    };
+
     static dLytMapGlobal_c *GetInstance() {
         return sInstance;
+    }
+
+    const mVec2_c& getField_0x20() const {
+        return field_0x20;
+    }
+
+    const mVec3_c& getPlayerPos() const {
+        return mPlayerPosition;
+    }
+
+    u8 getAlpha() const {
+        return mAlpha;
+    }
+
+    s32 getCurrentMapMode() const {
+        return mCurrentMapMode;
+    }
+
+    s32 getNextMapMode() const {
+        return mNextMapMode;
+    }
+
+    f32 getZoomFrame() const {
+        return mZoomFrame;
+    }
+
+    f32 getField_0x44() const {
+        return field_0x44;
     }
 
     void projectOntoMap(mVec2_c &result, const mVec3_c &position) const;
@@ -40,14 +77,16 @@ private:
     /* 0x3C */ mAng mMapRotation;
     /* 0x40 */ f32 field_0x40;
     /* 0x44 */ f32 field_0x44;
-    /* 0x48 */ UNKWORD field_0x48;
+    /* 0x48 */ UNKWORD mLevel;
     /* 0x4C */ u8 field_0x4C;
     /* 0x4D */ u8 field_0x4D;
-    /* 0x4E */ u8 field_0x4E;
+    /* 0x4E */ u8 mAlpha;
     /* 0x4F */ u8 field_0x4F;
     /* 0x50 */ UNKWORD field_0x50;
-    /* 0x54 */ u8 _0x54[0x64 - 0x54];
-    /* 0x60 */ f32 field_0x64;
+    /* 0x54 */ u8 _0x54[0x5C - 0x54];
+    /* 0x5C */ s32 mCurrentMapMode;
+    /* 0x60 */ s32 mNextMapMode;
+    /* 0x64 */ f32 mZoomFrame; ///< 0.0f when zoomed out, 1.0f when zoomed in
 };
 
 #endif

@@ -14,10 +14,10 @@ dLytMapGlobal_c::dLytMapGlobal_c()
       mMapRotation(0),
       field_0x40(1.0f),
       field_0x44(1.0f),
-      field_0x48(0),
+      mLevel(0),
       field_0x4C(0),
       field_0x4D(0),
-      field_0x4E(0),
+      mAlpha(0),
       field_0x4F(0),
       field_0x50(0) {
     sInstance = this;

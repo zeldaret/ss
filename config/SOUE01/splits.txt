@@ -1226,11 +1226,13 @@ d/a/d_a_door_base.cpp:
 	.data       start:0x80528F20 end:0x80528FB0
 	.sbss       start:0x80575668 end:0x80575670
 
-d/lyt/d_lyt_map_popup.cpp:
+d/lyt/d_lyt_map_markers.cpp:
 	.text       start:0x801792D0 end:0x80189F9C align:16
 	.rodata     start:0x804E9AD0 end:0x804E9CB0
 	.data       start:0x80528FB0 end:0x8052A880
+	.sdata      start:0x80572BB0 end:0x80572D08
 	.sbss       start:0x80575670 end:0x80575678
+	.sdata2     start:0x8057AC78 end:0x8057ACF0
 
 d/d_pouch.cpp:
 	.text       start:0x80189FA0 end:0x8018B4A4 align:16

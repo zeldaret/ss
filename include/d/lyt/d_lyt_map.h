@@ -6,11 +6,86 @@
 #include "d/d_message.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_map_capture.h"
+#include "d/lyt/d_lyt_map_global.h"
 #include "egg/core/eggColorFader.h"
 #include "m/m2d.h"
+#include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_bounding.h"
+#include "nw4r/lyt/lyt_pane.h"
 #include "s/s_State.hpp"
+#include "toBeSorted/d_flow_mgr.h"
+
+struct dMapFootPrintEntry {
+    /* 0x00 */ dMapFootPrintEntry *pPrev;
+    /* 0x04 */ dMapFootPrintEntry *pNext;
+    /* 0x08 */ mVec3_c position;
+    /* 0x14 */ mAng rotation;
+};
+
+/** Generic footprints queue */
+class dMapFootPrintsQueue_c {
+public:
+    void init();
+    void addStep(const mVec3_c &pos, const mAng &rot);
+    dMapFootPrintEntry *getFirst() const;
+    dMapFootPrintEntry *getNext(const dMapFootPrintEntry *it) const;
+
+    bool isEmpty() const {
+        return mCount == 0;
+    }
+
+private:
+    /* 0x000 */ dMapFootPrintEntry mEntries[40];
+    /* 0x3C0 */ dMapFootPrintEntry *mpFirst;
+    /* 0x3C4 */ dMapFootPrintEntry *mpLast;
+    /* 0x3C8 */ u32 mCount;
+};
+
+/** Records Link's footsteps */
+class dMapFootPrintsMgr_c {
+public:
+    dMapFootPrintsMgr_c() {
+        mQueue.init();
+    }
+    virtual ~dMapFootPrintsMgr_c() {}
+
+    void execute();
+
+    const dMapFootPrintsQueue_c *getQueue() const {
+        return &mQueue;
+    }
+
+private:
+    /* 0x004 */ dMapFootPrintsQueue_c mQueue;
+    /* 0x3D0 */ f32 mMinStepDistanceSq;
+};
+
+/** 2D UI - Map - Link footprint markers */
+class dLytMapFootPrints_c {
+public:
+    dLytMapFootPrints_c(dLytMapGlobal_c *global);
+    virtual ~dLytMapFootPrints_c() {}
+
+    bool build(d2d::ResAccIf_c *resAcc);
+    bool remove();
+    bool execute();
+    void draw();
+
+private:
+    dLytMapGlobal_c *getGlobal() const;
+
+    /* 0x004 */ dLytMapGlobal_c *mpGlobal;
+    /* 0x008 */ d2d::dLytSub mLyt;
+    /* 0x09C */ nw4r::lyt::Pane *mpPane;
+    /* 0x0A0 */ f32 field_0xA0;
+    /* 0x0A4 */ mVec2_c mFootprintPositions[30];
+    /* 0x194 */ u16 mMaxNumSteps;
+    /* 0x196 */ u16 mCurrentNumSteps;
+    /* 0x198 */ f32 field_0x198;
+    /* 0x19C */ f32 field_0x19C;
+    /* 0x1A0 */ u8 field_0x1A0;
+};
 
 struct LytMap0x80520B5C {
     LytMap0x80520B5C() : field_0x04(false), field_0x05(false) {}
@@ -145,7 +220,8 @@ private:
 
 class dLytMapFloorBtnMgr_c : public d2d::dSubPane {
 public:
-    dLytMapFloorBtnMgr_c(void *arg) : field_0x008(arg), field_0x51C(nullptr), mStateMgr(*this, sStateID::null) {
+    dLytMapFloorBtnMgr_c(dLytMapGlobal_c *global)
+        : mpGlobal(global), field_0x51C(nullptr), mStateMgr(*this, sStateID::null) {
         field_0x700 = 1;
         field_0x704 = 0;
         field_0x708 = 0;
@@ -173,7 +249,7 @@ public:
     STATE_FUNC_DECLARE(dLytMapFloorBtnMgr_c, Wait);
 
 private:
-    /* 0x008 */ void *field_0x008;
+    /* 0x008 */ dLytMapGlobal_c *mpGlobal;
     /* 0x00C */ UI_STATE_MGR_DECLARE(dLytMapFloorBtnMgr_c);
     /* 0x048 */ d2d::dLytSub mLyt;
     /* 0x0DC */ d2d::AnmGroup_c mAnmGroups[1];
@@ -269,6 +345,23 @@ private:
     /* 0x18E */ u8 field_0x18E;
 };
 
+class dLytMapDecoration_c {
+public:
+    dLytMapDecoration_c() {}
+    virtual ~dLytMapDecoration_c() {}
+    // TODO, name made up
+};
+
+class dLytMapPutIcon {
+public:
+    dLytMapPutIcon() {}
+    virtual ~dLytMapPutIcon() {}
+    // TODO, name made up
+
+    /* 0x04 */ d2d::LytBase_c mLyt;
+    /* 0x98 */ mVec2_c field_0x98;
+};
+
 class dLytMapMain_c : public m2d::Base_c {
     friend class dLytMap_c;
 
@@ -328,9 +421,10 @@ public:
 
 private:
     /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMapMain_c);
-    /* 0x004C */ u8 field_0x004C[0x00A4 - 0x004C];
+    /* 0x004C */ dFlowMgr_c mFlowMgr;
+    /* 0x0058 */ u8 _0x0058[0x00A4 - 0x0058];
     /* 0x00A4 */ dFlow_c mFlow;
-    /* 0x0108 */ u8 _0x108[0x10C - 0x108];
+    /* 0x0108 */ u8 _0x0108[0x010C - 0x0108];
     /* 0x010C */ d2d::LytBase_c mLyt;
     /* 0x019C */ d2d::AnmGroup_c mAnmGroups[54];
     /* 0x0F1C */ LytMap0x80520B5C field_0xF1C;
@@ -338,25 +432,46 @@ private:
     /* 0x0FA0 */ dLytMapFloorBtnMgr_c mFloorBtnMgr;
     /* 0x16B4 */ dLytMapPinIconAggregate_c mPinIconAggregate;
 
+    /* 0x2060 */ dLytMapDecoration_c field_0x2060;
+
+    /* 0x2064 */ u8 _0x2064[0x64C0 - 0x2064];
+
+    /* 0x64C0 */ dLytMapFootPrints_c mFootPrints;
+
+    /* 0x6664 */ dLytMapPutIcon mPutIcon;
+
+    /* 0x6700 */ u8 _0x6700[0x6704 - 0x6700];
+
     /* 0x6704 */ dLytMapSaveObj_c mSaveObjs[12];
     /* 0x79C4 */ dLytMapSaveCaption_c mSaveCaption;
-    /* 0x0000 */ dLytMapSavePopup_c mSavePopup;
+    /* 0x7BD0 */ dLytMapSavePopup_c mSavePopup;
+
+    /* 0x8010 */ u8 _0x7F84[0x807C - 0x8010];
+
     /* 0x807C */ dLytMapPopupInfo_c mPopupInfo;
+
+    /* 0x8208 */ u8 _0x8208[0x828C - 0x8208];
+
     /* 0x828C */ mVec3_c field_0x828C[12];
+
+    /* 0x831C */ u8 _0x831C[0x832C - 0x831C];
+
     /* 0x832C */ dCursorHitCheckLyt_c field_0x832C[33];
+
+    /* 0x8854 */ u8 _0x8854[0x8904 - 0x8854];
+
     /* 0x8904 */ mVec3_c field_0x8904;
     /* 0x8910 */ mVec3_c field_0x8910;
     /* 0x891C */ mVec3_c field_0x891C;
-
-    /* 0x8928 */ u8 _0x8928[0x8930 - 0x8928];
-
+    /* 0x8928 */ mVec2_c field_0x8928;
     /* 0x8930 */ mVec3_c field_0x8930;
     /* 0x893C */ mVec3_c field_0x893C;
 
-    /* 0x8948 */ u8 idkfixmelater[0x4BA0];
+    /* 0x8948 */ u8 _0x8948[0x8C94 - 0x8948];
+    
     /* 0x8C94 */ s32 field_0x8C94;
 
-    // ...
+    /* 0x8C98 */ u8 _0x8C98[0x8CC4 - 0x8C98];
 
     /* 0x8CC4 */ mVec3_c field_0x8CC4;
     /* 0x8CD0 */ mVec3_c field_0x8CD0;
@@ -367,8 +482,29 @@ private:
     /* 0x8D0C */ mVec3_c field_0x8D0C;
     /* 0x8D18 */ mVec3_c field_0x8D18;
     /* 0x8D24 */ mVec3_c field_0x8D24;
-
-    /* 0x8DC8 */ UNKWORD field_0x8DC8;
+    /* 0x8D30 */ mVec2_c field_0x8D30;
+    /* 0x8D38 */ mVec2_c field_0x8D38;
+    /* 0x8D40 */ f32 field_0x8D40;
+    /* 0x8D44 */ mAng field_0x8D44;
+    /* 0x8D46 */ mAng field_0x8D46;
+    /* 0x8D48 */ mAng field_0x8D48;
+    /* 0x8D4C */ f32 field_0x8D4C;
+    /* 0x8D50 */ f32 field_0x8D50;
+    /* 0x8D54 */ u8 _0x8D54[0x8D58 - 0x8D54];
+    /* 0x8D58 */ UNKWORD field_0x8D58;
+    /* 0x8D5C */ UNKWORD field_0x8D5C;
+    /* 0x8D60 */ UNKWORD field_0x8D60;
+    /* 0x8D64 */ UNKWORD field_0x8D64;
+    /* 0x8D68 */ mAng field_0x8D68;
+    /* 0x8D6A */ u8 field_0x8D6A;
+    /* 0x8D6B */ u8 field_0x8D6B;
+    /* 0x8D6C */ UNKWORD field_0x8D6C;
+    /* 0x8D70 */ UNKWORD field_0x8D70;
+    /* 0x8D74 */ u8 _0x8D74[0x8D94 - 0x8D74];
+    /* 0x8D94 */ d2d::SubPaneList mSubpaneList;
+    /* 0x8DA0 */ d2d::SubPaneListNode mSubpane;
+    /* 0x8DB0 */ u8 _0x8DB0[0x8DC8 - 0x8DB0];
+    /* 0x8DC8 */ dLytMapGlobal_c mGlobal;
 };
 
 // Made up name

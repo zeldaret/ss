@@ -1,14 +1,20 @@
 #include "d/lyt/d_lyt_map.h"
 
 #include "common.h"
+#include "d/a/d_a_player.h"
 #include "d/d_cursor_hit_check.h"
 #include "d/d_d2d.h"
 #include "d/d_pad.h"
 #include "d/d_pad_nav.h"
+#include "d/d_player.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_control_game.h"
+#include "d/lyt/d_lyt_map_global.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "egg/core/eggColorFader.h"
+#include "m/m_vec.h"
 #include "m/m_video.h"
+#include "nw4r/lyt/lyt_pane.h"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 
@@ -18,7 +24,7 @@ struct dLytMap_HIO_c {
 
     /* 0x04 */ f32 field_0x04;
     /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ f32 field_0x0C;
+    /* 0x0C */ f32 mFootstepsScale;
     /* 0x10 */ f32 field_0x10;
     /* 0x14 */ f32 field_0x14;
     /* 0x18 */ u8 field_0x18;
@@ -39,7 +45,7 @@ struct dLytMap_HIO_c {
     /* 0x27 */ u8 field_0x27;
     /* 0x28 */ u8 field_0x28;
     /* 0x29 */ u8 field_0x29;
-    /* 0x2A */ u8 field_0x2A;
+    /* 0x2A */ u8 mFootstepsAlpha;
     /* 0x2B */ u8 field_0x2B;
     /* 0x2C */ f32 field_0x2C;
 };
@@ -70,12 +76,191 @@ dLytMap_HIO_c::dLytMap_HIO_c() {
     field_0x28 = 0x5A;
     field_0x29 = 0x5;
     field_0x08 = 10.0f;
-    field_0x0C = 0.4f;
-    field_0x2A = 0x80;
+    mFootstepsScale = 0.4f;
+    mFootstepsAlpha = 0x80;
     field_0x2B = 10;
 }
 
 dLytMap_HIO_c::~dLytMap_HIO_c() {}
+
+void dMapFootPrintsQueue_c::init() {
+    int j = ARRAY_LENGTH(mEntries) - 1;
+    for (int i = 0; i < (int)ARRAY_LENGTH(mEntries); i++) {
+        mEntries[i].position.set(0.0f, 0.0f, 0.0f);
+        mEntries[i].pNext = &mEntries[j];
+        mEntries[j].pPrev = &mEntries[i];
+        j = i;
+    }
+
+    mpFirst = &mEntries[0];
+    mpLast = &mEntries[0];
+    mCount = 0;
+}
+
+void dMapFootPrintsQueue_c::addStep(const mVec3_c &pos, const mAng &rot) {
+    mpLast->position = pos;
+    mpLast->rotation = rot;
+    if (mpFirst == mpLast && mCount == ARRAY_LENGTH(mEntries)) {
+        mpFirst = mpFirst->pPrev;
+    }
+    mpLast = mpLast->pPrev;
+    if (mCount < ARRAY_LENGTH(mEntries)) {
+        mCount++;
+    }
+}
+
+dMapFootPrintEntry *dMapFootPrintsQueue_c::getFirst() const {
+    if (mCount == 0) {
+        return nullptr;
+    }
+    return mpLast->pNext;
+}
+
+dMapFootPrintEntry *dMapFootPrintsQueue_c::getNext(const dMapFootPrintEntry *it) const {
+    dMapFootPrintEntry *ret = nullptr;
+    if (it != mpFirst) {
+        ret = it->pNext;
+    }
+    return ret;
+}
+
+void dMapFootPrintsMgr_c::execute() {
+    dAcPy_c *link = getLinkPtr();
+    const mVec3_c &linkPos = link->mPosition;
+    if (mQueue.isEmpty()) {
+        mQueue.addStep(linkPos, link->mRotation.y);
+    } else {
+        mVec3_c lastPos = mQueue.getFirst()->position;
+        mVec3_c diff = mVec3_c(linkPos - lastPos);
+        f32 absXZ = diff.squareMagXZ();
+        mAng rot = diff.atan2sX_Z();
+        if (absXZ >= mMinStepDistanceSq) {
+            mQueue.addStep(linkPos, rot);
+        }
+    }
+}
+
+// here seems to be mAng::mAng(s16) { ... }
+
+dLytMapFootPrints_c::dLytMapFootPrints_c(dLytMapGlobal_c *global)
+    : mpGlobal(global),
+      mpPane(nullptr),
+      field_0xA0(0.0f),
+      mMaxNumSteps(ARRAY_LENGTH(mFootprintPositions)),
+      mCurrentNumSteps(0),
+      field_0x198(0.0f),
+      field_0x19C(0.0f),
+      field_0x1A0(0) {
+    for (int i = 0; i < (int)ARRAY_LENGTH(mFootprintPositions); i++) {
+        mFootprintPositions[i].set(0.0f, 0.0f);
+    }
+}
+
+dLytMapGlobal_c *dLytMapFootPrints_c::getGlobal() const {
+    return mpGlobal;
+}
+
+bool dLytMapFootPrints_c::build(d2d::ResAccIf_c *resAcc) {
+    mLyt.setResAcc(resAcc);
+    mLyt.build("footPrint_00.brlyt", nullptr);
+    nw4r::lyt::Pane *root = mLyt.getLayout()->GetRootPane();
+    root->SetVisible(false);
+    root->SetAlpha(0);
+    root->SetInfluencedAlpha(true);
+    mpPane = mLyt.findPane("P_all_01");
+    mLyt.calc();
+    field_0xA0 = 1.0f;
+    return true;
+}
+
+bool dLytMapFootPrints_c::remove() {
+    return true;
+}
+
+bool dLytMapFootPrints_c::execute() {
+    dLytMapGlobal_c *global = getGlobal();
+    u8 globalAlpha = global->getAlpha();
+    nw4r::lyt::Pane *root = mLyt.getLayout()->GetRootPane();
+    if (globalAlpha != 0) {
+        root->SetVisible(true);
+        root->SetAlpha(globalAlpha);
+    } else {
+        root->SetVisible(false);
+        root->SetAlpha(0);
+    }
+    const dMapFootPrintsQueue_c *queue = dLytControlGame_c::getInstance()->getFootprintsQueue();
+    mVec2_c playerPos;
+    global->projectOntoMap(playerPos, global->getPlayerPos());
+    mMaxNumSteps = sHio.field_0x2B;
+
+    const dMapFootPrintEntry *it = queue->getFirst();
+    int i = 0;
+
+    for (; it != nullptr; it = queue->getNext(it)) {
+        mVec2_c footstepPos;
+        global->projectOntoMap(footstepPos, it->position);
+        mVec2_c diff;
+        diff = footstepPos - playerPos;
+        f32 dist = diff.length();
+
+        for (f32 step = dist / global->getField_0x44(); step >= sHio.field_0x08 / field_0x198;
+             step /= global->getField_0x44()) {
+            f32 tmp = (sHio.field_0x08 / field_0x198) / step;
+
+            mVec2_c v = mVec2_c((footstepPos - playerPos) * tmp + playerPos);
+            mFootprintPositions[i] = v;
+            if (++i >= mMaxNumSteps) {
+                break;
+            }
+            playerPos = v;
+            diff = footstepPos - playerPos;
+            step = diff.length();
+        }
+        if (i >= mMaxNumSteps) {
+            break;
+        }
+    }
+    mCurrentNumSteps = i;
+    return true;
+}
+
+// here seems to be mVec2_c::mVec2_c(f32, f32) { ... }
+
+void dLytMapFootPrints_c::draw() {
+    if (!field_0x1A0) {
+        return;
+    }
+
+    dLytMapGlobal_c *global = getGlobal();
+    u8 globalAlpha = global->getAlpha();
+    if (globalAlpha == 0) {
+        return;
+    }
+
+    // TODO - GPR regswap between pane and mFootprintPositions[i]
+    nw4r::lyt::Pane *pane = mLyt.getLayout()->GetRootPane();
+
+    f32 scale = field_0x19C * sHio.mFootstepsScale;
+    mVec2_c scaleV = mVec2_c(scale, scale);
+    mpPane->SetScale(scaleV);
+
+    f32 globalAlphaF = globalAlpha;
+
+    for (int i = 0; i < mCurrentNumSteps; i++) {
+        mVec2_c pos = mVec2_c(global->getField_0x20() + mFootprintPositions[i]);
+        pane->SetTranslate(mVec3_c(pos.x, pos.y, 0.0f));
+
+        // TODO - FPR regswaps, maybe fewer temps would work
+        f32 constantAlpha = sHio.mFootstepsAlpha / 255.0f;
+        f32 alpha = globalAlphaF * field_0x19C;
+        int range = mMaxNumSteps;
+        f32 fadingFactor = ((f32)(range - i) / (f32)range);
+        pane->SetAlpha(alpha * fadingFactor * constantAlpha);
+
+        pane->CalculateMtx(mLyt.getDrawInfo());
+        pane->Draw(mLyt.getDrawInfo());
+    }
+}
 
 STATE_DEFINE(dLytMapPinIcon_c, Wait);
 STATE_DEFINE(dLytMapPinIcon_c, ToSelect);
@@ -246,8 +431,8 @@ void dLytMapPinIcon_c::executeState_Select() {
     } else {
         d2d::AnmGroup_c *m = &mAnmGroups[LYT_MAP_PIN_ICON_ANIM_ERASE];
         if (m->isBound()) {
-        m->play();
-    }
+            m->play();
+        }
     }
 }
 void dLytMapPinIcon_c::finalizeState_Select() {}
@@ -508,7 +693,19 @@ void dLytMapSaveObj_c::executeState_Decide() {}
 void dLytMapSaveObj_c::finalizeState_Decide() {}
 
 #pragma dont_inline on
-dLytMapMain_c::dLytMapMain_c() : mStateMgr(*this), mFloorBtnMgr(&field_0x8DC8) {}
+dLytMapMain_c::dLytMapMain_c()
+    : mStateMgr(*this),
+      mFlowMgr(&mFlow),
+      mFloorBtnMgr(&mGlobal),
+      mFootPrints(&mGlobal),
+      field_0x8D38(0.0f, 0.0f),
+      field_0x8D40(1.0f),
+      field_0x8D44(0),
+      field_0x8D46(0),
+      field_0x8D48(0),
+      field_0x8D4C(0.0f),
+      field_0x8D50(0.0f),
+      field_0x8D68(0) {}
 #pragma dont_inline reset
 
 dLytMapMain_c::~dLytMapMain_c() {}
