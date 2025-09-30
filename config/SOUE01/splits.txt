@@ -540,7 +540,11 @@ toBeSorted/bigboss_model_math_stuff.cpp:
 	.sbss       start:0x80575410 end:0x80575418
 
 toBeSorted/actor_event_flow_manager_related.cpp:
-	.text       start:0x800C3900 end:0x800C447C align:16
+	.text       start:0x800C3900 end:0x800C3AEC align:16
+
+toBeSorted/d_flow_mgr.cpp:
+	.text       start:0x800C3AF0 end:0x800C447C align:16
+	.data       start:0x80511B18 end:0x80511B30
 
 d/d_lyt_base.cpp:
 	.text       start:0x800C4480 end:0x800C4690 align:16

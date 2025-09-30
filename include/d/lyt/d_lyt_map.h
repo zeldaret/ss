@@ -95,14 +95,20 @@ struct LytMap0x80520B5C {
     bool field_0x05;
 };
 
-struct LytMapFourAnimGroups {
-    /* 0x00 */ d2d::AnmGroup_c mGroup1;
-    /* 0x40 */ d2d::AnmGroup_c mGroup2;
-    /* 0x80 */ d2d::AnmGroup_c mGroup3;
-    /* 0xC0 */ d2d::AnmGroup_c mGroup4;
+struct dLytMapFloorBtnAnmGroups {
+    /* 0x00 */ d2d::AnmGroup_c mLoop;
+    /* 0x40 */ d2d::AnmGroup_c mOnOff;
+    /* 0x80 */ d2d::AnmGroup_c mDecide;
+    /* 0xC0 */ d2d::AnmGroup_c mOnOffLight;
 };
 
-// Size 0x1E0
+// Ostensibly a bounding box for lyt elements
+struct LytMapTwoVecs {
+    /* 0x00 */ mVec3_c field_0x00;
+    /* 0x0C */ mVec3_c field_0x0C;
+};
+
+/** 2D UI - Map - a placed down beacon */
 class dLytMapPinIcon_c {
 public:
     friend class dLytMapPinIconAggregate_c;
@@ -111,12 +117,12 @@ public:
         : mStateMgr(*this, sStateID::null),
           mpBounding(nullptr),
           field_0x1BC(0),
-          field_0x1C0(0.0f, 0.0f, 0.0f),
-          field_0x1CC(0),
+          mPosition(0.0f, 0.0f, 0.0f),
+          mIsSet(false),
           field_0x1D0(nullptr),
           field_0x1D4(0),
           mIndex(0),
-          field_0x1DC(0) {}
+          mLoopFrame(0) {}
     virtual ~dLytMapPinIcon_c();
 
     bool build(d2d::ResAccIf_c *resAcc);
@@ -124,7 +130,10 @@ public:
     bool draw();
     bool execute();
 
-    void fn_8012EC30();
+    void updatePosition();
+    void checkPointedAt();
+    void setPosition(const mVec3_c &pos);
+    void setScale(f32 scale);
 
     bool isSelect() const {
         return *mStateMgr.getStateID() == dLytMapPinIcon_c::StateID_ToSelect ||
@@ -144,56 +153,71 @@ public:
 private:
     void removeBeacon();
 
+    dLytMapGlobal_c *getGlobal() const;
+
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMapPinIcon_c);
     /* 0x040 */ d2d::LytBase_c mLyt;
     /* 0x0D0 */ d2d::AnmGroup_c mAnmGroups[3];
     /* 0x190 */ dCursorHitCheckLyt_c mCsHitCheck;
     /* 0x1B8 */ nw4r::lyt::Bounding *mpBounding;
     /* 0x1BC */ UNKWORD field_0x1BC;
-    /* 0x1C0 */ mVec3_c field_0x1C0;
-    /* 0x1CC */ u8 field_0x1CC;
+    /* 0x1C0 */ mVec3_c mPosition;
+    /* 0x1CC */ bool mIsSet;
     /* 0x1D0 */ LytMap0x80520B5C *field_0x1D0;
     /* 0x1D4 */ UNKWORD field_0x1D4;
     /* 0x1D8 */ s32 mIndex;
-    /* 0x1DC */ UNKWORD field_0x1DC;
+    /* 0x1DC */ UNKWORD mLoopFrame;
 };
 
 class dLytMapPinIconAggregate_c {
 public:
     dLytMapPinIconAggregate_c() : mStateMgr(*this, sStateID::null) {
         field_0x9A0 = nullptr;
-        field_0x9A4 = 0;
-        field_0x9A8 = 0;
+        mLoopFrame = 0;
+        mLoopFrameMax = 0;
         for (int i = 0; i < 5; i++) {
             mPins[i].mIndex = i;
         }
     }
     virtual ~dLytMapPinIconAggregate_c() {}
 
+    bool build(d2d::ResAccIf_c *resAcc);
     bool remove();
+    bool execute();
+    bool draw();
+
+    void setScale(f32 scale);
+    void updatePosition();
+    void setUnk(LytMap0x80520B5C *unk);
+    bool setPosition(s32 index, const mVec3_c &position);
+    void unsetAll();
+    s32 getNumSetPins() const;
 
     STATE_FUNC_DECLARE(dLytMapPinIconAggregate_c, Wait);
     STATE_FUNC_DECLARE(dLytMapPinIconAggregate_c, Select);
     STATE_FUNC_DECLARE(dLytMapPinIconAggregate_c, Remove);
 
 private:
+    bool findNewBeaconId(s32 *pOutId);
+
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMapPinIconAggregate_c);
     /* 0x040 */ dLytMapPinIcon_c mPins[5];
 
     /* 0x9A0 */ LytMap0x80520B5C *field_0x9A0;
-    /* 0x9A4 */ UNKWORD field_0x9A4;
-    /* 0x9A8 */ UNKWORD field_0x9A8;
+    /* 0x9A4 */ s32 mLoopFrame;
+    /* 0x9A8 */ s32 mLoopFrameMax;
 };
 
 // Size 0x50
 class dLytMapFloorBtn_c {
+    friend class dLytMapFloorBtnMgr_c;
 public:
     dLytMapFloorBtn_c()
         : mStateMgr(*this, sStateID::null),
-          field_0x3C(0),
-          field_0x40(0),
+          mpOwnerLyt(nullptr),
+          mpAnmGroups(nullptr),
           field_0x44(0),
-          field_0x48(0),
+          mpBounding(nullptr),
           field_0x4C(0),
           field_0x4D(0) {}
     ~dLytMapFloorBtn_c() {}
@@ -208,12 +232,17 @@ public:
     STATE_FUNC_DECLARE(dLytMapFloorBtn_c, SelectInDecide);
     STATE_FUNC_DECLARE(dLytMapFloorBtn_c, DecideToSelectInDecide);
 
+    void init();
+    void execute();
+
+    bool build(d2d::ResAccIf_c *resAcc);
+
 private:
     /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMapFloorBtn_c);
-    /* 0x3C */ UNKWORD field_0x3C;
-    /* 0x40 */ UNKWORD field_0x40;
+    /* 0x3C */ d2d::LytBase_c *mpOwnerLyt;
+    /* 0x40 */ dLytMapFloorBtnAnmGroups *mpAnmGroups;
     /* 0x44 */ UNKWORD field_0x44;
-    /* 0x48 */ UNKWORD field_0x48;
+    /* 0x48 */ nw4r::lyt::Bounding *mpBounding;
     /* 0x4C */ u8 field_0x4C;
     /* 0x4D */ u8 field_0x4D;
 };
@@ -221,7 +250,7 @@ private:
 class dLytMapFloorBtnMgr_c : public d2d::dSubPane {
 public:
     dLytMapFloorBtnMgr_c(dLytMapGlobal_c *global)
-        : mpGlobal(global), field_0x51C(nullptr), mStateMgr(*this, sStateID::null) {
+        : mpGlobal(global), mpPane(nullptr), mStateMgr(*this, sStateID::null) {
         field_0x700 = 1;
         field_0x704 = 0;
         field_0x708 = 0;
@@ -253,8 +282,8 @@ private:
     /* 0x00C */ UI_STATE_MGR_DECLARE(dLytMapFloorBtnMgr_c);
     /* 0x048 */ d2d::dLytSub mLyt;
     /* 0x0DC */ d2d::AnmGroup_c mAnmGroups[1];
-    /* 0x11C */ LytMapFourAnimGroups mMoreGroups[4];
-    /* 0x51C */ void *field_0x51C;
+    /* 0x11C */ dLytMapFloorBtnAnmGroups mBtnGroups[4];
+    /* 0x51C */ nw4r::lyt::Pane *mpPane;
     /* 0x520 */ dCursorHitCheckLyt_c mCsHitChecks[4];
     /* 0x5C0 */ dLytMapFloorBtn_c mFloorBtns[4];
     /* 0x700 */ UNKWORD field_0x700;
@@ -295,6 +324,7 @@ public:
 
 private:
     /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMapSavePopupAction_c);
+    /* 0x3C */ u8 _0x3C[0x44 - 0x3C];
     /* 0x44 */ f32 field_0x44;
     /* 0x48 */ u8 field_0x48;
 };
@@ -302,12 +332,15 @@ private:
 // Assumed name
 class dLytMapSavePopup_c {
 public:
-    dLytMapSavePopup_c() {}
+    dLytMapSavePopup_c() : field_0x4A0(0), field_0x4A4(0), field_0x4A8(-1) {}
 
 private:
     /* 0x000 */ d2d::LytBase_c mLyt;
     /* 0x090 */ d2d::AnmGroup_c mAnmGroups[2];
     /* 0x110 */ dLytMapSavePopupAction_c mActions[12];
+    /* 0x4A0 */ UNKWORD field_0x4A0;
+    /* 0x4A4 */ UNKWORD field_0x4A4;
+    /* 0x4A8 */ UNKWORD field_0x4A8;
 };
 
 class dLytMapSaveCaption_c {
@@ -345,21 +378,31 @@ private:
     /* 0x18E */ u8 field_0x18E;
 };
 
+// TODO, name made up
 class dLytMapDecoration_c {
 public:
     dLytMapDecoration_c() {}
     virtual ~dLytMapDecoration_c() {}
-    // TODO, name made up
 };
 
-class dLytMapPutIcon {
+/** 2D UI - Map - beacon preview icon following the cursor */
+class dLytMapPutIcon_c {
 public:
-    dLytMapPutIcon() {}
-    virtual ~dLytMapPutIcon() {}
-    // TODO, name made up
+    dLytMapPutIcon_c() {}
+    virtual ~dLytMapPutIcon_c() {}
 
+    void build(d2d::ResAccIf_c *resAcc);
+    void remove();
+    void execute();
+    void draw();
+
+    void setPosition(const mVec2_c &pos);
+    void setScale(f32 scale);
+
+private:
     /* 0x04 */ d2d::LytBase_c mLyt;
-    /* 0x98 */ mVec2_c field_0x98;
+    /* 0x94 */ bool mVisible;
+    /* 0x95 */ u8 _0x95[0x9C - 0x95];
 };
 
 class dLytMapMain_c : public m2d::Base_c {
@@ -421,8 +464,7 @@ public:
 
 private:
     /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMapMain_c);
-    /* 0x004C */ dFlowMgr_c mFlowMgr;
-    /* 0x0058 */ u8 _0x0058[0x00A4 - 0x0058];
+    /* 0x004C */ dFlowMgrBase_c mFlowMgr;
     /* 0x00A4 */ dFlow_c mFlow;
     /* 0x0108 */ u8 _0x0108[0x010C - 0x0108];
     /* 0x010C */ d2d::LytBase_c mLyt;
@@ -438,16 +480,13 @@ private:
 
     /* 0x64C0 */ dLytMapFootPrints_c mFootPrints;
 
-    /* 0x6664 */ dLytMapPutIcon mPutIcon;
+    /* 0x6664 */ dLytMapPutIcon_c mPutIcon;
 
     /* 0x6700 */ u8 _0x6700[0x6704 - 0x6700];
 
     /* 0x6704 */ dLytMapSaveObj_c mSaveObjs[12];
     /* 0x79C4 */ dLytMapSaveCaption_c mSaveCaption;
     /* 0x7BD0 */ dLytMapSavePopup_c mSavePopup;
-
-    /* 0x8010 */ u8 _0x7F84[0x807C - 0x8010];
-
     /* 0x807C */ dLytMapPopupInfo_c mPopupInfo;
 
     /* 0x8208 */ u8 _0x8208[0x828C - 0x8208];
@@ -456,6 +495,9 @@ private:
 
     /* 0x831C */ u8 _0x831C[0x832C - 0x831C];
 
+    // TODO - it appears the map abuses these hit check things
+    // to calculate Lyt bounding boxes, and it stores the
+    // results in 0x8948...
     /* 0x832C */ dCursorHitCheckLyt_c field_0x832C[33];
 
     /* 0x8854 */ u8 _0x8854[0x8904 - 0x8854];
@@ -467,8 +509,10 @@ private:
     /* 0x8930 */ mVec3_c field_0x8930;
     /* 0x893C */ mVec3_c field_0x893C;
 
-    /* 0x8948 */ u8 _0x8948[0x8C94 - 0x8948];
-    
+    /* 0x8948 */ LytMapTwoVecs field_0x8948[33];
+
+    /* 0x8C60 */ u8 _0x8C60[0x8C94 - 0x8C60];
+
     /* 0x8C94 */ s32 field_0x8C94;
 
     /* 0x8C98 */ u8 _0x8C98[0x8CC4 - 0x8C98];

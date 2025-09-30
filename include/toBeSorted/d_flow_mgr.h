@@ -2,17 +2,27 @@
 #define D_FLOW_MGR_H
 
 #include "common.h"
+#include "d/d_message.h"
+#include "sized_string.h"
 
-class dFlow_c;
-
-class dFlowMgr_c {
+class dFlowMgrBase_c {
 public:
-    dFlowMgr_c(dFlow_c *flow);
-    virtual ~dFlowMgr_c() {}
+    dFlowMgrBase_c(dFlow_c *flow);
+    virtual ~dFlowMgrBase_c() {}
 
 private:
     /* 0x04 */ dFlow_c *mpFlow;
-    /* 0x08 */ u8 field_0x05;
+    /* 0x08 */ u8 _0x08[0x14 - 0x08];
+    /* 0x14 */ SizedString<0x40> field_0x14;
+    /* 0x54 */ u8 field_0x54;
+};
+
+class dFlowMgr_c : public dFlowMgrBase_c {
+public:
+    dFlowMgr_c();
+
+private:
+    /* 0x58  */ dFlow_c mFlow;
 };
 
 #endif

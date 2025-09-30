@@ -431,6 +431,10 @@ public:
         mNextCursorActive = false;
     }
 
+    dCursorHitCheck_c *getCursorHit() const {
+        return mCursorIf.getHit();
+    }
+
 private:
     static dCsGame_c *sInstance;
     bool isForcedHidden() const;

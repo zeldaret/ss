@@ -1,12 +1,16 @@
 #ifndef D_LYT_MAP_GLOBAL_H
 #define D_LYT_MAP_GLOBAL_H
 
+#include "common.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 
 class dLytMapGlobal_c {
 public:
     dLytMapGlobal_c();
+    ~dLytMapGlobal_c() {
+        sInstance = nullptr;
+    }
 
     enum MapMode_e {
         MAPMODE_WORLD = 0,
@@ -21,11 +25,11 @@ public:
         return sInstance;
     }
 
-    const mVec2_c& getField_0x20() const {
+    const mVec2_c &getField_0x20() const {
         return field_0x20;
     }
 
-    const mVec3_c& getPlayerPos() const {
+    const mVec3_c &getPlayerPos() const {
         return mPlayerPosition;
     }
 

@@ -488,6 +488,7 @@ config.libs = [
             Object(Matching, "d/flag/flag_managers.cpp"),
             Object(NonMatching, "toBeSorted/bigboss_model_math_stuff.cpp"),
             Object(NonMatching, "toBeSorted/actor_event_flow_manager_related.cpp"),
+            Object(NonMatching, "toBeSorted/d_flow_mgr.cpp"),
             Object(NonMatching, "d/d_lyt_base.cpp"),
             Object(NonMatching, "toBeSorted/unk_npc_path_stuff_1.cpp"),
             Object(NonMatching, "toBeSorted/unk_npc_path_stuff_2.cpp"),
