@@ -170,6 +170,8 @@ private:
 };
 
 class dLytMapPinIconAggregate_c {
+    friend class dLytMapMain_c;
+
 public:
     dLytMapPinIconAggregate_c() : mStateMgr(*this, sStateID::null) {
         field_0x9A0 = nullptr;
@@ -211,6 +213,7 @@ private:
 // Size 0x50
 class dLytMapFloorBtn_c {
     friend class dLytMapFloorBtnMgr_c;
+
 public:
     dLytMapFloorBtn_c()
         : mStateMgr(*this, sStateID::null),
@@ -218,8 +221,8 @@ public:
           mpAnmGroups(nullptr),
           field_0x44(0),
           mpBounding(nullptr),
-          field_0x4C(0),
-          field_0x4D(0) {}
+          mSelected(false),
+          mDecided(false) {}
     ~dLytMapFloorBtn_c() {}
 
     STATE_FUNC_DECLARE(dLytMapFloorBtn_c, Wait);
@@ -237,27 +240,30 @@ public:
 
     bool build(d2d::ResAccIf_c *resAcc);
 
+    void directlyDecide();
+    void directlyUndecide();
+
 private:
     /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMapFloorBtn_c);
     /* 0x3C */ d2d::LytBase_c *mpOwnerLyt;
     /* 0x40 */ dLytMapFloorBtnAnmGroups *mpAnmGroups;
     /* 0x44 */ UNKWORD field_0x44;
     /* 0x48 */ nw4r::lyt::Bounding *mpBounding;
-    /* 0x4C */ u8 field_0x4C;
-    /* 0x4D */ u8 field_0x4D;
+    /* 0x4C */ bool mSelected;
+    /* 0x4D */ bool mDecided;
 };
 
 class dLytMapFloorBtnMgr_c : public d2d::dSubPane {
 public:
     dLytMapFloorBtnMgr_c(dLytMapGlobal_c *global)
         : mpGlobal(global), mpPane(nullptr), mStateMgr(*this, sStateID::null) {
-        field_0x700 = 1;
-        field_0x704 = 0;
-        field_0x708 = 0;
+        mNumFloors = 1;
+        mBaseFloorOffset = 0;
+        mSelectedBtnIdx = 0;
         field_0x70C = 4;
-        field_0x710 = 0;
-        field_0x711 = 0;
-        field_0x712 = 0;
+        field_0x710 = false;
+        field_0x711 = false;
+        field_0x712 = false;
     }
     virtual ~dLytMapFloorBtnMgr_c();
 
@@ -277,7 +283,22 @@ public:
     STATE_FUNC_DECLARE(dLytMapFloorBtnMgr_c, Invisible);
     STATE_FUNC_DECLARE(dLytMapFloorBtnMgr_c, Wait);
 
+    void init(s32 numFloors, s32 baseFloorOffset, s32 selectedFloor);
+
+    bool canDecideFloor() const;
+    void decideSelectedFloor();
+    s32 getCurrentFloor() const;
+    s32 getPointedAtBtnIdx() const;
+
+    bool hasPointedAtABtnIdx() const {
+        return getPointedAtBtnIdx() >= 0;
+    }
+
+    void resetFloor(s32 newFloor);
+
 private:
+    void checkPointedAtBtn();
+
     /* 0x008 */ dLytMapGlobal_c *mpGlobal;
     /* 0x00C */ UI_STATE_MGR_DECLARE(dLytMapFloorBtnMgr_c);
     /* 0x048 */ d2d::dLytSub mLyt;
@@ -286,13 +307,13 @@ private:
     /* 0x51C */ nw4r::lyt::Pane *mpPane;
     /* 0x520 */ dCursorHitCheckLyt_c mCsHitChecks[4];
     /* 0x5C0 */ dLytMapFloorBtn_c mFloorBtns[4];
-    /* 0x700 */ UNKWORD field_0x700;
-    /* 0x704 */ UNKWORD field_0x704;
-    /* 0x708 */ UNKWORD field_0x708;
+    /* 0x700 */ s32 mNumFloors;
+    /* 0x704 */ s32 mBaseFloorOffset;
+    /* 0x708 */ s32 mSelectedBtnIdx;
     /* 0x70C */ UNKWORD field_0x70C;
-    /* 0x710 */ u8 field_0x710;
-    /* 0x711 */ u8 field_0x711;
-    /* 0x712 */ u8 field_0x712;
+    /* 0x710 */ bool field_0x710;
+    /* 0x711 */ bool field_0x711;
+    /* 0x712 */ bool field_0x712;
 };
 
 // Size 0x4C
@@ -383,6 +404,8 @@ class dLytMapDecoration_c {
 public:
     dLytMapDecoration_c() {}
     virtual ~dLytMapDecoration_c() {}
+
+    void setIslandNamesOn(bool on);
 };
 
 /** 2D UI - Map - beacon preview icon following the cursor */
@@ -463,6 +486,21 @@ public:
     STATE_FUNC_DECLARE(dLytMapMain_c, EventSaveObjDecide);
 
 private:
+    dLytMapGlobal_c *getGlobal();
+    void checkScroll();
+    bool needsNav(s32 mapMode) const;
+    bool canZoomOut(s32 mapMode) const;
+    bool canZoomIn(s32 mapMode) const;
+    bool canResetPosition(s32 mapMode, u8) const;
+    bool canChangeUpDirection(s32 mapMode, u8) const;
+
+    f32 fn_80142D90(s32);
+    void fn_80142F00(mVec3_c &, s32 mapMode, u8, const mVec3_c &, const mAng &);
+    void fn_8013FB70(const mVec3_c&, f32);
+
+    void zoomOut();
+    void zoomIn();
+
     /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMapMain_c);
     /* 0x004C */ dFlowMgrBase_c mFlowMgr;
     /* 0x00A4 */ dFlow_c mFlow;
@@ -511,12 +549,24 @@ private:
 
     /* 0x8948 */ LytMapTwoVecs field_0x8948[33];
 
-    /* 0x8C60 */ u8 _0x8C60[0x8C94 - 0x8C60];
+    /* 0x8C60 */ s32 mMaxBeaconCount;
+    /* 0x8C64 */ s32 field_0x8C64;
+    /* 0x8C68 */ s32 field_0x8C68;
 
+    /* 0x8C6C */ u8 _0x8C6C[0x8C90 - 0x8C6C];
+
+    /* 0x8C90 */ u8 field_0x8C90;
     /* 0x8C94 */ s32 field_0x8C94;
 
-    /* 0x8C98 */ u8 _0x8C98[0x8CC4 - 0x8C98];
+    /* 0x8C98 */ u8 _0x8C98[0x8CA4 - 0x8C98];
 
+    /* 0x8CA4 */ s32 field_0x8CA4;
+    /* 0x8CA8 */ s32 field_0x8CA8;
+
+    /* 0x8CAC */ u8 _0x8CAC[0x8CC0 - 0x8CAC];
+
+    /* 0x8CC0 */ bool field_0x8CC0;
+    /* 0x8CC1 */ bool field_0x8CC1;
     /* 0x8CC4 */ mVec3_c field_0x8CC4;
     /* 0x8CD0 */ mVec3_c field_0x8CD0;
     /* 0x8CDC */ mVec3_c field_0x8CDC;
@@ -535,9 +585,9 @@ private:
     /* 0x8D4C */ f32 field_0x8D4C;
     /* 0x8D50 */ f32 field_0x8D50;
     /* 0x8D54 */ u8 _0x8D54[0x8D58 - 0x8D54];
-    /* 0x8D58 */ UNKWORD field_0x8D58;
+    /* 0x8D58 */ s32 field_0x8D58;
     /* 0x8D5C */ UNKWORD field_0x8D5C;
-    /* 0x8D60 */ UNKWORD field_0x8D60;
+    /* 0x8D60 */ s32 field_0x8D60;
     /* 0x8D64 */ UNKWORD field_0x8D64;
     /* 0x8D68 */ mAng field_0x8D68;
     /* 0x8D6A */ u8 field_0x8D6A;
@@ -547,7 +597,13 @@ private:
     /* 0x8D74 */ u8 _0x8D74[0x8D94 - 0x8D74];
     /* 0x8D94 */ d2d::SubPaneList mSubpaneList;
     /* 0x8DA0 */ d2d::SubPaneListNode mSubpane;
-    /* 0x8DB0 */ u8 _0x8DB0[0x8DC8 - 0x8DB0];
+    /* 0x8DB0 */ u8 _0x8DB0[0x8DB4 - 0x8DB0];
+    /* 0x8DB4 */ bool mNavEnabled;
+    /* 0x8DB4 */ bool field_0x8DB5;
+    /* 0x8DB6 */ u8 _0x8DB6[0x8DBC - 0x8DB6];
+    /* 0x8DBC */ bool mIslandNamesOn;
+    /* 0x8DBD */ bool field_0x8DBD;
+    /* 0x8DBE */ u8 _0x8DBE[0x8DC8 - 0x8DBE];
     /* 0x8DC8 */ dLytMapGlobal_c mGlobal;
 };
 

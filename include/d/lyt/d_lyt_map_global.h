@@ -15,22 +15,33 @@ public:
     enum MapMode_e {
         MAPMODE_WORLD = 0,
         MAPMODE_PROVINCE = 1,
+        MAPMODE_WORLD_SKY = 2,
         MAPMODE_STAGE = 3,
         MAPMODE_ZOOM = 4,
-
-        // There probably are more special-purpose modes...
     };
 
     static dLytMapGlobal_c *GetInstance() {
         return sInstance;
     }
 
+    const mVec3_c &getField_0x00() const {
+        return field_0x00;
+    }
+
     const mVec2_c &getField_0x20() const {
         return field_0x20;
     }
 
+    const mVec3_c &getMapRotationCenter() const {
+        return mMapRotationCenter;
+    }
+
     const mVec3_c &getPlayerPos() const {
         return mPlayerPosition;
+    }
+
+    const mAng &getField_0x56() const {
+        return field_0x56;
     }
 
     u8 getAlpha() const {
@@ -51,6 +62,14 @@ public:
 
     f32 getField_0x44() const {
         return field_0x44;
+    }
+
+    s32 getFloor() const {
+        return mFloor;
+    }
+
+    void setFloor(s32 floor) {
+        mFloor = floor;
     }
 
     void projectOntoMap(mVec2_c &result, const mVec3_c &position) const;
@@ -81,13 +100,15 @@ private:
     /* 0x3C */ mAng mMapRotation;
     /* 0x40 */ f32 field_0x40;
     /* 0x44 */ f32 field_0x44;
-    /* 0x48 */ UNKWORD mLevel;
+    /* 0x48 */ s32 mFloor;
     /* 0x4C */ u8 field_0x4C;
     /* 0x4D */ u8 field_0x4D;
     /* 0x4E */ u8 mAlpha;
     /* 0x4F */ u8 field_0x4F;
     /* 0x50 */ UNKWORD field_0x50;
-    /* 0x54 */ u8 _0x54[0x5C - 0x54];
+    /* 0x54 */ u8 _0x54[0x56 - 0x54];
+    /* 0x56 */ mAng field_0x56;
+    /* 0x58 */ u8 _0x58[0x5C - 0x58];
     /* 0x5C */ s32 mCurrentMapMode;
     /* 0x60 */ s32 mNextMapMode;
     /* 0x64 */ f32 mZoomFrame; ///< 0.0f when zoomed out, 1.0f when zoomed in

@@ -435,6 +435,10 @@ public:
         return mCursorIf.getHit();
     }
 
+    dCursorInterfaceGame_c *getCursorIf() {
+        return &mCursorIf;
+    }
+
 private:
     static dCsGame_c *sInstance;
     bool isForcedHidden() const;
