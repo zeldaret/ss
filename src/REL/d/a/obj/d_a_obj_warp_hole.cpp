@@ -5,6 +5,7 @@
 #include "d/a/npc/d_a_npc_talk_kensei.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_sc_game.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "toBeSorted/event_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_WARP_HOLE, dAcOwarpHole_c, fProfile::OBJ_WARP_HOLE, 0x25C, 0, 0);
@@ -38,8 +39,7 @@ int dAcOwarpHole_c::create() {
     mLinkPos = dAcPy_c::GetLink()->mPosition;
     mEff.init(this);
     mWalkFramesMaybe = 0;
-    mPositionCopy2 = mPosition;
-    mPositionCopy2.y += 170.0f;
+    mPositionCopy2.set(mPosition.x, mPosition.y + 170.0f, mPosition.z);
     mPositionCopy3 = mPositionCopy2;
 
     return SUCCEEDED;
@@ -58,44 +58,49 @@ int dAcOwarpHole_c::actorExecute() {
     dCcS::GetInstance()->Set(&mCcCyl);
     updateMatrix();
     mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_914_, mWorldMtx, nullptr, nullptr);
-    holdSound(0xC90);
+    holdSound(SE_WarpH_Wait);
 
     return SUCCEEDED;
 }
 
 int dAcOwarpHole_c::actorExecuteInEvent() {
     mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_914_, mWorldMtx, nullptr, nullptr);
-    holdSound(0xC90);
+    holdSound(SE_WarpH_Wait);
+    int retVal = NOT_READY;
     bool advance = mEvent.isAdvance();
-    mPositionCopy2 = mPosition;
-    mPositionCopy2.y += 170.0f;
-    s16 targetAngleY;
+    mPositionCopy2.set(mPosition.x, mPosition.y + 170.0f, mPosition.z);
 
     switch (mEvent.getCurrentEventCommand()) {
-        case 'none': mEvent.advanceNext(); break;
+        case 'none':
+            mEvent.advanceNext();
+            retVal = SUCCEEDED;
+            break;
         case 'plwk':
             if (advance) {
-                mLinkPos = dAcPy_c::GetLink()->mPosition;
-                targetAngleY = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
-                mLinkPos.x += 330.0f * nw4r::math::SinIdx(targetAngleY);
-                mLinkPos.z += 330.0f * nw4r::math::CosIdx(targetAngleY);
+                float multiplier330 = 330.0f;
+                mLinkPos = dAcPy_c::GetLinkM()->mPosition;
+                mAng targetAngleY = (mAng)cLib::targetAngleY(mPosition, dAcPy_c::GetLinkM()->getPosition());
+                mLinkPos.x += multiplier330 * targetAngleY.sin();
+                mLinkPos.z += multiplier330 * targetAngleY.cos();
             }
             if (EventManager::isInEvent()) {
                 if (EventManager::isCurrentEvent("BeforeLastBossBattleChicken")) {
-                    dAcPy_c::GetLinkM()->vt_0x2AC();
-                    dAcPy_c::GetLinkM()->triggerMoveEventMaybe(); // TODO: parameters
+                    dAcPy_c* player = dAcPy_c::GetLinkM();
+                    player->vt_0x2AC();
+                    player->triggerMoveEventMaybe(2, 0, 0, mLinkPos, 0, 0, 0);
                 }
             }
             if (dAcPy_c::GetLinkM()->mPosition.absXZTo(mLinkPos) < 10.0f) {
                 mEvent.advanceNext();
             }
+            retVal = SUCCEEDED;
             break;
         case 'warp':
             if (advance) {
                 dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_916_, mWorldMtx, nullptr, nullptr, 0, 0);
                 mWalkFramesMaybe = 80;
             }
-            if (mWalkFramesMaybe) {
+            if (mWalkFramesMaybe != 0) {
                 mWalkFramesMaybe -= 1;
             }
             if (mWalkFramesMaybe == 77) {
@@ -104,12 +109,13 @@ int dAcOwarpHole_c::actorExecuteInEvent() {
             if (mWalkFramesMaybe == 20) {
                 dScGame_c::GetInstance()->triggerExit(mRoomID, mExitListIdx);
             }
-            if (!mWalkFramesMaybe) {
+            if (mWalkFramesMaybe == 0) {
                 mEvent.advanceNext();
             }
+            retVal = SUCCEEDED;
     }
 
-    return SUCCEEDED;
+    return retVal;
 }
 
 int dAcOwarpHole_c::draw() {
