@@ -63,6 +63,12 @@ int dAcOwarpHole_c::actorExecute() {
     return SUCCEEDED;
 }
 
+// copy from d_a_obj_fairy - TODO move it to a shared file
+inline static void vecCylCalc(mVec3_c &target, const mAng &rot, f32 factor) {
+    target.x += factor * rot.sin();
+    target.z += factor * rot.cos();
+}
+
 int dAcOwarpHole_c::actorExecuteInEvent() {
     mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_914_, mWorldMtx, nullptr, nullptr);
     holdSound(SE_WarpH_Wait);
@@ -77,11 +83,9 @@ int dAcOwarpHole_c::actorExecuteInEvent() {
             break;
         case 'plwk':
             if (advance) {
-                float multiplier330 = 330.0f;
-                mLinkPos = dAcPy_c::GetLinkM()->mPosition;
-                mAng targetAngleY = (mAng)cLib::targetAngleY(mPosition, dAcPy_c::GetLinkM()->getPosition());
-                mLinkPos.x += multiplier330 * targetAngleY.sin();
-                mLinkPos.z += multiplier330 * targetAngleY.cos();
+                dAcPy_c *link = dAcPy_c::GetLinkM();
+                mLinkPos = link->mPosition;
+                vecCylCalc(mLinkPos,cLib::targetAngleY(mPosition, link->mPosition), 330.0f);
             }
             if (EventManager::isInEvent()) {
                 if (EventManager::isCurrentEvent("BeforeLastBossBattleChicken")) {

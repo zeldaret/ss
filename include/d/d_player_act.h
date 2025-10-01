@@ -412,7 +412,7 @@ public:
     /* vt 0x2A8 */ virtual void lookTowardItem() {}
     /* vt 0x2AC */ virtual void vt_0x2AC() {}
     /* vt 0x2B0 */ virtual void vt_0x2B0() {}
-    /* vt 0x2B4 */ virtual void triggerMoveEventMaybe(u32, u32, u32, mVec3_c &, u16, u32, u32) {}
+    /* vt 0x2B4 */ virtual void triggerMoveEventMaybe(u32, u32, u32, mVec3_c &, const mAng&, u32, u32) {}
     /* vt 0x2B8 */ virtual void setActorRef9() {}
     /* vt 0x2BC */ virtual void unlinkActorRef9() {}
     /* vt 0x2C0 */ virtual bool vt_0x2C0() {
