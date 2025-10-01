@@ -10,8 +10,16 @@ public:
     dAcNpcKensei_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dAcNpcKensei_c() {}
 
+    static dAcNpcKensei_c* GetInstance() {
+        return sInstance;
+    }
+
 private:
+    static dAcNpcKensei_c *sInstance;
+    
     /* 0x??? */ STATE_MGR_DECLARE(dAcNpcKensei_c);
 };
+
+
 
 #endif

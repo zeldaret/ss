@@ -2825,7 +2825,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_vent_fan", "REL/d/a/obj/d_a_obj_vent_fan.cpp"),
     Rel(NonMatching, "d_a_obj_vortex", "REL/d/a/obj/d_a_obj_vortex.cpp"),
     Rel(NonMatching, "d_a_obj_warp", "REL/d/a/obj/d_a_obj_warp.cpp"),
-    Rel(NonMatching, "d_a_obj_warp_hole", "REL/d/a/obj/d_a_obj_warp_hole.cpp"),
+    Rel(Matching, "d_a_obj_warp_hole", "REL/d/a/obj/d_a_obj_warp_hole.cpp"),
     Rel(
         NonMatching, "d_a_obj_waterfall_D100", "REL/d/a/obj/d_a_obj_waterfall_D100.cpp"
     ),
