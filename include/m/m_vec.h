@@ -300,6 +300,9 @@ public:
     mVec2_c(const EGG::Vector2f &other) {
         set(other.x, other.y);
     }
+    mVec2_c(const nw4r::math::VEC2 &other) {
+        set(other.x, other.y);
+    }
     mVec2_c(f32 fx, f32 fy) {
         set(fx, fy);
     }

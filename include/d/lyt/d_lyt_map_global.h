@@ -32,6 +32,10 @@ public:
         return field_0x20;
     }
 
+    void setField_0x28(const mVec2_c &v) {
+        field_0x28 = v;
+    }
+
     const mVec3_c &getMapRotationCenter() const {
         return mMapRotationCenter;
     }
@@ -94,8 +98,7 @@ private:
     /* 0x0C */ mVec2_c field_0x0C;
     /* 0x14 */ mVec3_c mMapRotationCenter;
     /* 0x20 */ mVec2_c field_0x20;
-    /* 0x28 */ f32 field_0x28;
-    /* 0x2C */ f32 field_0x2C;
+    /* 0x28 */ mVec2_c field_0x28;
     /* 0x30 */ mVec3_c mPlayerPosition;
     /* 0x3C */ mAng mMapRotation;
     /* 0x40 */ f32 field_0x40;

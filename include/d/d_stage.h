@@ -150,6 +150,7 @@ public:
     }
 
     bool fn_801B3EE0();
+    void fn_801B3F20();
 
 private:
     dRoom_c *createRoom(int roomid, bool flag0x40);

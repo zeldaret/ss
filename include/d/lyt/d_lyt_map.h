@@ -17,13 +17,26 @@
 #include "toBeSorted/d_flow_mgr.h"
 
 /** Bird Statue Definition (StatueSelectDestination) */
-struct dMapSaveDefinition {
+struct dMapSaveObjDefinition {
     /* 0x00 */ const char *stageName;
     /* 0x04 */ u8 room;
     /* 0x05 */ u8 layer;
     /* 0x06 */ u8 enrance;
     /* 0x08 */ UNKWORD field_0x08;
     /* 0x0C */ const char *statueLabel;
+};
+
+/** Something for making sure re-opening the map opens it in a similar state as when it was last closed */
+struct dMapSavedDataEntry {
+    /* 0x00 */ s32 mapMode;
+    /* 0x04 */ u8 mapUpDirection;
+    /* 0x05 */ u8 field_0x05;
+    /* 0x06 */ u8 field_0x06;
+};
+
+struct dMapSavedData {
+    /* 0x00 */ dMapSavedDataEntry entries[6];
+    /* 0x30 */ bool islandNamesOn;
 };
 
 struct dMapFootPrintEntry {
@@ -406,6 +419,14 @@ public:
     STATE_FUNC_DECLARE(dLytMapSaveCaption_c, Wait);
     STATE_FUNC_DECLARE(dLytMapSaveCaption_c, Out);
 
+    void build(d2d::ResAccIf_c *resAcc);
+    void remove();
+    void execute();
+    void draw();
+
+    void setType(s32 type);
+    void setLabel(const char *label);
+
 private:
     /* 0x000 */ UI_STATE_MGR_DECLARE(dLytMapSaveCaption_c);
     /* 0x03C */ d2d::LytBase_c mLyt;
@@ -415,7 +436,8 @@ private:
 // Size 0x190
 class dLytMapSaveObj_c {
 public:
-    dLytMapSaveObj_c() : mStateMgr(*this, sStateID::null), field_0x18C(0), field_0x18D(0), field_0x18E(0) {}
+    dLytMapSaveObj_c()
+        : mStateMgr(*this, sStateID::null), mSelectRequest(false), mDecideRequest(false), mDecideFinished(false) {}
 
     STATE_FUNC_DECLARE(dLytMapSaveObj_c, Wait);
     STATE_FUNC_DECLARE(dLytMapSaveObj_c, ToSelect);
@@ -423,13 +445,22 @@ public:
     STATE_FUNC_DECLARE(dLytMapSaveObj_c, ToWait);
     STATE_FUNC_DECLARE(dLytMapSaveObj_c, Decide);
 
+    void build(d2d::ResAccIf_c *resAcc);
+    void remove();
+    void execute();
+    void draw();
+
+    void setPosition(const mVec3_c &position);
+    void setAlpha(u8 alpha);
+    void init();
+
 private:
     /* 0x000 */ UI_STATE_MGR_DECLARE(dLytMapSaveObj_c);
     /* 0x03C */ d2d::LytBase_c mLyt;
     /* 0x0CC */ d2d::AnmGroup_c mAnmGroups[3];
-    /* 0x18C */ u8 field_0x18C;
-    /* 0x18D */ u8 field_0x18D;
-    /* 0x18E */ u8 field_0x18E;
+    /* 0x18C */ bool mSelectRequest;
+    /* 0x18D */ bool mDecideRequest;
+    /* 0x18E */ bool mDecideFinished;
 };
 
 // TODO, name made up
@@ -444,7 +475,7 @@ public:
 /** 2D UI - Map - beacon preview icon following the cursor */
 class dLytMapPutIcon_c {
 public:
-    dLytMapPutIcon_c() {}
+    dLytMapPutIcon_c() : mVisible(false), field_0x98(0.0f, 0.0f) {}
     virtual ~dLytMapPutIcon_c() {}
 
     void build(d2d::ResAccIf_c *resAcc);
@@ -458,7 +489,7 @@ public:
 private:
     /* 0x04 */ d2d::LytBase_c mLyt;
     /* 0x94 */ bool mVisible;
-    /* 0x95 */ u8 _0x95[0x9C - 0x95];
+    /* 0x98 */ mVec2_c field_0x98;
 };
 
 class dLytMapMain_c : public m2d::Base_c {
@@ -477,7 +508,7 @@ public:
     bool fn_80139EA0() const;
     void lightPillarRelated(s32, s32, s32);
 
-    const dMapSaveDefinition *getSaveDefinition(s32 province, s32 statueIdx) const;
+    const dMapSaveObjDefinition *getSaveObjDefinition(s32 province, s32 statueIdx) const;
 
     STATE_FUNC_DECLARE(dLytMapMain_c, Invisible);
     STATE_FUNC_DECLARE(dLytMapMain_c, RenderingWait);
@@ -536,6 +567,15 @@ private:
     void zoomOut();
     void zoomIn();
 
+    void loadTextboxes();
+
+    void saveUnkMapData();
+    void initUnkMapData();
+    void loadUnkMapData();
+
+    static dMapSavedData sSavedMapData;
+    static const dMapSavedData sDefaultMapData;
+
     /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMapMain_c);
     /* 0x004C */ dFlowMgrBase_c mFlowMgr;
     /* 0x00A4 */ dFlow_c mFlow;
@@ -554,9 +594,6 @@ private:
     /* 0x64C0 */ dLytMapFootPrints_c mFootPrints;
 
     /* 0x6664 */ dLytMapPutIcon_c mPutIcon;
-
-    /* 0x6700 */ u8 _0x6700[0x6704 - 0x6700];
-
     /* 0x6704 */ dLytMapSaveObj_c mSaveObjs[12];
     /* 0x79C4 */ dLytMapSaveCaption_c mSaveCaption;
     /* 0x7BD0 */ dLytMapSavePopup_c mSavePopup;
@@ -564,9 +601,9 @@ private:
 
     /* 0x8208 */ u8 _0x8208[0x821C - 0x8208];
 
-    /* 0x821C */ nw4r::lyt::Bounding **field_0x821C[10];
-    /* 0x8244 */ nw4r::lyt::Bounding **field_0x8244[6];
-    /* 0x825C */ nw4r::lyt::Bounding **field_0x825C[12];
+    /* 0x821C */ nw4r::lyt::Bounding *field_0x821C[10];
+    /* 0x8244 */ nw4r::lyt::Bounding *field_0x8244[6];
+    /* 0x825C */ nw4r::lyt::Bounding *field_0x825C[12];
     /* 0x828C */ mVec3_c field_0x828C[12];
 
     /* 0x831C */ u8 _0x831C[0x832C - 0x831C];
@@ -591,13 +628,16 @@ private:
     /* 0x8C64 */ s32 field_0x8C64;
     /* 0x8C68 */ s32 field_0x8C68;
 
-    /* 0x8C6C */ u8 _0x8C6C[0x8C90 - 0x8C6C];
+    /* 0x8C6C */ UNKWORD field_0x8C6C;
+
+    /* 0x8C70 */ u8 _0x8C70[0x8C90 - 0x8C70];
 
     /* 0x8C90 */ u8 field_0x8C90;
+    /* 0x8C91 */ u8 field_0x8C91;
+    /* 0x8C92 */ u8 field_0x8C92;
+    /* 0x8C93 */ u8 field_0x8C93;
     /* 0x8C94 */ s32 field_0x8C94;
-
-    /* 0x8C98 */ u8 _0x8C98[0x8C9C - 0x8C98];
-
+    /* 0x8C98 */ UNKWORD field_0x8C98;
     /* 0x8C9C */ UNKWORD field_0x8C9C;
 
     /* 0x8CA0 */ u8 _0x8CA0[0x8CA4 - 0x8CA0];
@@ -605,8 +645,11 @@ private:
     /* 0x8CA4 */ s32 field_0x8CA4;
     /* 0x8CA8 */ s32 field_0x8CA8;
 
-    /* 0x8CAC */ u8 _0x8CAC[0x8CC0 - 0x8CAC];
+    /* 0x8CAC */ u8 field_0x8CAC;
 
+    /* 0x8CAD */ u8 _0x8CAC[0x8CBC - 0x8CAD];
+
+    /* 0x8CBC */ nw4r::lyt::Bounding *mpMapBounding;
     /* 0x8CC0 */ bool field_0x8CC0;
     /* 0x8CC1 */ bool field_0x8CC1;
     /* 0x8CC4 */ mVec3_c field_0x8CC4;
@@ -636,16 +679,25 @@ private:
     /* 0x8D6B */ u8 field_0x8D6B;
     /* 0x8D6C */ UNKWORD field_0x8D6C;
     /* 0x8D70 */ UNKWORD field_0x8D70;
-    /* 0x8D74 */ u8 _0x8D74[0x8D94 - 0x8D74];
+    /* 0x8D74 */ u8 _0x8D74[0x8D78 - 0x8D74];
+    /* 0x8D78 */ f32 field_0x8D78;
+    /* 0x8D7C */ f32 field_0x8D7C;
+    /* 0x8D80 */ f32 field_0x8D80;
+    /* 0x8D84 */ f32 field_0x8D84;
+    /* 0x8D88 */ f32 field_0x8D88;
+    /* 0x8D8C */ u8 _0x8D8C[0x8D94 - 0x8D8C];
     /* 0x8D94 */ d2d::SubPaneList mSubpaneList;
     /* 0x8DA0 */ d2d::SubPaneListNode mSubpane;
-    /* 0x8DB0 */ u8 _0x8DB0[0x8DB4 - 0x8DB0];
+    /* 0x8DB0 */ UNKWORD field_0x8DB0;
     /* 0x8DB4 */ bool mNavEnabled;
-    /* 0x8DB4 */ bool field_0x8DB5;
-    /* 0x8DB6 */ u8 _0x8DB6[0x8DBC - 0x8DB6];
+    /* 0x8DB5 */ bool field_0x8DB5;
+    /* 0x8DB8 */ UNKWORD field_0x8DB8;
     /* 0x8DBC */ bool mIslandNamesOn;
     /* 0x8DBD */ bool field_0x8DBD;
-    /* 0x8DBE */ u8 _0x8DBE[0x8DC8 - 0x8DBE];
+    /* 0x8DBE */ u8 field_0x8DBE;
+    /* 0x8DBF */ u8 field_0x8DBF;
+    /* 0x8DC0 */ UNKWORD field_0x8DC0;
+    /* 0x8DC4 */ UNKWORD field_0x8DC4;
     /* 0x8DC8 */ dLytMapGlobal_c mGlobal;
 };
 
@@ -707,8 +759,8 @@ public:
         mMapMain.lightPillarRelated(p1, p2, p3);
     }
 
-    const dMapSaveDefinition *getSaveDefinition(s32 statueIdx) const {
-        return mMapMain.getSaveDefinition(mMapMain.field_0x8C9C, statueIdx);
+    const dMapSaveObjDefinition *getSaveObjDefinition(s32 statueIdx) const {
+        return mMapMain.getSaveObjDefinition(mMapMain.field_0x8C9C, statueIdx);
     }
 
 private:

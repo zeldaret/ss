@@ -9,8 +9,7 @@ dLytMapGlobal_c::dLytMapGlobal_c()
       field_0x0C(0.0f, 0.0f),
       mMapRotationCenter(0.0f, 0.0f, 0.0f),
       field_0x20(0.0f, 0.0f),
-      field_0x28(0.0f),
-      field_0x2C(0.0f),
+      field_0x28(0.0f, 0.0f),
       mMapRotation(0),
       field_0x40(1.0f),
       field_0x44(1.0f),
@@ -40,7 +39,7 @@ void dLytMapGlobal_c::projectOntoMap(
 
     work.x *= f2 * f1;
     work.z *= f2 * f1;
-    work.x *= field_0x28;
+    work.x *= field_0x28.x;
 
     result.x = work.x;
     result.y = -work.z;
@@ -75,7 +74,7 @@ void dLytMapGlobal_c::unprojectFromMap(
     f32 tmp = 1.0f / f1;
     mVec2_c diff = position - v1;
 
-    work.x = diff.x * tmp * (1.0f / field_0x28);
+    work.x = diff.x * tmp * (1.0f / field_0x28.x);
     work.z = -diff.y * tmp;
 
     work = work + v2;
