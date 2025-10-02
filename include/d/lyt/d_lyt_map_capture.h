@@ -11,8 +11,8 @@ public:
         field_0x040 = 0;
         field_0x070 = 0.0f;
         field_0x074 = 0.0f;
-        field_0x078 = 0;
-        field_0x079 = 0;
+        mRenderRequest = false;
+        mIsBusyRendering = false;
         field_0x06C = 0.0f;
         field_0x068 = 0.0f;
         field_0x064 = 0.0f;
@@ -24,6 +24,8 @@ public:
     STATE_FUNC_DECLARE(dLytMapCapture_c, RenderingWaitStep2);
 
 private:
+    void fn_8012D6F0();
+
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMapCapture_c);
     /* 0x040 */ UNKWORD field_0x040;
     /* 0x044 */ u8 _0x040[0x064 - 0x044];
@@ -32,8 +34,8 @@ private:
     /* 0x06C */ f32 field_0x06C;
     /* 0x070 */ f32 field_0x070;
     /* 0x074 */ f32 field_0x074;
-    /* 0x078 */ u8 field_0x078;
-    /* 0x079 */ u8 field_0x079;
+    /* 0x078 */ bool mRenderRequest;
+    /* 0x079 */ bool mIsBusyRendering;
 };
 
 #endif

@@ -16,6 +16,16 @@
 #include "s/s_State.hpp"
 #include "toBeSorted/d_flow_mgr.h"
 
+/** Bird Statue Definition (StatueSelectDestination) */
+struct dMapSaveDefinition {
+    /* 0x00 */ const char *stageName;
+    /* 0x04 */ u8 room;
+    /* 0x05 */ u8 layer;
+    /* 0x06 */ u8 enrance;
+    /* 0x08 */ UNKWORD field_0x08;
+    /* 0x0C */ const char *statueLabel;
+};
+
 struct dMapFootPrintEntry {
     /* 0x00 */ dMapFootPrintEntry *pPrev;
     /* 0x04 */ dMapFootPrintEntry *pNext;
@@ -261,8 +271,8 @@ public:
         mBaseFloorOffset = 0;
         mSelectedBtnIdx = 0;
         field_0x70C = 4;
-        field_0x710 = false;
-        field_0x711 = false;
+        mPointerVisible = false;
+        mPrevPointerVisible = false;
         field_0x712 = false;
     }
     virtual ~dLytMapFloorBtnMgr_c();
@@ -294,7 +304,8 @@ public:
         return getPointedAtBtnIdx() >= 0;
     }
 
-    void resetFloor(s32 newFloor);
+    void resetFloor(s32 newFloorBtn);
+    bool isUsingPointerNav() const;
 
 private:
     void checkPointedAtBtn();
@@ -311,8 +322,8 @@ private:
     /* 0x704 */ s32 mBaseFloorOffset;
     /* 0x708 */ s32 mSelectedBtnIdx;
     /* 0x70C */ UNKWORD field_0x70C;
-    /* 0x710 */ bool field_0x710;
-    /* 0x711 */ bool field_0x711;
+    /* 0x710 */ bool mPointerVisible;
+    /* 0x711 */ bool mPrevPointerVisible;
     /* 0x712 */ bool field_0x712;
 };
 
@@ -327,6 +338,11 @@ public:
     STATE_FUNC_DECLARE(dLytMapPopupInfo_c, WaitInvalid);
     STATE_FUNC_DECLARE(dLytMapPopupInfo_c, Out);
 
+    void build(d2d::ResAccIf_c *resAcc);
+    void remove();
+    void execute();
+    void draw();
+
 private:
     /* 0x000 */ UI_STATE_MGR_DECLARE(dLytMapPopupInfo_c);
     /* 0x03C */ d2d::LytBase_c mLyt;
@@ -335,33 +351,50 @@ private:
 
 // Size 0x4C
 class dLytMapSavePopupAction_c {
+    friend class dLytMapSavePopup_c;
+
 public:
-    dLytMapSavePopupAction_c() : mStateMgr(*this, sStateID::null), field_0x44(0.0f), field_0x48(0) {}
+    dLytMapSavePopupAction_c() : mStateMgr(*this, sStateID::null), mInOutFrame(0.0f), mInRequest(false) {}
 
     STATE_FUNC_DECLARE(dLytMapSavePopupAction_c, Invisible);
     STATE_FUNC_DECLARE(dLytMapSavePopupAction_c, In);
     STATE_FUNC_DECLARE(dLytMapSavePopupAction_c, Wait);
     STATE_FUNC_DECLARE(dLytMapSavePopupAction_c, Out);
 
+    void execute();
+    void init(d2d::AnmGroup_c *pGroups);
+    void hide();
+
 private:
     /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMapSavePopupAction_c);
-    /* 0x3C */ u8 _0x3C[0x44 - 0x3C];
-    /* 0x44 */ f32 field_0x44;
-    /* 0x48 */ u8 field_0x48;
+    /* 0x3C */ d2d::AnmGroup_c *mpAnmGroupInOut;
+    /* 0x40 */ d2d::AnmGroup_c *mpAnmGroupInput;
+    /* 0x44 */ f32 mInOutFrame;
+    /* 0x48 */ bool mInRequest;
 };
 
 // Assumed name
 class dLytMapSavePopup_c {
 public:
-    dLytMapSavePopup_c() : field_0x4A0(0), field_0x4A4(0), field_0x4A8(-1) {}
+    dLytMapSavePopup_c() : mStatueNum(0), mpStatueBoundings(nullptr), mCurrentlyInStatue(-1) {}
+
+    void build(d2d::ResAccIf_c *resAcc);
+    void remove();
+    void execute();
+    void draw();
+
+    void set(nw4r::lyt::Bounding **pStatueBoundings, s32 count);
+    void hide(s32 statueIdx);
 
 private:
+    f32 setStatueLabel(const char *label);
+
     /* 0x000 */ d2d::LytBase_c mLyt;
     /* 0x090 */ d2d::AnmGroup_c mAnmGroups[2];
     /* 0x110 */ dLytMapSavePopupAction_c mActions[12];
-    /* 0x4A0 */ UNKWORD field_0x4A0;
-    /* 0x4A4 */ UNKWORD field_0x4A4;
-    /* 0x4A8 */ UNKWORD field_0x4A8;
+    /* 0x4A0 */ s32 mStatueNum;
+    /* 0x4A4 */ nw4r::lyt::Bounding **mpStatueBoundings;
+    /* 0x4A8 */ s32 mCurrentlyInStatue;
 };
 
 class dLytMapSaveCaption_c {
@@ -444,6 +477,8 @@ public:
     bool fn_80139EA0() const;
     void lightPillarRelated(s32, s32, s32);
 
+    const dMapSaveDefinition *getSaveDefinition(s32 province, s32 statueIdx) const;
+
     STATE_FUNC_DECLARE(dLytMapMain_c, Invisible);
     STATE_FUNC_DECLARE(dLytMapMain_c, RenderingWait);
     STATE_FUNC_DECLARE(dLytMapMain_c, In);
@@ -496,7 +531,7 @@ private:
 
     f32 fn_80142D90(s32);
     void fn_80142F00(mVec3_c &, s32 mapMode, u8, const mVec3_c &, const mAng &);
-    void fn_8013FB70(const mVec3_c&, f32);
+    void fn_8013FB70(const mVec3_c &, f32);
 
     void zoomOut();
     void zoomIn();
@@ -527,8 +562,11 @@ private:
     /* 0x7BD0 */ dLytMapSavePopup_c mSavePopup;
     /* 0x807C */ dLytMapPopupInfo_c mPopupInfo;
 
-    /* 0x8208 */ u8 _0x8208[0x828C - 0x8208];
+    /* 0x8208 */ u8 _0x8208[0x821C - 0x8208];
 
+    /* 0x821C */ nw4r::lyt::Bounding **field_0x821C[10];
+    /* 0x8244 */ nw4r::lyt::Bounding **field_0x8244[6];
+    /* 0x825C */ nw4r::lyt::Bounding **field_0x825C[12];
     /* 0x828C */ mVec3_c field_0x828C[12];
 
     /* 0x831C */ u8 _0x831C[0x832C - 0x831C];
@@ -558,7 +596,11 @@ private:
     /* 0x8C90 */ u8 field_0x8C90;
     /* 0x8C94 */ s32 field_0x8C94;
 
-    /* 0x8C98 */ u8 _0x8C98[0x8CA4 - 0x8C98];
+    /* 0x8C98 */ u8 _0x8C98[0x8C9C - 0x8C98];
+
+    /* 0x8C9C */ UNKWORD field_0x8C9C;
+
+    /* 0x8CA0 */ u8 _0x8CA0[0x8CA4 - 0x8CA0];
 
     /* 0x8CA4 */ s32 field_0x8CA4;
     /* 0x8CA8 */ s32 field_0x8CA8;
@@ -663,6 +705,10 @@ public:
 
     void lightPillarRelated(s32 p1, s32 p2, s32 p3) {
         mMapMain.lightPillarRelated(p1, p2, p3);
+    }
+
+    const dMapSaveDefinition *getSaveDefinition(s32 statueIdx) const {
+        return mMapMain.getSaveDefinition(mMapMain.field_0x8C9C, statueIdx);
     }
 
 private:

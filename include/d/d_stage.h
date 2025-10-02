@@ -74,11 +74,16 @@ public:
     /* 0x1F0 */ u8 field_0x1F0;
 
 public:
+    u8 getField_0x1EE() const {
+        return field_0x1EE;
+    }
+
     void init(MapRelated *);
     void fn_801b4900();
     void fn_801B4B80(u32 mapParams, const mVec3_c &center, const mVec3_c &size);
     void fn_801B4C70(const mVec3_c &);
     void fn_801B50C0(s32);
+    const mVec3_c &fn_801B4CB0() const;
 };
 
 // OBJ NAME: STAGE
@@ -128,6 +133,10 @@ public:
         return sInstance;
     }
 
+    MapRelated *getMapRelated() {
+        return &mMapRelated;
+    }
+
     bool isFadedOut() const {
         return mFader.isStatus(mFaderBase_c::FADED_OUT);
     }
@@ -154,7 +163,7 @@ private:
     /* 0x0068 */ sFPhase<dStage_c> mPhase;
     /* 0x007C */ dRoomTable_c rooms;
     /* 0x017C */ dFader_c mFader;
-    /* 0x01A0 */ MapRelated mapRelated;
+    /* 0x01A0 */ MapRelated mMapRelated;
     /* 0x0394 */ u8 _0x394[0x39C - 0x394];
     /* 0x039C */ u32 loaded_entities[2047];
     /* 0x2398 */ s8 curr_room_id;

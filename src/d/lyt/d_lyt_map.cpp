@@ -15,6 +15,8 @@
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_map_global.h"
 #include "d/lyt/d_textbox.h"
+#include "d/lyt/d_window.h"
+#include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "egg/core/eggColorFader.h"
 #include "m/m_vec.h"
@@ -22,6 +24,8 @@
 #include "nw4r/g3d/g3d_obj.h"
 #include "nw4r/lyt/lyt_bounding.h"
 #include "nw4r/lyt/lyt_pane.h"
+#include "nw4r/lyt/lyt_window.h"
+#include "s/s_StateInterfaces.hpp"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/d_beacon.h"
@@ -56,6 +60,10 @@ struct dLytMap_HIO_c {
     /* 0x2A */ u8 mFootstepsAlpha;
     /* 0x2B */ u8 field_0x2B;
     /* 0x2C */ f32 field_0x2C;
+
+    f32 getField_0x04() const {
+        return field_0x04;
+    }
 };
 
 dLytMap_HIO_c sHio;
@@ -1030,8 +1038,8 @@ bool dLytMapFloorBtnMgr_c::build(d2d::ResAccIf_c *resAcc) {
         mCsHitChecks[i].execute();
     }
 
-    field_0x710 = false;
-    field_0x711 = false;
+    mPointerVisible = false;
+    mPrevPointerVisible = false;
 
     for (int i = 0; i < MAP_FLOOR_BTN_MGR_NUM_BTNS; i++) {
         mFloorBtns[i].mSelected = false;
@@ -1063,7 +1071,7 @@ bool dLytMapFloorBtnMgr_c::remove() {
 bool dLytMapFloorBtnMgr_c::execute() {
     field_0x70C = 4;
     if (*mStateMgr.getStateID() != StateID_Invisible) {
-        if (field_0x710) {
+        if (mPointerVisible) {
             for (int i = 0; i < MAP_FLOOR_BTN_MGR_NUM_BTNS; i++) {
                 mFloorBtns[i].execute();
             }
@@ -1072,13 +1080,15 @@ bool dLytMapFloorBtnMgr_c::execute() {
             // Determine the currently active floor
             s32 activeBtn = 0;
             s32 direction = dPadNav::getFSStickNavDirection();
-            if (field_0x710 != field_0x711) {
+            if (mPointerVisible != mPrevPointerVisible) {
+                // We just turned off pointing, so make the decided button the selected one too
                 for (int i = 0; i < MAP_FLOOR_BTN_MGR_NUM_BTNS; i++) {
                     if (mFloorBtns[i].mDecided) {
                         activeBtn = i;
                     }
                 }
             } else {
+                // Normal handling - pointing off, selected button stays selected
                 for (int i = 0; i < MAP_FLOOR_BTN_MGR_NUM_BTNS; i++) {
                     if (mFloorBtns[i].mSelected) {
                         activeBtn = i;
@@ -1136,14 +1146,14 @@ bool dLytMapFloorBtnMgr_c::execute() {
 }
 
 void dLytMapFloorBtnMgr_c::checkPointedAtBtn() {
-    field_0x711 = field_0x710;
-    field_0x710 = dPadNav::isPointerVisible();
+    mPrevPointerVisible = mPointerVisible;
+    mPointerVisible = dPadNav::isPointerVisible();
     if (field_0x712) {
         dPadNav::stopFSStickNav();
-        field_0x710 = true;
+        mPointerVisible = true;
     }
 
-    if (field_0x710) {
+    if (mPointerVisible) {
         for (int i = 0; i < MAP_FLOOR_BTN_MGR_NUM_BTNS; i++) {
             mFloorBtns[i].mSelected = false;
         }
@@ -1168,6 +1178,82 @@ s32 dLytMapFloorBtnMgr_c::getPointedAtBtnIdx() const {
         }
     }
     return idx;
+}
+
+bool dLytMapFloorBtnMgr_c::isUsingPointerNav() const {
+    return mPointerVisible;
+}
+
+void dLytMapFloorBtnMgr_c::resetFloor(s32 newFloorBtn) {
+    mFloorBtns[mSelectedBtnIdx].mDecided = false;
+    mFloorBtns[mSelectedBtnIdx].directlyUndecide();
+    mFloorBtns[mSelectedBtnIdx].mStateMgr.changeState(dLytMapFloorBtn_c::StateID_Wait);
+
+    mFloorBtns[newFloorBtn].mDecided = true;
+    mFloorBtns[newFloorBtn].directlyDecide();
+    mFloorBtns[newFloorBtn].mStateMgr.changeState(dLytMapFloorBtn_c::StateID_Decide);
+
+    mSelectedBtnIdx = newFloorBtn;
+}
+
+void dLytMapFloorBtnMgr_c::decideSelectedFloor() {
+    for (int i = 0; i < mNumFloors; i++) {
+        if (mFloorBtns[i].mSelected) {
+            if (i != mSelectedBtnIdx) {
+                mFloorBtns[mSelectedBtnIdx].mDecided = false;
+                mFloorBtns[i].mDecided = true;
+            }
+            mSelectedBtnIdx = i;
+        }
+    }
+}
+
+bool dLytMapFloorBtnMgr_c::canDecideFloor() const {
+    bool ret = false;
+
+    s32 idx = getPointedAtBtnIdx();
+    if (idx >= 0) {
+        // When pointing at a button that is thus selected but not yet decided,
+        // we can decide on that button if it's not busy animating...
+        if (!mFloorBtns[idx].mDecided) {
+            if (mFloorBtns[idx].mStateMgr.isState(dLytMapFloorBtn_c::StateID_Select)) {
+                bool busy = mFloorBtns[idx].mpAnmGroups->mOnOff.isBound() ||
+                            mFloorBtns[idx].mpAnmGroups->mDecide.isBound() ||
+                            mFloorBtns[idx].mpAnmGroups->mOnOffLight.isBound();
+                if (!busy) {
+                    ret = true;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < mNumFloors; i++) {
+        // But if any other button is animating and in a changing state, also forbid
+        if (i != idx) {
+            bool busy = mFloorBtns[i].mpAnmGroups->mOnOff.isBound() || mFloorBtns[i].mpAnmGroups->mDecide.isBound() ||
+                        mFloorBtns[i].mpAnmGroups->mOnOffLight.isBound();
+
+            if (busy) {
+                if (!mFloorBtns[i].mStateMgr.isState(dLytMapFloorBtn_c::StateID_Wait) &&
+                    !mFloorBtns[i].mStateMgr.isState(dLytMapFloorBtn_c::StateID_Decide)) {
+                    ret = false;
+                    break;
+                }
+            }
+        }
+    }
+
+    return ret;
+}
+
+s32 dLytMapFloorBtnMgr_c::getCurrentFloor() const {
+    s32 ret = -1;
+    for (int i = 0; i < MAP_FLOOR_BTN_MGR_NUM_BTNS; i++) {
+        if (mFloorBtns[i].mDecided) {
+            ret = i;
+        }
+    }
+    return mBaseFloorOffset - ret;
 }
 
 // What it says on the tin
@@ -1239,41 +1325,290 @@ dLytMapFloorBtnMgr_c::~dLytMapFloorBtnMgr_c() {
     dPadNav::setNavEnabled(false, false);
 }
 
+#define MAP_POPUP_INFO_ANIM_IN 0
+#define MAP_POPUP_INFO_ANIM_OUT 1
+#define MAP_POPUP_INFO_ANIM_INPUT 2
+
+#define MAP_POPUP_INFO_NUM_ANIMS 3
+
 void dLytMapPopupInfo_c::initializeState_Invisible() {}
 void dLytMapPopupInfo_c::executeState_Invisible() {}
 void dLytMapPopupInfo_c::finalizeState_Invisible() {}
 
-void dLytMapPopupInfo_c::initializeState_In() {}
-void dLytMapPopupInfo_c::executeState_In() {}
+void dLytMapPopupInfo_c::initializeState_In() {
+    mAnmGroups[MAP_POPUP_INFO_ANIM_IN].bind(false);
+}
+void dLytMapPopupInfo_c::executeState_In() {
+    if (mAnmGroups[MAP_POPUP_INFO_ANIM_IN].isEndReached()) {
+        mLyt.calc();
+        mAnmGroups[MAP_POPUP_INFO_ANIM_IN].unbind();
+        mStateMgr.changeState(StateID_Wait);
+    }
+}
 void dLytMapPopupInfo_c::finalizeState_In() {}
 
 void dLytMapPopupInfo_c::initializeState_Wait() {}
-void dLytMapPopupInfo_c::executeState_Wait() {}
+void dLytMapPopupInfo_c::executeState_Wait() {
+    if (dLytMsgWindow_c::getInstance()->isVisible()) {
+        mAnmGroups[MAP_POPUP_INFO_ANIM_INPUT].bind(false);
+        mAnmGroups[MAP_POPUP_INFO_ANIM_INPUT].setForward();
+        mAnmGroups[MAP_POPUP_INFO_ANIM_INPUT].setToStart();
+        mStateMgr.changeState(StateID_WaitInvalid);
+    } else if (mAnmGroups[MAP_POPUP_INFO_ANIM_INPUT].isStop2()) {
+        mLyt.calc();
+        mAnmGroups[MAP_POPUP_INFO_ANIM_INPUT].unbind();
+    }
+}
 void dLytMapPopupInfo_c::finalizeState_Wait() {}
 
 void dLytMapPopupInfo_c::initializeState_WaitInvalid() {}
-void dLytMapPopupInfo_c::executeState_WaitInvalid() {}
+void dLytMapPopupInfo_c::executeState_WaitInvalid() {
+    if (!dLytMsgWindow_c::getInstance()->isVisible()) {
+        mAnmGroups[MAP_POPUP_INFO_ANIM_INPUT].bind(false);
+        mAnmGroups[MAP_POPUP_INFO_ANIM_INPUT].setBackward();
+        mAnmGroups[MAP_POPUP_INFO_ANIM_INPUT].setToStart();
+        mStateMgr.changeState(StateID_Wait);
+    } else if (mAnmGroups[MAP_POPUP_INFO_ANIM_INPUT].isStop2()) {
+        mLyt.calc();
+        mAnmGroups[MAP_POPUP_INFO_ANIM_INPUT].unbind();
+    }
+}
 void dLytMapPopupInfo_c::finalizeState_WaitInvalid() {}
 
-void dLytMapPopupInfo_c::initializeState_Out() {}
-void dLytMapPopupInfo_c::executeState_Out() {}
+void dLytMapPopupInfo_c::initializeState_Out() {
+    mAnmGroups[MAP_POPUP_INFO_ANIM_OUT].bind(false);
+}
+void dLytMapPopupInfo_c::executeState_Out() {
+    if (mAnmGroups[MAP_POPUP_INFO_ANIM_OUT].isEndReached()) {
+        mLyt.calc();
+        mAnmGroups[MAP_POPUP_INFO_ANIM_OUT].unbind();
+    }
+}
 void dLytMapPopupInfo_c::finalizeState_Out() {}
 
+static const d2d::LytBrlanMapping sMapPopupInfoBrlanMap[] = {
+    {   "mapPopupInfo_00_in.brlan", "G_inOut_00"},
+    {  "mapPopupInfo_00_out.brlan", "G_inOut_00"},
+    {"mapPopupInfo_00_inPut.brlan", "G_input_00"},
+};
+
+void dLytMapPopupInfo_c::build(d2d::ResAccIf_c *resAcc) {
+    mLyt.setResAcc(resAcc);
+    mLyt.build("mapPopupInfo_00.brlyt", nullptr);
+    for (int i = 0; i < MAP_POPUP_INFO_NUM_ANIMS; i++) {
+        mAnmGroups[i].init(sMapPopupInfoBrlanMap[i].mFile, resAcc, mLyt.getLayout(), sMapPopupInfoBrlanMap[i].mName);
+    }
+    mStateMgr.changeState(StateID_Invisible);
+}
+
+void dLytMapPopupInfo_c::remove() {
+    for (int i = 0; i < MAP_POPUP_INFO_NUM_ANIMS; i++) {
+        mAnmGroups[i].remove();
+    }
+}
+
+void dLytMapPopupInfo_c::execute() {
+    mStateMgr.executeState();
+    mLyt.calc();
+    for (int i = 0; i < MAP_POPUP_INFO_NUM_ANIMS; i++) {
+        if (mAnmGroups[i].isBound()) {
+            mAnmGroups[i].play();
+        }
+    }
+}
+
+void dLytMapPopupInfo_c::draw() {
+    mLyt.draw();
+}
+
+#define MAP_SAVE_POPUP_ACTION_ANIM_IN_OUT 0
+#define MAP_SAVE_POPUP_ACTION_ANIM_INPUT 1
+
+#define MAP_SAVE_POPUP_ACTION_NUM_ANIMS 2
+
 void dLytMapSavePopupAction_c::initializeState_Invisible() {}
-void dLytMapSavePopupAction_c::executeState_Invisible() {}
+void dLytMapSavePopupAction_c::executeState_Invisible() {
+    if (mInRequest) {
+        mStateMgr.changeState(StateID_In);
+    }
+}
 void dLytMapSavePopupAction_c::finalizeState_Invisible() {}
 
-void dLytMapSavePopupAction_c::initializeState_In() {}
-void dLytMapSavePopupAction_c::executeState_In() {}
+void dLytMapSavePopupAction_c::initializeState_In() {
+    // TODO - explain why this seems unnecessarily complicated
+    mpAnmGroupInOut->bind(false);
+    mpAnmGroupInOut->setForward();
+    mpAnmGroupInOut->setToStart();
+    mInOutFrame = mpAnmGroupInOut->getFrame();
+    mpAnmGroupInOut->unbind();
+}
+void dLytMapSavePopupAction_c::executeState_In() {
+    // TODO - explain why this seems unnecessarily complicated
+    mpAnmGroupInOut->bind(false);
+    mpAnmGroupInOut->setFrame(mInOutFrame);
+    mpAnmGroupInOut->play();
+    if (mpAnmGroupInOut->isEndReached()) {
+        mStateMgr.changeState(StateID_Wait);
+    }
+    mInOutFrame = mpAnmGroupInOut->getFrame();
+    mpAnmGroupInOut->unbind();
+}
 void dLytMapSavePopupAction_c::finalizeState_In() {}
 
 void dLytMapSavePopupAction_c::initializeState_Wait() {}
-void dLytMapSavePopupAction_c::executeState_Wait() {}
+void dLytMapSavePopupAction_c::executeState_Wait() {
+    if (!mInRequest) {
+        mStateMgr.changeState(StateID_Out);
+    }
+}
 void dLytMapSavePopupAction_c::finalizeState_Wait() {}
 
-void dLytMapSavePopupAction_c::initializeState_Out() {}
-void dLytMapSavePopupAction_c::executeState_Out() {}
+void dLytMapSavePopupAction_c::initializeState_Out() {
+    // TODO - explain why this seems unnecessarily complicated
+    mpAnmGroupInOut->bind(false);
+    mpAnmGroupInOut->setBackward();
+    mpAnmGroupInOut->setToStart();
+    mInOutFrame = mpAnmGroupInOut->getFrame();
+    mpAnmGroupInOut->unbind();
+}
+void dLytMapSavePopupAction_c::executeState_Out() {
+    // TODO - explain why this seems unnecessarily complicated
+    mpAnmGroupInOut->bind(false);
+    mpAnmGroupInOut->setBackward();
+    mpAnmGroupInOut->setFrame(mInOutFrame);
+    mpAnmGroupInOut->play();
+    if (mpAnmGroupInOut->isStop2()) {
+        mStateMgr.changeState(StateID_Wait);
+    }
+    mInOutFrame = mpAnmGroupInOut->getFrame();
+    mpAnmGroupInOut->unbind();
+}
 void dLytMapSavePopupAction_c::finalizeState_Out() {}
+
+void dLytMapSavePopupAction_c::execute() {
+    mStateMgr.executeState();
+}
+
+void dLytMapSavePopupAction_c::init(d2d::AnmGroup_c *pGroups) {
+    mpAnmGroupInOut = &pGroups[MAP_SAVE_POPUP_ACTION_ANIM_IN_OUT];
+    mpAnmGroupInput = &pGroups[MAP_SAVE_POPUP_ACTION_ANIM_INPUT];
+}
+
+void dLytMapSavePopupAction_c::hide() {
+    mpAnmGroupInOut->bind(false);
+    mpAnmGroupInOut->setFrame(0.0f);
+    mpAnmGroupInOut->unbind();
+    mStateMgr.changeState(StateID_Invisible);
+}
+
+static const d2d::LytBrlanMapping sMapSavePopupActionBrlanMap[] = {
+    {"mapPopup_00_inOut.brlan", "G_inOut_00"},
+    {"mapPopup_00_scale.brlan", "G_scale_00"},
+};
+
+void dLytMapSavePopup_c::build(d2d::ResAccIf_c *resAcc) {
+    mLyt.setResAcc(resAcc);
+    mLyt.build("mapPopup_00.brlyt", nullptr);
+    for (int i = 0; i < MAP_SAVE_POPUP_ACTION_NUM_ANIMS; i++) {
+        mAnmGroups[i].init(
+            sMapSavePopupActionBrlanMap[i].mFile, resAcc, mLyt.getLayout(), sMapSavePopupActionBrlanMap[i].mName
+        );
+    }
+
+    for (int i = 0; i < (int)ARRAY_LENGTH(mActions); i++) {
+        mActions[i].init(mAnmGroups);
+        mActions[i].mStateMgr.changeState(dLytMapSavePopupAction_c::StateID_Invisible);
+    }
+}
+
+void dLytMapSavePopup_c::remove() {
+    for (int i = 0; i < MAP_SAVE_POPUP_ACTION_NUM_ANIMS; i++) {
+        mAnmGroups[i].remove();
+    }
+}
+
+void dLytMapSavePopup_c::execute() {
+    for (int i = 0; i < mStatueNum; i++) {
+        mActions[i].mInRequest = mCurrentlyInStatue == i;
+    }
+
+    for (int i = 0; i < mStatueNum; i++) {
+        mActions[i].execute();
+    }
+}
+
+void dLytMapSavePopup_c::draw() {
+    nw4r::lyt::Bounding *pBounding;
+
+    f32 scaleX = mLyt.getDrawInfo().GetLocationAdjustScale().x;
+    nw4r::lyt::Pane *rootPane = mLyt.getLayout()->GetRootPane();
+    for (int i = 0; i < mStatueNum; i++) {
+        const sStateIDIf_c *stateID = mActions[i].mStateMgr.getStateID();
+        if (*stateID != dLytMapSavePopupAction_c::StateID_Invisible) {
+            pBounding = mpStatueBoundings[i];
+            mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_INPUT].bind(false);
+            mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_INPUT].setFrame(30.0f);
+            const dMapSaveDefinition *def = dLytMap_c::GetInstance()->getSaveDefinition(i);
+            f32 width = setStatueLabel(def->statueLabel);
+
+            f32 allScaleX = mLyt.findPane("N_all_00")->GetScale().x;
+            // TODO fadds regswap
+            f32 x = pBounding->GetGlobalMtx()._03 + (0.5f * width * allScaleX * scaleX) + sHio.field_0x04;
+            f32 y = pBounding->GetGlobalMtx()._13;
+            mVec2_c translate2d(x, y);
+            mVec3_c translate = vec2ToVec3XY(translate2d);
+            rootPane->SetTranslate(translate);
+
+            if (*stateID == dLytMapSavePopupAction_c::StateID_In) {
+                mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_IN_OUT].bind(false);
+                mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_IN_OUT].setFrame(mActions[i].mInOutFrame);
+                mLyt.calc();
+                mLyt.draw();
+                mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_IN_OUT].unbind();
+            } else if (*stateID == dLytMapSavePopupAction_c::StateID_Wait) {
+                mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_IN_OUT].bind(false);
+                mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_IN_OUT].setToEnd();
+                mLyt.calc();
+                mLyt.draw();
+                mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_IN_OUT].unbind();
+            } else if (*stateID == dLytMapSavePopupAction_c::StateID_Out) {
+                mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_IN_OUT].bind(false);
+                mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_IN_OUT].setBackward();
+                mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_IN_OUT].setFrame(mActions[i].mInOutFrame);
+                mLyt.calc();
+                mLyt.draw();
+                mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_IN_OUT].unbind();
+            }
+            mAnmGroups[MAP_SAVE_POPUP_ACTION_ANIM_INPUT].unbind();
+        }
+    }
+}
+
+void dLytMapSavePopup_c::set(nw4r::lyt::Bounding **pStatueBoundings, s32 count) {
+    mpStatueBoundings = pStatueBoundings;
+    mStatueNum = count;
+}
+
+f32 dLytMapSavePopup_c::setStatueLabel(const char *label) {
+    static const char *sTPopupS = "T_popupS_00";
+    static const char *sTPopup = "T_popup_00";
+    static const char *sBg = "W_bgP_00";
+    dTextBox_c *textBox;
+
+    textBox = mLyt.getTextBox(sTPopupS);
+    textBox->setMessageWithGlobalTextProcessor2(label, nullptr);
+    textBox->GetLineWidth(nullptr);
+    textBox = mLyt.getTextBox(sTPopup);
+    textBox->setMessageWithGlobalTextProcessor2(label, nullptr);
+    
+    dWindow_c *w = mLyt.getWindow(sBg);
+    w->UpdateSize(textBox, 60.0f);
+    return w->GetSize().width;
+}
+
+void dLytMapSavePopup_c::hide(s32 statueIdx) {
+    mActions[statueIdx].hide();
+}
 
 void dLytMapSaveCaption_c::initializeState_Invisible() {}
 void dLytMapSaveCaption_c::executeState_Invisible() {}
