@@ -85,6 +85,7 @@ public:
     bool fn_80152F60() const;
     bool fn_80152F70() const;
     bool fn_80152F80() const;
+    static void setSelectBtn(f32 angle, f32 length);
 
 private:
     static dLytSystemWindow_c *sInstance;

@@ -36,8 +36,8 @@ public:
         nw4r::lyt::TextBox::SetFontSize(value);
     }
 
-    void set0x1F6(u8 val) {
-        field_0x1F6 = val;
+    void setIsShadow(bool val) {
+        mIsShadowTextBox = val;
     }
 
     void set0x1F8(u8 val) {
@@ -109,7 +109,7 @@ private:
     /* 0x1C1 */ u8 mWindowSubtype;
     /* 0x1C4 */ f32 mLineWidths[10];
     /* 0x1EC */ bool mbOvers[10];
-    /* 0x1F6 */ u8 field_0x1F6;
+    /* 0x1F6 */ bool mIsShadowTextBox;
     /* 0x1F7 */ u8 field_0x1F7;
     /* 0x1F8 */ u8 field_0x1F8;
     /* 0x1F9 */ bool field_0x1F9;

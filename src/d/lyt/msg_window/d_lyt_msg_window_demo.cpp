@@ -54,7 +54,7 @@ bool dLytMsgWindowDemo_c::build(d2d::ResAccIf_c *resAcc1, d2d::ResAccIf_c *resAc
         mpTextboxes[i] = mLyt.getTextBox(sTextBoxes[i]);
     }
 
-    mpTextboxes[1]->set0x1F6(1);
+    mpTextboxes[1]->setIsShadow(1);
 
     mpTagProcessor = tagProcessor;
 

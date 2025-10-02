@@ -38,9 +38,9 @@ public:
     void somethingWithScrapperAndMusic(wchar_t* src);
 
     void changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, bool);
-    wchar_t *writeItem(wchar_t *dest, wchar_t *src, s32 *, s32);
-    wchar_t *writeStringArg(wchar_t *dest, wchar_t *src, s32 *, s32);
-    wchar_t *writeNumericArg(wchar_t *dest, wchar_t *src, s32 *, s32);
+    wchar_t *writeItem(wchar_t *dest, wchar_t *src, s32 *, bool isProcessingOption);
+    wchar_t *writeStringArg(wchar_t *dest, wchar_t *src, s32 *, bool isProcessingOption);
+    wchar_t *writeNumericArg(wchar_t *dest, wchar_t *src, s32 *, bool isProcessingOption);
     void fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void drawIcon(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void calcRectIcon(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr);
@@ -72,9 +72,9 @@ public:
 
     static f32 fn_800B8040(s8, u32);
     wchar_t *writeSingleCharacter(wchar_t, wchar_t *, s32 *);
-    wchar_t *writeTextNormal(const wchar_t *src, wchar_t *dest, s32 *, u8 cmdLen, s32);
-    wchar_t *writeHeroname(wchar_t *dest, s32 *, s32);
-    wchar_t *writeSingularOrPluralWord(wchar_t *dest, wchar_t *src, s32 *, s32);
+    wchar_t *writeTextNormal(const wchar_t *src, wchar_t *dest, s32 *, u8 cmdLen, bool isProcessingOption);
+    wchar_t *writeHeroname(wchar_t *dest, s32 *, bool isProcessingOption);
+    wchar_t *writeSingularOrPluralWord(wchar_t *dest, wchar_t *src, s32 *, bool isProcessingOption);
     void fn_800B5520(wchar_t *src);
     void saveIconWidth(dTextBox_c *textBox, wchar_t *cmd, f32);
     void configureWriterForIcon(nw4r::ut::TextWriterBase<wchar_t> *, nw4r::ut::PrintContext<wchar_t> *ctx, u16 c, s32);
@@ -116,15 +116,15 @@ public:
     }
 
     u8 getField_0x90E() const {
-        return field_0x90E;
+        return mCurrentOptionIdx;
     }
 
     s32 getField_0x824() const {
         return field_0x824;
     }
 
-    s32 getField_0x828() const {
-        return field_0x828;
+    s32 getCancelBtnIdx() const {
+        return mCancelBtnIdx;
     }
 
     s32 getField_0x82C() const {
@@ -139,8 +139,8 @@ public:
         mMsgWindowSubtype = type;
     }
 
-    void setField_0x828(s32 val) {
-        field_0x828 = val;
+    void setCancelBtnIdx(s32 val) {
+        mCancelBtnIdx = val;
     }
 
     void setField_0x82C(s32 val) {
@@ -165,15 +165,15 @@ public:
     }
 
     void setField_0x90E(u8 val) {
-        field_0x90E = val;
+        mCurrentOptionIdx = val;
     }
 
     void setField_0xEE0(u8 val) {
         field_0xEE0 = val;
     }
 
-    void setField_0xEE1(u8 val) {
-        field_0xEE1 = val;
+    void setIsShadowText(bool val) {
+        mIsShadowText = val;
     }
 
     void setField_0xEE2(u8 val) {
@@ -184,35 +184,57 @@ public:
         field_0xEE3 = val;
     }
 
-    wchar_t *getBuf(s32 idx) {
-        return field_0x008[idx];
+    wchar_t *getOptionString(s32 idx) {
+        return mOptionBufs[idx];
     }
 
     LineData getLineData() const {
         return mLineData;
     }
 
-private:
-    wchar_t *getTmpBuffer() {
-        return field_0x008[field_0x90E - 1];
+    u8 getOptionSound(s32 idx) const {
+        return mOptionSound[idx];
     }
 
-    void onWriteTmpBuffer() {
-        if (field_0x90E - 1 < 4) {
-            field_0x808[field_0x90E - 1]++;
+private:
+    enum Cmd_e {
+        TAG_CMD_SCALE = 0x2,
+        TAG_CMD_COLOR = 0x3,
+        TAG_CMD_0x0F0F0F0E = 0x0F0F0F0E,
+        TAG_CMD_0x0F0F0F0F = 0x0F0F0F0F,
+        TAG_CMD_OPTION_0 = 0x10000,
+        TAG_CMD_OPTION_1 = 0x10001,
+        TAG_CMD_OPTION_2 = 0x10002,
+        TAG_CMD_OPTION_3 = 0x10003,
+
+        TAG_CMD_WRITE_HERONAME = 0x20000,
+        TAG_CMD_WRITE_ITEM = 0x20001,
+        TAG_CMD_WRITE_STRING_ARG = 0x20002,
+        TAG_CMD_WRITE_NUMERIC_ARG = 0x20003,
+
+        TAG_CMD_WRITE_WORD = 0x30004,
+    };
+
+    wchar_t *getOptionBuf() {
+        return mOptionBufs[mCurrentOptionIdx - 1];
+    }
+
+    void onWriteOptionBuf() {
+        if (mCurrentOptionIdx - 1 < 4) {
+            mOptionLengths[mCurrentOptionIdx - 1]++;
         }
     }
 
     /* 0x004 */ dTextBox_c *mpTextBox;
-    /* 0x008 */ wchar_t field_0x008[4][256];
-    /* 0x808 */ wchar_t field_0x808[4];
+    /* 0x008 */ wchar_t mOptionBufs[4][256];
+    /* 0x808 */ u16 mOptionLengths[4];
     /* 0x810 */ f32 field_0x810;
     /* 0x814 */ f32 field_0x814;
     /* 0x818 */ f32 field_0x818;
     /* 0x81C */ s32 field_0x81C;
     /* 0x820 */ s32 field_0x820;
     /* 0x824 */ u32 field_0x824;
-    /* 0x828 */ s32 field_0x828;
+    /* 0x828 */ s32 mCancelBtnIdx;
     /* 0x82C */ s32 field_0x82C;
     /* 0x830 */ s32 field_0x830;
     /* 0x834 */ s32 mPauseFramesLeft;
@@ -252,13 +274,13 @@ private:
     /* 0x908 */ f32 field_0x908;
     /* 0x90C */ u8 mMsgWindowSubtype;
     /* 0x90D */ u8 field_0x90D;
-    /* 0x90E */ u8 field_0x90E;
-    /* 0x90F */ u8 field_0x90F[4];
+    /* 0x90E */ u8 mCurrentOptionIdx;
+    /* 0x90F */ u8 mOptionSound[4];
     /* 0x914 */ LineData mLineData;
     /* 0x9E0 */ wchar_t mStringArgs[8][64];
     /* 0xDE0 */ u8 field_0xDE0[0xEE0 - 0xDE0];
     /* 0xEE0 */ u8 field_0xEE0;
-    /* 0xEE1 */ u8 field_0xEE1;
+    /* 0xEE1 */ bool mIsShadowText;
     /* 0xEE2 */ u8 field_0xEE2;
     /* 0xEE3 */ u8 field_0xEE3;
     /* 0xEE4 */ u8 field_0xEE4;

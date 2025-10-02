@@ -67,11 +67,11 @@ bool dLytSaveMsgWindow_c::build(bool arg) {
         }
     }
 
-    mBtn.setField_0x9C4(1);
+    mBtn.setFlipBtnLayout(1);
     if (arg) {
-        mBtn.setField_0x99C(1);
+        mBtn.setSkipOutAnim(1);
     }
-    mBtn.setField_0x9A0(1);
+    mBtn.setInSound(1);
 
     mStateMgr.changeState(StateID_Init);
     mLineSpace = mLyt.getTextBox("T_text_00")->GetLineSpace();
@@ -222,8 +222,8 @@ void dLytSaveMsgWindow_c::initializeState_Wait() {
 }
 void dLytSaveMsgWindow_c::executeState_Wait() {
     if (field_0x10C0 == 0) {
-        field_0x10C4 = mBtn.getField_0x9B4();
-        field_0x10C8 = mBtn.getField_0x9B0();
+        field_0x10C4 = mBtn.getDecidedBtnIdx();
+        field_0x10C8 = mBtn.getConfirmedBtnIdx();
     }
     if (field_0x10DB == 1) {
         field_0x10DB = 0;
@@ -279,7 +279,7 @@ void dLytSaveMsgWindow_c::executeState_Out() {
     }
 }
 void dLytSaveMsgWindow_c::finalizeState_Out() {
-    if (mBtn.getField_0x9A4() == 0) {
+    if (!mBtn.isVisible()) {
         mLyt.findPane("N_messageBtn_00")->SetVisible(false);
     }
     mWillFinishOut = 0;
@@ -375,7 +375,7 @@ void dLytSaveMsgWindow_c::updateSaveText() {
         numOptions = 4;
     }
     for (s32 i = 0; i < numOptions; i++) {
-        const wchar_t *text = dMessage_c::getGlobalTagProcessor()->getBuf(i);
+        const wchar_t *text = dMessage_c::getGlobalTagProcessor()->getOptionString(i);
         mBtn.getSelectTextBox(i, 0)->setTextWithGlobalTextProcessor(text);
         mBtn.getSelectTextBox(i, 1)->setTextWithGlobalTextProcessor(text);
     }
@@ -383,10 +383,10 @@ void dLytSaveMsgWindow_c::updateSaveText() {
     if (field_0x10B0 != 0) {
         mBtn.setTagProcessor(dMessage_c::getGlobalTagProcessor());
         static const u32 sInts[] = {0, 2, 3, 4};
-        u32 unkInt = sInts[field_0x10B0];
-        s32 f = dMessage_c::getGlobalTagProcessor()->getField_0x828();
-        mBtn.setField_0x9BC(f);
+        u32 numOptions = sInts[field_0x10B0];
+        s32 f = dMessage_c::getGlobalTagProcessor()->getCancelBtnIdx();
+        mBtn.setCancelBtnIdx(f);
         mBtn.setField_0x990(f);
-        mBtn.fn_8011E5D0(unkInt, true);
+        mBtn.requestIn(numOptions, true);
     }
 }

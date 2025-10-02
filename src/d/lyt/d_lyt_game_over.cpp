@@ -129,9 +129,9 @@ bool dLytGameOver_c::build() {
         }
     }
 
-    mSelectBtn.setField_0x9C4(1);
-    mSelectBtn.setField_0x99C(1);
-    mSelectBtn.setField_0x9A0(2);
+    mSelectBtn.setFlipBtnLayout(1);
+    mSelectBtn.setSkipOutAnim(1);
+    mSelectBtn.setInSound(2);
 
     mStateMgr.changeState(StateID_Init);
 
@@ -253,8 +253,8 @@ void dLytGameOver_c::executeState_Wait() {
     anm.play();
     switch (mStep) {
         case 0: {
-            if (mSelectBtn.getField_0x9B4() >= 0) {
-                mSelectedOption = mSelectBtn.getField_0x9B4();
+            if (mSelectBtn.getDecidedBtnIdx() >= 0) {
+                mSelectedOption = mSelectBtn.getDecidedBtnIdx();
                 mStep += 1;
                 mIsChangingState = true;
             }
@@ -344,15 +344,15 @@ void dLytGameOver_c::setupButtons() {
     }
 
     for (int i = 0; i < numOptions; i++) {
-        const wchar_t *buf = dMessage_c::getGlobalTagProcessor()->getBuf(i);
+        const wchar_t *buf = dMessage_c::getGlobalTagProcessor()->getOptionString(i);
         mSelectBtn.getSelectTextBox(i, 0)->setTextWithGlobalTextProcessor(buf);
         mSelectBtn.getSelectTextBox(i, 1)->setTextWithGlobalTextProcessor(buf);
     }
     mSelectBtn.setTagProcessor(dMessage_c::getGlobalTagProcessor());
-    u32 tmp = dMessage_c::getGlobalTagProcessor()->getField_0x828();
-    mSelectBtn.setField_0x9BC(tmp);
+    u32 tmp = dMessage_c::getGlobalTagProcessor()->getCancelBtnIdx();
+    mSelectBtn.setCancelBtnIdx(tmp);
     mSelectBtn.setField_0x990(tmp);
-    mSelectBtn.fn_8011E5D0(numOptions, true);
+    mSelectBtn.requestIn(numOptions, true);
 }
 
 SPECIAL_BASE_PROFILE(LYT_GAMEOVER_MGR, dLytGameOverMgr_c, fProfile::LYT_GAMEOVER_MGR, 0x02AC, 0x0201);
