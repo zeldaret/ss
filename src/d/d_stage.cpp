@@ -70,7 +70,7 @@ int dStage_c::create() {
         pcam++;
     }
 
-    if (mapRelated.field_0x1EB == 0) {
+    if (mMapRelated.field_0x1EB == 0) {
         mVec3_c min, max;
         for (s32 i = 0; i < MAX_ROOM_NUMBER - 1; i++) {
             dRoom_c *room = getRoom(i);
@@ -89,11 +89,11 @@ int dStage_c::create() {
         max.y += 6000.0f;
         mVec3_c size = max - min;
         mVec3_c center = mVec3_c(min.x + size.x * 0.5f, min.y, min.z + size.z * 0.5f);
-        mapRelated.fn_801B4B80(0, center, size);
+        mMapRelated.fn_801B4B80(0, center, size);
         mVec3_c v = mVec3_c(10000.0f, 10000.0f, 100000.0f);
-        mapRelated.fn_801B4C70(v);
+        mMapRelated.fn_801B4C70(v);
     }
-    mapRelated.fn_801B50C0(0);
+    mMapRelated.fn_801B50C0(0);
     fn_80028A80();
 
     return SUCCEEDED;

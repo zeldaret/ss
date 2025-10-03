@@ -1,6 +1,7 @@
 #ifndef D_CAMERA_H
 #define D_CAMERA_H
 
+#include "common.h"
 #include "d/d_base.h"
 #include "m/m_vec.h"
 
@@ -33,6 +34,10 @@ public:
         mScreenShakeIntensity = val;
     }
 
+    UNKWORD getField_0xDA8() const {
+        return field_0xDA8;
+    }
+
     bool isUnderwater() const;
     f32 getUnderwaterDepth() const;
 
@@ -44,7 +49,9 @@ private:
     /* 0xD98 */ void *field_0xD98;
     /* 0xD9C */ u8 _0xD9C[0xDA0 - 0xD9C];
     /* 0xDA0 */ void *field_0xDA0;
-    /* 0xDA4 */ u8 _0xDA4[0xDB0 - 0xDA4];
+    /* 0xDA4 */ u8 _0xDA4[0xDA8 - 0xDA4];
+    /* 0xDA8 */ UNKWORD field_0xDA8;
+    /* 0xDAC */ u8 _0xDAC[0xDB0 - 0xDAC];
     /* 0xDB0 */ f32 mScreenShakeIntensity;
 };
 

@@ -21,7 +21,7 @@ public:
 
     f32 GetLineWidth(f32 *pOutSpacing) const;
     f32 GetLinesHeight() const;
-    f32 GetUnkWidthRatio() const;
+    f32 getLineDrawWidth() const;
 
     void setLytBase(d2d::LytBase_c *lytBase) {
         mpLytBase = lytBase;

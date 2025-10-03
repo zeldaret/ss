@@ -439,7 +439,7 @@ f32 dTextBox_c::GetLinesHeight() const {
     return totalHeight;
 }
 
-f32 dTextBox_c::GetUnkWidthRatio() const {
+f32 dTextBox_c::getLineDrawWidth() const {
     return GetLineWidth(nullptr) / dGfx_c::get16x9to4x3WidthScaleF();
 }
 

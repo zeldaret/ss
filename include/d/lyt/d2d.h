@@ -73,10 +73,10 @@ public:
     }
 
 protected:
-    Layout_c mLayout;
-    nw4r::lyt::DrawInfo mDrawInfo;
-    m2d::ResAccIf_c *mpResAcc;
-    u32 mFlags;
+    /* 0x10 */ Layout_c mLayout;
+    /* 0x30 */ nw4r::lyt::DrawInfo mDrawInfo;
+    /* 0x84 */ m2d::ResAccIf_c *mpResAcc;
+    /* 0x88 */ u32 mFlags;
 };
 
 /**
@@ -250,6 +250,10 @@ struct AnmGroupBase_c {
 
     inline f32 getRate() const {
         return mpFrameCtrl->getRate();
+    }
+
+    inline bool isBound() const {
+        return (mFlags & ANMGROUP_FLAG_BOUND) != 0;
     }
 
     inline bool isEnabled() const {
