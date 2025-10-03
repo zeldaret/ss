@@ -24,20 +24,44 @@ public:
         return sInstance;
     }
 
-    const mVec3_c &getField_0x00() const {
-        return field_0x00;
+    const mVec3_c &getMapScroll() const {
+        return mMapScroll;
+    }
+
+    void setMapScroll(const mVec3_c &v) {
+        mMapScroll = v;
+    }
+
+    void setField_0x0C(const mVec2_c &v) {
+        field_0x0C = v;
     }
 
     const mVec2_c &getField_0x20() const {
         return field_0x20;
     }
 
+    void setField_0x20(const mVec2_c &v) {
+        field_0x20 = v;
+    }
+
     void setField_0x28(const mVec2_c &v) {
         field_0x28 = v;
     }
 
+    void setMapRotationCenter(const mVec3_c &v) {
+        mMapRotationCenter = v;
+    }
+
     const mVec3_c &getMapRotationCenter() const {
         return mMapRotationCenter;
+    }
+
+    const mAng &getMapRotation() const {
+        return mMapRotation;
+    }
+
+    void setMapRotation(const mAng &rot) {
+        mMapRotation = rot;
     }
 
     const mVec3_c &getPlayerPos() const {
@@ -64,8 +88,20 @@ public:
         return mZoomFrame;
     }
 
+    void setZoomFrame(f32 v) {
+        mZoomFrame = v;
+    }
+
+    void setField_0x58(f32 v) {
+        field_0x58 = v;
+    }
+
     f32 getField_0x44() const {
         return field_0x44;
+    }
+
+    void setField_0x44(f32 v) {
+        field_0x44 = v;
     }
 
     s32 getFloor() const {
@@ -85,16 +121,16 @@ private:
     static dLytMapGlobal_c *sInstance;
 
     void projectOntoMap(
-        mVec2_c &result, const mVec3_c &position, const mVec3_c &v1, const mVec3_c &mapRotationCenter, const mAng &rot,
-        f32 f1, f32 f2
+        mVec2_c &result, const mVec3_c &position, const mVec3_c &mapScroll, const mVec3_c &mapRotationCenter,
+        const mAng &rot, f32 f1, f32 f2
     ) const;
 
     void unprojectFromMap(
-        mVec3_c &result, const mVec2_c &position, const mVec2_c &v1, const mVec3_c &v2,
+        mVec3_c &result, const mVec2_c &position, const mVec2_c &v1, const mVec3_c &mapScroll,
         const mVec3_c &mapRotationCenter, const mAng &rot, f32 f1, f32 f2
     ) const;
 
-    /* 0x00 */ mVec3_c field_0x00;
+    /* 0x00 */ mVec3_c mMapScroll;
     /* 0x0C */ mVec2_c field_0x0C;
     /* 0x14 */ mVec3_c mMapRotationCenter;
     /* 0x20 */ mVec2_c field_0x20;
@@ -111,7 +147,7 @@ private:
     /* 0x50 */ UNKWORD field_0x50;
     /* 0x54 */ u8 _0x54[0x56 - 0x54];
     /* 0x56 */ mAng field_0x56;
-    /* 0x58 */ u8 _0x58[0x5C - 0x58];
+    /* 0x58 */ f32 field_0x58;
     /* 0x5C */ s32 mCurrentMapMode;
     /* 0x60 */ s32 mNextMapMode;
     /* 0x64 */ f32 mZoomFrame; ///< 0.0f when zoomed out, 1.0f when zoomed in

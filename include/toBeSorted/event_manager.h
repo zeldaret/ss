@@ -19,6 +19,8 @@ public:
     static bool canSkipCurrentEvent();
     static dAcBase_c *getMainActorInEvent();
 
+    static void execute();
+
     static EventManager *sInstance;
 
     static bool isInEvent() {

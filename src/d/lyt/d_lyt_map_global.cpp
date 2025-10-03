@@ -5,7 +5,7 @@
 dLytMapGlobal_c *dLytMapGlobal_c::sInstance;
 
 dLytMapGlobal_c::dLytMapGlobal_c()
-    : field_0x00(0.0f, 0.0f, 0.0f),
+    : mMapScroll(0.0f, 0.0f, 0.0f),
       field_0x0C(0.0f, 0.0f),
       mMapRotationCenter(0.0f, 0.0f, 0.0f),
       field_0x20(0.0f, 0.0f),
@@ -23,7 +23,7 @@ dLytMapGlobal_c::dLytMapGlobal_c()
 }
 
 void dLytMapGlobal_c::projectOntoMap(
-    mVec2_c &result, const mVec3_c &position, const mVec3_c &v1, const mVec3_c &mapRotationCenter, const mAng &rot,
+    mVec2_c &result, const mVec3_c &position, const mVec3_c &mapScroll, const mVec3_c &mapRotationCenter, const mAng &rot,
     f32 f1, f32 f2
 ) const {
     // Initializing like this fixes regswaps, even if it's not needed...
@@ -34,8 +34,8 @@ void dLytMapGlobal_c::projectOntoMap(
     work.y = 0.0f;
     work.rotY(-rot);
 
-    work.x += mapRotationCenter.x - v1.x;
-    work.z += mapRotationCenter.z - v1.z;
+    work.x += mapRotationCenter.x - mapScroll.x;
+    work.z += mapRotationCenter.z - mapScroll.z;
 
     work.x *= f2 * f1;
     work.z *= f2 * f1;
@@ -46,17 +46,17 @@ void dLytMapGlobal_c::projectOntoMap(
 }
 
 void dLytMapGlobal_c::projectOntoMap(mVec2_c &result, const mVec3_c &position) const {
-    projectOntoMap(result, position, field_0x00, mMapRotationCenter, mMapRotation, field_0x44, field_0x40);
+    projectOntoMap(result, position, mMapScroll, mMapRotationCenter, mMapRotation, field_0x44, field_0x40);
 }
 
 void dLytMapGlobal_c::unprojectFromMap(mVec3_c &result, const mVec2_c &position) const {
     unprojectFromMap(
-        result, position, field_0x20, field_0x00, mMapRotationCenter, mMapRotation, field_0x44, field_0x40
+        result, position, field_0x20, mMapScroll, mMapRotationCenter, mMapRotation, field_0x44, field_0x40
     );
 }
 
 void dLytMapGlobal_c::unprojectFromMap(mVec3_c &result, const mVec2_c &position, const mAng &rot) const {
-    unprojectFromMap(result, position, field_0x20, field_0x00, mMapRotationCenter, rot, field_0x44, field_0x40);
+    unprojectFromMap(result, position, field_0x20, mMapScroll, mMapRotationCenter, rot, field_0x44, field_0x40);
 }
 
 void dLytMapGlobal_c::unprojectFromMap(mVec3_c &result, const mVec2_c &position, const mVec3_c &v2, const mAng &rot)
@@ -65,7 +65,7 @@ void dLytMapGlobal_c::unprojectFromMap(mVec3_c &result, const mVec2_c &position,
 }
 
 void dLytMapGlobal_c::unprojectFromMap(
-    mVec3_c &result, const mVec2_c &position, const mVec2_c &v1, const mVec3_c &v2, const mVec3_c &mapRotationCenter,
+    mVec3_c &result, const mVec2_c &position, const mVec2_c &v1, const mVec3_c &mapScroll, const mVec3_c &mapRotationCenter,
     const mAng &rot, f32 f1, f32 f2
 ) const {
     mVec3_c work(0.0f, 0.0f, 0.0f);
@@ -77,7 +77,7 @@ void dLytMapGlobal_c::unprojectFromMap(
     work.x = diff.x * tmp * (1.0f / field_0x28.x);
     work.z = -diff.y * tmp;
 
-    work = work + v2;
+    work = work + mapScroll;
 
     work = work - mapRotationCenter;
     work.rotY(rot);

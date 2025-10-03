@@ -2,13 +2,13 @@
 #define D_LYT_MAP_CAPTURE_H
 
 #include "common.h"
+#include "nw4r/lyt/lyt_picture.h"
 #include "s/s_State.hpp"
 #include "s/s_StateID.hpp"
 
 class dLytMapCapture_c {
 public:
-    dLytMapCapture_c() :mStateMgr(*this, sStateID::null) {
-        field_0x040 = 0;
+    dLytMapCapture_c() :mStateMgr(*this, sStateID::null), mpPicture(nullptr) {
         field_0x070 = 0.0f;
         field_0x074 = 0.0f;
         mRenderRequest = false;
@@ -23,11 +23,21 @@ public:
     STATE_FUNC_DECLARE(dLytMapCapture_c, RenderingWait);
     STATE_FUNC_DECLARE(dLytMapCapture_c, RenderingWaitStep2);
 
+    void renderRequest() {
+        mRenderRequest = true;
+    }
+
+    void setPicture(nw4r::lyt::Picture *pic) {
+        mpPicture = pic;
+    }
+
+    bool isBusyRendering() const;
+
 private:
     void fn_8012D6F0();
 
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMapCapture_c);
-    /* 0x040 */ UNKWORD field_0x040;
+    /* 0x040 */ nw4r::lyt::Picture *mpPicture;
     /* 0x044 */ u8 _0x040[0x064 - 0x044];
     /* 0x064 */ f32 field_0x064;
     /* 0x068 */ f32 field_0x068;

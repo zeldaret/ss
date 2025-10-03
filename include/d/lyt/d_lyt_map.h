@@ -7,11 +7,14 @@
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_map_capture.h"
 #include "d/lyt/d_lyt_map_global.h"
+#include "d/lyt/d_textbox.h"
+#include "d/lyt/d_window.h"
 #include "egg/core/eggColorFader.h"
 #include "m/m2d.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_bounding.h"
+#include "nw4r/lyt/lyt_group.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/d_flow_mgr.h"
@@ -29,7 +32,7 @@ struct dMapSaveObjDefinition {
 /** Something for making sure re-opening the map opens it in a similar state as when it was last closed */
 struct dMapSavedDataEntry {
     /* 0x00 */ s32 mapMode;
-    /* 0x04 */ u8 mapUpDirection;
+    /* 0x04 */ bool mapUpDirection;
     /* 0x05 */ u8 field_0x05;
     /* 0x06 */ u8 field_0x06;
 };
@@ -342,6 +345,7 @@ private:
 
 // Size 0x4C
 class dLytMapPopupInfo_c {
+    friend class dLytMapMain_c;
 public:
     dLytMapPopupInfo_c() : mStateMgr(*this, sStateID::null) {}
 
@@ -464,12 +468,15 @@ private:
 };
 
 // TODO, name made up
-class dLytMapDecoration_c {
+class dLytMapDecoration_c : public m2d::Base_c {
 public:
     dLytMapDecoration_c() {}
     virtual ~dLytMapDecoration_c() {}
+    virtual void draw() override;
+    virtual void build(d2d::ResAccIf_c *resAcc);
 
     void setIslandNamesOn(bool on);
+    void fn_80189B90();
 };
 
 /** 2D UI - Map - beacon preview icon following the cursor */
@@ -563,6 +570,14 @@ private:
     f32 fn_80142D90(s32);
     void fn_80142F00(mVec3_c &, s32 mapMode, u8, const mVec3_c &, const mAng &);
     void fn_8013FB70(const mVec3_c &, f32);
+    bool fn_80141530() const;
+    bool fn_80142D10(s32, bool, mAng &);
+    void fn_80143060(mVec3_c &, const mVec3_c &, const mVec3_c &, const mAng &);
+    void fn_80140B90();
+    void fn_80143300();
+    void fn_80143120(s32);
+    void fn_80138D80();
+    bool shouldDrawFootprints() const;
 
     void zoomOut();
     void zoomIn();
@@ -576,10 +591,14 @@ private:
     static dMapSavedData sSavedMapData;
     static const dMapSavedData sDefaultMapData;
 
+    bool isSomeFieldEq0Or1Or7Or9Or11() const {
+        return field_0x8C94 == 0 || field_0x8C94 == 1 || field_0x8C94 == 7 || field_0x8C94 == 9 || field_0x8C94 == 11;
+    }
+
     /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMapMain_c);
     /* 0x004C */ dFlowMgrBase_c mFlowMgr;
     /* 0x00A4 */ dFlow_c mFlow;
-    /* 0x0108 */ u8 _0x0108[0x010C - 0x0108];
+    /* 0x0108 */ UNKWORD field_0x0108;
     /* 0x010C */ d2d::LytBase_c mLyt;
     /* 0x019C */ d2d::AnmGroup_c mAnmGroups[54];
     /* 0x0F1C */ LytMap0x80520B5C field_0xF1C;
@@ -589,7 +608,7 @@ private:
 
     /* 0x2060 */ dLytMapDecoration_c field_0x2060;
 
-    /* 0x2064 */ u8 _0x2064[0x64C0 - 0x2064];
+    /* 0x2070 */ u8 _0x2070[0x64C0 - 0x2070];
 
     /* 0x64C0 */ dLytMapFootPrints_c mFootPrints;
 
@@ -598,23 +617,39 @@ private:
     /* 0x79C4 */ dLytMapSaveCaption_c mSaveCaption;
     /* 0x7BD0 */ dLytMapSavePopup_c mSavePopup;
     /* 0x807C */ dLytMapPopupInfo_c mPopupInfo;
-
-    /* 0x8208 */ u8 _0x8208[0x821C - 0x8208];
-
+    /* 0x8208 */ dTextBox_c *mpNumberTextBox;
+    /* 0x820C */ dTextBox_c *mpNumberTextBoxS;
+    /* 0x8210 */ nw4r::lyt::Pane *mpNoroshiPane;
+    /* 0x8214 */ nw4r::lyt::Pane *mpScaleFlamePane;
+    /* 0x8218 */ dWindow_c *mpWakuWindow;
     /* 0x821C */ nw4r::lyt::Bounding *field_0x821C[10];
     /* 0x8244 */ nw4r::lyt::Bounding *field_0x8244[6];
     /* 0x825C */ nw4r::lyt::Bounding *field_0x825C[12];
     /* 0x828C */ mVec3_c field_0x828C[12];
 
-    /* 0x831C */ u8 _0x831C[0x832C - 0x831C];
+    /* 0x831C */ u8 _0x831C[0x8328 - 0x831C];
+
+    /* 0x8328 */ d2d::AnmGroup_c *mpOutAnmGroup;
 
     // TODO - it appears the map abuses these hit check things
     // to calculate Lyt bounding boxes, and it stores the
     // results in 0x8948...
-    /* 0x832C */ dCursorHitCheckLyt_c field_0x832C[33];
+    /* 0x832C */ dCursorHitCheckLyt_c mHitChecks[33];
 
-    /* 0x8854 */ u8 _0x8854[0x8904 - 0x8854];
+    /* 0x8854 */ nw4r::lyt::Pane *mpPanes[11];
 
+    /* 0x8880 */ u8 _0x8880[0x88B0 - 0x8880];
+
+    /* 0x88B0 */ nw4r::lyt::Pane *mpUnkPanes1[7];
+    /* 0x88CC */ nw4r::lyt::Pane *mpUnkPanes2[7];
+    
+    /* 0x88E8 */ nw4r::lyt::Pane *mpPaneBgAll01;
+    /* 0x88EC */ nw4r::lyt::Pane *mpPaneBgAll02;
+    /* 0x88F0 */ nw4r::lyt::Pane *mpPaneAll01;
+    /* 0x88F4 */ nw4r::lyt::Pane *mpPaneAll02;
+    /* 0x88F8 */ nw4r::lyt::Pane *mpPaneRotate00;
+    /* 0x88FC */ nw4r::lyt::Pane *mpPaneRotate01;
+    /* 0x8900 */ nw4r::lyt::Pane *mpAllPane;
     /* 0x8904 */ mVec3_c field_0x8904;
     /* 0x8910 */ mVec3_c field_0x8910;
     /* 0x891C */ mVec3_c field_0x891C;
@@ -627,13 +662,15 @@ private:
     /* 0x8C60 */ s32 mMaxBeaconCount;
     /* 0x8C64 */ s32 field_0x8C64;
     /* 0x8C68 */ s32 field_0x8C68;
-
     /* 0x8C6C */ UNKWORD field_0x8C6C;
+    /* 0x8C70 */ u32 field_0x8C70;
 
-    /* 0x8C70 */ u8 _0x8C70[0x8C90 - 0x8C70];
+    /* 0x8C74 */ u8 _0x8C74[0x8C88 - 0x8C74];
 
-    /* 0x8C90 */ u8 field_0x8C90;
-    /* 0x8C91 */ u8 field_0x8C91;
+    /* 0x8C88 */ f32 field_0x8C88;
+    /* 0x8C8C */ f32 field_0x8C8C;
+    /* 0x8C90 */ bool mMapUpDirection;
+    /* 0x8C91 */ bool mNextMapUpDirection;
     /* 0x8C92 */ u8 field_0x8C92;
     /* 0x8C93 */ u8 field_0x8C93;
     /* 0x8C94 */ s32 field_0x8C94;
@@ -642,12 +679,13 @@ private:
 
     /* 0x8CA0 */ u8 _0x8CA0[0x8CA4 - 0x8CA0];
 
-    /* 0x8CA4 */ s32 field_0x8CA4;
-    /* 0x8CA8 */ s32 field_0x8CA8;
+    /* 0x8CA4 */ s32 mCurrentMapMode;
+    /* 0x8CA8 */ s32 mNextMapMode;
 
     /* 0x8CAC */ u8 field_0x8CAC;
+    /* 0x8CAD */ u8 field_0x8CAD;
 
-    /* 0x8CAD */ u8 _0x8CAC[0x8CBC - 0x8CAD];
+    /* 0x8CAE */ u8 _0x8CAE[0x8CBC - 0x8CAE];
 
     /* 0x8CBC */ nw4r::lyt::Bounding *mpMapBounding;
     /* 0x8CC0 */ bool field_0x8CC0;
@@ -657,8 +695,8 @@ private:
     /* 0x8CDC */ mVec3_c field_0x8CDC;
     /* 0x8CE8 */ mVec3_c field_0x8CE8;
     /* 0x8CF4 */ mVec3_c field_0x8CF4;
-    /* 0x8D00 */ mVec3_c field_0x8D00;
-    /* 0x8D0C */ mVec3_c field_0x8D0C;
+    /* 0x8D00 */ mVec3_c mMapScroll;
+    /* 0x8D0C */ mVec3_c mPlayerPos;
     /* 0x8D18 */ mVec3_c field_0x8D18;
     /* 0x8D24 */ mVec3_c field_0x8D24;
     /* 0x8D30 */ mVec2_c field_0x8D30;
@@ -679,13 +717,13 @@ private:
     /* 0x8D6B */ u8 field_0x8D6B;
     /* 0x8D6C */ UNKWORD field_0x8D6C;
     /* 0x8D70 */ UNKWORD field_0x8D70;
-    /* 0x8D74 */ u8 _0x8D74[0x8D78 - 0x8D74];
+    /* 0x8D74 */ nw4r::lyt::Pane *mpZoomInOutPane;
     /* 0x8D78 */ f32 field_0x8D78;
     /* 0x8D7C */ f32 field_0x8D7C;
     /* 0x8D80 */ f32 field_0x8D80;
     /* 0x8D84 */ f32 field_0x8D84;
     /* 0x8D88 */ f32 field_0x8D88;
-    /* 0x8D8C */ u8 _0x8D8C[0x8D94 - 0x8D8C];
+    /* 0x8D8C */ nw4r::lyt::Group *mpPriorityGroups[2];
     /* 0x8D94 */ d2d::SubPaneList mSubpaneList;
     /* 0x8DA0 */ d2d::SubPaneListNode mSubpane;
     /* 0x8DB0 */ UNKWORD field_0x8DB0;
