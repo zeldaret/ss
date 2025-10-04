@@ -288,7 +288,7 @@ private:
     /* 0x0E34 */ dLytCommonIconItem_c mItemIcons[9];
     /* 0x567C */ d2d::SubPaneList mSubpaneList;
     /* 0x5688 */ d2d::SubPaneListNode mSubpanes[9];
-    /* 0x5718 */ EffectsStruct mEffects;
+    /* 0x5718 */ dEmitter_c mEffects;
 
     /* 0x574C */ InternalItem_e field_0x574C;
     /* 0x5750 */ InternalItem_e field_0x5750;

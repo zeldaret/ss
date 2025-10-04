@@ -140,7 +140,7 @@ private:
     /* 0x9B0 */ STATE_MGR_DECLARE(dAcEsm_c);
     /* 0x9EC */ dAcRef_c<dAcBomb_c> mBombRef;
     /* 0x9F8 */ dJntCol_c mJntCol;
-    /* 0xA0C */ EffectsStruct mEffArr[2];
+    /* 0xA0C */ dEmitter_c mEffArr[2];
     /* 0xA74 */ TimeAreaStruct mTimeArea;
     /* 0xA80 */ mVec3_c mPosCopy1;
     /* 0xA8C */ mVec3_c mScaleTarget;
