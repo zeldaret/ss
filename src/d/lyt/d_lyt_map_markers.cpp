@@ -827,13 +827,12 @@ void dLytMapIcon01_c::draw() {
     // Maybe compiler-generated
     u8 *idxes = mPassIdxes;
     for (int pass = 0; pass < 35; pass++, idxes++) {
-        u8 idx = *idxes;
+        s32 idx = *idxes;
         if (mNumCommandsPerPass[idx]) {
             for (int cmd = 0; cmd < mNumCommands; cmd++) {
                 // Maybe compiler-generated
                 const mAng &commandRot = mCommands[cmd].rotation;
-                // Suspicious cast
-                if (idx == (int)mCommands[cmd].passIdx) {
+                if (idx == mCommands[cmd].passIdx) {
                     s32 paneIdx = mCommands[cmd].paneIdx;
                     nw4r::lyt::Pane *pane = mpPanes[paneIdx];
                     switch (paneIdx) {
