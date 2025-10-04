@@ -9,6 +9,7 @@
 #include "d/lyt/d_lyt_map_global.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/d_window.h"
+#include "d/lyt/d_lyt_map_markers.h"
 #include "egg/core/eggColorFader.h"
 #include "m/m2d.h"
 #include "m/m_angle.h"
@@ -467,17 +468,6 @@ private:
     /* 0x18E */ bool mDecideFinished;
 };
 
-// TODO, name made up
-class dLytMapDecoration_c : public m2d::Base_c {
-public:
-    dLytMapDecoration_c() {}
-    virtual ~dLytMapDecoration_c() {}
-    virtual void draw() override;
-    virtual void build(d2d::ResAccIf_c *resAcc);
-
-    void setIslandNamesOn(bool on);
-    void fn_80189B90();
-};
 
 /** 2D UI - Map - beacon preview icon following the cursor */
 class dLytMapPutIcon_c {
@@ -605,10 +595,9 @@ private:
     /* 0x0F24 */ dLytMapCapture_c mMapCapture;
     /* 0x0FA0 */ dLytMapFloorBtnMgr_c mFloorBtnMgr;
     /* 0x16B4 */ dLytMapPinIconAggregate_c mPinIconAggregate;
+    /* 0x2060 */ dLytMapMarkers_c mMarkers;
 
-    /* 0x2060 */ dLytMapDecoration_c field_0x2060;
-
-    /* 0x2070 */ u8 _0x2070[0x64C0 - 0x2070];
+    /* 0x5F54 */ u8 _0x5F54[0x64C0 - 0x5F54];
 
     /* 0x64C0 */ dLytMapFootPrints_c mFootPrints;
 

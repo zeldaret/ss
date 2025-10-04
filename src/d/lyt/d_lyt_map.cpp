@@ -2207,7 +2207,7 @@ void dLytMapMain_c::build() {
 
     d2d::dSubPane::linkMeters(mLyt.getLayout()->GetGroupContainer()->FindGroupByName(sGroupName), &mSubpaneList);
     mFootPrints.build(resAcc);
-    field_0x2060.build(resAcc);
+    mMarkers.build(resAcc);
 
     mPinIconAggregate.build(resAcc);
     mPutIcon.build(resAcc);
@@ -2295,8 +2295,7 @@ void dLytMapMain_c::build() {
         mpPriorityGroups[i] = mLyt.findGroupByName(sPriorityGroupNames[i]);
     }
 
-    // TODO
-    ((mVec2_c*)(_0x2070 + 0x6E4))->set(boundingPos2.x, boundingPos2.y);
+    mMarkers.setField_0x6F4(boundingPos2);
     
     mPinIconAggregate.setUnk(&field_0xF1C);
 
@@ -2346,7 +2345,7 @@ void dLytMapMain_c::draw() {
     }
 
     if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE || mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM || mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE || mNextMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
-        field_0x2060.draw();
+        mMarkers.draw();
     }
 
     if (field_0x8C68 != 3 && field_0x8C68 != 5 && field_0x8C94 != 2) {
@@ -2367,7 +2366,7 @@ void dLytMapMain_c::draw() {
         fn_80138D80();
     }
     fn_80143120(-2);
-    field_0x2060.fn_80189B90();
+    mMarkers.fn_80189B90();
     mPutIcon.draw();
     if (field_0x8C94 == 10) {
         mPopupInfo.draw();
@@ -2448,7 +2447,7 @@ void dLytMapMain_c::executeState_Active() {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ISLAND_NAME_ON);
         }
         mIslandNamesOn = !mIslandNamesOn;
-        field_0x2060.setIslandNamesOn(mIslandNamesOn);
+        mMarkers.setIslandNamesOn(mIslandNamesOn);
     }
     checkScroll();
 
@@ -2713,10 +2712,10 @@ void dLytMapMain_c::initializeState_ChgDispAreaMode_MapRot() {
         mAnmGroups[MAP_MAIN_ANIM_ROTATE].setToEnd();
     }
     if (mNextMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
-        field_0x2060.setIslandNamesOn(false);
+        mMarkers.setIslandNamesOn(false);
     }
     if (mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
-        field_0x2060.setIslandNamesOn(mIslandNamesOn);
+        mMarkers.setIslandNamesOn(mIslandNamesOn);
     }
 
     if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM && mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {

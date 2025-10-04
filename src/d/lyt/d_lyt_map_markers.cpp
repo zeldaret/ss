@@ -1,10 +1,38 @@
 #include "d/lyt/d_lyt_map_markers.h"
 
 #include "common.h"
+#include "d/a/d_a_base.h"
+#include "d/a/d_a_player.h"
+#include "d/a/obj/d_a_obj_tbox.h"
+#include "d/d_cursor_hit_check.h"
 #include "d/d_message.h"
+#include "d/d_player.h"
+#include "d/d_player_act.h"
+#include "d/d_sc_game.h"
+#include "d/d_stage.h"
+#include "d/flag/dungeonflag_manager.h"
+#include "d/flag/storyflag_manager.h"
+#include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_map_global.h"
 #include "d/lyt/d_window.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "m/m_vec.h"
+#include "nw4r/lyt/lyt_bounding.h"
+#include "nw4r/lyt/lyt_pane.h"
+#include "nw4r/lyt/lyt_types.h"
+
+inline mVec3_c vec2ToVec3XY(const mVec2_c &v) {
+    return mVec3_c(v.x, v.y, 0.0f);
+}
+
+static bool checkHasMap() {
+    return DungeonflagManager::sInstance->getCounterOrFlag(2, 8);
+}
+
+static bool projectOntoMap(const mVec3_c &position, mVec2_c &result) {
+    dLytMapGlobal_c::GetInstance()->projectOntoMap(result, position);
+    return true;
+}
 
 static const d2d::LytBrlanMapping brlanMapMapPopup[] = {
     {"mapPopup_00_scale.brlan", "G_scale_00"},
@@ -213,5 +241,994 @@ void dLytMapPopup_c::checkMapMode() {
     if (current == next && current == dLytMapGlobal_c::MAPMODE_ZOOM) {
         mModeCheckResult = MODE_STABLE_ZOOM;
         return;
+    }
+}
+
+static const d2d::LytBrlanMapping brlanMapMapPlace[] = {
+    {   "mapPlace_00_in.brlan", "G_inOut_00"},
+    {"mapPlace_00_scale.brlan", "G_scale_00"},
+    {"mapPlace_00_color.brlan", "G_color_00"},
+};
+
+#define MAP_PLACE_ANIM_IN 0
+#define MAP_PLACE_ANIM_SCALE 1
+#define MAP_PLACE_ANIM_COLOR 2
+
+#define MAP_PLACE_NUM_ANIMS 3
+
+static const char *sMapPlacePaneNames[] = {
+    "N_all_00",
+    "N_all_01",
+};
+
+#define MAP_PLACE_PANE_ALL_00 0
+#define MAP_PLACE_PANE_ALL_01 1
+#define MAP_PLACE_NUM_PANES 2
+
+static const char *sMapPlaceBgPaneNames[] = {
+    "P_bg_00",
+    "P_bg_01",
+    "P_bg_02",
+};
+
+#define MAP_PLACE_PANE_BG_00 0
+#define MAP_PLACE_PANE_BG_01 1
+#define MAP_PLACE_PANE_BG_02 2
+#define MAP_PLACE_NUM_BG_PANES 3
+
+static const char *sMapPlaceTextboxNames[] = {
+    "T_area_00",
+    "T_areaS_00",
+    "T_areaS_01",
+};
+
+#define MAP_PLACE_NUM_TEXTBOXES 3
+
+static const char *sMapPlaceSizeBoxNames[] = {"W_bgP_00"};
+
+bool dLytMapPlace_c::build(d2d::ResAccIf_c *resAcc) {
+    mLyt.setResAcc(resAcc);
+    mLyt.build("mapPlace_00.brlyt", nullptr);
+
+    for (int i = 0; i < MAP_PLACE_NUM_ANIMS; i++) {
+        mAnm[i].init(brlanMapMapPlace[i].mFile, resAcc, mLyt.getLayout(), brlanMapMapPlace[i].mName);
+        mAnm[i].bind(false);
+        mAnm[i].setRate(1.0f);
+        mAnm[i].setAnimEnable(false);
+    }
+
+    for (int i = 0; i < MAP_PLACE_NUM_PANES; i++) {
+        mpPanes[i] = mLyt.findPane(sMapPlacePaneNames[i]);
+    }
+
+    for (int i = 0; i < MAP_PLACE_NUM_BG_PANES; i++) {
+        mpBgPanes[i] = mLyt.findPane(sMapPlaceBgPaneNames[i]);
+    }
+
+    for (int i = 0; i < MAP_PLACE_NUM_TEXTBOXES; i++) {
+        mpTextboxes[i] = mLyt.getTextBox(sMapPlaceTextboxNames[i]);
+    }
+
+    for (int i = 0; i < 1; i++) {
+        mpWindow[i] = mLyt.getWindow(sMapPlaceSizeBoxNames[i]);
+        mpSizeBox[i] = mLyt.getSizeBoxInWindow(sMapPlaceSizeBoxNames[i]);
+    }
+
+    realizeText();
+
+    f32 windowWidth = mpWindow[0]->GetSize().width;
+    f32 w1 = mpBgPanes[0]->GetSize().width;
+    f32 w2 = mpBgPanes[1]->GetSize().width;
+    f32 w3 = mpBgPanes[2]->GetSize().width;
+
+    f32 lineWidth = mpTextboxes[0]->GetLineWidth(nullptr);
+
+    f32 bgWidth = (w1 + w2 + w3);
+    field_0x1C4 = windowWidth - lineWidth;
+    field_0x1C0 = windowWidth - bgWidth;
+
+    realizeTextSize();
+    realizeBgSize();
+    setInitialState();
+
+    mMaxScale = mAnm[MAP_PLACE_ANIM_SCALE].getLastFrame();
+
+    return true;
+}
+
+bool dLytMapPlace_c::remove() {
+    for (int i = 0; i < MAP_PLACE_NUM_ANIMS; i++) {
+        mAnm[i].unbind();
+        mAnm[i].remove();
+    }
+    return true;
+}
+
+bool dLytMapPlace_c::execute() {
+    if (mAnm[MAP_PLACE_ANIM_IN].isEnabled() && mAnm[MAP_PLACE_ANIM_IN].isStop2()) {
+        mAnm[MAP_PLACE_ANIM_IN].setAnimEnable(false);
+    }
+    for (int i = 0; i < MAP_PLACE_NUM_ANIMS; i++) {
+        if (mAnm[i].isEnabled()) {
+            mAnm[i].play();
+        }
+    }
+    mLyt.calc();
+    return true;
+}
+
+void dLytMapPlace_c::draw() {
+    mpPanes[MAP_PLACE_PANE_ALL_00]->SetAlpha(dLytMapGlobal_c::GetInstance()->getAlpha());
+    mpPanes[MAP_PLACE_PANE_ALL_00]->SetTranslate(vec2ToVec3XY(field_0x1C8));
+    mpPanes[MAP_PLACE_PANE_ALL_00]->Animate(0);
+    mpPanes[MAP_PLACE_PANE_ALL_00]->CalculateMtx(mLyt.getDrawInfo());
+    mpPanes[MAP_PLACE_PANE_ALL_00]->Draw(mLyt.getDrawInfo());
+}
+
+void dLytMapPlace_c::setLabel(const char *label) {
+    mLabel = label;
+}
+
+void dLytMapPlace_c::realize() {
+    realizeText();
+    realizeTextSize();
+    realizeBgSize();
+}
+
+void dLytMapPlace_c::setInout(f32 value) {
+    if (/* 0.0f <= value && */ value <= mAnm[MAP_PLACE_ANIM_IN].getLastFrame()) {
+        mAnm[MAP_PLACE_ANIM_IN].setFrame(value);
+        mAnm[MAP_PLACE_ANIM_IN].setAnimEnable(true);
+        mpPanes[MAP_POPUP_PANE_ALL]->Animate(0);
+        mAnm[MAP_PLACE_ANIM_IN].setAnimEnable(false);
+    }
+}
+
+void dLytMapPlace_c::setColor(u32 value) {
+    f32 frame = value;
+    mAnm[MAP_PLACE_ANIM_COLOR].setAnimEnable(true);
+    mAnm[MAP_PLACE_ANIM_COLOR].setFrame(frame);
+    mpPanes[MAP_PLACE_PANE_ALL_00]->Animate(0);
+    mAnm[MAP_PLACE_ANIM_COLOR].setAnimEnable(false);
+}
+
+void dLytMapPlace_c::setInitialState() {
+    mAnm[MAP_PLACE_ANIM_COLOR].setRate(1.0f);
+    mAnm[MAP_PLACE_ANIM_COLOR].setForwardOnce();
+    mAnm[MAP_PLACE_ANIM_COLOR].setToStart();
+    mAnm[MAP_PLACE_ANIM_COLOR].setAnimEnable(true);
+
+    mAnm[MAP_PLACE_ANIM_SCALE].setRate(1.0f);
+    mAnm[MAP_PLACE_ANIM_SCALE].setForwardOnce();
+    mAnm[MAP_PLACE_ANIM_SCALE].setToStart();
+    mAnm[MAP_PLACE_ANIM_SCALE].setAnimEnable(true);
+
+    mAnm[MAP_PLACE_ANIM_IN].setRate(1.0f);
+    mAnm[MAP_PLACE_ANIM_IN].setForwardOnce();
+    mAnm[MAP_PLACE_ANIM_IN].setToEnd2();
+    mAnm[MAP_PLACE_ANIM_IN].setAnimEnable(true);
+
+    mLyt.calc();
+
+    mAnm[MAP_PLACE_ANIM_IN].setAnimEnable(false);
+    mAnm[MAP_PLACE_ANIM_SCALE].setAnimEnable(false);
+    mAnm[MAP_PLACE_ANIM_COLOR].setAnimEnable(false);
+}
+
+void dLytMapPlace_c::updateScale() {
+    // @bug mModeCheckResult is never set
+    f32 frame = 0.0f;
+    f32 zoomFrame = dLytMapGlobal_c::GetInstance()->getZoomFrame();
+
+    switch (mModeCheckResult) {
+        case MODE_TRANSITION_TO_ZOOM:  frame = mMaxScale * zoomFrame; break;
+        case MODE_TRANSITION_TO_STAGE: frame = mMaxScale * zoomFrame; break;
+        case MODE_STABLE_STAGE:        frame = 0.0f; break;
+        case MODE_STABLE_ZOOM:         frame = mMaxScale; break;
+    }
+
+    if (mMaxScale < frame) {
+        frame = mMaxScale;
+    } else if (frame < 0.0f) {
+        frame = 0.0f;
+    }
+
+    mAnm[MAP_PLACE_ANIM_SCALE].setAnimEnable(true);
+    mAnm[MAP_PLACE_ANIM_SCALE].setFrame(frame);
+    mpPanes[MAP_PLACE_PANE_ALL_01]->Animate(0);
+    mAnm[MAP_PLACE_ANIM_SCALE].setAnimEnable(false);
+}
+
+void dLytMapPlace_c::realizeText() {
+    const wchar_t *text = dMessage_c::getTextMessageByLabel(mLabel, true, nullptr, 0);
+    if (text != nullptr) {
+        for (int i = 0; i < MAP_PLACE_NUM_TEXTBOXES; i++) {
+            mpTextboxes[i]->setTextWithGlobalTextProcessor(text);
+        }
+    }
+}
+
+void dLytMapPlace_c::realizeTextSize() {
+    const wchar_t *text = dMessage_c::getTextMessageByLabel(mLabel, true, nullptr, 0);
+    if (text != nullptr) {
+        mpWindow[0]->UpdateSize(mpSizeBox[0], 0.0f);
+        nw4r::lyt::Size size(mpWindow[0]->GetSize());
+        size.width += field_0x1C4;
+        mpWindow[0]->SetSize(size);
+    }
+}
+
+static const d2d::LytBrlanMapping brlanMapMapIcon01[] = {
+    { "mapIcon_01_player2pattern.brlan",    "G_2pattern_00"},
+    {     "mapIcon_01_playerLoop.brlan",  "G_playerLoop_00"},
+    {          "mapIcon_01_scale.brlan",       "G_scale_00"},
+    {       "mapIcon_01_nusiAnim.brlan",    "G_nusiLoop_00"},
+    {       "mapIcon_01_areaLoop.brlan",    "G_areaLoop_00"},
+    {      "mapIcon_01_areaColor.brlan",   "G_areaColor_00"},
+    {      "mapIcon_01_cloudLoop.brlan",  "G_cloudBLoop_00"},
+    {     "mapIcon_01_cloudAlpha.brlan", "G_cloudBAlpha_00"},
+    {           "mapIcon_01_loop.brlan",        "G_loop_00"},
+    {   "mapIcon_01_goddessOnOff.brlan",     "G_goddess_00"},
+    {"mapIcon_01_saveObjectColor.brlan",   "G_saveColor_00"},
+    {        "mapIcon_01_iconOut.brlan",   "G_tresInOut_00"},
+    {        "mapIcon_01_iconOut.brlan",   "G_markInOut_00"},
+    {         "mapIcon_01_iconIn.brlan",   "G_tresInOut_00"},
+    {         "mapIcon_01_iconIn.brlan",   "G_markInOut_00"},
+    {         "mapIcon_01_iconIn.brlan",   "G_doorInOut_00"},
+    {         "mapIcon_01_iconIn.brlan",   "G_saveInOut_00"},
+    {         "mapIcon_01_iconIn.brlan",  "G_forceInOut_00"},
+};
+
+#define MAP_ICON_01_ANIM_PLAYER_2_PATTERN 0
+#define MAP_ICON_01_ANIM_PLAYER_LOOP 1
+#define MAP_ICON_01_ANIM_SCALE 2
+#define MAP_ICON_01_ANIM_NUSI_ANIM 3
+#define MAP_ICON_01_ANIM_AREA_LOOP 4
+#define MAP_ICON_01_ANIM_AREA_COLOR 5
+#define MAP_ICON_01_ANIM_CLOUD_LOOP 6
+#define MAP_ICON_01_ANIM_CLOUD_ALPHA 7
+#define MAP_ICON_01_ANIM_LOOP 8
+#define MAP_ICON_01_ANIM_GODDESS_ON_OFF 9
+#define MAP_ICON_01_ANIM_SAVE_OBJECT_COLOR 10
+#define MAP_ICON_01_ANIM_TRES_OUT 11
+#define MAP_ICON_01_ANIM_MARK_OUT 12
+#define MAP_ICON_01_ANIM_TRES_IN 13
+#define MAP_ICON_01_ANIM_MARK_IN 14
+#define MAP_ICON_01_ANIM_DOOR_IN 15
+#define MAP_ICON_01_ANIM_SAVE_IN 16
+#define MAP_ICON_01_ANIM_FORCE_IN 17
+#define MAP_ICON_01_NUM_ANIMS 18
+
+static const char *sPaneNamesIcon01[] = {
+    "N_treasure_00",  "N_mark_000",     "N_door_000",      "N_saveIcon_00",  "N_triforce_00", "N_player_000",
+    "N_player_01",    "N_start_000",    "N_sword_00",      "N_shizuku_00",   "N_shizuku_01",  "N_goddessC_00",
+    "N_terryShop_00", "N_cloudBig_000", "N_treasure_01",   "N_areaLight_00", "N_nusi_00",     "N_doorKey_00",
+    "N_target_00",    "N_mushi_00",     "N_seekerIcon_00", "N_doddess_00",   "N_domitory_00", "N_shop_00",
+    "N_mHusband_00",  "N_mWife_00",     "N_tool_00",       "N_keep_00",      "N_junk_00",     "N_fortune_00",
+    "N_ruletou_000",  "N_pampkin_000",  "N_tery_000",      "N_tikurin_000",  "N_uta_000",     "N_musi_000",
+    "N_skyloft_000",  "N_roulette_00",  "N_takegiri_00",   "N_kobunB_00",    "N_sebasun_00",  "N_commonIcon_00",
+};
+
+#define MAP_ICON_01_PANE_TREASURE_00 0
+#define MAP_ICON_01_PANE_MARK_000 1
+#define MAP_ICON_01_PANE_DOOR_000 2
+#define MAP_ICON_01_PANE_SAVEICON_00 3
+#define MAP_ICON_01_PANE_TRIFORCE_00 4
+#define MAP_ICON_01_PANE_PLAYER_000 5
+#define MAP_ICON_01_PANE_PLAYER_01 6
+#define MAP_ICON_01_PANE_START_000 7
+#define MAP_ICON_01_PANE_SWORD_00 8
+#define MAP_ICON_01_PANE_SHIZUKU_00 9
+#define MAP_ICON_01_PANE_SHIZUKU_01 10
+#define MAP_ICON_01_PANE_GODDESSC_00 11
+#define MAP_ICON_01_PANE_TERRYSHOP_00 12
+#define MAP_ICON_01_PANE_CLOUDBIG_000 13
+#define MAP_ICON_01_PANE_TREASURE_01 14
+#define MAP_ICON_01_PANE_AREALIGHT_00 15
+#define MAP_ICON_01_PANE_NUSI_00 16
+#define MAP_ICON_01_PANE_DOORKEY_00 17
+#define MAP_ICON_01_PANE_TARGET_00 18
+#define MAP_ICON_01_PANE_MUSHI_00 19
+#define MAP_ICON_01_PANE_SEEKERICON_00 20
+#define MAP_ICON_01_PANE_DODDESS_00 21
+#define MAP_ICON_01_PANE_DOMITORY_00 22
+#define MAP_ICON_01_PANE_SHOP_00 23
+#define MAP_ICON_01_PANE_MHUSBAND_00 24
+#define MAP_ICON_01_PANE_MWIFE_00 25
+#define MAP_ICON_01_PANE_TOOL_00 26
+#define MAP_ICON_01_PANE_KEEP_00 27
+#define MAP_ICON_01_PANE_JUNK_00 28
+#define MAP_ICON_01_PANE_FORTUNE_00 29
+#define MAP_ICON_01_PANE_RULETOU_000 30
+#define MAP_ICON_01_PANE_PAMPKIN_000 31
+#define MAP_ICON_01_PANE_TERY_000 32
+#define MAP_ICON_01_PANE_TIKURIN_000 33
+#define MAP_ICON_01_PANE_UTA_000 34
+#define MAP_ICON_01_PANE_MUSI_000 35
+#define MAP_ICON_01_PANE_SKYLOFT_000 36
+#define MAP_ICON_01_PANE_ROULETTE_00 37
+#define MAP_ICON_01_PANE_TAKEGIRI_00 38
+#define MAP_ICON_01_PANE_KOBUNB_00 39
+#define MAP_ICON_01_PANE_SEBASUN_00 40
+#define MAP_ICON_01_PANE_COMMONICON_00 41
+
+#define MAP_ICON_01_NUM_PANES 42
+
+static const char *sMapIcon01BoundingNames[] = {
+    "B_doddess_00",    "B_domitory_00",    "B_shop_00",       "B_mHusband_00",   "B_mWife_00",      "B_tool_00",
+    "B_keep_00",       "B_junk_00",        "B_fortune_00",    "B_ruletou_00",    "B_pampkin_00",    "B_tery_00",
+    "B_tikurin_00",    "B_uta_01",         "B_musi_01",       "B_skyloft_01",    "B_roulette_00",   "B_takegiri_00",
+    "B_kobunB_00",     "B_sebasun_00",     "B_uta_00",        "B_musi_00",       "B_skyloft_00",    "B_nusi_00",
+    "B_terryShop_00",  "B_seekerStone_00", "B_commonIcon_00", "B_commonIcon_01", "B_commonIcon_02", "B_commonIcon_03",
+    "B_commonIcon_04", "B_commonIcon_05",  "B_commonIcon_06", "B_commonIcon_07", "B_commonIcon_08", "B_commonIcon_09",
+    "B_commonIcon_10", "B_commonIcon_11",  "B_commonIcon_12", "B_commonIcon_13", "B_commonIcon_14", "B_commonIcon_15",
+    "B_commonIcon_16", "B_commonIcon_17",  "B_commonIcon_18", "B_commonIcon_19", "B_commonIcon_20", "B_commonIcon_21",
+    "B_commonIcon_22", "B_commonIcon_23",  "B_commonIcon_24", "B_commonIcon_25", "B_commonIcon_26", "B_commonIcon_27",
+    "B_commonIcon_28", "B_commonIcon_29",  "B_saveIcon_00",   "B_mushi_00",      "B_areaLight_00",
+};
+
+#define MAP_ICON_01_BOUNDING_DODDESS_00 0
+#define MAP_ICON_01_BOUNDING_DOMITORY_00 1
+#define MAP_ICON_01_BOUNDING_SHOP_00 2
+#define MAP_ICON_01_BOUNDING_MHUSBAND_00 3
+#define MAP_ICON_01_BOUNDING_MWIFE_00 4
+#define MAP_ICON_01_BOUNDING_TOOL_00 5
+#define MAP_ICON_01_BOUNDING_KEEP_00 6
+#define MAP_ICON_01_BOUNDING_JUNK_00 7
+#define MAP_ICON_01_BOUNDING_FORTUNE_00 8
+#define MAP_ICON_01_BOUNDING_RULETOU_00 9
+#define MAP_ICON_01_BOUNDING_PAMPKIN_00 10
+#define MAP_ICON_01_BOUNDING_TERY_00 11
+#define MAP_ICON_01_BOUNDING_TIKURIN_00 12
+#define MAP_ICON_01_BOUNDING_UTA_01 13
+#define MAP_ICON_01_BOUNDING_MUSI_01 14
+#define MAP_ICON_01_BOUNDING_SKYLOFT_01 15
+#define MAP_ICON_01_BOUNDING_ROULETTE_00 16
+#define MAP_ICON_01_BOUNDING_TAKEGIRI_00 17
+#define MAP_ICON_01_BOUNDING_KOBUNB_00 18
+#define MAP_ICON_01_BOUNDING_SEBASUN_00 19
+#define MAP_ICON_01_BOUNDING_UTA_00 20
+#define MAP_ICON_01_BOUNDING_MUSI_00 21
+#define MAP_ICON_01_BOUNDING_SKYLOFT_00 22
+#define MAP_ICON_01_BOUNDING_NUSI_00 23
+#define MAP_ICON_01_BOUNDING_TERRYSHOP_00 24
+#define MAP_ICON_01_BOUNDING_SEEKERSTONE_00 25
+#define MAP_ICON_01_BOUNDING_COMMONICON_00 26
+#define MAP_ICON_01_BOUNDING_COMMONICON_01 27
+#define MAP_ICON_01_BOUNDING_COMMONICON_02 28
+#define MAP_ICON_01_BOUNDING_COMMONICON_03 29
+#define MAP_ICON_01_BOUNDING_COMMONICON_04 30
+#define MAP_ICON_01_BOUNDING_COMMONICON_05 31
+#define MAP_ICON_01_BOUNDING_COMMONICON_06 32
+#define MAP_ICON_01_BOUNDING_COMMONICON_07 33
+#define MAP_ICON_01_BOUNDING_COMMONICON_08 34
+#define MAP_ICON_01_BOUNDING_COMMONICON_09 35
+#define MAP_ICON_01_BOUNDING_COMMONICON_10 36
+#define MAP_ICON_01_BOUNDING_COMMONICON_11 37
+#define MAP_ICON_01_BOUNDING_COMMONICON_12 38
+#define MAP_ICON_01_BOUNDING_COMMONICON_13 39
+#define MAP_ICON_01_BOUNDING_COMMONICON_14 40
+#define MAP_ICON_01_BOUNDING_COMMONICON_15 41
+#define MAP_ICON_01_BOUNDING_COMMONICON_16 42
+#define MAP_ICON_01_BOUNDING_COMMONICON_17 43
+#define MAP_ICON_01_BOUNDING_COMMONICON_18 44
+#define MAP_ICON_01_BOUNDING_COMMONICON_19 45
+#define MAP_ICON_01_BOUNDING_COMMONICON_20 46
+#define MAP_ICON_01_BOUNDING_COMMONICON_21 47
+#define MAP_ICON_01_BOUNDING_COMMONICON_22 48
+#define MAP_ICON_01_BOUNDING_COMMONICON_23 49
+#define MAP_ICON_01_BOUNDING_COMMONICON_24 50
+#define MAP_ICON_01_BOUNDING_COMMONICON_25 51
+#define MAP_ICON_01_BOUNDING_COMMONICON_26 52
+#define MAP_ICON_01_BOUNDING_COMMONICON_27 53
+#define MAP_ICON_01_BOUNDING_COMMONICON_28 54
+#define MAP_ICON_01_BOUNDING_COMMONICON_29 55
+#define MAP_ICON_01_BOUNDING_SAVEICON_00 56
+#define MAP_ICON_01_BOUNDING_MUSHI_00 57
+#define MAP_ICON_01_BOUNDING_AREALIGHT_00 58
+
+#define MAP_ICON_01_NUM_BOUNDINGS 59
+
+static const char *sMapIcon01SpecialPaneNames[] = {
+    "N_doddess_000",  "N_domitory_000",  "N_shop_000",       "N_mHusband_000", "N_mWife_000",    "N_tool_000",
+    "N_keep_000",     "N_junk_000",      "N_fortune_000",    "N_ruletou_000",  "N_pampkin_000",  "N_tery_000",
+    "N_tikurin_000",  "N_uta_000",       "N_musi_000",       "N_skyloft_02",   "N_roulette_01",  "N_takegiri_01",
+    "N_kobunB_01",    "N_sebasun_01",    "N_commonIcon_000", "N_saveIcon_000", "N_areaLight_01", "N_nusi_000",
+    "N_terryShop_01", "N_seekerIcon_01", "N_mushi_01",
+};
+
+#define MAP_ICON_01_SPECIAL_PANE_DODDESS_000 0
+#define MAP_ICON_01_SPECIAL_PANE_DOMITORY_000 1
+#define MAP_ICON_01_SPECIAL_PANE_SHOP_000 2
+#define MAP_ICON_01_SPECIAL_PANE_MHUSBAND_000 3
+#define MAP_ICON_01_SPECIAL_PANE_MWIFE_000 4
+#define MAP_ICON_01_SPECIAL_PANE_TOOL_000 5
+#define MAP_ICON_01_SPECIAL_PANE_KEEP_000 6
+#define MAP_ICON_01_SPECIAL_PANE_JUNK_000 7
+#define MAP_ICON_01_SPECIAL_PANE_FORTUNE_000 8
+#define MAP_ICON_01_SPECIAL_PANE_RULETOU_000 9
+#define MAP_ICON_01_SPECIAL_PANE_PAMPKIN_000 10
+#define MAP_ICON_01_SPECIAL_PANE_TERY_000 11
+#define MAP_ICON_01_SPECIAL_PANE_TIKURIN_000 12
+#define MAP_ICON_01_SPECIAL_PANE_UTA_000 13
+#define MAP_ICON_01_SPECIAL_PANE_MUSI_000 14
+#define MAP_ICON_01_SPECIAL_PANE_SKYLOFT_02 15
+#define MAP_ICON_01_SPECIAL_PANE_ROULETTE_01 16
+#define MAP_ICON_01_SPECIAL_PANE_TAKEGIRI_01 17
+#define MAP_ICON_01_SPECIAL_PANE_KOBUNB_01 18
+#define MAP_ICON_01_SPECIAL_PANE_SEBASUN_01 19
+#define MAP_ICON_01_SPECIAL_PANE_COMMONICON_000 20
+#define MAP_ICON_01_SPECIAL_PANE_SAVEICON_000 21
+#define MAP_ICON_01_SPECIAL_PANE_AREALIGHT_01 22
+#define MAP_ICON_01_SPECIAL_PANE_NUSI_000 23
+#define MAP_ICON_01_SPECIAL_PANE_TERRYSHOP_01 24
+#define MAP_ICON_01_SPECIAL_PANE_SEEKERICON_01 25
+#define MAP_ICON_01_SPECIAL_PANE_MUSHI_01 26
+
+#define MAP_ICON_01_NUM_SPECIAL_PANES 27
+
+static const char *sMapIcon01SpecialPictureNames[] = {
+    "P_doddess_00",  "P_domitory_00", "P_shop_00",    "P_mHusband_00", "P_mWife_00",  "P_tool_00",    "P_keep_00",
+    "P_junk_00",     "P_fortune_00",  "P_ruletou_00", "P_pampkin_00",  "P_tery_00",   "P_tikurin_00", "P_uta_00",
+    "P_musi_00",     "P_skyloft_00",  "P_icon_01",    "P_icon_02",     "P_icon_00",   "P_icon_04",    "P_commonIcon_00",
+    "P_saveIcon_01", "P_light_00_00", "P_nusi_00",    "P_terry_01",    "P_seeker_00", "P_mushi_00",
+
+};
+
+#define MAP_ICON_01_SPECIAL_PICTURE_DODDESS_00 0
+#define MAP_ICON_01_SPECIAL_PICTURE_DOMITORY_00 1
+#define MAP_ICON_01_SPECIAL_PICTURE_SHOP_00 2
+#define MAP_ICON_01_SPECIAL_PICTURE_MHUSBAND_00 3
+#define MAP_ICON_01_SPECIAL_PICTURE_MWIFE_00 4
+#define MAP_ICON_01_SPECIAL_PICTURE_TOOL_00 5
+#define MAP_ICON_01_SPECIAL_PICTURE_KEEP_00 6
+#define MAP_ICON_01_SPECIAL_PICTURE_JUNK_00 7
+#define MAP_ICON_01_SPECIAL_PICTURE_FORTUNE_00 8
+#define MAP_ICON_01_SPECIAL_PICTURE_RULETOU_00 9
+#define MAP_ICON_01_SPECIAL_PICTURE_PAMPKIN_00 10
+#define MAP_ICON_01_SPECIAL_PICTURE_TERY_00 11
+#define MAP_ICON_01_SPECIAL_PICTURE_TIKURIN_00 12
+#define MAP_ICON_01_SPECIAL_PICTURE_UTA_00 13
+#define MAP_ICON_01_SPECIAL_PICTURE_MUSI_00 14
+#define MAP_ICON_01_SPECIAL_PICTURE_SKYLOFT_00 15
+#define MAP_ICON_01_SPECIAL_PICTURE_ICON_01 16
+#define MAP_ICON_01_SPECIAL_PICTURE_ICON_02 17
+#define MAP_ICON_01_SPECIAL_PICTURE_ICON_00 18
+#define MAP_ICON_01_SPECIAL_PICTURE_ICON_04 19
+#define MAP_ICON_01_SPECIAL_PICTURE_COMMONICON_00 20
+#define MAP_ICON_01_SPECIAL_PICTURE_SAVEICON_01 21
+#define MAP_ICON_01_SPECIAL_PICTURE_LIGHT_00_00 22
+#define MAP_ICON_01_SPECIAL_PICTURE_NUSI_00 23
+#define MAP_ICON_01_SPECIAL_PICTURE_TERRY_01 24
+#define MAP_ICON_01_SPECIAL_PICTURE_SEEKER_00 25
+#define MAP_ICON_01_SPECIAL_PICTURE_MUSHI_00 26
+
+#define MAP_ICON_01_NUM_SPECIAL_PICTURES 27
+
+static const char *sTerryOnOff = "N_terryOnOff_00";
+
+bool dLytMapIcon01_c::build(d2d::ResAccIf_c *resAcc) {
+    // TODO - ...
+    mpResAcc = resAcc;
+    mLyt.setResAcc(resAcc);
+    mLyt.build("mapIcon_01.brlyt", nullptr);
+    for (int i = 0; i < MAP_ICON_01_NUM_ANIMS; i++) {
+        mAnm[i].init(brlanMapMapIcon01[i].mFile, mpResAcc, mLyt.getLayout(), brlanMapMapIcon01[i].mName);
+        mAnm[i].bind(false);
+    }
+
+    if (daPlayerActBase_c::getCurrentTunicType() == 1) {
+        setLinkTunic(1);
+    } else {
+        setLinkTunic(0);
+    }
+
+    // TODO bunch of setters
+
+    if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_TRIFORCE_COMPLETE)) {
+        setGoddessStatue(false);
+    } else {
+        setGoddessStatue(true);
+    }
+
+    for (int i = 0; i < MAP_ICON_01_NUM_PANES; i++) {
+        mpPanes[i] = mLyt.findPane(sPaneNamesIcon01[i]);
+    }
+
+    for (int i = 0; i < MAP_ICON_01_NUM_BOUNDINGS; i++) {
+        mpBoundings[i] = mLyt.findBounding(sMapIcon01BoundingNames[i]);
+    }
+
+    // TODO - why 56 and not 59
+    for (int i = 0; i < 56; i++) {
+        mUnk3[i].bounding = mpBoundings[i];
+    }
+
+    for (int i = 0; i < MAP_ICON_01_NUM_BOUNDINGS; i++) {
+        mpBoundings[i]->SetVisible(false);
+    }
+
+    mLyt.calc();
+
+    for (int i = 0; i < MAP_ICON_01_NUM_SPECIAL_PANES; i++) {
+        mpSpecialPanes[i] = mLyt.findPane(sMapIcon01SpecialPaneNames[i]);
+    }
+
+    for (int i = 0; i < MAP_ICON_01_NUM_SPECIAL_PICTURES; i++) {
+        mpSpecialPictures[i] = mLyt.findPane(sMapIcon01SpecialPictureNames[i]);
+    }
+
+    mpTerryOnOffPane = mLyt.findPane(sTerryOnOff);
+    setTerry(false);
+
+    for (int i = 0; i < 35; i++) {
+        mPassIdxes[i] = i;
+    }
+
+    checkMapMode();
+
+    for (int i = 0; i < (int)ARRAY_LENGTH(mIconAnims); i++) {
+        mIconAnims[i].cmdIndex = 100;
+        mIconAnims[i].frame = 0.0f;
+        mIconAnims[i].animIn = false;
+        mIconAnims[i].animOut = false;
+        mIconAnims[i].idleVisible = false;
+        mIconAnims[i].field_0x0B = 0;
+        mIconAnims[i].visible = false;
+    }
+
+    setupActorDrawCommands();
+    setupStageDrawCommands();
+    setupLinkDrawCommand();
+
+    if (field_0x0C70 == 1) {
+        setupTriforceDrawCommands();
+    }
+
+    if (field_0x0C70 == 4) {
+        setupUnkDrawCommand();
+    }
+
+    // TODO - ...
+
+    sortDrawCommands();
+
+    mCsHitCheck.init(mLyt.getLayout()->GetRootPane(), 0x1, 0, 0);
+    dCsMgr_c::GetInstance()->registCursorTarget(&mCsHitCheck);
+    resetDrawCommands();
+    return true;
+}
+
+bool dLytMapIcon01_c::remove() {
+    for (int i = 0; i < MAP_ICON_01_NUM_ANIMS; i++) {
+        mAnm[i].unbind();
+        mAnm[i].remove();
+    }
+    dCsMgr_c::GetInstance()->unregistCursorTarget(&mCsHitCheck);
+    return true;
+}
+
+bool dLytMapIcon01_c::execute() {
+    for (int i = 0; i < MAP_ICON_01_ANIM_FORCE_IN + 1 - MAP_ICON_01_ANIM_TRES_OUT; i++) {
+        if (mAnm[MAP_ICON_01_ANIM_TRES_OUT + i].isEnabled() && mAnm[MAP_ICON_01_ANIM_TRES_OUT + i].isStop2()) {
+            mAnm[MAP_ICON_01_ANIM_TRES_OUT + i].setAnimEnable(false);
+        }
+    }
+    mLyt.calc();
+    checkMapMode();
+    loadFlags();
+
+    return true;
+}
+
+void dLytMapIcon01_c::draw() {
+    // TODO - tons of GPR regswaps, mAng nonsense, otherwise OK
+    mAng mapRot = dLytMapGlobal_c::GetInstance()->getMapRotation();
+    // Maybe compiler-generated
+    u8 *idxes = mPassIdxes;
+    for (int pass = 0; pass < 35; pass++, idxes++) {
+        u8 idx = *idxes;
+        if (mNumCommandsPerPass[idx]) {
+            for (int cmd = 0; cmd < mNumCommands; cmd++) {
+                // Maybe compiler-generated
+                const mAng &commandRot = mCommands[cmd].rotation;
+                // Suspicious cast
+                if (idx == (int)mCommands[cmd].passIdx) {
+                    s32 paneIdx = mCommands[cmd].paneIdx;
+                    nw4r::lyt::Pane *pane = mpPanes[paneIdx];
+                    switch (paneIdx) {
+                        case MAP_ICON_01_PANE_PLAYER_000: {
+                            mVec3_c rotate(0.0f, 0.0f, 0.0f);
+                            if (dLytMapGlobal_c::GetInstance()->getField_0x55() != 0) {
+                                dAcPy_c *link = getLinkPtr();
+                                rotate.z = (link->vt_0x19C() + link->mRotation.y + (-mapRot)).degree2();
+                            } else {
+                                rotate.z = (field_0x0D3A + (-mapRot)).degree2();
+                            }
+                            pane->SetRotate(rotate);
+                            pane = pane->GetParent();
+                            break;
+                        }
+                        case MAP_ICON_01_PANE_DOOR_000:
+                        case MAP_ICON_01_PANE_START_000: {
+                            mVec3_c rotate(0.0f, 0.0f, ((-mapRot) + commandRot).degree2());
+                            pane->SetRotate(rotate);
+                            pane = mpPanes[paneIdx]->GetParent();
+                            break;
+                        }
+                        case MAP_ICON_01_PANE_MARK_000:
+                        case MAP_ICON_01_PANE_RULETOU_000:
+                        case MAP_ICON_01_PANE_PAMPKIN_000:
+                        case MAP_ICON_01_PANE_TERY_000:
+                        case MAP_ICON_01_PANE_TIKURIN_000:
+                        case MAP_ICON_01_PANE_UTA_000:
+                        case MAP_ICON_01_PANE_MUSI_000:
+                        case MAP_ICON_01_PANE_SKYLOFT_000: {
+                            mVec3_c rotate(0.0f, 0.0f, (-mapRot).degree2());
+                            pane->SetRotate(rotate);
+                            pane = mpPanes[paneIdx]->GetParent();
+                            break;
+                        }
+                        case MAP_ICON_01_PANE_AREALIGHT_00: {
+                            if (field_0x0D48 != 100 && field_0x0D48 == cmd) {
+                                drawAreaLight(0, pane);
+                            } else if (field_0x0D49 != 100 && field_0x0D49 == cmd) {
+                                drawAreaLight(1, pane);
+                            } else if (field_0x0D4A != 100 && field_0x0D4A == cmd) {
+                                drawAreaLight(2, pane);
+                            }
+                            break;
+                        }
+                        case MAP_ICON_01_PANE_SAVEICON_00: {
+                            if (field_0x0D4B[cmd] != 100) {
+                                drawSaveObj(field_0x0D4B[cmd], pane);
+                            }
+                            break;
+                        }
+                    }
+
+                    if (paneIdx == MAP_ICON_01_PANE_CLOUDBIG_000) {
+                        if (dScGame_c::isCurrentStage("F020")) {
+                            if (field_0x0C81) {
+                                drawCloud(1, pane);
+                            } else {
+                                drawCloud(0, pane);
+                            }
+                        } else if (dScGame_c::isCurrentStage("F023")) {
+                            drawCloud(2, pane);
+                        }
+                        mVec3_c rotate(0.0f, 0.0f, (-mapRot).degree2());
+                        pane->SetRotate(rotate);
+                        pane = mpPanes[paneIdx]->GetParent();
+                    }
+
+                    u8 alpha = dLytMapGlobal_c::GetInstance()->getAlpha();
+                    bool found = false;
+                    int i = 0;
+                    for (; i < mNumAnims; i++) {
+                        if (cmd == mIconAnims[i].cmdIndex) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (found == true) {
+                        if (field_0x0C84 && mIconAnims[i].animIn == true) {
+                            if (field_0x1845 == 1) {
+                                mIconAnims[i].idleVisible = true;
+                                mIconAnims[i].animIn = true;
+                            } else {
+                                mIconAnims[i].idleVisible = false;
+                                mIconAnims[i].animIn = false;
+                            }
+                        }
+
+                        if (field_0xD0C != field_0xD10) {
+                            mIconAnims[i].animIn = false;
+                            mIconAnims[i].animOut = false;
+                        }
+
+                        if (mIconAnims[i].animIn) {
+                            f32 f = mIconAnims[i].frame;
+                            if (f <= field_0x1838) {
+                                drawWithAnimIn(paneIdx, pane, f);
+                                mIconAnims[i].frame += 1.0f;
+                                mIconAnims[i].visible = true;
+                                if (!field_0x184C) {
+                                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ICON_APPEAR);
+                                    field_0x184C = true;
+                                }
+                            } else {
+                                mIconAnims[i].animIn = false;
+                                mIconAnims[i].visible = true;
+                                field_0x184C = false;
+                            }
+                        } else if (mIconAnims[i].animOut) {
+                            f32 f = mIconAnims[i].frame;
+                            if (f <= field_0x183C) {
+                                drawWithAnimOut(paneIdx, pane, f);
+                                mIconAnims[i].frame += 1.0f;
+                                mIconAnims[i].visible = true;
+                            } else {
+                                mIconAnims[i].animOut = false;
+                                mIconAnims[i].visible = true;
+                            }
+                        } else if (mIconAnims[i].idleVisible) {
+                            drawFullyIn(paneIdx, pane);
+                            mIconAnims[i].visible = true;
+                        }
+
+                        if (mIconAnims[i].visible == true) {
+                            pane->SetAlpha(alpha);
+                            pane->SetTranslate(vec2ToVec3XY(mCommands[cmd].position + field_0x0D40));
+                            pane->Animate(0);
+                            pane->CalculateMtx(mLyt.getDrawInfo());
+                            pane->Draw(mLyt.getDrawInfo());
+                        }
+                    } else {
+                        // No animation data - simply draw
+                        pane->SetAlpha(alpha);
+                        pane->SetTranslate(vec2ToVec3XY(mCommands[cmd].position + field_0x0D40));
+                        pane->Animate(0);
+                        pane->CalculateMtx(mLyt.getDrawInfo());
+                        pane->Draw(mLyt.getDrawInfo());
+                    }
+                }
+            }
+        }
+    }
+
+    mVec2_c v2(0.0f, 0.0f);
+    for (int i = 0; i < field_0x0E13; i++) {
+        if (mUnk3[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->IsVisible()) {
+            v2 = mUnk3[i + MAP_ICON_01_BOUNDING_COMMONICON_00].field_0x10;
+            mUnk3[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->SetTranslate(vec2ToVec3XY(v2 + field_0x0D40));
+            mUnk3[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->CalculateMtx(mLyt.getDrawInfo());
+            mUnk3[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->Draw(mLyt.getDrawInfo());
+        }
+    }
+
+    field_0xD10 = field_0xD0C;
+}
+
+static const char *sMapPrefix = "MAP_";
+
+void dLytMapIcon01_c::resetDrawCommands() {
+    for (int i = 0; i < (int)ARRAY_LENGTH(mCommands); i++) {
+        mCommands[i].position.set(0.0f, 0.0f);
+        mCommands[i].rotation.setF(0.0f);
+        mCommands[i].paneIdx = MAP_ICON_01_NUM_PANES;
+        mCommands[i].passIdx = 35;
+        field_0x0D4B[i] = 100;
+        field_0x0C85[i] = 0;
+    }
+
+    field_0xD0C = 0;
+
+    for (int i = 0; i < (int)ARRAY_LENGTH(mNumCommandsPerPass); i++) {
+        mNumCommandsPerPass[i] = 0;
+    }
+
+    mNumCommands = 0;
+
+    for (int i = 0; i < (int)ARRAY_LENGTH(mUnk3); i++) {
+        mUnk3[i].field_0x00 = 100;
+        mUnk3[i].field_0x10.set(0.0f, 0.0f);
+        mUnk3[i].field_0x08 = 0.0f;
+        mUnk3[i].field_0x0C = 0.0f;
+        mUnk3[i].field_0x18 = 0;
+        mUnk3[i].field_0x19 = 0;
+        mUnk3[i].field_0x1C = sMapPrefix;
+    }
+
+    field_0x0E13 = 0;
+    field_0x0C83 = 0;
+    field_0x0C84 = 0;
+
+    fn_80181C40();
+
+    field_0x0D48 = 100;
+    field_0x0D49 = 100;
+    field_0x0D4A = 100;
+
+    field_0x0C74 = 0;
+    field_0x0C75 = 0;
+    field_0x0C76 = 0;
+    field_0x0C77 = 0;
+    field_0x0C78 = 0;
+    field_0x0C79 = 0;
+    field_0x0C7A = 0;
+    field_0x0C7B = 0;
+    field_0x0C7C = 0;
+    field_0x0C7D = 0;
+    field_0x0C7E = 0;
+    field_0x0C7F = 0;
+    field_0x0C80 = 0;
+    field_0x0C81 = 0;
+    field_0x0C82 = 0;
+
+    for (int i = 0; i < (int)ARRAY_LENGTH(mIconAnims); i++) {
+        mIconAnims[i].visible = 0;
+    }
+
+    mNumAnims = 0;
+}
+
+void dLytMapIcon01_c::setLinkTunic(s32 type) {
+    f32 frame = 0.0f;
+    switch (type) {
+        case 1: frame = 0.0f; break;
+        case 0: frame = 1.0f; break;
+    }
+
+    mAnm[MAP_ICON_01_ANIM_PLAYER_2_PATTERN].setAnimEnable(true);
+    mAnm[MAP_ICON_01_ANIM_PLAYER_2_PATTERN].setFrame(frame);
+    mLyt.calc();
+    mAnm[MAP_ICON_01_ANIM_PLAYER_2_PATTERN].setAnimEnable(false);
+}
+
+void dLytMapIcon01_c::drawWithAnimIn(u32 paneIdx, nw4r::lyt::Pane *pane, f32 frame) {
+    if (paneIdx == MAP_ICON_01_PANE_DOORKEY_00) {
+        paneIdx = MAP_ICON_01_PANE_DOOR_000;
+    }
+
+    // NOTE: Treasure/Mark/Door/Save/Triforce order is the same between anims and panes
+    u8 anmIdx = paneIdx - MAP_ICON_01_PANE_TREASURE_00 + MAP_ICON_01_ANIM_TRES_IN;
+
+    if (frame <= mAnm[anmIdx].getLastFrame()) {
+        mAnm[anmIdx].setFrame(frame);
+        // Maybe inlines/macros
+        d2d::AnmGroup_c &anm = mAnm[anmIdx];
+        anm.setAnimEnable(true);
+        pane->Animate(0);
+        anm.setAnimEnable(false);
+    }
+}
+
+void dLytMapIcon01_c::drawWithAnimOut(u32 paneIdx, nw4r::lyt::Pane *pane, f32 frame) {
+    if (paneIdx == MAP_ICON_01_PANE_DOORKEY_00) {
+        paneIdx = MAP_ICON_01_PANE_DOOR_000;
+    }
+
+    // NOTE: Treasure/Mark/Door/Save/Triforce order is the same between anims and panes
+    u8 anmIdx = paneIdx - MAP_ICON_01_PANE_TREASURE_00 + MAP_ICON_01_ANIM_TRES_OUT;
+
+    if (frame <= mAnm[anmIdx].getLastFrame()) {
+        mAnm[anmIdx].setFrame(frame);
+        // Maybe inlines/macros
+        d2d::AnmGroup_c &anm = mAnm[anmIdx];
+        anm.setAnimEnable(true);
+        pane->Animate(0);
+        anm.setAnimEnable(false);
+    }
+}
+
+void dLytMapIcon01_c::drawFullyIn(u32 paneIdx, nw4r::lyt::Pane *pane) {
+    if (paneIdx == MAP_ICON_01_PANE_DOORKEY_00) {
+        paneIdx = MAP_ICON_01_PANE_DOOR_000;
+    }
+
+    // NOTE: Treasure/Mark/Door/Save/Triforce order is the same between anims and panes
+    u8 anmIdx = paneIdx - MAP_ICON_01_PANE_TREASURE_00 + MAP_ICON_01_ANIM_TRES_IN;
+
+    mAnm[anmIdx].setToEnd2();
+    // Maybe inlines/macros
+    d2d::AnmGroup_c &anm = mAnm[anmIdx];
+    anm.setAnimEnable(true);
+    pane->Animate(0);
+    anm.setAnimEnable(false);
+}
+
+void dLytMapIcon01_c::checkMapMode() {
+    s32 current = dLytMapGlobal_c::GetInstance()->getCurrentMapMode();
+    s32 next = dLytMapGlobal_c::GetInstance()->getNextMapMode();
+
+    if (current == dLytMapGlobal_c::MAPMODE_PROVINCE && next == dLytMapGlobal_c::MAPMODE_ZOOM) {
+        return;
+    }
+
+    if (current == dLytMapGlobal_c::MAPMODE_ZOOM && next == dLytMapGlobal_c::MAPMODE_PROVINCE) {
+        return;
+    }
+
+    if (current == dLytMapGlobal_c::MAPMODE_STAGE && next == dLytMapGlobal_c::MAPMODE_ZOOM) {
+        mModeCheckResult = MODE_TRANSITION_TO_ZOOM;
+        return;
+    }
+
+    if (current == dLytMapGlobal_c::MAPMODE_ZOOM && next == dLytMapGlobal_c::MAPMODE_STAGE) {
+        mModeCheckResult = MODE_TRANSITION_TO_STAGE;
+        return;
+    }
+
+    if (current == next && current == dLytMapGlobal_c::MAPMODE_PROVINCE) {
+        return;
+    }
+
+    if (current == next && current == dLytMapGlobal_c::MAPMODE_STAGE) {
+        mModeCheckResult = MODE_STABLE_STAGE;
+        return;
+    }
+
+    if (current == next && current == dLytMapGlobal_c::MAPMODE_ZOOM) {
+        mModeCheckResult = MODE_STABLE_ZOOM;
+        return;
+    }
+}
+
+void dLytMapIcon01_c::setupTboxDrawCommand(dAcBase_c *actor) {
+    if (actor->mProfileName == fProfile::TBOX && !actor->checkActorProperty(dAcBase_c::AC_PROP_0x100) &&
+        field_0xD0C == dStage_c::GetInstance()->getMapRelated()->fn_801B4F10(actor->mRoomID, actor->mPosition)) {
+        dAcTbox_c *box = static_cast<dAcTbox_c *>(actor);
+        if (box->getVariant() == dAcTbox_c::GODDESS) {
+            u16 flag = box->getParams2Lower();
+            if (StoryflagManager::sInstance->getCounterOrFlag(flag) != 0 && box->hasBeenOpened() != true) {
+                setupTboxDrawCommandGoddessClosed(box);
+            }
+        } else if (box->hasBeenOpened() != true) {
+            if (field_0x0C70 == 1) {
+                setupTboxDrawCommandClosed(box);
+            }
+        } else {
+            setupTboxDrawCommandOpen(box);
+        }
+    }
+}
+
+void dLytMapIcon01_c::setupTboxDrawCommandClosed(dAcTbox_c *box) {
+    if (mNumCommands < 100) {
+        mVec2_c pos(0.0f, 0.0f);
+        projectOntoMap(box->mPosition, pos);
+        mCommands[mNumCommands].passIdx = 17;
+        mCommands[mNumCommands].paneIdx = MAP_ICON_01_PANE_TREASURE_00;
+        mCommands[mNumCommands].position.x = pos.x;
+        mCommands[mNumCommands].position.y = pos.y;
+
+        if (checkHasMap()) {
+            if (field_0x0C84) {
+                mIconAnims[mNumAnims].cmdIndex = mNumCommands;
+                mIconAnims[mNumAnims].idleVisible = true;
+                mIconAnims[mNumAnims].animIn = true;
+            } else {
+                mIconAnims[mNumAnims].cmdIndex = mNumCommands;
+                mIconAnims[mNumAnims].idleVisible = true;
+                mIconAnims[mNumAnims].animIn = false;
+            }
+        } else {
+            mIconAnims[mNumAnims].cmdIndex = mNumCommands;
+            mIconAnims[mNumAnims].idleVisible = false;
+        }
+
+        mNumAnims++;
+        mNumCommandsPerPass[17]++;
+        mNumCommands++;
+    }
+}
+
+void dLytMapIcon01_c::setupTboxDrawCommandOpen(dAcTbox_c *box) {
+    if (mNumCommands < 100) {
+        mVec2_c pos(0.0f, 0.0f);
+        projectOntoMap(box->mPosition, pos);
+        mCommands[mNumCommands].passIdx = 17;
+        mCommands[mNumCommands].paneIdx = MAP_ICON_01_PANE_TREASURE_01;
+        mCommands[mNumCommands].position.x = pos.x;
+        mCommands[mNumCommands].position.y = pos.y;
+
+        mNumCommandsPerPass[17]++;
+        mNumCommands++;
+    }
+}
+
+void dLytMapIcon01_c::setupTboxDrawCommandGoddessClosed(dAcTbox_c *box) {
+    if (mNumCommands < 100) {
+        mVec2_c pos(0.0f, 0.0f);
+        projectOntoMap(box->mPosition, pos);
+        mCommands[mNumCommands].passIdx = 28;
+        mCommands[mNumCommands].paneIdx = MAP_ICON_01_PANE_GODDESSC_00;
+        mCommands[mNumCommands].position.x = pos.x;
+        mCommands[mNumCommands].position.y = pos.y;
+
+        mNumCommandsPerPass[28]++;
+        mNumCommands++;
     }
 }

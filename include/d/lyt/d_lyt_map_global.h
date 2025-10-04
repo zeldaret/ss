@@ -68,6 +68,10 @@ public:
         return mPlayerPosition;
     }
 
+    u8 getField_0x55() const {
+        return field_0x55;
+    }
+
     const mAng &getField_0x56() const {
         return field_0x56;
     }
@@ -145,7 +149,8 @@ private:
     /* 0x4E */ u8 mAlpha;
     /* 0x4F */ u8 field_0x4F;
     /* 0x50 */ UNKWORD field_0x50;
-    /* 0x54 */ u8 _0x54[0x56 - 0x54];
+    /* 0x54 */ u8 field_0x54;
+    /* 0x55 */ u8 field_0x55;
     /* 0x56 */ mAng field_0x56;
     /* 0x58 */ f32 field_0x58;
     /* 0x5C */ s32 mCurrentMapMode;

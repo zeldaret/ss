@@ -84,6 +84,7 @@ public:
     void fn_801B4C70(const mVec3_c &);
     void fn_801B50C0(s32);
     const mVec3_c &fn_801B4CB0() const;
+    s32 fn_801B4F10(s32 roomid, const mVec3_c &position) const;
 };
 
 // OBJ NAME: STAGE

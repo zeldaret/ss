@@ -64,6 +64,14 @@ public:
     STATE_FUNC_DECLARE(dAcTbox_c, Wait);
     STATE_FUNC_DECLARE(dAcTbox_c, GoddessWait);
 
+    u8 getVariant() const {
+        return mVariant;
+    }
+
+    bool hasBeenOpened() const {
+        return mHasBeenOpened;
+    }
+
 private:
     static f32 getSomeRate();
     bool initBgW(dBgW &bg, const char *arcName, const char *fileName);
