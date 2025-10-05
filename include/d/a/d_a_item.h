@@ -79,6 +79,7 @@ public:
     static bool isRupee(ITEM_ID item);
     static bool isKeyPiece(ITEM_ID item);
     static bool isTreasure(ITEM_ID item);
+    bool isTriforce() const;
 
     static bool getItemGetEventName(u16 item, const char **outName);
     static void itemGetEventStart(dAcBase_c *);

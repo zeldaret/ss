@@ -2,24 +2,34 @@
 
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/a/d_a_item.h"
 #include "d/a/d_a_player.h"
+#include "d/a/obj/d_a_obj_base.h"
+#include "d/a/obj/d_a_obj_save.h"
 #include "d/a/obj/d_a_obj_tbox.h"
+#include "d/d_cs_base.h"
 #include "d/d_cursor_hit_check.h"
+#include "d/d_gfx.h"
 #include "d/d_message.h"
 #include "d/d_player.h"
 #include "d/d_player_act.h"
 #include "d/d_sc_game.h"
 #include "d/d_stage.h"
+#include "d/d_stage_mgr.h"
 #include "d/flag/dungeonflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_map_global.h"
 #include "d/lyt/d_window.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
+#include "f/f_base.h"
+#include "f/f_manager.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_bounding.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "nw4r/lyt/lyt_types.h"
+#include "sized_string.h"
+#include "toBeSorted/arc_managers/layout_arc_manager.h"
 
 inline mVec3_c vec2ToVec3XY(const mVec2_c &v) {
     return mVec3_c(v.x, v.y, 0.0f);
@@ -627,6 +637,8 @@ static const char *sMapIcon01BoundingNames[] = {
 #define MAP_ICON_01_BOUNDING_MUSHI_00 57
 #define MAP_ICON_01_BOUNDING_AREALIGHT_00 58
 
+#define MAP_ICON_01_BOUNDING_COMMONICON_LAST (MAP_ICON_01_BOUNDING_COMMONICON_29 + 1)
+
 #define MAP_ICON_01_NUM_BOUNDINGS 59
 
 static const char *sMapIcon01SpecialPaneNames[] = {
@@ -705,10 +717,15 @@ static const char *sMapIcon01SpecialPictureNames[] = {
 
 #define MAP_ICON_01_NUM_SPECIAL_PICTURES 27
 
+static const char *sSaveObjPrefix = "SAVEOBJ_NAME_";
 static const char *sTerryOnOff = "N_terryOnOff_00";
 
 bool dLytMapIcon01_c::build(d2d::ResAccIf_c *resAcc) {
-    // TODO - ...
+    field_0x1848 = 30;
+    mCurrentFloor = dLytMapGlobal_c::GetInstance()->getFloor();
+    field_0x0C83 = dLytMapGlobal_c::GetInstance()->getField_0x4F();
+    field_0x0C84 = dLytMapGlobal_c::GetInstance()->getField_0x4C();
+    mLastFloor = mCurrentFloor;
     mpResAcc = resAcc;
     mLyt.setResAcc(resAcc);
     mLyt.build("mapIcon_01.brlyt", nullptr);
@@ -740,8 +757,8 @@ bool dLytMapIcon01_c::build(d2d::ResAccIf_c *resAcc) {
     }
 
     // TODO - why 56 and not 59
-    for (int i = 0; i < 56; i++) {
-        mUnk3[i].bounding = mpBoundings[i];
+    for (int i = 0; i < MAP_ICON_01_BOUNDING_COMMONICON_LAST; i++) {
+        mPopupConfigs[i].bounding = mpBoundings[i];
     }
 
     for (int i = 0; i < MAP_ICON_01_NUM_BOUNDINGS; i++) {
@@ -766,32 +783,32 @@ bool dLytMapIcon01_c::build(d2d::ResAccIf_c *resAcc) {
     }
 
     checkMapMode();
+    loadFlags();
 
     for (int i = 0; i < (int)ARRAY_LENGTH(mIconAnims); i++) {
         mIconAnims[i].cmdIndex = 100;
         mIconAnims[i].frame = 0.0f;
         mIconAnims[i].animIn = false;
         mIconAnims[i].animOut = false;
-        mIconAnims[i].idleVisible = false;
-        mIconAnims[i].field_0x0B = 0;
         mIconAnims[i].visible = false;
+        mIconAnims[i].prevVisible = false;
+        mIconAnims[i].render = false;
     }
 
     setupActorDrawCommands();
     setupStageDrawCommands();
     setupLinkDrawCommand();
-
     if (field_0x0C70 == 1) {
         setupTriforceDrawCommands();
     }
 
     if (field_0x0C70 == 4) {
-        setupUnkDrawCommand();
+        setupCloudBigDrawCommand();
     }
 
-    // TODO - ...
-
-    sortDrawCommands();
+    recordAnimVisState();
+    transitionAnims();
+    sortPanes();
 
     mCsHitCheck.init(mLyt.getLayout()->GetRootPane(), 0x1, 0, 0);
     dCsMgr_c::GetInstance()->registCursorTarget(&mCsHitCheck);
@@ -814,9 +831,51 @@ bool dLytMapIcon01_c::execute() {
             mAnm[MAP_ICON_01_ANIM_TRES_OUT + i].setAnimEnable(false);
         }
     }
-    mLyt.calc();
+    resetDrawCommands();
     checkMapMode();
     loadFlags();
+
+    mCurrentFloor = dLytMapGlobal_c::GetInstance()->getFloor();
+    field_0x0C83 = dLytMapGlobal_c::GetInstance()->getField_0x4F();
+    field_0x0C84 = dLytMapGlobal_c::GetInstance()->getField_0x4C();
+
+    updateScale();
+    setupActorDrawCommands();
+    setupStageDrawCommands();
+    setupLinkDrawCommand();
+    if (field_0x0C70 == 1) {
+        setupTriforceDrawCommands();
+    }
+
+    if (field_0x0C70 == 4) {
+        setupCloudBigDrawCommand();
+    }
+
+    for (int i = 0; i < MAP_ICON_01_NUM_ANIMS; i++) {
+        if (mAnm[i].isEnabled()) {
+            mAnm[i].play();
+        }
+    }
+
+    if (dLytMapGlobal_c::GetInstance()->getField_0x4D() && dLytMapGlobal_c::GetInstance()->getField_0x50() != 10) {
+        checkBoundingPointing();
+    }
+
+    mCsHitCheck.resetCachedHitboxes();
+    mCsHitCheck.execute();
+
+    transitionAnims();
+    recordAnimVisState();
+
+    if (!field_0x1844) {
+        field_0x1844 = true;
+        if (field_0x0C84 == 0) {
+            for (int i = 0; i < 50; i++) {
+                mIconAnims[i].animIn = false;
+                mIconAnims[i].animOut = false;
+            }
+        }
+    }
 
     return true;
 }
@@ -870,17 +929,17 @@ void dLytMapIcon01_c::draw() {
                         }
                         case MAP_ICON_01_PANE_AREALIGHT_00: {
                             if (field_0x0D48 != 100 && field_0x0D48 == cmd) {
-                                drawAreaLight(0, pane);
+                                setAreaLight(0, pane);
                             } else if (field_0x0D49 != 100 && field_0x0D49 == cmd) {
-                                drawAreaLight(1, pane);
+                                setAreaLight(1, pane);
                             } else if (field_0x0D4A != 100 && field_0x0D4A == cmd) {
-                                drawAreaLight(2, pane);
+                                setAreaLight(2, pane);
                             }
                             break;
                         }
                         case MAP_ICON_01_PANE_SAVEICON_00: {
                             if (field_0x0D4B[cmd] != 100) {
-                                drawSaveObj(field_0x0D4B[cmd], pane);
+                                setSaveObj(field_0x0D4B[cmd], pane);
                             }
                             break;
                         }
@@ -888,13 +947,13 @@ void dLytMapIcon01_c::draw() {
 
                     if (paneIdx == MAP_ICON_01_PANE_CLOUDBIG_000) {
                         if (dScGame_c::isCurrentStage("F020")) {
-                            if (field_0x0C81) {
-                                drawCloud(1, pane);
+                            if (mThunderheadEntered) {
+                                setCloud(1, pane);
                             } else {
-                                drawCloud(0, pane);
+                                setCloud(0, pane);
                             }
                         } else if (dScGame_c::isCurrentStage("F023")) {
-                            drawCloud(2, pane);
+                            setCloud(2, pane);
                         }
                         mVec3_c rotate(0.0f, 0.0f, (-mapRot).degree2());
                         pane->SetRotate(rotate);
@@ -914,15 +973,15 @@ void dLytMapIcon01_c::draw() {
                     if (found == true) {
                         if (field_0x0C84 && mIconAnims[i].animIn == true) {
                             if (field_0x1845 == 1) {
-                                mIconAnims[i].idleVisible = true;
+                                mIconAnims[i].visible = true;
                                 mIconAnims[i].animIn = true;
                             } else {
-                                mIconAnims[i].idleVisible = false;
+                                mIconAnims[i].visible = false;
                                 mIconAnims[i].animIn = false;
                             }
                         }
 
-                        if (field_0xD0C != field_0xD10) {
+                        if (mCurrentFloor != mLastFloor) {
                             mIconAnims[i].animIn = false;
                             mIconAnims[i].animOut = false;
                         }
@@ -932,14 +991,14 @@ void dLytMapIcon01_c::draw() {
                             if (f <= field_0x1838) {
                                 drawWithAnimIn(paneIdx, pane, f);
                                 mIconAnims[i].frame += 1.0f;
-                                mIconAnims[i].visible = true;
+                                mIconAnims[i].render = true;
                                 if (!field_0x184C) {
                                     dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ICON_APPEAR);
                                     field_0x184C = true;
                                 }
                             } else {
                                 mIconAnims[i].animIn = false;
-                                mIconAnims[i].visible = true;
+                                mIconAnims[i].render = true;
                                 field_0x184C = false;
                             }
                         } else if (mIconAnims[i].animOut) {
@@ -947,17 +1006,17 @@ void dLytMapIcon01_c::draw() {
                             if (f <= field_0x183C) {
                                 drawWithAnimOut(paneIdx, pane, f);
                                 mIconAnims[i].frame += 1.0f;
-                                mIconAnims[i].visible = true;
+                                mIconAnims[i].render = true;
                             } else {
                                 mIconAnims[i].animOut = false;
-                                mIconAnims[i].visible = true;
+                                mIconAnims[i].render = true;
                             }
-                        } else if (mIconAnims[i].idleVisible) {
+                        } else if (mIconAnims[i].visible) {
                             drawFullyIn(paneIdx, pane);
-                            mIconAnims[i].visible = true;
+                            mIconAnims[i].render = true;
                         }
 
-                        if (mIconAnims[i].visible == true) {
+                        if (mIconAnims[i].render == true) {
                             pane->SetAlpha(alpha);
                             pane->SetTranslate(vec2ToVec3XY(mCommands[cmd].position + field_0x0D40));
                             pane->Animate(0);
@@ -979,15 +1038,16 @@ void dLytMapIcon01_c::draw() {
 
     mVec2_c v2(0.0f, 0.0f);
     for (int i = 0; i < field_0x0E13; i++) {
-        if (mUnk3[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->IsVisible()) {
-            v2 = mUnk3[i + MAP_ICON_01_BOUNDING_COMMONICON_00].field_0x10;
-            mUnk3[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->SetTranslate(vec2ToVec3XY(v2 + field_0x0D40));
-            mUnk3[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->CalculateMtx(mLyt.getDrawInfo());
-            mUnk3[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->Draw(mLyt.getDrawInfo());
+        if (mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->IsVisible()) {
+            v2 = mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].boundingPos;
+            mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->SetTranslate(vec2ToVec3XY(v2 + field_0x0D40)
+            );
+            mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->CalculateMtx(mLyt.getDrawInfo());
+            mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->Draw(mLyt.getDrawInfo());
         }
     }
 
-    field_0xD10 = field_0xD0C;
+    mLastFloor = mCurrentFloor;
 }
 
 static const char *sMapPrefix = "MAP_";
@@ -1002,7 +1062,7 @@ void dLytMapIcon01_c::resetDrawCommands() {
         field_0x0C85[i] = 0;
     }
 
-    field_0xD0C = 0;
+    mCurrentFloor = 0;
 
     for (int i = 0; i < (int)ARRAY_LENGTH(mNumCommandsPerPass); i++) {
         mNumCommandsPerPass[i] = 0;
@@ -1010,14 +1070,13 @@ void dLytMapIcon01_c::resetDrawCommands() {
 
     mNumCommands = 0;
 
-    for (int i = 0; i < (int)ARRAY_LENGTH(mUnk3); i++) {
-        mUnk3[i].field_0x00 = 100;
-        mUnk3[i].field_0x10.set(0.0f, 0.0f);
-        mUnk3[i].field_0x08 = 0.0f;
-        mUnk3[i].field_0x0C = 0.0f;
-        mUnk3[i].field_0x18 = 0;
-        mUnk3[i].field_0x19 = 0;
-        mUnk3[i].field_0x1C = sMapPrefix;
+    for (int i = 0; i < (int)ARRAY_LENGTH(mPopupConfigs); i++) {
+        mPopupConfigs[i].cmdIdx = 100;
+        mPopupConfigs[i].boundingPos.set(0.0f, 0.0f);
+        mPopupConfigs[i].textPos.set(0.0f, 0.0f);
+        mPopupConfigs[i].pointedAt = false;
+        mPopupConfigs[i].objId = 0;
+        mPopupConfigs[i].labelPrefix = sMapPrefix;
     }
 
     field_0x0E13 = 0;
@@ -1030,27 +1089,46 @@ void dLytMapIcon01_c::resetDrawCommands() {
     field_0x0D49 = 100;
     field_0x0D4A = 100;
 
-    field_0x0C74 = 0;
-    field_0x0C75 = 0;
-    field_0x0C76 = 0;
-    field_0x0C77 = 0;
-    field_0x0C78 = 0;
-    field_0x0C79 = 0;
-    field_0x0C7A = 0;
-    field_0x0C7B = 0;
-    field_0x0C7C = 0;
-    field_0x0C7D = 0;
-    field_0x0C7E = 0;
-    field_0x0C7F = 0;
-    field_0x0C80 = 0;
-    field_0x0C81 = 0;
-    field_0x0C82 = 0;
+    mFunFunIslandDiscovered = false;
+    mLumpyPumkpinDiscovered = false;
+    mBeedleIslandDiscovered = false;
+    mBambooIslandDiscovered = false;
+    mIsleOfSongsDiscovered = false;
+    mBugHavenDiscovered = false;
+    mBilocyteFightTriggered = false;
+    mFaronPillarOpened = false;
+    mFaronDiscovered = false;
+    mEldinPillarOpened = false;
+    mEldinDiscovered = false;
+    mLanayruPillarOpened = false;
+    mLanaryuDiscovered = false;
+    mThunderheadEntered = false;
+    mBeedleShopEntered = false;
 
     for (int i = 0; i < (int)ARRAY_LENGTH(mIconAnims); i++) {
-        mIconAnims[i].visible = 0;
+        mIconAnims[i].render = false;
     }
 
     mNumAnims = 0;
+}
+
+void dLytMapIcon01_c::loadFlags() {
+    StoryflagManager *mgr = StoryflagManager::sInstance;
+    mFunFunIslandDiscovered = mgr->getCounterOrFlag(STORYFLAG_FUN_FUN_ISLAND_DISCOVERED);
+    mLumpyPumkpinDiscovered = mgr->getCounterOrFlag(STORYFLAG_LUMPY_PUMPKIN_DISCOVERED);
+    mBeedleIslandDiscovered = mgr->getCounterOrFlag(STORYFLAG_BEEDLE_ISLAND_DISCOVERED);
+    mBambooIslandDiscovered = mgr->getCounterOrFlag(STORYFLAG_BAMBOO_ISLAND_DISCOVERED);
+    mIsleOfSongsDiscovered = mgr->getCounterOrFlag(STORYFLAG_ISLE_OF_SONGS_DISCOVERED);
+    mBugHavenDiscovered = mgr->getCounterOrFlag(STORYFLAG_BUG_HAVEN_DISCOVERED);
+    mBilocyteFightTriggered = mgr->getCounterOrFlag(STORYFLAG_BILOCYCTE_FIGHT_TRIGGERED);
+    mFaronPillarOpened = mgr->getCounterOrFlag(STORYFLAG_FARON_PILLAR_OPENED);
+    mFaronDiscovered = mgr->getCounterOrFlag(STORYFLAG_FARON_DISCOVERED);
+    mEldinPillarOpened = mgr->getCounterOrFlag(STORYFLAG_ELDIN_PILLAR_OPENED);
+    mEldinDiscovered = mgr->getCounterOrFlag(STORYFLAG_ELDIN_DISCOVERED);
+    mLanayruPillarOpened = mgr->getCounterOrFlag(STORYFLAG_LANAYRU_PILLAR_OPENED);
+    mLanaryuDiscovered = mgr->getCounterOrFlag(STORYFLAG_LANAYRU_DISCOVERED);
+    mThunderheadEntered = mgr->getCounterOrFlag(STORYFLAG_THUNDERHEAD_ENTERED);
+    mBeedleShopEntered = mgr->getCounterOrFlag(STORYFLAG_BEEDLE_SHOP_ENTERED);
 }
 
 void dLytMapIcon01_c::setLinkTunic(s32 type) {
@@ -1064,6 +1142,49 @@ void dLytMapIcon01_c::setLinkTunic(s32 type) {
     mAnm[MAP_ICON_01_ANIM_PLAYER_2_PATTERN].setFrame(frame);
     mLyt.calc();
     mAnm[MAP_ICON_01_ANIM_PLAYER_2_PATTERN].setAnimEnable(false);
+}
+
+void dLytMapIcon01_c::setAreaLight(u32 color, nw4r::lyt::Pane *pane) {
+    f32 frame = color;
+    mAnm[MAP_ICON_01_ANIM_AREA_COLOR].setAnimEnable(true);
+    mAnm[MAP_ICON_01_ANIM_AREA_COLOR].setFrame(frame);
+    pane->Animate(0);
+    mAnm[MAP_ICON_01_ANIM_AREA_COLOR].setAnimEnable(false);
+}
+
+void dLytMapIcon01_c::setCloud(u32 alpha, nw4r::lyt::Pane *pane) {
+    f32 frame = alpha;
+    mAnm[MAP_ICON_01_ANIM_CLOUD_ALPHA].setAnimEnable(true);
+    mAnm[MAP_ICON_01_ANIM_CLOUD_ALPHA].setFrame(frame);
+    pane->Animate(0);
+    mAnm[MAP_ICON_01_ANIM_CLOUD_ALPHA].setAnimEnable(false);
+}
+
+void dLytMapIcon01_c::setGoddessStatue(u32 present) {
+    f32 frame = 0.0f;
+    if (!present) {
+        frame = 1.0f;
+    }
+    mAnm[MAP_ICON_01_ANIM_GODDESS_ON_OFF].setFrame(frame);
+    mAnm[MAP_ICON_01_ANIM_GODDESS_ON_OFF].setAnimEnable(true);
+    mLyt.calc();
+    mAnm[MAP_ICON_01_ANIM_GODDESS_ON_OFF].setAnimEnable(false);
+}
+
+void dLytMapIcon01_c::setSaveObj(u32 color, nw4r::lyt::Pane *pane) {
+    f32 frame = color;
+    mAnm[MAP_ICON_01_ANIM_SAVE_OBJECT_COLOR].setAnimEnable(true);
+    mAnm[MAP_ICON_01_ANIM_SAVE_OBJECT_COLOR].setFrame(frame);
+    pane->Animate(0);
+    mAnm[MAP_ICON_01_ANIM_SAVE_OBJECT_COLOR].setAnimEnable(false);
+}
+
+void dLytMapIcon01_c::setTerry(bool present) {
+    // NONMATCHING
+    // Additional clrlwi here...
+    // When you fix this, maybe also fix other instances of this problem
+    // by searching for 91657b77
+    mpTerryOnOffPane->SetVisible(present);
 }
 
 void dLytMapIcon01_c::drawWithAnimIn(u32 paneIdx, nw4r::lyt::Pane *pane, f32 frame) {
@@ -1155,9 +1276,62 @@ void dLytMapIcon01_c::checkMapMode() {
     }
 }
 
+void dLytMapIcon01_c::setupActorDrawCommands() {
+    dAcBase_c *ac = nullptr;
+    while ((ac = static_cast<dAcBase_c *>(fManager_c::searchBaseByGroupType(fBase_c::ACTOR, ac))) != nullptr) {
+        if (field_0x0C70 == 4 && mBilocyteFightTriggered) {
+            setupNpcBNusiDrawCommand(ac);
+        }
+
+        if (field_0x0C70 == 1 && checkHasMap()) {
+            setupObjD3DummyDrawCommand(ac);
+        }
+
+        if (dScGame_c::currentSpawnInfo.getTimeOfDay() != SpawnInfo::NIGHT) {
+            setupObjTerryShopDrawCommand(ac);
+        }
+
+        setupTboxDrawCommand(ac);
+        setupObjShutterDrawCommand(ac);
+        setupObjDoorDrawCommand(ac);
+        setupObjSealedDoorDrawCommand(ac);
+        setupObjHarpHintDrawCommand(ac);
+
+        if (field_0x184D) {
+            setupNpcKenseiDrawCommand(ac);
+        }
+
+        setupNpcBeeDrawCommand(ac);
+        setupObjSaveDrawCommand(ac);
+        setupObjLightLineDrawCommand(ac);
+        setupObjRoAtTargetDrawCommand(ac);
+
+        if (mNumCommands >= 100) {
+            break;
+        }
+    }
+}
+
+void dLytMapIcon01_c::setupNpcKenseiDrawCommand(dAcBase_c *actor) {
+    if (mNumCommands < 100) {
+        if (actor->mProfileName == fProfile::NPC_KENSEI && !actor->checkActorProperty(dAcBase_c::AC_PROP_0x100) &&
+            mCurrentFloor == dStage_c::GetInstance()->getMapRelated()->fn_801B4F10(actor->mRoomID, actor->mPosition)) {
+            mVec2_c pos(0.0f, 0.0f);
+            projectOntoMap(actor->mPosition, pos);
+            mCommands[mNumCommands].passIdx = 18;
+            mCommands[mNumCommands].paneIdx = MAP_ICON_01_PANE_SWORD_00;
+            mCommands[mNumCommands].position.x = pos.x;
+            mCommands[mNumCommands].position.y = pos.y;
+
+            mNumCommandsPerPass[18]++;
+            mNumCommands++;
+        }
+    }
+}
+
 void dLytMapIcon01_c::setupTboxDrawCommand(dAcBase_c *actor) {
     if (actor->mProfileName == fProfile::TBOX && !actor->checkActorProperty(dAcBase_c::AC_PROP_0x100) &&
-        field_0xD0C == dStage_c::GetInstance()->getMapRelated()->fn_801B4F10(actor->mRoomID, actor->mPosition)) {
+        mCurrentFloor == dStage_c::GetInstance()->getMapRelated()->fn_801B4F10(actor->mRoomID, actor->mPosition)) {
         dAcTbox_c *box = static_cast<dAcTbox_c *>(actor);
         if (box->getVariant() == dAcTbox_c::GODDESS) {
             u16 flag = box->getParams2Lower();
@@ -1186,16 +1360,16 @@ void dLytMapIcon01_c::setupTboxDrawCommandClosed(dAcTbox_c *box) {
         if (checkHasMap()) {
             if (field_0x0C84) {
                 mIconAnims[mNumAnims].cmdIndex = mNumCommands;
-                mIconAnims[mNumAnims].idleVisible = true;
+                mIconAnims[mNumAnims].visible = true;
                 mIconAnims[mNumAnims].animIn = true;
             } else {
                 mIconAnims[mNumAnims].cmdIndex = mNumCommands;
-                mIconAnims[mNumAnims].idleVisible = true;
+                mIconAnims[mNumAnims].visible = true;
                 mIconAnims[mNumAnims].animIn = false;
             }
         } else {
             mIconAnims[mNumAnims].cmdIndex = mNumCommands;
-            mIconAnims[mNumAnims].idleVisible = false;
+            mIconAnims[mNumAnims].visible = false;
         }
 
         mNumAnims++;
@@ -1229,5 +1403,522 @@ void dLytMapIcon01_c::setupTboxDrawCommandGoddessClosed(dAcTbox_c *box) {
 
         mNumCommandsPerPass[28]++;
         mNumCommands++;
+    }
+}
+
+void dLytMapIcon01_c::setupObjShutterDrawCommand(dAcBase_c *actor) {
+    // TODO - needs door classes
+}
+
+void dLytMapIcon01_c::setupObjDoorDrawCommand(dAcBase_c *actor) {
+    // TODO - needs door classes
+}
+
+void dLytMapIcon01_c::setupObjSaveDrawCommand(dAcBase_c *actor) {
+    if (mNumCommands < 100) {
+        if (actor->mProfileName == fProfile::OBJ_SAVE && !actor->checkActorProperty(dAcBase_c::AC_PROP_0x100) &&
+            mCurrentFloor == dStage_c::GetInstance()->getMapRelated()->fn_801B4F10(actor->mRoomID, actor->mPosition)) {
+            dAcOSave_c *save = static_cast<dAcOSave_c *>(actor);
+
+            bool b1 = false;
+            bool b2 = false;
+            bool activated = save->checkStatueFlag();
+            if (field_0x0C70 == 1) {
+                if (checkHasMap()) {
+                    if (field_0x0C84) {
+                        if (!activated) {
+                            b1 = true;
+                            b2 = true;
+                        } else {
+                            b1 = true;
+                        }
+                    } else {
+                        b1 = true;
+                    }
+                } else if (activated) {
+                    b1 = true;
+                }
+            } else if (activated) {
+                b1 = true;
+            }
+
+            mVec2_c pos(0.0f, 0.0f);
+            projectOntoMap(actor->mPosition, pos);
+            mCommands[mNumCommands].passIdx = 9;
+            mCommands[mNumCommands].paneIdx = MAP_ICON_01_PANE_SAVEICON_00;
+            mCommands[mNumCommands].position.x = pos.x;
+            mCommands[mNumCommands].position.y = pos.y;
+
+            if (b1) {
+                if (save->getStatueType() == dAcOSave_c::TYPE_NORMAL) {
+                    field_0x0D4B[mNumCommands] = 0;
+                } else if (save->getStatueType() == dAcOSave_c::TYPE_OVERWORLD) {
+                    field_0x0D4B[mNumCommands] = 1;
+                } else if (save->getStatueType() == dAcOSave_c::TYPE_DUNGEON) {
+                    field_0x0D4B[mNumCommands] = 2;
+                } else {
+                    field_0x0D4B[mNumCommands] = 0;
+                }
+
+                if (b2) {
+                    mIconAnims[mNumAnims].cmdIndex = mNumCommands;
+                    mIconAnims[mNumAnims].visible = true;
+                    mIconAnims[mNumAnims].animIn = true;
+                } else {
+                    mIconAnims[mNumAnims].cmdIndex = mNumCommands;
+                    mIconAnims[mNumAnims].visible = true;
+                    mIconAnims[mNumAnims].animIn = false;
+                }
+            } else {
+                mIconAnims[mNumAnims].cmdIndex = mNumCommands;
+                mIconAnims[mNumAnims].visible = false;
+                mIconAnims[mNumAnims].animIn = false;
+            }
+
+            if (field_0x0C70 != 4 && mIconAnims[mNumAnims].visible == true &&
+                field_0x0E13 < MAP_ICON_01_BOUNDING_COMMONICON_LAST - MAP_ICON_01_BOUNDING_COMMONICON_00) {
+                s32 idx = field_0x0E13 + MAP_ICON_01_BOUNDING_COMMONICON_00;
+                u32 id = save->getStatueNameId();
+                mPopupConfigs[idx].cmdIdx = mNumCommands;
+                mPopupConfigs[idx].boundingPos.x = pos.x;
+                mPopupConfigs[idx].boundingPos.y = pos.y;
+                mPopupConfigs[idx].objId = id;
+                mPopupConfigs[idx].labelPrefix = sSaveObjPrefix;
+                nw4r::lyt::Bounding *b = mPopupConfigs[idx].bounding;
+                nw4r::lyt::Size bSize = mpBoundings[MAP_ICON_01_BOUNDING_SAVEICON_00]->GetSize();
+                b->SetSize(bSize);
+                mVec2_c textPos(0.0f, 0.0f);
+                fn_80181880(
+                    mpSpecialPictures[MAP_ICON_01_SPECIAL_PICTURE_SAVEICON_01],
+                    mpSpecialPanes[MAP_ICON_01_SPECIAL_PANE_SAVEICON_000], textPos
+                );
+
+                mPopupConfigs[idx].textPos.x = textPos.x;
+                mPopupConfigs[idx].textPos.y = textPos.y;
+                mPopupConfigs[idx].bounding->SetVisible(true);
+                field_0x0E13++;
+            }
+
+            mNumAnims++;
+            mNumCommandsPerPass[9]++;
+            mNumCommands++;
+        }
+    }
+}
+
+void dLytMapIcon01_c::setupObjLightLineDrawCommand(dAcBase_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupNpcBNusiDrawCommand(dAcBase_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupObjTerryShopDrawCommand(dAcBase_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupObjRoAtTargetDrawCommand(dAcBase_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupObjD3DummyDrawCommand(dAcBase_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupObjSealedDoorDrawCommand(dAcBase_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupObjHarpHintDrawCommand(dAcBase_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupNpcBeeDrawCommand(dAcBase_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupStageDrawCommands() {
+    dAcBase_c *ac = nullptr;
+    while ((ac = static_cast<dAcBase_c *>(fManager_c::searchBaseByGroupType(fBase_c::STAGE, ac))) != nullptr) {
+        setupTgMapMarkDrawCommand(ac);
+
+        if (dLytMapGlobal_c::GetInstance()->getField_0x54()) {
+            setupTgMapInstDrawCommand(ac);
+        }
+
+        setupTgForceGetFlagDrawCommand(ac);
+
+        if (field_0x184D) {
+            setupTgInsectDrawCommand(ac);
+        }
+
+        if (mNumCommands >= 100) {
+            break;
+        }
+    }
+}
+
+void dLytMapIcon01_c::setupTgMapMarkDrawCommand(dAcBase_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupTgMapMarkDrawCommand1(dTgMapMark_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupTgMapMarkDrawCommand2(dTgMapMark_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupTgMapInstDrawCommand(dAcBase_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupTgForceGetFlagDrawCommand(dAcBase_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupTgInsectDrawCommand(dAcBase_c *actor) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupLinkDrawCommand() {
+    if (dAcPy_c::GetLinkM() != nullptr) {
+        setupLinkDrawCommand1(dAcPy_c::GetLinkM());
+
+        if (dLytMapGlobal_c::GetInstance()->getField_0x50() != 3) {
+            setupLinkDrawCommand2();
+        }
+    }
+}
+
+void dLytMapIcon01_c::setupLinkDrawCommand1(dAcPy_c *ac) {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupLinkDrawCommand2() {
+    // TODO - ...
+}
+
+void dLytMapIcon01_c::setupCloudBigDrawCommand() {
+    if (mNumCommands < 100) {
+        mVec3_c thunderHeadPos(-135210.0f, 0.0f, -84790.0f);
+        mVec2_c pos(0.0f, 0.0f);
+        projectOntoMap(thunderHeadPos, pos);
+        mCommands[mNumCommands].passIdx = 31;
+        mCommands[mNumCommands].paneIdx = MAP_ICON_01_PANE_CLOUDBIG_000;
+        mCommands[mNumCommands].position.x = pos.x;
+        mCommands[mNumCommands].position.y = pos.y;
+
+        mNumCommandsPerPass[31]++;
+        mNumCommands++;
+    }
+}
+
+void dLytMapIcon01_c::setupTriforceDrawCommands() {
+    dAcObjBase_c *ac = nullptr;
+    while ((ac = dAcObjBase_c::getNextObject(&dAcItem_c::sItemList, ac)) != nullptr) {
+        if (static_cast<dAcItem_c *>(ac)->isTriforce() && !ac->checkActorProperty(dAcBase_c::AC_PROP_0x100) &&
+            mCurrentFloor == dStage_c::GetInstance()->getMapRelated()->fn_801B4F10(ac->mRoomID, ac->mPosition)) {
+            // @bug mNumCommands not checked?
+            mVec2_c pos(0.0f, 0.0f);
+            projectOntoMap(ac->mPosition, pos);
+            mCommands[mNumCommands].passIdx = 23;
+            mCommands[mNumCommands].paneIdx = MAP_ICON_01_PANE_TRIFORCE_00;
+            mCommands[mNumCommands].position.x = pos.x;
+            mCommands[mNumCommands].position.y = pos.y;
+
+            mNumCommandsPerPass[23]++;
+            mNumCommands++;
+        }
+    }
+}
+
+void dLytMapIcon01_c::fn_80181880(nw4r::lyt::Pane *a, nw4r::lyt::Pane *b, mVec2_c &result) const {
+    // TODO - maybe equivalent but floating point hell
+    // Ignoring the get16x9to4x3WidthScaleF stuff this basically does
+    // (a->translate + a->parent->translate) * b->scale + (Ex * a->size * a->scale * b->scale / 2.0f)
+    mVec2_c scaleA = a->GetScale();
+    mVec2_c scaleB = b->GetScale();
+
+    mVec3_c parentTranslateA = a->GetParent()->GetTranslate();
+    parentTranslateA.x /= dGfx_c::get16x9to4x3WidthScaleF();
+
+    mVec3_c translateA = a->GetTranslate();
+    translateA.x /= dGfx_c::get16x9to4x3WidthScaleF();
+    translateA.x += parentTranslateA.x;
+    translateA.x *= scaleB.x;
+    translateA.y += parentTranslateA.y;
+    translateA.y *= scaleB.y;
+
+    nw4r::lyt::Size sizeA = a->GetSize();
+    sizeA.width /= dGfx_c::get16x9to4x3WidthScaleF();
+    sizeA.width *= scaleA.x;
+    sizeA.width *= scaleB.x;
+    sizeA.height *= scaleA.y;
+    sizeA.height *= scaleB.y;
+
+    translateA.x += (sizeA.width / 2.0f);
+
+    result.x = translateA.x;
+    result.y = translateA.y;
+}
+
+void dLytMapIcon01_c::recordAnimVisState() {
+    for (int i = 0; i < mNumAnims; i++) {
+        mIconAnims[i].prevVisible = mIconAnims[i].visible;
+    }
+}
+
+void dLytMapIcon01_c::transitionAnims() {
+    for (int i = 0; i < mNumAnims; i++) {
+        if (mIconAnims[i].visible != mIconAnims[i].prevVisible) {
+            if (mIconAnims[i].prevVisible == true) {
+                mIconAnims[i].animIn = false;
+                mIconAnims[i].animOut = true;
+            } else if (mIconAnims[i].visible == true) {
+                mIconAnims[i].animIn = true;
+                mIconAnims[i].animOut = false;
+            }
+        }
+    }
+}
+
+void dLytMapIcon01_c::checkBoundingPointing() {
+    for (int i = 0; i < MAP_ICON_01_BOUNDING_COMMONICON_LAST; i++) {
+        if (mPopupConfigs[i].bounding->IsVisible() && isPointingAtBounding(mPopupConfigs[i].bounding)) {
+            if (i == MAP_ICON_01_BOUNDING_UTA_00) {
+                mPopupConfigs[MAP_ICON_01_BOUNDING_UTA_01].pointedAt = true;
+            } else if (i == MAP_ICON_01_BOUNDING_MUSI_00) {
+                mPopupConfigs[MAP_ICON_01_BOUNDING_MUSI_01].pointedAt = true;
+            } else if (i == MAP_ICON_01_BOUNDING_SKYLOFT_00) {
+                mPopupConfigs[MAP_ICON_01_BOUNDING_SKYLOFT_01].pointedAt = true;
+            } else {
+                mPopupConfigs[i].pointedAt = true;
+            }
+        }
+    }
+}
+
+bool dLytMapIcon01_c::isPointingAtBounding(nw4r::lyt::Pane *pane) const {
+    dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
+    if (d != nullptr && d->getType() == 'lyt ' && static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == pane) {
+        return true;
+    }
+    return false;
+}
+
+void dLytMapIcon01_c::fn_80181C40() {
+    for (int i = 0; i < MAP_ICON_01_BOUNDING_COMMONICON_LAST; i++) {
+        mpBoundings[i]->SetVisible(false);
+    }
+}
+
+bool dLytMapIcon00_c::build(d2d::ResAccIf_c *resAcc) {
+    // TODO - ...
+    return true;
+}
+
+bool dLytMapIcon00_c::remove() {
+    // TODO - ...
+    return true;
+}
+
+bool dLytMapIcon00_c::execute() {
+    // TODO - ...
+    return true;
+}
+
+void dLytMapIcon00_c::draw() {
+    // TODO - ...
+}
+
+void dLytMapIcon00_c::resetDrawCommands() {
+    for (int i = 0; i < (int)ARRAY_LENGTH(mCommands); i++) {
+        mCommands[i].position.set(0.0f, 0.0f);
+        mCommands[i].rotation.setF(0.0f);
+        mCommands[i].paneIdx = 39;
+        mCommands[i].passIdx = 35;
+        field_0x0F20[i] = 100;
+        field_0x13A8[i] = 0;
+        field_0x1342[i] = 0;
+        field_0x0E5B[i] = 0;
+    }
+
+    for (int i = 0; i < (int)ARRAY_LENGTH(mNumCommandsPerPass); i++) {
+        mNumCommandsPerPass[i] = 0;
+    }
+
+    field_0x13A7 = 0;
+    mNumCommands = 0;
+
+    for (int i = 0; i < 36; i++) {
+        field_0x0EEC[i] = 0;
+    }
+
+    for (int i = 0; i < (int)ARRAY_LENGTH(mPopupConfigs); i++) {
+        mPopupConfigs[i].cmdIdx = 100;
+        mPopupConfigs[i].boundingPos.set(0.0f, 0.0f);
+        mPopupConfigs[i].textPos.set(0.0f, 0.0f);
+        mPopupConfigs[i].pointedAt = false;
+        mPopupConfigs[i].objId = 0;
+        mPopupConfigs[i].labelPrefix = sMapPrefix;
+    }
+
+    field_0x140C = 0;
+    field_0x0E59 = 0;
+    field_0x0E5A = 0;
+
+    fn_80189750();
+
+    field_0x0E50 = 0;
+    field_0x0E51 = 0;
+    field_0x0E52 = 0;
+    field_0x0E53 = 0;
+    field_0x0E54 = 0;
+    field_0x0E55 = 0;
+    field_0x0E56 = 0;
+    field_0x0E57 = 0;
+    field_0x0E58 = 0;
+
+    for (int i = 0; i < (int)ARRAY_LENGTH(mIconAnims); i++) {
+        mIconAnims[i].render = false;
+    }
+
+    mNumAnims = 0;
+    field_0x1CE4 = 0;
+}
+
+static const char *sMapPopPrefix = "MAP_POP_";
+
+bool dLytMapMarkers_c::build(d2d::ResAccIf_c *resAcc) {
+    mMapPopup.build(resAcc);
+    if (dStageMgr_c::GetInstance()->isSTIFbyte4_0()) {
+        void *data = LayoutArcManager::GetInstance()->getLoadedData("MapSky");
+        mResAcc01.attach(data, "");
+
+        // TODO - ...
+
+        mIcon01.build(&mResAcc01);
+    } else {
+        void *data = LayoutArcManager::GetInstance()->getLoadedData("MapField");
+        mResAcc00.attach(data, "");
+
+        // TODO - ...
+
+        mIcon00.build(&mResAcc00);
+    }
+    return true;
+}
+
+bool dLytMapMarkers_c::remove() {
+    mMapPopup.remove();
+    if (dStageMgr_c::GetInstance()->isSTIFbyte4_0()) {
+        mIcon01.remove();
+        mResAcc01.detach();
+    } else {
+        mIcon00.remove();
+        mResAcc00.detach();
+    }
+    // TODO - ...
+    return true;
+}
+
+bool dLytMapMarkers_c::execute() {
+    return true;
+}
+
+void dLytMapMarkers_c::draw() {
+    if (dStageMgr_c::GetInstance()->isSTIFbyte4_0()) {
+        mIcon01.draw();
+    } else {
+        mIcon00.draw();
+    }
+}
+
+void dLytMapMarkers_c::setIslandNamesOn(bool on) {
+    if (dStageMgr_c::GetInstance()->isSTIFbyte4_0()) {
+        mShowIslandNames = on;
+        mIcon01.mShowIslandNames = on;
+    }
+}
+
+void dLytMapMarkers_c::drawPopups() {
+    for (int i = 0; i < mNumPopups; i++) {
+        if (mPopups[i].visible) {
+            SizedString<0x40> label;
+            if (mPopups[i].objId == 0xFF) {
+                label.sprintf("SAVEOBJ_NAME_UNKNOWN");
+            } else {
+                label.sprintf("%s%02d", mPopups[i].labelPrefix, mPopups[i].objId);
+            }
+            mMapPopup.setLabel(label);
+            mMapPopup.realizeText();
+            f32 width = mMapPopup.getTextRenderWidth();
+
+            // TODO - probably equivalent but FPR, order, stack problems
+            mVec2_c boundingPos = mPopups[i].boundingPos;
+            mVec2_c textPos = mPopups[i].textPos;
+            mVec2_c pos = boundingPos + textPos + field_0x06F4;
+            pos.x += width / 2.0f;
+            
+            mMapPopup.setPosition(pos);
+
+            mMapPopup.setInout(mPopups[i].inAnimFrame);
+            mMapPopup.draw();
+            if (mPopups[i].inAnimFrame <= mMapPopup.getInAnimDuration()) {
+                mPopups[i].inAnimFrame += 1.0f;
+            }
+            if (mMapPopup.getInAnimDuration() <= mPopups[i].inAnimFrame) {
+                mPopups[i].inAnimFrame = mMapPopup.getInAnimDuration();
+            }
+        } else if (0.0f < mPopups[i].inAnimFrame) {
+            SizedString<0x40> label;
+            if (mPopups[i].objId == 0xFF) {
+                label.sprintf("SAVEOBJ_NAME_UNKNOWN");
+            } else {
+                label.sprintf("%s%02d", mPopups[i].labelPrefix, mPopups[i].objId);
+            }
+            mMapPopup.setLabel(label);
+            mMapPopup.realizeText();
+            f32 width = mMapPopup.getTextRenderWidth();
+
+            // TODO - probably equivalent but FPR, order, stack problems
+            mVec2_c boundingPos = mPopups[i].boundingPos;
+            mVec2_c textPos = mPopups[i].textPos;
+            mVec2_c pos = boundingPos + textPos + field_0x06F4;
+            pos.x += width / 2.0f;
+
+            mMapPopup.setPosition(pos);
+
+            mPopups[i].inAnimFrame -= 1.0f;
+            mMapPopup.setInout(mPopups[i].inAnimFrame);
+            mMapPopup.draw();
+        }
+    }
+}
+
+void dLytMapMarkers_c::resetPopups() {
+    for (int i = 0; i < (int)ARRAY_LENGTH(mPopups); i++) {
+        mPopups[i].inAnimFrame = 0.0f;
+        mPopups[i].textPos.set(0.0f, 0.0f);
+        mPopups[i].boundingPos.set(0.0f, 0.0f);
+        mPopups[i].visible = false;
+        mPopups[i].objId = 0;
+        mPopups[i].labelPrefix = sMapPopPrefix;
+    }
+}
+
+void dLytMapMarkers_c::loadPopups() {
+    for (int i = 0; i < mNumPopups; i++) {
+        // TODO - this looks weird
+        const mVec2_c &v = mpPopupConfigs[i].textPos;
+        mPopups[i].textPos.x = v.x;
+        mPopups[i].textPos.y = v.y;
+        mPopups[i].boundingPos = mpPopupConfigs[i].boundingPos;
+        mPopups[i].visible = mpPopupConfigs[i].pointedAt;
+        mPopups[i].objId = mpPopupConfigs[i].objId;
+        mPopups[i].labelPrefix = mpPopupConfigs[i].labelPrefix;
     }
 }

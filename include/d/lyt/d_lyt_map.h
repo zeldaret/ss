@@ -596,11 +596,7 @@ private:
     /* 0x0FA0 */ dLytMapFloorBtnMgr_c mFloorBtnMgr;
     /* 0x16B4 */ dLytMapPinIconAggregate_c mPinIconAggregate;
     /* 0x2060 */ dLytMapMarkers_c mMarkers;
-
-    /* 0x5F54 */ u8 _0x5F54[0x64C0 - 0x5F54];
-
     /* 0x64C0 */ dLytMapFootPrints_c mFootPrints;
-
     /* 0x6664 */ dLytMapPutIcon_c mPutIcon;
     /* 0x6704 */ dLytMapSaveObj_c mSaveObjs[12];
     /* 0x79C4 */ dLytMapSaveCaption_c mSaveCaption;
@@ -674,7 +670,12 @@ private:
     /* 0x8CAC */ u8 field_0x8CAC;
     /* 0x8CAD */ u8 field_0x8CAD;
 
-    /* 0x8CAE */ u8 _0x8CAE[0x8CBC - 0x8CAE];
+    /* 0x8CAE */ u8 _0x8CAE[0x8CB0 - 0x8CAE];
+
+    /* 0x8CB0 */ u32 field_0x8CB0;
+    /* 0x8CB4 */ UNKWORD field_0x8CB4;
+
+    /* 0x8CB8 */ u8 _0x8CB8[0x8CBC - 0x8CB8];
 
     /* 0x8CBC */ nw4r::lyt::Bounding *mpMapBounding;
     /* 0x8CC0 */ bool field_0x8CC0;

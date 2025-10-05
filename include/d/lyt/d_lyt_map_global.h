@@ -116,6 +116,26 @@ public:
         mFloor = floor;
     }
 
+    u8 getField_0x4C() const {
+        return field_0x4C;
+    }
+
+    u8 getField_0x4D() const {
+        return field_0x4D;
+    }
+
+    u8 getField_0x4F() const {
+        return field_0x4F;
+    }
+
+    UNKWORD getField_0x50() const {
+        return field_0x50;
+    }
+
+    u8 getField_0x54() const {
+        return field_0x54;
+    }
+
     void projectOntoMap(mVec2_c &result, const mVec3_c &position) const;
     void unprojectFromMap(mVec3_c &result, const mVec2_c &position) const;
     void unprojectFromMap(mVec3_c &result, const mVec2_c &position, const mAng &rot) const;

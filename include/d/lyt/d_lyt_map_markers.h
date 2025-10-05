@@ -13,14 +13,21 @@
 
 class dAcBase_c;
 class dAcTbox_c;
+class dAcPy_c;
+class dTgMapMark_c;
 
 // Size: 0x1C
-struct MapUnkStruct1 {
+struct dLytMapPopupState {
 public:
-    MapUnkStruct1() {}
-    ~MapUnkStruct1() {}
+    dLytMapPopupState() : textPos(0.0f, 0.0f) {}
+    ~dLytMapPopupState() {}
 
-    /* 0x00 */ u8 _0x00[0x1C];
+    /* 0x00 */ f32 inAnimFrame;
+    /* 0x04 */ mVec2_c textPos;
+    /* 0x0C */ mVec2_c boundingPos;
+    /* 0x14 */ bool visible;
+    /* 0x15 */ u8 objId;
+    /* 0x18 */ const char *labelPrefix;
 };
 
 /**
@@ -44,32 +51,34 @@ public:
 };
 
 // Size: 0x20
-struct MapUnkStruct3 {
+struct dLytMapPopupConfig {
 public:
-    MapUnkStruct3() {}
-    ~MapUnkStruct3() {}
+    dLytMapPopupConfig() : textPos(0.0f, 0.0f) {}
+    ~dLytMapPopupConfig() {}
 
-    /* 0x00 */ UNKWORD field_0x00;
+    /* 0x00 */ s32 cmdIdx;
     /* 0x04 */ nw4r::lyt::Bounding *bounding;
-    /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ f32 field_0x0C;
-    /* 0x10 */ mVec2_c field_0x10;
-    /* 0x18 */ u8 field_0x18;
-    /* 0x19 */ u8 field_0x19;
-    /* 0x1C */ const char *field_0x1C;
+    /* 0x08 */ mVec2_c textPos;
+    /* 0x10 */ mVec2_c boundingPos;
+    /* 0x18 */ bool pointedAt;
+    /* 0x19 */ u8 objId;
+    /* 0x1C */ const char *labelPrefix;
 };
 
-// Size: 0xC
-struct MapUnkStruct4 {
+/**
+ * Copy of dLytMapIcon01DrawCommand
+ *
+ * Size: 0xC
+ */
+struct dLytMapIcon00DrawCommand {
 public:
-    MapUnkStruct4() {}
-    ~MapUnkStruct4() {}
+    dLytMapIcon00DrawCommand() {}
+    ~dLytMapIcon00DrawCommand() {}
 
-    /* 0x00 */ f32 field_0x00;
-    /* 0x04 */ f32 field_0x04;
-    /* 0x08 */ u16 field_0x08;
-    /* 0x0A */ u8 field_0x0A;
-    /* 0x0B */ u8 field_0x0B;
+    /* 0x00 */ mVec2_c position;
+    /* 0x08 */ mAng rotation;
+    /* 0x0A */ u8 paneIdx;
+    /* 0x0B */ u8 passIdx;
 };
 
 /**
@@ -82,19 +91,25 @@ struct dLytMapIconAnimState {
 public:
     // no ctor/dtor
 
-    /* 0x00 */ UNKWORD cmdIndex;
+    /* 0x00 */ s32 cmdIndex;
     /* 0x04 */ f32 frame;
-    /* 0x08 */ u8 animIn;
-    /* 0x09 */ u8 animOut;
-    /* 0x0A */ u8 idleVisible;
-    /* 0x0B */ u8 field_0x0B;
-    /* 0x0C */ bool visible;
+    /* 0x08 */ bool animIn;
+    /* 0x09 */ bool animOut;
+    /* 0x0A */ bool visible;
+    /* 0x0B */ bool prevVisible;
+    /* 0x0C */ bool render;
 };
 
 /** 2D UI - Map - Popup text that appears when pointing at certain points of interest */
 class dLytMapPopup_c {
 public:
-    dLytMapPopup_c() : mLabel("MAP_00") {}
+    dLytMapPopup_c()
+        : mLabel("MAP_00"),
+          mModeCheckResult(MODE_MAX),
+          field_0x178(0),
+          mMaxScale(0.0f),
+          field_0x180(0),
+          field_0x184(0) {}
     virtual ~dLytMapPopup_c() {}
 
     bool build(d2d::ResAccIf_c *resAcc);
@@ -103,8 +118,17 @@ public:
     void draw();
 
     void setLabel(const char *label);
+    void realizeText();
     void setInout(f32 value);
     f32 getTextRenderWidth() const;
+
+    f32 getInAnimDuration() const {
+        return mAnm[1].getLastFrame();
+    }
+
+    void setPosition(const mVec2_c &pos) {
+        mPosition = pos;
+    }
 
 private:
     enum ModeCheck_e {
@@ -112,9 +136,9 @@ private:
         MODE_TRANSITION_TO_STAGE = 3,
         MODE_STABLE_STAGE = 4,
         MODE_STABLE_ZOOM = 5,
+        MODE_MAX = 6,
     };
 
-    void realizeText();
     void setInitialState();
 
     void checkMapMode();
@@ -132,12 +156,14 @@ private:
     /* 0x178 */ u8 field_0x178;
     /* 0x17C */ f32 mMaxScale;
     /* 0x180 */ UNKWORD field_0x180;
+    /* 0x184 */ UNKWORD field_0x184;
 };
 
 /** 2D UI - Map - Text holding area names (on the world/province view, or exits on the stage view) */
 class dLytMapPlace_c {
 public:
-    dLytMapPlace_c() {}
+    dLytMapPlace_c()
+        : mLabel("MAP_02"), mModeCheckResult(MODE_MAX), field_0x1C0(0.0f), field_0x1C4(0.0f), mMaxScale(0.0f) {}
     virtual ~dLytMapPlace_c() {}
 
     bool build(d2d::ResAccIf_c *resAcc);
@@ -157,6 +183,7 @@ private:
         MODE_TRANSITION_TO_STAGE = 3,
         MODE_STABLE_STAGE = 4,
         MODE_STABLE_ZOOM = 5,
+        MODE_MAX = 6,
     };
 
     void realizeText();
@@ -181,27 +208,25 @@ private:
     /* 0x1D8 */ f32 mMaxScale;
 };
 
-class dLytMapIcon00_c : public m2d::Base_c {
-public:
-    dLytMapIcon00_c() {}
-
-private:
-    /* 0x0104 */ d2d::LytBase_c mLyt;
-    /* 0x0194 */ d2d::AnmGroup_c mAnm[29];
-    /* 0x0970 */ dCursorHitCheckLyt_c mCsHitCheck;
-    /* 0x0998 */ MapUnkStruct4 mUnk4[100];
-    /* 0x0E5B */ u8 field_0x0E5B[100];
-    /* 0x0F20 */ u8 field_0x0F20[100];
-    /* 0x0F84 */ mVec3_c field_0x0F84[77];
-    /* 0x1342 */ u8 field_0x1342[100];
-    /* 0x13A8 */ u8 field_0x13A8[100];
-    /* 0x1410 */ MapUnkStruct3 mUnk3[30];
-    /* 0x1D70 */ dLytMapPlace_c mPlace;
-};
-
 class dLytMapIcon01_c : public m2d::Base_c {
+    friend class dLytMapMarkers_c;
+
 public:
-    dLytMapIcon01_c() {}
+    dLytMapIcon01_c()
+        : field_0x000D(0),
+          mShowIslandNames(false),
+          mModeCheckResult(MODE_MAX),
+          field_0x0C70(0),
+          field_0x0C83(0),
+          field_0x0C84(0),
+          field_0x1838(0.0f),
+          field_0x183C(0.0f),
+          field_0x1840(0.0f),
+          field_0x1844(false),
+          field_0x1845(0),
+          field_0x1848(0),
+          field_0x184C(false),
+          field_0x184D(false) {}
     virtual void draw() override;
     virtual bool build(d2d::ResAccIf_c *resAcc);
     virtual bool remove();
@@ -214,36 +239,69 @@ private:
         MODE_TRANSITION_TO_STAGE = 3,
         MODE_STABLE_STAGE = 4,
         MODE_STABLE_ZOOM = 5,
+        MODE_MAX = 6,
     };
 
     void setupActorDrawCommands();
     void setupStageDrawCommands();
     void setupLinkDrawCommand();
+    void setupLinkDrawCommand1(dAcPy_c *ac);
+    void setupLinkDrawCommand2();
+    void setupCloudBigDrawCommand();
     void setupTriforceDrawCommands();
-    void setupUnkDrawCommand();
 
-    void sortDrawCommands();
+    void sortPanes();
 
     void setupTboxDrawCommand(dAcBase_c *actor);
     void setupTboxDrawCommandGoddessClosed(dAcTbox_c *box);
     void setupTboxDrawCommandOpen(dAcTbox_c *box);
     void setupTboxDrawCommandClosed(dAcTbox_c *box);
+    void setupNpcKenseiDrawCommand(dAcBase_c *actor);
+    void setupObjShutterDrawCommand(dAcBase_c *actor);
+    void setupObjDoorDrawCommand(dAcBase_c *actor);
+    void setupObjSaveDrawCommand(dAcBase_c *actor);
+    void setupObjLightLineDrawCommand(dAcBase_c *actor);
+    void setupNpcBNusiDrawCommand(dAcBase_c *actor);
+    void setupObjTerryShopDrawCommand(dAcBase_c *actor);
+    void setupObjRoAtTargetDrawCommand(dAcBase_c *actor);
+    void setupObjD3DummyDrawCommand(dAcBase_c *actor);
+    void setupObjSealedDoorDrawCommand(dAcBase_c *actor);
+    void setupObjHarpHintDrawCommand(dAcBase_c *actor);
+    void setupNpcBeeDrawCommand(dAcBase_c *actor);
+
+    void setupTgMapMarkDrawCommand(dAcBase_c *actor);
+    void setupTgMapMarkDrawCommand1(dTgMapMark_c *actor);
+    void setupTgMapMarkDrawCommand2(dTgMapMark_c *actor);
+    void setupTgMapInstDrawCommand(dAcBase_c *actor);
+    void setupTgForceGetFlagDrawCommand(dAcBase_c *actor);
+    void setupTgInsectDrawCommand(dAcBase_c *actor);
 
     void setLinkTunic(s32 type);
-    void setGoddessStatue(bool present);
+    void setGoddessStatue(u32 present);
     void setTerry(bool present);
-    void drawAreaLight(s32 color, nw4r::lyt::Pane *pane);
-    void drawSaveObj(s32 color, nw4r::lyt::Pane *pane);
-    void drawCloud(s32 alpha, nw4r::lyt::Pane *pane);
+    void setAreaLight(u32 color, nw4r::lyt::Pane *pane);
+    void setCloud(u32 alpha, nw4r::lyt::Pane *pane);
+    void setSaveObj(u32 color, nw4r::lyt::Pane *pane);
 
     void drawWithAnimIn(u32 paneIdx, nw4r::lyt::Pane *pane, f32 frame);
     void drawWithAnimOut(u32 paneIdx, nw4r::lyt::Pane *pane, f32 frame);
     void drawFullyIn(u32 paneIdx, nw4r::lyt::Pane *pane);
+
     void fn_80181C40();
+
+    void fn_80181880(nw4r::lyt::Pane *, nw4r::lyt::Pane *, mVec2_c &) const;
 
     void checkMapMode();
     void loadFlags();
+    void updateScale();
 
+    void recordAnimVisState();
+    void transitionAnims();
+    void checkBoundingPointing();
+    bool isPointingAtBounding(nw4r::lyt::Pane *pane) const;
+
+    /* 0x000D */ u8 field_0x000D;
+    /* 0x000E */ bool mShowIslandNames;
     /* 0x0010 */ nw4r::lyt::Bounding *mpBoundings[59];
     /* 0x00FC */ nw4r::lyt::Pane *mpSpecialPanes[27];
     /* 0x0168 */ nw4r::lyt::Pane *mpSpecialPictures[27];
@@ -256,28 +314,27 @@ private:
     /* 0x07BC */ dLytMapIcon01DrawCommand mCommands[100];
     /* 0x0C6C */ s32 mModeCheckResult;
     /* 0x0C70 */ s32 field_0x0C70;
-
-    /* 0x0C74 */ u8 field_0x0C74;
-    /* 0x0C75 */ u8 field_0x0C75;
-    /* 0x0C76 */ u8 field_0x0C76;
-    /* 0x0C77 */ u8 field_0x0C77;
-    /* 0x0C78 */ u8 field_0x0C78;
-    /* 0x0C79 */ u8 field_0x0C79;
-    /* 0x0C7A */ u8 field_0x0C7A;
-    /* 0x0C7B */ u8 field_0x0C7B;
-    /* 0x0C7C */ u8 field_0x0C7C;
-    /* 0x0C7D */ u8 field_0x0C7D;
-    /* 0x0C7E */ u8 field_0x0C7E;
-    /* 0x0C7F */ u8 field_0x0C7F;
-    /* 0x0C80 */ u8 field_0x0C80;
-    /* 0x0C81 */ u8 field_0x0C81;
-    /* 0x0C82 */ u8 field_0x0C82;
+    /* 0x0C74 */ bool mFunFunIslandDiscovered;
+    /* 0x0C75 */ bool mLumpyPumkpinDiscovered;
+    /* 0x0C76 */ bool mBeedleIslandDiscovered;
+    /* 0x0C77 */ bool mBambooIslandDiscovered;
+    /* 0x0C78 */ bool mIsleOfSongsDiscovered;
+    /* 0x0C79 */ bool mBugHavenDiscovered;
+    /* 0x0C7A */ bool mBilocyteFightTriggered;
+    /* 0x0C7B */ bool mFaronPillarOpened;
+    /* 0x0C7C */ bool mFaronDiscovered;
+    /* 0x0C7D */ bool mEldinPillarOpened;
+    /* 0x0C7E */ bool mEldinDiscovered;
+    /* 0x0C7F */ bool mLanayruPillarOpened;
+    /* 0x0C80 */ bool mLanaryuDiscovered;
+    /* 0x0C81 */ bool mThunderheadEntered;
+    /* 0x0C82 */ bool mBeedleShopEntered;
     /* 0x0C83 */ u8 field_0x0C83;
     /* 0x0C84 */ u8 field_0x0C84;
     /* 0x0C85 */ u8 field_0x0C85[100];
     /* 0x0CE9 */ u8 mPassIdxes[35];
-    /* 0x0D0C */ s32 field_0xD0C;
-    /* 0x0D10 */ s32 field_0xD10;
+    /* 0x0D0C */ s32 mCurrentFloor;
+    /* 0x0D10 */ s32 mLastFloor;
     /* 0x0D14 */ u8 mNumCommandsPerPass[35];
     /* 0x0D37 */ u8 mNumCommands;
 
@@ -296,41 +353,149 @@ private:
     /* 0x0DAF */ u8 _0x0DAF[0x0E13 - 0x0DAF];
 
     /* 0x0E13 */ u8 field_0x0E13;
-    /* 0x0E14 */ MapUnkStruct3 mUnk3[56];
+    /* 0x0E14 */ dLytMapPopupConfig mPopupConfigs[56];
     /* 0x1514 */ dLytMapIconAnimState mIconAnims[50];
     /* 0x1834 */ s32 mNumAnims;
     /* 0x1838 */ f32 field_0x1838;
     /* 0x183C */ f32 field_0x183C;
-
-    /* 0x1840 */ u8 _0x183C[0x1845 - 0x1840];
-
+    /* 0x1840 */ f32 field_0x1840;
+    /* 0x1844 */ bool field_0x1844;
     /* 0x1845 */ u8 field_0x1845;
 
-    /* 0x1846 */ u8 _0x1846[0x184C - 0x1846];
+    /* 0x1848 */ UNKWORD field_0x1848;
 
     /* 0x184C */ bool field_0x184C;
+    /* 0x184D */ bool field_0x184D;
 };
 
-// TODO, name made up
+class dLytMapIcon00_c : public m2d::Base_c {
+public:
+    dLytMapIcon00_c()
+        : mModeCheckResult(MODE_MAX),
+          field_0x0E4C(0),
+          field_0x0E59(0),
+          field_0x0E5A(0),
+          field_0x13A6(0),
+          field_0x13A7(0),
+          field_0x1CD0(0.0f, 0.0f, 0.0f),
+          field_0x1CDC(0),
+          field_0x1CDD(0),
+          field_0x1CDE(0),
+          field_0x1CE0(0),
+          field_0x1CE4(0),
+          field_0x1CE5(0),
+          field_0x1CE6(0),
+          field_0x1CE7(0) {}
+
+    virtual void draw() override;
+    virtual bool build(d2d::ResAccIf_c *resAcc);
+    virtual bool remove();
+    virtual bool execute();
+    virtual void resetDrawCommands();
+
+private:
+    enum ModeCheck_e {
+        MODE_TRANSITION_TO_ZOOM = 2,
+        MODE_TRANSITION_TO_STAGE = 3,
+        MODE_STABLE_STAGE = 4,
+        MODE_STABLE_ZOOM = 5,
+        MODE_MAX = 6,
+    };
+
+    void fn_80189750();
+
+    /* 0x0010 */ u8 _0x0010[0x0104 - 0x0010];
+
+    /* 0x0104 */ d2d::LytBase_c mLyt;
+    /* 0x0194 */ d2d::AnmGroup_c mAnm[29];
+
+    /* 0x08D4 */ u8 _0x08D4[0x0970 - 0x08D4];
+
+    /* 0x0970 */ dCursorHitCheckLyt_c mCsHitCheck;
+    /* 0x0998 */ dLytMapIcon00DrawCommand mCommands[100];
+    /* 0x0E48 */ s32 mModeCheckResult;
+    /* 0x0E4C */ UNKWORD field_0x0E4C;
+    /* 0x0E50 */ u8 field_0x0E50;
+    /* 0x0E51 */ u8 field_0x0E51;
+    /* 0x0E52 */ u8 field_0x0E52;
+    /* 0x0E53 */ u8 field_0x0E53;
+    /* 0x0E54 */ u8 field_0x0E54;
+    /* 0x0E55 */ u8 field_0x0E55;
+    /* 0x0E56 */ u8 field_0x0E56;
+    /* 0x0E57 */ u8 field_0x0E57;
+    /* 0x0E58 */ u8 field_0x0E58;
+    /* 0x0E59 */ u8 field_0x0E59;
+    /* 0x0E59 */ u8 field_0x0E5A;
+    /* 0x0E5B */ u8 field_0x0E5B[100];
+
+    /* 0x0EC0 */ u8 _0x0EC0[0x0EE4 - 0x0EC0];
+
+    /* 0x0EE4 */ s32 mNumCommands;
+    /* 0x0EE8 */ s32 field_0x0EE8;
+    /* 0x0EEC */ u8 field_0x0EEC[36];
+
+    /* 0x0F10 */ u8 _0x0F10[0x0F20 - 0x0F10];
+
+    /* 0x0F20 */ u8 field_0x0F20[100];
+
+    /* 0x0F84 */ mVec3_c field_0x0F84[77];
+
+    /* 0x1320 */ u8 _0x1320[0x1331 - 0x1320];
+
+    /* 0x1331 */ u8 mNumCommandsPerPass[17];
+    /* 0x1342 */ u8 field_0x1342[100];
+    /* 0x13A6 */ u8 field_0x13A6;
+    /* 0x13A6 */ u8 field_0x13A7;
+    /* 0x13A8 */ u8 field_0x13A8[100];
+    /* 0x140C */ u8 field_0x140C;
+    /* 0x1410 */ dLytMapPopupConfig mPopupConfigs[30];
+    /* 0x17D0 */ dLytMapPlace_c mPlace;
+    /* 0x19B8 */ dLytMapIconAnimState mIconAnims[50];
+    /* 0x1CCC */ s32 mNumAnims;
+    /* 0x1CD0 */ mVec3_c field_0x1CD0;
+    /* 0x1CDC */ u8 field_0x1CDC;
+    /* 0x1CDD */ u8 field_0x1CDD;
+    /* 0x1CDE */ u8 field_0x1CDE;
+    /* 0x1CE0 */ UNKWORD field_0x1CE0;
+    /* 0x1CE4 */ u8 field_0x1CE4;
+    /* 0x1CE5 */ u8 field_0x1CE5;
+    /* 0x1CE6 */ u8 field_0x1CE6;
+    /* 0x1CE7 */ u8 field_0x1CE7;
+};
+
 class dLytMapMarkers_c : public m2d::Base_c {
 public:
-    dLytMapMarkers_c() : field_0x6F0(0), field_0x0702(0), field_0x0703(0), field_0x0704(0.0f) {}
+    dLytMapMarkers_c()
+        : mShowIslandNames(false), field_0x0702(0), field_0x0703(0), field_0x0704(0.0f), mNumPopups(0) {}
     virtual ~dLytMapMarkers_c() {}
     virtual void draw() override;
-    virtual void build(d2d::ResAccIf_c *resAcc);
+    virtual bool build(d2d::ResAccIf_c *resAcc);
+    virtual bool remove();
+    virtual bool execute();
 
     void setIslandNamesOn(bool on);
-    void fn_80189B90();
+    void drawPopups();
 
     void setField_0x6F4(const mVec2_c &v) {
         field_0x06F4 = v;
     }
 
-private:
-    /* 0x0010 */ d2d::ResAccIf_c mResAcc1;
-    /* 0x0380 */ d2d::ResAccIf_c mResAcc2;
+    void setField_0x0703(u8 v) {
+        field_0x0703 = v;
+    }
 
-    /* 0x06F0 */ u8 field_0x6F0;
+    f32 getField_0x0704() const {
+        return field_0x0704;
+    }
+
+private:
+    void resetPopups();
+    void loadPopups();
+
+    /* 0x0010 */ d2d::ResAccIf_c mResAcc00;
+    /* 0x0380 */ d2d::ResAccIf_c mResAcc01;
+
+    /* 0x06F0 */ bool mShowIslandNames;
     /* 0x06F4 */ mVec2_c field_0x06F4;
 
     /* 0x06FC */ u8 _0x6FC[0x0702 - 0x06FC];
@@ -339,11 +504,11 @@ private:
     /* 0x0702 */ u8 field_0x0703;
     /* 0x0704 */ f32 field_0x0704;
     /* 0x0708 */ dLytMapPopup_c mMapPopup;
-    /* 0x088C */ u8 _0x088C[0x0894 - 0x088C];
-    /* 0x0894 */ MapUnkStruct1 mUnk1[60];
-
-    /* 0x0F30 */ dLytMapIcon01_c mIcon01;
-    /* 0x2780 */ dLytMapIcon00_c mIcon00;
+    /* 0x0890 */ s32 mNumPopups;
+    /* 0x0894 */ dLytMapPopupState mPopups[60];
+    /* 0x0F24 */ const dLytMapPopupConfig *mpPopupConfigs;
+    /* 0x0F28 */ dLytMapIcon01_c mIcon01;
+    /* 0x2778 */ dLytMapIcon00_c mIcon00;
 };
 
 #endif

@@ -2296,7 +2296,7 @@ void dLytMapMain_c::build() {
     }
 
     mMarkers.setField_0x6F4(boundingPos2);
-    
+
     mPinIconAggregate.setUnk(&field_0xF1C);
 
     mpPaneBgAll01 = mLyt.findPane("N_mapBgAll_01");
@@ -2344,17 +2344,19 @@ void dLytMapMain_c::draw() {
         mFootPrints.draw();
     }
 
-    if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE || mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM || mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE || mNextMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+    if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE || mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM ||
+        mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE || mNextMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
         mMarkers.draw();
     }
 
     if (field_0x8C68 != 3 && field_0x8C68 != 5 && field_0x8C94 != 2) {
         mPinIconAggregate.draw();
     }
-    
+
     fn_80143120(0);
 
-    if ((mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE || mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) && (mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE || mNextMapMode == dLytMapGlobal_c::MAPMODE_ZOOM)) {
+    if ((mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE || mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) &&
+        (mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE || mNextMapMode == dLytMapGlobal_c::MAPMODE_ZOOM)) {
         mpZoomInOutPane->SetVisible(false);
     } else {
         mpZoomInOutPane->SetVisible(true);
@@ -2362,11 +2364,12 @@ void dLytMapMain_c::draw() {
 
     mpScaleFlamePane->SetVisible(field_0x8DB5 ? true : false);
     mLyt.getLayout()->GetRootPane()->Draw(mLyt.getDrawInfo());
-    if ((mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE || mNextMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) && field_0x8C94 == 10) {
+    if ((mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE || mNextMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) &&
+        field_0x8C94 == 10) {
         fn_80138D80();
     }
     fn_80143120(-2);
-    mMarkers.fn_80189B90();
+    mMarkers.drawPopups();
     mPutIcon.draw();
     if (field_0x8C94 == 10) {
         mPopupInfo.draw();
@@ -2844,23 +2847,68 @@ void dLytMapMain_c::executeState_ResetPos() {
 }
 void dLytMapMain_c::finalizeState_ResetPos() {}
 
-void dLytMapMain_c::initializeState_ResetPosWithFloorChange() {}
-void dLytMapMain_c::executeState_ResetPosWithFloorChange() {}
+void dLytMapMain_c::initializeState_ResetPosWithFloorChange() {
+    dPadNav::stopFSStickNav();
+    mMapCapture.renderRequest();
+}
+void dLytMapMain_c::executeState_ResetPosWithFloorChange() {
+    if (mMapCapture.isBusyRendering()) {
+        return;
+    }
+    dLytMapGlobal_c *global = getGlobal();
+    mVec3_c pos;
+    fn_80142F00(pos, mCurrentMapMode, mMapUpDirection, global->getMapRotationCenter(), global->getField_0x56());
+    if (global->getMapScroll().squareDistanceToXZ(pos) >= 1.0f) {
+        mStateMgr.changeState(StateID_ResetPos);
+    } else {
+        mStateMgr.changeState(StateID_Active);
+    }
+}
 void dLytMapMain_c::finalizeState_ResetPosWithFloorChange() {}
 
-void dLytMapMain_c::initializeState_EventSwBankSmall_Step1() {}
-void dLytMapMain_c::executeState_EventSwBankSmall_Step1() {}
+void dLytMapMain_c::initializeState_EventSwBankSmall_Step1() {
+    field_0x8CB0 = sHio.field_0x1D;
+    field_0x8CB4 = 0;
+}
+void dLytMapMain_c::executeState_EventSwBankSmall_Step1() {
+    if (field_0x8CB0 != 0) {
+        field_0x8CB0--;
+        return;
+    }
+
+    mMarkers.setField_0x0703(1);
+    mStateMgr.changeState(StateID_EventSwBankSmall_Step2);
+}
 void dLytMapMain_c::finalizeState_EventSwBankSmall_Step1() {}
 
-void dLytMapMain_c::initializeState_EventSwBankSmall_Step2() {}
-void dLytMapMain_c::executeState_EventSwBankSmall_Step2() {}
+void dLytMapMain_c::initializeState_EventSwBankSmall_Step2() {
+    field_0x8CB0 = mMarkers.getField_0x0704();
+}
+void dLytMapMain_c::executeState_EventSwBankSmall_Step2() {
+    if (field_0x8CB0 != 0) {
+        field_0x8CB0--;
+        return;
+    }
+    mStateMgr.changeState(StateID_EventSwBankSmall_Step3);
+}
 void dLytMapMain_c::finalizeState_EventSwBankSmall_Step2() {}
 
-void dLytMapMain_c::initializeState_EventSwBankSmall_Step3() {}
-void dLytMapMain_c::executeState_EventSwBankSmall_Step3() {}
+void dLytMapMain_c::initializeState_EventSwBankSmall_Step3() {
+    field_0x8CB0 = sHio.field_0x1E;
+}
+void dLytMapMain_c::executeState_EventSwBankSmall_Step3() {
+    if (field_0x8CB0 != 0) {
+        field_0x8CB0--;
+        return;
+    }
+
+    field_0x8D6B = 1;
+}
 void dLytMapMain_c::finalizeState_EventSwBankSmall_Step3() {}
 
-void dLytMapMain_c::initializeState_EventMapIntro_Step1() {}
+void dLytMapMain_c::initializeState_EventMapIntro_Step1() {
+    field_0x8CB0 = sHio.field_0x1F;
+}
 void dLytMapMain_c::executeState_EventMapIntro_Step1() {}
 void dLytMapMain_c::finalizeState_EventMapIntro_Step1() {}
 
