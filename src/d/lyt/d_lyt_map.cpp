@@ -19,6 +19,7 @@
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_map_global.h"
+#include "d/lyt/d_lyt_unknowns.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/d_window.h"
 #include "d/lyt/meter/d_lyt_meter.h"
@@ -1903,7 +1904,7 @@ dLytMapMain_c::dLytMapMain_c()
       mFloorBtnMgr(&mGlobal),
       mFootPrints(&mGlobal),
       field_0x8C6C(0),
-      field_0x8C92(1),
+      mMapUpDirectionAfterZoomToDetail(true),
       field_0x8C93(0),
       field_0x8C94(0),
       field_0x8C98(0),
@@ -1926,9 +1927,9 @@ dLytMapMain_c::dLytMapMain_c()
       field_0x8D70(0),
       field_0x8DB0(0),
       mNavEnabled(false),
-      field_0x8DB5(false),
+      mDrawScaleFrame(false),
       field_0x8DB8(0),
-      mIslandNamesOn(false),
+      mShowIslandNames(false),
       field_0x8DBD(0),
       field_0x8DBE(0),
       field_0x8DBF(0),
@@ -2164,6 +2165,12 @@ static const char *sBoundingNames[] = {
     "B_saveIcon_25", "B_saveIcon_26", "B_saveIcon_27",
 };
 
+#define MAP_MAIN_NUM_BOUNDINGS_NORMAL 5
+#define MAP_MAIN_OFFSET_BOUNDINGS_SAVEICON 5
+#define MAP_MAIN_NUM_BOUNDINGS_SAVEICON 28
+
+#define MAP_MAIN_NUM_BOUNDINGS 33
+
 static const char *sPaneNames[] = {
     "N_pName_00", "N_fName_00", "N_nFname_00", "N_sVname_00", "N_dName_02", "N_dName_00",
     "N_lName_00", "N_gName_02", "N_gName_01",  "N_nVname_00", "N_gName_00",
@@ -2227,6 +2234,7 @@ void dLytMapMain_c::build() {
     for (int i = 0; i < (int)ARRAY_LENGTH(sBoundingNames); i++) {
         nw4r::lyt::Bounding *b = mLyt.findBounding(sBoundingNames[i]);
         b->SetVisible(false);
+        // TODO - bird statues
         if (i >= 5 && i < 15) {
             field_0x821C[i - 5] = b;
         } else if (i >= 15 && i < 21) {
@@ -2262,7 +2270,7 @@ void dLytMapMain_c::build() {
     field_0x8D38.x *= mLyt.getDrawInfo().GetLocationAdjustScale().x;
     mpAllPane = mLyt.findPane("N_all_00");
     mpNoroshiPane = mLyt.findPane("N_noroshi_00");
-    mpScaleFlamePane = mLyt.findPane("N_scaleFlame_00");
+    mpScaleFramePane = mLyt.findPane("N_scaleFlame_00");
     mpWakuWindow = mLyt.getWindow("W_waku_01");
 
     for (int i = 0; i < (int)ARRAY_LENGTH(sPaneNames); i++) {
@@ -2362,7 +2370,7 @@ void dLytMapMain_c::draw() {
         mpZoomInOutPane->SetVisible(true);
     }
 
-    mpScaleFlamePane->SetVisible(field_0x8DB5 ? true : false);
+    mpScaleFramePane->SetVisible(mDrawScaleFrame ? true : false);
     mLyt.getLayout()->GetRootPane()->Draw(mLyt.getDrawInfo());
     if ((mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE || mNextMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) &&
         field_0x8C94 == 10) {
@@ -2401,8 +2409,8 @@ void dLytMapMain_c::saveUnkMapData() {
     data.field_0x06 = 1;
     data.mapMode = mCurrentMapMode;
     data.mapUpDirection = mMapUpDirection;
-    data.field_0x05 = field_0x8C92;
-    sSavedMapData.islandNamesOn = mIslandNamesOn;
+    data.mapUpDirectionAfterZoomToDetail = mMapUpDirectionAfterZoomToDetail;
+    sSavedMapData.showIslandNames = mShowIslandNames;
 }
 
 void dLytMapMain_c::initUnkMapData() {
@@ -2410,16 +2418,277 @@ void dLytMapMain_c::initUnkMapData() {
         sSavedMapData.entries[i].field_0x06 = sDefaultMapData.entries[i].field_0x06;
         sSavedMapData.entries[i].mapMode = sDefaultMapData.entries[i].mapMode;
         sSavedMapData.entries[i].mapUpDirection = sDefaultMapData.entries[i].mapUpDirection;
-        sSavedMapData.entries[i].field_0x05 = sDefaultMapData.entries[i].field_0x05;
+        sSavedMapData.entries[i].mapUpDirectionAfterZoomToDetail =
+            sDefaultMapData.entries[i].mapUpDirectionAfterZoomToDetail;
     }
-    sSavedMapData.islandNamesOn = sDefaultMapData.islandNamesOn;
+    sSavedMapData.showIslandNames = sDefaultMapData.showIslandNames;
 }
 
 void dLytMapMain_c::loadUnkMapData() {
     mCurrentMapMode = sSavedMapData.entries[field_0x8C68].mapMode;
     mMapUpDirection = sSavedMapData.entries[field_0x8C68].mapUpDirection;
-    field_0x8C92 = sSavedMapData.entries[field_0x8C68].field_0x05;
-    mIslandNamesOn = sSavedMapData.islandNamesOn;
+    mMapUpDirectionAfterZoomToDetail = sSavedMapData.entries[field_0x8C68].mapUpDirectionAfterZoomToDetail;
+    mShowIslandNames = sSavedMapData.showIslandNames;
+}
+
+void dLytMapMain_c::clearButtonMessages() {
+    for (int i = 0; i <= METER_BTN_0x4000; i++) {
+        dLytMeter_c::GetInstance()->clearFlags(i);
+    }
+}
+
+void dLytMapMain_c::setButtonMessages(
+    s32 currentMapMode, bool currentUpDirection, s32 nextMapMode, bool nextUpDirection
+) {
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_BG, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::ACT_IE_NONE);
+
+    if (canCenterCursor(currentMapMode) || canCenterCursor(nextMapMode)) {
+        dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_DOWN);
+        LytDoButtonRelated::setCrossDown(LytDoButtonRelated::ACT_IE_ETC_CENTER, true);
+    }
+
+    // TODO - some of these parts directly access members instead of using function args...
+
+    // TODO - canCenterCursor1 looks like an inline that somehow failed to get inlined (it's emitted right after this
+    // function...)
+    if (canCenterCursor1(mCurrentMapMode) && canCenterCursor1(mNextMapMode) && canPlaceBeacons(mCurrentMapMode) &&
+        canPlaceBeacons(mNextMapMode)) {
+        if (field_0x8DBD && *mPinIconAggregate.mStateMgr.getStateID() != dLytMapPinIconAggregate_c::StateID_Select) {
+            dLytMeter_c::GetInstance()->setFlags(METER_BTN_C);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::ACT_IE_ETC_ADD_BEACON);
+        } else if (*mPinIconAggregate.mStateMgr.getStateID() == dLytMapPinIconAggregate_c::StateID_Select) {
+            dLytMeter_c::GetInstance()->setFlags(METER_BTN_C);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::ACT_IE_ETC_REMOVE_BEACON);
+        } else if (!(*mStateMgr.getStateID() == StateID_In) && !(*mStateMgr.getStateID() == StateID_Out)) {
+            dLytMeter_c::GetInstance()->setFlags(METER_BTN_NUN_STK);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_NONE);
+        }
+    }
+
+    if (canZoomOut(currentMapMode) && canZoomOut(nextMapMode)) {
+        if ((field_0x8C68 == 0 && currentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) ||
+            (field_0x8C68 == 2 && currentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) ||
+            (field_0x8C68 == 4 && currentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) ||
+            (field_0x8C68 == 3 && currentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) ||
+            (field_0x8C68 == 5 && currentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) ||
+            (field_0x8C68 == 1 && currentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE)) {
+            dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_LEFT);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::ACT_IE_ETC_WORLD_MAP);
+        } else {
+            dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_LEFT);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::ACT_IE_ETC_ZOOM_OUT);
+
+            if (currentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_NUN_STK);
+                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_ETC_ZOOM_OUT);
+            }
+        }
+    }
+
+    if (canZoomIn(currentMapMode) && canZoomIn(nextMapMode)) {
+        dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_RIGHT);
+        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_R, LytDoButtonRelated::ACT_IE_ETC_ZOOM_IN);
+
+        if (currentMapMode == dLytMapGlobal_c::MAPMODE_STAGE && nextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+            dLytMeter_c::GetInstance()->setFlags(METER_BTN_NUN_STK);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_ETC_ZOOM_IN);
+        }
+    }
+
+    // Directly accessing members instead of using function args...
+    if (needsNav(mCurrentMapMode) && needsNav(mNextMapMode)) {
+        dLytMeter_c::GetInstance()->setFlags(METER_BTN_NUN_STK);
+        dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x1000);
+        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::ACT_IE_ETC_SELECT_FLOOR);
+
+        if (mFloorBtnMgr.hasPointedAtABtnIdx() && mFloorBtnMgr.canDecideFloor()) {
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_ETC_DISPLAY);
+        }
+    }
+
+    if (canChangeUpDirection(currentMapMode, currentUpDirection) &&
+        canChangeUpDirection(nextMapMode, nextUpDirection)) {
+        dLytMeter_c::GetInstance()->setFlags(METER_BTN_Z);
+
+        if (!currentUpDirection) {
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_ETC_ROTATE_MAP);
+        } else {
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_ETC_ROTATE_MAP_2);
+        }
+    }
+
+    switch (field_0x8C68) {
+        case 2: {
+            if (currentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_UP);
+                LytDoButtonRelated::setCrossTop(LytDoButtonRelated::ACT_IE_ETC_CURRENT_LOCATION, true);
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_Z);
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x1000);
+                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::ACT_IE_ETC_SCROLL);
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x4000);
+            } else if (currentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+                if (canResetPosition(mCurrentMapMode, mMapUpDirection)) {
+                    dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x1000);
+                    LytDoButtonRelated::set(
+                        LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::ACT_IE_ETC_SCROLL
+                    );
+                } else {
+                    dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x1000);
+                    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::ACT_IE_NONE);
+                }
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x4000);
+            }
+            break;
+        }
+        case 0:
+        case 4: {
+            if (currentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_UP);
+                LytDoButtonRelated::setCrossTop(LytDoButtonRelated::ACT_IE_ETC_CURRENT_LOCATION, true);
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x1000);
+                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::ACT_IE_ETC_SCROLL);
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x4000);
+            } else if (currentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+                if (canResetPosition(mCurrentMapMode, mMapUpDirection)) {
+                    dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_UP);
+                    LytDoButtonRelated::setCrossTop(LytDoButtonRelated::ACT_IE_ETC_CURRENT_LOCATION, true);
+                    dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x1000);
+                    LytDoButtonRelated::set(
+                        LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::ACT_IE_ETC_SCROLL
+                    );
+                } else {
+                    dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x1000);
+                    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::ACT_IE_NONE);
+                }
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x4000);
+            }
+
+            if (field_0x8C68 == 4 && mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE &&
+                mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_Z);
+                if (mShowIslandNames) {
+                    LytDoButtonRelated::set(
+                        LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_ETC_HIDE_ISLAND_NAME
+                    );
+                } else {
+                    LytDoButtonRelated::set(
+                        LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_ETC_SHOW_ISLAND_NAME
+                    );
+                }
+            }
+            break;
+        }
+        case 1: {
+            if (currentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_UP);
+                LytDoButtonRelated::setCrossTop(LytDoButtonRelated::ACT_IE_ETC_CURRENT_LOCATION, true);
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x1000);
+                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::ACT_IE_ETC_SCROLL);
+
+                if (needsNav(mCurrentMapMode) && needsNav(mNextMapMode) && mFloorBtnMgr.hasPointedAtABtnIdx()) {
+                    if (mFloorBtnMgr.canDecideFloor()) {
+                        LytDoButtonRelated::set(
+                            LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_ETC_DISPLAY
+                        );
+                    } else {
+                        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_NONE);
+                    }
+                }
+
+                dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x4000);
+
+            } else if (currentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+                if (needsNav(mCurrentMapMode) && needsNav(mNextMapMode) && mFloorBtnMgr.hasPointedAtABtnIdx()) {
+                    if (mFloorBtnMgr.canDecideFloor()) {
+                        LytDoButtonRelated::set(
+                            LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_ETC_DISPLAY
+                        );
+                    } else {
+                        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_NONE);
+                    }
+                }
+            }
+            break;
+        }
+    }
+}
+
+void dLytMapMain_c::setCursorType() {
+    if (canCenterCursor1(mCurrentMapMode) && canCenterCursor1(mNextMapMode)) {
+        if ((field_0x8C94 == 10 || ((field_0x8C68 == 3 || field_0x8C68 == 1) && mPointerOnMap)) ||
+            (mPointerCanPlaceBeacon && isPointingAtMainMap()) ||
+            (*mPinIconAggregate.mStateMgr.getStateID() == dLytMapPinIconAggregate_c::StateID_Select) ||
+            (needsNav(mCurrentMapMode) && needsNav(mNextMapMode) && mFloorBtnMgr.hasPointedAtABtnIdx())) {
+            dCsGame_c::GetInstance()->pointerDefSet();
+        } else {
+            dCsGame_c::GetInstance()->pointerCatSet();
+        }
+    }
+}
+
+void dLytMapMain_c::fn_8013B0C0() {
+    dLytMapGlobal_c *global = getGlobal();
+    // TODO - FPR Regswaps
+    f32 f1 = field_0x8D40 * global->getField_0x44();
+    f32 f2 = f1 * global->getField_0x28().x;
+    mAng rot = global->getField_0x56();
+
+    for (int i = 0; i <= MAP_MAIN_NUM_BOUNDINGS_NORMAL - 1; i++) {
+        mVec3_c v1;
+        mVec3_c v2;
+
+        f32 v1x = (f32)mHitChecks[i].getBoundingData()->mMinX; 
+        f32 v2x = (f32)mHitChecks[i].getBoundingData()->mMaxX; 
+        f32 v1z = (f32)mHitChecks[i].getBoundingData()->mMaxY;
+        f32 v2z = (f32)mHitChecks[i].getBoundingData()->mMinY;
+
+        v1.x = v1x / f2;
+        v1.y = 0.0f;
+        v1.z = -v1z / f1;
+        
+        v2.x = v2x / f2;
+        v2.y = 0.0f;
+        v2.z = -v2z / f1;
+
+        v1.rotY(rot);
+        v2.rotY(rot);
+
+        // Looks like this is manually unprojecting the UI element
+        // hitbox corners?
+        s16 v = rot.mVal;
+        if (v == 0) {
+            // 0° rotation
+            field_0x8948[i].field_0x00.x = field_0x8CC4.x + v1.x;
+            field_0x8948[i].field_0x00.y = 0.0f;
+            field_0x8948[i].field_0x00.z = field_0x8CC4.z + v1.z;
+
+            field_0x8948[i].field_0x0C.x = field_0x8CC4.x + v2.x;
+            field_0x8948[i].field_0x0C.y = 0.0f;
+            field_0x8948[i].field_0x0C.z = field_0x8CC4.z + v2.z;
+        } else if (v == 0x4000) {
+            // 90° rotation
+            field_0x8948[i].field_0x00.x = field_0x8CC4.x + v1.x;
+            field_0x8948[i].field_0x00.y = 0.0f;
+            field_0x8948[i].field_0x00.z = field_0x8CC4.z + v2.z;
+
+            field_0x8948[i].field_0x0C.x = field_0x8CC4.x + v2.x;
+            field_0x8948[i].field_0x0C.y = 0.0f;
+            field_0x8948[i].field_0x0C.z = field_0x8CC4.z + v1.z;
+        } else if (v == -0x8000) {
+            // 180° rotation
+            field_0x8948[i].field_0x00.x = field_0x8CC4.x + v2.x;
+            field_0x8948[i].field_0x00.y = 0.0f;
+            field_0x8948[i].field_0x00.z = field_0x8CC4.z + v2.z;
+
+            field_0x8948[i].field_0x0C.x = field_0x8CC4.x + v1.x;
+            field_0x8948[i].field_0x0C.y = 0.0f;
+            field_0x8948[i].field_0x0C.z = field_0x8CC4.z + v1.z;
+        }
+    }
 }
 
 void dLytMapMain_c::initializeState_Invisible() {}
@@ -2434,6 +2703,238 @@ void dLytMapMain_c::initializeState_In() {}
 void dLytMapMain_c::executeState_In() {}
 void dLytMapMain_c::finalizeState_In() {}
 
+void dLytMapMain_c::zoomIn() {
+    if (field_0x8C68 == 2 || (field_0x8C6C == 1 && (field_0x8C68 == 3 || field_0x8C68 == 1))) {
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD) {
+            if (dPad::getDownTrigRight()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_AREA);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_WORLD_SKY;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) {
+            if (dPad::getDownTrigRight()) {
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_COURSE);
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+            if (dPad::getDownTrigRight() || dPad::getDownTrigA()) {
+                mNextMapUpDirection = mMapUpDirectionAfterZoomToDetail;
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_ZOOM;
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_DETAIL);
+
+                if (mPointerOnMap && (field_0x8D5C < 2 || !mFloorBtnMgr.hasPointedAtABtnIdx())) {
+                    mStateMgr.changeState(StateID_ChgDispAreaMode_CsrRot);
+                } else {
+                    mStateMgr.changeState(StateID_ChgDispAreaMode_MapRot);
+                }
+            }
+        }
+    } else if (field_0x8C68 == 4 || field_0x8C68 == 5) {
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD) {
+            if (dPad::getDownTrigRight()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_COURSE);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) {
+            if (dPad::getDownTrigRight()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_COURSE);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+            if (dPad::getDownTrigRight() || dPad::getDownTrigA()) {
+                mNextMapUpDirection = mMapUpDirectionAfterZoomToDetail;
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_ZOOM;
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_DETAIL);
+
+                if (mPointerOnMap && (field_0x8D5C < 2 || !mFloorBtnMgr.hasPointedAtABtnIdx())) {
+                    mStateMgr.changeState(StateID_ChgDispAreaMode_CsrRot);
+                } else {
+                    mStateMgr.changeState(StateID_ChgDispAreaMode_MapRot);
+                }
+            }
+        }
+    } else if (field_0x8C68 == 0) {
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD) {
+            if (dPad::getDownTrigRight()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_AREA);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_PROVINCE;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) {
+            if (dPad::getDownTrigRight()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_COURSE);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+            if (dPad::getDownTrigRight() || dPad::getDownTrigA()) {
+                mNextMapUpDirection = mMapUpDirectionAfterZoomToDetail;
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_ZOOM;
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_DETAIL);
+
+                if (mPointerOnMap && (field_0x8D5C < 2 || !mFloorBtnMgr.hasPointedAtABtnIdx())) {
+                    mStateMgr.changeState(StateID_ChgDispAreaMode_CsrRot);
+                } else {
+                    mStateMgr.changeState(StateID_ChgDispAreaMode_MapRot);
+                }
+            }
+        }
+    } else if (field_0x8C68 == 1) {
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD) {
+            if (dPad::getDownTrigRight()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_AREA);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_PROVINCE;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) {
+            if (dPad::getDownTrigRight()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_COURSE);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+            if (dPad::getDownTrigRight() || (!mFloorBtnMgr.hasPointedAtABtnIdx() && dPad::getDownTrigA())) {
+                mNextMapUpDirection = mMapUpDirectionAfterZoomToDetail;
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_ZOOM;
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_DETAIL);
+
+                if (mPointerOnMap && (field_0x8D5C < 2 || !mFloorBtnMgr.hasPointedAtABtnIdx())) {
+                    mStateMgr.changeState(StateID_ChgDispAreaMode_CsrRot);
+                } else {
+                    mStateMgr.changeState(StateID_ChgDispAreaMode_MapRot);
+                }
+            }
+        }
+    } else if (field_0x8C68 == 3) {
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD) {
+            if (dPad::getDownTrigRight()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_AREA);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_PROVINCE;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) {
+            if (dPad::getDownTrigRight()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_COURSE);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        }
+    }
+}
+
+void dLytMapMain_c::zoomOut() {
+    if (field_0x8C68 == 2 || (field_0x8C6C == 1 && (field_0x8C68 == 3 || field_0x8C68 == 1))) {
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) {
+            if (dPad::getDownTrigLeft()) {
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_WORLD;
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_WORLD);
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+            if (dPad::getDownTrigLeft()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_AREA);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_WORLD_SKY;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+            if (dPad::getDownTrigLeft() || dPad::getDownTrigA()) {
+                mMapUpDirectionAfterZoomToDetail = mMapUpDirection;
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+                mNextMapUpDirection = true;
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_COURSE);
+
+                mStateMgr.changeState(StateID_ChgDispAreaMode_MapRot);
+            }
+        }
+    } else if (field_0x8C68 == 4 || field_0x8C68 == 5) {
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) {
+            if (dPad::getDownTrigLeft()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_WORLD);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_WORLD;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+            if (dPad::getDownTrigLeft()) {
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_WORLD;
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_WORLD);
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+            if (dPad::getDownTrigLeft() || dPad::getDownTrigA()) {
+                mMapUpDirectionAfterZoomToDetail = mMapUpDirection;
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+                mNextMapUpDirection = true;
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_COURSE);
+
+                mStateMgr.changeState(StateID_ChgDispAreaMode_MapRot);
+            }
+        }
+    } else if (field_0x8C68 == 0) {
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) {
+            if (dPad::getDownTrigLeft()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_WORLD);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_WORLD;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+            if (dPad::getDownTrigLeft()) {
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_PROVINCE;
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_AREA);
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+            if (dPad::getDownTrigLeft() || dPad::getDownTrigA()) {
+                mMapUpDirectionAfterZoomToDetail = mMapUpDirection;
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+                mNextMapUpDirection = true;
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_COURSE);
+
+                mStateMgr.changeState(StateID_ChgDispAreaMode_MapRot);
+            }
+        }
+    } else if (field_0x8C68 == 1) {
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) {
+            if (dPad::getDownTrigLeft()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_WORLD);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_WORLD;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+            if (dPad::getDownTrigLeft()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_AREA);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_PROVINCE;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+            if (dPad::getDownTrigLeft() || (!mFloorBtnMgr.hasPointedAtABtnIdx() && dPad::getDownTrigA())) {
+                mMapUpDirectionAfterZoomToDetail = mMapUpDirection;
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+                mNextMapUpDirection = true;
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_COURSE);
+
+                mStateMgr.changeState(StateID_ChgDispAreaMode_MapRot);
+            }
+        }
+    } else if (field_0x8C68 == 3) {
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) {
+            if (dPad::getDownTrigLeft()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_WORLD);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_WORLD;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+            if (dPad::getDownTrigLeft()) {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_AREA);
+                mNextMapMode = dLytMapGlobal_c::MAPMODE_PROVINCE;
+                mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+            }
+        }
+    }
+}
+
 void dLytMapMain_c::initializeState_Active() {}
 void dLytMapMain_c::executeState_Active() {
     dLytMapGlobal_c *global = getGlobal();
@@ -2444,13 +2945,13 @@ void dLytMapMain_c::executeState_Active() {
     // TODO figure out and double check numbers
     if (field_0x8C68 == 4 && mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE &&
         mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE && dPad::getDownTrigZ()) {
-        if (mIslandNamesOn) {
+        if (mShowIslandNames) {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ISLAND_NAME_OFF);
         } else {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ISLAND_NAME_ON);
         }
-        mIslandNamesOn = !mIslandNamesOn;
-        mMarkers.setIslandNamesOn(mIslandNamesOn);
+        mShowIslandNames = !mShowIslandNames;
+        mMarkers.setIslandNamesOn(mShowIslandNames);
     }
     checkScroll();
 
@@ -2474,22 +2975,23 @@ void dLytMapMain_c::executeState_Active() {
 
     if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE && mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE &&
         canZoomIn(dLytMapGlobal_c::MAPMODE_STAGE)) {
-        if (field_0x8CC0 && (field_0x8D5C < 2 || !mFloorBtnMgr.hasPointedAtABtnIdx())) {
-            const mVec3_c &pos = global->getPlayerPos();
+        if (mPointerOnMap && (field_0x8D5C < 2 || !mFloorBtnMgr.hasPointedAtABtnIdx())) {
+            // Can zoom in around cursor, use the cursor pos
             getGlobal()->unprojectFromMap(field_0x8CF4, dCsGame_c::GetInstance()->getCursorIf()->getCursorPos());
             f32 tmp = fn_80142D90(4);
             fn_8013FB70(field_0x8CF4, getGlobal()->getField_0x44() / tmp);
-            field_0x8DB5 = true;
+            mDrawScaleFrame = true;
         } else {
+            // Cannot zoom in around cursor, use the player pos
             f32 tmp = fn_80142D90(4);
             f32 val = getGlobal()->getField_0x44() / tmp;
             fn_8013FB70(getGlobal()->getPlayerPos(), val);
-            field_0x8DB5 = true;
+            mDrawScaleFrame = true;
         }
     }
 
     if (field_0x8DBD && *mPinIconAggregate.mStateMgr.getStateID() != dLytMapPinIconAggregate_c::StateID_Select &&
-        dPad::getDownTrigC() && field_0x8CC1) {
+        dPad::getDownTrigC() && mPointerCanPlaceBeacon) {
         s32 id = -1;
         mPinIconAggregate.findNewBeaconId(&id);
         if (id >= 0) {
@@ -2540,7 +3042,7 @@ void dLytMapMain_c::executeState_Active() {
     }
 }
 void dLytMapMain_c::finalizeState_Active() {
-    field_0x8DB5 = false;
+    mDrawScaleFrame = false;
 }
 
 void dLytMapMain_c::initializeState_Out() {
@@ -2718,7 +3220,7 @@ void dLytMapMain_c::initializeState_ChgDispAreaMode_MapRot() {
         mMarkers.setIslandNamesOn(false);
     }
     if (mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
-        mMarkers.setIslandNamesOn(mIslandNamesOn);
+        mMarkers.setIslandNamesOn(mShowIslandNames);
     }
 
     if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM && mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
@@ -2768,7 +3270,7 @@ void dLytMapMain_c::executeState_ChgDispAreaMode_MapRot() {
 
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM && mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
             fn_8013FB70(field_0x8CF4, f4 / field_0x8D50);
-            field_0x8DB5 = true;
+            mDrawScaleFrame = true;
         }
 
         // TODO dead code
@@ -2779,7 +3281,7 @@ void dLytMapMain_c::executeState_ChgDispAreaMode_MapRot() {
             if (field_0x8C94 == 3 && field_0x0108 > 0) {
                 field_0x0108--;
             } else {
-                field_0x8DB5 = false;
+                mDrawScaleFrame = false;
                 if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
                     mAnmGroups[MAP_MAIN_ANIM_ROTATE].setToEnd();
                 } else {
@@ -2787,7 +3289,7 @@ void dLytMapMain_c::executeState_ChgDispAreaMode_MapRot() {
                 }
                 mLyt.calc();
                 mAnmGroups[MAP_MAIN_ANIM_ROTATE].unbind();
-                field_0x8DB5 = false;
+                mDrawScaleFrame = false;
                 mMapUpDirection = mNextMapUpDirection;
                 global->setMapRotation(field_0x8D46);
                 global->setField_0x44(field_0x8D4C);
@@ -2909,20 +3411,100 @@ void dLytMapMain_c::finalizeState_EventSwBankSmall_Step3() {}
 void dLytMapMain_c::initializeState_EventMapIntro_Step1() {
     field_0x8CB0 = sHio.field_0x1F;
 }
-void dLytMapMain_c::executeState_EventMapIntro_Step1() {}
+void dLytMapMain_c::executeState_EventMapIntro_Step1() {
+    if (field_0x8D6A) {
+        fn_80140B90();
+        return;
+    }
+
+    if (field_0x8CB0 != 0) {
+        field_0x8CB0--;
+    } else {
+        mStateMgr.changeState(StateID_EventMapIntro_Step2);
+    }
+    EventManager::execute();
+}
 void dLytMapMain_c::finalizeState_EventMapIntro_Step1() {}
 
-void dLytMapMain_c::initializeState_EventMapIntro_Step2() {}
-void dLytMapMain_c::executeState_EventMapIntro_Step2() {}
+void dLytMapMain_c::initializeState_EventMapIntro_Step2() {
+    if (field_0x8880[field_0x88AC] != nullptr) {
+        field_0x8880[field_0x88AC]->bind(false);
+        field_0x8880[field_0x88AC]->setFrame(0.0f);
+        mLyt.calc();
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_WORLD_EXTEND);
+    }
+}
+void dLytMapMain_c::executeState_EventMapIntro_Step2() {
+    if (field_0x8D6A) {
+        fn_80140B90();
+        return;
+    }
+
+    if (field_0x8880[field_0x88AC] != nullptr) {
+        if (field_0x8880[field_0x88AC]->isEndReached()) {
+            field_0x8880[field_0x88AC]->unbind();
+            mStateMgr.changeState(StateID_EventMapIntro_Step3);
+        } else {
+            field_0x8880[field_0x88AC]->play();
+        }
+    } else {
+        mStateMgr.changeState(StateID_EventMapIntro_Step3);
+    }
+
+    EventManager::execute();
+}
 void dLytMapMain_c::finalizeState_EventMapIntro_Step2() {}
 
-void dLytMapMain_c::initializeState_EventMapIntro_Step3() {}
-void dLytMapMain_c::executeState_EventMapIntro_Step3() {}
+void dLytMapMain_c::initializeState_EventMapIntro_Step3() {
+    field_0x8CB0 = 0;
+}
+void dLytMapMain_c::executeState_EventMapIntro_Step3() {
+    if (field_0x8D6A) {
+        fn_80140B90();
+        return;
+    }
+
+    if (field_0x8CB0 != 0) {
+        field_0x8CB0--;
+    } else {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_AREA);
+        mNextMapMode = dLytMapGlobal_c::MAPMODE_PROVINCE;
+        field_0x0108 = sHio.field_0x20;
+        mStateMgr.changeState(StateID_ChgDispAreaMode_WA);
+    }
+    EventManager::execute();
+}
 void dLytMapMain_c::finalizeState_EventMapIntro_Step3() {}
 
-void dLytMapMain_c::initializeState_EventMapIntro_Step4() {}
-void dLytMapMain_c::executeState_EventMapIntro_Step4() {}
+void dLytMapMain_c::initializeState_EventMapIntro_Step4() {
+    field_0x8CB0 = sHio.field_0x21;
+}
+void dLytMapMain_c::executeState_EventMapIntro_Step4() {
+    if (field_0x8D6A) {
+        fn_80140B90();
+        return;
+    }
+
+    if (field_0x8CB0 != 0) {
+        field_0x8CB0--;
+    } else {
+        field_0x8D6B = 1;
+    }
+    EventManager::execute();
+}
 void dLytMapMain_c::finalizeState_EventMapIntro_Step4() {}
+
+void dLytMapMain_c::fn_80140B90() {
+    mAnmGroups[MAP_MAIN_ANIM_OUT].bind(false);
+    mAnmGroups[MAP_MAIN_ANIM_OUT].setToEnd();
+    mLyt.calc();
+    mAnmGroups[MAP_MAIN_ANIM_OUT].unbind();
+    dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x10;
+    dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x10;
+    dScGame_c::getCamera(0)->doFn_80093360();
+    dScGame_c::getCamera(0)->fn_8019E430();
+    mStateMgr.changeState(StateID_Invisible);
+}
 
 void dLytMapMain_c::initializeState_EventDungeonMapGet_Step1() {}
 void dLytMapMain_c::executeState_EventDungeonMapGet_Step1() {}
@@ -3003,3 +3585,42 @@ void dLytMapMain_c::finalizeState_EventSaveObjConfirmMsgWindow() {}
 void dLytMapMain_c::initializeState_EventSaveObjDecide() {}
 void dLytMapMain_c::executeState_EventSaveObjDecide() {}
 void dLytMapMain_c::finalizeState_EventSaveObjDecide() {}
+
+void dLytMapMain_c::checkCursorPointedAtMap() {
+    const mVec2_c *pos2d;
+    dLytMapGlobal_c *global = getGlobal();
+    bool pointerOnMap = true;
+    bool canPlaceBeacon = true;
+
+    pos2d = &dCsGame_c::GetInstance()->getCursorIf()->getCursorPos();
+    mVec3_c pos3d(0.0f, 0.0f, 0.0f);
+    global->unprojectFromMap(pos3d, *pos2d, global->getMapRotation());
+
+    f32 tmp = global->getField_0x28().x * 368.0f;
+    f32 nTmp = -tmp;
+    if (pos2d->x > tmp || pos2d->x < nTmp || pos2d->y > 209.0f || pos2d->y < -193.0f) {
+        // Pointer off screen?
+        pointerOnMap = false;
+        canPlaceBeacon = false;
+    }
+
+    if (pointerOnMap && (pos3d.x < field_0x8930.x || pos3d.x > field_0x893C.x || pos3d.z < field_0x8930.z ||
+                         pos3d.z > field_0x893C.z)) {
+        // Pointer too close to the edge?
+        canPlaceBeacon = false;
+    }
+
+    if (pointerOnMap) {
+        for (int i = 0; i < MAP_MAIN_NUM_BOUNDINGS_NORMAL; i++) {
+            if (pos3d.x >= field_0x8948[i].field_0x00.x && pos3d.x <= field_0x8948[i].field_0x0C.x &&
+                pos3d.z >= field_0x8948[i].field_0x00.z && pos3d.z <= field_0x8948[i].field_0x0C.z) {
+                // Cannot place beacon when hovering over UI element (remocon, ...)
+                canPlaceBeacon = false;
+                break;
+            }
+        }
+    }
+
+    mPointerOnMap = pointerOnMap;
+    mPointerCanPlaceBeacon = canPlaceBeacon;
+}

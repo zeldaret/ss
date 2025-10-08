@@ -14,9 +14,13 @@ public:
 
     enum MapMode_e {
         MAPMODE_WORLD = 0,
+        // aka area
         MAPMODE_PROVINCE = 1,
+        // aka area
         MAPMODE_WORLD_SKY = 2,
+        // aka course
         MAPMODE_STAGE = 3,
+        // aka detail
         MAPMODE_ZOOM = 4,
     };
 
@@ -42,6 +46,10 @@ public:
 
     void setField_0x20(const mVec2_c &v) {
         field_0x20 = v;
+    }
+
+    const mVec2_c &getField_0x28() const {
+        return field_0x28;
     }
 
     void setField_0x28(const mVec2_c &v) {

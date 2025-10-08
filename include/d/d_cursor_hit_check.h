@@ -95,6 +95,10 @@ public:
         mHasCalculatedBoundingData = false;
     }
 
+    const dCsCheckLyt_BoundingData *getBoundingData() const {
+        return mpBoundingData;
+    }
+
 private:
     void countBoundings(nw4r::lyt::Pane *);
     void gatherBoundings(dCsCheckLyt_BoundingData **pEnd, nw4r::lyt::Pane *);

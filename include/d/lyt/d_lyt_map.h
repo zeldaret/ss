@@ -7,9 +7,9 @@
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_map_capture.h"
 #include "d/lyt/d_lyt_map_global.h"
+#include "d/lyt/d_lyt_map_markers.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/d_window.h"
-#include "d/lyt/d_lyt_map_markers.h"
 #include "egg/core/eggColorFader.h"
 #include "m/m2d.h"
 #include "m/m_angle.h"
@@ -34,13 +34,13 @@ struct dMapSaveObjDefinition {
 struct dMapSavedDataEntry {
     /* 0x00 */ s32 mapMode;
     /* 0x04 */ bool mapUpDirection;
-    /* 0x05 */ u8 field_0x05;
+    /* 0x05 */ bool mapUpDirectionAfterZoomToDetail;
     /* 0x06 */ u8 field_0x06;
 };
 
 struct dMapSavedData {
     /* 0x00 */ dMapSavedDataEntry entries[6];
-    /* 0x30 */ bool islandNamesOn;
+    /* 0x30 */ bool showIslandNames;
 };
 
 struct dMapFootPrintEntry {
@@ -347,6 +347,7 @@ private:
 // Size 0x4C
 class dLytMapPopupInfo_c {
     friend class dLytMapMain_c;
+
 public:
     dLytMapPopupInfo_c() : mStateMgr(*this, sStateID::null) {}
 
@@ -468,7 +469,6 @@ private:
     /* 0x18E */ bool mDecideFinished;
 };
 
-
 /** 2D UI - Map - beacon preview icon following the cursor */
 class dLytMapPutIcon_c {
 public:
@@ -554,8 +554,12 @@ private:
     bool needsNav(s32 mapMode) const;
     bool canZoomOut(s32 mapMode) const;
     bool canZoomIn(s32 mapMode) const;
-    bool canResetPosition(s32 mapMode, u8) const;
-    bool canChangeUpDirection(s32 mapMode, u8) const;
+    bool canResetPosition(s32 mapMode, bool) const;
+    bool canChangeUpDirection(s32 mapMode, bool) const;
+    bool canCenterCursor(s32 mapMode) const;
+    bool canCenterCursor1(s32 mapMode) const;
+    bool canPlaceBeacons(s32 mapMode) const;
+    bool isPointingAtMainMap() const;
 
     f32 fn_80142D90(s32);
     void fn_80142F00(mVec3_c &, s32 mapMode, u8, const mVec3_c &, const mAng &);
@@ -569,14 +573,22 @@ private:
     void fn_80138D80();
     bool shouldDrawFootprints() const;
 
-    void zoomOut();
     void zoomIn();
+    void zoomOut();
+
+    void clearButtonMessages();
+    void setButtonMessages(s32 currentMapMode, bool currentUpDirection, s32 nextMapMode, bool nextUpDirection);
+    void setCursorType();
 
     void loadTextboxes();
 
     void saveUnkMapData();
     void initUnkMapData();
     void loadUnkMapData();
+
+    void checkCursorPointedAtMap();
+
+    void fn_8013B0C0();
 
     static dMapSavedData sSavedMapData;
     static const dMapSavedData sDefaultMapData;
@@ -605,14 +617,16 @@ private:
     /* 0x8208 */ dTextBox_c *mpNumberTextBox;
     /* 0x820C */ dTextBox_c *mpNumberTextBoxS;
     /* 0x8210 */ nw4r::lyt::Pane *mpNoroshiPane;
-    /* 0x8214 */ nw4r::lyt::Pane *mpScaleFlamePane;
+    /* 0x8214 */ nw4r::lyt::Pane *mpScaleFramePane;
     /* 0x8218 */ dWindow_c *mpWakuWindow;
     /* 0x821C */ nw4r::lyt::Bounding *field_0x821C[10];
     /* 0x8244 */ nw4r::lyt::Bounding *field_0x8244[6];
     /* 0x825C */ nw4r::lyt::Bounding *field_0x825C[12];
     /* 0x828C */ mVec3_c field_0x828C[12];
+    /* 0x831C */ UNKWORD field_0x831C;
+    /* 0x8320 */ UNKWORD field_0x8320;
 
-    /* 0x831C */ u8 _0x831C[0x8328 - 0x831C];
+    /* 0x8324 */ u8 _0x8324[0x8328 - 0x8324];
 
     /* 0x8328 */ d2d::AnmGroup_c *mpOutAnmGroup;
 
@@ -622,12 +636,11 @@ private:
     /* 0x832C */ dCursorHitCheckLyt_c mHitChecks[33];
 
     /* 0x8854 */ nw4r::lyt::Pane *mpPanes[11];
-
-    /* 0x8880 */ u8 _0x8880[0x88B0 - 0x8880];
-
+    /* 0x8880 */ d2d::AnmGroup_c *field_0x8880[11]; // ???
+    /* 0x88AC */ UNKWORD field_0x88AC;
     /* 0x88B0 */ nw4r::lyt::Pane *mpUnkPanes1[7];
     /* 0x88CC */ nw4r::lyt::Pane *mpUnkPanes2[7];
-    
+
     /* 0x88E8 */ nw4r::lyt::Pane *mpPaneBgAll01;
     /* 0x88EC */ nw4r::lyt::Pane *mpPaneBgAll02;
     /* 0x88F0 */ nw4r::lyt::Pane *mpPaneAll01;
@@ -647,7 +660,7 @@ private:
     /* 0x8C60 */ s32 mMaxBeaconCount;
     /* 0x8C64 */ s32 field_0x8C64;
     /* 0x8C68 */ s32 field_0x8C68;
-    /* 0x8C6C */ UNKWORD field_0x8C6C;
+    /* 0x8C6C */ s32 field_0x8C6C;
     /* 0x8C70 */ u32 field_0x8C70;
 
     /* 0x8C74 */ u8 _0x8C74[0x8C88 - 0x8C74];
@@ -656,7 +669,7 @@ private:
     /* 0x8C8C */ f32 field_0x8C8C;
     /* 0x8C90 */ bool mMapUpDirection;
     /* 0x8C91 */ bool mNextMapUpDirection;
-    /* 0x8C92 */ u8 field_0x8C92;
+    /* 0x8C92 */ bool mMapUpDirectionAfterZoomToDetail;
     /* 0x8C93 */ u8 field_0x8C93;
     /* 0x8C94 */ s32 field_0x8C94;
     /* 0x8C98 */ UNKWORD field_0x8C98;
@@ -678,8 +691,8 @@ private:
     /* 0x8CB8 */ u8 _0x8CB8[0x8CBC - 0x8CB8];
 
     /* 0x8CBC */ nw4r::lyt::Bounding *mpMapBounding;
-    /* 0x8CC0 */ bool field_0x8CC0;
-    /* 0x8CC1 */ bool field_0x8CC1;
+    /* 0x8CC0 */ bool mPointerOnMap;
+    /* 0x8CC1 */ bool mPointerCanPlaceBeacon;
     /* 0x8CC4 */ mVec3_c field_0x8CC4;
     /* 0x8CD0 */ mVec3_c field_0x8CD0;
     /* 0x8CDC */ mVec3_c field_0x8CDC;
@@ -703,7 +716,7 @@ private:
     /* 0x8D60 */ s32 field_0x8D60;
     /* 0x8D64 */ UNKWORD field_0x8D64;
     /* 0x8D68 */ mAng field_0x8D68;
-    /* 0x8D6A */ u8 field_0x8D6A;
+    /* 0x8D6A */ u8 field_0x8D6A; // set at 0x8009e2d4
     /* 0x8D6B */ u8 field_0x8D6B;
     /* 0x8D6C */ UNKWORD field_0x8D6C;
     /* 0x8D70 */ UNKWORD field_0x8D70;
@@ -718,9 +731,9 @@ private:
     /* 0x8DA0 */ d2d::SubPaneListNode mSubpane;
     /* 0x8DB0 */ UNKWORD field_0x8DB0;
     /* 0x8DB4 */ bool mNavEnabled;
-    /* 0x8DB5 */ bool field_0x8DB5;
+    /* 0x8DB5 */ bool mDrawScaleFrame;
     /* 0x8DB8 */ UNKWORD field_0x8DB8;
-    /* 0x8DBC */ bool mIslandNamesOn;
+    /* 0x8DBC */ bool mShowIslandNames;
     /* 0x8DBD */ bool field_0x8DBD;
     /* 0x8DBE */ u8 field_0x8DBE;
     /* 0x8DBF */ u8 field_0x8DBF;
