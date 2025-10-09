@@ -480,6 +480,10 @@ public:
         field_0x06F4 = v;
     }
 
+    void setField_0x0702(u8 v) {
+        field_0x0702 = v;
+    }
+
     void setField_0x0703(u8 v) {
         field_0x0703 = v;
     }

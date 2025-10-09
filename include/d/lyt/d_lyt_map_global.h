@@ -128,12 +128,20 @@ public:
         return field_0x4C;
     }
 
+    void setField_0x4C(u8 v) {
+        field_0x4C = v;
+    }
+
     u8 getField_0x4D() const {
         return field_0x4D;
     }
 
     u8 getField_0x4F() const {
         return field_0x4F;
+    }
+
+    void setField_0x4F(u8 v) {
+        field_0x4F = v;
     }
 
     UNKWORD getField_0x50() const {

@@ -96,7 +96,7 @@ enum StoryFlags_e {
      * 3 / Water Dragon's Lair layer 3 / Behind The Temple layer 7)] Story Flag #16 (0x0010) - JP 805ACD5B 0x02 / US
      * 805A9ADB 0x02
      */
-    STORYFLAG_16,
+    STORYFLAG_WATER_DRAGON_SOTH_PART,
 
     /** [Triforce Completed]
      *  Story Flag #17 (0x0011) - JP 805ACD5B 0x04 / US 805A9ADB 0x04
@@ -2657,7 +2657,7 @@ enum StoryFlags_e {
     /** [Flooded Faron Woods Introductory Cutscene]
      *  Story Flag #527 (0x020F) - JP 805ACD94 0x10 / US 805A9B14 0x10
      */
-    STORYFLAG_527,
+    STORYFLAG_FLOODED_FARON_WOODS_DISCOVERED,
 
     /** [Finishing a Silent Realm for the First time]
      *  Story Flag #528 (0x0210) - JP 805ACD94 0x20 / US 805A9B14 0x20

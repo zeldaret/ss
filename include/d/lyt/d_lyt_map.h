@@ -20,13 +20,15 @@
 #include "s/s_State.hpp"
 #include "toBeSorted/d_flow_mgr.h"
 
+class dAcTbox_c;
+
 /** Bird Statue Definition (StatueSelectDestination) */
 struct dMapSaveObjDefinition {
     /* 0x00 */ const char *stageName;
     /* 0x04 */ u8 room;
     /* 0x05 */ u8 layer;
-    /* 0x06 */ u8 enrance;
-    /* 0x08 */ UNKWORD field_0x08;
+    /* 0x06 */ u8 entrance;
+    /* 0x08 */ s32 type;
     /* 0x0C */ const char *statueLabel;
 };
 
@@ -129,10 +131,9 @@ struct dLytMapFloorBtnAnmGroups {
     /* 0xC0 */ d2d::AnmGroup_c mOnOffLight;
 };
 
-// Ostensibly a bounding box for lyt elements
-struct LytMapTwoVecs {
-    /* 0x00 */ mVec3_c field_0x00;
-    /* 0x0C */ mVec3_c field_0x0C;
+struct dLytMapBoundingWorldBounds {
+    /* 0x00 */ mVec3_c min;
+    /* 0x0C */ mVec3_c max;
 };
 
 /** 2D UI - Map - a placed down beacon */
@@ -405,6 +406,10 @@ public:
     void set(nw4r::lyt::Bounding **pStatueBoundings, s32 count);
     void hide(s32 statueIdx);
 
+    void setCurrentStatue(s32 idx) {
+        mCurrentlyInStatue = idx;
+    }
+
 private:
     f32 setStatueLabel(const char *label);
 
@@ -417,6 +422,8 @@ private:
 };
 
 class dLytMapSaveCaption_c {
+    friend class dLytMapMain_c;
+
 public:
     dLytMapSaveCaption_c() : mStateMgr(*this, sStateID::null) {}
 
@@ -441,6 +448,8 @@ private:
 
 // Size 0x190
 class dLytMapSaveObj_c {
+    friend class dLytMapMain_c;
+
 public:
     dLytMapSaveObj_c()
         : mStateMgr(*this, sStateID::null), mSelectRequest(false), mDecideRequest(false), mDecideFinished(false) {}
@@ -549,6 +558,13 @@ public:
     STATE_FUNC_DECLARE(dLytMapMain_c, EventSaveObjDecide);
 
 private:
+    // TODO - used elsewhere?
+    enum Province_e {
+        PROVINCE_FARON = 0,
+        PROVINCE_ELDIN = 1,
+        PROVINCE_LANAYRU = 2,
+    };
+
     dLytMapGlobal_c *getGlobal();
     void checkScroll();
     bool needsNav(s32 mapMode) const;
@@ -560,6 +576,8 @@ private:
     bool canCenterCursor1(s32 mapMode) const;
     bool canPlaceBeacons(s32 mapMode) const;
     bool isPointingAtMainMap() const;
+
+    s32 getSelectedSaveObjIdx() const;
 
     f32 fn_80142D90(s32);
     void fn_80142F00(mVec3_c &, s32 mapMode, u8, const mVec3_c &, const mAng &);
@@ -588,7 +606,11 @@ private:
 
     void checkCursorPointedAtMap();
 
-    void fn_8013B0C0();
+    void calculateBoundingWorldHitboxes();
+
+    dAcTbox_c *findGoddessChestForStoryflag(s32 flag) const;
+    bool checkStoryflag(s32 flag) const;
+    void displaySaveObjs();
 
     static dMapSavedData sSavedMapData;
     static const dMapSavedData sDefaultMapData;
@@ -624,7 +646,7 @@ private:
     /* 0x825C */ nw4r::lyt::Bounding *field_0x825C[12];
     /* 0x828C */ mVec3_c field_0x828C[12];
     /* 0x831C */ UNKWORD field_0x831C;
-    /* 0x8320 */ UNKWORD field_0x8320;
+    /* 0x8320 */ u32 field_0x8320;
 
     /* 0x8324 */ u8 _0x8324[0x8328 - 0x8324];
 
@@ -655,7 +677,7 @@ private:
     /* 0x8930 */ mVec3_c field_0x8930;
     /* 0x893C */ mVec3_c field_0x893C;
 
-    /* 0x8948 */ LytMapTwoVecs field_0x8948[33];
+    /* 0x8948 */ dLytMapBoundingWorldBounds mBoundingWorldBounds[33];
 
     /* 0x8C60 */ s32 mMaxBeaconCount;
     /* 0x8C64 */ s32 field_0x8C64;
@@ -673,7 +695,7 @@ private:
     /* 0x8C93 */ u8 field_0x8C93;
     /* 0x8C94 */ s32 field_0x8C94;
     /* 0x8C98 */ UNKWORD field_0x8C98;
-    /* 0x8C9C */ UNKWORD field_0x8C9C;
+    /* 0x8C9C */ s32 mProvince;
 
     /* 0x8CA0 */ u8 _0x8CA0[0x8CA4 - 0x8CA0];
 
@@ -685,11 +707,9 @@ private:
 
     /* 0x8CAE */ u8 _0x8CAE[0x8CB0 - 0x8CAE];
 
-    /* 0x8CB0 */ u32 field_0x8CB0;
+    /* 0x8CB0 */ u32 mEventTimer;
     /* 0x8CB4 */ UNKWORD field_0x8CB4;
-
-    /* 0x8CB8 */ u8 _0x8CB8[0x8CBC - 0x8CB8];
-
+    /* 0x8CB8 */ u32 field_0x8CB8;
     /* 0x8CBC */ nw4r::lyt::Bounding *mpMapBounding;
     /* 0x8CC0 */ bool mPointerOnMap;
     /* 0x8CC1 */ bool mPointerCanPlaceBeacon;
@@ -732,7 +752,7 @@ private:
     /* 0x8DB0 */ UNKWORD field_0x8DB0;
     /* 0x8DB4 */ bool mNavEnabled;
     /* 0x8DB5 */ bool mDrawScaleFrame;
-    /* 0x8DB8 */ UNKWORD field_0x8DB8;
+    /* 0x8DB8 */ s32 mDisplayedBeaconCount;
     /* 0x8DBC */ bool mShowIslandNames;
     /* 0x8DBD */ bool field_0x8DBD;
     /* 0x8DBE */ u8 field_0x8DBE;
@@ -801,7 +821,7 @@ public:
     }
 
     const dMapSaveObjDefinition *getSaveObjDefinition(s32 statueIdx) const {
-        return mMapMain.getSaveObjDefinition(mMapMain.field_0x8C9C, statueIdx);
+        return mMapMain.getSaveObjDefinition(mMapMain.mProvince, statueIdx);
     }
 
 private:

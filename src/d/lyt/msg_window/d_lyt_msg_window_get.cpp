@@ -177,6 +177,7 @@ bool dLytMsgWindowGet_c::execute() {
 
 void dLytMsgWindowGet_c::draw() {
     // NONMATCHING
+    // TODO - SetVisible clrlwi
     // The instruction patterns here are the same that EGG::StateGX::Scoped
     // generates, but there's no RAII to be found here. What's the missing
     // link that makes the compiler generate these?

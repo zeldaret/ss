@@ -1181,7 +1181,7 @@ void dLytMapIcon01_c::setSaveObj(u32 color, nw4r::lyt::Pane *pane) {
 
 void dLytMapIcon01_c::setTerry(bool present) {
     // NONMATCHING
-    // Additional clrlwi here...
+    // TODO - SetVisible clrlwi
     // When you fix this, maybe also fix other instances of this problem
     // by searching for 91657b77
     mpTerryOnOffPane->SetVisible(present);

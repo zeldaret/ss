@@ -78,6 +78,14 @@ public:
         return field_0x1EE;
     }
 
+    void setField_0x1E8(u8 v) {
+        field_0x1E8 = v;
+    }
+
+    void setField_0x1EF(u8 v) {
+        field_0x1EF = v;
+    }
+
     void init(MapRelated *);
     void fn_801b4900();
     void fn_801B4B80(u32 mapParams, const mVec3_c &center, const mVec3_c &size);

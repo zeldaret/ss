@@ -10,6 +10,9 @@ public:
     dFlowMgrBase_c(dFlow_c *flow);
     virtual ~dFlowMgrBase_c() {}
 
+    void triggerEntryPoint(s32 labelPart1, s32 labelPart2, u8 p4, u8 p5);
+    bool checkFinished();
+
 private:
     /* 0x04 */ dFlow_c *mpFlow;
     /* 0x08 */ u8 _0x08[0x14 - 0x08];
