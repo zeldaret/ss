@@ -2366,6 +2366,120 @@ void dLytMapMain_c::build() {
     fn_80143300();
 }
 
+void dLytMapMain_c::loadStageProperties() {
+    mAreaGroup = getAreaGroup(dStageMgr_c::GetInstance()->getSTIFArea());
+    mRoomType = getRoomType();
+
+    // Yes, it does need to be written this way, otherwise the catch-all else
+    // branch is collapsed with the other ones.
+
+    if (mRoomType == ROOMTYPE_FIELD) {
+        mCurrentMapMode = dLytMapGlobal_c::MAPMODE_ZOOM;
+        return;
+    }
+
+    if (mRoomType == ROOMTYPE_DUNGEON) {
+        mCurrentMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+        return;
+    }
+
+    if (mRoomType == ROOMTYPE_SKYLOFT) {
+        mCurrentMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+        return;
+    }
+
+    if (mRoomType == ROOMTYPE_BOSS_HOUSE) {
+        mCurrentMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+        return;
+    }
+
+    mCurrentMapMode = dLytMapGlobal_c::MAPMODE_STAGE;
+}
+
+void dLytMapMain_c::setupStage() {
+    loadStageProperties();
+    if (field_0x8C94 == 10) {
+        mLyt.findPane("N_skyloft_00")->SetVisible(false);
+    }
+
+    mAnmGroups[MAP_MAIN_ANIM_PLAYER_2_PATTERN].bind(false);
+    if (dAcPy_c::getCurrentTunicType() == 1) {
+        mAnmGroups[MAP_MAIN_ANIM_PLAYER_2_PATTERN].setFrame(1.0f);
+    } else {
+        mAnmGroups[MAP_MAIN_ANIM_PLAYER_2_PATTERN].setFrame(0.0f);
+    }
+
+    if (mRoomType == ROOMTYPE_SKYLOFT ||
+        (mAreaGroup == AREAGROUP_SKY && (mRoomType == ROOMTYPE_BOSS_HOUSE || mRoomType == ROOMTYPE_SKYFIELD_INTERIOR ||
+                                         mRoomType == ROOMTYPE_DUNGEON))) {
+        mAnmGroups[MAP_MAIN_ANIM_SUN_ROTE].bind(false);
+    }
+
+    s32 type = 0;
+    mAnmGroups[MAP_MAIN_ANIM_TYPE].bind(false);
+    if (dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL) {
+        type = 8;
+    } else if (mAreaGroup == AREAGROUP_FARON || mAreaGroup == AREAGROUP_SEALED_GROUNDS) {
+        if (dStageMgr_c::GetInstance()->getSTIFArea() == dStageMgr_c::STIF_AREA_SEALED_GROUNDS) {
+            type = 7;
+        } else if (mRoomType == ROOMTYPE_FIELD) {
+            type = 1;
+        } else {
+            type = 2;
+        }
+    } else if (mAreaGroup == AREAGROUP_ELDIN) {
+        if (mRoomType == ROOMTYPE_FIELD) {
+            type = 3;
+        } else {
+            type = 4;
+        }
+    } else if (mAreaGroup == AREAGROUP_LANAYRU) {
+        if (mRoomType == ROOMTYPE_FIELD) {
+            type = 5;
+        } else {
+            type = 6;
+        }
+    } else if (mAreaGroup == AREAGROUP_SKY) {
+        if (dStageMgr_c::GetInstance()->getSTIFRoomType() == dStageMgr_c::STIF_ROOMTYPE_DUNGEON) {
+            type = 11;
+        } else {
+            // TODO - probably an enum but this matches too
+            type = 9;
+            if (dScGame_c::currentSpawnInfo.getTimeOfDay() == SpawnInfo::NIGHT) {
+                type = 10;
+            }
+        }
+    }
+    mAnmGroups[MAP_MAIN_ANIM_TYPE].setFrame(type);
+    mLyt.calc();
+    mAnmGroups[MAP_MAIN_ANIM_TYPE].unbind();
+
+    field_0x8C7C = 0.0f;
+    field_0x8C80 = 0.0f;
+    mAnmGroups[MAP_MAIN_ANIM_IN].bind(false);
+    mAnmGroups[MAP_MAIN_ANIM_IN].setFrame(0.0f);
+    mAnmGroups[MAP_MAIN_ANIM_MAP_V].bind(false);
+    fn_801431E0();
+    mLyt.calc();
+    mAnmGroups[MAP_MAIN_ANIM_MAP_V].unbind();
+    mAnmGroups[MAP_MAIN_ANIM_IN].unbind();
+    if (mRoomType == ROOMTYPE_BOSS_HOUSE || mRoomType == ROOMTYPE_SKYFIELD_INTERIOR) {
+        mLyt.findPane("N_houkoul_00")->SetVisible(false);
+    }
+    if (field_0x8C94 != 10) {
+        loadTextboxes();
+    }
+    fn_8013AD50();
+}
+
+void dLytMapMain_c::remove() {
+    // TODO - ...
+}
+
+void dLytMapMain_c::execute() {
+    // TODO - ...
+}
+
 void dLytMapMain_c::draw() {
     if (!field_0x8DBF) {
         return;
@@ -2383,7 +2497,7 @@ void dLytMapMain_c::draw() {
         mMarkers.draw();
     }
 
-    if (field_0x8C68 != 3 && field_0x8C68 != 5 && field_0x8C94 != 2) {
+    if (mRoomType != ROOMTYPE_BOSS_HOUSE && mRoomType != ROOMTYPE_SKYFIELD_INTERIOR && field_0x8C94 != 2) {
         mPinIconAggregate.draw();
     }
 
@@ -2458,7 +2572,7 @@ void lytMapusesSizedWString() {
 }
 
 void dLytMapMain_c::saveUnkMapData() {
-    dMapSavedDataEntry &data = sSavedMapData.entries[field_0x8C68];
+    dMapSavedDataEntry &data = sSavedMapData.entries[mRoomType];
     data.field_0x06 = 1;
     data.mapMode = mCurrentMapMode;
     data.mapUpDirection = mMapUpDirection;
@@ -2478,9 +2592,9 @@ void dLytMapMain_c::initUnkMapData() {
 }
 
 void dLytMapMain_c::loadUnkMapData() {
-    mCurrentMapMode = sSavedMapData.entries[field_0x8C68].mapMode;
-    mMapUpDirection = sSavedMapData.entries[field_0x8C68].mapUpDirection;
-    mMapUpDirectionAfterZoomToDetail = sSavedMapData.entries[field_0x8C68].mapUpDirectionAfterZoomToDetail;
+    mCurrentMapMode = sSavedMapData.entries[mRoomType].mapMode;
+    mMapUpDirection = sSavedMapData.entries[mRoomType].mapUpDirection;
+    mMapUpDirectionAfterZoomToDetail = sSavedMapData.entries[mRoomType].mapUpDirectionAfterZoomToDetail;
     mShowIslandNames = sSavedMapData.showIslandNames;
 }
 
@@ -2524,12 +2638,12 @@ void dLytMapMain_c::setButtonMessages(
     }
 
     if (canZoomOut(currentMapMode) && canZoomOut(nextMapMode)) {
-        if ((field_0x8C68 == 0 && currentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) ||
-            (field_0x8C68 == 2 && currentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) ||
-            (field_0x8C68 == 4 && currentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) ||
-            (field_0x8C68 == 3 && currentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) ||
-            (field_0x8C68 == 5 && currentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) ||
-            (field_0x8C68 == 1 && currentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE)) {
+        if ((mRoomType == ROOMTYPE_FIELD && currentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) ||
+            (mRoomType == ROOMTYPE_SKYLOFT && currentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) ||
+            (mRoomType == ROOMTYPE_SKYFIELD && currentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) ||
+            (mRoomType == ROOMTYPE_BOSS_HOUSE && currentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) ||
+            (mRoomType == ROOMTYPE_SKYFIELD_INTERIOR && currentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) ||
+            (mRoomType == ROOMTYPE_DUNGEON && currentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE)) {
             dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_LEFT);
             LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::ACT_IE_ETC_WORLD_MAP);
         } else {
@@ -2575,8 +2689,8 @@ void dLytMapMain_c::setButtonMessages(
         }
     }
 
-    switch (field_0x8C68) {
-        case 2: {
+    switch (mRoomType) {
+        case ROOMTYPE_SKYLOFT: {
             if (currentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
                 dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_UP);
                 LytDoButtonRelated::setCrossTop(LytDoButtonRelated::ACT_IE_ETC_CURRENT_LOCATION, true);
@@ -2598,8 +2712,8 @@ void dLytMapMain_c::setButtonMessages(
             }
             break;
         }
-        case 0:
-        case 4: {
+        case ROOMTYPE_FIELD:
+        case ROOMTYPE_SKYFIELD: {
             if (currentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
                 dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_UP);
                 LytDoButtonRelated::setCrossTop(LytDoButtonRelated::ACT_IE_ETC_CURRENT_LOCATION, true);
@@ -2621,7 +2735,7 @@ void dLytMapMain_c::setButtonMessages(
                 dLytMeter_c::GetInstance()->setFlags(METER_BTN_0x4000);
             }
 
-            if (field_0x8C68 == 4 && mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE &&
+            if (mRoomType == ROOMTYPE_SKYFIELD && mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE &&
                 mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
                 dLytMeter_c::GetInstance()->setFlags(METER_BTN_Z);
                 if (mShowIslandNames) {
@@ -2636,7 +2750,7 @@ void dLytMapMain_c::setButtonMessages(
             }
             break;
         }
-        case 1: {
+        case ROOMTYPE_DUNGEON: {
             if (currentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
                 dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_UP);
                 LytDoButtonRelated::setCrossTop(LytDoButtonRelated::ACT_IE_ETC_CURRENT_LOCATION, true);
@@ -2673,7 +2787,8 @@ void dLytMapMain_c::setButtonMessages(
 
 void dLytMapMain_c::setCursorType() {
     if (canCenterCursor1(mCurrentMapMode) && canCenterCursor1(mNextMapMode)) {
-        if ((field_0x8C94 == 10 || ((field_0x8C68 == 3 || field_0x8C68 == 1) && mPointerOnMap)) ||
+        if ((field_0x8C94 == 10 ||
+             ((mRoomType == ROOMTYPE_BOSS_HOUSE || mRoomType == ROOMTYPE_DUNGEON) && mPointerOnMap)) ||
             (mPointerCanPlaceBeacon && isPointingAtMainMap()) ||
             (*mPinIconAggregate.mStateMgr.getStateID() == dLytMapPinIconAggregate_c::StateID_Select) ||
             (needsNav(mCurrentMapMode) && needsNav(mNextMapMode) && mFloorBtnMgr.hasPointedAtABtnIdx())) {
@@ -2894,7 +3009,7 @@ void dLytMapMain_c::setupFlags() {
     }
     mAnmGroups[MAP_MAIN_ANIM_KUMO_PATTERN].setFrame(titleLineFrame);
     mAnmGroups[MAP_MAIN_ANIM_MAP_V].bind(false);
-    if (field_0x8C68 == 1 || field_0x8C68 == 3) {
+    if (mRoomType == ROOMTYPE_DUNGEON || mRoomType == ROOMTYPE_BOSS_HOUSE) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
             mAnmGroups[MAP_MAIN_ANIM_MAP_V].setFrame(3.0f);
         }
@@ -3030,7 +3145,8 @@ void dLytMapMain_c::setupFlags() {
         grpZAIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_ZA_IN_DESERT];
     }
 
-    if (field_0x8C68 == 2 || (mAreaGroup == AREAGROUP_SKY && (field_0x8C68 == 3 || field_0x8C68 == 1))) {
+    if (mRoomType == ROOMTYPE_SKYLOFT ||
+        (mAreaGroup == AREAGROUP_SKY && (mRoomType == ROOMTYPE_BOSS_HOUSE || mRoomType == ROOMTYPE_DUNGEON))) {
         grpZIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_ZA_IN_SKY_MAP_2];
         grpZAIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_ZA_OUT_SKY_COURSE];
     }
@@ -3128,7 +3244,7 @@ void dLytMapMain_c::setupFlags() {
         }
     }
 
-    if (field_0x8C68 == 4 || field_0x8C68 == 5) {
+    if (mRoomType == ROOMTYPE_SKYFIELD || mRoomType == ROOMTYPE_SKYFIELD_INTERIOR) {
         mLyt.findPane("P_skyloftLink_00")->SetVisible(false);
     }
 
@@ -3140,7 +3256,7 @@ void dLytMapMain_c::setupFlags() {
         mPutIcon.setVisible(false);
     }
 
-    if (field_0x8C68 == 4) {
+    if (mRoomType == ROOMTYPE_SKYFIELD) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE && mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
             mMarkers.setIslandNamesOn(mShowIslandNames);
         } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM && mNextMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
@@ -3181,8 +3297,34 @@ s32 dLytMapMain_c::getAreaGroup(s32 stifArea) const {
     return ret;
 }
 
+s32 dLytMapMain_c::getRoomType() const {
+    s32 ret = ROOMTYPE_FIELD;
+    s32 stifRoomType = dStageMgr_c::GetInstance()->getSTIFRoomType();
+    if (field_0x8C94 == 10) {
+        ret = ROOMTYPE_FIELD;
+    }
+
+    if (dScGame_c::isCurrentStage("F011r") ||
+        (dScGame_c::isCurrentStage("F002r") && dScGame_c::currentSpawnInfo.isNight()) ||
+        dScGame_c::isCurrentStage("F010r") || dScGame_c::isCurrentStage("F019r")) {
+        ret = ROOMTYPE_SKYFIELD_INTERIOR;
+    } else if (stifRoomType == dStageMgr_c::STIF_ROOMTYPE_FIELD) {
+        ret = ROOMTYPE_FIELD;
+    } else if (stifRoomType == dStageMgr_c::STIF_ROOMTYPE_DUNGEON) {
+        ret = ROOMTYPE_DUNGEON;
+    } else if (stifRoomType == dStageMgr_c::STIF_ROOMTYPE_SKYLOFT) {
+        ret = ROOMTYPE_SKYLOFT;
+    } else if (stifRoomType == dStageMgr_c::STIF_ROOMTYPE_BOSS_HOUSE) {
+        ret = ROOMTYPE_BOSS_HOUSE;
+    } else if (stifRoomType == dStageMgr_c::STIF_ROOMTYPE_SKYFIELD) {
+        ret = ROOMTYPE_SKYFIELD;
+    }
+    return ret;
+}
+
 void dLytMapMain_c::zoomIn() {
-    if (field_0x8C68 == 2 || (mAreaGroup == AREAGROUP_SKY && (field_0x8C68 == 3 || field_0x8C68 == 1))) {
+    if (mRoomType == ROOMTYPE_SKYLOFT ||
+        (mAreaGroup == AREAGROUP_SKY && (mRoomType == ROOMTYPE_BOSS_HOUSE || mRoomType == ROOMTYPE_DUNGEON))) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD) {
             if (dPad::getDownTrigRight()) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_AREA);
@@ -3208,7 +3350,7 @@ void dLytMapMain_c::zoomIn() {
                 }
             }
         }
-    } else if (field_0x8C68 == 4 || field_0x8C68 == 5) {
+    } else if (mRoomType == ROOMTYPE_SKYFIELD || mRoomType == ROOMTYPE_SKYFIELD_INTERIOR) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD) {
             if (dPad::getDownTrigRight()) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_COURSE);
@@ -3234,7 +3376,7 @@ void dLytMapMain_c::zoomIn() {
                 }
             }
         }
-    } else if (field_0x8C68 == 0) {
+    } else if (mRoomType == ROOMTYPE_FIELD) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD) {
             if (dPad::getDownTrigRight()) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_AREA);
@@ -3260,7 +3402,7 @@ void dLytMapMain_c::zoomIn() {
                 }
             }
         }
-    } else if (field_0x8C68 == 1) {
+    } else if (mRoomType == ROOMTYPE_DUNGEON) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD) {
             if (dPad::getDownTrigRight()) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_AREA);
@@ -3286,7 +3428,7 @@ void dLytMapMain_c::zoomIn() {
                 }
             }
         }
-    } else if (field_0x8C68 == 3) {
+    } else if (mRoomType == ROOMTYPE_BOSS_HOUSE) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD) {
             if (dPad::getDownTrigRight()) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_AREA);
@@ -3304,7 +3446,8 @@ void dLytMapMain_c::zoomIn() {
 }
 
 void dLytMapMain_c::zoomOut() {
-    if (field_0x8C68 == 2 || (mAreaGroup == AREAGROUP_SKY && (field_0x8C68 == 3 || field_0x8C68 == 1))) {
+    if (mRoomType == ROOMTYPE_SKYLOFT ||
+        (mAreaGroup == AREAGROUP_SKY && (mRoomType == ROOMTYPE_BOSS_HOUSE || mRoomType == ROOMTYPE_DUNGEON))) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) {
             if (dPad::getDownTrigLeft()) {
                 mNextMapMode = dLytMapGlobal_c::MAPMODE_WORLD;
@@ -3327,7 +3470,7 @@ void dLytMapMain_c::zoomOut() {
                 mStateMgr.changeState(StateID_ChgDispAreaMode_MapRot);
             }
         }
-    } else if (field_0x8C68 == 4 || field_0x8C68 == 5) {
+    } else if (mRoomType == ROOMTYPE_SKYFIELD || mRoomType == ROOMTYPE_SKYFIELD_INTERIOR) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) {
             if (dPad::getDownTrigLeft()) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_WORLD);
@@ -3350,7 +3493,7 @@ void dLytMapMain_c::zoomOut() {
                 mStateMgr.changeState(StateID_ChgDispAreaMode_MapRot);
             }
         }
-    } else if (field_0x8C68 == 0) {
+    } else if (mRoomType == ROOMTYPE_FIELD) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) {
             if (dPad::getDownTrigLeft()) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_WORLD);
@@ -3373,7 +3516,7 @@ void dLytMapMain_c::zoomOut() {
                 mStateMgr.changeState(StateID_ChgDispAreaMode_MapRot);
             }
         }
-    } else if (field_0x8C68 == 1) {
+    } else if (mRoomType == ROOMTYPE_DUNGEON) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) {
             if (dPad::getDownTrigLeft()) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_WORLD);
@@ -3396,7 +3539,7 @@ void dLytMapMain_c::zoomOut() {
                 mStateMgr.changeState(StateID_ChgDispAreaMode_MapRot);
             }
         }
-    } else if (field_0x8C68 == 3) {
+    } else if (mRoomType == ROOMTYPE_BOSS_HOUSE) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) {
             if (dPad::getDownTrigLeft()) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMOUT_TO_WORLD);
@@ -3420,8 +3563,7 @@ void dLytMapMain_c::executeState_Active() {
         return;
     }
 
-    // TODO figure out and double check numbers
-    if (field_0x8C68 == 4 && mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE &&
+    if (mRoomType == ROOMTYPE_SKYFIELD && mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE &&
         mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE && dPad::getDownTrigZ()) {
         if (mShowIslandNames) {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ISLAND_NAME_OFF);
@@ -3488,8 +3630,8 @@ void dLytMapMain_c::executeState_Active() {
                (dPad::getDownTrigA() && mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE && canZoomIn(mCurrentMapMode)
                )) {
         zoomIn();
-    } else if ((field_0x8C68 == dLytMapGlobal_c::MAPMODE_WORLD || field_0x8C68 == dLytMapGlobal_c::MAPMODE_PROVINCE ||
-                field_0x8C68 == dLytMapGlobal_c::MAPMODE_WORLD_SKY || field_0x8C68 == dLytMapGlobal_c::MAPMODE_ZOOM) &&
+    } else if ((mRoomType == ROOMTYPE_FIELD || mRoomType == ROOMTYPE_DUNGEON || mRoomType == ROOMTYPE_SKYLOFT ||
+                mRoomType == ROOMTYPE_SKYFIELD) &&
                canResetPosition(mCurrentMapMode, mMapUpDirection) && dPad::getDownTrigUp()) {
         mVec3_c pos;
         fn_80142F00(pos, mCurrentMapMode, mMapUpDirection, global->getMapRotationCenter(), global->getField_0x56());

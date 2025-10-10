@@ -76,6 +76,15 @@ public:
         STIF_AREA_LANAYRU_GORGE = 11,
     };
 
+    // room is a not great name since this is really stage-wide...
+    enum StifRoomType_e {
+        STIF_ROOMTYPE_FIELD = 0,
+        STIF_ROOMTYPE_DUNGEON = 1,
+        STIF_ROOMTYPE_SKYLOFT = 2,
+        STIF_ROOMTYPE_BOSS_HOUSE = 3,
+        STIF_ROOMTYPE_SKYFIELD = 4,
+    };
+
     s32 getSTIFArea() const;
     bool isSTIFAreaFaron() const;
     bool isSTIFAreaEldin() const;
@@ -86,6 +95,8 @@ public:
     bool isSTIFAreaSky() const {
         return getSTIFArea() == STIF_AREA_SKY;
     }
+
+    s32 getSTIFRoomType() const;
 
     s32 getAreaType() const;
     s32 getMapNameId() const;

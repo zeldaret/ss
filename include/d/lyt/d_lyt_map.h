@@ -41,7 +41,7 @@ struct dMapSavedDataEntry {
 };
 
 struct dMapSavedData {
-    /* 0x00 */ dMapSavedDataEntry entries[6];
+    /* 0x00 */ dMapSavedDataEntry entries[/* dLytMapMain_c::ROOMTYPE_MAX */ 6];
     /* 0x30 */ bool showIslandNames;
 };
 
@@ -512,6 +512,8 @@ public:
     virtual void dLytMapMain_vt0x10();
 
     void build();
+    void remove();
+    void execute();
 
     bool isNotInvisible() const;
     bool isOpenMaybe() const;
@@ -562,7 +564,8 @@ public:
     STATE_FUNC_DECLARE(dLytMapMain_c, EventSaveObjDecide);
 
 private:
-    // TODO - need to come up with better names
+    // TODO - need to come up with better names for all of these enums and concepts
+
     enum SurfaceProvince_e {
         SURFACE_PROVINCE_FARON = 0,
         SURFACE_PROVINCE_ELDIN = 1,
@@ -578,6 +581,16 @@ private:
         AREAGROUP_MAX = 6,
     };
 
+    enum RoomType_e {
+        ROOMTYPE_FIELD = 0,
+        ROOMTYPE_DUNGEON = 1,
+        ROOMTYPE_SKYLOFT = 2,
+        ROOMTYPE_BOSS_HOUSE = 3,
+        ROOMTYPE_SKYFIELD = 4,
+        ROOMTYPE_SKYFIELD_INTERIOR = 5,
+        ROOMTYPE_MAX = 6,
+    };
+
     dLytMapGlobal_c *getGlobal();
     void checkScroll();
     bool needsNav(s32 mapMode) const;
@@ -590,7 +603,9 @@ private:
     bool canPlaceBeacons(s32 mapMode) const;
     bool isPointingAtMainMap() const;
 
+    void loadStageProperties();
     s32 getAreaGroup(s32 stifArea) const;
+    s32 getRoomType() const;
 
     s32 getSelectedSaveObjIdx() const;
 
@@ -604,6 +619,8 @@ private:
     void fn_80143300();
     void fn_80143120(s32);
     void fn_80138D80();
+    void fn_801431E0();
+    void fn_8013AD50();
     bool shouldDrawFootprints() const;
 
     void zoomIn();
@@ -614,6 +631,7 @@ private:
     void setCursorType();
 
     void setupFlags();
+    void setupStage();
 
     void loadTextboxes();
 
@@ -698,11 +716,15 @@ private:
 
     /* 0x8C60 */ s32 mMaxBeaconCount;
     /* 0x8C64 */ s32 field_0x8C64;
-    /* 0x8C68 */ s32 field_0x8C68;
+    /* 0x8C68 */ s32 mRoomType;
     /* 0x8C6C */ s32 mAreaGroup;
     /* 0x8C70 */ u32 field_0x8C70;
 
-    /* 0x8C74 */ u8 _0x8C74[0x8C88 - 0x8C74];
+    /* 0x8C74 */ u8 _0x8C74[0x8C7C - 0x8C74];
+    /* 0x8C7C */ f32 field_0x8C7C;
+    /* 0x8C80 */ f32 field_0x8C80;
+
+    /* 0x8C84 */ u8 _0x8C84[0x8C88 - 0x8C84];
 
     /* 0x8C88 */ f32 field_0x8C88;
     /* 0x8C8C */ f32 field_0x8C8C;
