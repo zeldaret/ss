@@ -710,7 +710,7 @@ bool dFlow_c::handleMessage() {
         if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_BOSS_RUSH_ACTIVE)) {
             // "When you require my analysis..."
             v = 200;
-        } else if (dStageMgr_c::GetInstance()->getSTIFbyte4() == 0) {
+        } else if (dStageMgr_c::GetInstance()->getSTIFArea() == dStageMgr_c::STIF_AREA_SKY) {
             // Sky rumor
             v = cM::rndInt(30);
         } else {

@@ -88,6 +88,10 @@ public:
         return mAlpha;
     }
 
+    void setAlpha(u8 alpha) {
+        mAlpha = alpha;
+    }
+
     s32 getCurrentMapMode() const {
         return mCurrentMapMode;
     }

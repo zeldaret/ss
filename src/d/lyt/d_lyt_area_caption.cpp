@@ -135,15 +135,15 @@ void dLytAreaCaptionParts_c::executeState_Wait() {
     if (field_0x54C) {
         field_0x54C = false;
         s32 typeFrame = 0;
-        if (dStageMgr_c::GetInstance()->isSTIFbyte4_2or3or4()) {
+        if (dStageMgr_c::GetInstance()->isSTIFAreaFaron()) {
             typeFrame = 1;
-        } else if (dStageMgr_c::GetInstance()->isSTIFbyte4_5or6()) {
+        } else if (dStageMgr_c::GetInstance()->isSTIFAreaEldin()) {
             typeFrame = 2;
-        } else if (dStageMgr_c::GetInstance()->isSTIFbyte4_7or8or9or10or11()) {
+        } else if (dStageMgr_c::GetInstance()->isSTIFAreaLanayru()) {
             typeFrame = 3;
-        } else if (dStageMgr_c::GetInstance()->isSTIFbyte4_1()) {
+        } else if (dStageMgr_c::GetInstance()->isSTIFAreaSealedGrounds()) {
             typeFrame = 4;
-        } else if (dStageMgr_c::GetInstance()->isSTIFbyte4_0()) {
+        } else if (dStageMgr_c::GetInstance()->isSTIFAreaSky()) {
             typeFrame = 5;
         }
 

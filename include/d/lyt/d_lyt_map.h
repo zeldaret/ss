@@ -492,6 +492,10 @@ public:
     void setPosition(const mVec2_c &pos);
     void setScale(f32 scale);
 
+    void setVisible(bool visible) {
+        mVisible = visible;
+    }
+
 private:
     /* 0x04 */ d2d::LytBase_c mLyt;
     /* 0x94 */ bool mVisible;
@@ -558,11 +562,20 @@ public:
     STATE_FUNC_DECLARE(dLytMapMain_c, EventSaveObjDecide);
 
 private:
-    // TODO - used elsewhere?
-    enum Province_e {
-        PROVINCE_FARON = 0,
-        PROVINCE_ELDIN = 1,
-        PROVINCE_LANAYRU = 2,
+    // TODO - need to come up with better names
+    enum SurfaceProvince_e {
+        SURFACE_PROVINCE_FARON = 0,
+        SURFACE_PROVINCE_ELDIN = 1,
+        SURFACE_PROVINCE_LANAYRU = 2,
+    };
+
+    enum AreaGroup_e {
+        AREAGROUP_SKY = 1,
+        AREAGROUP_FARON = 2,
+        AREAGROUP_ELDIN = 3,
+        AREAGROUP_LANAYRU = 4,
+        AREAGROUP_SEALED_GROUNDS = 5,
+        AREAGROUP_MAX = 6,
     };
 
     dLytMapGlobal_c *getGlobal();
@@ -576,6 +589,8 @@ private:
     bool canCenterCursor1(s32 mapMode) const;
     bool canPlaceBeacons(s32 mapMode) const;
     bool isPointingAtMainMap() const;
+
+    s32 getAreaGroup(s32 stifArea) const;
 
     s32 getSelectedSaveObjIdx() const;
 
@@ -597,6 +612,8 @@ private:
     void clearButtonMessages();
     void setButtonMessages(s32 currentMapMode, bool currentUpDirection, s32 nextMapMode, bool nextUpDirection);
     void setCursorType();
+
+    void setupFlags();
 
     void loadTextboxes();
 
@@ -660,8 +677,8 @@ private:
     /* 0x8854 */ nw4r::lyt::Pane *mpPanes[11];
     /* 0x8880 */ d2d::AnmGroup_c *field_0x8880[11]; // ???
     /* 0x88AC */ UNKWORD field_0x88AC;
-    /* 0x88B0 */ nw4r::lyt::Pane *mpUnkPanes1[7];
-    /* 0x88CC */ nw4r::lyt::Pane *mpUnkPanes2[7];
+    /* 0x88B0 */ nw4r::lyt::Pane *mpDungeonPanes[7];
+    /* 0x88CC */ nw4r::lyt::Pane *mpDungeonPics[7];
 
     /* 0x88E8 */ nw4r::lyt::Pane *mpPaneBgAll01;
     /* 0x88EC */ nw4r::lyt::Pane *mpPaneBgAll02;
@@ -682,7 +699,7 @@ private:
     /* 0x8C60 */ s32 mMaxBeaconCount;
     /* 0x8C64 */ s32 field_0x8C64;
     /* 0x8C68 */ s32 field_0x8C68;
-    /* 0x8C6C */ s32 field_0x8C6C;
+    /* 0x8C6C */ s32 mAreaGroup;
     /* 0x8C70 */ u32 field_0x8C70;
 
     /* 0x8C74 */ u8 _0x8C74[0x8C88 - 0x8C74];
@@ -695,7 +712,7 @@ private:
     /* 0x8C93 */ u8 field_0x8C93;
     /* 0x8C94 */ s32 field_0x8C94;
     /* 0x8C98 */ UNKWORD field_0x8C98;
-    /* 0x8C9C */ s32 mProvince;
+    /* 0x8C9C */ s32 mSurfaceProvince;
 
     /* 0x8CA0 */ u8 _0x8CA0[0x8CA4 - 0x8CA0];
 
@@ -730,7 +747,7 @@ private:
     /* 0x8D48 */ mAng field_0x8D48;
     /* 0x8D4C */ f32 field_0x8D4C;
     /* 0x8D50 */ f32 field_0x8D50;
-    /* 0x8D54 */ u8 _0x8D54[0x8D58 - 0x8D54];
+    /* 0x8D54 */ s32 field_0x8D54;
     /* 0x8D58 */ s32 field_0x8D58;
     /* 0x8D5C */ UNKWORD field_0x8D5C;
     /* 0x8D60 */ s32 field_0x8D60;
@@ -738,8 +755,8 @@ private:
     /* 0x8D68 */ mAng field_0x8D68;
     /* 0x8D6A */ u8 field_0x8D6A; // set at 0x8009e2d4
     /* 0x8D6B */ u8 field_0x8D6B;
-    /* 0x8D6C */ UNKWORD field_0x8D6C;
-    /* 0x8D70 */ UNKWORD field_0x8D70;
+    /* 0x8D6C */ nw4r::lyt::Pane *mpRegionPane1;
+    /* 0x8D70 */ nw4r::lyt::Pane *mpRegionPane2;
     /* 0x8D74 */ nw4r::lyt::Pane *mpZoomInOutPane;
     /* 0x8D78 */ f32 field_0x8D78;
     /* 0x8D7C */ f32 field_0x8D7C;
@@ -821,8 +838,10 @@ public:
     }
 
     const dMapSaveObjDefinition *getSaveObjDefinition(s32 statueIdx) const {
-        return mMapMain.getSaveObjDefinition(mMapMain.mProvince, statueIdx);
+        return mMapMain.getSaveObjDefinition(mMapMain.mSurfaceProvince, statueIdx);
     }
+
+    void fn_80143A30();
 
 private:
     /* 0x0004 */ d2d::ResAccIf_c mResAcc;

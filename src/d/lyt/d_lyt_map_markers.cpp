@@ -1794,7 +1794,7 @@ static const char *sMapPopPrefix = "MAP_POP_";
 
 bool dLytMapMarkers_c::build(d2d::ResAccIf_c *resAcc) {
     mMapPopup.build(resAcc);
-    if (dStageMgr_c::GetInstance()->isSTIFbyte4_0()) {
+    if (dStageMgr_c::GetInstance()->isSTIFAreaSky()) {
         void *data = LayoutArcManager::GetInstance()->getLoadedData("MapSky");
         mResAcc01.attach(data, "");
 
@@ -1814,7 +1814,7 @@ bool dLytMapMarkers_c::build(d2d::ResAccIf_c *resAcc) {
 
 bool dLytMapMarkers_c::remove() {
     mMapPopup.remove();
-    if (dStageMgr_c::GetInstance()->isSTIFbyte4_0()) {
+    if (dStageMgr_c::GetInstance()->isSTIFAreaSky()) {
         mIcon01.remove();
         mResAcc01.detach();
     } else {
@@ -1830,7 +1830,7 @@ bool dLytMapMarkers_c::execute() {
 }
 
 void dLytMapMarkers_c::draw() {
-    if (dStageMgr_c::GetInstance()->isSTIFbyte4_0()) {
+    if (dStageMgr_c::GetInstance()->isSTIFAreaSky()) {
         mIcon01.draw();
     } else {
         mIcon00.draw();
@@ -1838,7 +1838,7 @@ void dLytMapMarkers_c::draw() {
 }
 
 void dLytMapMarkers_c::setIslandNamesOn(bool on) {
-    if (dStageMgr_c::GetInstance()->isSTIFbyte4_0()) {
+    if (dStageMgr_c::GetInstance()->isSTIFAreaSky()) {
         mShowIslandNames = on;
         mIcon01.mShowIslandNames = on;
     }

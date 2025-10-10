@@ -135,7 +135,8 @@ public:
 
     void triggerExit(s32 room, u16 exitIndex, s32 forcedNight = 2, s32 forcedTrial = 2);
     void triggerEntrance(
-        const char *stageName, u8 roomid, u8 layer, u8 entrance, int forcedNight = SpawnInfo::RETAIN_TOD, int forcedTrial = SpawnInfo::RETAIN_TRIAL, u8 transitionType = dFader_c::FADER_BLACK,
+        const char *stageName, u8 roomid, u8 layer, u8 entrance, int forcedNight = SpawnInfo::RETAIN_TOD,
+        int forcedTrial = SpawnInfo::RETAIN_TRIAL, u8 transitionType = dFader_c::FADER_BLACK,
         u16 transitionFadeFrames = 15, s8 field0x28 = -1
     );
     // void triggerEntrance(const char *stageName, u8 room, );
@@ -211,6 +212,10 @@ public:
 
     f32 targetingScreenFn_801BBEC0() const {
         return mScreen1.fn_801BBEC0();
+    }
+
+    void setTargetingScreenPrio(u8 prio) {
+        mScreen1.setPriority(prio);
     }
 
     static bool sCopyFileBToCurrentAfterRespawn;

@@ -404,7 +404,8 @@ void FiContext::prepareFiCallOptions() {
     }
 
     mFiButtonOptions[0] = KEN8_Advice;
-    if (dStageMgr_c::GetInstance()->getSTIFbyte4() == 0 && !isInAnySkyKeepRoom() && !isInLeviasFightMaybe()) {
+    if (dStageMgr_c::GetInstance()->getSTIFArea() == dStageMgr_c::STIF_AREA_SKY && !isInAnySkyKeepRoom() &&
+        !isInLeviasFightMaybe()) {
         // In the Sky, show play time
         mFiButtonOptions[1] = KEN8_PlayTime;
     } else {

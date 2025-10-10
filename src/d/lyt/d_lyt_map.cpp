@@ -10,6 +10,7 @@
 #include "d/d_cs_game.h"
 #include "d/d_cursor_hit_check.h"
 #include "d/d_d2d.h"
+#include "d/d_fader.h"
 #include "d/d_message.h"
 #include "d/d_pad.h"
 #include "d/d_pad_nav.h"
@@ -17,6 +18,7 @@
 #include "d/d_rumble.h"
 #include "d/d_sc_game.h"
 #include "d/d_stage.h"
+#include "d/d_stage_mgr.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/lyt/d2d.h"
@@ -1909,7 +1911,7 @@ dLytMapMain_c::dLytMapMain_c()
       mFlowMgr(&mFlow),
       mFloorBtnMgr(&mGlobal),
       mFootPrints(&mGlobal),
-      field_0x8C6C(0),
+      mAreaGroup(0),
       mMapUpDirectionAfterZoomToDetail(true),
       field_0x8C93(0),
       field_0x8C94(0),
@@ -1929,8 +1931,8 @@ dLytMapMain_c::dLytMapMain_c()
       field_0x8D68(0),
       field_0x8D6A(0),
       field_0x8D6B(0),
-      field_0x8D6C(0),
-      field_0x8D70(0),
+      mpRegionPane1(nullptr),
+      mpRegionPane2(nullptr),
       field_0x8DB0(0),
       mNavEnabled(false),
       mDrawScaleFrame(false),
@@ -2150,6 +2152,24 @@ static const d2d::LytBrlanMapping sMapMainBrlanMap[] = {
 #define MAP_MAIN_ANIM_SKYLOFT_UP_DOWN 19
 #define MAP_MAIN_ANIM_LINK_POSITION_LIGHT 20
 
+#define MAP_MAIN_ANIM_MAP_Z_IN_FOREST 21
+#define MAP_MAIN_ANIM_MAP_Z_WAKU_IN 22
+
+#define MAP_MAIN_ANIM_MAP_Z_IN_PLANT 25
+
+#define MAP_MAIN_ANIM_MAP_ZA_IN_PLANT 27
+
+#define MAP_MAIN_ANIM_MAP_Z_IN_DESERT 29
+
+#define MAP_MAIN_ANIM_MAP_Z_IN_VOLCANO 31
+
+#define MAP_MAIN_ANIM_MAP_ZA_IN_FOREST 36
+#define MAP_MAIN_ANIM_MAP_ZA_IN_DESERT 37
+#define MAP_MAIN_ANIM_MAP_ZA_IN_VOLCANO 38
+
+#define MAP_MAIN_ANIM_MAP_ZA_IN_SKY_MAP_2 41
+#define MAP_MAIN_ANIM_MAP_ZA_OUT_SKY_COURSE 44
+
 #define MAP_MAIN_ANIM_SUN_ROTE 45
 #define MAP_MAIN_ANIM_IN_NO_CAM 46
 #define MAP_MAIN_ANIM_OUT_NO_CAM 47
@@ -2182,11 +2202,11 @@ static const char *sPaneNames[] = {
     "N_lName_00", "N_gName_02", "N_gName_01",  "N_nVname_00", "N_gName_00",
 };
 
-static const char *sPaneNamesUnk1[] = {
+static const char *sDungeonPaneNames[] = {
     "N_fD1_00", "N_vD1_00", "N_dD1_00", "N_fD2_00", "N_dD2_00", "N_vD2_00", "N_lastD_00",
 };
 
-static const char *sPaneNamesUnk2[] = {
+static const char *sDungeonPicNames[] = {
     "P_fD1_00", "P_vD1_00", "P_dD1_00", "P_fD2_00", "P_dD2_00", "P_vD2_00", "P_lastD_00",
 };
 
@@ -2287,17 +2307,17 @@ void dLytMapMain_c::build() {
         }
     }
 
-    for (int i = 0; i < (int)ARRAY_LENGTH(sPaneNamesUnk1); i++) {
-        if (sPaneNamesUnk1[i] != nullptr) {
-            mpUnkPanes1[i] = mLyt.findPane(sPaneNamesUnk1[i]);
+    for (int i = 0; i < (int)ARRAY_LENGTH(sDungeonPaneNames); i++) {
+        if (sDungeonPaneNames[i] != nullptr) {
+            mpDungeonPanes[i] = mLyt.findPane(sDungeonPaneNames[i]);
         } else {
-            mpUnkPanes1[i] = nullptr;
+            mpDungeonPanes[i] = nullptr;
         }
 
-        if (sPaneNamesUnk2[i] != nullptr) {
-            mpUnkPanes2[i] = mLyt.findPane(sPaneNamesUnk2[i]);
+        if (sDungeonPicNames[i] != nullptr) {
+            mpDungeonPics[i] = mLyt.findPane(sDungeonPicNames[i]);
         } else {
-            mpUnkPanes2[i] = nullptr;
+            mpDungeonPics[i] = nullptr;
         }
     }
 
@@ -2399,15 +2419,15 @@ s32 dLytMapMain_c::getSelectedSaveObjIdx() const {
     bool has = false;
     s32 start;
     s32 end;
-    if (field_0x8C6C == 2) {
+    if (mAreaGroup == AREAGROUP_FARON) {
         start = 5;
         end = 14;
         has = true;
-    } else if (field_0x8C6C == 3) {
+    } else if (mAreaGroup == AREAGROUP_ELDIN) {
         start = 15;
         end = 20;
         has = true;
-    } else if (field_0x8C6C == 4) {
+    } else if (mAreaGroup == AREAGROUP_LANAYRU) {
         start = 21;
         end = 32;
         has = true;
@@ -2733,12 +2753,436 @@ void dLytMapMain_c::initializeState_RenderingWait() {}
 void dLytMapMain_c::executeState_RenderingWait() {}
 void dLytMapMain_c::finalizeState_RenderingWait() {}
 
+struct dLytMapStoryflagPaneMapping {
+    /* 0x00 */ s32 storyFlag;
+    /* 0x04 */ const char *paneName;
+};
+
+static const dLytMapStoryflagPaneMapping sStoryflagPaneMap[] = {
+    {      STORYFLAG_FARON_PILLAR_OPENED,   "N_forestP_00"},
+    {      STORYFLAG_ELDIN_PILLAR_OPENED,  "N_volcanoP_00"},
+    {    STORYFLAG_LANAYRU_PILLAR_OPENED,   "N_desertP_00"},
+    {         STORYFLAG_FARON_DISCOVERED,  "N_toForest_00"},
+    {         STORYFLAG_ELDIN_DISCOVERED, "N_toVolcano_00"},
+    {       STORYFLAG_LANAYRU_DISCOVERED,  "N_toDesert_00"},
+    { STORYFLAG_ISLE_OF_SONGS_DISCOVERED,      "N_utaN_00"},
+    {STORYFLAG_FUN_FUN_ISLAND_DISCOVERED,  "N_ruretouN_00"},
+    { STORYFLAG_LUMPY_PUMPKIN_DISCOVERED,  "N_pampkinN_00"},
+    { STORYFLAG_BEEDLE_ISLAND_DISCOVERED,     "N_teryN_00"},
+    { STORYFLAG_BAMBOO_ISLAND_DISCOVERED,  "N_tikurinN_00"},
+    {     STORYFLAG_BUG_HAVEN_DISCOVERED,     "N_musiN_00"},
+    { STORYFLAG_ISLE_OF_SONGS_DISCOVERED,      "N_utaI_00"},
+    {STORYFLAG_FUN_FUN_ISLAND_DISCOVERED,  "N_ruretouI_00"},
+    { STORYFLAG_LUMPY_PUMPKIN_DISCOVERED,  "N_pampkinI_00"},
+    { STORYFLAG_BEEDLE_ISLAND_DISCOVERED,     "N_teryI_00"},
+    { STORYFLAG_BAMBOO_ISLAND_DISCOVERED,  "N_tikurinI_00"},
+    {     STORYFLAG_BUG_HAVEN_DISCOVERED,     "N_musiI_00"},
+    {STORYFLAG_BILOCYCTE_FIGHT_TRIGGERED,     "N_nushi_00"},
+};
+
+// 255 is a placeholder for "no flag", despite it corresponding to an actual story flag...
+static const s32 sFlagsRenameMe[] = {
+    255, STORYFLAG_FARON_PILLAR_OPENED, STORYFLAG_ELDIN_PILLAR_OPENED, STORYFLAG_LANAYRU_PILLAR_OPENED,
+    STORYFLAG_THUNDERHEAD_ENTERED
+};
+
+// Not sure what the second number means
+static const s32 sFlags2RenameMe[][2] = {
+    {         STORYFLAG_FARON_DISCOVERED, 5},
+    {   STORYFLAG_FARON_WOODS_DISCOVERED, 2},
+    {    STORYFLAG_DEEP_WOODS_DISCOVERED, 2},
+    {         STORYFLAG_ELDIN_DISCOVERED, 3},
+    {       STORYFLAG_LANAYRU_DISCOVERED, 4},
+    {STORYFLAG_LANAYRU_DESERT_DISCOVERED, 4},
+    {   STORYFLAG_LAKE_FLORIA_DISCOVERED, 2},
+    { STORYFLAG_LANAYRU_CAVES_DISCOVERED, 4},
+    {STORYFLAG_ANCIENT_HARBOR_DISCOVERED, 4},
+    {STORYFLAG_VOLCANO_SUMMIT_DISCOVERED, 3},
+    { STORYFLAG_LANAYRU_GORGE_DISCOVERED, 4},
+};
+
+static const s32 sDungeonDiscoveredFlags[] = {
+    STORYFLAG_SKYVIEW_DISCOVERED,         STORYFLAG_EARTH_TEMPLE_DISCOVERED, STORYFLAG_LMF_DISCOVERED,
+    STORYFLAG_ANCIENT_CISTERN_DISCOVERED, STORYFLAG_SANDSHIP_DISCOVERED,     STORYFLAG_FIRE_SANCTUARY_DISCOVERED,
+    STORYFLAG_SKY_KEEP_DISCOVERED,
+};
+
+static const char *sAreaPicNamesL[] = {
+    "P_plainL_00", "P_forestL_00", "P_nForestL_00", "P_sVolcanoL_00", "P_mineL_00",    "P_desertL_00",
+    "P_lakeL_00",  "P_glenL_00",   "P_seaL_00",     "P_nVolcanoL_00", "P_skyloftL_00", "P_glenL_01",
+};
+
+static const char *sAreaPicNamesLink[] = {
+    "P_plainLink_00", "P_forestLink_00", "P_nForestLink_00", "P_sVolLink_00", "P_mineLink_00",    "P_desertLink_00",
+    "P_lakeLink_00",  "P_glenLink_00",   "P_seaLink_00",     "P_nVolLink_00", "P_skyloftLink_00", "P_glenLink_01",
+};
+
+#define MAP_MAIN_AREA_PIC_PLAIN 0
+#define MAP_MAIN_AREA_PIC_FOREST 1
+#define MAP_MAIN_AREA_PIC_N_FOREST 2
+#define MAP_MAIN_AREA_PIC_S_VOLCANO 3
+#define MAP_MAIN_AREA_PIC_MINE 4
+#define MAP_MAIN_AREA_PIC_DESERT 5
+#define MAP_MAIN_AREA_PIC_LACE 6
+#define MAP_MAIN_AREA_PIC_GLEN_00 7
+#define MAP_MAIN_AREA_PIC_SEA 8
+#define MAP_MAIN_AREA_PIC_N_VOLCANO 9
+#define MAP_MAIN_AREA_PIC_SKYLOFT 10
+#define MAP_MAIN_AREA_PIC_GLEN_01 11
+
+#define MAP_MAIN_NUM_AREA_PICS 12
+
+void dLytMapMain_c::setupFlags() {
+    if (field_0x8C94 == 4 || field_0x8C94 == 6) {
+        field_0x8DBE = 0;
+    } else {
+        field_0x8DBE = -1;
+    }
+    field_0x8D6B = 0;
+    field_0x8D6A = 0;
+
+    mpAllPane->SetVisible(true);
+    s32 currentRegion;
+    switch (dStageMgr_c::GetInstance()->getSTIFArea()) {
+        default:                                      currentRegion = MAP_MAIN_AREA_PIC_SKYLOFT; break;
+        case dStageMgr_c::STIF_AREA_SEALED_GROUNDS:   currentRegion = MAP_MAIN_AREA_PIC_PLAIN; break;
+        case dStageMgr_c::STIF_AREA_FARON_WOODS:      currentRegion = MAP_MAIN_AREA_PIC_FOREST; break;
+        case dStageMgr_c::STIF_AREA_DEEP_WOODS:       currentRegion = MAP_MAIN_AREA_PIC_N_FOREST; break;
+        case dStageMgr_c::STIF_AREA_LAKE_FLORIA:      currentRegion = MAP_MAIN_AREA_PIC_LACE; break;
+        case dStageMgr_c::STIF_AREA_VOLCANO_SOUTH:    currentRegion = MAP_MAIN_AREA_PIC_S_VOLCANO; break;
+        case dStageMgr_c::STIF_AREA_VOLCANO_NORTH:    currentRegion = MAP_MAIN_AREA_PIC_N_VOLCANO; break;
+        case dStageMgr_c::STIF_AREA_LANAYRU_MINE:     currentRegion = MAP_MAIN_AREA_PIC_MINE; break;
+        case dStageMgr_c::STIF_AREA_LANAYRU_DESERT:   currentRegion = MAP_MAIN_AREA_PIC_DESERT; break;
+        case dStageMgr_c::STIF_AREA_LANAYRU_SAND_SEA: currentRegion = MAP_MAIN_AREA_PIC_SEA; break;
+        case dStageMgr_c::STIF_AREA_LANAYRU_CAVES:    currentRegion = MAP_MAIN_AREA_PIC_GLEN_00; break;
+        case dStageMgr_c::STIF_AREA_LANAYRU_GORGE:    currentRegion = MAP_MAIN_AREA_PIC_GLEN_01; break;
+    }
+    // TODO - regswap between i and ok
+    for (int i = 0; i < (int)ARRAY_LENGTH(sStoryflagPaneMap); i++) {
+        nw4r::lyt::Pane *p = mLyt.findPane(sStoryflagPaneMap[i].paneName);
+        bool ok = StoryflagManager::sInstance->getFlag(sStoryflagPaneMap[i].storyFlag) != 0;
+        if (i >= 0 && i < 6 && (dScGame_c::isCurrentStage("F403") || dScGame_c::isCurrentStage("F404"))) {
+            // If we're in the past, light pillars aren't a thing
+            ok = false;
+        }
+        if (ok) {
+            p->SetVisible(true);
+        } else {
+            p->SetVisible(false);
+        }
+    }
+
+    if (StoryflagManager::sInstance->getFlag(STORYFLAG_BILOCYCTE_FIGHT_TRIGGERED)) {
+        mAnmGroups[MAP_MAIN_ANIM_NUSHI_LOOP].bind(false);
+    }
+    mAnmGroups[MAP_MAIN_ANIM_KUMO_PATTERN].bind(false);
+
+    f32 titleLineFrame = 4.0f;
+    // TODO - lots of regswaps
+    for (int i = ARRAY_LENGTH(sFlagsRenameMe) - 1; i >= 0; i--) {
+        s32 flag = sFlagsRenameMe[i];
+        // This might be an inline...
+        bool doBreak = true;
+        bool flagSet = flag != 255 && StoryflagManager::sInstance->getCounterOrFlag(flag);
+        if (!flagSet && flag != 255) {
+            doBreak = false;
+        }
+        if (doBreak) {
+            break;
+        }
+        titleLineFrame -= 1.0f;
+    }
+    mAnmGroups[MAP_MAIN_ANIM_KUMO_PATTERN].setFrame(titleLineFrame);
+    mAnmGroups[MAP_MAIN_ANIM_MAP_V].bind(false);
+    if (field_0x8C68 == 1 || field_0x8C68 == 3) {
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+            mAnmGroups[MAP_MAIN_ANIM_MAP_V].setFrame(3.0f);
+        }
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+            mAnmGroups[MAP_MAIN_ANIM_MAP_V].setFrame(2.0f);
+        }
+    }
+
+    field_0x8880[0] = &mAnmGroups[MAP_MAIN_ANIM_DRAW_PLAIN];
+    field_0x8880[1] = &mAnmGroups[MAP_MAIN_ANIM_DRAW_FOREST];
+    field_0x8880[2] = &mAnmGroups[MAP_MAIN_ANIM_DRAW_N_FOREST];
+    field_0x8880[3] = &mAnmGroups[MAP_MAIN_ANIM_DRAW_S_VOLCANO];
+    field_0x8880[4] = &mAnmGroups[MAP_MAIN_ANIM_DRAW_MINE];
+    field_0x8880[5] = &mAnmGroups[MAP_MAIN_ANIM_DRAW_DESERT];
+    field_0x8880[6] = &mAnmGroups[MAP_MAIN_ANIM_DRAW_LAKE];
+    field_0x8880[7] = &mAnmGroups[MAP_MAIN_ANIM_DRAW_GLEN_01];
+    field_0x8880[8] = &mAnmGroups[MAP_MAIN_ANIM_DRAW_SEA];
+    field_0x8880[9] = &mAnmGroups[MAP_MAIN_ANIM_DRAW_N_VOLCANO];
+    field_0x8880[10] = &mAnmGroups[MAP_MAIN_ANIM_DRAW_GLEN_00];
+
+    for (int i = 0; i < (int)ARRAY_LENGTH(field_0x8880); i++) {
+        if (field_0x8880[i] != nullptr) {
+            field_0x8880[i]->bind(false);
+            field_0x8880[i]->setToEnd();
+        }
+    }
+
+    for (int i = 0; i < (int)ARRAY_LENGTH(mpPanes); i++) {
+        if (mpPanes[i] != nullptr) {
+            mpPanes[i]->SetVisible(true);
+        }
+    }
+
+    field_0x88AC = -1;
+
+    for (int i = ARRAY_LENGTH(sFlags2RenameMe) - 1; i >= 0; i--) {
+        s32 flag = sFlags2RenameMe[i][0];
+        bool flagSet = flag != 255 && StoryflagManager::sInstance->getCounterOrFlag(flag);
+        if (flagSet) {
+            field_0x88AC = i;
+            break;
+        }
+        if (mpPanes[i] != nullptr) {
+            mpPanes[i]->SetVisible(false);
+        }
+        if (field_0x8880[i] != nullptr) {
+            field_0x8880[i]->setFrame(0.0f);
+        }
+    }
+
+    if (field_0x8C94 == 3) {
+        if (field_0x88AC < 0) {
+            field_0x88AC = 0;
+        }
+        if (field_0x88AC >= 0) {
+            if (mpPanes[field_0x88AC] != nullptr) {
+                mpPanes[field_0x88AC]->SetVisible(true);
+            }
+            if (field_0x8880[field_0x88AC] != nullptr) {
+                field_0x8880[field_0x88AC]->setFrame(0.0f);
+            }
+        }
+    }
+
+    for (int i = 0; i < (int)ARRAY_LENGTH(sDungeonDiscoveredFlags); i++) {
+        if (mpDungeonPanes[i] != nullptr) {
+            mpDungeonPanes[i]->SetVisible(true);
+        }
+        if (mpDungeonPics[i] != nullptr) {
+            mpDungeonPics[i]->SetVisible(true);
+        }
+    }
+
+    for (int i = ARRAY_LENGTH(sDungeonDiscoveredFlags) - 1; i >= 0; i--) {
+        s32 flag = sDungeonDiscoveredFlags[i];
+        bool flagSet = flag != 255 && StoryflagManager::sInstance->getCounterOrFlag(flag);
+        if (flagSet) {
+            break;
+        }
+        if (mpDungeonPanes[i] != nullptr) {
+            mpDungeonPanes[i]->SetVisible(false);
+        }
+        if (mpDungeonPics[i] != nullptr) {
+            mpDungeonPics[i]->SetVisible(false);
+        }
+    }
+
+    if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_TRIFORCE_COMPLETE) &&
+        !dScGame_c::isCurrentStage("F403") && !dScGame_c::isCurrentStage("F404")) {
+        if (mpDungeonPanes[6] != nullptr) {
+            mpDungeonPanes[6]->SetVisible(false);
+        }
+        if (mpDungeonPics[6] != nullptr) {
+            mpDungeonPics[6]->SetVisible(false);
+        }
+    }
+
+    mAnmGroups[MAP_MAIN_ANIM_WORLD_STATE].bind(false);
+
+    if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_TRIFORCE_COMPLETE) &&
+        !dScGame_c::isCurrentStage("F403") && !dScGame_c::isCurrentStage("F404")) {
+        mAnmGroups[MAP_MAIN_ANIM_WORLD_STATE].setFrame(1.0f);
+    } else {
+        mAnmGroups[MAP_MAIN_ANIM_WORLD_STATE].setFrame(0.0f);
+    }
+    mLyt.getLayout()->Animate(0);
+    mLyt.calc();
+
+    if (mAnmGroups[MAP_MAIN_ANIM_WORLD_STATE].isBound()) {
+        mAnmGroups[MAP_MAIN_ANIM_WORLD_STATE].unbind();
+    }
+
+    for (int i = 0; i < 11; i++) {
+        if (field_0x8880[i] != nullptr) {
+            field_0x8880[i]->unbind();
+        }
+    }
+
+    mAnmGroups[MAP_MAIN_ANIM_LINK_POSITION_LIGHT].bind(false);
+    mAnmGroups[MAP_MAIN_ANIM_ROTATE].bind(false);
+
+    d2d::AnmGroup_c *grpZIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_Z_IN_FOREST];
+    d2d::AnmGroup_c *grpZAIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_ZA_IN_FOREST];
+    d2d::AnmGroup_c *grpZWakuIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_Z_WAKU_IN];
+    if (mAreaGroup == AREAGROUP_SEALED_GROUNDS) {
+        grpZIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_Z_IN_PLANT];
+        grpZAIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_ZA_IN_PLANT];
+    } else if (mAreaGroup == AREAGROUP_ELDIN) {
+        grpZIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_Z_IN_VOLCANO];
+        grpZAIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_ZA_IN_VOLCANO];
+    } else if (mAreaGroup == AREAGROUP_LANAYRU) {
+        grpZIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_Z_IN_DESERT];
+        grpZAIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_ZA_IN_DESERT];
+    }
+
+    if (field_0x8C68 == 2 || (mAreaGroup == AREAGROUP_SKY && (field_0x8C68 == 3 || field_0x8C68 == 1))) {
+        grpZIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_ZA_IN_SKY_MAP_2];
+        grpZAIn = &mAnmGroups[MAP_MAIN_ANIM_MAP_ZA_OUT_SKY_COURSE];
+    }
+
+    mAnmGroups[MAP_MAIN_ANIM_SKYLOFT_UP_DOWN].bind(false);
+    mAnmGroups[MAP_MAIN_ANIM_CLOUD_LOOK].bind(false);
+    mAnmGroups[MAP_MAIN_ANIM_LIGHT_LOOP].bind(false);
+
+    if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE || mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+        grpZAIn->bind(false);
+        grpZAIn->setFrame(0.0f);
+        grpZWakuIn->bind(false);
+        grpZWakuIn->setToEnd();
+    } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE ||
+               mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) {
+        grpZAIn->bind(false);
+        grpZAIn->setToEnd();
+        // no group1->bind(false) ?
+        grpZIn->setToEnd();
+        grpZWakuIn->bind(false);
+        grpZWakuIn->setFrame(0.0f);
+    } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD) {
+        grpZIn->bind(false);
+        grpZIn->setFrame(0.0f);
+        grpZWakuIn->bind(false);
+        grpZWakuIn->setFrame(0.0f);
+    }
+
+    if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+        mAnmGroups[MAP_MAIN_ANIM_ROTATE].setFrame(0.0f);
+    } else {
+        mAnmGroups[MAP_MAIN_ANIM_ROTATE].setToEnd();
+    }
+
+    if (field_0x8C94 == 2) {
+        mAnmGroups[MAP_MAIN_ANIM_N_ON_OFF].bind(false);
+        mAnmGroups[MAP_MAIN_ANIM_N_ON_OFF].setToEnd();
+    } else {
+        mAnmGroups[MAP_MAIN_ANIM_N_ON_OFF].bind(false);
+        mAnmGroups[MAP_MAIN_ANIM_TITLE_ON_OFF].bind(false);
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE || mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+            mAnmGroups[MAP_MAIN_ANIM_N_ON_OFF].setFrame(0.0f);
+            mAnmGroups[MAP_MAIN_ANIM_TITLE_ON_OFF].setToEnd();
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD ||
+                   mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE ||
+                   mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) {
+            mAnmGroups[MAP_MAIN_ANIM_N_ON_OFF].setToEnd();
+            mAnmGroups[MAP_MAIN_ANIM_TITLE_ON_OFF].setFrame(0.0f);
+        }
+    }
+
+    mAnmGroups[MAP_MAIN_ANIM_TITE_LINE].bind(false);
+    mAnmGroups[MAP_MAIN_ANIM_TITE_LINE].setFrame(field_0x8D54 - 1);
+
+    mLyt.getLayout()->Animate(0);
+    mLyt.calc();
+
+    mAnmGroups[MAP_MAIN_ANIM_TITE_LINE].unbind();
+    if (mAnmGroups[MAP_MAIN_ANIM_N_ON_OFF].isBound()) {
+        mAnmGroups[MAP_MAIN_ANIM_N_ON_OFF].unbind();
+    }
+    if (mAnmGroups[MAP_MAIN_ANIM_TITLE_ON_OFF].isBound()) {
+        mAnmGroups[MAP_MAIN_ANIM_TITLE_ON_OFF].unbind();
+    }
+    if (grpZIn->isBound()) {
+        grpZIn->unbind();
+    }
+    if (grpZAIn->isBound()) {
+        grpZAIn->unbind();
+    }
+    if (grpZWakuIn->isBound()) {
+        grpZWakuIn->unbind();
+    }
+    mAnmGroups[MAP_MAIN_ANIM_ROTATE].unbind();
+    mpAllPane->SetVisible(false);
+    if (mAnmGroups[MAP_MAIN_ANIM_KUMO_PATTERN].isBound()) {
+        mAnmGroups[MAP_MAIN_ANIM_KUMO_PATTERN].unbind();
+    }
+    getGlobal()->setAlpha(0);
+    // we had JUST set this to invisible...
+    mpAllPane->SetVisible(true);
+    mpRegionPane1 = nullptr;
+    for (int i = 0; i < MAP_MAIN_NUM_AREA_PICS; i++) {
+        nw4r::lyt::Pane *p1 = mLyt.findPane(sAreaPicNamesL[i]);
+        nw4r::lyt::Pane *p2 = mLyt.findPane(sAreaPicNamesLink[i]);
+        if (i == currentRegion) {
+            p1->SetVisible(true);
+            p2->SetVisible(true);
+            mpRegionPane1 = p1;
+            // TODO - was this meant to be p2?
+            mpRegionPane2 = p1;
+        } else {
+            p1->SetVisible(false);
+            p2->SetVisible(false);
+        }
+    }
+
+    if (field_0x8C68 == 4 || field_0x8C68 == 5) {
+        mLyt.findPane("P_skyloftLink_00")->SetVisible(false);
+    }
+
+    if (canPlaceBeacons(mCurrentMapMode) && canPlaceBeacons(mNextMapMode)) {
+        mPutIcon.setVisible(true);
+        mpNoroshiPane->SetVisible(true);
+    } else {
+        mpNoroshiPane->SetVisible(false);
+        mPutIcon.setVisible(false);
+    }
+
+    if (field_0x8C68 == 4) {
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE && mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+            mMarkers.setIslandNamesOn(mShowIslandNames);
+        } else if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM && mNextMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+            mMarkers.setIslandNamesOn(false);
+        }
+    }
+}
+
 void dLytMapMain_c::initializeState_In() {}
 void dLytMapMain_c::executeState_In() {}
 void dLytMapMain_c::finalizeState_In() {}
 
+s32 dLytMapMain_c::getAreaGroup(s32 stifArea) const {
+    s32 ret = AREAGROUP_MAX;
+    if (field_0x8C94 == 10) {
+        switch (mSurfaceProvince) {
+            case SURFACE_PROVINCE_FARON:   ret = AREAGROUP_FARON; break;
+            case SURFACE_PROVINCE_ELDIN:   ret = AREAGROUP_ELDIN; break;
+            case SURFACE_PROVINCE_LANAYRU: ret = AREAGROUP_LANAYRU; break;
+        }
+    } else {
+        switch (stifArea) {
+            case dStageMgr_c::STIF_AREA_SKY:              ret = AREAGROUP_SKY; break;
+            case dStageMgr_c::STIF_AREA_SEALED_GROUNDS:   ret = AREAGROUP_SEALED_GROUNDS; break;
+            case dStageMgr_c::STIF_AREA_FARON_WOODS:
+            case dStageMgr_c::STIF_AREA_DEEP_WOODS:
+            case dStageMgr_c::STIF_AREA_LAKE_FLORIA:      ret = AREAGROUP_FARON; break;
+            case dStageMgr_c::STIF_AREA_VOLCANO_SOUTH:
+            case dStageMgr_c::STIF_AREA_VOLCANO_NORTH:    ret = AREAGROUP_ELDIN; break;
+            case dStageMgr_c::STIF_AREA_LANAYRU_MINE:
+            case dStageMgr_c::STIF_AREA_LANAYRU_DESERT:
+            case dStageMgr_c::STIF_AREA_LANAYRU_SAND_SEA:
+            case dStageMgr_c::STIF_AREA_LANAYRU_CAVES:
+            case dStageMgr_c::STIF_AREA_LANAYRU_GORGE:    ret = AREAGROUP_LANAYRU; break;
+        }
+    }
+
+    return ret;
+}
+
 void dLytMapMain_c::zoomIn() {
-    if (field_0x8C68 == 2 || (field_0x8C6C == 1 && (field_0x8C68 == 3 || field_0x8C68 == 1))) {
+    if (field_0x8C68 == 2 || (mAreaGroup == AREAGROUP_SKY && (field_0x8C68 == 3 || field_0x8C68 == 1))) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD) {
             if (dPad::getDownTrigRight()) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_AREA);
@@ -2860,7 +3304,7 @@ void dLytMapMain_c::zoomIn() {
 }
 
 void dLytMapMain_c::zoomOut() {
-    if (field_0x8C68 == 2 || (field_0x8C6C == 1 && (field_0x8C68 == 3 || field_0x8C68 == 1))) {
+    if (field_0x8C68 == 2 || (mAreaGroup == AREAGROUP_SKY && (field_0x8C68 == 3 || field_0x8C68 == 1))) {
         if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) {
             if (dPad::getDownTrigLeft()) {
                 mNextMapMode = dLytMapGlobal_c::MAPMODE_WORLD;
@@ -3786,7 +4230,7 @@ bool dLytMapMain_c::checkStoryflag(s32 flag) const {
 }
 
 void dLytMapMain_c::initializeState_EventSaveObjMsgWindow() {
-    if (mProvince == PROVINCE_FARON && checkStoryflag(STORYFLAG_LEVIAS_FIGHT_DEFEATED) &&
+    if (mSurfaceProvince == SURFACE_PROVINCE_FARON && checkStoryflag(STORYFLAG_LEVIAS_FIGHT_DEFEATED) &&
         !checkStoryflag(STORYFLAG_FLOODED_FARON_WOODS_DISCOVERED)) {
         // "A report, Master. An unusual phenomenon is taking place in Faron Woods, making it impossible to descend
         // directly into them at the moment."
@@ -3826,9 +4270,9 @@ struct dLytMapSaveObjFlagDefinition {
 static const dLytMapSaveObjFlagDefinition sSaveObjFlagsFaron[] = {
     {SAVE_OBJ_FLAG_KIND_SCENEFLAG, 10, 31},
     {SAVE_OBJ_FLAG_KIND_STORYFLAG, STORYFLAG_800},
-    {SAVE_OBJ_FLAG_KIND_SCENEFLAG, STORYFLAG_801},
-    {SAVE_OBJ_FLAG_KIND_SCENEFLAG, STORYFLAG_802},
-    {SAVE_OBJ_FLAG_KIND_SCENEFLAG, STORYFLAG_803},
+    {SAVE_OBJ_FLAG_KIND_STORYFLAG, STORYFLAG_801},
+    {SAVE_OBJ_FLAG_KIND_STORYFLAG, STORYFLAG_802},
+    {SAVE_OBJ_FLAG_KIND_STORYFLAG, STORYFLAG_803},
     {SAVE_OBJ_FLAG_KIND_SCENEFLAG, 1, 104},
     {SAVE_OBJ_FLAG_KIND_SCENEFLAG, 1, 103},
     {SAVE_OBJ_FLAG_KIND_SCENEFLAG, 2, 32},
@@ -3840,7 +4284,7 @@ static const dLytMapSaveObjFlagDefinition sSaveObjFlagsEldin[] = {
     {SAVE_OBJ_FLAG_KIND_STORYFLAG, STORYFLAG_804},
     {SAVE_OBJ_FLAG_KIND_STORYFLAG, STORYFLAG_805},
     {SAVE_OBJ_FLAG_KIND_STORYFLAG, STORYFLAG_806},
-    {SAVE_OBJ_FLAG_KIND_SCENEFLAG, STORYFLAG_807},
+    {SAVE_OBJ_FLAG_KIND_STORYFLAG, STORYFLAG_807},
     {SAVE_OBJ_FLAG_KIND_SCENEFLAG, 5, 101},
     {SAVE_OBJ_FLAG_KIND_SCENEFLAG, 15, 114},
 };
@@ -3868,14 +4312,14 @@ void dLytMapMain_c::displaySaveObjs() {
     s32 numFlags = ARRAY_LENGTH(sSaveObjFlagsFaron);
     nw4r::lyt::Bounding **pBoundings = field_0x821C;
     const dLytMapSaveObjFlagDefinition *flagSet = sSaveObjFlagsFaron;
-    switch (mProvince) {
-        case PROVINCE_ELDIN: {
+    switch (mSurfaceProvince) {
+        case SURFACE_PROVINCE_ELDIN: {
             pBoundings = field_0x8244;
             flagSet = sSaveObjFlagsEldin;
             numFlags = ARRAY_LENGTH(sSaveObjFlagsEldin);
             break;
         }
-        case PROVINCE_LANAYRU: {
+        case SURFACE_PROVINCE_LANAYRU: {
             pBoundings = field_0x825C;
             flagSet = sSaveObjFlagsLanayru;
             numFlags = ARRAY_LENGTH(sSaveObjFlagsLanayru);
@@ -3886,7 +4330,7 @@ void dLytMapMain_c::displaySaveObjs() {
     bool isInFaronSothMode = false;
     bool isInFaronFloodedMode = false;
 
-    if (mProvince == PROVINCE_FARON) {
+    if (mSurfaceProvince == SURFACE_PROVINCE_FARON) {
         if (checkStoryflag(STORYFLAG_LEVIAS_FIGHT_DEFEATED) &&
             !checkStoryflag(STORYFLAG_FLOODED_FARON_WOODS_DISCOVERED)) {
             isInFaronSothMode = true;
@@ -3964,7 +4408,7 @@ void dLytMapMain_c::executeState_EventSaveObjSelect() {
     }
 
     if (found) {
-        const dMapSaveObjDefinition *def = getSaveObjDefinition(mProvince, statueIdx);
+        const dMapSaveObjDefinition *def = getSaveObjDefinition(mSurfaceProvince, statueIdx);
         mSaveCaption.setLabel(def->statueLabel);
         mSaveCaption.setType(def->type);
         mSaveCaption.mStateMgr.changeState(dLytMapSaveCaption_c::StateID_In);
@@ -3980,11 +4424,110 @@ void dLytMapMain_c::executeState_EventSaveObjSelect() {
 }
 void dLytMapMain_c::finalizeState_EventSaveObjSelect() {}
 
+static const dMapSaveObjDefinition sFaronSaveObjs[] = {
+    {  "F400", 0, 0, 10, 4, "SAVEOBJ_NAME_00"},
+    {  "F100", 0, 0, 50, 1, "SAVEOBJ_NAME_01"},
+    {  "F100", 0, 0, 51, 1, "SAVEOBJ_NAME_02"},
+    {  "F100", 0, 0, 52, 1, "SAVEOBJ_NAME_03"},
+    {  "F100", 0, 0, 53, 1, "SAVEOBJ_NAME_04"},
+    {  "F101", 0, 0, 13, 1, "SAVEOBJ_NAME_05"},
+    {  "F101", 0, 0, 14, 1, "SAVEOBJ_NAME_06"},
+    {  "F102", 3, 0,  2, 1, "SAVEOBJ_NAME_07"},
+    {"F102_1", 0, 0,  5, 1, "SAVEOBJ_NAME_08"},
+    {  "F401", 1, 0,  8, 4, "SAVEOBJ_NAME_28"},
+};
+static const dMapSaveObjDefinition sFloodedFaronSaveObj = {"F103", 0, 0, 9, 1, "SAVEOBJ_NAME_09"};
+static const dMapSaveObjDefinition sFaronLoweredGoddessStatueSaveObj = {"F406", 1, 0, 5, 4, "SAVEOBJ_NAME_29"};
+static const dMapSaveObjDefinition sEldinSaveObjs[] = {
+    {  "F200",  0, 0, 2, 2, "SAVEOBJ_NAME_10"},
+    {  "F200",  2, 0, 6, 2, "SAVEOBJ_NAME_11"},
+    {  "F200",  2, 0, 7, 2, "SAVEOBJ_NAME_12"},
+    {  "F200",  4, 0, 7, 2, "SAVEOBJ_NAME_13"},
+    {"F201_3",  0, 0, 3, 2, "SAVEOBJ_NAME_14"},
+    {  "D201", 10, 0, 2, 2, "SAVEOBJ_NAME_15"},
+};
+
+static const dMapSaveObjDefinition sLanayruSaveObjs[] = {
+    {"F300_1", 0, 0,  2, 3, "SAVEOBJ_NAME_16"},
+    {  "F300", 0, 0, 15, 3, "SAVEOBJ_NAME_17"},
+    {  "F300", 0, 0, 16, 3, "SAVEOBJ_NAME_18"},
+    {  "F300", 0, 0, 17, 3, "SAVEOBJ_NAME_19"},
+    {  "F300", 0, 0, 18, 3, "SAVEOBJ_NAME_20"},
+    {"F300_4", 0, 0, 16, 3, "SAVEOBJ_NAME_21"},
+    {"F300_4", 0, 0, 17, 3, "SAVEOBJ_NAME_22"},
+    {  "F301", 0, 0, 10, 3, "SAVEOBJ_NAME_23"},
+    {"F301_3", 0, 0, 10, 3, "SAVEOBJ_NAME_24"},
+    {"F301_4", 0, 0, 10, 3, "SAVEOBJ_NAME_25"},
+    {"F301_6", 0, 0, 10, 3, "SAVEOBJ_NAME_26"},
+    {  "F302", 0, 0, 12, 3, "SAVEOBJ_NAME_27"},
+};
+
+const dMapSaveObjDefinition *dLytMapMain_c::getSaveObjDefinition(s32 province, s32 index) const {
+    const dMapSaveObjDefinition *ret = nullptr;
+    switch (province) {
+        case SURFACE_PROVINCE_FARON: {
+            if (index == 4 && checkStoryflag(STORYFLAG_FLOODED_FARON_WOODS_DISCOVERED) &&
+                !checkStoryflag(STORYFLAG_WATER_DRAGON_SOTH_PART)) {
+                ret = &sFloodedFaronSaveObj;
+            } else if (index == 9 && checkStoryflag(STORYFLAG_GODDESS_STATUE_FALLEN)) {
+                ret = &sFaronLoweredGoddessStatueSaveObj;
+            } else {
+                ret = &sFaronSaveObjs[index];
+            }
+            break;
+        }
+        case SURFACE_PROVINCE_ELDIN: {
+            ret = &sEldinSaveObjs[index];
+            break;
+        }
+        case SURFACE_PROVINCE_LANAYRU: {
+            ret = &sLanayruSaveObjs[index];
+            break;
+        }
+    }
+    return ret;
+}
+
 void dLytMapMain_c::initializeState_EventSaveObjConfirmMsgWindow() {
     // "Descend into this area? [1]Yes.[2-]No."
     mFlowMgr.triggerEntryPoint(4, 17, 0, 0);
 }
-void dLytMapMain_c::executeState_EventSaveObjConfirmMsgWindow() {}
+void dLytMapMain_c::executeState_EventSaveObjConfirmMsgWindow() {
+    if (!mFlowMgr.checkFinished()) {
+        return;
+    }
+
+    if (dLytMsgWindow_c::getInstance()->getTextOptionSelection() == 0) {
+        // confirm
+        dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x10;
+        dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x10;
+        s32 idx = 0;
+        s32 statueIdx = -1;
+        for (int i = 0; i < field_0x8320; i++) {
+            if (mSaveObjs[i].mDecideFinished) {
+                statueIdx = i;
+                break;
+            }
+        }
+
+        const dMapSaveObjDefinition *def = getSaveObjDefinition(mSurfaceProvince, statueIdx);
+        dScGame_c::GetInstance()->triggerEntrance(
+            def->stageName, def->room, def->layer, def->entrance, SpawnInfo::RETAIN_TOD, SpawnInfo::RETAIN_TRIAL,
+            dFader_c::FADER_GREY
+        );
+        dScGame_c::GetInstance()->setTargetingScreenPrio(0x8B);
+        dLytMap_c::GetInstance()->fn_80143A30();
+        mStateMgr.changeState(StateID_EventSaveObjDecide);
+        mSaveCaption.mStateMgr.changeState(dLytMapSaveCaption_c::StateID_Out);
+    } else {
+        // cancel
+        for (int i = 0; i < field_0x8320; i++) {
+            mSaveObjs[i].init();
+        }
+        mStateMgr.changeState(StateID_EventSaveObjSelect);
+        mSaveCaption.mStateMgr.changeState(dLytMapSaveCaption_c::StateID_Out);
+    }
+}
 void dLytMapMain_c::finalizeState_EventSaveObjConfirmMsgWindow() {}
 
 void dLytMapMain_c::initializeState_EventSaveObjDecide() {}

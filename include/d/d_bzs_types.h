@@ -193,7 +193,7 @@ struct STIF {
     /* 0x08 */ f32 defaultCullingDistance;
     /* 0x0C */ u16 flagIndex;
     /* 0x0E */ u8 areaType;
-    /* 0x0F */ u8 field_0x0F;
+    /* 0x0F */ u8 area;
     /* 0x10 */ u8 field_0x10;
     /* 0x11 */ u8 field_0x11;
     /* 0x12 */ s8 mapNameId;
