@@ -66,7 +66,7 @@ int dAcOwindmill_c::create() {
     mSetRotation = getFromParams(0, 0xF);
     mSceneFlagInPlace = getFromParams(4, 0xFF);
     mSceneFlagBeingBlown = getFromParams(0xC, 0xFF);
-    mWindmillRotation = mRotation.y;
+    mWindmillRotation = mRotation.y.mVal;
     mWindmillPosition = mPosition;
 
     mWindmillPosition.x += -95.22334f * (mRotation.y + mAng(0xc17)).sin();
@@ -82,12 +82,12 @@ int dAcOwindmill_c::create() {
     mAnmClr.setFrame(0.f, 0);
     field_0x634 = mAnmClr.getFrameMax(0) - 1.f;
     if (isLightTowerRaised2() || SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneFlagInPlace)) {
-        s32 delta = mSetRotation - mCurrentStuckPos;
+        s8 delta = mSetRotation - mCurrentStuckPos;
         if (delta < 0) {
-            delta = 0xC;
+            delta += 0xC;
         }
-        mCurrentStuckPos = mSetRotation;
         mRotation.y += 0x1555 * delta;
+        mCurrentStuckPos = mSetRotation;
         mStateMgr.changeState(StateID_CollectStick);
         mTimer1 = 0;
         mTimer2 = 0;
