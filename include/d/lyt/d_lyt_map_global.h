@@ -96,8 +96,16 @@ public:
         return mCurrentMapMode;
     }
 
+    void setCurrentMapMode(s32 mode) {
+        mCurrentMapMode = mode;
+    }
+
     s32 getNextMapMode() const {
         return mNextMapMode;
+    }
+
+    void setNextMapMode(s32 mode) {
+        mNextMapMode = mode;
     }
 
     f32 getZoomFrame() const {
@@ -110,6 +118,10 @@ public:
 
     void setField_0x58(f32 v) {
         field_0x58 = v;
+    }
+
+    f32 getField_0x58() const {
+        return field_0x58;
     }
 
     f32 getField_0x44() const {
@@ -138,6 +150,10 @@ public:
 
     u8 getField_0x4D() const {
         return field_0x4D;
+    }
+
+    void setField_0x4D(u8 v) {
+        field_0x4D = v;
     }
 
     u8 getField_0x4F() const {

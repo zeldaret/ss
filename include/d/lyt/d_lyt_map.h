@@ -101,6 +101,18 @@ public:
     bool execute();
     void draw();
 
+    void setVisible(bool visible) {
+        mVisible = visible;
+    }
+
+    void setField_0x198(f32 f) {
+        field_0x198 = f;
+    }
+
+    void setField_0x19C(f32 f) {
+        field_0x19C = f;
+    }
+
 private:
     dLytMapGlobal_c *getGlobal() const;
 
@@ -113,7 +125,7 @@ private:
     /* 0x196 */ u16 mCurrentNumSteps;
     /* 0x198 */ f32 field_0x198;
     /* 0x19C */ f32 field_0x19C;
-    /* 0x1A0 */ u8 field_0x1A0;
+    /* 0x1A0 */ bool mVisible;
 };
 
 struct LytMap0x80520B5C {
@@ -221,7 +233,7 @@ public:
     void setUnk(LytMap0x80520B5C *unk);
     bool setPosition(s32 index, const mVec3_c &position);
     void unsetAll();
-    s32 getNumSetPins() const;
+    u32 getNumSetPins() const;
 
     STATE_FUNC_DECLARE(dLytMapPinIconAggregate_c, Wait);
     STATE_FUNC_DECLARE(dLytMapPinIconAggregate_c, Select);
@@ -291,7 +303,7 @@ public:
         field_0x70C = 4;
         mPointerVisible = false;
         mPrevPointerVisible = false;
-        field_0x712 = false;
+        mForceNoNav = false;
     }
     virtual ~dLytMapFloorBtnMgr_c();
 
@@ -325,8 +337,12 @@ public:
     void resetFloor(s32 newFloorBtn);
     bool isUsingPointerNav() const;
 
-private:
+    void setForceNoNav(bool b) {
+        mForceNoNav = b;
+    }
+
     void checkPointedAtBtn();
+private:
 
     /* 0x008 */ dLytMapGlobal_c *mpGlobal;
     /* 0x00C */ UI_STATE_MGR_DECLARE(dLytMapFloorBtnMgr_c);
@@ -342,7 +358,7 @@ private:
     /* 0x70C */ UNKWORD field_0x70C;
     /* 0x710 */ bool mPointerVisible;
     /* 0x711 */ bool mPrevPointerVisible;
-    /* 0x712 */ bool field_0x712;
+    /* 0x712 */ bool mForceNoNav;
 };
 
 // Size 0x4C
@@ -591,6 +607,22 @@ private:
         ROOMTYPE_MAX = 6,
     };
 
+    enum MapEvent_e {
+        MAP_EVENT_NONE = 0,
+        MAP_EVENT_1 = 1,
+        // ???
+        MAP_EVENT_SW_BANK_SMALL = 2,
+        MAP_EVENT_MAP_INTRO = 3,
+        MAP_EVENT_DUNGEON_MAP_GET = 4,
+        MAP_EVENT_FIELD_MAP_CHANGE_5 = 5,
+        MAP_EVENT_FOREST_MAP_CHANGE = 6,
+        MAP_EVENT_SIGNAL_ADD = 7,
+        MAP_EVENT_FIELD_MAP_CHANGE_8 = 8,
+        MAP_EVENT_GODDESS_CUBE = 9,
+        MAP_EVENT_SAVE_OBJ_MSG_WINDOW = 10,
+        MAP_EVENT_11 = 11,
+    };
+
     dLytMapGlobal_c *getGlobal();
     void checkScroll();
     bool needsNav(s32 mapMode) const;
@@ -601,6 +633,7 @@ private:
     bool canCenterCursor(s32 mapMode) const;
     bool canCenterCursor1(s32 mapMode) const;
     bool canPlaceBeacons(s32 mapMode) const;
+    bool canChangeFloor(s32 mapMode) const;
     bool isPointingAtMainMap() const;
 
     void loadStageProperties();
@@ -621,6 +654,7 @@ private:
     void fn_80138D80();
     void fn_801431E0();
     void fn_8013AD50();
+    void fn_80143360();
     bool shouldDrawFootprints() const;
 
     void zoomIn();
@@ -646,12 +680,17 @@ private:
     dAcTbox_c *findGoddessChestForStoryflag(s32 flag) const;
     bool checkStoryflag(s32 flag) const;
     void displaySaveObjs();
+    bool isPaneVisible(nw4r::lyt::Pane *pane) const;
+    void setSaveObjsVisible(bool visible);
+    void setSaveObjPanePtrs();
+    void initSaveObjs();
 
     static dMapSavedData sSavedMapData;
     static const dMapSavedData sDefaultMapData;
 
     bool isSomeFieldEq0Or1Or7Or9Or11() const {
-        return field_0x8C94 == 0 || field_0x8C94 == 1 || field_0x8C94 == 7 || field_0x8C94 == 9 || field_0x8C94 == 11;
+        return mMapEvent == MAP_EVENT_NONE || mMapEvent == MAP_EVENT_1 || mMapEvent == MAP_EVENT_SIGNAL_ADD ||
+               mMapEvent == MAP_EVENT_GODDESS_CUBE || mMapEvent == MAP_EVENT_11;
     }
 
     /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMapMain_c);
@@ -676,12 +715,12 @@ private:
     /* 0x8210 */ nw4r::lyt::Pane *mpNoroshiPane;
     /* 0x8214 */ nw4r::lyt::Pane *mpScaleFramePane;
     /* 0x8218 */ dWindow_c *mpWakuWindow;
-    /* 0x821C */ nw4r::lyt::Bounding *field_0x821C[10];
-    /* 0x8244 */ nw4r::lyt::Bounding *field_0x8244[6];
-    /* 0x825C */ nw4r::lyt::Bounding *field_0x825C[12];
+    /* 0x821C */ nw4r::lyt::Bounding *mpSaveObjBoundingsFaron[10];
+    /* 0x8244 */ nw4r::lyt::Bounding *mpSaveObjBoundingsEldin[6];
+    /* 0x825C */ nw4r::lyt::Bounding *mpSaveObjBoundingsLanayru[12];
     /* 0x828C */ mVec3_c field_0x828C[12];
-    /* 0x831C */ UNKWORD field_0x831C;
-    /* 0x8320 */ u32 field_0x8320;
+    /* 0x831C */ nw4r::lyt::Bounding **mpCurrentSaveObjBoundings;
+    /* 0x8320 */ u32 mNumSaveObjs;
 
     /* 0x8324 */ u8 _0x8324[0x8328 - 0x8324];
 
@@ -732,8 +771,8 @@ private:
     /* 0x8C91 */ bool mNextMapUpDirection;
     /* 0x8C92 */ bool mMapUpDirectionAfterZoomToDetail;
     /* 0x8C93 */ u8 field_0x8C93;
-    /* 0x8C94 */ s32 field_0x8C94;
-    /* 0x8C98 */ UNKWORD field_0x8C98;
+    /* 0x8C94 */ s32 mMapEvent;
+    /* 0x8C98 */ s32 mNextMapEvent;
     /* 0x8C9C */ s32 mSurfaceProvince;
 
     /* 0x8CA0 */ u8 _0x8CA0[0x8CA4 - 0x8CA0];
@@ -847,12 +886,14 @@ public:
     void build();
 
     bool isSomeMapFieldEq2Or4Or5Or6() const {
-        return mMapMain.field_0x8C94 == 2 || mMapMain.field_0x8C94 == 4 || mMapMain.field_0x8C94 == 5 ||
-               mMapMain.field_0x8C94 == 6;
+        return mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_SW_BANK_SMALL ||
+               mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_DUNGEON_MAP_GET ||
+               mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_FIELD_MAP_CHANGE_5 ||
+               mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_FOREST_MAP_CHANGE;
     }
 
     bool isSomeMapFieldEq10() const {
-        return mMapMain.field_0x8C94 == 10;
+        return mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_SAVE_OBJ_MSG_WINDOW;
     }
 
     void lightPillarRelated(s32 p1, s32 p2, s32 p3) {

@@ -26,11 +26,12 @@ public:
     void renderRequest() {
         mRenderRequest = true;
     }
-
+    
     void setPicture(nw4r::lyt::Picture *pic) {
         mpPicture = pic;
     }
-
+    
+    void execute();
     bool isBusyRendering() const;
 
 private:
