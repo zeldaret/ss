@@ -651,7 +651,6 @@ private:
     void fn_80140B90();
     void fn_80143300();
     void fn_80143120(s32);
-    void fn_80138D80();
     void fn_801431E0();
     void fn_8013AD50();
     void fn_80143360();

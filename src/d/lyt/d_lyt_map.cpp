@@ -2722,7 +2722,7 @@ void dLytMapMain_c::draw() {
     mLyt.getLayout()->GetRootPane()->Draw(mLyt.getDrawInfo());
     if ((mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE || mNextMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) &&
         mMapEvent == MAP_EVENT_SAVE_OBJ_MSG_WINDOW) {
-        fn_80138D80();
+        initSaveObjs();
     }
     fn_80143120(-2);
     mMarkers.drawPopups();
@@ -3867,12 +3867,12 @@ void dLytMapMain_c::executeState_Active() {
         if (mPointerOnMap && (field_0x8D5C < 2 || !mFloorBtnMgr.hasPointedAtABtnIdx())) {
             // Can zoom in around cursor, use the cursor pos
             getGlobal()->unprojectFromMap(field_0x8CF4, dCsGame_c::GetInstance()->getCursorIf()->getCursorPos());
-            f32 tmp = fn_80142D90(dLytMapGlobal_c::MAPMODE_STAGE);
+            f32 tmp = fn_80142D90(dLytMapGlobal_c::MAPMODE_ZOOM);
             fn_8013FB70(field_0x8CF4, getGlobal()->getField_0x44() / tmp);
             mDrawScaleFrame = true;
         } else {
             // Cannot zoom in around cursor, use the player pos
-            f32 tmp = fn_80142D90(dLytMapGlobal_c::MAPMODE_STAGE);
+            f32 tmp = fn_80142D90(dLytMapGlobal_c::MAPMODE_ZOOM);
             f32 val = getGlobal()->getField_0x44() / tmp;
             fn_8013FB70(getGlobal()->getPlayerPos(), val);
             mDrawScaleFrame = true;
