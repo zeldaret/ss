@@ -177,8 +177,7 @@ void dAcOwindmill_c::executeState_CameraMove() {
         }
         if (sLib::calcTimer(&mTimer1) == 0) {
             if (mPinwheel.get() != NULL && mPinwheel.get()->mBeingBlown) {
-                const sStateIDIf_c *oldState = mStateMgr.getOldStateID();
-                oldState->isEqual(StateID_CollectStick);
+                *mStateMgr.getOldStateID() == StateID_CollectStick;
                 mStateMgr.changeState(StateID_Move);
             } else {
                 const sStateIDIf_c *oldState = mStateMgr.getOldStateID();
