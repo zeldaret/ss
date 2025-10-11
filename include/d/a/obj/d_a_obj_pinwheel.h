@@ -35,11 +35,13 @@ private:
     /* 0x6B0 */ STATE_MGR_DECLARE(dAcOpinwheel_c);
     /* 0x6EC */ s16 mStateTimer;
     /* 0x6EE */ s16 mRotationSpeed;
-    /* 0x6F0 */ bool mBeingBlown;
 
     static dCcD_SrcSph sSphSrc;
 
     static const u32 unused;
+
+public:
+    /* 0x6F0 */ bool mBeingBlown;
 };
 
 #endif
