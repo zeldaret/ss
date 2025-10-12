@@ -2,6 +2,7 @@
 #define D_A_PLAYER_ACT_H
 
 #include "d/d_player_base.h"
+#include "m/m_vec.h"
 
 class dAcEnBase_c;
 class dAcOFairy_c;
@@ -201,7 +202,7 @@ public:
     /* vt 0x17C */ virtual const mVec3_c &getBellowsPosOrOtherVec3F() const {
         return mPosition;
     }
-    /* vt 0x180 */ virtual void setWindMillPos() {}
+    /* vt 0x180 */ virtual void setWindMillPos(mVec3_c *position) const {}
     /* vt 0x184 */ virtual bool isOffeset0x435eEqual0x20() {
         return 0;
     }
@@ -412,7 +413,7 @@ public:
     /* vt 0x2A8 */ virtual void lookTowardItem() {}
     /* vt 0x2AC */ virtual void vt_0x2AC() {}
     /* vt 0x2B0 */ virtual void vt_0x2B0() {}
-    /* vt 0x2B4 */ virtual void triggerMoveEventMaybe(u32, u32, u32, mVec3_c &, const mAng&, u32, u32) {}
+    /* vt 0x2B4 */ virtual void triggerMoveEventMaybe(u32, u32, u32, mVec3_c &, const mAng &, u32, u32) {}
     /* vt 0x2B8 */ virtual void setActorRef9() {}
     /* vt 0x2BC */ virtual void unlinkActorRef9() {}
     /* vt 0x2C0 */ virtual bool vt_0x2C0() {
