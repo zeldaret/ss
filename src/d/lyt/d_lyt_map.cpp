@@ -2400,7 +2400,7 @@ void dLytMapMain_c::loadStageProperties() {
 
 void dLytMapMain_c::setupStage() {
     loadStageProperties();
-    if (mMapEvent == MAP_EVENT_SAVE_OBJ_MSG_WINDOW) {
+    if (mMapEvent == MAP_EVENT_SAVE_OBJ) {
         mLyt.findPane("N_skyloft_00")->SetVisible(false);
     }
 
@@ -2468,7 +2468,7 @@ void dLytMapMain_c::setupStage() {
     if (mRoomType == ROOMTYPE_BOSS_HOUSE || mRoomType == ROOMTYPE_SKYFIELD_INTERIOR) {
         mLyt.findPane("N_houkoul_00")->SetVisible(false);
     }
-    if (mMapEvent != MAP_EVENT_SAVE_OBJ_MSG_WINDOW) {
+    if (mMapEvent != MAP_EVENT_SAVE_OBJ) {
         loadTextboxes();
     }
     fn_8013AD50();
@@ -2659,7 +2659,7 @@ void dLytMapMain_c::execute() {
         }
     }
 
-    if (mMapEvent == MAP_EVENT_SAVE_OBJ_MSG_WINDOW) {
+    if (mMapEvent == MAP_EVENT_SAVE_OBJ) {
         bool visible =
             mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE || mNextMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE;
         setSaveObjsVisible(visible);
@@ -2721,13 +2721,13 @@ void dLytMapMain_c::draw() {
     mpScaleFramePane->SetVisible(mDrawScaleFrame ? true : false);
     mLyt.getLayout()->GetRootPane()->Draw(mLyt.getDrawInfo());
     if ((mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE || mNextMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE) &&
-        mMapEvent == MAP_EVENT_SAVE_OBJ_MSG_WINDOW) {
+        mMapEvent == MAP_EVENT_SAVE_OBJ) {
         initSaveObjs();
     }
     fn_80143120(-2);
     mMarkers.drawPopups();
     mPutIcon.draw();
-    if (mMapEvent == MAP_EVENT_SAVE_OBJ_MSG_WINDOW) {
+    if (mMapEvent == MAP_EVENT_SAVE_OBJ) {
         mPopupInfo.draw();
     }
 
@@ -3052,7 +3052,7 @@ void dLytMapMain_c::setButtonMessages(
 
 void dLytMapMain_c::setCursorType() {
     if (canCenterCursor1(mCurrentMapMode) && canCenterCursor1(mNextMapMode)) {
-        if ((mMapEvent == MAP_EVENT_SAVE_OBJ_MSG_WINDOW ||
+        if ((mMapEvent == MAP_EVENT_SAVE_OBJ ||
              ((mRoomType == ROOMTYPE_BOSS_HOUSE || mRoomType == ROOMTYPE_DUNGEON) && mPointerOnMap)) ||
             (mPointerCanPlaceBeacon && isPointingAtMainMap()) ||
             (*mPinIconAggregate.mStateMgr.getStateID() == dLytMapPinIconAggregate_c::StateID_Select) ||
@@ -3530,17 +3530,116 @@ void dLytMapMain_c::setupFlags() {
     }
 }
 
-void dLytMapMain_c::initializeState_In() {}
+void dLytMapMain_c::initializeState_In() {
+    if (mMapEvent == MAP_EVENT_SAVE_OBJ) {
+        displaySaveObjs();
+        if (mMapEvent == MAP_EVENT_SAVE_OBJ) {
+            mPopupInfo.mStateMgr.changeState(dLytMapPopupInfo_c::StateID_In);
+        }
+    }
+
+    if (field_0x8CAD != 0 || mMapEvent == MAP_EVENT_MAP_INTRO) {
+        mpInOutAnmGroup = &mAnmGroups[MAP_MAIN_ANIM_IN];
+    } else {
+        mpInOutAnmGroup = &mAnmGroups[MAP_MAIN_ANIM_IN_NO_CAM];
+    }
+
+    field_0x8C88 = mpInOutAnmGroup->getLastFrame();
+    mpInOutAnmGroup->bind(false);
+    mpInOutAnmGroup->setFrame(0.0f);
+    mPinIconAggregate.setScale(getGlobal()->getZoomFrame());
+}
 void dLytMapMain_c::executeState_In() {
     field_0x8DBF = 1;
+
     dLytMapGlobal_c *global = getGlobal();
-    // TODO this should explain most of mMapEvent
+    if ((!field_0x8CAD || !field_0x8C84) && field_0x8CAD) {
+        return;
+    }
+
+    f32 ratio = (mpInOutAnmGroup->getFrame() / mpInOutAnmGroup->getLastFrame());
+
+    f32 f1 = fn_80142D90(mCurrentMapMode) * 2.0f;
+    f32 f2 = fn_80142D90(mCurrentMapMode);
+    f32 f3 = cLib::easeOut(ratio, 3.0f);
+    global->setField_0x44(f1 + f3 * (f2 - f1));
+
+    mVec3_c v1;
+    if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD || mCurrentMapMode == dLytMapGlobal_c::MAPMODE_PROVINCE ||
+        mCurrentMapMode == dLytMapGlobal_c::MAPMODE_WORLD_SKY) {
+        fn_80142F00(v1, mCurrentMapMode, true, global->getMapRotationCenter(), global->getField_0x56());
+    } else {
+        fn_80142F00(v1, mCurrentMapMode, mMapUpDirection, global->getMapRotationCenter(), global->getField_0x56());
+    }
+    global->setMapScroll(v1);
+    if (mpInOutAnmGroup->isEndReached()) {
+        dCsGame_c::GetInstance()->setPriorityDraw(0x8A);
+        mLyt.getLayout()->Animate(0);
+        mLyt.calc();
+        mAnmGroups[MAP_MAIN_ANIM_IN].unbind();
+        mpInOutAnmGroup->unbind();
+        for (int i = 0; i < (int)ARRAY_LENGTH(mHitChecks); i++) {
+            mHitChecks[i].resetCachedHitboxes();
+            mHitChecks[i].execute();
+        }
+
+        switch (mMapEvent) {
+            default: {
+                mFloorBtnMgr.mStateMgr.changeState(dLytMapFloorBtnMgr_c::StateID_Wait);
+                mStateMgr.changeState(StateID_Active);
+                break;
+            }
+            case MAP_EVENT_SW_BANK_SMALL: {
+                mStateMgr.changeState(StateID_EventSwBankSmall_Step1);
+                break;
+            }
+            case MAP_EVENT_MAP_INTRO: {
+                mStateMgr.changeState(StateID_EventMapIntro_Step1);
+                break;
+            }
+            case MAP_EVENT_DUNGEON_MAP_GET: {
+                mStateMgr.changeState(StateID_EventDungeonMapGet_Step1);
+                break;
+            }
+            case MAP_EVENT_FIELD_MAP_CHANGE_5:
+            case MAP_EVENT_FIELD_MAP_CHANGE_8: {
+                mStateMgr.changeState(StateID_EventFieldMapChange_Step1);
+                break;
+            }
+            case MAP_EVENT_FOREST_MAP_CHANGE: {
+                mStateMgr.changeState(StateID_EventForestMapChange_Step1);
+                break;
+            }
+            case MAP_EVENT_SIGNAL_ADD: {
+                mStateMgr.changeState(StateID_EventSignalAdd_Step1);
+                break;
+            }
+            case MAP_EVENT_GODDESS_CUBE: {
+                mStateMgr.changeState(StateID_EventGoddessCube_Step1);
+                break;
+            }
+            case MAP_EVENT_SAVE_OBJ: {
+                displaySaveObjs();
+                mStateMgr.changeState(StateID_EventSaveObjMsgWindow);
+                break;
+            }
+        }
+    }
+
+    if (mpInOutAnmGroup->isBound()) {
+        mpInOutAnmGroup->play();
+    }
 }
-void dLytMapMain_c::finalizeState_In() {}
+void dLytMapMain_c::finalizeState_In() {
+    if (fn_80141530()) {
+        dBase_c::s_NextExecuteControlFlags |= dBase_c::BASE_PROP_0x10;
+    }
+    dBase_c::s_DrawControlFlags |= dBase_c::BASE_PROP_0x10;
+}
 
 s32 dLytMapMain_c::getAreaGroup(s32 stifArea) const {
     s32 ret = AREAGROUP_MAX;
-    if (mMapEvent == MAP_EVENT_SAVE_OBJ_MSG_WINDOW) {
+    if (mMapEvent == MAP_EVENT_SAVE_OBJ) {
         switch (mSurfaceProvince) {
             case SURFACE_PROVINCE_FARON:   ret = AREAGROUP_FARON; break;
             case SURFACE_PROVINCE_ELDIN:   ret = AREAGROUP_ELDIN; break;
@@ -3569,7 +3668,7 @@ s32 dLytMapMain_c::getAreaGroup(s32 stifArea) const {
 s32 dLytMapMain_c::getRoomType() const {
     s32 ret = ROOMTYPE_FIELD;
     s32 stifRoomType = dStageMgr_c::GetInstance()->getSTIFRoomType();
-    if (mMapEvent == MAP_EVENT_SAVE_OBJ_MSG_WINDOW) {
+    if (mMapEvent == MAP_EVENT_SAVE_OBJ) {
         ret = ROOMTYPE_FIELD;
     }
 
@@ -3935,19 +4034,19 @@ void dLytMapMain_c::finalizeState_Active() {
 }
 
 void dLytMapMain_c::initializeState_Out() {
-    if (mMapEvent == MAP_EVENT_SAVE_OBJ_MSG_WINDOW) {
+    if (mMapEvent == MAP_EVENT_SAVE_OBJ) {
         mPopupInfo.mStateMgr.changeState(StateID_Out);
     }
     dLytMeter_c::GetInstance()->setMeterField_0x13750(0);
     if (field_0x8CAD || mMapEvent == MAP_EVENT_MAP_INTRO) {
-        mpOutAnmGroup = &mAnmGroups[MAP_MAIN_ANIM_OUT];
+        mpInOutAnmGroup = &mAnmGroups[MAP_MAIN_ANIM_OUT];
     } else {
-        mpOutAnmGroup = &mAnmGroups[MAP_MAIN_ANIM_OUT_NO_CAM];
+        mpInOutAnmGroup = &mAnmGroups[MAP_MAIN_ANIM_OUT_NO_CAM];
     }
 
-    mpOutAnmGroup->bind(false);
-    mpOutAnmGroup->setFrame(0.0f);
-    field_0x8C8C = mpOutAnmGroup->getLastFrame();
+    mpInOutAnmGroup->bind(false);
+    mpInOutAnmGroup->setFrame(0.0f);
+    field_0x8C8C = mpInOutAnmGroup->getLastFrame();
 
     if (fn_80141530()) {
         dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x10;
@@ -3956,20 +4055,20 @@ void dLytMapMain_c::initializeState_Out() {
     dPadNav::setNavEnabled(false, false);
 }
 void dLytMapMain_c::executeState_Out() {
-    if (mpOutAnmGroup->isEndReached()) {
+    if (mpInOutAnmGroup->isEndReached()) {
         bool specialMode = isSomeFieldEq0Or1Or7Or9Or11();
         // Kind of a weird way to write `specialMode || ... != 3 `
         if ((specialMode && dScGame_c::getCamera(0)->getField_0xDA8() != 3) || !specialMode) {
             dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x10;
             mLyt.calc();
-            mpOutAnmGroup->unbind();
+            mpInOutAnmGroup->unbind();
             field_0x8DBF = 0;
             mStateMgr.changeState(StateID_Invisible);
         }
     }
 
-    if (mpOutAnmGroup->isBound()) {
-        mpOutAnmGroup->play();
+    if (mpInOutAnmGroup->isBound()) {
+        mpInOutAnmGroup->play();
     }
 }
 void dLytMapMain_c::finalizeState_Out() {}

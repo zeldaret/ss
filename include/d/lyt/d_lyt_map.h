@@ -20,6 +20,10 @@
 #include "s/s_State.hpp"
 #include "toBeSorted/d_flow_mgr.h"
 
+// TODO - this file uses a lot of `friend` classes because the necessary
+// inlines might mess up weak function order. Let's get the order right
+// first before introducing more problems...
+
 class dAcTbox_c;
 
 /** Bird Statue Definition (StatueSelectDestination) */
@@ -294,6 +298,8 @@ private:
 };
 
 class dLytMapFloorBtnMgr_c : public d2d::dSubPane {
+    friend class dLytMapMain_c;
+
 public:
     dLytMapFloorBtnMgr_c(dLytMapGlobal_c *global)
         : mpGlobal(global), mpPane(nullptr), mStateMgr(*this, sStateID::null) {
@@ -342,8 +348,8 @@ public:
     }
 
     void checkPointedAtBtn();
-private:
 
+private:
     /* 0x008 */ dLytMapGlobal_c *mpGlobal;
     /* 0x00C */ UI_STATE_MGR_DECLARE(dLytMapFloorBtnMgr_c);
     /* 0x048 */ d2d::dLytSub mLyt;
@@ -619,7 +625,7 @@ private:
         MAP_EVENT_SIGNAL_ADD = 7,
         MAP_EVENT_FIELD_MAP_CHANGE_8 = 8,
         MAP_EVENT_GODDESS_CUBE = 9,
-        MAP_EVENT_SAVE_OBJ_MSG_WINDOW = 10,
+        MAP_EVENT_SAVE_OBJ = 10,
         MAP_EVENT_11 = 11,
     };
 
@@ -643,7 +649,7 @@ private:
     s32 getSelectedSaveObjIdx() const;
 
     f32 fn_80142D90(s32);
-    void fn_80142F00(mVec3_c &, s32 mapMode, u8, const mVec3_c &, const mAng &);
+    void fn_80142F00(mVec3_c &, s32 mapMode, bool, const mVec3_c &, const mAng &);
     void fn_8013FB70(const mVec3_c &, f32);
     bool fn_80141530() const;
     bool fn_80142D10(s32, bool, mAng &);
@@ -723,7 +729,7 @@ private:
 
     /* 0x8324 */ u8 _0x8324[0x8328 - 0x8324];
 
-    /* 0x8328 */ d2d::AnmGroup_c *mpOutAnmGroup;
+    /* 0x8328 */ d2d::AnmGroup_c *mpInOutAnmGroup;
 
     // TODO - it appears the map abuses these hit check things
     // to calculate Lyt bounding boxes, and it stores the
@@ -762,7 +768,7 @@ private:
     /* 0x8C7C */ f32 field_0x8C7C;
     /* 0x8C80 */ f32 field_0x8C80;
 
-    /* 0x8C84 */ u8 _0x8C84[0x8C88 - 0x8C84];
+    /* 0x8C84 */ u8 field_0x8C84;
 
     /* 0x8C88 */ f32 field_0x8C88;
     /* 0x8C8C */ f32 field_0x8C8C;
@@ -892,7 +898,7 @@ public:
     }
 
     bool isSomeMapFieldEq10() const {
-        return mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_SAVE_OBJ_MSG_WINDOW;
+        return mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_SAVE_OBJ;
     }
 
     void lightPillarRelated(s32 p1, s32 p2, s32 p3) {
