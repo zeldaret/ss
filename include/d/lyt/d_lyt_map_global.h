@@ -80,6 +80,10 @@ public:
         return field_0x55;
     }
 
+    void setField_0x55(u8 v) {
+        field_0x55 = v;
+    }
+
     const mAng &getField_0x56() const {
         return field_0x56;
     }
@@ -164,8 +168,12 @@ public:
         field_0x4F = v;
     }
 
-    UNKWORD getField_0x50() const {
-        return field_0x50;
+    s32 getMapEvent() const {
+        return mMapEvent;
+    }
+
+    void setMapEvent(s32 v) {
+        mMapEvent = v;
     }
 
     u8 getField_0x54() const {
@@ -204,7 +212,7 @@ private:
     /* 0x4D */ u8 field_0x4D;
     /* 0x4E */ u8 mAlpha;
     /* 0x4F */ u8 field_0x4F;
-    /* 0x50 */ UNKWORD field_0x50;
+    /* 0x50 */ s32 mMapEvent;
     /* 0x54 */ u8 field_0x54;
     /* 0x55 */ u8 field_0x55;
     /* 0x56 */ mAng field_0x56;

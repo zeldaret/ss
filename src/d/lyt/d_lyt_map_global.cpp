@@ -18,7 +18,7 @@ dLytMapGlobal_c::dLytMapGlobal_c()
       field_0x4D(0),
       mAlpha(0),
       field_0x4F(0),
-      field_0x50(0) {
+      mMapEvent(0) {
     sInstance = this;
 }
 

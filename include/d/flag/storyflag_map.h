@@ -667,7 +667,7 @@ enum StoryFlags_e {
     /** [Meeting Impa cutscene]
      *  Story Flag #130 (0x0082) - JP 805ACD64 0x01 / US 805A9AE4 0x01
      */
-    STORYFLAG_130,
+    STORYFLAG_IMPA_MET,
 
     /** [Imp 1 defeated (Skyloft layers 4&5)]
      *  Story Flag #131 (0x0083) - JP 805ACD64 0x02 / US 805A9AE4 0x02

@@ -86,9 +86,9 @@ protected:
         EVENT_SET_TEMPFLAG = 28,
         EVENT_UNSET_TEMPFLAG = 29,
 
-        EVENT_LIGHT_PILLAR_30 = 30,
+        EVENT_START_MAP_EVENT = 30,
 
-        EVENT_LIGHT_PILLAR_34 = 34,
+        EVENT_END_MAP_EVENT = 34,
 
         EVENT_SET_STORYFLAG_217 = 37,
         EVENT_DEMO_METER_ITEM_SELECT = 38,
@@ -227,10 +227,6 @@ public:
     void init();
     void reset();
 
-    bool getField_0x328() const {
-        return field_0x328;
-    }
-
     bool getField_0x329() const {
         return field_0x329;
     }
@@ -243,8 +239,12 @@ public:
         field_0x2FC = val;
     }
 
-    void setField_0x328(u8 val) {
-        field_0x328 = val;
+    bool getInMapEvent() const {
+        return mInMapEvent;
+    }
+
+    void setInMapEvent(bool val) {
+        mInMapEvent = val;
     }
 
     s32 getField_0x32C() const {
@@ -362,7 +362,7 @@ private:
 
     /* 0x300 */ u32 field_0x300[10];
 
-    /* 0x328 */ bool field_0x328;
+    /* 0x328 */ bool mInMapEvent;
     /* 0x329 */ bool field_0x329;
     /* 0x32A */ bool field_0x32A;
 

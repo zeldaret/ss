@@ -8,7 +8,9 @@
 extern "C" bool fn_80081FE0(void *, const char *);
 extern "C" bool fn_800918E0(void *, s32, s16);
 extern "C" void fn_80080960(void *, s32, s32, s8, s32);
+extern "C" void fn_80093340(void *);
 extern "C" void fn_80093360(void *);
+extern "C" void fn_80093380(void *);
 
 class dCamera_c : public dBase_c {
 public:
@@ -31,8 +33,16 @@ public:
         return fn_800918E0(field_0xDA0, a1, a2);
     }
 
+    void doFn_80093340() {
+        fn_80093340(field_0xDA4);
+    }
+
     void doFn_80093360() {
         fn_80093360(field_0xDA4);
+    }
+
+    void doFn_80093380() {
+        fn_80093380(field_0xDA4);
     }
 
     void setScreenShakeIntensity(f32 val) {
@@ -47,6 +57,8 @@ public:
     f32 getUnderwaterDepth() const;
 
     void fn_8019E430();
+    void fn_8019E410();
+    mAng fn_8019E3B0() const;
 
 private:
     /* 0x068 */ u8 _0x068[0x6C - 0x068];

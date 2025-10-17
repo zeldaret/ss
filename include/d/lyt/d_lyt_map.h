@@ -41,7 +41,7 @@ struct dMapSavedDataEntry {
     /* 0x00 */ s32 mapMode;
     /* 0x04 */ bool mapUpDirection;
     /* 0x05 */ bool mapUpDirectionAfterZoomToDetail;
-    /* 0x06 */ u8 field_0x06;
+    /* 0x06 */ bool isValid;
 };
 
 struct dMapSavedData {
@@ -537,10 +537,14 @@ public:
     void remove();
     void execute();
 
-    bool isNotInvisible() const;
-    bool isOpenMaybe() const;
-    bool fn_80139EA0() const;
-    void lightPillarRelated(s32, s32, s32);
+    bool checkClose() const;
+
+    bool isOpen() const;
+    bool canOpen() const;
+    bool isVisible() const;
+    void queueMapEvent(s32 mapEvent, s32 surfaceProvince, s32 c);
+    void startMapEvent(s32 mapEvent, s32 surfaceProvince, s32 c);
+    bool isVisibleNoIntro() const;
 
     const dMapSaveObjDefinition *getSaveObjDefinition(s32 province, s32 statueIdx) const;
 
@@ -585,6 +589,23 @@ public:
     STATE_FUNC_DECLARE(dLytMapMain_c, EventSaveObjConfirmMsgWindow);
     STATE_FUNC_DECLARE(dLytMapMain_c, EventSaveObjDecide);
 
+    enum MapEvent_e {
+        MAP_EVENT_NONE = 0,
+        MAP_EVENT_1 = 1,
+        // ???
+        MAP_EVENT_SW_BANK_SMALL = 2,
+        MAP_EVENT_MAP_INTRO = 3,
+        MAP_EVENT_DUNGEON_MAP_GET = 4,
+        MAP_EVENT_FIELD_MAP_CHANGE_5 = 5,
+        MAP_EVENT_FOREST_MAP_CHANGE = 6,
+        MAP_EVENT_SIGNAL_ADD = 7,
+        MAP_EVENT_FIELD_MAP_CHANGE_8 = 8,
+        MAP_EVENT_GODDESS_CUBE = 9,
+        /** arg1 = surface province */
+        MAP_EVENT_SAVE_OBJ = 10,
+        MAP_EVENT_11 = 11,
+    };
+
 private:
     // TODO - need to come up with better names for all of these enums and concepts
 
@@ -613,22 +634,6 @@ private:
         ROOMTYPE_MAX = 6,
     };
 
-    enum MapEvent_e {
-        MAP_EVENT_NONE = 0,
-        MAP_EVENT_1 = 1,
-        // ???
-        MAP_EVENT_SW_BANK_SMALL = 2,
-        MAP_EVENT_MAP_INTRO = 3,
-        MAP_EVENT_DUNGEON_MAP_GET = 4,
-        MAP_EVENT_FIELD_MAP_CHANGE_5 = 5,
-        MAP_EVENT_FOREST_MAP_CHANGE = 6,
-        MAP_EVENT_SIGNAL_ADD = 7,
-        MAP_EVENT_FIELD_MAP_CHANGE_8 = 8,
-        MAP_EVENT_GODDESS_CUBE = 9,
-        MAP_EVENT_SAVE_OBJ = 10,
-        MAP_EVENT_11 = 11,
-    };
-
     dLytMapGlobal_c *getGlobal();
     void checkScroll();
     bool needsNav(s32 mapMode) const;
@@ -638,7 +643,7 @@ private:
     bool canChangeUpDirection(s32 mapMode, bool) const;
     bool canCenterCursor(s32 mapMode) const;
     bool canCenterCursor1(s32 mapMode) const;
-    bool canPlaceBeacons(s32 mapMode) const;
+    bool canPlaceBeacons(s32 mapMode);
     bool canChangeFloor(s32 mapMode) const;
     bool isPointingAtMainMap() const;
 
@@ -654,12 +659,14 @@ private:
     bool fn_80141530() const;
     bool fn_80142D10(s32, bool, mAng &);
     void fn_80143060(mVec3_c &, const mVec3_c &, const mVec3_c &, const mAng &);
-    void fn_80140B90();
+    void forceOut();
     void fn_80143300();
     void fn_80143120(s32);
     void fn_801431E0();
     void fn_8013AD50();
     void fn_80143360();
+    void fn_80142C80(s32);
+    bool isMapIntroDone() const;
     bool shouldDrawFootprints() const;
 
     void zoomIn();
@@ -671,12 +678,14 @@ private:
 
     void setupFlags();
     void setupStage();
+    void setupEvent(s32 event, s32 arg1, s32 arg2);
+    void close();
 
     void loadTextboxes();
 
-    void saveUnkMapData();
-    void initUnkMapData();
-    void loadUnkMapData();
+    void saveMapState();
+    void initMapState();
+    void loadMapState();
 
     void checkCursorPointedAtMap();
 
@@ -690,12 +699,20 @@ private:
     void setSaveObjPanePtrs();
     void initSaveObjs();
 
+    u8 getRoomAlpha(s32 roomid) const;
+
     static dMapSavedData sSavedMapData;
     static const dMapSavedData sDefaultMapData;
 
-    bool isSomeFieldEq0Or1Or7Or9Or11() const {
+    bool isMapEventEq0Or1Or7Or9Or11() const {
         return mMapEvent == MAP_EVENT_NONE || mMapEvent == MAP_EVENT_1 || mMapEvent == MAP_EVENT_SIGNAL_ADD ||
                mMapEvent == MAP_EVENT_GODDESS_CUBE || mMapEvent == MAP_EVENT_11;
+    }
+
+    bool isMapEventEq1Or7Or8Or9Or11() const {
+        return mMapEvent == MAP_EVENT_1 || mMapEvent == MAP_EVENT_SIGNAL_ADD ||
+               mMapEvent == MAP_EVENT_FIELD_MAP_CHANGE_8 || mMapEvent == MAP_EVENT_GODDESS_CUBE ||
+               mMapEvent == MAP_EVENT_11;
     }
 
     /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMapMain_c);
@@ -778,17 +795,15 @@ private:
     /* 0x8C93 */ u8 field_0x8C93;
     /* 0x8C94 */ s32 mMapEvent;
     /* 0x8C98 */ s32 mNextMapEvent;
-    /* 0x8C9C */ s32 mSurfaceProvince;
-
-    /* 0x8CA0 */ u8 _0x8CA0[0x8CA4 - 0x8CA0];
+    /* 0x8C9C */ s32 mMapEventArg1;
+    /* 0x8CA0 */ s32 mMapEventArg2;
 
     /* 0x8CA4 */ s32 mCurrentMapMode;
     /* 0x8CA8 */ s32 mNextMapMode;
 
     /* 0x8CAC */ u8 field_0x8CAC;
-    /* 0x8CAD */ u8 field_0x8CAD;
-
-    /* 0x8CAE */ u8 _0x8CAE[0x8CB0 - 0x8CAE];
+    /* 0x8CAD */ bool mDoCameraTransition;
+    /* 0x8CAE */ bool field_0x8CAE;
 
     /* 0x8CB0 */ u32 mEventTimer;
     /* 0x8CB4 */ UNKWORD field_0x8CB4;
@@ -813,14 +828,14 @@ private:
     /* 0x8D48 */ mAng field_0x8D48;
     /* 0x8D4C */ f32 field_0x8D4C;
     /* 0x8D50 */ f32 field_0x8D50;
-    /* 0x8D54 */ s32 field_0x8D54;
-    /* 0x8D58 */ s32 field_0x8D58;
-    /* 0x8D5C */ UNKWORD field_0x8D5C;
-    /* 0x8D60 */ s32 field_0x8D60;
-    /* 0x8D64 */ UNKWORD field_0x8D64;
+    /* 0x8D54 */ s32 mNumTitleLines;
+    /* 0x8D58 */ s32 mCurrentFloor;
+    /* 0x8D5C */ UNKWORD mNumFloors;
+    /* 0x8D60 */ s32 mBaseFloorOffset;
+    /* 0x8D64 */ s32 field_0x8D64;
     /* 0x8D68 */ mAng field_0x8D68;
-    /* 0x8D6A */ u8 field_0x8D6A; // set at 0x8009e2d4
-    /* 0x8D6B */ u8 field_0x8D6B;
+    /* 0x8D6A */ bool mEventCanceled; // set at 0x8009e2d4
+    /* 0x8D6B */ bool mEventDone;
     /* 0x8D6C */ nw4r::lyt::Pane *mpRegionPane1;
     /* 0x8D70 */ nw4r::lyt::Pane *mpRegionPane2;
     /* 0x8D74 */ nw4r::lyt::Pane *mpZoomInOutPane;
@@ -838,8 +853,8 @@ private:
     /* 0x8DB8 */ s32 mDisplayedBeaconCount;
     /* 0x8DBC */ bool mShowIslandNames;
     /* 0x8DBD */ bool field_0x8DBD;
-    /* 0x8DBE */ u8 field_0x8DBE;
-    /* 0x8DBF */ u8 field_0x8DBF;
+    /* 0x8DBE */ u8 mMapChangeAlpha;
+    /* 0x8DBF */ bool mIsVisible;
     /* 0x8DC0 */ UNKWORD field_0x8DC0;
     /* 0x8DC4 */ UNKWORD field_0x8DC4;
     /* 0x8DC8 */ dLytMapGlobal_c mGlobal;
@@ -876,37 +891,37 @@ public:
         return sInstance;
     }
 
-    bool isNotInvisible() const {
-        return mMapMain.isNotInvisible();
+    bool isVisible() const {
+        return mMapMain.isVisible();
     }
 
-    bool isOpenMaybe() const {
-        return mMapMain.isOpenMaybe();
+    bool isOpen() const {
+        return mMapMain.isOpen();
     }
 
-    bool getFn_80139EA0() const {
-        return mMapMain.fn_80139EA0();
+    bool isVisibleNoIntro() const {
+        return mMapMain.isVisibleNoIntro();
     }
 
     void build();
 
-    bool isSomeMapFieldEq2Or4Or5Or6() const {
+    bool isMapEventEq2Or4Or5Or6() const {
         return mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_SW_BANK_SMALL ||
                mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_DUNGEON_MAP_GET ||
                mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_FIELD_MAP_CHANGE_5 ||
                mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_FOREST_MAP_CHANGE;
     }
 
-    bool isSomeMapFieldEq10() const {
+    bool isMapEventSaveObj() const {
         return mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_SAVE_OBJ;
     }
 
-    void lightPillarRelated(s32 p1, s32 p2, s32 p3) {
-        mMapMain.lightPillarRelated(p1, p2, p3);
+    void queueMapEvent(s32 mapEvent, s32 arg1, s32 arg2) {
+        mMapMain.queueMapEvent(mapEvent, arg1, arg2);
     }
 
     const dMapSaveObjDefinition *getSaveObjDefinition(s32 statueIdx) const {
-        return mMapMain.getSaveObjDefinition(mMapMain.mSurfaceProvince, statueIdx);
+        return mMapMain.getSaveObjDefinition(mMapMain.mMapEventArg1, statueIdx);
     }
 
     void fn_80143A30();

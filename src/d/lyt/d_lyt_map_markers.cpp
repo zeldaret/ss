@@ -19,6 +19,7 @@
 #include "d/flag/dungeonflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_map.h"
 #include "d/lyt/d_lyt_map_global.h"
 #include "d/lyt/d_window.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
@@ -857,7 +858,8 @@ bool dLytMapIcon01_c::execute() {
         }
     }
 
-    if (dLytMapGlobal_c::GetInstance()->getField_0x4D() && dLytMapGlobal_c::GetInstance()->getField_0x50() != 10) {
+    if (dLytMapGlobal_c::GetInstance()->getField_0x4D() &&
+        dLytMapGlobal_c::GetInstance()->getMapEvent() != dLytMapMain_c::MAP_EVENT_SAVE_OBJ) {
         checkBoundingPointing();
     }
 
@@ -1587,7 +1589,7 @@ void dLytMapIcon01_c::setupLinkDrawCommand() {
     if (dAcPy_c::GetLinkM() != nullptr) {
         setupLinkDrawCommand1(dAcPy_c::GetLinkM());
 
-        if (dLytMapGlobal_c::GetInstance()->getField_0x50() != 3) {
+        if (dLytMapGlobal_c::GetInstance()->getMapEvent() != dLytMapMain_c::MAP_EVENT_MAP_INTRO) {
             setupLinkDrawCommand2();
         }
     }
@@ -1862,7 +1864,7 @@ void dLytMapMarkers_c::drawPopups() {
             mVec2_c textPos = mPopups[i].textPos;
             mVec2_c pos = boundingPos + textPos + field_0x06F4;
             pos.x += width / 2.0f;
-            
+
             mMapPopup.setPosition(pos);
 
             mMapPopup.setInout(mPopups[i].inAnimFrame);

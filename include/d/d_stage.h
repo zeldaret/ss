@@ -67,13 +67,17 @@ public:
     /* 0x1E9 */ u8 field_0x1E9;
     /* 0x1EA */ s8 field_0x1EA;
     /* 0x1EB */ u8 field_0x1EB;
-    /* 0x1EC */ u8 field_0x1EC;
+    /* 0x1EC */ s8 field_0x1EC;
     /* 0x1ED */ u8 field_0x1ED;
     /* 0x1EE */ u8 field_0x1EE;
     /* 0x1EF */ u8 field_0x1EF;
     /* 0x1F0 */ u8 field_0x1F0;
 
 public:
+    s8 getField_0x1EC() const {
+        return field_0x1EC;
+    }
+
     u8 getField_0x1EE() const {
         return field_0x1EE;
     }

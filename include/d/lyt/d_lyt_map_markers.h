@@ -492,6 +492,10 @@ public:
         return field_0x0704;
     }
 
+    void setLinkRot(const mAng3_c &rot) {
+        mLinkRot = rot;
+    }
+
 private:
     void resetPopups();
     void loadPopups();
@@ -501,9 +505,7 @@ private:
 
     /* 0x06F0 */ bool mShowIslandNames;
     /* 0x06F4 */ mVec2_c field_0x06F4;
-
-    /* 0x06FC */ u8 _0x6FC[0x0702 - 0x06FC];
-
+    /* 0x06FC */ mAng3_c mLinkRot;
     /* 0x0702 */ u8 field_0x0702;
     /* 0x0702 */ u8 field_0x0703;
     /* 0x0704 */ f32 field_0x0704;

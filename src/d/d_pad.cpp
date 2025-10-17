@@ -498,7 +498,7 @@ void ex_c::fn_80056790(s32 chan) {
 
     f32 f;
     if (dScGame_c::GetInstance() != nullptr && dLytMap_c::GetInstance() != nullptr &&
-        !dLytMap_c::GetInstance()->isNotInvisible()) {
+        !dLytMap_c::GetInstance()->isVisible()) {
         f = dScGame_c::GetInstance()->targetingScreenFn_801BBEC0();
     } else {
         f = 1.0f;

@@ -32,15 +32,15 @@ inline bool EventManagerIsInMap() {
 }
 
 inline bool EventManagerIsMapOpen() {
-    return EventManagerIsInMap() && dLytMap_c::GetInstance()->isOpenMaybe();
+    return EventManagerIsInMap() && dLytMap_c::GetInstance()->isOpen();
 }
 
-inline bool EventManagerIsMapOpenAndMessage() {
-    return EventManagerIsMapOpen() && !dMessage_c::getInstance()->getField_0x328();
+inline bool EventManagerIsMapOpenNormal() {
+    return EventManagerIsMapOpen() && !dMessage_c::getInstance()->getInMapEvent();
 }
 
-inline bool EventManagerIsMapOpenAnd0x9008Eq10() {
-    return EventManagerIsMapOpen() && dLytMap_c::GetInstance()->isSomeMapFieldEq10();
+inline bool EventManagerIsMapEventSaveObj() {
+    return EventManagerIsMapOpen() && dLytMap_c::GetInstance()->isMapEventSaveObj();
 }
 
 #endif

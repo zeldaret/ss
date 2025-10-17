@@ -257,7 +257,7 @@ bool dCsGame_c::shouldDraw() const {
 bool dCsGame_c::isForcedHidden() const {
     return (
         EventManagerNotDrawControl0x80() && EventManagerNotSkyKeepPuzzle() && EventManagerNotInShop() &&
-        EventManagerNotInDeposit() && !EventManagerIsMapOpenAndMessage() && !EventManagerIsMapOpenAnd0x9008Eq10()
+        EventManagerNotInDeposit() && !EventManagerIsMapOpenNormal() && !EventManagerIsMapEventSaveObj()
     );
 }
 
@@ -338,7 +338,7 @@ mVec2_c &dCursorInterfaceGame_c::getCursorPos() {
     f32 f3 = sHio.field_0x10 + 4.0f;
     f32 f4 = sHio.field_0x0C + -15.0f;
 
-    if (dLytMap_c::GetInstance() != nullptr && dLytMap_c::GetInstance()->isOpenMaybe()) {
+    if (dLytMap_c::GetInstance() != nullptr && dLytMap_c::GetInstance()->isOpen()) {
         if (pos.x < -f0 + f4) {
             pos.x = -f0 + f4;
         }
