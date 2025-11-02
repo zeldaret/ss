@@ -82,8 +82,6 @@ inline static void vecCylCalc(mVec3_c &target, const mAng &rot, f32 factor) {
     target.z += factor * rot.cos();
 }
 
-extern const f32 lbl_80577010;
-
 int dAcOGrave_c::create() {
     mShouldGlow = getFromParams(0, 3) == 0;
     mSceneflag = getFromParams(2, 0xFF);
@@ -105,7 +103,7 @@ int dAcOGrave_c::create() {
         }
         field_0x7F6 = false;
         mOrigPos2 = mPosition;
-        vecCylCalc(mOrigPos2, mRotation.y.mVal + 0x8000, lbl_80577010);
+        vecCylCalc(mOrigPos2, mRotation.y.mVal + 0x8000, dAcPy_c::sPushRelatedConstant);
         mPosition.set(mOrigPos2.x, mOrigPos2.y, mOrigPos2.z);
         mOldPosition.set(mOrigPos2.x, mOrigPos2.y, mOrigPos2.z);
     }
@@ -170,7 +168,7 @@ void dAcOGrave_c::executeState_Wait() {
     s32 diff = sLib::absDiff(ang, mRotation.y);
     if (field_0x7F6) {
         mOrigPos2 = mPosition;
-        vecCylCalc(mOrigPos2, mAngle.y, lbl_80577010);
+        vecCylCalc(mOrigPos2, mAngle.y, dAcPy_c::sPushRelatedConstant);
         if ((mPush && (s16)diff < 0x2000) || (mPull && (s16)diff > 0x6000)) {
             field_0x7F6 = false;
             mStateMgr.changeState(StateID_Move);
