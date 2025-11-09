@@ -2514,7 +2514,7 @@ config.libs = [
     ),
     Rel(NonMatching, "d_a_obj_god_mark", "REL/d/a/obj/d_a_obj_god_mark.cpp"),
     Rel(NonMatching, "d_a_obj_grass_coil", "REL/d/a/obj/d_a_obj_grass_coil.cpp"),
-    Rel(NonMatching, "d_a_obj_grave", "REL/d/a/obj/d_a_obj_grave.cpp"),
+    Rel(Matching, "d_a_obj_grave", "REL/d/a/obj/d_a_obj_grave.cpp"),
     Rel(NonMatching, "d_a_obj_ground_cover", "REL/d/a/obj/d_a_obj_ground_cover.cpp"),
     Rel(NonMatching, "d_a_obj_guard_log", "REL/d/a/obj/d_a_obj_guard_log.cpp"),
     Rel(NonMatching, "d_a_obj_harp_hint", "REL/d/a/obj/d_a_obj_harp_hint.cpp"),

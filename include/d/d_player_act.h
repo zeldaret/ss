@@ -556,6 +556,10 @@ public:
         field_0x360 |= mask;
     }
 
+    inline void offFlags_0x360(u32 mask) {
+        field_0x360 &= ~mask;
+    }
+
     inline void onForceOrPreventActionFlags(u32 mask) {
         mForceOrPreventActionFlags |= mask;
     }

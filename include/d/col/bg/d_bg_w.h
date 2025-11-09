@@ -386,6 +386,9 @@ public:
     void SetRideCallback(dBgW_RideCallback func) {
         mpRide_cb = func;
     }
+    void SetUnkCallback(dBgW_UnkCallback func) {
+        mpUnk_cb = func;
+    }
     void OnMoveFlag() {
         mFlags |= 1;
     }
