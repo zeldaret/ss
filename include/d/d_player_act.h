@@ -251,8 +251,8 @@ public:
     /* vt 0x1C0 */ virtual void *vt_0x1C0() const {
         return nullptr;
     }
-    /* vt 0x1C4 */ virtual UNKWORD getActorInActorRef1() {
-        return 0;
+    /* vt 0x1C4 */ virtual dAcObjBase_c *getActorInActorRef1() {
+        return nullptr;
     }
     /* vt 0x1C8 */ virtual bool doesActorRef1Exist() {
         return false;

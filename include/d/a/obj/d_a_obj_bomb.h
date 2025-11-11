@@ -46,10 +46,10 @@ public:
 
     void setTransformFromFlower(const mMtx_c &);
 
-    void Off_0xA3C(u32 mask) {
+    void unsetField0xA3C(u32 mask) {
         field_0xA3C &= ~mask;
     }
-    void On_0xA3C(u32 mask) {
+    void setField0xA3C(u32 mask) {
         field_0xA3C |= mask;
     }
 
