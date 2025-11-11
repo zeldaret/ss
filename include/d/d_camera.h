@@ -55,6 +55,7 @@ public:
 
     bool isUnderwater() const;
     f32 getUnderwaterDepth() const;
+    bool fn_8019E3C0() const;
 
     void fn_8019E430();
     void fn_8019E410();

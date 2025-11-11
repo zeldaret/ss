@@ -40,24 +40,35 @@ protected:
 
 public:
     // Beetle Functions [0x8021AA70 - 0x8021BE20]
-    s16 getBeetleFlightTime();
-    mAng getBeetleAngle0();
-    mAng getBeetleAngle1();
-    f32 getBeetleWingAngleActive();
-    f32 getBeetleWingAngleInactive();
-    f32 getBeetleNormalSpeed();
-    f32 getBeetleQuickSpeed();
-    f32 getBeetleMaxRange();
-    f32 getBeetleLargeRadius();
-    f32 getBeetleSmallRadius();
-    f32 getBeetleMaxHeightOffset();
-    mAng getBeetleSmallAngle0();
-    mAng getBeetleSmallAngle1();
-    mAng getBeetleBonkRecoilAngle();
-    mAng getBeetleSmallAngle2();
+    mAng fn_8023BA40(mAng p1, mAng p2) const;
+    bool unkBeetle_8021B040(dAcObjBase_c *);
+    s16 getBeetleFlightTime() const;
+    mAng getBeetleAngle0() const;
+    mAng getBeetleAngle1() const;
+    f32 getBeetleWingAngleActive() const;
+    f32 getBeetleWingAngleInactive() const;
+    f32 getBeetleNormalSpeed() const;
+    f32 getBeetleQuickSpeed() const;
+    f32 getBeetleMaxRange() const;
+    f32 getBeetleLargeRadius() const;
+    f32 getBeetleSmallRadius() const;
+    f32 getBeetleMaxHeightOffset() const;
+    mAng getBeetleSmallAngle0() const;
+    mAng getBeetleSmallAngle1() const;
+    mAng getBeetleBonkRecoilAngle() const;
+    mAng getBeetleSmallAngle2() const;
+    f32 getBeetle_8021B280() const;
+    f32 getBeetle_8021B290() const;
+    u8 getBeetle_8021B2A0() const;
     void setBeetleFlashClr(const mColor &);
     void setBeetleBackAnim();
-    s32 getBeetleWarningTimeLeft();
+    int getBeetleWarningTimeLeft() const;
+    s16 getBeetleUnkTimeLeft() const;
+    void setBeetleReleasedObject(dAcObjBase_c *pObj);
+
+    // Responsible for taking in some collision Poly Info and playing the related effect.
+    // Used on Impact
+    static void spawnItemHitEffect(const mVec3_c &position, const cBgS_PolyInfo &polyInfo, f32 scale);
 
     // Item select/equip/use functions [0x801E3160 - 0x801E7AD0] ?
     static s32 calcItemWheelSelection(bool reset, s32 numOptions);
@@ -128,6 +139,7 @@ public:
 
     static u32 getCurrentHealthCapacity();
 
+    void setGuide(dAcObjBase_c *);
     bool canDowseProbably() const;
 
     mAng fn_8023B520() const;
