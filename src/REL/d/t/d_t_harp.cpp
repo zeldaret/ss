@@ -15,6 +15,11 @@ short fn_536_530() {
     return 1;
 }
 
+short fn_536_540(dTgHarp_c *param_1) {
+    param_1->mStateMgr.executeState();
+    return 1;
+}
+
 void dTgHarp_c::initializeState_Wait() {}
 void dTgHarp_c::executeState_Wait() {}
 void dTgHarp_c::finalizeState_Wait() {}
