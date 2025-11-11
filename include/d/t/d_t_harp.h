@@ -14,6 +14,7 @@ public:
 
 private:
     /* 0x??? */ STATE_MGR_DECLARE(dTgHarp_c);
+    short fn_536_530();
     unsigned short fn_536_690(unsigned short *param_1);
 };
 
