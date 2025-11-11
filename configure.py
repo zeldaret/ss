@@ -2437,7 +2437,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_D3_dummy", "REL/d/a/obj/d_a_obj_D3_dummy.cpp"),
     Rel(NonMatching, "d_a_obj_daynight", "REL/d/a/obj/d_a_obj_daynight.cpp"),
     Rel(NonMatching, "d_a_obj_decoA", "REL/d/a/obj/d_a_obj_decoA.cpp"),
-    Rel(NonMatching, "d_a_obj_decoB", "REL/d/a/obj/d_a_obj_decoB.cpp"),
+    Rel(Matching, "d_a_obj_decoB", "REL/d/a/obj/d_a_obj_decoB.cpp"),
     Rel(NonMatching, "d_a_obj_desert", "REL/d/a/obj/d_a_obj_desert.cpp"),
     Rel(NonMatching, "d_a_obj_desert_ago", "REL/d/a/obj/d_a_obj_desert_ago.cpp"),
     Rel(Matching, "d_a_obj_desert_debris", "REL/d/a/obj/d_a_obj_desert_debris.cpp"),

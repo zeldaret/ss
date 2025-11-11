@@ -1094,8 +1094,8 @@ bool dAcEsm_c::fn_187_4B50() {
     if (mBombRef.isLinked()) {
         dAcBomb_c *pBomb = mBombRef.get();
         if (pBomb) {
-            pBomb->On_0xA3C(0x4);
-            pBomb->Off_0xA3C(0x800000);
+            pBomb->setField0xA3C(0x4);
+            pBomb->unsetField0xA3C(0x800000);
             mBombRef.unlink();
         }
 

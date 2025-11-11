@@ -1114,8 +1114,8 @@ void JPAResource::calcWorkData_c(JPAEmitterWorkData* work) {
     Mtx local_scl_mtx, local_rot_mtx, global_mtx;
     MTXScale(local_scl_mtx, work->mpEmtr->mLocalScl.x, work->mpEmtr->mLocalScl.y,
              work->mpEmtr->mLocalScl.z);
-    JPAGetXYZRotateMtx(work->mpEmtr->mLocalRot.x * 182, work->mpEmtr->mLocalRot.y * 182,
-                       work->mpEmtr->mLocalRot.z * 182, local_rot_mtx);
+    JPAGetXYZRotateMtx(work->mpEmtr->mLocalRot.x * (s32)182, work->mpEmtr->mLocalRot.y * (s32)182,
+                       work->mpEmtr->mLocalRot.z * (s32)182, local_rot_mtx);
     MTXScale(global_mtx, work->mpEmtr->mGlobalScl.x, work->mpEmtr->mGlobalScl.y,
              work->mpEmtr->mGlobalScl.z);
     MTXConcat(work->mpEmtr->mGlobalRot, global_mtx, global_mtx);
@@ -1137,8 +1137,8 @@ void JPAResource::calcWorkData_c(JPAEmitterWorkData* work) {
  * calcWorkData_d__11JPAResourceFP18JPAEmitterWorkData          */
 void JPAResource::calcWorkData_d(JPAEmitterWorkData* work) {
     Mtx mtx;
-    JPAGetXYZRotateMtx(work->mpEmtr->mLocalRot.x * 0xB6, work->mpEmtr->mLocalRot.y * 0xB6,
-                       work->mpEmtr->mLocalRot.z * 0xB6, mtx);
+    JPAGetXYZRotateMtx(work->mpEmtr->mLocalRot.x * (s32)182, work->mpEmtr->mLocalRot.y * (s32)182,
+                       work->mpEmtr->mLocalRot.z * (s32)182, mtx);
     MTXConcat(work->mpEmtr->mGlobalRot, mtx, work->mGlobalRot);
     MTXMultVecSR(work->mGlobalRot, work->mpEmtr->mLocalDir, work->mGlobalEmtrDir);
 }

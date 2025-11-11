@@ -17,11 +17,14 @@ struct mAng {
         mVal = val;
         return *this;
     }
-
     void setF(const f32 &f) {
         mVal = f;
     }
 
+    mAng &operator=(const mAng &val) {
+        mVal = val.mVal;
+        return *this;
+    }
     static mAng atan2s(f32 a, f32 b) {
         return mAng(cM::atan2s(a, b));
     }
@@ -62,12 +65,24 @@ struct mAng {
         return *this;
     }
 
-    s32 absDiff(const mAng &other) const {
-        return sLib::absDiff(mVal, other.mVal);
+    mAng operator*(const mAng &ang) const {
+        return mVal * ang.mVal;
+    }
+    mAng operator*(const f32 f) const {
+        return mVal * f;
+    }
+    mAng operator*(const s32 ang) const {
+        return mVal * ang;
     }
 
     static s32 abs(const mAng b) {
         return labs(b);
+    }
+    s32 abs() const {
+        return mAng::abs(*this);
+    }
+    s32 absDiff(const mAng &other) const {
+        return sLib::absDiff(mVal, other.mVal);
     }
 
     s32 step(s16 target, s32 steps, s16 max, s16 min);
@@ -201,6 +216,11 @@ public:
     // Found with the pattern mAng3_c.y += cM::rndFX()
     void addY(f32 val) {
         y.mVal += (s16)val;
+    }
+    // TODO - This is the only way I could get the regswap to be fixed..
+    // Found with the pattern mAng3_c.z += cM::rnd()
+    void addZ(f32 val) {
+        z.mVal += (s16)val;
     }
 
     void addX(const s32 &fx) {

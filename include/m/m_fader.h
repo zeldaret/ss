@@ -20,6 +20,10 @@ public:
         return isStatus(mFaderBase_c::FADED_IN) || isStatus(mFaderBase_c::FADED_OUT);
     }
 
+    bool isActive() const {
+        return isStatus(mFaderBase_c::FADING_IN) || isStatus(mFaderBase_c::FADING_OUT);
+    }
+
     mFaderBase_c::EStatus getStatus() const {
         return mpFader->getStatus();
     }
@@ -30,6 +34,9 @@ public:
 
     void fadeIn() {
         mpFader->fadeIn();
+    }
+    void fadeOut() {
+        mpFader->fadeOut();
     }
     bool calc() {
         return mpFader->calc();

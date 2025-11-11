@@ -166,8 +166,12 @@ public:
         return mPosition.distance(to);
     }
 
-    bool checkBeyondRadius(const mVec3_c &point, f32 radius) {
+    bool checkBeyondRadius(const mVec3_c &point, f32 radius) const {
         return getSquareDistanceTo(point) > radius;
+    }
+
+    bool checkWithinRadius(const mVec3_c &point, f32 radius) const {
+        return (mPosition - point).squareMagXZ() < radius * radius;
     }
 
     u32 getRoomId() {

@@ -1222,10 +1222,10 @@ void daPlayerModelBase_c::adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, 
     } else if (nodeId == PLAYER_MAIN_NODE_BACKBONE_1) {
         transformBackbone1(result);
         applyWorldRotationMaybe(
-            result, field_0x1268 >> 1, field_0x126A * 0.4f + getArmZRot(2), field_0x126C, nullptr, false
+            result, field_0x1268 >> 1, 0.4f * field_0x126A + getArmZRot(2), field_0x126C, nullptr, false
         );
     } else if (nodeId == PLAYER_MAIN_NODE_BACKBONE_2) {
-        applyWorldRotationMaybe(result, field_0x1268 >> 1, field_0x126A * 0.6f + getArmZRot(2), 0, nullptr, false);
+        applyWorldRotationMaybe(result, field_0x1268 >> 1, 0.6f * field_0x126A + getArmZRot(2), 0, nullptr, false);
     } else if (nodeId == PLAYER_MAIN_NODE_FSKIRT_L1 && *field_0x136C != 0) {
         mVec3_c v;
         vt_0x30C(v);

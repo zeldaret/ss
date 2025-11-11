@@ -88,8 +88,8 @@ public:
     /* 0x14 */ ConnectionType_e mType;
     /* 0x18 */ u16 field_0x18;
     /* 0x1A */ u16 field_0x1A;
-    /* 0x1C */ f32 field_0x1C;
-    /* 0x20 */ f32 field_0x20;
+    /* 0x1C */ f32 field_0x1C; // Used as Y
+    /* 0x20 */ f32 field_0x20; // Used as Z
     /* 0x24 */ f32 field_0x24;
     /* 0x28 */ mMtx_c carryTransMtx;
     /* 0x58 */ mMtx_c field_0x58;
