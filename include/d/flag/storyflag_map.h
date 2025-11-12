@@ -1155,7 +1155,7 @@ enum StoryFlags_e {
     /** [First Goddess Cube (Unlocks ability to skyward strike Goddess Cubes)]
      *  Story Flag #227 (0x00E3) - JP 805ACD72 0x20 / US 805A9AF2 0x20
      */
-    STORYFLAG_227,
+    STORYFLAG_FIRST_GODDESS_CUBE,
 
     /** [Goddess Cube near Skyview Entrance]
      *  Story Flag #228 (0x00E4) - JP 805ACD72 0x40 / US 805A9AF2 0x40

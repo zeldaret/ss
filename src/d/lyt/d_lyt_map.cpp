@@ -1,8 +1,11 @@
+// clang-format off
+// vtable order
+#define NEED_DIRECT_FRAMECTRL_ACCESS
+
 #include "c/c_math.h"
 #include "d/d_player_act.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "toBeSorted/minigame_mgr.h"
-#define NEED_DIRECT_FRAMECTRL_ACCESS
 #include "c/c_lib.h"
 #include "common.h"
 #include "d/a/d_a_player.h"
@@ -49,6 +52,8 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/d_beacon.h"
 #include "toBeSorted/event_manager.h"
+
+// clang-format on
 
 struct dLytMap_HIO_c {
     dLytMap_HIO_c();
@@ -1944,7 +1949,7 @@ dLytMapMain_c::dLytMapMain_c()
       mShowIslandNames(false),
       field_0x8DBD(0),
       mMapChangeAlpha(0),
-      mIsVisible(true),
+      mIsVisible(false),
       field_0x8DC0(-1),
       field_0x8DC4(0) {
     field_0x8D78 = 0.0f;
@@ -3719,6 +3724,9 @@ static const s32 sFlagsRenameMe[] = {
     STORYFLAG_THUNDERHEAD_ENTERED
 };
 
+extern const s32 unkPadding[];
+const s32 unkPadding[14] = {0};
+
 // Not sure what the second number means
 static const s32 sFlags2RenameMe[][2] = {
     {         STORYFLAG_FARON_DISCOVERED, 5},
@@ -5278,8 +5286,148 @@ void dLytMapMain_c::finalizeState_EventGoddessCube_Step1() {
     mEventTimer = 50;
 }
 
-void dLytMapMain_c::initializeState_EventGoddessCube_Step2() {}
-void dLytMapMain_c::executeState_EventGoddessCube_Step2() {}
+void dLytMapMain_c::initializeState_EventGoddessCube_Step2() {
+    dAcTbox_c *box = findGoddessChestForStoryflag(STORYFLAG_FIRST_GODDESS_CUBE);
+    mGoddessChestWorldPosition = box->getPosition();
+    mNextMapMode = dLytMapGlobal_c::MAPMODE_ZOOM;
+    dLytMapGlobal_c *global = getGlobal();
+    mMapScroll = global->getMapScroll();
+    field_0x8D50 = global->getField_0x44();
+    field_0x8D44 = global->getMapRotation();
+    field_0x8D4C = fn_80142D90(mNextMapMode);
+    fn_80142D10(mNextMapMode, mNextMapUpDirection, field_0x8D46);
+    mVec3_c center = mGoddessChestWorldPosition;
+    mVec2_c result(0.0f, 0.0f);
+    global->unprojectFromMap(mMapScroll, result, field_0x8D44);
+    global->setMapRotationCenter(center);
+
+    mVec3_c offset(field_0x8CD0.x * 0.5f, 0.0f, field_0x8CD0.z * 0.5f);
+    offset.rotY(-global->getField_0x56());
+    if (offset.x < 0.0f) {
+        offset.x = -offset.x;
+    }
+    if (offset.z < 0.0f) {
+        offset.z = -offset.z;
+    }
+
+    mVec3_c diff1(field_0x8CC4.x - offset.x, 0.0f, field_0x8CC4.z - offset.z);
+    mVec3_c diff2(field_0x8CC4.x + offset.x, 0.0f, field_0x8CC4.z + offset.z);
+
+    if (mPlayerPos.x < diff1.x) {
+        mPlayerPos.x = diff1.x;
+    }
+    if (mPlayerPos.z < diff1.z) {
+        mPlayerPos.z = diff1.z;
+    }
+    if (mPlayerPos.x > diff2.x) {
+        mPlayerPos.x = diff2.x;
+    }
+    if (mPlayerPos.z > diff2.z) {
+        mPlayerPos.z = diff2.z;
+    }
+    const mVec3_c &c = global->getMapRotationCenter();
+    fn_80143060(mPlayerPos, center, c, field_0x8D46);
+    mVec3_c tmp = mMapScroll;
+    fn_80143060(mMapScroll, tmp, c, field_0x8D44);
+    fn_80143060(field_0x8D18, center, global->getPlayerPos(), field_0x8D46);
+
+    global->setMapScroll(mMapScroll);
+    const mVec2_c &csPos = dCsGame_c::GetInstance()->getCursorIf()->getCursorPos();
+    global->unprojectFromMap(field_0x8CF4, csPos);
+    fn_8013FB70(field_0x8CF4, field_0x8D50 / field_0x8D4C);
+    mpScaleFramePane->SetVisible(true);
+    field_0x8C70 = 0;
+    if (mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+        global->setZoomFrame(1.0f);
+        global->setField_0x58(field_0x8D50 / field_0x8D4C);
+    } else {
+        global->setZoomFrame(0.0f);
+        global->setField_0x58(1.0f);
+    }
+    mAnmGroups[MAP_MAIN_ANIM_ROTATE].bind(false);
+    if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+        mAnmGroups[MAP_MAIN_ANIM_ROTATE].setFrame(0.0f);
+    } else {
+        mAnmGroups[MAP_MAIN_ANIM_ROTATE].setToEnd();
+    }
+
+    if (mNextMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+        mMarkers.setIslandNamesOn(false);
+    }
+
+    if (mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+        mMarkers.setIslandNamesOn(mShowIslandNames);
+    }
+    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_ZOOMIN_TO_DETAIL);
+}
+void dLytMapMain_c::executeState_EventGoddessCube_Step2() {
+    dLytMapGlobal_c *global = getGlobal();
+    f32 f1 = (f32)field_0x8C70 / sHio.field_0x1C;
+    f32 factor = cLib::easeInOut(f1, 2.0f);
+
+    f32 f2, f3;
+    if (mNextMapMode == dLytMapGlobal_c::MAPMODE_STAGE) {
+        f32 ratio = field_0x8D50 / field_0x8D4C;
+        f1 = 1.0f - f1;
+        f2 = ratio + (1.0f - ratio) * factor;
+        f3 = 1.0f - factor;
+    } else {
+        f32 ratio = field_0x8D4C / field_0x8D50;
+        f2 = ratio + (1.0f - ratio) * (1.0f - factor);
+        f3 = factor;
+    }
+    global->setZoomFrame(f1);
+    global->setField_0x58(f2);
+
+    // unused
+    mVec3_c tmp = mMapScroll;
+    // unused
+    mVec3_c tmp2 = mPlayerPos;
+
+    // Lerps
+    f32 f4 = field_0x8D50 + factor * (field_0x8D4C - field_0x8D50);
+    global->setField_0x44(f4);
+
+
+    // TODO stack and reg swaps
+    global->setMapRotation(factor * mAng(field_0x8D46 - field_0x8D44) + field_0x8D44);
+
+    f32 length = mAnmGroups[MAP_MAIN_ANIM_ROTATE].getLastFrame();
+
+    // unused - the f1 store is here so that the fcmpu isn't optimized away
+    if (field_0x8C7C - field_0x8C80) {
+        f1 = 0.0f;
+    }
+    
+    mAnmGroups[MAP_MAIN_ANIM_ROTATE].setFrame(length - f3 * length);
+
+    global->setMapScroll(mPlayerPos + (mMapScroll - mPlayerPos) * (1.0f / (f4 / field_0x8D50)) * (1.0f - factor));
+
+    fn_8013FB70(field_0x8CF4, f4 / field_0x8D4C);
+
+    mpScaleFramePane->SetVisible(true);
+    if (field_0x8C70 >= sHio.field_0x1C) {
+        mpScaleFramePane->SetVisible(false);
+        if (mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM) {
+            mAnmGroups[MAP_MAIN_ANIM_ROTATE].setToEnd();
+        } else {
+            mAnmGroups[MAP_MAIN_ANIM_ROTATE].setFrame(0.0f);
+        }
+        mLyt.calc();
+        mAnmGroups[MAP_MAIN_ANIM_ROTATE].unbind();
+        mMapUpDirection = mNextMapUpDirection;
+        global->setMapRotation(field_0x8D46);
+        global->setField_0x44(field_0x8D4C);
+        global->setMapScroll(field_0x8D18);
+        if (dAcPy_c::LINK != nullptr) {
+            global->setMapRotationCenter(global->getPlayerPos());
+        }
+        mCurrentMapMode = mNextMapMode;
+        mStateMgr.changeState(StateID_EventGoddessCube_Step3);
+    } else {
+        field_0x8C70++;
+    }
+}
 void dLytMapMain_c::finalizeState_EventGoddessCube_Step2() {}
 
 void dLytMapMain_c::initializeState_EventGoddessCube_Step3() {}
@@ -5579,7 +5727,7 @@ void dLytMapMain_c::executeState_EventSaveObjConfirmMsgWindow() {
             dFader_c::FADER_GREY
         );
         dScGame_c::GetInstance()->setTargetingScreenPrio(0x8B);
-        dLytMap_c::GetInstance()->fn_80143A30();
+        dLytMap_c::GetInstance()->fadeOut();
         mStateMgr.changeState(StateID_EventSaveObjDecide);
         mSaveCaption.mStateMgr.changeState(dLytMapSaveCaption_c::StateID_Out);
     } else {
@@ -5636,12 +5784,45 @@ void dLytMapMain_c::checkCursorPointedAtMap() {
     mPointerCanPlaceBeacon = canPlaceBeacon;
 }
 
-void dLytMap_c::build() {
+dLytMap_c *dLytMap_c::sInstance;
+
+bool dLytMap_c::build() {
     d2d::setLytAllocator();
     void *data = LayoutArcManager::GetInstance()->getLoadedData("Map2D");
     mResAcc.attach(data, "");
     mMapMain.build();
     m2d::setLytAllocator();
     mMapMain.setPriority(0x86);
-    // TODO there's another thing here at 0x91C0
+    mMapFader.setPriority(0x8A);
+    return true;
+}
+
+bool dLytMap_c::remove() {
+    d2d::setLytAllocator();
+    mMapMain.remove();
+    mResAcc.detach();
+    dCsGame_c::GetInstance()->setPriorityDraw(0x88);
+    dScGame_c::GetInstance()->setTargetingScreenPrio(0x85);
+    return true;
+}
+
+bool dLytMap_c::execute() {
+    mMapMain.execute();
+    if (mMapFader.isVisible()) {
+        mMapFader.calc();
+    }
+    return true;
+}
+
+bool dLytMap_c::draw() {
+    mMapMain.addToDrawList();
+    if (mMapFader.isVisible()) {
+        mMapFader.addToDrawList();
+    }
+    return true;
+}
+
+void dLytMap_c::fadeOut() {
+    mMapFader.setVisible(true);
+    mMapFader.fadeOut();
 }

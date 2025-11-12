@@ -11,6 +11,7 @@
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/d_window.h"
 #include "egg/core/eggColorFader.h"
+#include "egg/core/eggFader.h"
 #include "m/m2d.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
@@ -138,6 +139,31 @@ struct LytMap0x80520B5C {
 
     bool field_0x04;
     bool field_0x05;
+};
+
+
+/** 2D UI - Map - beacon preview icon following the cursor */
+class dLytMapPutIcon_c {
+public:
+    dLytMapPutIcon_c() : mVisible(false), field_0x98(0.0f, 0.0f) {}
+    virtual ~dLytMapPutIcon_c() {}
+
+    void build(d2d::ResAccIf_c *resAcc);
+    void remove();
+    void execute();
+    void draw();
+
+    void setPosition(const mVec2_c &pos);
+    void setScale(f32 scale);
+
+    void setVisible(bool visible) {
+        mVisible = visible;
+    }
+
+private:
+    /* 0x04 */ d2d::LytBase_c mLyt;
+    /* 0x94 */ bool mVisible;
+    /* 0x98 */ mVec2_c field_0x98;
 };
 
 struct dLytMapFloorBtnAnmGroups {
@@ -367,6 +393,35 @@ private:
     /* 0x712 */ bool mForceNoNav;
 };
 
+// Made up name
+class dLytMapFader_c : public m2d::Base_c {
+public:
+    dLytMapFader_c();
+    virtual ~dLytMapFader_c();
+    /* vt 0x0C */ virtual void draw() override;
+
+    void calc();
+
+    bool isVisible() const {
+        return mIsVisible;
+    }
+
+    void setVisible(bool v) {
+        mIsVisible = v;
+    }
+
+    void fadeOut() {
+        mFader.setStatus(EGG::Fader::STATUS_PREPARE_OUT);
+        mFader.setFrame(15);
+        mFader.fadeOut();
+    }
+
+public:
+    /* 0x10 */ EGG::ColorFader mFader;
+    /* 0x34 */ u8 _0x34[0x38 - 0x34];
+    /* 0x38 */ bool mIsVisible;
+};
+
 // Size 0x4C
 class dLytMapPopupInfo_c {
     friend class dLytMapMain_c;
@@ -475,6 +530,7 @@ class dLytMapSaveObj_c {
 public:
     dLytMapSaveObj_c()
         : mStateMgr(*this, sStateID::null), mSelectRequest(false), mDecideRequest(false), mDecideFinished(false) {}
+    ~dLytMapSaveObj_c() {}
 
     STATE_FUNC_DECLARE(dLytMapSaveObj_c, Wait);
     STATE_FUNC_DECLARE(dLytMapSaveObj_c, ToSelect);
@@ -498,30 +554,6 @@ private:
     /* 0x18C */ bool mSelectRequest;
     /* 0x18D */ bool mDecideRequest;
     /* 0x18E */ bool mDecideFinished;
-};
-
-/** 2D UI - Map - beacon preview icon following the cursor */
-class dLytMapPutIcon_c {
-public:
-    dLytMapPutIcon_c() : mVisible(false), field_0x98(0.0f, 0.0f) {}
-    virtual ~dLytMapPutIcon_c() {}
-
-    void build(d2d::ResAccIf_c *resAcc);
-    void remove();
-    void execute();
-    void draw();
-
-    void setPosition(const mVec2_c &pos);
-    void setScale(f32 scale);
-
-    void setVisible(bool visible) {
-        mVisible = visible;
-    }
-
-private:
-    /* 0x04 */ d2d::LytBase_c mLyt;
-    /* 0x94 */ bool mVisible;
-    /* 0x98 */ mVec2_c field_0x98;
 };
 
 class dLytMapMain_c : public m2d::Base_c {
@@ -819,7 +851,7 @@ private:
     /* 0x8D00 */ mVec3_c mMapScroll;
     /* 0x8D0C */ mVec3_c mPlayerPos;
     /* 0x8D18 */ mVec3_c field_0x8D18;
-    /* 0x8D24 */ mVec3_c field_0x8D24;
+    /* 0x8D24 */ mVec3_c mGoddessChestWorldPosition;
     /* 0x8D30 */ mVec2_c field_0x8D30;
     /* 0x8D38 */ mVec2_c field_0x8D38;
     /* 0x8D40 */ f32 field_0x8D40;
@@ -860,19 +892,6 @@ private:
     /* 0x8DC8 */ dLytMapGlobal_c mGlobal;
 };
 
-// Made up name
-class dLytMapFader_c : public m2d::Base_c {
-public:
-    dLytMapFader_c();
-    virtual ~dLytMapFader_c();
-    /* vt 0x0C */ virtual void draw() override;
-
-    void calc();
-
-private:
-    /* 0x10 */ EGG::ColorFader mFader;
-};
-
 // Size 0x91FC, inline ctor at 802ccd88
 class dLytMap_c {
 public:
@@ -903,7 +922,10 @@ public:
         return mMapMain.isVisibleNoIntro();
     }
 
-    void build();
+    bool build();
+    bool remove();
+    bool execute();
+    bool draw();
 
     bool isMapEventEq2Or4Or5Or6() const {
         return mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_SW_BANK_SMALL ||
@@ -924,11 +946,13 @@ public:
         return mMapMain.getSaveObjDefinition(mMapMain.mMapEventArg1, statueIdx);
     }
 
-    void fn_80143A30();
+    void fadeOut();
 
 private:
     /* 0x0004 */ d2d::ResAccIf_c mResAcc;
     /* 0x0374 */ dLytMapMain_c mMapMain;
+    /* 0x91A4 */ u8 _0x91A4[0x91C0 - 0x91A4];
+    /* 0x91C0 */ dLytMapFader_c mMapFader;
 
     static dLytMap_c *sInstance;
 };
