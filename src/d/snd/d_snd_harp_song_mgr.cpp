@@ -120,3 +120,21 @@ void dSndHarpSongMgr_c::resetFloatArr2() {
         field_0x52C[i] = 0.0f;
     }
 }
+
+bool dSndHarpSongMgr_c::isContinuousStrumming() {
+    return this->field_0x01C;
+}
+
+u8 dSndHarpSongMgr_c::fun_80381150() {
+    if (this->isContinuousStrumming()) {
+        return this->field_0x042;
+    }
+    return true;
+}
+
+// NONMATCHING
+// NOTE: This bool is derived from fun_80381150(), which returns a u8.
+// The conversion to bool is performed by the compiler.
+bool dSndHarpSongMgr_c::isPlayingHarpRelated() {
+    return fun_80381150() == false;
+}
