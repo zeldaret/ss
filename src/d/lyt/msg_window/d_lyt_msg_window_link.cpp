@@ -1,8 +1,8 @@
 #include "d/lyt/msg_window/d_lyt_msg_window_link.h"
 
 #include "common.h"
-#include "d/d_tag_processor.h"
 #include "d/d_lyt_hio.h"
+#include "d/d_tag_processor.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_common.h"
@@ -17,10 +17,10 @@ STATE_DEFINE(dLytMsgWindowLink_c, Visible);
 STATE_DEFINE(dLytMsgWindowLink_c, Out);
 
 static const d2d::LytBrlanMapping brlanMap[] = {
-    {  "linkWindow_00_in.brlan", "G_inOut_00"},
-    { "linkWindow_00_out.brlan", "G_inOut_00"},
-    {"linkWindow_00_position.brlan",  "G_position_00"},
-    {"linkWindow_00_loop.brlan",  "G_loop_00"},
+    {      "linkWindow_00_in.brlan",    "G_inOut_00"},
+    {     "linkWindow_00_out.brlan",    "G_inOut_00"},
+    {"linkWindow_00_position.brlan", "G_position_00"},
+    {    "linkWindow_00_loop.brlan",     "G_loop_00"},
 };
 
 #define LINK_ANIM_IN 0
@@ -98,7 +98,7 @@ bool dLytMsgWindowLink_c::build(d2d::ResAccIf_c *resAcc1, d2d::ResAccIf_c *resAc
     mParam = 0;
 
     mOffset.x = mOffset.y = 0.0f;
-    
+
     mWaitDelay = 0;
 
     mStateMgr.changeState(StateID_Invisible);
@@ -239,17 +239,9 @@ bool dLytMsgWindowLink_c::execute() {
 }
 
 void dLytMsgWindowLink_c::draw() {
-    // NONMATCHING
-    // TODO - SetVisible clrlwi
-    // The instruction patterns here are the same that EGG::StateGX::Scoped
-    // generates, but there's no RAII to be found here. What's the missing
-    // link that makes the compiler generate these?
-    // When you fix this, fix other instances of this problem
-    // by searching for 91657b77
-    bool bVis[3] = {
-        mpPanes[0]->IsVisible(),
-        mpPanes[1]->IsVisible(),
-        mpPanes[2]->IsVisible(),
+    bool bVis[3];
+    for (int i = 0; i < 3; ++i) {
+        bVis[i] = mpPanes[i]->IsVisible();
     };
 
     mpPanes[0]->SetVisible(bVis[0]);
@@ -267,9 +259,9 @@ void dLytMsgWindowLink_c::draw() {
 
     mLyt.draw();
 
-    mpPanes[0]->SetVisible(bVis[0]);
-    mpPanes[1]->SetVisible(bVis[1]);
-    mpPanes[2]->SetVisible(bVis[2]);
+    for (int i = 0; i < 3; ++i) {
+        mpPanes[i]->SetVisible(bVis[i]);
+    };
 }
 
 void dLytMsgWindowLink_c::open(dAcObjBase_c *obj, u32 param) {

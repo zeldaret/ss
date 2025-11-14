@@ -675,7 +675,7 @@ bool dLytMapPinIcon_c::draw() {
 
 void dLytMapPinIconAggregate_c::initializeState_Wait() {}
 void dLytMapPinIconAggregate_c::executeState_Wait() {
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < (int)ARRAY_LENGTH(mPins); i++) {
         if (mPins[i].isSelect()) {
             mStateMgr.changeState(StateID_Select);
         }
@@ -686,7 +686,7 @@ void dLytMapPinIconAggregate_c::finalizeState_Wait() {}
 void dLytMapPinIconAggregate_c::initializeState_Select() {}
 void dLytMapPinIconAggregate_c::executeState_Select() {
     bool anyRemove = false;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < (int)ARRAY_LENGTH(mPins); i++) {
         if (mPins[i].isRemove()) {
             mStateMgr.changeState(StateID_Remove);
             anyRemove = true;
@@ -697,7 +697,7 @@ void dLytMapPinIconAggregate_c::executeState_Select() {
 
     if (!anyRemove) {
         bool allSelect = true;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < (int)ARRAY_LENGTH(mPins); i++) {
             if (mPins[i].isSelect()) {
                 allSelect = false;
                 break;
@@ -4552,12 +4552,12 @@ void dLytMapMain_c::executeState_Active() {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_BEACON_SET);
         }
     } else if ((dPad::getDownTrigLeft() && canZoomOut(mCurrentMapMode)) ||
-               (dPad::getDownTrigA() && mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM && canZoomOut(mCurrentMapMode)
-               )) {
+               (dPad::getDownTrigA() && mCurrentMapMode == dLytMapGlobal_c::MAPMODE_ZOOM &&
+                canZoomOut(mCurrentMapMode))) {
         zoomOut();
     } else if ((dPad::getDownTrigRight() && canZoomIn(mCurrentMapMode)) ||
-               (dPad::getDownTrigA() && mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE && canZoomIn(mCurrentMapMode)
-               )) {
+               (dPad::getDownTrigA() && mCurrentMapMode == dLytMapGlobal_c::MAPMODE_STAGE &&
+                canZoomIn(mCurrentMapMode))) {
         zoomIn();
     } else if ((mRoomType == ROOMTYPE_FIELD || mRoomType == ROOMTYPE_DUNGEON || mRoomType == ROOMTYPE_SKYLOFT ||
                 mRoomType == ROOMTYPE_SKYFIELD) &&
@@ -5388,7 +5388,6 @@ void dLytMapMain_c::executeState_EventGoddessCube_Step2() {
     f32 f4 = field_0x8D50 + factor * (field_0x8D4C - field_0x8D50);
     global->setField_0x44(f4);
 
-
     // TODO stack and reg swaps
     global->setMapRotation(factor * mAng(field_0x8D46 - field_0x8D44) + field_0x8D44);
 
@@ -5398,7 +5397,7 @@ void dLytMapMain_c::executeState_EventGoddessCube_Step2() {
     if (field_0x8C7C - field_0x8C80) {
         f1 = 0.0f;
     }
-    
+
     mAnmGroups[MAP_MAIN_ANIM_ROTATE].setFrame(length - f3 * length);
 
     global->setMapScroll(mPlayerPos + (mMapScroll - mPlayerPos) * (1.0f / (f4 / field_0x8D50)) * (1.0f - factor));

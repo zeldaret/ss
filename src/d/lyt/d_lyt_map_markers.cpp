@@ -140,11 +140,7 @@ bool dLytMapPopup_c::execute() {
 void dLytMapPopup_c::draw() {
     u8 alpha = dLytMapGlobal_c::GetInstance()->getAlpha();
     mpPanes[MAP_POPUP_PANE_ALL]->SetAlpha(alpha);
-    mVec3_c pos;
-    pos.x = mPosition.x;
-    pos.y = mPosition.y;
-    pos.z = 0.0f;
-    mpPanes[MAP_POPUP_PANE_ALL]->SetTranslate(pos);
+    mpPanes[MAP_POPUP_PANE_ALL]->SetTranslate(vec2ToVec3XY(mPosition));
     mpPanes[MAP_POPUP_PANE_ALL]->Animate(0);
     mpPanes[MAP_POPUP_PANE_ALL]->CalculateMtx(mLyt.getDrawInfo());
     mpPanes[MAP_POPUP_PANE_ALL]->Draw(mLyt.getDrawInfo());
@@ -787,7 +783,7 @@ bool dLytMapIcon01_c::build(d2d::ResAccIf_c *resAcc) {
     loadFlags();
 
     for (int i = 0; i < (int)ARRAY_LENGTH(mIconAnims); i++) {
-        mIconAnims[i].cmdIndex = 100;
+        mIconAnims[i].cmdIndex = ARRAY_LENGTH(mCommands);
         mIconAnims[i].frame = 0.0f;
         mIconAnims[i].animIn = false;
         mIconAnims[i].animOut = false;
@@ -930,17 +926,17 @@ void dLytMapIcon01_c::draw() {
                             break;
                         }
                         case MAP_ICON_01_PANE_AREALIGHT_00: {
-                            if (field_0x0D48 != 100 && field_0x0D48 == cmd) {
+                            if (field_0x0D48 != ARRAY_LENGTH(mCommands) && field_0x0D48 == cmd) {
                                 setAreaLight(0, pane);
-                            } else if (field_0x0D49 != 100 && field_0x0D49 == cmd) {
+                            } else if (field_0x0D49 != ARRAY_LENGTH(mCommands) && field_0x0D49 == cmd) {
                                 setAreaLight(1, pane);
-                            } else if (field_0x0D4A != 100 && field_0x0D4A == cmd) {
+                            } else if (field_0x0D4A != ARRAY_LENGTH(mCommands) && field_0x0D4A == cmd) {
                                 setAreaLight(2, pane);
                             }
                             break;
                         }
                         case MAP_ICON_01_PANE_SAVEICON_00: {
-                            if (field_0x0D4B[cmd] != 100) {
+                            if (field_0x0D4B[cmd] != ARRAY_LENGTH(mCommands)) {
                                 setSaveObj(field_0x0D4B[cmd], pane);
                             }
                             break;
@@ -1042,7 +1038,8 @@ void dLytMapIcon01_c::draw() {
     for (int i = 0; i < field_0x0E13; i++) {
         if (mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->IsVisible()) {
             v2 = mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].boundingPos;
-            mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->SetTranslate(vec2ToVec3XY(v2 + field_0x0D40)
+            mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->SetTranslate(
+                vec2ToVec3XY(v2 + field_0x0D40)
             );
             mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->CalculateMtx(mLyt.getDrawInfo());
             mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->Draw(mLyt.getDrawInfo());
@@ -1060,7 +1057,7 @@ void dLytMapIcon01_c::resetDrawCommands() {
         mCommands[i].rotation.setF(0.0f);
         mCommands[i].paneIdx = MAP_ICON_01_NUM_PANES;
         mCommands[i].passIdx = 35;
-        field_0x0D4B[i] = 100;
+        field_0x0D4B[i] = ARRAY_LENGTH(mCommands);
         field_0x0C85[i] = 0;
     }
 
@@ -1073,7 +1070,7 @@ void dLytMapIcon01_c::resetDrawCommands() {
     mNumCommands = 0;
 
     for (int i = 0; i < (int)ARRAY_LENGTH(mPopupConfigs); i++) {
-        mPopupConfigs[i].cmdIdx = 100;
+        mPopupConfigs[i].cmdIdx = ARRAY_LENGTH(mCommands);
         mPopupConfigs[i].boundingPos.set(0.0f, 0.0f);
         mPopupConfigs[i].textPos.set(0.0f, 0.0f);
         mPopupConfigs[i].pointedAt = false;
@@ -1087,9 +1084,9 @@ void dLytMapIcon01_c::resetDrawCommands() {
 
     fn_80181C40();
 
-    field_0x0D48 = 100;
-    field_0x0D49 = 100;
-    field_0x0D4A = 100;
+    field_0x0D48 = ARRAY_LENGTH(mCommands);
+    field_0x0D49 = ARRAY_LENGTH(mCommands);
+    field_0x0D4A = ARRAY_LENGTH(mCommands);
 
     mFunFunIslandDiscovered = false;
     mLumpyPumkpinDiscovered = false;
@@ -1182,10 +1179,6 @@ void dLytMapIcon01_c::setSaveObj(u32 color, nw4r::lyt::Pane *pane) {
 }
 
 void dLytMapIcon01_c::setTerry(bool present) {
-    // NONMATCHING
-    // TODO - SetVisible clrlwi
-    // When you fix this, maybe also fix other instances of this problem
-    // by searching for 91657b77
     mpTerryOnOffPane->SetVisible(present);
 }
 
@@ -1300,22 +1293,22 @@ void dLytMapIcon01_c::setupActorDrawCommands() {
         setupObjHarpHintDrawCommand(ac);
 
         if (field_0x184D) {
-            setupNpcKenseiDrawCommand(ac);
+            setupNpcBeeDrawCommand(ac);
         }
 
-        setupNpcBeeDrawCommand(ac);
+        setupNpcKenseiDrawCommand(ac);
         setupObjSaveDrawCommand(ac);
         setupObjLightLineDrawCommand(ac);
         setupObjRoAtTargetDrawCommand(ac);
 
-        if (mNumCommands >= 100) {
+        if (mNumCommands >= ARRAY_LENGTH(mCommands)) {
             break;
         }
     }
 }
 
 void dLytMapIcon01_c::setupNpcKenseiDrawCommand(dAcBase_c *actor) {
-    if (mNumCommands < 100) {
+    if (mNumCommands < ARRAY_LENGTH(mCommands)) {
         if (actor->mProfileName == fProfile::NPC_KENSEI && !actor->checkActorProperty(dAcBase_c::AC_PROP_0x100) &&
             mCurrentFloor == dStage_c::GetInstance()->getMapRelated()->fn_801B4F10(actor->mRoomID, actor->mPosition)) {
             mVec2_c pos(0.0f, 0.0f);
@@ -1351,7 +1344,7 @@ void dLytMapIcon01_c::setupTboxDrawCommand(dAcBase_c *actor) {
 }
 
 void dLytMapIcon01_c::setupTboxDrawCommandClosed(dAcTbox_c *box) {
-    if (mNumCommands < 100) {
+    if (mNumCommands < ARRAY_LENGTH(mCommands)) {
         mVec2_c pos(0.0f, 0.0f);
         projectOntoMap(box->mPosition, pos);
         mCommands[mNumCommands].passIdx = 17;
@@ -1381,7 +1374,7 @@ void dLytMapIcon01_c::setupTboxDrawCommandClosed(dAcTbox_c *box) {
 }
 
 void dLytMapIcon01_c::setupTboxDrawCommandOpen(dAcTbox_c *box) {
-    if (mNumCommands < 100) {
+    if (mNumCommands < ARRAY_LENGTH(mCommands)) {
         mVec2_c pos(0.0f, 0.0f);
         projectOntoMap(box->mPosition, pos);
         mCommands[mNumCommands].passIdx = 17;
@@ -1395,7 +1388,7 @@ void dLytMapIcon01_c::setupTboxDrawCommandOpen(dAcTbox_c *box) {
 }
 
 void dLytMapIcon01_c::setupTboxDrawCommandGoddessClosed(dAcTbox_c *box) {
-    if (mNumCommands < 100) {
+    if (mNumCommands < ARRAY_LENGTH(mCommands)) {
         mVec2_c pos(0.0f, 0.0f);
         projectOntoMap(box->mPosition, pos);
         mCommands[mNumCommands].passIdx = 28;
@@ -1417,7 +1410,7 @@ void dLytMapIcon01_c::setupObjDoorDrawCommand(dAcBase_c *actor) {
 }
 
 void dLytMapIcon01_c::setupObjSaveDrawCommand(dAcBase_c *actor) {
-    if (mNumCommands < 100) {
+    if (mNumCommands < ARRAY_LENGTH(mCommands)) {
         if (actor->mProfileName == fProfile::OBJ_SAVE && !actor->checkActorProperty(dAcBase_c::AC_PROP_0x100) &&
             mCurrentFloor == dStage_c::GetInstance()->getMapRelated()->fn_801B4F10(actor->mRoomID, actor->mPosition)) {
             dAcOSave_c *save = static_cast<dAcOSave_c *>(actor);
@@ -1555,7 +1548,7 @@ void dLytMapIcon01_c::setupStageDrawCommands() {
             setupTgInsectDrawCommand(ac);
         }
 
-        if (mNumCommands >= 100) {
+        if (mNumCommands >= ARRAY_LENGTH(mCommands)) {
             break;
         }
     }
@@ -1604,7 +1597,7 @@ void dLytMapIcon01_c::setupLinkDrawCommand2() {
 }
 
 void dLytMapIcon01_c::setupCloudBigDrawCommand() {
-    if (mNumCommands < 100) {
+    if (mNumCommands < ARRAY_LENGTH(mCommands)) {
         mVec3_c thunderHeadPos(-135210.0f, 0.0f, -84790.0f);
         mVec2_c pos(0.0f, 0.0f);
         projectOntoMap(thunderHeadPos, pos);
@@ -1742,7 +1735,7 @@ void dLytMapIcon00_c::resetDrawCommands() {
         mCommands[i].rotation.setF(0.0f);
         mCommands[i].paneIdx = 39;
         mCommands[i].passIdx = 35;
-        field_0x0F20[i] = 100;
+        field_0x0F20[i] = ARRAY_LENGTH(mCommands);
         field_0x13A8[i] = 0;
         field_0x1342[i] = 0;
         field_0x0E5B[i] = 0;
@@ -1760,7 +1753,7 @@ void dLytMapIcon00_c::resetDrawCommands() {
     }
 
     for (int i = 0; i < (int)ARRAY_LENGTH(mPopupConfigs); i++) {
-        mPopupConfigs[i].cmdIdx = 100;
+        mPopupConfigs[i].cmdIdx = ARRAY_LENGTH(mCommands);
         mPopupConfigs[i].boundingPos.set(0.0f, 0.0f);
         mPopupConfigs[i].textPos.set(0.0f, 0.0f);
         mPopupConfigs[i].pointedAt = false;
