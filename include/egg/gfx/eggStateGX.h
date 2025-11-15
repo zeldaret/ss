@@ -87,14 +87,12 @@ public:
     static bool GXSetDither_(bool);
     static void GXCopyTex_(void *data, bool);
     static CacheGX &GXSetDstAlpha_(bool, u8);
+    static void GetScissorSafeParam(const f32 src[4], u32 dst[4]);
     static void GXSetProjection_(Mtx44, GXProjectionType);
     static void GXSetProjectionv_(const f32 *);
     static void GXSetViewport_(f32 ox, f32 oy, f32 sx, f32 sy, f32 near, f32 far);
     static void GXSetScissor_(u32, u32, u32, u32);
     static void GXSetScissorBoxOffset_(s32, s32);
-
-    // not sure
-    static void CalculateScreenScissor(const f32 src[4], u32 dst[4]);
 
     static u16 s_widthEfb;
     static u16 s_heightEfb;
@@ -105,8 +103,6 @@ public:
     static u16 s_commandFlag;
 
     static CacheGX s_cacheGX;
-    // Inofficial names
-    static GXTexObj sDefaultTexObj;
     static MemLayout s_tmem_layout; // same name, different type
 };
 

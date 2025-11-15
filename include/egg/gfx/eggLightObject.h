@@ -52,9 +52,9 @@ public:
     void CopyToG3D_View(nw4r::g3d::LightObj &, const nw4r::math::MTX34 &) const;
     void CopyFromG3D(const nw4r::g3d::ResAnmLight &, f32, EGG::LightObject *, bool);
 
-    void ApplyAnmResultInner(const nw4r::g3d::LightAnmResult &);
-    void ApplyAnmResultA(const nw4r::g3d::LightAnmResult &);
-    bool ApplyAnmResultB(const nw4r::g3d::LightAnmResult &);
+    void ImportAnmG3D(const nw4r::g3d::LightAnmResult &);
+    void ImportAnmG3D_Diff(const nw4r::g3d::LightAnmResult &);
+    bool ImportAnmG3D_Spec(const nw4r::g3d::LightAnmResult &);
 
     void CalcAt();
     void SetPos(const nw4r::math::VEC3 &);

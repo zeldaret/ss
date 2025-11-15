@@ -21,10 +21,11 @@ namespace {
 static GXTexRegion *texRegionCallback(const GXTexObj *pObj, GXTexMapID map) {
     return &EGG::StateGX::s_tmem_layout.mRegions[map % EGG::StateGX::s_tmem_layout.numRegions];
 }
+static GXTexObj ALIGN_DECL(32) DUMMY_TEX_OBJ;
 
-static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
+static const GXColor WHITE = {0xFF, 0xFF, 0xFF, 0xFF};
 
-static const f32 identity[3][4] = {
+static const f32 IDENTITY[3][4] = {
     {1.0f, 0.0f, 0.0f, 0.0f},
     {0.0f, 1.0f, 0.0f, 0.0f},
     {0.0f, 0.0f, 1.0f, 0.0f},
@@ -33,8 +34,6 @@ static const f32 identity[3][4] = {
 } // namespace
 
 namespace EGG {
-
-GXTexObj ALIGN_DECL(32) StateGX::sDefaultTexObj;
 StateGX::MemLayout StateGX::s_tmem_layout;
 StateGX::CacheGX StateGX::s_cacheGX;
 
@@ -56,10 +55,10 @@ void StateGX::initialize(u16 width, u16 height, GXColor color, GXPixelFmt pixelF
         BaseSystem::getDisplay()->setClearColor(color);
     }
 
-    static u8 sDefaultTexObjData[16] = {0};
+    static u8 NullTexData[16] = {0};
 
-    GXInitTexObj(&sDefaultTexObj, sDefaultTexObjData, 4, 4, GX_TF_IA8, GX_CLAMP, GX_CLAMP, 0);
-    GXInitTexObjLOD(&sDefaultTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+    GXInitTexObj(&DUMMY_TEX_OBJ, NullTexData, 4, 4, GX_TF_IA8, GX_CLAMP, GX_CLAMP, 0);
+    GXInitTexObjLOD(&DUMMY_TEX_OBJ, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
     invalidateTexAllGX();
     frameInit();
     setTMemLayout(nw4r::g3d::tmem::TMEM_LAYOUT_1);
@@ -137,12 +136,12 @@ void StateGX::resetVtx() {
 
 void StateGX::resetColorChannel() {
     GXSetNumChans(1);
-    GXSetChanAmbColor(GX_COLOR0A0, white);
-    GXSetChanAmbColor(GX_COLOR1A1, white);
+    GXSetChanAmbColor(GX_COLOR0A0, WHITE);
+    GXSetChanAmbColor(GX_COLOR1A1, WHITE);
 
-    GXSetChanMatColor(GX_COLOR0A0, white);
+    GXSetChanMatColor(GX_COLOR0A0, WHITE);
 
-    GXSetChanMatColor(GX_COLOR1A1, white);
+    GXSetChanMatColor(GX_COLOR1A1, WHITE);
     GXSetCullMode(GX_CULL_BACK);
     GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
     GXSetChanCtrl(GX_COLOR1A1, false, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
@@ -150,12 +149,12 @@ void StateGX::resetColorChannel() {
 
 void StateGX::resetIndirect() {
     GXSetNumIndStages(0);
-    static const f32 ind[2][3] = {
+    static const f32 offsetMtx[2][3] = {
         {0.5f, 0.0f, 0.0f},
         {0.0f, 0.5f, 0.0f},
     };
     for (u32 i = 0; i < 3; i++) {
-        GXSetIndTexMtx(static_cast<GXIndTexMtxID>(i + GX_ITM_0), ind, 1);
+        GXSetIndTexMtx(static_cast<GXIndTexMtxID>(i + GX_ITM_0), offsetMtx, 1);
     }
     for (u32 i = 0; i < 4; i++) {
         GXSetIndTexCoordScale(static_cast<GXIndTexStageID>(i + GX_INDTEXSTAGE0), GX_ITS_1, GX_ITS_1);
@@ -164,7 +163,7 @@ void StateGX::resetIndirect() {
 
 void StateGX::resetTexture() {
     for (u32 i = 0; i < s_tmem_layout.numRegions; i++) {
-        GXLoadTexObj(&sDefaultTexObj, static_cast<GXTexMapID>(i + GX_TEXMAP0));
+        GXLoadTexObj(&DUMMY_TEX_OBJ, static_cast<GXTexMapID>(i + GX_TEXMAP0));
     }
 }
 
@@ -172,7 +171,7 @@ void StateGX::resetTexGen() {
     GXSetNumTexGens(1);
 
     for (u32 i = 0; i < 10; i++) {
-        GXLoadTexMtxImm(identity, i * 3 + 0x1E, GX_MTX3x4);
+        GXLoadTexMtxImm(IDENTITY, i * 3 + 0x1E, GX_MTX3x4);
     }
 
     for (u32 i = 0; i < GX_MAX_TEXCOORD; i++) {
@@ -198,12 +197,12 @@ void StateGX::resetTev() {
 
     for (u32 i = 0; i < GX_MAX_KCOLOR; i++) {
         GXTevKColorID id = static_cast<GXTevKColorID>(i);
-        GXSetTevKColor(id, white);
+        GXSetTevKColor(id, WHITE);
     }
 
     for (u32 i = 0; i < GX_MAX_TEVREG; i++) {
         GXTevRegID id = static_cast<GXTevRegID>(i);
-        GXSetTevColor(id, white);
+        GXSetTevColor(id, WHITE);
     }
 
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
@@ -217,7 +216,7 @@ void StateGX::resetPE() {
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZTexture(0, GX_TF_Z24X8, 0);
     GXSetZMode(true, GX_LEQUAL, true);
-    GXSetFog(GX_FOG_NONE, white, 0.0f, 1.0f, 0.1f, 1.0f);
+    GXSetFog(GX_FOG_NONE, WHITE, 0.0f, 1.0f, 0.1f, 1.0f);
     GXSetFogRangeAdj(false, 0, nullptr);
     GXSetZCompLoc(true);
     GXSetDstAlpha(false, 0);
@@ -288,7 +287,7 @@ StateGX::CacheGX &StateGX::GXSetDstAlpha_(bool enable, u8 alpha) {
     return s_cacheGX;
 }
 
-void StateGX::CalculateScreenScissor(const f32 src[4], u32 dst[4]) {
+void StateGX::GetScissorSafeParam(const f32 src[4], u32 dst[4]) {
     dst[0] = src[0] >= 0.0f ? src[0] : 0.0f;
     dst[1] = src[1] >= 0.0f ? src[1] : 0.0f;
     dst[2] = dst[0] + src[2] > 640.0f ? 640 - dst[0] : src[2];

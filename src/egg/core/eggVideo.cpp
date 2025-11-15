@@ -296,16 +296,15 @@ const GXRenderModeObj gRMO_Ntsc_640x456IntDf_4x3 = {
     {0, 0, 21, 22, 21, 0, 0}  // vFilter
 };
 
-} // namespace
-
-namespace EGG {
-
-const EGG::Video::RenderModeObjSet renderModes = {
+const EGG::Video::RenderModeObjSet gStandardRenderModeObjSet = {
     {&gRMO_Pal60_640x456Prog_16x9, &gRMO_Pal60_640x456IntDf_16x9, &gRMO_Pal50_640x456IntDf_16x9,
      &gRMO_Ntsc_640x456Prog_16x9, &gRMO_Ntsc_640x456IntDf_16x9, &gRMO_Pal60_640x456Prog_4x3,
      &gRMO_Pal60_640x456IntDf_4x3, &gRMO_Pal50_640x456IntDf_4x3, &gRMO_Ntsc_640x456Prog_4x3,
      &gRMO_Ntsc_640x456IntDf_4x3}
 };
+} // namespace
+
+namespace EGG {
 
 void Video::initialize(GXRenderModeObj *obj, const RenderModeObjSet *set) {
     VIInit();
@@ -315,7 +314,7 @@ void Video::initialize(GXRenderModeObj *obj, const RenderModeObjSet *set) {
 GXRenderModeObj *Video::configure(GXRenderModeObj *obj, const RenderModeObjSet *set) {
     GXRenderModeObj *oldMode = pRenderMode;
     if (set == nullptr) {
-        set = &renderModes;
+        set = &gStandardRenderModeObjSet;
     }
     if (obj == nullptr) {
         // Cast away constness. In an incredibly cursed way, adding proper

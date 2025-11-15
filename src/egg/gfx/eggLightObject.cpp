@@ -31,12 +31,15 @@ int IBinary<LightObject>::GetVersion() {
 }
 
 // why
-static const f32 zeroVec[3] = {0.0f, 0.0f, 0.0f};
+namespace {
+
+static const f32 ZERO_VEC[3] = {0.0f, 0.0f, 0.0f};
+}
 
 LightObject::LightObject()
     : mIndex(0),
       field_0x06(0),
-      mAt(zeroVec),
+      mAt(ZERO_VEC),
       mPos(-10000.0f, 10000.0f, 10000.0f),
       mDir(0.0f, -1.0f, 0.0f),
       mWhite(DrawGX::WHITE),
@@ -54,7 +57,7 @@ LightObject::LightObject()
       mFlags(0x661) {}
 
 void LightObject::Reset() {
-    SetPosAt(nw4r::math::VEC3(-10000.0f, 10000.0f, 10000.0f), zeroVec);
+    SetPosAt(nw4r::math::VEC3(-10000.0f, 10000.0f, 10000.0f), ZERO_VEC);
     mFlags = 0x661;
     mWhite = DrawGX::WHITE;
     mBlack = DrawGX::BLACK;
@@ -149,12 +152,12 @@ void LightObject::InitGX(GXLightObj *obj) const {
             case 1: {
                 nw4r::math::VEC3 tmp = field_0x94 * -1e10f;
                 GXInitLightPos(obj, tmp.x, tmp.y, tmp.z);
-                GXInitLightDir(obj, zeroVec[0], zeroVec[1], zeroVec[2]);
+                GXInitLightDir(obj, ZERO_VEC[0], ZERO_VEC[1], ZERO_VEC[2]);
                 break;
             }
             case 0: {
                 GXInitLightPos(obj, mViewPos.x, mViewPos.y, mViewPos.z);
-                GXInitLightDir(obj, zeroVec[0], zeroVec[1], zeroVec[2]);
+                GXInitLightDir(obj, ZERO_VEC[0], ZERO_VEC[1], ZERO_VEC[2]);
                 break;
             }
             case 2: {
@@ -259,8 +262,8 @@ void LightObject::CopyFromG3D(
     g3dLight.GetAnmResult(&result, frame);
     if (!skipDoingSomething || (result.flags & nw4r::g3d::LightAnmResult::FLAG_LIGHT_ENABLE) != 0) {
         if ((result.flags & nw4r::g3d::LightAnmResult::FLAG_LIGHT_ENABLE) != 0) {
-            ApplyAnmResultA(result);
-            if (optObj != nullptr && optObj->ApplyAnmResultB(result)) {
+            ImportAnmG3D_Diff(result);
+            if (optObj != nullptr && optObj->ImportAnmG3D_Spec(result)) {
                 optObj->field_0x06 = mIndex;
                 optObj->mFlags |= 2;
             }
@@ -273,7 +276,7 @@ void LightObject::CopyFromG3D(
     }
 }
 
-void LightObject::ApplyAnmResultInner(const nw4r::g3d::LightAnmResult &res) {
+void LightObject::ImportAnmG3D(const nw4r::g3d::LightAnmResult &res) {
     // TODO
     mFlags = mFlags & 0xF07E;
     mCutoff = 90.0f;
@@ -298,8 +301,8 @@ void LightObject::ApplyAnmResultInner(const nw4r::g3d::LightAnmResult &res) {
     }
 }
 
-void LightObject::ApplyAnmResultA(const nw4r::g3d::LightAnmResult &res) {
-    ApplyAnmResultInner(res);
+void LightObject::ImportAnmG3D_Diff(const nw4r::g3d::LightAnmResult &res) {
+    ImportAnmG3D(res);
     switch ((int)(res.flags & nw4r::g3d::LightAnmResult::FLAG_LIGHT_TYPE_MASK)) {
         case 0: {
             field_0x3D = 0;
@@ -334,9 +337,9 @@ void LightObject::ApplyAnmResultA(const nw4r::g3d::LightAnmResult &res) {
     }
 }
 
-bool LightObject::ApplyAnmResultB(const nw4r::g3d::LightAnmResult &res) {
+bool LightObject::ImportAnmG3D_Spec(const nw4r::g3d::LightAnmResult &res) {
     if ((res.flags & nw4r::g3d::LightAnmResult::FLAG_SPECULAR_ENABLE) != 0) {
-        ApplyAnmResultInner(res);
+        ImportAnmG3D(res);
         field_0x3D = 1;
         mWhite = res.specColor;
         SetPosAt(res.pos, res.aim);
