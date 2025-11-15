@@ -125,7 +125,7 @@ bool dSndHarpSongMgr_c::isContinuousStrumming() {
     return field_0x01C;
 }
 
-bool dSndHarpSongMgr_c::fun_80381150() {
+bool dSndHarpSongMgr_c::fn_80381150() {
     if (isContinuousStrumming()) {
         return field_0x042;
     }
@@ -133,5 +133,5 @@ bool dSndHarpSongMgr_c::fun_80381150() {
 }
 
 bool dSndHarpSongMgr_c::isPlayingHarpRelated() {
-    return fun_80381150() == false;
+    return fn_80381150() == false;
 }

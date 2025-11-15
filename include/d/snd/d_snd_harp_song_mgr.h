@@ -31,9 +31,9 @@ private:
     void shiftFloat2(f32 val);
     void resetFloatArr1();
     void resetFloatArr2();
-    bool fun_80381150();
     bool isContinuousStrumming();
     bool isPlayingHarpRelated();
+    bool fn_80381150();
 
     /* 0x010 */ u8 field_0x010;
     /* 0x011 */ u8 field_0x011;
