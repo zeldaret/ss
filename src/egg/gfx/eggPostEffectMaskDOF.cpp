@@ -8,11 +8,15 @@
 #include "rvl/GX/GXTypes.h"
 #include "rvl/MTX/mtx.h"
 
-namespace EGG {
+namespace {
 
-static const GXColor sColorNear = (GXColor){0x00, 0xFF, 0x00, 0xFF};
-static const GXColor sColorFar = (GXColor){0xFF, 0x00, 0x00, 0x00};
-static const GXColor sColorCenter = (GXColor){0x00, 0x00, 0x00, 0x00};
+static const GXColor NEAR = (GXColor){0x00, 0xFF, 0x00, 0xFF};
+static const GXColor FAR = (GXColor){0xFF, 0x00, 0x00, 0x00};
+static const GXColor CENTER = (GXColor){0x00, 0x00, 0x00, 0x00};
+
+} // namespace
+
+namespace EGG {
 
 PostEffectMaskDOF::PostEffectMaskDOF()
     : field_0x2C(8),
@@ -234,13 +238,13 @@ void PostEffectMaskDOF::setMaterialInternal() {
 }
 
 const GXColor &PostEffectMaskDOF::getNearColor() {
-    return sColorNear;
+    return NEAR;
 }
 const GXColor &PostEffectMaskDOF::getFarColor() {
-    return sColorFar;
+    return FAR;
 }
 const GXColor &PostEffectMaskDOF::getCenterColor() {
-    return sColorCenter;
+    return CENTER;
 }
 
 } // namespace EGG

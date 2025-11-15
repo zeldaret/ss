@@ -43,6 +43,9 @@ public:
         mCopyFilterArg = filt;
     }
 
+    static const CopyFilter VFILTER_BLUR;
+    static const CopyFilter VFILTER_OFF;
+
 private:
     /* 0x18 */ u8 mCapFlags;
     /* 0x19 */ GXColor mClearColor;

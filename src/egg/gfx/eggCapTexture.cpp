@@ -6,21 +6,27 @@
 #include "rvl/GX/GXPixel.h"
 #include "rvl/GX/GXTypes.h"
 
+namespace {
+static const GXColor DEFUALT_CLEAR_COLOR = {0, 0, 0, 0};
+static const u8 SAMPLE_PATTERN_OFF[12][2] = {};
+
+} // namespace
 namespace EGG {
 
-static const GXColor sBlack = {0, 0, 0, 0};
-static const CopyFilter defaultFilter = {
-    {0, 0, 1, 0x3F, 0, 0, 0}
+const CopyFilter CapTexture::VFILTER_BLUR = {
+    {0x15, 0, 0, 0x16, 0, 0x15, 0}
 };
 
-static const u8 copyArg2[12][2] = {};
+const CopyFilter CapTexture::VFILTER_OFF = {
+    {0, 0, 1, 0x3F, 0, 0, 0}
+};
 
 void CapTexture::configure() {
     CpuTexture::configure();
     mCapFlags = 0;
-    mClearColor = sBlack;
+    mClearColor = DEFUALT_CLEAR_COLOR;
     field_0x20 = 0xFFFFFF;
-    mCopyFilterArg = defaultFilter;
+    mCopyFilterArg = VFILTER_OFF;
 }
 
 void CapTexture::capture(u16 x, u16 y, bool upscale, int format) {
@@ -32,7 +38,8 @@ void CapTexture::capture(u16 x, u16 y, bool upscale, int format) {
     GXSetTexCopyDst(mWidth, mHeight, fmt, upscale);
 
     GXSetCopyFilter(
-        0, copyArg2, (mCapFlags & 8) ? true : false, (mCapFlags & 8) ? mCopyFilterArg.values : defaultFilter.values
+        0, SAMPLE_PATTERN_OFF, (mCapFlags & 8) ? true : false,
+        (mCapFlags & 8) ? mCopyFilterArg.values : VFILTER_OFF.values
     );
 
     StateGX::ScopedColor colorUpdate((mCapFlags & 1) != 0);
@@ -41,7 +48,7 @@ void CapTexture::capture(u16 x, u16 y, bool upscale, int format) {
     GXSetCopyClear(mClearColor, field_0x20);
     GXSetCopyClamp(3);
     StateGX::GXCopyTex_(dataPtr, true);
-    GXSetCopyFilter(0, copyArg2, 0, defaultFilter.values);
+    GXSetCopyFilter(0, SAMPLE_PATTERN_OFF, 0, VFILTER_OFF.values);
 
     if ((mCapFlags & 0x10) != 0) {
         GXPixModeSync();
