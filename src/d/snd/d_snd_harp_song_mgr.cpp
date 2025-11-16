@@ -120,3 +120,18 @@ void dSndHarpSongMgr_c::resetFloatArr2() {
         field_0x52C[i] = 0.0f;
     }
 }
+
+bool dSndHarpSongMgr_c::isContinuousStrumming() {
+    return field_0x01C;
+}
+
+bool dSndHarpSongMgr_c::isPlayingHarpRelated() {
+    return fn_80381150() == false;
+}
+
+bool dSndHarpSongMgr_c::fn_80381150() {
+    if (isContinuousStrumming()) {
+        return field_0x042;
+    }
+    return true;
+}

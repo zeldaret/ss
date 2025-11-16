@@ -2,8 +2,8 @@
 #define D_SND_HARP_SONG_MGR_H
 
 #include "common.h"
-#include "d/snd/d_snd_util.h"
 #include "d/snd/d_snd_types.h"
+#include "d/snd/d_snd_util.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 
 SND_DISPOSER_FORWARD_DECL(dSndHarpSongMgr_c);
@@ -31,6 +31,9 @@ private:
     void shiftFloat2(f32 val);
     void resetFloatArr1();
     void resetFloatArr2();
+    bool isContinuousStrumming();
+    bool isPlayingHarpRelated();
+    bool fn_80381150();
 
     /* 0x010 */ u8 field_0x010;
     /* 0x011 */ u8 field_0x011;
@@ -48,7 +51,7 @@ private:
     /* 0x03C */ f32 field_0x03C;
     /* 0x040 */ u8 field_0x040;
     /* 0x041 */ u8 field_0x041;
-    /* 0x042 */ u8 field_0x042;
+    /* 0x042 */ bool field_0x042;
     /* 0x043 */ u8 field_0x043;
     /* 0x044 */ u8 field_0x044;
     /* 0x048 */ UNKWORD field_0x048;
