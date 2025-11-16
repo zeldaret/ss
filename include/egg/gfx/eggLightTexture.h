@@ -92,11 +92,6 @@ public:
     static void getTexDimensions(u16 *, u16 *, u16 *, u16 *, u16);
 
 private:
-    static void fn_804AB270();
-    static void fn_804AB310(const GXColor &color);
-    static void fn_804AB440();
-    static void fn_804AB600();
-
     static void fn_804AC0A0(int, int *, int *);
     static void loadTextureData(int index, void *data, GXTexFmt fmt);
 
@@ -125,6 +120,7 @@ private:
     /* 0x9F */ u8 field_0x9F;
 
     static u16 sTextureSize;
+    static s8 sScaleExp;
 
     static u16 sDrawWidth;
     static u16 sDrawHeight;

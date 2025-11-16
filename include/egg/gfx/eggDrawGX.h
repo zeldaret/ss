@@ -172,14 +172,6 @@ public:
     static const DL s_DL7;
     static const DL s_DL8;
 
-    static const ZModeConfig s_ZMode[ZMODE_MAX];
-    static const BlendModeConfig s_Blend[BLEND_MAX];
-    static GXTexObj sDummyTexObj;
-    // not sure end
-
-    static GXTexMapID sTexMapDefault;
-    static GXLightID sLightMaskDefault;
-
     static nw4r::math::MTX34 s_cameraMtx;
 
     static u32 s_flag;

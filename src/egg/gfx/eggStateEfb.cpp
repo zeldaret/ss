@@ -15,7 +15,7 @@ namespace EGG {
 StateEfb::Buffer StateEfb::spBufferSet[BUFFER_MAX];
 f32 StateEfb::sWorkSpaceV[6];
 f32 StateEfb::sWorkSpaceHideV[6];
-f32 StateEfb::sUnkBuffer[6];
+f32 StateEfb::sShiftViewPort[6];
 
 u32 StateEfb::sFlag = 4;
 s32 StateEfb::sWorkBuffer = -1;
@@ -204,18 +204,20 @@ void StateEfb::popWorkBuffer(bool b, u32 userData) {
 
 f32 *StateEfb::fn_804B4550() {
     const Screen::DataEfb &efb = GlobalDrawState::getScreen().GetDataEfb();
-    sUnkBuffer[0] = sWorkSpaceV[0];
-    sUnkBuffer[1] = sWorkSpaceV[1];
-    sUnkBuffer[2] = efb.vp.x2;
-    sUnkBuffer[3] = efb.vp.y2;
-    sUnkBuffer[4] = efb.vp.z1;
-    sUnkBuffer[5] = efb.vp.z2;
-    StateGX::GXSetViewport_(sUnkBuffer[0], sUnkBuffer[1], sUnkBuffer[2], sUnkBuffer[3], sUnkBuffer[4], sUnkBuffer[5]);
+    sShiftViewPort[0] = sWorkSpaceV[0];
+    sShiftViewPort[1] = sWorkSpaceV[1];
+    sShiftViewPort[2] = efb.vp.x2;
+    sShiftViewPort[3] = efb.vp.y2;
+    sShiftViewPort[4] = efb.vp.z1;
+    sShiftViewPort[5] = efb.vp.z2;
+    StateGX::GXSetViewport_(
+        sShiftViewPort[0], sShiftViewPort[1], sShiftViewPort[2], sShiftViewPort[3], sShiftViewPort[4], sShiftViewPort[5]
+    );
     u32 f[4];
-    StateGX::CalculateScreenScissor(sUnkBuffer, f);
+    StateGX::GetScissorSafeParam(sShiftViewPort, f);
     StateGX::GXSetScissor_(f[0], f[1], f[2], f[3]);
     StateGX::GXSetScissorBoxOffset_(0, 0);
-    return sUnkBuffer;
+    return sShiftViewPort;
 }
 
 bool StateEfb::isEnableDirtyBufferMode() {

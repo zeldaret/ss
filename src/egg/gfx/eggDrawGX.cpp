@@ -36,18 +36,18 @@ const DrawGX::DL DrawGX::s_DL0 = DrawGX::DL_0;
 const DrawGX::DL DrawGX::s_DL7 = DrawGX::DL_7;
 const DrawGX::DL DrawGX::s_DL8 = DrawGX::DL_8;
 
-GXTexMapID DrawGX::sTexMapDefault;
-GXLightID DrawGX::sLightMaskDefault = GX_LIGHT0;
-
 nw4r::math::MTX34 DrawGX::s_cameraMtx;
 DrawGX::DLData DrawGX::s_DL[DL_MAX];
-GXTexObj DrawGX::sDummyTexObj;
 
 u32 DrawGX::s_flag;
 
 }; // namespace EGG
 
 namespace {
+
+static GXTexObj CLEAR_Z_TEX_OBJ;
+static GXLightID LIGHTMASK_DEFAULT = GX_LIGHT0;
+static GXTexMapID TEXMAP_DEFAULT;
 
 static void DrawQuadNormal(u8 x1, u8 x2, u8 x3, u8 x4, u8 y) {
     GXPosition2u8(x1, y);
@@ -118,42 +118,42 @@ namespace EGG {
 
 static DrawGX sDrawGX;
 
-static u8 DummyTextureData[64] = {
-    // clang-format off
-0x00,  0xFF,  0x00,  0xFF,
-0x00,  0xFF,  0x00,  0xFF,
-0x00,  0xFF, 0x00, 0xFF,
-0x00, 0xFF, 0x00, 0xFF,
-0x00, 0xFF, 0x00, 0xFF,
-0x00, 0xFF, 0x00, 0xFF,
-0x00, 0xFF, 0x00, 0xFF,
-0x00, 0xFF, 0x00, 0xFF,
-0xFF, 0xFF, 0xFF, 0xFF,
-0xFF, 0xFF, 0xFF, 0xFF,
-0xFF, 0xFF, 0xFF, 0xFF,
-0xFF, 0xFF, 0xFF, 0xFF,
-0xFF, 0xFF, 0xFF, 0xFF,
-0xFF, 0xFF, 0xFF, 0xFF,
-0xFF, 0xFF, 0xFF, 0xFF,
-0xFF, 0xFF, 0xFF, 0xFF,
-    // clang-format on
-};
-
 void DrawGX::Initialize(Heap *pHeap_) {
-    2.0f; // cool
+    2.0f; // cool+
+
+    static u8 s_clear_z_TX[64] = {
+        // clang-format off
+        0x00,  0xFF,  0x00,  0xFF,
+        0x00,  0xFF,  0x00,  0xFF,
+        0x00,  0xFF, 0x00, 0xFF,
+        0x00, 0xFF, 0x00, 0xFF,
+        0x00, 0xFF, 0x00, 0xFF,
+        0x00, 0xFF, 0x00, 0xFF,
+        0x00, 0xFF, 0x00, 0xFF,
+        0x00, 0xFF, 0x00, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF,
+        // clang-format on
+    };
     Heap *pHeap = pHeap_ == nullptr ? Heap::getCurrentHeap() : pHeap_;
 
-    GXInitTexObj(&sDummyTexObj, DummyTextureData, 4, 4, GX_TF_Z24X8, GX_REPEAT, GX_REPEAT, false);
-    GXInitTexObjLOD(&sDummyTexObj, GX_NEAR, GX_NEAR, 0.0, 0.0, 0.0, 0, 0, GX_ANISO_1);
+    GXInitTexObj(&CLEAR_Z_TEX_OBJ, s_clear_z_TX, 4, 4, GX_TF_Z24X8, GX_REPEAT, GX_REPEAT, false);
+    GXInitTexObjLOD(&CLEAR_Z_TEX_OBJ, GX_NEAR, GX_NEAR, 0.0, 0.0, 0.0, 0, 0, GX_ANISO_1);
     PSMTXIdentity(s_cameraMtx.m);
     CreateDisplayList(pHeap);
 }
 
 GXTexMapID DrawGX::GetTexMapDefault() {
-    return sTexMapDefault;
+    return TEXMAP_DEFAULT;
 }
 GXLightID DrawGX::GetLightMaskDefault() {
-    return sLightMaskDefault;
+    return LIGHTMASK_DEFAULT;
 }
 
 void DrawGX::BeginDrawLine(ColorChannel chan, ZMode zMode) {
@@ -240,7 +240,7 @@ void DrawGX::ClearEfb(
     GXSetCullMode(GX_CULL_NONE);
     if (b3) {
         SetMat_TexGen(TEXGEN_1);
-        GXLoadTexObj(&sDummyTexObj, sTexMapDefault);
+        GXLoadTexObj(&CLEAR_Z_TEX_OBJ, TEXMAP_DEFAULT);
     } else {
         SetMat_TexGen(TEXGEN_0);
     }
@@ -252,7 +252,7 @@ void DrawGX::ClearEfb(
     GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
     if (b3) {
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, sTexMapDefault, GX_COLOR_NULL);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, TEXMAP_DEFAULT, GX_COLOR_NULL);
     } else {
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
     }
@@ -336,7 +336,7 @@ void DrawGX::SetMat_Tev(GXTevStageID stageId, enum TevSetting setting) {
             break;
         case TEV_2:
             GXSetTevDirect(stageId);
-            GXSetTevOrder(stageId, GX_TEXCOORD0, sTexMapDefault, GX_COLOR0A0);
+            GXSetTevOrder(stageId, GX_TEXCOORD0, TEXMAP_DEFAULT, GX_COLOR0A0);
             GXSetTevSwapMode(stageId, GX_TEV_SWAP0, GX_TEV_SWAP0);
             GXSetTevColorIn(stageId, GX_CC_ZERO, GX_CC_TEXC, GX_CC_RASC, GX_CC_ZERO);
             GXSetTevColorOp(stageId, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
@@ -345,7 +345,7 @@ void DrawGX::SetMat_Tev(GXTevStageID stageId, enum TevSetting setting) {
             break;
         case TEV_1:
             GXSetTevDirect(stageId);
-            GXSetTevOrder(stageId, GX_TEXCOORD0, sTexMapDefault, GX_COLOR0A0);
+            GXSetTevOrder(stageId, GX_TEXCOORD0, TEXMAP_DEFAULT, GX_COLOR0A0);
             GXSetTevSwapMode(stageId, GX_TEV_SWAP0, GX_TEV_SWAP0);
             GXSetTevColorIn(stageId, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
             GXSetTevColorOp(stageId, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
@@ -377,7 +377,7 @@ void DrawGX::LoadTexture(nw4r::g3d::ResTex tex, GXTexMapID texMapId) {
 void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
     GXClearVtxDesc();
     switch (type) {
-        case VTX_TYPE_0:
+        case VTX_TYPE_0: {
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0xe);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S16, 0xe);
             // clang-format off
@@ -405,16 +405,18 @@ void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
             GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
             GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
             break;
+        }
         case VTX_TYPE_2:
         case VTX_TYPE_3:
         case VTX_TYPE_4:
-        case VTX_TYPE_5:
+        case VTX_TYPE_5: {
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxDesc(GX_VA_NRM, GX_DIRECT);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
             break;
-        case VTX_TYPE_6:
+        }
+        case VTX_TYPE_6: {
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxDesc(GX_VA_NRM, GX_DIRECT);
             GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
@@ -422,23 +424,25 @@ void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
             break;
-        case VTX_TYPE_1:
+        }
+        case VTX_TYPE_1: {
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
             break;
+        }
         case VTX_TYPE_7:
-        case VTX_TYPE_8:
+        case VTX_TYPE_8: {
             // clang-format off
-            static const ALIGN_DECL(32) s16 sVtxDataType7[][2] = {
+            static const ALIGN_DECL(32) s16 QUAD_VTX[][2] = {
                 {0xE000, 0x2000},
                 {0x2000, 0x2000},
                 {0x2000, 0xE000},
                 {0xE000, 0xE000},
             };
-            static const ALIGN_DECL(32) s16 sNrmDataType7[][3] = {
+            static const ALIGN_DECL(32) s16 QUAD_NRM[][3] = {
                 {0x0000, 0x0000, 0x4000}
             };
-            static const ALIGN_DECL(32) u8 sTexDataType7[][2] = {
+            static const ALIGN_DECL(32) u8 QUAD_UV[][2] = {
                 {0x00, 0x00},
                 {0x01, 0x00},
                 {0x01, 0x01},
@@ -455,21 +459,22 @@ void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
             if (type == VTX_TYPE_7) {
                 GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U8, 0);
             }
-            GXSetArray(GX_VA_POS, sVtxDataType7, 4);
-            GXSetArray(GX_VA_NRM, sNrmDataType7, 6);
+            GXSetArray(GX_VA_POS, QUAD_VTX, 4);
+            GXSetArray(GX_VA_NRM, QUAD_NRM, 6);
             if (type == VTX_TYPE_7) {
-                GXSetArray(GX_VA_TEX0, sTexDataType7, 2);
+                GXSetArray(GX_VA_TEX0, QUAD_UV, 2);
             }
             break;
-        case VTX_TYPE_9:
+        }
+        case VTX_TYPE_9: {
             // clang-format off
-            static const ALIGN_DECL(32) s16 sVtxDataType9[][3] = {
+            static const ALIGN_DECL(32) s16 QUAD_VTX[][3] = {
                 {0xE000, 0x0000, 0xE000},
                 {0x2000, 0x0000, 0xE000},
                 {0x2000, 0x0000, 0x2000},
                 {0xE000, 0x0000, 0x2000},
             };
-            static const ALIGN_DECL(32) s16 sNrmDataType9[][3] = {
+            static const ALIGN_DECL(32) s16 QUAD_NRM[][3] = {
                 {0x0000, 0x4000, 0x0000}  
             };
             // clang-format on
@@ -477,21 +482,22 @@ void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
             GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0xe);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S16, 0xe);
-            GXSetArray(GX_VA_POS, sVtxDataType9, 6);
-            GXSetArray(GX_VA_NRM, sNrmDataType9, 6);
+            GXSetArray(GX_VA_POS, QUAD_VTX, 6);
+            GXSetArray(GX_VA_NRM, QUAD_NRM, 6);
             break;
+        }
         case VTX_TYPE_10:
         case VTX_TYPE_11:
         case VTX_TYPE_12:
         case VTX_TYPE_13: {
             // clang-format off
-            static const ALIGN_DECL(32) u8 sPosDataType10[][2] = {
+            static const ALIGN_DECL(32) u8 SCREEN_VTX[][2] = {
                 {0x00, 0x01},
                 {0x01, 0x01},
                 {0x01, 0x00},
                 {0x00, 0x00},
             };
-            static const ALIGN_DECL(32) u8 sTexDataType10[][2] = {
+            static const ALIGN_DECL(32) u8 SCREEN_VTX_LU[][2] = {
                 {0x00, 0x00},
                 {0x01, 0x00},
                 {0x01, 0x01},
@@ -504,9 +510,9 @@ void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
             if (bVar2) {
                 GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
             }
-            GXSetArray(GX_VA_POS, bVar1 ? sTexDataType10 : sPosDataType10, 2);
+            GXSetArray(GX_VA_POS, bVar1 ? SCREEN_VTX_LU : SCREEN_VTX, 2);
             if (bVar2) {
-                GXSetArray(GX_VA_TEX0, sTexDataType10, 2);
+                GXSetArray(GX_VA_TEX0, SCREEN_VTX_LU, 2);
             }
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_U8, 0);
             if (bVar2) {
@@ -683,38 +689,36 @@ void DrawGX::DrawDL(enum DL dl, const nw4r::math::MTX34 &mtx, GXColor clr) {
     GXCallDisplayList(s_DL[dl].mpList, s_DL[dl].mLen);
 }
 
-const DrawGX::ZModeConfig DrawGX::s_ZMode[ZMODE_MAX] = {
-    {false, GX_ALWAYS, false},
-    { true, GX_LEQUAL,  true},
-    { true, GX_LEQUAL, false},
-    { true, GX_ALWAYS,  true},
-};
-
 void DrawGX::SetZMode(enum ZMode mode) {
-    GXSetZMode(s_ZMode[mode].mTest, s_ZMode[mode].mCompare, s_ZMode[mode].mUpdate);
+    static const DrawGX::ZModeConfig Z_ARG[ZMODE_MAX] = {
+        {false, GX_ALWAYS, false},
+        { true, GX_LEQUAL,  true},
+        { true, GX_LEQUAL, false},
+        { true, GX_ALWAYS,  true},
+    };
+    GXSetZMode(Z_ARG[mode].mTest, Z_ARG[mode].mCompare, Z_ARG[mode].mUpdate);
 }
 
-const DrawGX::BlendModeConfig DrawGX::s_Blend[BLEND_MAX] = {
-    {   GX_BM_BLEND,    GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR},
-    {   GX_BM_BLEND, GX_BL_INVSRCALPHA,    GX_BL_SRCALPHA, GX_LO_CLEAR},
-    {   GX_BM_BLEND,         GX_BL_ONE,         GX_BL_ONE, GX_LO_CLEAR},
-    {   GX_BM_BLEND,    GX_BL_SRCALPHA,         GX_BL_ONE, GX_LO_CLEAR},
-    {   GX_BM_BLEND,      GX_BL_SRCCLR,         GX_BL_ONE, GX_LO_CLEAR},
-    {   GX_BM_BLEND,   GX_BL_INVSRCCLR,         GX_BL_ONE, GX_LO_CLEAR},
-    {GX_BM_SUBTRACT,         GX_BL_ONE,         GX_BL_ONE, GX_LO_CLEAR},
-    {   GX_BM_BLEND,        GX_BL_ZERO,      GX_BL_SRCCLR, GX_LO_CLEAR},
-    {   GX_BM_BLEND,        GX_BL_ZERO,   GX_BL_INVSRCCLR, GX_LO_CLEAR},
-    {   GX_BM_BLEND,         GX_BL_ONE,        GX_BL_ZERO, GX_LO_CLEAR},
-    {   GX_BM_BLEND,    GX_BL_DSTALPHA, GX_BL_INVDSTALPHA, GX_LO_CLEAR},
-    {   GX_BM_BLEND, GX_BL_INVDSTALPHA,    GX_BL_DSTALPHA, GX_LO_CLEAR},
-    {   GX_BM_BLEND,    GX_BL_DSTALPHA,         GX_BL_ONE, GX_LO_CLEAR},
-    {   GX_BM_BLEND, GX_BL_INVDSTALPHA,         GX_BL_ONE, GX_LO_CLEAR},
-    {    GX_BM_NONE,         GX_BL_ONE,         GX_BL_ONE, GX_LO_CLEAR},
-};
-
 void DrawGX::SetBlendMode(enum Blend mode) {
+    static const DrawGX::BlendModeConfig BLEND[BLEND_MAX] = {
+        {   GX_BM_BLEND,    GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR},
+        {   GX_BM_BLEND, GX_BL_INVSRCALPHA,    GX_BL_SRCALPHA, GX_LO_CLEAR},
+        {   GX_BM_BLEND,         GX_BL_ONE,         GX_BL_ONE, GX_LO_CLEAR},
+        {   GX_BM_BLEND,    GX_BL_SRCALPHA,         GX_BL_ONE, GX_LO_CLEAR},
+        {   GX_BM_BLEND,      GX_BL_SRCCLR,         GX_BL_ONE, GX_LO_CLEAR},
+        {   GX_BM_BLEND,   GX_BL_INVSRCCLR,         GX_BL_ONE, GX_LO_CLEAR},
+        {GX_BM_SUBTRACT,         GX_BL_ONE,         GX_BL_ONE, GX_LO_CLEAR},
+        {   GX_BM_BLEND,        GX_BL_ZERO,      GX_BL_SRCCLR, GX_LO_CLEAR},
+        {   GX_BM_BLEND,        GX_BL_ZERO,   GX_BL_INVSRCCLR, GX_LO_CLEAR},
+        {   GX_BM_BLEND,         GX_BL_ONE,        GX_BL_ZERO, GX_LO_CLEAR},
+        {   GX_BM_BLEND,    GX_BL_DSTALPHA, GX_BL_INVDSTALPHA, GX_LO_CLEAR},
+        {   GX_BM_BLEND, GX_BL_INVDSTALPHA,    GX_BL_DSTALPHA, GX_LO_CLEAR},
+        {   GX_BM_BLEND,    GX_BL_DSTALPHA,         GX_BL_ONE, GX_LO_CLEAR},
+        {   GX_BM_BLEND, GX_BL_INVDSTALPHA,         GX_BL_ONE, GX_LO_CLEAR},
+        {    GX_BM_NONE,         GX_BL_ONE,         GX_BL_ONE, GX_LO_CLEAR},
+    };
     GXSetBlendMode(
-        s_Blend[mode].mBlendMode, s_Blend[mode].mBlendFactorSrc, s_Blend[mode].mBlendFactorDst, s_Blend[mode].mLogicOp
+        BLEND[mode].mBlendMode, BLEND[mode].mBlendFactorSrc, BLEND[mode].mBlendFactorDst, BLEND[mode].mLogicOp
     );
 }
 

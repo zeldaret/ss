@@ -14,7 +14,7 @@ namespace EGG {
 
 namespace {
 
-void calcColorGradient(GXColor &outColor, const GXColor &c1, const GXColor &c2, f32 amount) {
+void blendColor(GXColor &outColor, const GXColor &c1, const GXColor &c2, f32 amount) {
     if (amount <= 0.0f) {
         outColor = c1;
     } else if (amount >= 1.0f) {
@@ -62,7 +62,7 @@ void makeGradient(int op, GXColor *outColor, u16 size, u16 start, u16 end, const
                 ratio = -ratio * ratio * ratio * ratio + 1.0f;
                 break;
         }
-        calcColorGradient(outColor[i], c1, c2, ratio);
+        blendColor(outColor[i], c1, c2, ratio);
     }
 }
 

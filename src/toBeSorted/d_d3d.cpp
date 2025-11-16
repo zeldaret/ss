@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/d_gfx.h"
 #include "d/d_light_env.h"
 #include "d/d_sc_game.h"
 #include "d/t/d_t_siren.h"
@@ -25,7 +26,7 @@
 namespace d3d {
 
 static EGG::Screen sSomeScreen;
-static SomeList sSomeList;
+static SomeList l_list;
 
 AnmMdlWrapper::AnmMdlWrapper() : mpSoundSource(nullptr), mpSoundData(nullptr) {}
 
@@ -210,22 +211,19 @@ bool AnmMdlWrapper2::setAnm(const char *anmFile, m3d::playMode_e mode, f32 frame
     return false;
 }
 
-extern "C" f32 lbl_80575150;
-extern "C" f32 lbl_8057514C;
-extern "C" f32 lbl_80576A0C;
-
 void insertNode(SomeListNode *node, f32 a, f32 b) {
-    node->field_0x04 = ((a * lbl_80575150) - 0.5f) + lbl_8057514C;
-    node->field_0x06 = (lbl_80575150 - 0.5f) - b;
-    sSomeList.append(node);
+    node->field_0x04 =
+        ((a * dGfx_c::getCurrentScreenTo4x3WidthScaleF()) - 0.5f) + dGfx_c::getCurrentScreenWidthLimitF();
+    node->field_0x06 = (dGfx_c::getCurrentScreenHeightLimitF() - 0.5f) - b;
+    l_list.append(node);
 }
 
 void clearList() {
     // TODO
-    for (SomeList::Iterator it = sSomeList.GetBeginIter(); it != sSomeList.GetEndIter(); ++it) {
+    for (SomeList::Iterator it = l_list.GetBeginIter(); it != l_list.GetEndIter(); ++it) {
         SomeListNode *nd = &*it;
-        SomeList::Iterator itCopy = sSomeList.GetPosition(nd);
-        sSomeList.remove(nd);
+        SomeList::Iterator itCopy = l_list.GetPosition(nd);
+        l_list.remove(nd);
         it = itCopy;
     }
 }

@@ -362,7 +362,7 @@ private:
 
     static CoreControllerFactory sCoreControllerFactory;
     static CoreControllerConnectCallback sConnectCallback;
-    static bool sUseBuiltinWpadAllocator;
+    static bool sWPADRegisterAllocatorOFF;
     static s32 sWPADWorkSize;
 };
 

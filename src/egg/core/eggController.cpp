@@ -20,7 +20,7 @@ CoreControllerMgr::T__Disposer *CoreControllerMgr::T__Disposer::sStaticDisposer;
 CoreControllerFactory CoreControllerMgr::sCoreControllerFactory;
 CoreControllerConnectCallback CoreControllerMgr::sConnectCallback;
 // This controls whether EggController registers an allocator within the WPAD driver
-bool CoreControllerMgr::sUseBuiltinWpadAllocator;
+bool CoreControllerMgr::sWPADRegisterAllocatorOFF;
 s32 CoreControllerMgr::sWPADWorkSize = 0x32000;
 
 void CoreStatus::init() {
@@ -356,7 +356,7 @@ void CoreControllerMgr::connectCallback(s32 a1, s32 a2) {
 /* 0x80499D10 */
 CoreControllerMgr::CoreControllerMgr() {
     const int idxes[] = {0, 1, 2, 3};
-    if (sUseBuiltinWpadAllocator == false) {
+    if (sWPADRegisterAllocatorOFF == false) {
         Heap *heap = ExpHeap::create(sWPADWorkSize, BaseSystem::mConfigData->mRootHeapMem2, 0);
         heap->mName = "EGG::CoreControllerMgr";
         sAllocator = new Allocator(heap, 0x20);
