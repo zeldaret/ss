@@ -120,7 +120,7 @@ public:
     /* vt 0x64 */ virtual bool restorePosRotFromCopy();
     /* vt 0x68 */ virtual void registerInEvent();
     /* vt 0x6C */ virtual void unkVirtFunc_0x6C();
-    /* vt 0x70 */ virtual void doInteraction(s32);
+    /* vt 0x70 */ virtual void doInteraction(s32 /* InteractionType */);
 
 public:
     dAcBase_c();

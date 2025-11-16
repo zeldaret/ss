@@ -50,7 +50,7 @@ public:
     static bool eventRelatedStateFlags_shift0x11_1();
 
     // Something like isActorInEvent maybe?
-    static bool FUN_800a0570(dAcBase_c *actor);
+    static bool FUN_800a0570(const dAcBase_c *actor);
     static bool FUN_800a0ba0();
 
 private:

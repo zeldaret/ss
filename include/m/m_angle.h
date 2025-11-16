@@ -138,6 +138,10 @@ struct mAng {
 
     s16 mVal;
 
+    static const mAng Zero() {
+        return 0;
+    }
+
 private:
     static const f32 sHalfCircleDeg;
     static const f32 sAngToDeg;

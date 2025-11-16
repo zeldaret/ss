@@ -197,7 +197,7 @@ void dAcSalbageObj_c::initSalbageObj() {
 }
 
 void dAcSalbageObj_c::doInteraction(s32 arg) {
-    if (arg == 4 || arg == 5 || arg == 12) {
+    if (arg == TALK || arg == EXAMINE_TALK || arg == READ) {
         if (mStateMgr.isState(StateID_Wait) && dSalvageMgr_c::sInstance->hasObjAndSlb()) {
             dAcNpcTalkKensei_c::GetInstance()->triggerSalvageQuestion(this);
         }

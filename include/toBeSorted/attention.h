@@ -32,27 +32,27 @@ public:
 };
 
 enum InteractionType {
-    UNK_0,
-    PICK_UP,
-    OPEN,
-    UNK_3,
-    TALK,
-    EXAMINE_TALK,
-    EXAMINE_6,
-    UNK_7,
-    GET_IN,
-    READY_SWORD,
-    UNK_10,
-    UNK_11,
-    READ,
-    GRAB,
-    CATCH,
-    UNK_15,
-    UNK_16,
-    DIG,
-    UNK_18,
-    SIT,
-    UNK_20,
+    /*  0 */ UNK_0,
+    /*  1 */ PICK_UP,
+    /*  2 */ OPEN,
+    /*  3 */ UNK_3,
+    /*  4 */ TALK,
+    /*  5 */ EXAMINE_TALK,
+    /*  6 */ EXAMINE_6,
+    /*  7 */ UNK_7,
+    /*  8 */ GET_IN,
+    /*  9 */ READY_SWORD,
+    /* 10 */ UNK_10,
+    /* 11 */ UNK_11,
+    /* 12 */ READ,
+    /* 13 */ GRAB,
+    /* 14 */ CATCH,
+    /* 15 */ UNK_15,
+    /* 16 */ UNK_16,
+    /* 17 */ DIG,
+    /* 18 */ UNK_18,
+    /* 19 */ SIT,
+    /* 20 */ UNK_20,
 
     UNK_0x58 = 0x58,
 };
@@ -171,7 +171,7 @@ public:
 
 private:
     /* 0xBDC */ u8 field_0xBDC;
-    
+
 public:
     static AttentionManager *sInstance;
 

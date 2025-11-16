@@ -152,7 +152,7 @@ int dAcOSeatSword_c::actorExecuteInEvent() {
 }
 
 void dAcOSeatSword_c::doInteraction(s32 param0) {
-    if (param0 == 5) {
+    if (param0 == EXAMINE_TALK) {
         field_0x7EA = true;
         Event evt((char *)sEventName, 0x190, 0x100001, nullptr, nullptr);
         mEvent.scheduleEvent(evt, 0);

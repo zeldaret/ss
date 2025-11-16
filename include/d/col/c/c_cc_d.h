@@ -830,6 +830,12 @@ public:
     void SetAtFlag(u32 flag) {
         mAt.SetSPrm(flag);
     }
+    void SetAtGrp(u32 grp) {
+        mAt.SetAtFlag(GetAtGrp() | grp);
+    }
+    void OffAtGrp(u32 grp) {
+        mAt.SetAtFlag(GetAtGrp() & ~grp);
+    }
 
     void SetTgFlag_0xA(u16 flag) {
         mTg.SetFlag_0xA(flag);
@@ -906,6 +912,9 @@ public:
 
     void OnAtSet() {
         mAt.OnSPrm(1);
+    }
+    void OffAtSet() {
+        mAt.OffSPrm(1);
     }
     u32 ChkAtNoMass() const {
         return mAt.MskSPrm(0x400);
@@ -1000,7 +1009,6 @@ public:
     }
 
     // Co
-
     void SetCoGrp(u32 grp) {
         mCo.SetGrp(grp << 4);
     }

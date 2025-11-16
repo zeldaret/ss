@@ -39,8 +39,8 @@ public:
     ~fManager_c() {}
     int getSearchTableNum();
     static fBase_c *searchBaseByID(fBaseID_e id);
-    static fBase_c *searchBaseByProfName(ProfileName profID, const fBase_c *parent);
-    static fBase_c *searchBaseByGroupType(u8 groupType, const fBase_c *parent);
+    static fBase_c *searchBaseByProfName(ProfileName profID, const fBase_c *parent = nullptr);
+    static fBase_c *searchBaseByGroupType(u8 groupType, const fBase_c *parent = nullptr);
     static void mainLoop();
 
 private:
