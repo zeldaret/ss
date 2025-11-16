@@ -913,9 +913,6 @@ public:
     void OnAtSet() {
         mAt.OnSPrm(1);
     }
-    void OffAtSet() {
-        mAt.OffSPrm(1);
-    }
     u32 ChkAtNoMass() const {
         return mAt.MskSPrm(0x400);
     }

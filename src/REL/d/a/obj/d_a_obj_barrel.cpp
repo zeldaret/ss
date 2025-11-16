@@ -3,6 +3,7 @@
 #include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/a/d_a_item.h"
 #include "d/a/d_a_player.h"
 #include "d/a/npc/d_a_npc_ce_friend.h"
 #include "d/a/npc/d_a_npc_ce_lady.h"
@@ -10,11 +11,14 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/c/c_cc_d.h"
+#include "d/col/c/c_m3d_g_tri.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_linkage.h"
+#include "d/d_rumble.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
+#include "egg/math/eggMath.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "m/m_angle.h"
@@ -23,10 +27,12 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/math/math_arithmetic.h"
 #include "rvl/MTX/mtxvec.h"
+#include "rvl/MTX/vec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
+#include "toBeSorted/special_item_drop_mgr.h"
 
 f32 sFloats1(1.f);
 
@@ -129,7 +135,7 @@ int dAcOBarrel_c::actorCreate() {
     mMaxSpeed = -40.f;
 
     field_0xDD8.y = 0.f;
-    field_0xDEC = 0;
+    field_0xDEC = mAng::Zero();
     quat_0xD50.set(1.f, 0.f, 0.f, 0.f);
     mScale.set(1.f, 1.f, 1.f);
     quat_0xD70.set(1.f, 0.f, 0.f, 0.f);
@@ -143,8 +149,8 @@ int dAcOBarrel_c::actorCreate() {
         mCyl.SetAtGrp(0x10);
     }
 
-    /* field_0xCC8 = this */
-    /* field_0xCFC = this */
+    mEmitter0.init(this);
+    mEmitter1.init(this);
 
     if (mRotation.x != 0 || mRotation.z != 0) {
         field_0xE02 = true;
@@ -393,7 +399,7 @@ void dAcOBarrel_c::executeState_Wait() {
             holdSoundWithFloatParam(SE_Barrel_ROLL_LV, mSpeed);
             mCyl.OnAtSet();
         } else {
-            mCyl.OffAtSet();
+            mCyl.ClrAtSet();
         }
     }
 
@@ -457,7 +463,7 @@ void dAcOBarrel_c::initializeState_GrabUp() {
     }
 
     mCyl.SetCo_0x400();
-    mCyl.OffAtSet();
+    mCyl.ClrAtSet();
 
     if (field_0xE04) {
         field_0xE15 = 10;
@@ -495,7 +501,7 @@ void dAcOBarrel_c::executeState_GrabUp() {
 }
 void dAcOBarrel_c::finalizeState_GrabUp() {
     mCyl.ClrCo_0x400();
-    mCyl.OffAtSet();
+    mCyl.ClrAtSet();
     field_0xE02 = true;
 }
 
@@ -530,21 +536,276 @@ void dAcOBarrel_c::finalizeState_GrabPut() {
     mCyl.OnAtSet();
 }
 
-void dAcOBarrel_c::initializeState_Slope() {}
-void dAcOBarrel_c::executeState_Slope() {}
-void dAcOBarrel_c::finalizeState_Slope() {}
-void dAcOBarrel_c::initializeState_Water() {}
-void dAcOBarrel_c::executeState_Water() {}
-void dAcOBarrel_c::finalizeState_Water() {}
-void dAcOBarrel_c::initializeState_Water2() {}
-void dAcOBarrel_c::executeState_Water2() {}
-void dAcOBarrel_c::finalizeState_Water2() {}
-void dAcOBarrel_c::initializeState_Explode() {}
-void dAcOBarrel_c::executeState_Explode() {}
+void dAcOBarrel_c::initializeState_Slope() {
+    mVec3_c vz_out;
+    cM3dGTri tri;
+    dBgS::GetInstance()->GetTriPla(mObjAcch.GetGnd(), &tri);
+
+    if (checkSlower(EGG::Math<f32>::epsilon())) {
+        mAngle.y = tri.GetAngleY();
+        mSpeed = 5.f;
+    }
+    field_0xDEE = tri.GetAngleY();
+    field_0xDEE -= mAngle.y;
+
+    mAng ang(mAng::abs(mAngle.y - field_0xDEE));
+    field_0xDF0 = nw4r::math::FSqrt(ang.degree2() / 180.f) * 910.f;
+
+    MTXMultVecSR(mWorldMtx, -mVec3_c::Ez, vz_out);
+    field_0xDEA = vz_out.atan2sX_Z();
+
+    field_0xE09 = false;
+
+    if (dBgS_ObjGndChk::CheckPos(mPosition + mVec3_c::Ey * 100.f)) {
+        const dAcObjBase_c *pObj = dBgS::GetInstance()->GetActorPointer(dBgS_ObjGndChk::GetInstance());
+        if (dBgS::GetInstance()->ChkMoveBG(dBgS_ObjGndChk::GetInstance(), true)) {
+            if (pObj && pObj->mProfileName == fProfile::OBJ_VSD) {
+                field_0xE09 = true;
+                quat_0xD70.set(1.f, 0.f, 0.f, 0.f);
+            }
+        }
+    }
+}
+void dAcOBarrel_c::executeState_Slope() {
+    if (mObjAcch.ChkGroundLanding() && !field_0xE0E) {
+        fn_293_37B0();
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mVelocity, 0, 1.f, field_0x1B0);
+        startSound(SE_Barrel_ROLL_GROUND);
+    } else if (mObjAcch.ChkGndHit()) {
+        field_0xDD8.y = 0.f;
+        mVelocity.y = 0.f;
+        fn_293_30D0();
+
+        if (field_0xE02) {
+            fn_293_31B0();
+        } else {
+            fn_293_58C0();
+            mVec3_c v = field_0xDBC;
+            v.rotY(-mRotation.y);
+
+            if (field_0xE09) {
+                v = mVec3_c::Ey;
+            }
+
+            quat_0xD70.Set(mVec3_c::Ey, v);
+        }
+
+        fn_293_3560();
+
+        if (checkSlower(EGG::Math<f32>::epsilon())) {
+            field_0xE00 = false;
+        } else if (field_0xE02) {
+            field_0xE00 = fn_293_4F80();
+        }
+
+        if (!field_0xE08 && !isType_0() && mYOffset < 0.f && fn_293_4BC0()) {
+            mSpeed = 0.f;
+            field_0xE00 = false;
+            fn_293_5910();
+        }
+
+        if (mSpeed > 0.f && field_0xE02) {
+            holdSoundWithFloatParam(SE_Barrel_ROLL_LV, mSpeed);
+            mCyl.OnAtSet();
+        } else {
+            mCyl.ClrAtSet();
+        }
+
+        if (!field_0xE08 && !isType_0() && checkYOffsetField_0x100()) {
+            killNoItemDrop();
+            return;
+        }
+
+        if (!fn_293_4A90(mAng::deg2short(1))) {
+            mStateMgr.changeState(StateID_Wait);
+            return;
+        }
+    }
+
+    if (fn_293_4C60()) {
+        mStateMgr.changeState(StateID_Water);
+    } else if (getLinkage().checkConnection(dLinkage_c::CONNECTION_1)) {
+        mStateMgr.changeState(StateID_GrabUp);
+    }
+}
+void dAcOBarrel_c::finalizeState_Slope() {
+    field_0xE09 = false;
+}
+
+void dAcOBarrel_c::initializeState_Water() {
+    field_0xDE4.x = cM::rndInt(0x100) + 0x900;
+    field_0xDF2 = cM::rndInt(0x100) + 0x1000;
+
+    mAcceleration *= 0.25f;
+    mVelocity.y *= 0.25f;
+
+    mStts.SetRank(9);
+
+    field_0xE16 = 120;
+
+    startSound(SE_Barrel_ROLL_FLOAT);
+    startSound(SE_O_FALL_WATER_M);
+}
+void dAcOBarrel_c::executeState_Water() {
+    if (mType == dAcOBarrel_c::Type2 && 0 == sLib::calcTimer(&field_0xE16)) {
+        mVelocity.y = nw4r::ut::Max(mVelocity.y + mAcceleration * 0.2f, mMaxSpeed * 0.2f);
+
+        if (mObjAcch.ChkGndHit()) {
+            fn_293_4200();
+        }
+    } else {
+        fn_293_5850(&sFloats1, true);
+
+        if (mScale.y > 0.f) {
+            mWaterEffect.execute(mObjAcch.GetWtrGroundH(), mObjAcch.GetGroundH());
+        }
+
+        if (mType != dAcOBarrel_c::Type2 && nw4r::math::FAbs(field_0xDD8.z + mAcceleration) < 0.1f &&
+            nw4r::math::FAbs(mVelocity.y + mAcceleration) < 0.1f) {
+            mStateMgr.changeState(StateID_Water2);
+        } else if (!fn_293_4C60()) {
+            mStateMgr.changeState(StateID_Wait);
+        }
+    }
+}
+void dAcOBarrel_c::finalizeState_Water() {
+    field_0xDF2 = mAng::Zero();
+}
+
+void dAcOBarrel_c::initializeState_Water2() {
+    mVelocity.y = cM::rndFX(0.1f) + 0.2f;
+    field_0xDF2 = cM::rndInt(0x50) + 0x300;
+    field_0xDE4.x = cM::rndInt(0x100) + 0x400;
+}
+void dAcOBarrel_c::executeState_Water2() {
+    static f32 sFloat = 1.f;
+    fn_293_5850(&sFloat, false);
+    if (mScale.y > 0.f) {
+        mWaterEffect.execute(mObjAcch.GetWtrGroundH(), mObjAcch.GetGroundH());
+    }
+    if (!fn_293_4C60()) {
+        mStateMgr.changeState(StateID_Wait);
+    }
+}
+void dAcOBarrel_c::finalizeState_Water2() {
+    field_0xDF2 = mAng::Zero();
+}
+
+void dAcOBarrel_c::initializeState_Explode() {
+    setActorProperty(AC_PROP_0x4);
+    mSpeed = 0.f;
+    mVelocity = mVec3_c::Zero;
+    mAcceleration = 0.f;
+
+    mSph.ClrTgSet();
+    mSph.ClrCoSet();
+    mSph.OnAtSet();
+
+    field_0xE13 = 5;
+
+    f32 dist = mPosition.squareDistance(dAcPy_c::GetLink()->mPosition);
+    if (dist < 400.f * 400.f) {
+        dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0 | dRumble_c::FLAG_ACTIVE);
+    } else if (dist < 800.f * 800.f) {
+        dRumble_c::start(dRumble_c::sRumblePreset3, dRumble_c::FLAG_SLOT0 | dRumble_c::FLAG_ACTIVE);
+    }
+}
+void dAcOBarrel_c::executeState_Explode() {
+    if (0 == sLib::calcTimer(&field_0xE13)) {
+        if (field_0xE07) {
+            itemDroppingAndGivingRelated(nullptr, 0);
+        }
+        deleteRequest();
+    }
+}
 void dAcOBarrel_c::finalizeState_Explode() {}
-void dAcOBarrel_c::initializeState_KrakenBorn() {}
-void dAcOBarrel_c::executeState_KrakenBorn() {}
+
+void dAcOBarrel_c::initializeState_KrakenBorn() {
+    mSpeed = 30.f;
+    mCyl.OffAtGrp(0x2);
+
+    field_0xE00 = true;
+    field_0xE02 = true;
+}
+void dAcOBarrel_c::executeState_KrakenBorn() {
+    if (mObjAcch.ChkGroundLanding()) {
+        fn_293_37B0();
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mVelocity, 0, 1.f, field_0x1B0);
+        startSound(SE_Barrel_ROLL_GROUND);
+    } else if (mObjAcch.ChkGndHit()) {
+        field_0xDD8.y = 0.f;
+        mVelocity.y = 0.f;
+        if (mSpeed > 0.f) {
+            holdSoundWithFloatParam(SE_Barrel_ROLL_LV, mSpeed);
+        }
+    }
+
+    if (fn_293_4C60()) {
+        deleteRequest();
+    }
+}
 void dAcOBarrel_c::finalizeState_KrakenBorn() {}
-void dAcOBarrel_c::initializeState_Rebirth() {}
-void dAcOBarrel_c::executeState_Rebirth() {}
-void dAcOBarrel_c::finalizeState_Rebirth() {}
+
+void dAcOBarrel_c::initializeState_Rebirth() {
+    SpecialItemDropMgr::GetInstance()->giveSpecialDropItem(
+        getParams2UpperByte(), mRoomID, &mPosition, 0, mRotation.y, -1
+    );
+    field_0xDC8 = mPosition;
+    mpPosition = &field_0xDC8;
+    mRotation = mRotationCopy;
+    quat_0xD90.set(1.f, 0.f, 0.f, 0.f);
+    quat_0xD70.set(1.f, 0.f, 0.f, 0.f);
+    quat_0xD80.set(1.f, 0.f, 0.f, 0.f);
+    quat_0xDA0.set(1.f, 0.f, 0.f, 0.f);
+
+    mSpeed = 0.f;
+    mVelocity.y = 0.f;
+    field_0xDD8.y = 0.f;
+
+    mCyl.ClrCoSet();
+    mCyl.ClrTgSet();
+    getLinkage().fn_80050EA0(this);
+
+    mStts.SetRank(0);
+    setObjectProperty(OBJ_PROP_0x200);
+
+    switch (getParams2UpperByte()) {
+        case SPECIAL_ITEM_10BOMBS: mDropItem = 2; break;
+        case SPECIAL_ITEM_ARROWS:  mDropItem = 0; break;
+        case SPECIAL_ITEM_SEEDS:   mDropItem = 1; break;
+    }
+
+    field_0xDFE = 150;
+    unsetActorProperty(AC_PROP_0x1);
+}
+void dAcOBarrel_c::executeState_Rebirth() {
+    field_0xDD8.y = 0.f;
+
+    // Why??
+    mPosition.set(mPositionCopy.x, mPositionCopy.y, mPositionCopy.z);
+    mOldPosition.set(mPositionCopy.x, mPositionCopy.y, mPositionCopy.z);
+
+    u8 count = 0xFF;
+    switch (mDropItem) {
+        case 2: count = dAcItem_c::getTotalBombCount(); break;
+        case 0: count = dAcItem_c::getTotalArrowCount(); break;
+        case 1: count = dAcItem_c::getTotalSeedCount(); break;
+    }
+
+    if (checkObjectProperty(OBJ_PROP_0x2) && count <= 3) {
+        if (0 == sLib::calcTimer(&field_0xDFE)) {
+            mStateMgr.changeState(StateID_Wait);
+        }
+    } else {
+        field_0xDFE = 150;
+    }
+}
+void dAcOBarrel_c::finalizeState_Rebirth() {
+    mCyl.OnCoSet();
+    mCyl.OnTgSet();
+    field_0xE02 = false;
+    mpPosition = &mPosition;
+    unsetObjectProperty(OBJ_PROP_0x200);
+    setActorProperty(AC_PROP_0x1);
+    mStts.SetRank(9);
+}

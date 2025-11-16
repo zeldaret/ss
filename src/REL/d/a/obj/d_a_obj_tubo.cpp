@@ -407,10 +407,10 @@ void dAcOtubo_c::initializeState_Rebirth() {
 
     int item_drop_table = getParams2UpperByte();
     switch (item_drop_table) {
-        default:              break;
-        case SPECIAL_ITEM_11: field_0x9FC = 2; break;
-        case SPECIAL_ITEM_12: field_0x9FC = 0; break;
-        case SPECIAL_ITEM_13: field_0x9FC = 1; break;
+        default:                   break;
+        case SPECIAL_ITEM_10BOMBS: field_0x9FC = 2; break;
+        case SPECIAL_ITEM_ARROWS:  field_0x9FC = 0; break;
+        case SPECIAL_ITEM_SEEDS:   field_0x9FC = 1; break;
     }
     mTimer_0x9E8 = 150;
     unsetActorProperty(AC_PROP_0x1);

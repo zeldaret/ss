@@ -10,6 +10,7 @@
 #include "d/d_shadow.h"
 #include "d/flag/sceneflag_manager.h"
 #include "m/m3d/m_smdl.h"
+#include "m/m_angle.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
@@ -46,6 +47,9 @@ public:
     /** fn_293_30D0 */
     void fn_293_30D0();
 
+    /** fn_293_31B0 */
+    void fn_293_31B0();
+
     /** fn_293_3560 */
     void fn_293_3560();
 
@@ -79,6 +83,9 @@ public:
     /** fn_293_4ED0 */
     bool fn_293_4ED0();
 
+    /** fn_293_4F80 */
+    bool fn_293_4F80();
+
     /** fn_293_50B0 */
     bool fn_293_50B0();
 
@@ -87,6 +94,9 @@ public:
 
     /** fn_293_5360 */
     void fn_293_5360();
+
+    /** fn_293_5850 */
+    void fn_293_5850(f32 *, bool);
 
     /** fn_293_58C0 */
     void fn_293_58C0();
@@ -132,7 +142,8 @@ private:
     /* 0xC7C */ TimeAreaStruct mTimeArea;
     /* 0xC88 */ dAcRef_c<dAcNpcCeLady_c> mCeLady;
     /* 0xC94 */ dAcRef_c<dAcNpcCeFriend_c> mCeFriend;
-    /* 0xCA0 */ u8 _CA0[0xD08 - 0xCA0];
+    /* 0xCA0 */ EffectsStruct mEmitter0;
+    /* 0xCD4 */ EffectsStruct mEmitter1;
     /* 0xD08 */ dWaterEffect_c mWaterEffect;
     /* 0xD70 */ mQuat_c quat_0xD50;
     /* 0xD70 */ mQuat_c quat_0xD60;
@@ -142,13 +153,17 @@ private:
     /* 0xDA0 */ mQuat_c quat_0xDA0;
     /* 0xDB0 */ u8 _DB0[0xDBC - 0xDB0];
     /* 0xDBC */ mVec3_c field_0xDBC;
-    /* 0xDC8 */ u8 _DC8[0xDD4 - 0xDC8];
+    /* 0xDC8 */ mVec3_c field_0xDC8;
     /* 0xDD4 */ f32 field_0xDD4;
     /* 0xDD8 */ mVec3_c field_0xDD8;
     /* 0xDE4 */ mAng3_c field_0xDE4;
-    /* 0xDEE */ u8 _DEA[0xDEC - 0xDEA];
-    /* 0xDEC */ u16 field_0xDEC;
-    /* 0xDEE */ u8 _DEE[0xE00 - 0xDEE];
+    /* 0xDEA */ mAng field_0xDEA;
+    /* 0xDEC */ mAng field_0xDEC;
+    /* 0xDEE */ mAng field_0xDEE;
+    /* 0xDF0 */ mAng field_0xDF0;
+    /* 0xDF2 */ mAng field_0xDF2;
+    /* 0xDF4 */ u8 _DF4[0xDFE - 0xDF4];
+    /* 0xDF4 */ u16 field_0xDFE;
     /* 0xE00 */ bool field_0xE00; //< Can Damage ?
     /* 0xE01 */ bool field_0xE01;
     /* 0xE02 */ bool field_0xE02;
@@ -158,7 +173,7 @@ private:
     /* 0xE06 */ bool field_0xE06;
     /* 0xE07 */ bool field_0xE07;
     /* 0xE08 */ bool field_0xE08;
-    /* 0xE09 */ bool field_0xE09;
+    /* 0xE09 */ bool field_0xE09; //< for OBJ_VSD Present
     /* 0xE0A */ bool field_0xE0A;
     /* 0xE0B */ bool field_0xE0B;
     /* 0xE0C */ bool field_0xE0C;
@@ -175,6 +190,7 @@ private:
     /* 0xE17 */ u8 field_0xE17;
     /* 0xE18 */ u8 field_0xE18;
     /* 0xE19 */ u8 mBrokenFlag;
+    /* 0xE1C */ s32 mDropItem;
 };
 
 #endif
