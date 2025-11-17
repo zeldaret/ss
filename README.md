@@ -8,7 +8,7 @@ The Legend of Zelda: Skyward Sword
 [DOL Progress]: https://decomp.dev/zeldaret/ss.svg?mode=shield&measure=code&category=dol&label=DOL
 [RELs Progress]: https://decomp.dev/zeldaret/ss.svg?mode=shield&measure=code&category=modules&label=RELs
 [Discord Badge]: https://img.shields.io/discord/688807550715560050?color=%237289DA&logo=discord&logoColor=%23FFFFFF
-[discord]: https://discord.zelda64.dev
+[discord]: https://discord.zelda.deco.mp
 
 This repository contains a work-in-progress decompilation of *The Legend of Zelda: Skyward Sword*
 for the Nintendo Wii system.
