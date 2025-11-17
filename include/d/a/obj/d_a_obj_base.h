@@ -113,12 +113,16 @@ public:
         return mYOffset;
     }
 
-    bool checkStopped() const {
-        return getVelocityMag() <= EGG::Math<f32>::epsilon();
+    bool isFullyStopped(f32 speed = EGG::Math<f32>::epsilon()) const {
+        return getVelocityMag() <= speed;
     }
 
-    bool checkSlower(f32 speed) const {
+    bool isSpeedStopped(f32 speed = EGG::Math<f32>::epsilon()) const {
         return std::fabsf(mSpeed) <= speed;
+    }
+
+    bool isVerticalSpeedStopped(f32 speed = EGG::Math<f32>::epsilon()) const {
+        return std::fabsf(mVelocity.y) <= speed;
     }
 
     bool checkYOffsetField_0x100() const {
@@ -205,7 +209,7 @@ public:
         u32 roomId
     );
     void fn_8002efa0();
-    bool fn_8002eff0(f32 *, s16 *, f32 *, f32 *, f32 *);
+    bool fn_8002eff0(const f32 &, const s16 &, cCcD_Obj *, const f32 &, const f32 &);
     void createChildAttached2(
         fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
         u32 roomId

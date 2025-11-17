@@ -443,7 +443,7 @@ void AttentionManager::addPickUpTarget(dAcObjBase_c &actor, f32 field_0x14) {
     addTarget(actor, pickUpTarget, 0, nullptr);
 }
 
-void AttentionManager::addSitTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14) {
+void AttentionManager::addSitTarget(dAcObjBase_c &actor, f32 field_0x14, AttentionManager::Flags_e flags) {
     static InteractionTargetDef sitTarget = {0, 2, 0, SIT, 2, 0.0f, 60.0f, 0.0f, -75.0f, 75.0f, 20.0f, 1.0f};
     sitTarget.interactFlags = flags;
     sitTarget.field_0x14 = field_0x14;

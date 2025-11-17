@@ -56,7 +56,7 @@ public:
         cM3d_CalcPla(v1, v2, v3, &mNormal, &mD);
     }
     f32 getCrossY_NonIsZero(const mVec3_c *param_1) {
-        return ((-mNormal.x * param_1->x - mNormal.z * param_1->z) - mD) / mNormal.y;
+        return -(mNormal.x * param_1->x + mNormal.z * param_1->z) / mNormal.y;
     }
 
     f32 GetXZDist() const {

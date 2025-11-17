@@ -626,7 +626,7 @@ void dAcOtubo_c::attemptDestroy() {
         return;
     }
 
-    if (mObjAcch.ChkWallHit(nullptr) && sLib::absDiff(mAcchCir.GetWallAngleY(), mAngle.y) > mAng::deg2short(70.f)) {
+    if (mObjAcch.ChkWallHit(nullptr) && mAng(mAcchCir.GetWallAngleY()).absDiff(mAngle.y) > mAng::deg2short(70.f)) {
         attemptDestroyOnWall();
         mAngle.y = mAcchCir.GetWallAngleY();
         mSpeed *= 0.5f;
@@ -672,7 +672,7 @@ void dAcOtubo_c::attemptDestroy() {
 }
 
 void dAcOtubo_c::attemptDestroyOnWall(const u32 &param0, const bool &param1) {
-    if (param1 && sLib::absDiff(mAcchCir.GetWallAngleY(), mAngle.y) > mAng::deg2short(70.f) && 15.f < mSpeed) {
+    if (param1 && mAng(mAcchCir.GetWallAngleY()).absDiff(mAngle.y) > mAng::deg2short(70.f) && 15.f < mSpeed) {
         destroy();
     }
 }
@@ -746,8 +746,7 @@ void dAcOtubo_c::adjustAngle() {
     mSpeed = nw4r::math::FSqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z);
     mSpeed = cM::minMaxLimit(mSpeed, -30.f, 30.f);
 
-    mAng a = mAng::fromVec(pla.GetN()); // Probably mean to be angle from Ey
-    if (sLib::absDiff(a, mAngle.y) < mAng::deg2short(90.f)) {
+    if (mAng::fromVec(pla.GetN()).absDiff(mAngle.y) < mAng::deg2short(90.f)) {
         sLib::addCalcAngle(mAngle.y.ref(), pla.GetAngleY(), 5, 0x71C, 0x100);
     } else {
         mAngle.y = mAng::fromVec(mVelocity);
@@ -761,8 +760,7 @@ void dAcOtubo_c::adjustSpeed() {
     mAng gndAngle = mAng::fromRad(mVec3_c::Ey.angle(pla.GetN()));
     step *= gndAngle.cos();
 
-    if (gndAngle < mAng::deg2short(5) ||
-        sLib::absDiff(cM::atan2s(pla.mNormal.x, pla.mNormal.z), mAngle.y) > mAng::deg2short(90)) {
+    if (gndAngle < mAng::deg2short(5) || mAng::fromVec(pla.GetN()).absDiff(mAngle.y) > mAng::deg2short(90)) {
         f32 stepSize = mYOffset;
         sLib::chase(&mSpeed, 0.f, step + stepSize * -0.05f);
     } else {
@@ -777,10 +775,10 @@ void dAcOtubo_c::adjustSpeed() {
 
 bool dAcOtubo_c::checkSlope() {
     cM3dGPla pla;
-    dBgS::GetInstance()->GetTriPla(mObjAcch.mGnd, &pla);
+    dBgS::GetInstance()->GetTriPla(mObjAcch.GetGnd(), &pla);
     mAng gndAngle = mAng::fromRad(mVec3_c::Ey.angle(pla.GetN()));
 
-    return sLib::absDiff(gndAngle, 0) > mAng::deg2short(5);
+    return gndAngle.absDiff(0) > mAng::deg2short(5);
 }
 
 bool dAcOtubo_c::fn_272_3660() {

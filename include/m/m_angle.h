@@ -6,6 +6,7 @@
 #include "m/m_vec.h"
 #include "math.h"
 #include "nw4r/math/math_triangular.h"
+#include "s/s_Math.h"
 
 struct mAng {
     mAng() {}
@@ -33,6 +34,9 @@ struct mAng {
     }
 
     void set(s16 val) {
+        mVal = val;
+    }
+    void setF(const f32 &val) {
         mVal = val;
     }
 
@@ -63,6 +67,10 @@ struct mAng {
     mAng &operator*=(const f32 &other) {
         mVal *= other;
         return *this;
+    }
+
+    s32 absDiff(const mAng &other) const {
+        return sLib::absDiff(mVal, other.mVal);
     }
 
     static s32 abs(const mAng b) {
@@ -98,7 +106,7 @@ struct mAng {
         return mVal * sAngToRad;
     }
 
-    static s16 fromRad(f32 rad) {
+    static mAng fromRad(f32 rad) {
         return rad * sRadToAng;
     }
 

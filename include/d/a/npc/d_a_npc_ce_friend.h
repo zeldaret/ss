@@ -12,6 +12,7 @@ public:
     virtual ~dAcNpcCeFriend_c() {}
 
     bool fn_11_17C0(dAcObjBase_c *);
+    bool fn_11_2A40();
 
 private:
     /* 0x??? */ STATE_MGR_DECLARE(dAcNpcCeFriend_c);

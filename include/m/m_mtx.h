@@ -147,9 +147,13 @@ public:
         MTXMultVecSR(*this, in, out);
     }
     mVec3_c multVecSR(const mVec3_c &v) const {
-        mVec3_c ret = v;
-        MTXMultVecSR(*this, ret, ret);
+        mVec3_c ret;
+        multVecSR(v, ret);
         return ret;
+    }
+
+    void multVecSR(mVec3_c &v) const {
+        multVecSR(v, v);
     }
 
     mMtx_c &operator+=(const mMtx_c &rhs) {

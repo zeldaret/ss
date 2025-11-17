@@ -65,23 +65,29 @@ public:
     /** fn_293_4200 */
     void fn_293_4200();
 
-    /** fn_293_45A0 */
+    /** Check to see if the Barrel should break */
     bool fn_293_45A0();
 
     /** fn_293_4A90 */
     bool fn_293_4A90(const mAng &);
 
-    /** fn_293_4BC0 */
+    /** Checks if On Lava or Sink Sand */
     bool fn_293_4BC0();
+
+    /** Checks if On Lava */
+    bool fn_293_4C20() const;
 
     /** fn_293_4C60 */
     bool fn_293_4C60();
 
-    /** fn_293_4D00 */
+    /** Check to see if its below some range */
+    bool fn_293_4CE0() const;
+
+    /** Check to see if its being moved. (like Conveyor) */
     bool fn_293_4D00();
 
-    /** fn_293_4ED0 */
-    bool fn_293_4ED0();
+    /** Check to see if it is being moved upwards? */
+    bool fn_293_4ED0() const;
 
     /** fn_293_4F80 */
     bool fn_293_4F80();
@@ -89,11 +95,17 @@ public:
     /** fn_293_50B0 */
     bool fn_293_50B0();
 
-    /** fn_293_5150 */
-    bool fn_293_5150();
+    /** Perform Timeslip */
+    void fn_293_5150();
 
     /** fn_293_5360 */
     void fn_293_5360();
+
+    /** fn_293_5440 */
+    void fn_293_5440();
+
+    /** fn_293_54D0 */
+    void fn_293_54D0();
 
     /** fn_293_5850 */
     void fn_293_5850(f32 *, bool);
@@ -151,7 +163,7 @@ private:
     /* 0xD80 */ mQuat_c quat_0xD80;
     /* 0xD90 */ mQuat_c quat_0xD90;
     /* 0xDA0 */ mQuat_c quat_0xDA0;
-    /* 0xDB0 */ u8 _DB0[0xDBC - 0xDB0];
+    /* 0xDB0 */ mVec3_c field_0xDB0; //< player direction vector
     /* 0xDBC */ mVec3_c field_0xDBC;
     /* 0xDC8 */ mVec3_c field_0xDC8;
     /* 0xDD4 */ f32 field_0xDD4;
@@ -162,8 +174,12 @@ private:
     /* 0xDEE */ mAng field_0xDEE;
     /* 0xDF0 */ mAng field_0xDF0;
     /* 0xDF2 */ mAng field_0xDF2;
-    /* 0xDF4 */ u8 _DF4[0xDFE - 0xDF4];
-    /* 0xDF4 */ u16 field_0xDFE;
+    /* 0xDF4 */ mAng field_0xDF4;
+    /* 0xDF6 */ mAng field_0xDF6;
+    /* 0xDF8 */ mAng field_0xDF8;
+    /* 0xDFA */ mAng field_0xDFA;
+    /* 0xDFC */ u16 field_0xDFC;
+    /* 0xDFE */ u16 field_0xDFE;
     /* 0xE00 */ bool field_0xE00; //< Can Damage ?
     /* 0xE01 */ bool field_0xE01;
     /* 0xE02 */ bool field_0xE02;
@@ -176,8 +192,8 @@ private:
     /* 0xE09 */ bool field_0xE09; //< for OBJ_VSD Present
     /* 0xE0A */ bool field_0xE0A;
     /* 0xE0B */ bool field_0xE0B;
-    /* 0xE0C */ bool field_0xE0C;
-    /* 0xE0D */ bool field_0xE0D;
+    /* 0xE0C */ bool field_0xE0C; //< Timeslip Active
+    /* 0xE0D */ bool field_0xE0D; //< Timeslip_rev Active
     /* 0xE0E */ bool field_0xE0E;
     /* 0xE0F */ u8 mType;
     /* 0xE10 */ u8 field_0xE10;

@@ -174,7 +174,12 @@ private:
 
 public:
     static AttentionManager *sInstance;
-
+    enum Flags_e {
+        FLAGS_0,
+        FLAGS_1,
+        FLAGS_2,
+        FLAGS_3,
+    };
     bool create();
     bool createHeap();
     bool execute();
@@ -183,7 +188,7 @@ public:
     void addTarget(dAcObjBase_c &actor, const InteractionTargetDef &def, u32, mVec3_c *);
 
     void addPickUpTarget(dAcObjBase_c &actor, f32 field_0x14);
-    void addSitTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14);
+    void addSitTarget(dAcObjBase_c &actor, f32 field_0x14, Flags_e flags);
 
     void addTalkTarget_unused(dAcObjBase_c &actor);
 

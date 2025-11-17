@@ -149,8 +149,12 @@ public:
         return mRotation;
     }
 
-    mVec3_c getPostionDifference(const dAcBase_c &other) {
+    mVec3_c getPostionDifference(const dAcBase_c &other) const {
         return mPosition - other.mPosition;
+    }
+
+    f32 getHeightDifference(const dAcBase_c &b) const {
+        return mPosition.y - b.mPosition.y;
     }
 
     f32 getSquareDistanceTo(const mVec3_c &point) const {

@@ -1,6 +1,7 @@
 #include "d/a/obj/d_a_obj_chair.h"
 
 #include "common.h"
+#include "d/a/d_a_base.h"
 #include "d/a/d_a_item.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
@@ -160,7 +161,7 @@ int dAcOChair_c::actorExecute() {
 
     if (!isBench()) {
         if (isChairTypeIdk0() && !checkObjectProperty(OBJ_PROP_0x8000)) {
-            if (sLib::absDiff(getRotation().y, getXZAngleToPlayer()) > 910) {
+            if (mRotation.y.absDiff(getXZAngleToPlayer()) > mAng::deg2short(5)) {
                 getRotation().y = getXZAngleToPlayer();
             }
         }
@@ -174,7 +175,7 @@ int dAcOChair_c::actorExecute() {
         mMdl.calc(false);
     } else {
         if (isChairTypeIdk0() && !checkObjectProperty(OBJ_PROP_0x8000)) {
-            if (sLib::absDiff(getRotation().y, getXZAngleToPlayer()) > 910) {
+            if (mRotation.y.absDiff(getXZAngleToPlayer()) > mAng::deg2short(5)) {
                 getRotation().y = getXZAngleToPlayer();
             }
         }
@@ -197,7 +198,7 @@ int dAcOChair_c::draw() {
 void dAcOChair_c::initializeState_Wait() {}
 
 void dAcOChair_c::executeState_Wait() {
-    const f32 height_diff = mPosition.y - dAcPy_c::GetLink()->mPosition.y;
+    const f32 height_diff = getHeightDifference(dAcPy_c::GetLinkR());
     if (!isBench() || (50.f < height_diff && height_diff < 60.f)) {
         if (field_0xB1A && field_0xB1B) {
             if (dAcPy_c::GetLink()->checkActionFlagsCont(0x1000)) {
@@ -207,12 +208,13 @@ void dAcOChair_c::executeState_Wait() {
                 return;
             }
             if (field_0xB1C && mChairType == CHAIR_E) {
-                const f32 mag = (mChairPos - mPositionCopy2).squareMagXZ();
-                if (mag < 10000.f) {
+                if (mChairPos.squareDistanceToXZ(mPositionCopy2) < 10000.f) {
                     return;
                 }
             }
-            AttentionManager::GetInstance()->addSitTarget(*this, isBench() ? 0 : 3, 120.f);
+            AttentionManager::GetInstance()->addSitTarget(
+                *this, 120.f, isBench() ? AttentionManager::FLAGS_0 : AttentionManager::FLAGS_3
+            );
         }
     }
 }
