@@ -1065,7 +1065,7 @@ void dAcOBarrel_c::fn_293_4200() {
         dAcNpcCeLady_c *pCeLady = mCeLady.get();
         bool b = true;
         if (pCeLady) {
-            pCeLady->fn_12_1E00(this, &b);
+            pCeLady->fn_12_1E80(this, &b);
         }
         if (!b) {
             return;
@@ -1391,12 +1391,15 @@ void dAcOBarrel_c::fn_293_54D0() {
     }
 }
 
+// FAKEMATCH ??
 inline f32 some_calc(f32 acc, f32 gnd, f32 pos) {
     f32 a = (gnd - pos);
     return nw4r::math::FAbs(acc) * a;
 }
 void dAcOBarrel_c::fn_293_5850(f32 *pMult, bool reduceY) {
-    field_0xDE0 = some_calc(mAcceleration, mObjAcch.GetWtrGroundH(), mPosition.y) / 50.f;
+    f32 pos = mPosition.y;
+    f32 gnd = mObjAcch.GetWtrGroundH();
+    field_0xDE0 = some_calc(mAcceleration, gnd, pos) / 50.f;
 
     mSpeed *= 0.93f;
 
@@ -1413,7 +1416,7 @@ void dAcOBarrel_c::fn_293_58C0() {
 }
 
 void dAcOBarrel_c::fn_293_5910() {
-    static mVec3_c scale(1.f, 1.f, 1.f);
+    static mVec3_c scale(1.5f, 1.5f, 1.5f);
 
     if (fn_293_4C20()) {
         return;
@@ -1422,3 +1425,9 @@ void dAcOBarrel_c::fn_293_5910() {
     mEmitter0.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_515_, mPosition, nullptr, &scale, nullptr, nullptr);
     mEmitter1.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_516_, mPosition, nullptr, &scale, nullptr, nullptr);
 }
+
+struct T {
+    f32 a, b, c, d, e, f, g, h, i;
+    static const T floats;
+};
+const T T::floats = {50.f, 0.93f, 0.85f, 0.0f, 0.2f, -10000.f, 5.0f, -0.05f, 20.f};
