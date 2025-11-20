@@ -69,8 +69,8 @@ int dAcOwindmill_c::create() {
     mWindmillRotation = mRotation.y.mVal;
     mWindmillPosition = mPosition;
 
-    mWindmillPosition.x += -95.22334f * (mRotation.y + mAng(0xc17)).sin();
-    mWindmillPosition.z += -95.22334f * (mRotation.y + mAng(0xc17)).cos();
+    mWindmillPosition.x += -95.22334f * mAng(mRotation.y + 0xc17).sin();
+    mWindmillPosition.z += -95.22334f * mAng(mRotation.y + 0xc17).cos();
     mWindmillPosition.y += -86.11143f;
 
     if (mHasPropellor || isWindmillRepaired()) {
