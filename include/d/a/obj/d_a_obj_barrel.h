@@ -25,7 +25,7 @@ class dAcOBarrel_c : public dAcObjBase_c {
 public:
     enum Type {
         Normal,
-        Explode,
+        Bomb,
         Type2,
         Kraken,
     };
@@ -62,7 +62,7 @@ public:
     /** fn_293_3DB0 */
     void fn_293_3DB0();
 
-    /** fn_293_4200 */
+    /** Break Barrel */
     void fn_293_4200();
 
     /** Check to see if the Barrel should break */
@@ -110,7 +110,7 @@ public:
     /** fn_293_5850 */
     void fn_293_5850(f32 *, bool);
 
-    /** fn_293_58C0 */
+    /** Set Ground Normal */
     void fn_293_58C0();
 
     /** fn_293_5910 */
@@ -134,6 +134,13 @@ public:
 
     bool isTimeshiftableType() const {
         return mType & 1;
+    }
+
+    bool field0x17Check() const {
+        return field_0xE17 == 0 || field_0xE17 == 1;
+    }
+    bool isType_1() const {
+        return mType & 2;
     }
 
     bool checkFlag_0xE18() {
@@ -167,7 +174,9 @@ private:
     /* 0xDBC */ mVec3_c field_0xDBC;
     /* 0xDC8 */ mVec3_c field_0xDC8;
     /* 0xDD4 */ f32 field_0xDD4;
-    /* 0xDD8 */ mVec3_c field_0xDD8;
+    /* 0xDD8 */ f32 field_0xDD8;
+    /* 0xDDC */ f32 field_0xDDC;
+    /* 0xDE0 */ f32 field_0xDE0;
     /* 0xDE4 */ mAng3_c field_0xDE4;
     /* 0xDEA */ mAng field_0xDEA;
     /* 0xDEC */ mAng field_0xDEC;

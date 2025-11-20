@@ -16,6 +16,7 @@
 #include "d/col/c/c_m3d_g_pla.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_light_env.h"
 #include "d/d_linkage.h"
 #include "d/d_rumble.h"
 #include "d/flag/sceneflag_manager.h"
@@ -37,29 +38,38 @@
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
-// Begin HIO
-// Pattern based on TP naming sceme class_HIOParam/class_Param_c
-struct dAcOBarrel_c_HIOParam {
-    f32 _0;
-    f32 _1;
-    f32 _2;
-    f32 _3;
-    f32 _4;
-    f32 _5;
-    s16 _6;
-    f32 _7;
-    s16 _8;
-    f32 _9;
-    f32 _10;
-    s16 _12;
-    f32 _11;
-    f32 _13;
-};
 struct dAcOBarrel_c_Param_c {
-    static const dAcOBarrel_c_HIOParam m;
+    static const f32 _0;
+    static const f32 _1;
+    static const f32 _2;
+    static const f32 _3;
+    static const f32 _4;
+    static const f32 _5;
+    static const s16 _6;
+    static const f32 _7;
+    static const s16 _8;
+    static const f32 _9;
+    static const f32 _10;
+    static const s16 _11;
+    static const f32 _12;
+    static const f32 _13;
 };
-const dAcOBarrel_c_HIOParam dAcOBarrel_c_Param_c::m = {2.5f, 10.f,   7.f,  0.125f, 0.2f,   0.2f, 0x5A00,
-                                                       15.f, 0x0500, 0.8f, 10.f,   0x0300, 0.8f, 5.f};
+
+const f32 dAcOBarrel_c_Param_c::_0 = 2.5f;
+const f32 dAcOBarrel_c_Param_c::_1 = 10.f;
+const f32 dAcOBarrel_c_Param_c::_2 = 7.f;
+const f32 dAcOBarrel_c_Param_c::_3 = 0.125f;
+const f32 dAcOBarrel_c_Param_c::_4 = 0.2f;
+const f32 dAcOBarrel_c_Param_c::_5 = 0.2f;
+const s16 dAcOBarrel_c_Param_c::_6 = 0x5A00;
+const f32 dAcOBarrel_c_Param_c::_7 = 15.f;
+const s16 dAcOBarrel_c_Param_c::_8 = 0x0500;
+const f32 dAcOBarrel_c_Param_c::_9 = 0.8f;
+const f32 dAcOBarrel_c_Param_c::_10 = 10.f;
+const s16 dAcOBarrel_c_Param_c::_11 = 0x0300;
+const f32 dAcOBarrel_c_Param_c::_12 = 0.8f;
+const f32 dAcOBarrel_c_Param_c::_13 = 5.f;
+
 // End HIO
 
 // Data Floats
@@ -106,13 +116,13 @@ static dCcD_SrcSph sSrcSph = {
 
 static const char *sBarrelResFile[] = {
     "Barrel",     // Normal
-    "BarrelBomb", // Explode
+    "BarrelBomb", // Bomb
     "Barrel",     // Type2
     "Barrel",     // Kraken
 };
 static const char *sBarrelResMdl[] = {
     "Barrel",     // Normal
-    "BarrelBomb", // Explode
+    "BarrelBomb", // Bomb
     "Barrel",     // Type2
     "Barrel",     // Kraken
 };
@@ -170,7 +180,7 @@ int dAcOBarrel_c::actorCreate() {
     mAcceleration = -4.f;
     mMaxSpeed = -40.f;
 
-    field_0xDD8.y = 0.f;
+    field_0xDDC = 0.f;
     field_0xDEC = mAng::Zero();
     quat_0xD50.set(1.f, 0.f, 0.f, 0.f);
     mScale.set(1.f, 1.f, 1.f);
@@ -234,9 +244,9 @@ int dAcOBarrel_c::actorPostCreate() {
 
     f32 scale;
     if (getFromParams(8, 0x3) == 0) {
-        scale = 1.f;
-    } else {
         scale = 2.5f;
+    } else {
+        scale = 1.f;
     }
 
     if (field_0xE10 == 0 && isTimeshiftableType()) {
@@ -277,7 +287,7 @@ int dAcOBarrel_c::actorExecute() {
             fn_293_3DB0();
         }
 
-        field_0xDD8.y += mPosition.y - mOldPosition.y;
+        field_0xDDC += mPosition.y - mOldPosition.y;
     }
 
     if (!b4D00) {
@@ -326,7 +336,7 @@ int dAcOBarrel_c::actorExecute() {
     }
 
     if (!b4D00 || field_0xE02 == 0) {
-        updateMatrix();
+        updateMtx();
     }
 
     mMdl.setLocalMtx(mWorldMtx);
@@ -397,7 +407,7 @@ void dAcOBarrel_c::executeState_Wait() {
         }
         field_0xE0A = true;
     } else if (mObjAcch.ChkGndHit()) {
-        field_0xDD8.y = 0.f;
+        field_0xDDC = 0.f;
         mVelocity.y = 0.f;
         field_0xDBC = mVec3_c::Ey;
         fn_293_5360();
@@ -471,7 +481,7 @@ void dAcOBarrel_c::executeState_Grab() {
     }
 }
 void dAcOBarrel_c::finalizeState_Grab() {
-    field_0xDD8.y = 0.f;
+    field_0xDDC = 0.f;
     field_0xDD4 = cM::rndF(40.f);
     mCyl.ClrCo_0x400();
     u8 state = getLinkage().getState();
@@ -486,14 +496,14 @@ void dAcOBarrel_c::initializeState_GrabUp() {
     MTXMultVecSR(mWorldMtx, v, v);
 
     mAng rotX = mAng::fromRad(v.angle(mVec3_c::Ex));
-    mAng rotY = dAcPy_c::GetLink()->mRotation.y - mRotation.y;
-
-    bool z = rotX > 0x4000;
+    s32 ry = dAcPy_c::GetLink()->mRotation.y - mRotation.y;
 
     mQuat_c qy, qz;
-    qy.setAxisRotation(
-        mVec3_c::Ey, mAng::short2rad(rotY.absDiff(0) > mAng::deg2short(90.f) ? rotY += mAng::deg2short(180.f) : rotY)
-    );
+    bool z = rotX > 0x4000;
+    bool y = mAng(ry).absDiff(0) > 0x4000;
+
+    // Fakematch?
+    qy.setAxisRotation(mVec3_c::Ey, mAng::short2rad(y ? mAng(ry) - 0x8000 : ry));
     qz.setAxisRotation(mVec3_c::Ez, mAng::short2rad(z ? 0x4000 : -0x4000));
 
     quat_0xD60 = qy * qz;
@@ -521,7 +531,7 @@ void dAcOBarrel_c::executeState_GrabUp() {
                 mStateMgr.changeState(StateID_Wait);
                 return;
             }
-            field_0xDD8.y = 0.f;
+            field_0xDDC = 0.f;
         }
     }
 
@@ -531,7 +541,7 @@ void dAcOBarrel_c::executeState_GrabUp() {
         quat_0xD70.slerpTo(quat_0xD50, 0.2f, quat_0xD70);
     } else {
         if (!getLinkage().checkConnection(dLinkage_c::CONNECTION_1)) {
-            field_0xDD8.y = 0.f;
+            field_0xDDC = 0.f;
             mStateMgr.changeState(StateID_Wait);
         } else {
             mStateMgr.changeState(StateID_Grab);
@@ -611,10 +621,10 @@ void dAcOBarrel_c::initializeState_Slope() {
 void dAcOBarrel_c::executeState_Slope() {
     if (mObjAcch.ChkGroundLanding() && !field_0xE0E) {
         fn_293_37B0();
-        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mVelocity, 0, 1.f, field_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.f, field_0x1B0);
         startSound(SE_Barrel_ROLL_GROUND);
     } else if (mObjAcch.ChkGndHit()) {
-        field_0xDD8.y = 0.f;
+        field_0xDDC = 0.f;
         mVelocity.y = 0.f;
         fn_293_30D0();
 
@@ -702,7 +712,7 @@ void dAcOBarrel_c::executeState_Water() {
             mWaterEffect.execute(mObjAcch.GetWtrGroundH(), mObjAcch.GetGroundH());
         }
 
-        if (mType != dAcOBarrel_c::Type2 && nw4r::math::FAbs(field_0xDD8.z + mAcceleration) < 0.1f &&
+        if (mType != dAcOBarrel_c::Type2 && nw4r::math::FAbs(field_0xDE0 + mAcceleration) < 0.1f &&
             nw4r::math::FAbs(mVelocity.y + mAcceleration) < 0.1f) {
             mStateMgr.changeState(StateID_Water2);
         } else if (!fn_293_4C60()) {
@@ -747,9 +757,9 @@ void dAcOBarrel_c::initializeState_Explode() {
 
     f32 dist = mPosition.squareDistance(dAcPy_c::GetLink()->mPosition);
     if (dist < 400.f * 400.f) {
-        dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0 | dRumble_c::FLAG_ACTIVE);
-    } else if (dist < 800.f * 800.f) {
         dRumble_c::start(dRumble_c::sRumblePreset3, dRumble_c::FLAG_SLOT0 | dRumble_c::FLAG_ACTIVE);
+    } else if (dist < 800.f * 800.f) {
+        dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0 | dRumble_c::FLAG_ACTIVE);
     }
 }
 void dAcOBarrel_c::executeState_Explode() {
@@ -772,10 +782,10 @@ void dAcOBarrel_c::initializeState_KrakenBorn() {
 void dAcOBarrel_c::executeState_KrakenBorn() {
     if (mObjAcch.ChkGroundLanding()) {
         fn_293_37B0();
-        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mVelocity, 0, 1.f, field_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.f, field_0x1B0);
         startSound(SE_Barrel_ROLL_GROUND);
     } else if (mObjAcch.ChkGndHit()) {
-        field_0xDD8.y = 0.f;
+        field_0xDDC = 0.f;
         mVelocity.y = 0.f;
         if (mSpeed > 0.f) {
             holdSoundWithFloatParam(SE_Barrel_ROLL_LV, mSpeed);
@@ -802,7 +812,7 @@ void dAcOBarrel_c::initializeState_Rebirth() {
 
     mSpeed = 0.f;
     mVelocity.y = 0.f;
-    field_0xDD8.y = 0.f;
+    field_0xDDC = 0.f;
 
     mCyl.ClrCoSet();
     mCyl.ClrTgSet();
@@ -821,7 +831,7 @@ void dAcOBarrel_c::initializeState_Rebirth() {
     unsetActorProperty(AC_PROP_0x1);
 }
 void dAcOBarrel_c::executeState_Rebirth() {
-    field_0xDD8.y = 0.f;
+    field_0xDDC = 0.f;
 
     // Why??
     mPosition.set(mPositionCopy.x, mPositionCopy.y, mPositionCopy.z);
@@ -860,12 +870,11 @@ void dAcOBarrel_c::fn_293_30D0() {
                 return;
             }
         }
-    }
-
-    AttentionManager *pAttnMgr = AttentionManager::GetInstance();
-    if (mYOffset >= 0.f) {
-        pAttnMgr->addPickUpTarget(*this, 120.f);
-        pAttnMgr->addUnk3Target(*this, 1, 500.f, -200.f, 200.f);
+        AttentionManager *pAttnMgr = AttentionManager::GetInstance();
+        if (mYOffset >= 0.f) {
+            pAttnMgr->addPickUpTarget(*this, 120.f);
+            pAttnMgr->addUnk3Target(*this, 1, 500.f, -200.f, 200.f);
+        }
     }
 }
 
@@ -880,46 +889,53 @@ void dAcOBarrel_c::fn_293_31B0() {
 
     field_0xDBC = pla.GetN();
 
-    mVelocity += pla.GetN() * 7.f;
-    mVelocity.y = pla.getCrossY_NonIsZero(&mVelocity);
+    // Excuse me?
+    mVec3_c _ = mVelocity;
+
+    mVelocity.x += pla.GetN().x * 7.f;
+    mVelocity.z += pla.GetN().z * 7.f;
+    mVelocity.y = -mVelocity.inprodXZ(pla.GetN()) / pla.GetN().y;
 
     mSpeed = nw4r::math::FSqrt(mVelocity.squareMagXZ());
     mSpeed = cM::minMaxLimit(mSpeed, -20.f, 20.f);
 
     if (mAng::fromVec(pla.GetN()).absDiff(mAngle.y) < 0x2000) {
-        sLib::addCalcAngle(mAngle.y.ref(), pla.GetAngleY(), 5, 0x71C, 0x100);
+        sLib::addCalcAngle(mAngle.y.ref(), pla.GetAngleY(), 5, mAng::deg2short(10), 0x100);
     } else {
         mAngle.y = mAng::fromVec(mVelocity);
     }
 
     if (!isSpeedStopped()) {
         mAng ang = pla.GetAngleY();
-        mAng target = ang - 0x8000;
-        mVec3_c v = mWorldMtx.multVecSR(-mVec3_c::Ez);
+        s32 target = ang - 0x8000;
 
+        mVec3_c v = mWorldMtx.multVecSR(-mVec3_c::Ez);
         field_0xDEA = mAng::fromVec(v);
-        if (target.absDiff(field_0xDEA) > 0x4000) {
-            target = ang;
-        } else {
-            target = ang - 0x8000;
-        }
+
+        target = mAng(target).absDiff(field_0xDEA) > 0x4000 ? mAng(target) - 0x8000 : target;
+
         if (field_0xE00 && field_0xE02) {
             field_0xE01 = fn_293_4ED0();
-            target -= field_0xDEA;
-            sLib::addCalcAngle(field_0xDEC.ref(), target, 10, mAng::deg2short(5), 0x100);
-        }
+            sLib::addCalcAngle(field_0xDEC.ref(), mAng(target) - field_0xDEA, 10, mAng::deg2short(5), 0x100);
 
-        mQuat_c q;
-        q.setAxisRotation(mVec3_c::Ey, field_0xDEC.radian());
-        quat_0xD70.slerpTo(q, 0.3f, quat_0xD70);
+            mQuat_c q;
+            q.setAxisRotation(mVec3_c::Ey, field_0xDEC.radian());
+            quat_0xD70.slerpTo(q, 0.3f, quat_0xD70);
+        }
     }
+
     if (field_0xE09) {
         quat_0xD70.set(1.f, 0.f, 0.f, 0.f);
     }
 }
 
 void dAcOBarrel_c::fn_293_3560() {
-    f32 f = field_0xE11 == 3 ? 0.2f : 0.125f;
+    f32 f;
+    if (field_0xE11 == 3) {
+        f = 0.2f;
+    } else {
+        f = 0.125f;
+    }
 
     cM3dGPla pla;
     dBgS::GetInstance()->GetTriPla(mObjAcch.GetGnd(), &pla);
@@ -944,13 +960,184 @@ void dAcOBarrel_c::fn_293_3560() {
     }
 }
 
-void dAcOBarrel_c::fn_293_37B0() {}
+void dAcOBarrel_c::fn_293_37B0() {
+    mVelocity.y *= -0.5f;
 
-void dAcOBarrel_c::updateMtx() {}
+    bool someState;
+    if (mType == Type2) {
+        someState = field_0xE17 > 2;
+    } else {
+        someState = mVelocity.y < 8.f;
+    }
 
-void dAcOBarrel_c::fn_293_3DB0() {}
+    if (mType != Type2 || !someState) {
+        mSpeed *= 0.95f;
+    }
 
-void dAcOBarrel_c::fn_293_4200() {}
+    if (someState) {
+        mVelocity.y = 0.f;
+        field_0xDE4.x = mAng::Zero();
+        field_0xDDC = 0.f;
+        field_0xE0E = true;
+    } else {
+        field_0xE17++;
+
+        field_0xDF2 = cM::rndInt(0x50) + 0x900;
+        field_0xDE4.x = cM::rndInt(0x100) + 0x400;
+
+        if (mSpeed < 5.f) {
+            fn_293_58C0();
+            mAng nrmAngle = mAng::fromRad(field_0xDBC.angle(mVec3_c::Ey));
+            mSpeed = nrmAngle.sin() * 12.5f;
+
+            // why is it mType & 2???
+            if (isType_1() && field_0xE17 < 2) {
+                mSpeed = nw4r::ut::Max(mSpeed, cM::rndFX(5.f) + 25.f);
+                field_0xE00 = true;
+            }
+
+            mAngle.y = mAng::fromVec(field_0xDBC);
+        }
+        field_0xE0E = false;
+    }
+
+    if (fn_293_4BC0()) {
+        field_0xDE4.x = mAng::Zero();
+        mSpeed = 0.f;
+        mVelocity.y = 0.f;
+        field_0xE00 = false;
+    }
+}
+
+void dAcOBarrel_c::updateMtx() {
+    if (!mStateMgr.isState(StateID_Water2)) {
+        sLib::addCalcAngle(field_0xDE4.x.ref(), 0, 30, 0x200, 0x20);
+    }
+    field_0xDE4.y += field_0xDF2;
+
+    getLinkage().fn_800511E0(this);
+
+    mMtx_c m2, m1, m3, m4;
+
+    m1.fromQuat(quat_0xDA0);
+    m2.fromQuat(quat_0xD70 * quat_0xD80 * quat_0xD90);
+
+    mWorldMtx += m1;
+
+    m3.transS(0.f, 51.f, 0.f);
+    mWorldMtx += m3;
+
+    mWorldMtx.YrotM(field_0xDE4.y);
+    mWorldMtx.XrotM(field_0xDE4.x);
+    mWorldMtx.YrotM(-field_0xDE4.y);
+    mWorldMtx += m2;
+
+    m4.transS(0.f, -51.f, 0.f);
+    mWorldMtx += m4;
+}
+
+void dAcOBarrel_c::fn_293_3DB0() {
+    if (!field_0xE00) {
+        return;
+    }
+    f32 f0, f1;
+    f0 = 0.5f * mVelocity.mag();
+    f0 = mAng(f0 * 182.f).radian();
+    f1 = mAng(mAngle.y - mRotation.y).radian();
+
+    if (field_0xE01) {
+        f0 *= -1.f;
+    }
+
+    mQuat_c q0, q1, q2;
+    q1.setAxisRotation(mVec3_c::Ey, f1);
+    q0.setAxisRotation(mVec3_c::Ey, -f1);
+    q2.setAxisRotation(mVec3_c::Ey, f0);
+
+    quat_0xD90 = q1 * q2 * q0 * quat_0xD90;
+}
+
+extern "C" void fn_800307E0(const mVec3_c &, s32);
+void dAcOBarrel_c::fn_293_4200() {
+    getLinkage().fn_80050EA0(this);
+
+    if (field_0xE04 || field_0xE05) {
+        dAcNpcCeLady_c *pCeLady = mCeLady.get();
+        bool b = true;
+        if (pCeLady) {
+            pCeLady->fn_12_1E00(this, &b);
+        }
+        if (!b) {
+            return;
+        }
+    }
+
+    startSound(SE_Barrel_BROKEN);
+
+    mVec3_c emitPosition = mPosition;
+    emitPosition.y += (field_0xE02 ? 25.f : 50.f);
+
+    if (mBrokenFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mBrokenFlag)) {
+        SceneflagManager::sInstance->setFlag(mRoomID, mBrokenFlag);
+    }
+
+    dLightEnv_c::GetPInstance()->setBPM8_Type6_2(&mPosition);
+    if (mType == Bomb) {
+        mVec3_c scale = mScale;
+        if (getFromParams(8, 0x3) == 0) {
+            scale *= 1.5f;
+        }
+
+        dJEffManager_c::spawnEffect(
+            PARTICLE_RESOURCE_ID_MAPPING_322_, mPosition, nullptr, &scale, nullptr, nullptr, 0, 0
+        );
+        dJEffManager_c::spawnEffect(
+            PARTICLE_RESOURCE_ID_MAPPING_323_, mPosition, nullptr, &scale, nullptr, nullptr, 0, 0
+        );
+        dJEffManager_c::spawnEffect(
+            PARTICLE_RESOURCE_ID_MAPPING_324_, mPosition, nullptr, &scale, nullptr, nullptr, 0, 0
+        );
+        dJEffManager_c::spawnEffect(
+            PARTICLE_RESOURCE_ID_MAPPING_325_, mPosition, nullptr, &scale, nullptr, nullptr, 0, 0
+        );
+        dJEffManager_c::spawnEffect(
+            PARTICLE_RESOURCE_ID_MAPPING_242_, emitPosition, nullptr, &mScale, nullptr, nullptr, 0, 0
+        );
+
+        dJEffManager_c::spawnEffect(
+            PARTICLE_RESOURCE_ID_MAPPING_474_, emitPosition, nullptr, &mScale, nullptr, nullptr, 0, 0
+        )
+            ->bindShpEmitter(0x15, true);
+
+        if (fn_293_4C60()) {
+            dJEffManager_c::spawnEffect(
+                PARTICLE_RESOURCE_ID_MAPPING_658_, emitPosition, nullptr, &mScale, nullptr, nullptr, 0, 0
+            );
+        }
+        fn_800307E0(mPosition, 0);
+        startSound(SE_Barrel_BOMB);
+        mStateMgr.changeState(StateID_Explode);
+
+    } else {
+        dJEffManager_c::spawnEffect(
+            PARTICLE_RESOURCE_ID_MAPPING_243_, emitPosition, nullptr, &mScale, nullptr, nullptr, 0, 0
+        );
+        dJEffManager_c::spawnEffect(
+            PARTICLE_RESOURCE_ID_MAPPING_475_, emitPosition, nullptr, &mScale, nullptr, nullptr, 0, 0
+        )
+            ->bindShpEmitter(0x14, true);
+
+        if (field_0xE07) {
+            itemDroppingAndGivingRelated(nullptr, 0);
+        }
+
+        if (field_0xE0B) {
+            mStateMgr.changeState(StateID_Rebirth);
+        } else {
+            deleteRequest();
+        }
+    }
+}
 
 bool dAcOBarrel_c::fn_293_45A0() {
     if (field_0xE06) {
@@ -1005,7 +1192,7 @@ bool dAcOBarrel_c::fn_293_45A0() {
         }
     }
 
-    if (mType == Explode && (mStateMgr.isState(StateID_Water) || mStateMgr.isState(StateID_Water2))) {
+    if (mType == Bomb && (mStateMgr.isState(StateID_Water) || mStateMgr.isState(StateID_Water2))) {
         if (mCyl.ChkCoHit()) {
             dAcObjBase_c *pActor = mCyl.GetCoActor();
             if (pActor->isPlayer() || pActor->mProfileName == fProfile::OBJ_TIME_BOAT) {
@@ -1015,7 +1202,7 @@ bool dAcOBarrel_c::fn_293_45A0() {
     }
 
     if (mObjAcch.ChkGndHit() && mYOffset >= 0.f) {
-        if ((!isType_0() && field_0xDD8.y < -500.f) || (isType_0() && field_0xDD8.y < -1000.f)) {
+        if ((!isType_0() && field_0xDDC < -500.f) || (isType_0() && field_0xDDC < -1000.f)) {
             return true;
         }
     }
@@ -1054,7 +1241,7 @@ bool dAcOBarrel_c::fn_293_4C60() {
 }
 
 bool dAcOBarrel_c::fn_293_4CE0() const {
-    return field_0xDD8.y < -10000.f;
+    return field_0xDDC < -10000.f;
 }
 
 bool dAcOBarrel_c::fn_293_4D00() {
@@ -1074,7 +1261,7 @@ bool dAcOBarrel_c::fn_293_4ED0() const {
     mWorldMtx.multVecSR(up);
 
     mQuat_c q;
-    q.setAxisRotation(up, DEG_TO_RAD(1));
+    q.setAxisRotation(up, mAng::short2rad(mAng::deg2short(1)));
 
     mMtx_c m;
     m.fromQuat(q);
@@ -1094,7 +1281,7 @@ bool dAcOBarrel_c::fn_293_4F80() {
 
 bool dAcOBarrel_c::fn_293_50B0() {
     return (
-        field_0xE00 && field_0xE02 && mSpeed > 15.f && getXZAngleToPlayer().absDiff(mAngle.y) <= mAng::deg2short(60)
+        field_0xE00 && field_0xE02 && mSpeed > 15.f && getXZAngleToPlayer().absDiff(mAngle.y) < mAng::deg2short(60.005)
     );
 }
 
@@ -1103,7 +1290,7 @@ void dAcOBarrel_c::fn_293_5150() {
     v.y += field_0xE02 ? 25.f : 50.f;
     mVec3_c scale(0.75f, 0.75f, 0.75f);
 
-    if (mType == Explode) {
+    if (mType == Bomb) {
         mTimeArea.check(mRoomID, mPosition, 0, 0.f, 0.1f);
 
         f32 scaleTarget = getFromParams(8, 0x3) == 0 ? 2.5f : 1.f;
@@ -1142,7 +1329,7 @@ void dAcOBarrel_c::fn_293_5150() {
 }
 void dAcOBarrel_c::fn_293_5360() {
     if (!field_0xE03) {
-        static const s16 s = 0x2000;
+        static const s16 s = {0x2000};
         field_0xE03 = fn_8002eff0(120.f, s, &mCyl, 10.f, -10.f);
     }
 
@@ -1154,7 +1341,7 @@ void dAcOBarrel_c::fn_293_5360() {
 
             if (field_0xDFC != 0) {
                 fn_293_4200();
-            } else if (mType == Explode) {
+            } else if (mType == Bomb) {
                 fn_293_4200();
 
             } else {
@@ -1183,7 +1370,7 @@ void dAcOBarrel_c::fn_293_54D0() {
         qplayer0.setAxisRotation(field_0xDB0, mAng(field_0xDF4.sin() * field_0xDF8).radian());
         field_0xDF4 += mAng::deg2short(12);
         if (mAng::abs(field_0xDF4) < mAng::deg2short(12)) {
-            field_0xDF8 *= dAcOBarrel_c_Param_c::m._11;
+            field_0xDF8 *= dAcOBarrel_c_Param_c::_12;
         }
 
         m.makeRotationFromVecs(mVec3_c::Ez, field_0xDB0, 1.f);
@@ -1192,7 +1379,7 @@ void dAcOBarrel_c::fn_293_54D0() {
         qplayer1.setAxisRotation(vx, mAng(field_0xDF6.sin() * field_0xDFA).radian());
         field_0xDF6 += mAng::deg2short(20);
         if (mAng::abs(field_0xDF6) < mAng::deg2short(20)) {
-            field_0xDFA *= dAcOBarrel_c_Param_c::m._9;
+            field_0xDFA *= dAcOBarrel_c_Param_c::_9;
         }
 
         quat_0xDA0 = qplayer0 * qplayer1;
@@ -1204,8 +1391,34 @@ void dAcOBarrel_c::fn_293_54D0() {
     }
 }
 
-void dAcOBarrel_c::fn_293_5850(f32 *, bool) {}
+inline f32 some_calc(f32 acc, f32 gnd, f32 pos) {
+    f32 a = (gnd - pos);
+    return nw4r::math::FAbs(acc) * a;
+}
+void dAcOBarrel_c::fn_293_5850(f32 *pMult, bool reduceY) {
+    field_0xDE0 = some_calc(mAcceleration, mObjAcch.GetWtrGroundH(), mPosition.y) / 50.f;
 
-void dAcOBarrel_c::fn_293_58C0() {}
+    mSpeed *= 0.93f;
 
-void dAcOBarrel_c::fn_293_5910() {}
+    if (reduceY) {
+        mVelocity.y *= 0.85f;
+    }
+    mVelocity.y += field_0xDE0 * *pMult;
+}
+
+void dAcOBarrel_c::fn_293_58C0() {
+    cM3dGPla pla;
+    dBgS::GetInstance()->GetTriPla(mObjAcch.GetGnd(), &pla);
+    field_0xDBC = pla.GetN();
+}
+
+void dAcOBarrel_c::fn_293_5910() {
+    static mVec3_c scale(1.f, 1.f, 1.f);
+
+    if (fn_293_4C20()) {
+        return;
+    }
+
+    mEmitter0.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_515_, mPosition, nullptr, &scale, nullptr, nullptr);
+    mEmitter1.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_516_, mPosition, nullptr, &scale, nullptr, nullptr);
+}

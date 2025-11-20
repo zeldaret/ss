@@ -18,6 +18,7 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
+#include "nw4r/math/math_arithmetic.h"
 
 // Ghidra: ActorObjectBase
 //   size: 0x330
