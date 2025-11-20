@@ -242,7 +242,9 @@ void dAcOwindmill_c::executeState_Move() {
 void dAcOwindmill_c::finalizeState_Move() {
     field_0x63A = false;
     mAnmClr.setRate(-1.f, 0);
-    mRotation.y = mWindmillRotation + (mAng)mAng::fromDeg(mCurrentStuckPos * 0x1e);
+
+    mRotation.y = mWindmillRotation;
+    mRotation.y += mAng::fromDeg(mCurrentStuckPos * 30);
 }
 
 void dAcOwindmill_c::initializeState_Collect() {}
