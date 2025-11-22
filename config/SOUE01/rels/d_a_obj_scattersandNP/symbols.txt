@@ -22,5 +22,5 @@ lbl_110_rodata_50 = .rodata:0x00000050; // type:object size:0x4 align:4 data:flo
 lbl_110_rodata_54 = .rodata:0x00000054; // type:object size:0x24 align:4 data:float
 g_profile_OBJ_VSD = .data:0x00000000; // type:object size:0x10
 lbl_110_data_10 = .data:0x00000010; // type:object size:0x64 align:4 data:float
-lbl_110_data_74 = .data:0x00000074; // type:object size:0x24
+lbl_110_data_74 = .data:0x00000074; // type:object size:0x1D data:string
 lbl_110_data_98 = .data:0x00000098; // type:object size:0x80

@@ -12,5 +12,5 @@ _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_431_rodata_0 = .rodata:0x00000000; // type:object size:0x18 scope:local data:float
 g_profile_OBJ_ROPE_BASE = .data:0x00000000; // type:object size:0x38
-lbl_431_data_38 = .data:0x00000038; // type:object size:0x20 scope:local
+lbl_431_data_38 = .data:0x00000038; // type:object size:0x1C scope:local data:string
 __vt__14dAcOropeBase_c = .data:0x00000058; // type:object size:0x80

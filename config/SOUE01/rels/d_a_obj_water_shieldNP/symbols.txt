@@ -19,6 +19,6 @@ _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_433_rodata_0 = .rodata:0x00000000; // type:object size:0x14 scope:local data:float
 g_profile_OBJ_WATER_SHIELD = .data:0x00000000; // type:object size:0x10
 lbl_433_data_10 = .data:0x00000010; // type:object size:0x40
-lbl_433_data_50 = .data:0x00000050; // type:object size:0x20 scope:local
+lbl_433_data_50 = .data:0x00000050; // type:object size:0x1F scope:local data:string
 __vt__17dAcOwaterShield_c = .data:0x00000070; // type:object size:0x80
 __vt__Q34nw4r3g3d15IScnObjCallback = .data:0x000000F0; // type:object size:0x20

@@ -19,5 +19,5 @@ lbl_426_data_10 = .data:0x00000010; // type:object size:0x8 scope:local data:str
 lbl_426_data_18 = .data:0x00000018; // type:object size:0x8 scope:local data:string
 lbl_426_data_20 = .data:0x00000020; // type:object size:0x8 scope:local data:string
 g_profile_OBJ_ISLAND_LOD = .data:0x00000028; // type:object size:0x10
-lbl_426_data_38 = .data:0x00000038; // type:object size:0x20 scope:local
+lbl_426_data_38 = .data:0x00000038; // type:object size:0x1D scope:local data:string
 __vt__15dAcOislandLOD_c = .data:0x00000058; // type:object size:0x80

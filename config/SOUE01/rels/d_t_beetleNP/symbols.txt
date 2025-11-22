@@ -18,5 +18,5 @@ dTgBeetle__scaleMultiplier = .rodata:0x00000004; // type:object size:0x4 align:4
 lbl_302_rodata_4.y = .rodata:0x00000008; // type:object size:0x4 align:4 data:float
 lbl_302_rodata_4.z = .rodata:0x0000000C; // type:object size:0xC align:4 data:float
 g_profile_BEETLE_TAG = .data:0x00000000; // type:object size:0x10
-lbl_302_data_10 = .data:0x00000010; // type:object size:0x8
+lbl_302_data_10 = .data:0x00000010; // type:object size:0x5 data:string
 dTgBeetle__vtable = .data:0x00000018; // type:object size:0x74
