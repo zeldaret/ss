@@ -36,9 +36,6 @@ struct mAng {
     void set(s16 val) {
         mVal = val;
     }
-    void setF(const f32 &val) {
-        mVal = val;
-    }
 
     s16 *ref() {
         return &mVal;

@@ -1433,8 +1433,8 @@ void dAcOBarrel_c::fn_293_5910() {
         return;
     }
 
-    mEmitter0.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_515_, mPosition, nullptr, &scale, nullptr, nullptr);
-    mEmitter1.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_516_, mPosition, nullptr, &scale, nullptr, nullptr);
+    mEmitter0.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_515_, mPosition, nullptr, &scale, nullptr, nullptr);
+    mEmitter1.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_516_, mPosition, nullptr, &scale, nullptr, nullptr);
 }
 
 struct T {

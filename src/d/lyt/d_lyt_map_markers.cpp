@@ -897,9 +897,9 @@ void dLytMapIcon01_c::draw() {
                             mVec3_c rotate(0.0f, 0.0f, 0.0f);
                             if (dLytMapGlobal_c::GetInstance()->getField_0x55() != 0) {
                                 dAcPy_c *link = getLinkPtr();
-                                rotate.z = (link->vt_0x19C() + link->mRotation.y + (-mapRot)).degree2();
+                                rotate.z = mAng(link->mRotation.y + link->vt_0x19C() + -mapRot).degree2();
                             } else {
-                                rotate.z = (field_0x0D3A + (-mapRot)).degree2();
+                                rotate.z = mAng(field_0x0D3A + -mapRot).degree2();
                             }
                             pane->SetRotate(rotate);
                             pane = pane->GetParent();
@@ -907,7 +907,7 @@ void dLytMapIcon01_c::draw() {
                         }
                         case MAP_ICON_01_PANE_DOOR_000:
                         case MAP_ICON_01_PANE_START_000: {
-                            mVec3_c rotate(0.0f, 0.0f, ((-mapRot) + commandRot).degree2());
+                            mVec3_c rotate(0.0f, 0.0f, mAng(-mapRot + commandRot).degree2());
                             pane->SetRotate(rotate);
                             pane = mpPanes[paneIdx]->GetParent();
                             break;

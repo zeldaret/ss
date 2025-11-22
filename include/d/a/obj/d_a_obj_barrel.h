@@ -161,8 +161,8 @@ private:
     /* 0xC7C */ TimeAreaStruct mTimeArea;
     /* 0xC88 */ dAcRef_c<dAcNpcCeLady_c> mCeLady;
     /* 0xC94 */ dAcRef_c<dAcNpcCeFriend_c> mCeFriend;
-    /* 0xCA0 */ EffectsStruct mEmitter0;
-    /* 0xCD4 */ EffectsStruct mEmitter1;
+    /* 0xCA0 */ dEmitter_c mEmitter0;
+    /* 0xCD4 */ dEmitter_c mEmitter1;
     /* 0xD08 */ dWaterEffect_c mWaterEffect;
     /* 0xD50 */ mQuat_c quat_0xD50;
     /* 0xD60 */ mQuat_c quat_0xD60;
