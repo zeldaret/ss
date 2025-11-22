@@ -223,10 +223,10 @@ private:
     /* 0x08F0 */ mVec3_c field_0x8F0;
     /* 0x08FC */ dCcD_Sph mSph0;
     /* 0x0A4C */ dCcD_Sph mSph1;
-    /* 0x0B9C */ EffectsStruct mEff0;
-    /* 0x0BD0 */ EffectsStruct mEff1;
-    /* 0x0C04 */ EffectsStruct mEff2;
-    /* 0x0C38 */ EffectsStruct mEff3;
+    /* 0x0B9C */ dEmitter_c mEff0;
+    /* 0x0BD0 */ dEmitter_c mEff1;
+    /* 0x0C04 */ dEmitter_c mEff2;
+    /* 0x0C38 */ dEmitter_c mEff3;
     /* 0x0C6C */ dLytFader_c mLytFader;
     /* 0x114C */ mFader_c mFader;
     /* 0x1150 */ u8 _0x1150[0x115C - 0x1150];

@@ -57,7 +57,7 @@ int dAcOwarpHole_c::actorExecute() {
 
     dCcS::GetInstance()->Set(&mCcCyl);
     updateMatrix();
-    mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_914_, mWorldMtx, nullptr, nullptr);
+    mEff.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_914_, mWorldMtx, nullptr, nullptr);
     holdSound(SE_WarpH_Wait);
 
     return SUCCEEDED;
@@ -70,7 +70,7 @@ inline static void vecCylCalc(mVec3_c &target, const mAng &rot, f32 factor) {
 }
 
 int dAcOwarpHole_c::actorExecuteInEvent() {
-    mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_914_, mWorldMtx, nullptr, nullptr);
+    mEff.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_914_, mWorldMtx, nullptr, nullptr);
     holdSound(SE_WarpH_Wait);
     int retVal = NOT_READY;
     bool advance = mEvent.isAdvance();

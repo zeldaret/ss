@@ -156,8 +156,8 @@ class AttentionManager {
     /* 0xB64 */ u8 mHasTarget;
     /* 0xB65 */ u8 field_0xB65[0xB68 - 0xB65];
     /* 0xB68 */ UNKWORD field_0xB68;
-    /* 0xB6C */ EffectsStruct mEffect1;
-    /* 0xBA0 */ EffectsStruct mEffect2;
+    /* 0xB6C */ dEmitter_c mEffect1;
+    /* 0xBA0 */ dEmitter_c mEffect2;
     /* 0xBD4 */ u8 field_0xBD4;
     /* 0xBD5 */ u8 field_0xBD5;
 

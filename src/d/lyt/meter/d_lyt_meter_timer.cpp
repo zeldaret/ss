@@ -327,7 +327,7 @@ bool LytMeterTimerPart1_c::incrementTearCount() {
     if (mDisplayedTearCount < mActualTearCount && dLytDropLine_c::finishPartMaybe()) {
         startNextFruitAnim();
         if (!dLytMeter_c::getfn_800C9FE0()) {
-            createEffect(mActualTearCount - 1);
+            startEffect(mActualTearCount - 1);
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SIREN_SHIZUKU_GET_IN);
         }
 
@@ -382,7 +382,7 @@ void LytMeterTimerPart1_c::initColors() {
     }
 }
 
-void LytMeterTimerPart1_c::createEffect(s32 fruitIndex) {
+void LytMeterTimerPart1_c::startEffect(s32 fruitIndex) {
     nw4r::math::MTX34 mtx = mpPanes[fruitIndex]->GetGlobalMtx();
     mVec3_c pos;
     pos.x = mtx._03;
@@ -1243,7 +1243,7 @@ void dLytMeterTimer_c::executeState_ChangeFruits() {
                 if (mpPart1->getField0x780() < TIMER_01_NUM_TEARS) {
                     mpPart1->updateDropLine(mpPart2->i_getPane());
                     mpPart1->startFruitAnim(fruit);
-                    mpPart1->createEffect(fruit);
+                    mpPart1->startEffect(fruit);
                 }
             }
 
@@ -1458,7 +1458,7 @@ void dLytMeterTimer_c::gotoChangeFruits6() {
         mpPart1->resetBowlNuts();
         mpPart1->updateDropLine(mpPart2->i_getPane());
         mpPart1->startFruitAnim(mpPart1->getField0x780());
-        mpPart1->createEffect(mpPart1->getField0x780());
+        mpPart1->startEffect(mpPart1->getField0x780());
         field_0x54 = false;
         field_0x56 = 6;
         mStateMgr.changeState(StateID_ChangeFruits);
@@ -1506,7 +1506,7 @@ void dLytMeterTimer_c::doPickup() {
     mpPart1->resetBowlNuts();
     mpPart1->updateDropLine(mpPart2->i_getPane());
     mpPart1->startFruitAnim(mpPart1->getField0x780());
-    mpPart1->createEffect(mpPart1->getField0x780());
+    mpPart1->startEffect(mpPart1->getField0x780());
     field_0x56 = 6;
 }
 

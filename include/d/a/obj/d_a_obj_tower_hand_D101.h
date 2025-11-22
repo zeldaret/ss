@@ -105,7 +105,7 @@ private:
     void getLinkOffset(mVec3_c &out) const;
 
     /* 0x330 */ m3d::mdlAnmChr mMdl;
-    /* 0x398 */ EffectsStruct mEffects;
+    /* 0x398 */ dEmitter_c mEffects;
     /* 0x3CC */ dBgW mBgWs[3];
     /* 0x9FC */ STATE_MGR_DECLARE(dAcOTowerHandD101_c);
     /* 0xA38 */ ActorEventRelated mEvent;

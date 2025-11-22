@@ -178,7 +178,7 @@ private:
     /* 0x0CB0 */ dLytCommonIconItem_c mItemIcons[8];
     /* 0x4CF0 */ d2d::SubPaneList mSubpaneList;
     /* 0x4CFC */ d2d::SubPaneListNode mSubpanes[8];
-    /* 0x4D7C */ EffectsStruct mEffects[4];
+    /* 0x4D7C */ dEmitter_c mEffects[4];
     /* 0x4E4C */ mAng3_c mEffectsRot[4];
     /* 0x4E64 */ s32 mSlotForEffect[4];
     /* 0x4E74 */ f32 mArrowRotation;

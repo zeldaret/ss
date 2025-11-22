@@ -21,7 +21,7 @@ public:
 
 private:
     /* 0x330 */ dCcD_Cyl mCcCyl;
-    /* 0x480 */ EffectsStruct mEff;
+    /* 0x480 */ dEmitter_c mEff;
     /* 0x4B4 */ ActorEventRelated mEvent;
     /* 0x504 */ mVec3_c mLinkPos;
     /* 0x510 */ u8 mExitListIdx;

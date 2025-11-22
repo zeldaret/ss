@@ -627,7 +627,7 @@ void dLytMeterMinusBtn_c::initializeState_DemoMove() {
             nw4r::math::MTX34 mtx = mpPanes[i + MINUS_BTN_PANE_ITEM_OFFSET]->GetGlobalMtx();
             mVec3_c pos(mtx._03, mtx._13, 0.0f);
             mSlotForEffect[numPlayingEffects] = i;
-            mEffects[numPlayingEffects].createUIEffect(
+            mEffects[numPlayingEffects].startUIEffect(
                 PARTICLE_RESOURCE_ID_MAPPING_971_, pos, &mEffectsRot[numPlayingEffects], nullptr, nullptr, nullptr
             );
             numPlayingEffects++;
@@ -666,7 +666,7 @@ void dLytMeterMinusBtn_c::executeState_DemoMove() {
             nw4r::math::MTX34 mtx = getPaneByIndex(mSlotToDemo + MINUS_BTN_PANE_ITEM_OFFSET)->GetGlobalMtx();
             mVec3_c pos(mtx._03, mtx._13, 0.0f);
             mSlotForEffect[0] = mSlotToDemo;
-            mEffects[0].createUIEffect(
+            mEffects[0].startUIEffect(
                 PARTICLE_RESOURCE_ID_MAPPING_971_, pos, &mEffectsRot[0], nullptr, nullptr, nullptr
             );
         }
@@ -825,7 +825,7 @@ bool dLytMeterMinusBtn_c::remove() {
         mAnm[i].remove();
     }
 
-    // Not removing our EffectsStructs I guess?
+    // Not removing our emitters I guess?
     return true;
 }
 
