@@ -90,6 +90,9 @@ extern inline float sqrtf(float x) {
     return x;
 }
 
+#if 1
+double sqrt(double);
+#else
 extern inline double sqrt(double x) {
     if (x > 0.0) {
         double guess = __frsqrte(x);                    /* returns an approximation to    */
@@ -106,6 +109,7 @@ extern inline double sqrt(double x) {
 
     return HUGE_VALF;
 }
+#endif
 
 inline float atan2f(float y, float x) {
     return (float)atan2(y, x);

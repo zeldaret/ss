@@ -89,6 +89,7 @@ dPolar *dPolar::canonicalize() {
     // NONMATCHING - redundant stack copies
     if (R < 0.0f) {
         R = -R;
+
         U.Set(-U.value);
         V.Set(V.rotate180F());
     }
@@ -110,45 +111,32 @@ void dPolar::Set(f32 r, f32 u, f32 v) {
     canonicalize();
 }
 
-// TODO - how to prevent the inline from being used?
-extern "C" double sqrt_help(double);
-
 void dPolar::setCartesian(const mVec3_c &v) {
-    // NONMATCHING - too many frsp
     f32 x = v.x;
     f32 y = v.y;
     f32 z = v.z;
+
     f64 magXZSq = (f64)(z * z) + (f64)(x * x);
     f64 magSq = magXZSq + (f64)(y * y);
 
-    f32 magXZ, mag;
-    if (magXZSq > 0.0) {
-        magXZ = sqrt_help(magXZSq);
-    } else {
-        magXZ = 0.0;
-    }
-
-    if (magSq > 0.0) {
-        mag = sqrt_help(magSq);
-    } else {
-        mag = 0.0;
-    }
-
-    R = mag;
-    f32 atan = cM::atan2f(magXZ, y);
-    U = mAng::rad2deg_c(M_PI / 2 - atan);
-    V = mAng::rad2deg_c(cM::atan2f(x, z));
+    f32 magXZ = (magXZSq > 0.0) ? (f32)sqrt(magXZSq) : 0.f;
+    R = (magSq > 0.0) ? (f32)sqrt(magSq) : 0.f;
+    U.Set(mAng::rad2deg_c(M_PI / 2 - cM::atan2f(magXZ, y)));
+    V.Set(mAng::rad2deg_c(cM::atan2f(x, z)));
     canonicalize();
 }
 
 mVec3_c dPolar::toCartesian() const {
-    // NONMATCHING - regswap
     f32 cosU = U.cos();
     f32 sinU = U.sin();
     f32 cosV = V.cos();
     f32 sinV = V.sin();
-    f32 tmp = R * cosU;
-    return mVec3_c(sinV * tmp, R * sinU, cosV * tmp);
+
+    f32 x = sinV * (R * cosU);
+    f32 z = cosV * (R * cosU);
+    f32 y = R * sinU;
+
+    return mVec3_c(x, y, z);
 }
 
 f32 dPolar::SetR(f32 r) {
