@@ -5138,6 +5138,9 @@ egg/audio/eggAudioSystem.cpp:
 	.sbss       start:0x805768F8 end:0x80576900
 	.sdata2     start:0x8057F8B0 end:0x8057F8C8
 
+JSystem/JStudio/JStudio/ctb-data.cpp:
+	.sdata2     start:0x8057F8C8 end:0x8057F8D0
+
 egg/util/eggException.cpp:
 	.text       start:0x804B7550 end:0x804B7B48 align:16
 	.data       start:0x8056F420 end:0x8056F438
@@ -5154,69 +5157,118 @@ JSystem/JGadget/std-vector.cpp:
 
 JSystem/JStudio/JStudio/ctb.cpp:
 	.text       start:0x804B8A60 end:0x804B90D8 align:16
+	.data       start:0x8056F438 end:0x8056F480
 
 JSystem/JStudio/JStudio/functionvalue.cpp:
 	.text       start:0x804B90E0 end:0x804BB758 align:16
+	.rodata     start:0x804FBE08 end:0x804FBE18
+	.data       start:0x8056F480 end:0x8056F560
+	.sdata2     start:0x8057F8D0 end:0x8057F928
+
+JSystem/JStudio/JStudio/fvb-data.cpp:
+	.sdata2     start:0x8057F928 end:0x8057F930
 
 JSystem/JStudio/JStudio/fvb.cpp:
 	.text       start:0x804BB760 end:0x804BC7BC align:16
+	.rodata     start:0x804FBE18 end:0x804FBE58
+	.data       start:0x8056F560 end:0x8056F650
 
 JSystem/JStudio/JStudio/fvb-data-parse.cpp:
 	.text       start:0x804BC7C0 end:0x804BC828 align:16
 
 JSystem/JStudio/JStudio/jstudio-control.cpp:
 	.text       start:0x804BC830 end:0x804BD10C align:16
+	.data       start:0x8056F650 end:0x8056F690
+	.sdata2     start:0x8057F930 end:0x8057F938
+
+JSystem/JStudio/JStudio/jstudio-data.cpp:
+	.sdata2     start:0x8057F938 end:0x8057F940
 
 JSystem/JStudio/JStudio/jstudio-math.cpp:
 	.text       start:0x804BD110 end:0x804BD5EC align:16
 	.ctors      start:0x804DB9B4 end:0x804DB9B8
+	.sbss       start:0x80576920 end:0x80576928
+	.sdata2     start:0x8057F940 end:0x8057F960
 
 JSystem/JStudio/JStudio/jstudio-object.cpp:
 	.text       start:0x804BD5F0 end:0x804BFF8C align:16
 	.ctors      start:0x804DB9B8 end:0x804DB9BC
+	.rodata     start:0x804FBE58 end:0x804FBF78
+	.data       start:0x8056F690 end:0x80570050
+	.sbss       start:0x80576928 end:0x80576930
+	.sdata2     start:0x8057F960 end:0x8057F988
+	.bss        start:0x80675490 end:0x80675630
+
+JSystem/JStudio/JStudio/stb-data.cpp:
+	.rodata     start:0x804FBF78 end:0x804FBF98
+	.sdata2     start:0x8057F988 end:0x8057F990
 
 JSystem/JStudio/JStudio/object-id.cpp:
 	.text       start:0x804BFF90 end:0x804C0074 align:16
 
 JSystem/JStudio/JStudio/stb.cpp:
 	.text       start:0x804C0080 end:0x804C0EA4 align:16
+	.data       start:0x80570050 end:0x805700C0
 
 JSystem/JStudio/JStudio/stb-data-parse.cpp:
 	.text       start:0x804C0EB0 end:0x804C1000 align:16
 
 JSystem/JStudio/JStudio_JStage/control.cpp:
 	.text       start:0x804C1000 end:0x804C15F0 align:16
+	.data       start:0x805700C0 end:0x805700D0
+
+JSystem/JStudio/JStudio_JStage/object.cpp:
+	.text       start:0x804C15F0 end:0x804C1B80 align:16
 
 JSystem/JStudio/JStudio_JStage/object-actor.cpp:
-	.text       start:0x804C15F0 end:0x804C28E0 align:16
+	.text       start:0x804C1B80 end:0x804C28C0 align:16
 	.ctors      start:0x804DB9BC end:0x804DB9C0
+	.data       start:0x805700D0 end:0x80570200
+	.sdata2     start:0x8057F990 end:0x8057F998
+	.bss        start:0x80675630 end:0x80675740
 
 JSystem/JStudio/JStudio_JStage/object-camera.cpp:
-	.text       start:0x804C28E0 end:0x804C3350 align:16
+	.text       start:0x804C28C0 end:0x804C3350 align:16
 	.ctors      start:0x804DB9C0 end:0x804DB9C4
+	.data       start:0x80570200 end:0x80570328
+	.bss        start:0x80675740 end:0x80675820
 
 JSystem/JStudio/JStudio_JStage/object-light.cpp:
 	.text       start:0x804C3350 end:0x804C3864 align:16
+	.data       start:0x80570328 end:0x80570378
+	.sdata2     start:0x8057F998 end:0x8057F9A0
 
 JSystem/JStudio/JStudio_JStage/object-message.cpp:
 	.text       start:0x804C3870 end:0x804C39D4 align:16
+	.data       start:0x80570378 end:0x805703B8
 
 toBeSorted/JSystem/unk_jstage_maybe.cpp:
 	.text       start:0x804C39E0 end:0x804C3FC8 align:16
+	.rodata     start:0x804FBF98 end:0x804FBFA8
+	.sdata2     start:0x8057F9A0 end:0x8057F9B8
 
 JSystem/JStudio/JStudio_JParticle/control.cpp:
 	.text       start:0x804C3FD0 end:0x804C42CC align:16
+	.data       start:0x805703B8 end:0x805703D0
 
 JSystem/JStudio/JStudio_JParticle/object-particle.cpp:
 	.text       start:0x804C42D0 end:0x804C53DC align:16
 	.ctors      start:0x804DB9C4 end:0x804DB9C8
+	.data       start:0x805703D0 end:0x80570488
+	.sdata2     start:0x8057F9B8 end:0x8057F9F0
+	.bss        start:0x80675820 end:0x806758B0
 
 JSystem/JStudio/JStudio_JAudio2/control.cpp:
-	.text       start:0x804C53E0 end:0x804C54E0 align:16
+	.text       start:0x804C53E0 end:0x804C5684 align:16
+	.data       start:0x80570488 end:0x805704A0
+	.sdata2     start:0x8057F9F0 end:0x8057F9F8
 
 JSystem/JStudio/JStudio_JAudio2/object-sound.cpp:
-	.text       start:0x804C54E0 end:0x804C64DC align:16
+	.text       start:0x804C5690 end:0x804C64DC align:16
 	.ctors      start:0x804DB9C8 end:0x804DB9CC
+	.data       start:0x805704A0 end:0x80570560
+	.sdata2     start:0x8057F9F8 end:0x8057FA00
+	.bss        start:0x806758B0 end:0x80675948
 
 PowerPC_EABI_Support/Runtime/Src/__mem.c:
 	.init       start:0x800043C4 end:0x80004744
