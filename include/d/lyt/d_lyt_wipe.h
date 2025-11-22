@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/lyt/d2d.h"
 #include "s/s_State.hpp"
+#include "toBeSorted/d_flow_mgr.h"
 
 class dLytWipeMain_c {
 public:
@@ -61,7 +62,7 @@ private:
     /* 0x03C */ d2d::ResAccIf_c mResAcc;
     /* 0x3AC */ dLytWipeMain_c mMain;
 
-    /* 0x4E0 */ u8 _0x4E0[0x59C - 0x4E0];
+    /* 0x4E0 */ dFlowMgr_c mFlowMgr;
 
     /* 0x59C */ bool mWantsIn;
     /* 0x59D */ bool mWantsOut;

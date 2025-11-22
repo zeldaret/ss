@@ -60,6 +60,9 @@ struct dMapFootPrintEntry {
 /** Generic footprints queue */
 class dMapFootPrintsQueue_c {
 public:
+    dMapFootPrintsQueue_c() {
+        init();
+    }
     void init();
     void addStep(const mVec3_c &pos, const mAng &rot);
     dMapFootPrintEntry *getFirst() const;
@@ -79,9 +82,7 @@ private:
 /** Records Link's footsteps */
 class dMapFootPrintsMgr_c {
 public:
-    dMapFootPrintsMgr_c() {
-        mQueue.init();
-    }
+    dMapFootPrintsMgr_c() : mMinStepDistanceSq(0.0f) {}
     virtual ~dMapFootPrintsMgr_c() {}
 
     void execute();
@@ -140,7 +141,6 @@ struct LytMap0x80520B5C {
     bool field_0x04;
     bool field_0x05;
 };
-
 
 /** 2D UI - Map - beacon preview icon following the cursor */
 class dLytMapPutIcon_c {

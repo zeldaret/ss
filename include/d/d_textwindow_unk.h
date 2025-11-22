@@ -30,6 +30,8 @@ struct dLytMsgWindowCharData {
 // one by one in the text boxes
 class TextWindowUnk {
 public:
+    static const int BUF_SIZE = 1023;
+
     TextWindowUnk(dTagProcessor_c *tagProcessor);
     virtual ~TextWindowUnk() {}
 
@@ -55,8 +57,8 @@ public:
 
 private:
     /* 0x0004 */ dTagProcessor_c *mpTagProcessor;
-    /* 0x0008 */ wchar_t mRawTextBuffer[1023];
-    /* 0x0806 */ wchar_t mProcessedTextBuffer[1023];
+    /* 0x0008 */ wchar_t mRawTextBuffer[BUF_SIZE];
+    /* 0x0806 */ wchar_t mProcessedTextBuffer[BUF_SIZE];
     /* 0x1004 */ wchar_t mUnkBuffer[511]; // ???
     /* 0x1402 */ SizedString<64> field_0x1402;
     /* 0x1442 */ u8 _0x1442[0x144C - 0x1442];
@@ -90,7 +92,7 @@ public:
     }
 
 private:
-    dLytMsgWindowCharData mData[1023];
+    dLytMsgWindowCharData mData[TextWindowUnk::BUF_SIZE];
 };
 
 #endif

@@ -70,14 +70,14 @@ bool TextWindowUnk::checkEndReached() const {
 }
 
 void MsgWindowBlurRelated::build() {
-    for (int i = 0; i < 1023; i++) {
+    for (int i = 0; i < TextWindowUnk::BUF_SIZE; i++) {
         mData[i].reset();
     }
 }
 
 void MsgWindowBlurRelated::drawTextBlur(dLytTextLight *thing, mVec2_c size, u8 alpha) {
     s8 t = -1;
-    for (int i = 0; i < 1023; i++) {
+    for (int i = 0; i < TextWindowUnk::BUF_SIZE; i++) {
         if (mData[i].displayTimerMaybe >= 0) {
             if (t == -1) {
                 mData[i].displayTimerMaybe++;

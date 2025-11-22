@@ -1281,7 +1281,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
          MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER) || fn_800D56B0() || field_0x1377E)
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() ||
-            (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->fn_8012B000()) ||
+            (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->isOutputText()) ||
             fn_800D5650() || fn_800D5680())) {
         mPanesVisible[METER_ANIM_RUPY] = false;
     }
@@ -1306,7 +1306,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         field_0x1377E
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() ||
-            (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->fn_8012B000()) ||
+            (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->isOutputText()) ||
             fn_800D5650() || fn_800D5680())) {
         mPanesVisible[METER_ANIM_SHIELD] = false;
     }
@@ -1333,7 +1333,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         || (field_0x1377E != 0)
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() ||
-            (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->fn_8012B000()) ||
+            (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->isOutputText()) ||
             fn_800D5650() || fn_800D5680())) {
         mPanesVisible[METER_ANIM_HEART] = false;
     }

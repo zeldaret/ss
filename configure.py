@@ -532,7 +532,7 @@ config.libs = [
             Object(Matching, "d/lyt/msg_window/d_lyt_msg_window_wood.cpp"),
             Object(Matching, "d/lyt/msg_window/d_lyt_msg_window_stone.cpp"),
             Object(Matching, "d/lyt/msg_window/d_lyt_msg_window_demo.cpp"),
-            Object(NonMatching, "d/lyt/msg_window/d_lyt_simple_window.cpp"),
+            Object(Matching, "d/lyt/msg_window/d_lyt_simple_window.cpp"),
             Object(Matching, "d/lyt/d_lyt_auto_caption.cpp"),
             Object(Matching, "d/lyt/d_lyt_auto_explain.cpp"),
             Object(Matching, "d/lyt/d_lyt_map_global.cpp"),

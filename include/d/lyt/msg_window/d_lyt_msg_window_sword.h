@@ -76,8 +76,8 @@ private:
 
     /* 0x05F8 */ dLytCommonABtn_c mBtn;
 
-    /* 0x07A8 */ dLytMsgWindowCharData mCharacterData[1023];
-    /* 0x5794 */ wchar_t mTextBuf[1023];
+    /* 0x07A8 */ dLytMsgWindowCharData mCharacterData[TextWindowUnk::BUF_SIZE];
+    /* 0x5794 */ wchar_t mTextBuf[TextWindowUnk::BUF_SIZE];
 
     /* 0x5F94 */ dLytTextSword mSwordText;
     /* 0x607C */ dLytTextSword::ESwordType mSwordType;

@@ -1,6 +1,7 @@
 #ifndef D_LYT_MSG_WINDOW_H
 #define D_LYT_MSG_WINDOW_H
 
+#include "common.h"
 #include "d/d_tag_processor.h"
 #include "d/d_textwindow_unk.h"
 #include "d/lyt/d2d.h"
@@ -53,8 +54,12 @@ public:
         MSG_WINDOW_36 = 36,
     };
 
-    dLytMsgWindow_c() : mStateMgr(*this) {}
-    virtual ~dLytMsgWindow_c() {}
+    dLytMsgWindow_c() : mStateMgr(*this) {
+        sInstance = this;
+    }
+    virtual ~dLytMsgWindow_c() {
+        sInstance = nullptr;
+    }
 
     bool build();
     bool remove();
