@@ -196,6 +196,16 @@ public:
         return mOptionSound[idx];
     }
 
+    void resetSomeThings() {
+        // TODO clean this up - are these arrays or not???
+        for (int i = 0; i < 11; i++) {
+            mNumericArgsCopy[i] = 0;
+        }
+        for (int i = 0; i < 11; i++) {
+            (&field_0xEE5)[i] = 0;
+        }
+    }
+
 private:
     enum Cmd_e {
         TAG_CMD_SCALE = 0x2,

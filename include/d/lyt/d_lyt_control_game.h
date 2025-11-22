@@ -3,7 +3,13 @@
 
 #include "d/d_base.h"
 #include "d/lyt/d_lyt_map.h"
+#include "d/lyt/d_lyt_wipe.h"
+#include "d/lyt/meter/d_lyt_meter.h"
+#include "d/lyt/msg_window/d_lyt_msg_window.h"
+#include "d/lyt/msg_window/d_lyt_simple_window.h"
 #include "s/s_State.hpp"
+#include "toBeSorted/arc_managers/layout_arc_manager.h"
+#include "toBeSorted/raii_ptr.h"
 
 class dLytControlGame_c : public dBase_c {
 public:
@@ -75,16 +81,25 @@ public:
 
 private:
     /* 0x00068 */ UI_STATE_MGR_DECLARE(dLytControlGame_c);
-    /* 0x000A4 */ u8 _0x000A4[0x15850 - 0x000A4];
-
+    /* 0x000A4 */ RaiiPtr<void*> field_0x000A4;
+    /* 0x000A8 */ dLytMeter_c mMeter;
+    /* 0x13C10 */ dLytMsgWindow_c mMsgWindow;
+    /* 0x14E34 */ dLytSimpleWindow_c mSimpleWindow;
+    /* 0x152A0 */ dLytWipe_c mWipe;
+    /* 0x15848 */ u8 _0x15848[0x15850 - 0x15848];
     /* 0x15850 */ dMapFootPrintsMgr_c mFootprintsMgr;
 
-    /* 0x15C24 */ u8 _0x15C24[0x15C2C - 0x15C24];
+    /* 0x15C24 */ UNKWORD field_0x15C24;
+    /* 0x15C28 */ UNKWORD field_0x15C28;
 
     /* 0x15C2C */ s32 mCurrentPauseDisp;
     /* 0x15C30 */ s32 mPauseDisp00Tab;
 
-    /* 0x15C34 */ u8 _0x15C34[0x15C60 - 0x15C34];
+    /* 0x15C34 */ u8 _0x15C34[0x15C40 - 0x15C34];
+
+    /* 0x15C40 */ LayoutArcControl mLytArcControl;
+
+    /* 0x15C4C */ u8 _0x15C4C[0x15C60 - 0x15C4C];
 
     /* 0x15C60 */ u16 mItemForPauseDemo;
 
