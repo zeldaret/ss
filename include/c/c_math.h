@@ -8,6 +8,8 @@
 
 namespace cM {
 s16 atan2s(f32, f32);
+f32 atan2f(f32, f32);
+
 void initRnd(s32);
 f32 rnd();
 int rndInt(int max);

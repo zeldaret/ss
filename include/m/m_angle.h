@@ -98,8 +98,12 @@ struct mAng {
         return rad * sRadToAng;
     }
 
-    static f32 ang2deg_c(f32 rad) {
-        return rad * sAngToDeg;
+    static f32 ang2deg_c(f32 ang) {
+        return ang * sAngToDeg;
+    }
+
+    static f32 rad2deg_c(f32 rad) {
+        return rad * sRadToDeg;
     }
 
     static f32 rad2deg(f32 rad) {
@@ -122,6 +126,10 @@ struct mAng {
     }
     static s16 rad2short(f32 rad) {
         return rad * (65536.0f / (2.f * M_PI));
+    }
+
+    static f32 deg2rad_c(f32 deg) {
+        return deg * sDegToRad;
     }
 
     s16 mVal;
