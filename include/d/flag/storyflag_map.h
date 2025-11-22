@@ -96,7 +96,7 @@ enum StoryFlags_e {
      * 3 / Water Dragon's Lair layer 3 / Behind The Temple layer 7)] Story Flag #16 (0x0010) - JP 805ACD5B 0x02 / US
      * 805A9ADB 0x02
      */
-    STORYFLAG_16,
+    STORYFLAG_WATER_DRAGON_SOTH_PART,
 
     /** [Triforce Completed]
      *  Story Flag #17 (0x0011) - JP 805ACD5B 0x04 / US 805A9ADB 0x04
@@ -247,17 +247,17 @@ enum StoryFlags_e {
     /** [Faron light pillar]
      *  Story Flag #46 (0x002E) - JP 805ACD67 0x80 / US 805A9AE7 0x80
      */
-    STORYFLAG_46,
+    STORYFLAG_FARON_PILLAR_OPENED,
 
     /** [Eldin light pillar]
      *  Story Flag #47 (0x002F) - JP 805ACD66 0x01 / US 805A9AE6 0x01
      */
-    STORYFLAG_47,
+    STORYFLAG_ELDIN_PILLAR_OPENED,
 
     /** [Lanayru light pillar (Eldin Volcano, Digging Mitts Cave, FS Entrance, Volcano Summit Waterfall layer 2 /
      * Lanayru Mines layer 1 / Temple of Time layer 1)] Story Flag #48 (0x0030) - JP 805ACD66 0x02 / US 805A9AE6 0x02
      */
-    STORYFLAG_48,
+    STORYFLAG_LANAYRU_PILLAR_OPENED,
 
     /** [Talk to Headmaster to learn about Windmills]
      *  Story Flag #49 (0x0031) - JP 805ACD66 0x04 / US 805A9AE6 0x04
@@ -452,17 +452,17 @@ enum StoryFlags_e {
     /** [Faron Woods introductory cutscene (Behind The Temple layer 2)]
      *  Story Flag #87 (0x0057) - JP 805ACD6C 0x02 / US 805A9AEC 0x02
      */
-    STORYFLAG_87,
+    STORYFLAG_FARON_WOODS_DISCOVERED,
 
     /** [Lake Floria Introductory Cutscene]
      *  Story Flag #88 (0x0058) - JP 805ACD6C 0x04 / US 805A9AEC 0x04
      */
-    STORYFLAG_88,
+    STORYFLAG_LAKE_FLORIA_DISCOVERED,
 
     /** [Skyview Introductory cutscene]
      *  Story Flag #89 (0x0059) - JP 805ACD6C 0x08 / US 805A9AEC 0x08
      */
-    STORYFLAG_89,
+    STORYFLAG_SKYVIEW_DISCOVERED,
 
     /** [Sets after the Robot upgrades your Beetle]
      *  Story Flag #90 (0x005A) - JP 805ACD6F 0x80 / US 805A9AEF 0x80
@@ -472,12 +472,12 @@ enum StoryFlags_e {
     /** [Deep Woods Introductory cutscene]
      *  Story Flag #91 (0x005B) - JP 805ACD71 0x01 / US 805A9AF1 0x01
      */
-    STORYFLAG_91,
+    STORYFLAG_DEEP_WOODS_DISCOVERED,
 
     /** [Lanayru Desert Introductory Cutscene]
      *  Story Flag #92 (0x005C) - JP 805ACD71 0x02 / US 805A9AF1 0x02
      */
-    STORYFLAG_92,
+    STORYFLAG_LANAYRU_DESERT_DISCOVERED,
 
     /** [Faron's Trial Gate Fi Singing Cutscene]
      *  Story Flag #93 (0x005D) - JP 805ACD71 0x04 / US 805A9AF1 0x04
@@ -667,7 +667,7 @@ enum StoryFlags_e {
     /** [Meeting Impa cutscene]
      *  Story Flag #130 (0x0082) - JP 805ACD64 0x01 / US 805A9AE4 0x01
      */
-    STORYFLAG_130,
+    STORYFLAG_IMPA_MET,
 
     /** [Imp 1 defeated (Skyloft layers 4&5)]
      *  Story Flag #131 (0x0083) - JP 805ACD64 0x02 / US 805A9AE4 0x02
@@ -703,7 +703,7 @@ enum StoryFlags_e {
      * Screen) (Faron Woods, Deep Woods, Inside Great Tree layer 1)] Story Flag #137 (0x0089) - JP 805ACD64 0x80 / US
      * 805A9AE4 0x80
      */
-    STORYFLAG_137,
+    STORYFLAG_FARON_DISCOVERED,
 
     /** [Cutscene near sealed temple entrance first time in sealed grounds (Sealed Temple layer 1)]
      *  Story Flag #138 (0x008A) - JP 805ACD67 0x01 / US 805A9AE7 0x01
@@ -793,17 +793,17 @@ enum StoryFlags_e {
     /** [Ancient Cistern Introductory Cutscene (lilypad outside AC appears) (Outside AC layer 2)]
      *  Story Flag #155 (0x009B) - JP 805ACD60 0x02 / US 805A9AE0 0x02
      */
-    STORYFLAG_155,
+    STORYFLAG_ANCIENT_CISTERN_DISCOVERED,
 
     /** [Sandship Introductory Cutscene]
      *  Story Flag #156 (0x009C) - JP 805ACD60 0x04 / US 805A9AE0 0x04
      */
-    STORYFLAG_156,
+    STORYFLAG_SANDSHIP_DISCOVERED,
 
     /** [Ancient Harbour Introductory Cutscene]
      *  Story Flag #157 (0x009D) - JP 805ACD60 0x08 / US 805A9AE0 0x08
      */
-    STORYFLAG_157,
+    STORYFLAG_ANCIENT_HARBOR_DISCOVERED,
 
     /** [First Time in Sand Sea]
      *  Story Flag #158 (0x009E) - JP 805ACD60 0x10 / US 805A9AE0 0x10
@@ -813,7 +813,7 @@ enum StoryFlags_e {
     /** [Sky Keep Introductory Cutscene]
      *  Story Flag #159 (0x009F) - JP 805ACD60 0x20 / US 805A9AE0 0x20
      */
-    STORYFLAG_159,
+    STORYFLAG_SKY_KEEP_DISCOVERED,
 
     /** [Mogma Mitts restricted by Bokoblin Base]
      *  Story Flag #160 (0x00A0) - JP 805ACD60 0x80 / US 805A9AE0 0x80
@@ -883,7 +883,7 @@ enum StoryFlags_e {
     /** [Fire Sanctuary Introductory Cutscene]
      *  Story Flag #173 (0x00AD) - JP 805ACD62 0x10 / US 805A9AE2 0x10
      */
-    STORYFLAG_173,
+    STORYFLAG_FIRE_SANCTUARY_DISCOVERED,
 
     /** []
      *  Story Flag #174 (0x00AE) - JP 805ACD62 0x20 / US 805A9AE2 0x20
@@ -928,12 +928,12 @@ enum StoryFlags_e {
     /** [Eldin Volcano Introductory Cutscene (Eldin Layer 1 only) (if set it activates Statue select screen on entering
      * Eldin Pillar)] Story Flag #182 (0x00B6) - JP 805ACD66 0x20 / US 805A9AE6 0x20
      */
-    STORYFLAG_182,
+    STORYFLAG_ELDIN_DISCOVERED,
 
     /** [Earth Temple Introductory Cutscene]
      *  Story Flag #183 (0x00B7) - JP 805ACD66 0x40 / US 805A9AE6 0x40
      */
-    STORYFLAG_183,
+    STORYFLAG_EARTH_TEMPLE_DISCOVERED,
 
     /** [Impa Cutscene at Bridge in Eldin]
      *  Story Flag #184 (0x00B8) - JP 805ACD66 0x80 / US 805A9AE6 0x80
@@ -968,7 +968,7 @@ enum StoryFlags_e {
     /** [Lanayru Mines Introductory Cutscene (Lanayru Desert layer 1)]
      *  Story Flag #190 (0x00BE) - JP 805ACD6D 0x80 / US 805A9AED 0x80
      */
-    STORYFLAG_190,
+    STORYFLAG_LANAYRU_DISCOVERED,
 
     /** [(not implemented yet -- 7F62)]
      *  Story Flag #191 (0x00BF) - JP from 805ACE57 0x40 to 805ACE56 0x01 / US from 805A9BD7 0x40 to 805A9BD6 0x01
@@ -1075,7 +1075,7 @@ enum StoryFlags_e {
     /** [LMF Introductory Cutscene (The loading zone to LMF now exists AND the opened Lanayru Gate of Time now appears
      * in the Harp Cutscene)] Story Flag #211 (0x00D3) - JP 805ACD70 0x80 / US 805A9AF0 0x80
      */
-    STORYFLAG_211,
+    STORYFLAG_LMF_DISCOVERED,
 
     /** []
      *  Story Flag #212 (0x00D4) - JP 805ACD73 0x01 / US 805A9AF3 0x01
@@ -1155,7 +1155,7 @@ enum StoryFlags_e {
     /** [First Goddess Cube (Unlocks ability to skyward strike Goddess Cubes)]
      *  Story Flag #227 (0x00E3) - JP 805ACD72 0x20 / US 805A9AF2 0x20
      */
-    STORYFLAG_227,
+    STORYFLAG_FIRST_GODDESS_CUBE,
 
     /** [Goddess Cube near Skyview Entrance]
      *  Story Flag #228 (0x00E4) - JP 805ACD72 0x40 / US 805A9AF2 0x40
@@ -1425,7 +1425,7 @@ enum StoryFlags_e {
     /** [Land on Fun Fun Island for first time (name on map appears)]
      *  Story Flag #281 (0x0119) - JP 805ACD7B 0x08 / US 805A9AFB 0x08
      */
-    STORYFLAG_281,
+    STORYFLAG_FUN_FUN_ISLAND_DISCOVERED,
 
     /** [Land on Lumpy Pumpkin Island for first time (name on map appears)]
      *  Story Flag #282 (0x011A) - JP 805ACD7B 0x10 / US 805A9AFB 0x10
@@ -1435,7 +1435,7 @@ enum StoryFlags_e {
     /** [Talk to Beedle on his island for first time (name on map appears)]
      *  Story Flag #283 (0x011B) - JP 805ACD7B 0x20 / US 805A9AFB 0x20
      */
-    STORYFLAG_283,
+    STORYFLAG_BEEDLE_ISLAND_DISCOVERED,
 
     /** [Land on Bamboo Island for first time (name on map appears)]
      *  Story Flag #284 (0x011C) - JP 805ACD7B 0x40 / US 805A9AFB 0x40
@@ -1450,7 +1450,7 @@ enum StoryFlags_e {
     /** [Talk to Strich at Bug Heaven for first time (name on map appears)]
      *  Story Flag #286 (0x011E) - JP 805ACD7A 0x01 / US 805A9AFA 0x01
      */
-    STORYFLAG_286,
+    STORYFLAG_BUG_HAVEN_DISCOVERED,
 
     /** []
      *  Story Flag #287 (0x011F) - JP 805ACD7A 0x02 / US 805A9AFA 0x02
@@ -1460,7 +1460,7 @@ enum StoryFlags_e {
     /** [Bilocyte fight triggered]
      *  Story Flag #288 (0x0120) - JP 805ACD7A 0x04 / US 805A9AFA 0x04
      */
-    STORYFLAG_288,
+    STORYFLAG_BILOCYCTE_FIGHT_TRIGGERED,
 
     /** [Owlan's wooden shield]
      *  Story Flag #289 (0x0121) - JP 805ACD7A 0x08 / US 805A9AFA 0x08
@@ -1917,7 +1917,7 @@ enum StoryFlags_e {
     /** [Thunderhead entered for first time]
      *  Story Flag #379 (0x017B) - JP 805ACD85 0x02 / US 805A9B05 0x02
      */
-    STORYFLAG_379,
+    STORYFLAG_THUNDERHEAD_ENTERED,
 
     /** [Parrow gives his Crystal Sidequest (to find Orielle)]
      *  Story Flag #380 (0x017C) - JP 805ACD8A 0x40 / US 805A9B0A 0x40
@@ -2327,7 +2327,7 @@ enum StoryFlags_e {
     /** [Panning Camera Cutscene in Lanayru Caves showing crawlspace to Lanayru Gorge]
      *  Story Flag #461 (0x01CD) - JP 805ACD8C 0x20 / US 805A9B0C 0x20
      */
-    STORYFLAG_461,
+    STORYFLAG_LANAYRU_CAVES_DISCOVERED,
 
     /** [Set when Thunder Dragon teaches SotH part]
      *  Story Flag #462 (0x01CE) - JP 805ACD8C 0x40 / US 805A9B0C 0x40
@@ -2442,7 +2442,7 @@ enum StoryFlags_e {
     /** [Goddess Statue falling onto the Sealed Grounds Cutscene]
      *  Story Flag #484 (0x01E4) - JP 805ACD90 0x04 / US 805A9B10 0x04
      */
-    STORYFLAG_484,
+    STORYFLAG_GODDESS_STATUE_FALLEN,
 
     /** [Groose goes back to the Groosenator after defeating Imp 3]
      *  Story Flag #485 (0x01E5) - JP 805ACD90 0x08 / US 805A9B10 0x08
@@ -2652,12 +2652,12 @@ enum StoryFlags_e {
     /** [Lanayru Gorge Introductory Cutscene]
      *  Story Flag #526 (0x020E) - JP 805ACD94 0x08 / US 805A9B14 0x08
      */
-    STORYFLAG_526,
+    STORYFLAG_LANAYRU_GORGE_DISCOVERED,
 
     /** [Flooded Faron Woods Introductory Cutscene]
      *  Story Flag #527 (0x020F) - JP 805ACD94 0x10 / US 805A9B14 0x10
      */
-    STORYFLAG_527,
+    STORYFLAG_FLOODED_FARON_WOODS_DISCOVERED,
 
     /** [Finishing a Silent Realm for the First time]
      *  Story Flag #528 (0x0210) - JP 805ACD94 0x20 / US 805A9B14 0x20
@@ -2833,7 +2833,7 @@ enum StoryFlags_e {
     /** [Volcano Summit Introductory Cutscene]
      *  Story Flag #562 (0x0232) - JP 805ACD99 0x08 / US 805A9B19 0x08
      */
-    STORYFLAG_562,
+    STORYFLAG_VOLCANO_SUMMIT_DISCOVERED,
 
     /** [(not implemented yet -- 74B3)]
      *  Story Flag #563 (0x0233) - JP from 805ACE40 0x08 to 805ACE40 0x40 / US from 805A9BC0 0x08 to 805A9BC0 0x40
@@ -3568,7 +3568,7 @@ enum StoryFlags_e {
     /** [Enter Beedle's Shop for first time]
      *  Story Flag #709 (0x02C5) - JP 805ACDA2 0x80 / US 805A9B22 0x80
      */
-    STORYFLAG_709,
+    STORYFLAG_BEEDLE_SHOP_ENTERED,
 
     /** [Sets after Treasure dowsing]
      *  Story Flag #710 (0x02C6) - JP 805ACDA5 0x01 / US 805A9B25 0x01

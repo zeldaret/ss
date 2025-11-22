@@ -417,35 +417,37 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
             dStageMgr_c::GetInstance()->getFlagIndex();
             SceneflagManager::sInstance->unsetTempflag_i(0x3F, (params1n2 >> 16) & 0xFFFF);
             break;
-        case EVENT_LIGHT_PILLAR_30: {
+        case EVENT_START_MAP_EVENT: {
             s8 p4 = (params1n2 >> 24) & 0xFF;
             s8 p1 = params1n2 & 0xFF;
-            s8 p3 = (params1n2 >> 16) & 0xFF;
-            s8 p2 = (params1n2 >> 8) & 0xFF;
-            s32 val = 1;
+            s8 arg1 = (params1n2 >> 16) & 0xFF;
+            s8 arg2 = (params1n2 >> 8) & 0xFF;
+            s32 mapEvent = 1;
             switch (p1) {
-                case 1: val = 4; break;
-                case 2: val = 3; break;
-                case 3: val = 5; break;
-                case 5: val = 7; break;
-                case 6: val = 8; break;
-                case 7: val = 9; break;
+                case 1: mapEvent = dLytMapMain_c::MAP_EVENT_DUNGEON_MAP_GET; break;
+                case 2: mapEvent = dLytMapMain_c::MAP_EVENT_MAP_INTRO; break;
+                case 3: mapEvent = dLytMapMain_c::MAP_EVENT_FIELD_MAP_CHANGE_5; break;
+                case 5: mapEvent = dLytMapMain_c::MAP_EVENT_SIGNAL_ADD; break;
+                case 6: mapEvent = dLytMapMain_c::MAP_EVENT_FIELD_MAP_CHANGE_8; break;
+                case 7: mapEvent = dLytMapMain_c::MAP_EVENT_GODDESS_CUBE; break;
             }
-            dMessage_c::getInstance()->setField_0x32C(val);
+            dMessage_c::getInstance()->setField_0x32C(mapEvent);
             dMessage_c::getInstance()->setField_0x329(true);
-            if (dMessage_c::getInstance()->getField_0x328() == 0) {
-                dMessage_c::getInstance()->setField_0x328(1);
+            if (dMessage_c::getInstance()->getInMapEvent() == false) {
+                dMessage_c::getInstance()->setInMapEvent(true);
                 dMessage_c::getInstance()->clearLightPillarRelatedArgs();
                 if (dLytControlGame_c::getInstance()->isStateNormalOrNotInEvent()) {
-                    dLytControlGame_c::getInstance()->somehowRelatedToEnteringLightPillars(val, p3, p2);
+                    dLytControlGame_c::getInstance()->somehowRelatedToEnteringLightPillars(
+                        mapEvent, arg1, arg2
+                    );
                 }
             } else {
-                dLytMap_c::GetInstance()->lightPillarRelated(val, p3, p2);
+                dLytMap_c::GetInstance()->queueMapEvent(mapEvent, arg1, arg2);
             }
             dMessage_c::getInstance()->storeLightPillarRelatedArg(p4);
             break;
         }
-        case EVENT_LIGHT_PILLAR_34: {
+        case EVENT_END_MAP_EVENT: {
             // TODO what do these modes do?
             if (params1n2 == 1) {
                 if (!dLytControlGame_c::getInstance()->isNotInStateMap()) {
@@ -463,7 +465,7 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
                     dMessage_c::getInstance()->setField_0x32A(1);
                 }
             }
-            dMessage_c::getInstance()->setField_0x328(0);
+            dMessage_c::getInstance()->setInMapEvent(false);
             break;
         }
         case EVENT_SET_STORYFLAG_217:
@@ -710,7 +712,7 @@ bool dFlow_c::handleMessage() {
         if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_BOSS_RUSH_ACTIVE)) {
             // "When you require my analysis..."
             v = 200;
-        } else if (dStageMgr_c::GetInstance()->getSTIFbyte4() == 0) {
+        } else if (dStageMgr_c::GetInstance()->getSTIFArea() == dStageMgr_c::STIF_AREA_SKY) {
             // Sky rumor
             v = cM::rndInt(30);
         } else {
@@ -1127,7 +1129,7 @@ bool dFlow_c::advanceUntil(s32 searchType, s32 searchParam3, s32 *pOutParams1n2)
                     case EVENT_LOAD_FI_FLOW:
                     case EVENT_COUNTER_THRESHOLD:
                     case 27:                      keepGoing = handleEvent(); continue;
-                    case EVENT_LIGHT_PILLAR_34:
+                    case EVENT_END_MAP_EVENT:
                         if (element->params1n2 == 2) {
                             keepGoing = false;
                             continue;
@@ -1762,7 +1764,7 @@ void dMessage_c::executeMinigame() {
 void dMessage_c::init() {
     clearLightPillarRelatedArgs();
     // Probably inlines
-    field_0x328 = 0;
+    mInMapEvent = false;
     field_0x329 = 0;
     field_0x32A = 0;
     sInstance->setField_0x32C(12);

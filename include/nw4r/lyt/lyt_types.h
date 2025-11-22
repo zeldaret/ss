@@ -1,9 +1,11 @@
 #ifndef NW4R_LYT_TYPES_H
 #define NW4R_LYT_TYPES_H
 
-#include "nw4r/math.h" // IWYU pragma: export
 #include "nw4r/ut/ut_LinkList.h"
 #include "nw4r/ut/ut_algorithm.h"
+
+#include "nw4r/math.h" // IWYU pragma: export
+
 #include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
@@ -31,8 +33,10 @@ inline bool TestBit(T bits, int index) {
 }
 template <typename T>
 inline void SetBit(T *bits, int pos, bool val) {
-    T mask = ~T(1 << pos);
-    *bits = T((*bits & mask)) | (val << pos);
+    T mask = 1 << pos;
+
+    *bits &= ~mask;
+    *bits |= val ? mask : 0;
 }
 
 template <typename T>

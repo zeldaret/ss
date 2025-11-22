@@ -17,6 +17,10 @@ struct mAng {
         return *this;
     }
 
+    void setF(const f32 &f) {
+        mVal = f;
+    }
+
     static mAng atan2s(f32 a, f32 b) {
         return mAng(cM::atan2s(a, b));
     }

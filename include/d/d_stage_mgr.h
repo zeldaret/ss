@@ -59,16 +59,44 @@ public:
     bool isAreaTypeOverworldOrSkyloft() const;
     s32 getSTIFunk1() const;
 
-    s32 getSTIFbyte4() const;
-    bool isSTIFbyte4_2or3or4() const;
-    bool isSTIFbyte4_5or6() const;
-    bool isSTIFbyte4_7or8or9or10or11() const;
-    bool isSTIFbyte4_1() const {
-        return getSTIFbyte4() == 1;
+    // Individually revealed areas on the main world map
+    enum StifArea_e {
+        STIF_AREA_SKY = 0,
+        // also applies to isle of songs, goddess statue
+        STIF_AREA_SEALED_GROUNDS = 1,
+        STIF_AREA_FARON_WOODS = 2,
+        STIF_AREA_DEEP_WOODS = 3,
+        STIF_AREA_LAKE_FLORIA = 4,
+        STIF_AREA_VOLCANO_SOUTH = 5,
+        STIF_AREA_VOLCANO_NORTH = 6,
+        STIF_AREA_LANAYRU_MINE = 7,
+        STIF_AREA_LANAYRU_DESERT = 8,
+        STIF_AREA_LANAYRU_CAVES = 9,
+        STIF_AREA_LANAYRU_SAND_SEA = 10,
+        STIF_AREA_LANAYRU_GORGE = 11,
+    };
+
+    // room is a not great name since this is really stage-wide...
+    enum StifRoomType_e {
+        STIF_ROOMTYPE_FIELD = 0,
+        STIF_ROOMTYPE_DUNGEON = 1,
+        STIF_ROOMTYPE_SKYLOFT = 2,
+        STIF_ROOMTYPE_BOSS_HOUSE = 3,
+        STIF_ROOMTYPE_SKYFIELD = 4,
+    };
+
+    s32 getSTIFArea() const;
+    bool isSTIFAreaFaron() const;
+    bool isSTIFAreaEldin() const;
+    bool isSTIFAreaLanayru() const;
+    bool isSTIFAreaSealedGrounds() const {
+        return getSTIFArea() == STIF_AREA_SEALED_GROUNDS;
     }
-    bool isSTIFbyte4_0() const {
-        return getSTIFbyte4() == 0;
+    bool isSTIFAreaSky() const {
+        return getSTIFArea() == STIF_AREA_SKY;
     }
+
+    s32 getSTIFRoomType() const;
 
     s32 getAreaType() const;
     s32 getMapNameId() const;

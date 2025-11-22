@@ -641,9 +641,11 @@ public:
     static bool isOutOfStamina();
     static f32 getStamina();
 
+    static s32 getCurrentTunicType();
     static s32 getCurrentSwordType();
     static const char *getSwordName(s32);
     static s32 getCurrentlyEquippedShieldType();
+
 
     static const mColor &getEarringsColor();
 

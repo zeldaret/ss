@@ -996,7 +996,7 @@ bool dLytMeterMain_c::remove() {
 void dLytMeterMain_c::fn_800D5290() {
     dLytMeter_c *meter = dLytMeter_c::GetInstance();
 
-    if (dLytMap_c::GetInstance() != nullptr && !dLytMap_c::GetInstance()->isSomeMapFieldEq2Or4Or5Or6()) {
+    if (dLytMap_c::GetInstance() != nullptr && !dLytMap_c::GetInstance()->isMapEventEq2Or4Or5Or6()) {
         meter->setFlags(METER_BTN_PLUS);
     }
 
@@ -1008,7 +1008,7 @@ void dLytMeterMain_c::fn_800D5290() {
 }
 
 bool dLytMeterMain_c::fn_800D5350() {
-    if (mBasicPosition == POSITION_MAP && dMessage_c::getInstance()->getField_0x328()) {
+    if (mBasicPosition == POSITION_MAP && dMessage_c::getInstance()->getInMapEvent()) {
         return true;
     }
     return false;
@@ -1093,7 +1093,7 @@ bool dLytMeterMain_c::fn_800D56B0() {
         return true;
     }
 
-    if (dLytMap_c::GetInstance() != nullptr && !dLytMap_c::GetInstance()->getFn_80139EA0()) {
+    if (dLytMap_c::GetInstance() != nullptr && !dLytMap_c::GetInstance()->isVisibleNoIntro()) {
         return true;
     }
 

@@ -17,6 +17,16 @@ public:
     STATE_FUNC_DECLARE(dAcOSave_c, LightShaft);
     STATE_FUNC_DECLARE(dAcOSave_c, Escape);
 
+    bool checkStatueFlag() const;
+    u32 getStatueType() const;
+    u32 getStatueNameId() const;
+
+    enum StatueType {
+        TYPE_NORMAL = 0,
+        TYPE_OVERWORLD = 1,
+        TYPE_DUNGEON = 2,
+    };
+
 private:
     /* 0x??? */ STATE_MGR_DECLARE(dAcOSave_c);
 };

@@ -75,6 +75,10 @@ public:
         mpResAcc = resAcc;
     }
 
+    void setPriorityDraw(u8 priority) {
+        mLyt.setPriority(priority);
+    }
+
 private:
     /* 0x0C */ m2d::ResAccIf_c *mpResAcc;
     /* 0x10 */ d2d::LytBase_c mLyt;
@@ -94,6 +98,10 @@ public:
 
     void setResAcc(m2d::ResAccIf_c *resAcc) {
         mpResAcc = resAcc;
+    }
+
+    void setPriorityDraw(u8 priority) {
+        mLyt.setPriority(priority);
     }
 
 private:
@@ -344,6 +352,10 @@ public:
             mpResAcc = resAcc;
         }
 
+        void setPriorityDraw(u8 priority) {
+            mLyt.setPriority(priority);
+        }
+
         void changeState(const sFStateID_c<lytItemCursor_c> &newState);
 
         void pachinkoSetCharging(bool charging, f32 progress);
@@ -355,6 +367,7 @@ public:
         void bowStartDrawOrCharge(f32 f1, f32 f2);
         void bowAimStart();
         void bowReady();
+
 
     private:
         STATE_FUNC_DECLARE(lytItemCursor_c, Invisible);
@@ -429,6 +442,20 @@ public:
 
     void offNextCursor() {
         mNextCursorActive = false;
+    }
+
+    dCursorHitCheck_c *getCursorHit() const {
+        return mCursorIf.getHit();
+    }
+
+    dCursorInterfaceGame_c *getCursorIf() {
+        return &mCursorIf;
+    }
+
+    void setPriorityDraw(u8 priority) {
+        mLyt1.setPriorityDraw(priority);
+        mLyt2.setPriorityDraw(priority);
+        mCursor.setPriorityDraw(priority);
     }
 
 private:

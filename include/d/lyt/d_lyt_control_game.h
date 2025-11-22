@@ -2,6 +2,7 @@
 #define D_LYT_CONTROL_GAME_H
 
 #include "d/d_base.h"
+#include "d/lyt/d_lyt_map.h"
 #include "s/s_State.hpp"
 
 class dLytControlGame_c : public dBase_c {
@@ -17,6 +18,10 @@ public:
 
     void fn_802CCD40(bool);
     void fn_802D04F0();
+
+    const dMapFootPrintsQueue_c *getFootprintsQueue() const {
+        return mFootprintsMgr.getQueue();
+    }
 
     static dLytControlGame_c *getInstance() {
         return sInstance;
@@ -70,7 +75,11 @@ public:
 
 private:
     /* 0x00068 */ UI_STATE_MGR_DECLARE(dLytControlGame_c);
-    /* 0x000A4 */ u8 _0x000A4[0x15C2C - 0x000A4];
+    /* 0x000A4 */ u8 _0x000A4[0x15850 - 0x000A4];
+
+    /* 0x15850 */ dMapFootPrintsMgr_c mFootprintsMgr;
+
+    /* 0x15C24 */ u8 _0x15C24[0x15C2C - 0x15C24];
 
     /* 0x15C2C */ s32 mCurrentPauseDisp;
     /* 0x15C30 */ s32 mPauseDisp00Tab;

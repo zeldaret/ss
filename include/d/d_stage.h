@@ -67,18 +67,36 @@ public:
     /* 0x1E9 */ u8 field_0x1E9;
     /* 0x1EA */ s8 field_0x1EA;
     /* 0x1EB */ u8 field_0x1EB;
-    /* 0x1EC */ u8 field_0x1EC;
+    /* 0x1EC */ s8 field_0x1EC;
     /* 0x1ED */ u8 field_0x1ED;
     /* 0x1EE */ u8 field_0x1EE;
     /* 0x1EF */ u8 field_0x1EF;
     /* 0x1F0 */ u8 field_0x1F0;
 
 public:
+    s8 getField_0x1EC() const {
+        return field_0x1EC;
+    }
+
+    u8 getField_0x1EE() const {
+        return field_0x1EE;
+    }
+
+    void setField_0x1E8(u8 v) {
+        field_0x1E8 = v;
+    }
+
+    void setField_0x1EF(u8 v) {
+        field_0x1EF = v;
+    }
+
     void init(MapRelated *);
     void fn_801b4900();
     void fn_801B4B80(u32 mapParams, const mVec3_c &center, const mVec3_c &size);
     void fn_801B4C70(const mVec3_c &);
     void fn_801B50C0(s32);
+    const mVec3_c &fn_801B4CB0() const;
+    s32 fn_801B4F10(s32 roomid, const mVec3_c &position) const;
 };
 
 // OBJ NAME: STAGE
@@ -128,6 +146,10 @@ public:
         return sInstance;
     }
 
+    MapRelated *getMapRelated() {
+        return &mMapRelated;
+    }
+
     bool isFadedOut() const {
         return mFader.isStatus(mFaderBase_c::FADED_OUT);
     }
@@ -141,6 +163,8 @@ public:
     }
 
     bool fn_801B3EE0();
+    void fn_801B3F20();
+    void fn_801B3F30();
 
 private:
     dRoom_c *createRoom(int roomid, bool flag0x40);
@@ -154,7 +178,7 @@ private:
     /* 0x0068 */ sFPhase<dStage_c> mPhase;
     /* 0x007C */ dRoomTable_c rooms;
     /* 0x017C */ dFader_c mFader;
-    /* 0x01A0 */ MapRelated mapRelated;
+    /* 0x01A0 */ MapRelated mMapRelated;
     /* 0x0394 */ u8 _0x394[0x39C - 0x394];
     /* 0x039C */ u32 loaded_entities[2047];
     /* 0x2398 */ s8 curr_room_id;

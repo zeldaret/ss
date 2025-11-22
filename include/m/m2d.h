@@ -112,7 +112,7 @@ public:
         return mEndFrame;
     }
 
-// There's at least 1 file where the obvious way of writing
+// There are at least 2 files where the obvious way of writing
 // it seems to require accessing some members directly, without
 // inlines. I want to discourage direct access though, so
 // putting the ability behind an explicit define. We don't

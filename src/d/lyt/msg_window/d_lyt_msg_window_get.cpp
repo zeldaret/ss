@@ -176,18 +176,9 @@ bool dLytMsgWindowGet_c::execute() {
 }
 
 void dLytMsgWindowGet_c::draw() {
-    // NONMATCHING
-    // The instruction patterns here are the same that EGG::StateGX::Scoped
-    // generates, but there's no RAII to be found here. What's the missing
-    // link that makes the compiler generate these?
-    // When you fix this, fix other instances of this problem
-    // by searching for 91657b77
-    bool bVis[5] = {
-        mpPanes[0]->IsVisible(),
-        mpPanes[1]->IsVisible(),
-        mpPanes[2]->IsVisible(),
-        mpPanes[3]->IsVisible(),
-        mpPanes[4]->IsVisible(),
+    bool bVis[5];
+    for (int i = 0; i < 5; ++i) {
+        bVis[i] = mpPanes[i]->IsVisible();
     };
 
     mpPanes[0]->SetVisible(bVis[0]);
@@ -207,11 +198,9 @@ void dLytMsgWindowGet_c::draw() {
 
     mLyt.draw();
 
-    mpPanes[0]->SetVisible(bVis[0]);
-    mpPanes[1]->SetVisible(bVis[1]);
-    mpPanes[2]->SetVisible(bVis[2]);
-    mpPanes[3]->SetVisible(bVis[3]);
-    mpPanes[4]->SetVisible(bVis[4]);
+    for (int i = 0; i < 5; ++i) {
+        mpPanes[i]->SetVisible(bVis[i]);
+    };
 }
 
 void dLytMsgWindowGet_c::open(dAcObjBase_c *obj, u32 param) {
