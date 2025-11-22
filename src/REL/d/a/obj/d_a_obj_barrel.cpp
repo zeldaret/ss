@@ -154,6 +154,17 @@ int dAcOBarrel_c::actorCreate() {
     field_0xE05 = (int)getFromParams(6, 0x3) == 1 && mType == Normal;
 
     field_0xE07 = getFromParams(10, 0x3) == 0;
+
+    /**
+      D300: r06:  l0: id:FC 0F params1: 0xFFFA57F0 -> 0x01 (Seed Drops)
+    D300_1: r08:  l0: id:FC 33 params1: 0xFCEFF7F0 -> 0x01 (Bomb Drops)
+    D300_1: r08:  l0: id:FC 37 params1: 0xFCFFF7F0 -> 0x01 (Bomb Drops)
+    D300_1: r08:  l0: id:FC 38 params1: 0xFD0FF7F0 -> 0x01 (Bomb Drops)
+      D301: r00:  l0: id:00 12 params1: 0xFFFFF7F0 -> 0x01 (Arrow Drops)
+      D301: r00:  l0: id:00 13 params1: 0xFFFFF7F0 -> 0x01 (Arrow Drops)
+      D301: r00:  l0: id:00 14 params1: 0xFFFFF7F0 -> 0x01 (Arrow Drops)
+      D301: r00:  l0: id:00 15 params1: 0xFFFFF7F0 -> 0x01 (Arrow Drops)
+    */
     field_0xE0B = getFromParams(10, 0x3) == 1;
     field_0xE08 = getFromParams(8, 0x3) == 0;
 
@@ -1107,7 +1118,7 @@ void dAcOBarrel_c::fn_293_4200() {
         dJEffManager_c::spawnEffect(
             PARTICLE_RESOURCE_ID_MAPPING_474_, emitPosition, nullptr, &mScale, nullptr, nullptr, 0, 0
         )
-            ->bindShpEmitter(0x15, true);
+            ->bindShpEmitter(dJEffManager_c::BarrelBomb, true);
 
         if (fn_293_4C60()) {
             dJEffManager_c::spawnEffect(
@@ -1125,7 +1136,7 @@ void dAcOBarrel_c::fn_293_4200() {
         dJEffManager_c::spawnEffect(
             PARTICLE_RESOURCE_ID_MAPPING_475_, emitPosition, nullptr, &mScale, nullptr, nullptr, 0, 0
         )
-            ->bindShpEmitter(0x14, true);
+            ->bindShpEmitter(dJEffManager_c::Barrel, true);
 
         if (field_0xE07) {
             itemDroppingAndGivingRelated(nullptr, 0);

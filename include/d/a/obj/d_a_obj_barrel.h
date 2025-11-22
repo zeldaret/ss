@@ -164,8 +164,8 @@ private:
     /* 0xCA0 */ EffectsStruct mEmitter0;
     /* 0xCD4 */ EffectsStruct mEmitter1;
     /* 0xD08 */ dWaterEffect_c mWaterEffect;
-    /* 0xD70 */ mQuat_c quat_0xD50;
-    /* 0xD70 */ mQuat_c quat_0xD60;
+    /* 0xD50 */ mQuat_c quat_0xD50;
+    /* 0xD60 */ mQuat_c quat_0xD60;
     /* 0xD70 */ mQuat_c quat_0xD70;
     /* 0xD80 */ mQuat_c quat_0xD80;
     /* 0xD90 */ mQuat_c quat_0xD90;
