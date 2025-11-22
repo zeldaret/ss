@@ -110,8 +110,8 @@ private:
     /* 0x01D8 */ dTextBox_c *mpTextboxes[2];
     /* 0x01E0 */ nw4r::lyt::Pane *mpPanes[3];
     /* 0x01F4 */ dTagProcessor_c *mpTagProcessor;
-    /* 0x01F8 */ dLytMsgWindowCharData mCharData[1023]; // TODO - how large is this really?
-    /* 0x51DC */ wchar_t mTextBuf[1023];
+    /* 0x01F8 */ dLytMsgWindowCharData mCharData[TextWindowUnk::BUF_SIZE];
+    /* 0x51DC */ wchar_t mTextBuf[TextWindowUnk::BUF_SIZE];
     /* 0x59DC */ dLytTextSword mSwordText;
     /* 0x5AC4 */ s32 mSwordType;
     /* 0x5AC8 */ u8 field_0x5AC8;

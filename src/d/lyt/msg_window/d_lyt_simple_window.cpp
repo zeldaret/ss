@@ -280,7 +280,7 @@ bool dLytSimpleWindowSword_c::build(d2d::ResAccIf_c *resAcc, dTagProcessor_c *ta
     mpTextboxes[1]->setIsShadow(1);
     mpTagProcessor = tagProcessor;
 
-    for (int i = 0; i < (int)ARRAY_LENGTH(mCharData); i++) {
+    for (int i = 0; i < TextWindowUnk::BUF_SIZE; i++) {
         mCharData[i].reset();
         mTextBuf[i] = L'\0';
     }
@@ -373,15 +373,14 @@ bool dLytSimpleWindowSword_c::isOut() {
 }
 
 bool dLytSimpleWindowSword_c::setText(const wchar_t *text) {
-    int foundIdx = ARRAY_LENGTH(mCharData);
-    for (int i = 0; i < (int)ARRAY_LENGTH(mCharData); i++) {
+    int foundIdx = TextWindowUnk::BUF_SIZE;
+    for (int i = 0; i < TextWindowUnk::BUF_SIZE; i++) {
         if (mCharData[i].displayTimerMaybe >= 0 && foundIdx > mCharData[i].field_0x0C) {
             foundIdx = mCharData[i].field_0x0C;
         }
     }
 
-    // How is text bounds-checked here????
-    for (int i = 0; i < (int)ARRAY_LENGTH(mCharData); i++) {
+    for (int i = 0; i < TextWindowUnk::BUF_SIZE; i++) {
         if (i < foundIdx) {
             mTextBuf[i] = text[i];
         } else {

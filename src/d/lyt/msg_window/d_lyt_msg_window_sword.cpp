@@ -4,6 +4,7 @@
 #include "d/d_gfx.h"
 #include "d/d_tag_processor.h"
 #include "d/d_lyt_hio.h"
+#include "d/d_textwindow_unk.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_textbox.h"
 #include "m/m_vec.h"
@@ -96,7 +97,7 @@ bool dLytMsgWindowSword_c::build(d2d::ResAccIf_c *resAcc1, d2d::ResAccIf_c *resA
 
     mSwordText.build(resAcc, mSwordType);
 
-    for (int i = 0; i < 1023; i++) {
+    for (int i = 0; i < TextWindowUnk::BUF_SIZE; i++) {
         mCharacterData[i].reset();
         mTextBuf[i] = L'\0';
     }
@@ -265,7 +266,7 @@ bool dLytMsgWindowSword_c::execute() {
 void dLytMsgWindowSword_c::draw() {
     mLyt.draw();
 
-    for (int i = 0; i < 1023; i++) {
+    for (int i = 0; i < TextWindowUnk::BUF_SIZE; i++) {
         if (mCharacterData[i].displayTimerMaybe >= 0) {
             if (!mHasDrawnThisTick) {
                 mCharacterData[i].displayTimerMaybe += 1;
@@ -313,15 +314,14 @@ bool dLytMsgWindowSword_c::isDoneClosing() const {
 }
 
 bool dLytMsgWindowSword_c::setText(const wchar_t *text) {
-    int foundIdx = 1023;
-    for (int i = 0; i < 1023; i++) {
+    int foundIdx = TextWindowUnk::BUF_SIZE;
+    for (int i = 0; i < TextWindowUnk::BUF_SIZE; i++) {
         if (mCharacterData[i].displayTimerMaybe >= 0 && foundIdx > mCharacterData[i].field_0x0C) {
             foundIdx = mCharacterData[i].field_0x0C;
         }
     }
 
-    // How is text bounds-checked here????
-    for (int i = 0; i < 1023; i++) {
+    for (int i = 0; i < TextWindowUnk::BUF_SIZE; i++) {
         if (i < foundIdx) {
             mTextBuf[i] = text[i];
         } else {
@@ -333,5 +333,5 @@ bool dLytMsgWindowSword_c::setText(const wchar_t *text) {
     mpTextboxes[1]->SetTagProcessor(mpTagProcessor);
     mpTextboxes[0]->setTextWithTextProcessor(mTextBuf, mpTagProcessor, 0);
     mpTextboxes[1]->setTextWithTextProcessor(mTextBuf, mpTagProcessor, 0);
-    return foundIdx == 1023;
+    return foundIdx == TextWindowUnk::BUF_SIZE;
 }
