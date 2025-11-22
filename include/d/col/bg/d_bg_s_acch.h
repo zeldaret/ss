@@ -521,8 +521,14 @@ public:
     dBgS_GndChk &GetGnd() {
         return mGnd;
     }
+    const dBgS_GndChk &GetGnd() const {
+        return mGnd;
+    }
 
     dBgS_RoofChk &GetRoof() {
+        return mRoof;
+    }
+    const dBgS_RoofChk &GetRoof() const {
         return mRoof;
     }
 

@@ -62,6 +62,10 @@ public:
         return field_0x0E & pBg->GetField_0x22();
     }
 
+    void SetField_0xC(u16 v) {
+        field_0x0C = v;
+    }
+
     void SetExtChk(const cBgS_Chk &other) {
         mPolyPassChk = other.mPolyPassChk;
         mGrpPassChk = other.mGrpPassChk;

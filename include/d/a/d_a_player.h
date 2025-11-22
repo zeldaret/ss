@@ -2,6 +2,7 @@
 #define D_A_PLAYER_H
 
 #include "common.h"
+#include "d/a/d_a_base.h"
 #include "d/a/d_a_item.h"
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/d_player_mdl.h"
@@ -93,6 +94,12 @@ public:
         return LINK;
     }
 
+    static dAcPy_c &GetLinkRM() {
+        return *LINK;
+    }
+    static const dAcPy_c &GetLinkR() {
+        return *LINK;
+    }
     static dAcPy_c *GetLinkM() {
         return LINK;
     }

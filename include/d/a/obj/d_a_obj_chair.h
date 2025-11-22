@@ -6,13 +6,11 @@
 #include "d/col/bg/d_bg_w.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_shadow.h"
-#include "d/flag/sceneflag_manager.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOChair_c : public dAcObjBase_c {
 public:

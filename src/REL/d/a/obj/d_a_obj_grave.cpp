@@ -164,8 +164,7 @@ void dAcOGrave_c::executeState_Wait() {
             mAnmMatClr.setRate(1.f, 0);
         }
     }
-    mAng ang = getXZAngleToPlayer();
-    s32 diff = sLib::absDiff(ang, mRotation.y);
+    s32 diff = getXZAngleToPlayer().absDiff(mRotation.y);
     if (field_0x7F6) {
         mOrigPos2 = mPosition;
         vecCylCalc(mOrigPos2, mAngle.y, dAcPy_c::sPushRelatedConstant);

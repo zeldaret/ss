@@ -6,6 +6,7 @@
 #include "m/m_vec.h"
 #include "math.h"
 #include "nw4r/math/math_triangular.h"
+#include "s/s_Math.h"
 
 struct mAng {
     mAng() {}
@@ -44,10 +45,6 @@ struct mAng {
         return mAng(-mVal);
     }
 
-    mAng operator+(const mAng &other) const {
-        return mAng(mVal + other.mVal);
-    }
-
     mAng &operator+=(const mAng &other) {
         mVal += other.mVal;
         return *this;
@@ -63,6 +60,10 @@ struct mAng {
     mAng &operator*=(const f32 &other) {
         mVal *= other;
         return *this;
+    }
+
+    s32 absDiff(const mAng &other) const {
+        return sLib::absDiff(mVal, other.mVal);
     }
 
     static s32 abs(const mAng b) {
@@ -98,7 +99,7 @@ struct mAng {
         return mVal * sAngToRad;
     }
 
-    static s16 fromRad(f32 rad) {
+    static mAng fromRad(f32 rad) {
         return rad * sRadToAng;
     }
 
@@ -137,6 +138,10 @@ struct mAng {
     }
 
     s16 mVal;
+
+    static const mAng Zero() {
+        return 0;
+    }
 
 private:
     static const f32 sHalfCircleDeg;

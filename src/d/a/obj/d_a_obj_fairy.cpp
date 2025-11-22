@@ -128,12 +128,9 @@ int dAcOFairy_c::create() {
     }
     mPreventCatchAfterSpawnTimer = 45;
 
-    if (isWithinPlayerRadius(200.0f)) {
-        s16 ang = mVelocity.atan2sX_Z();
-        if (sLib::absDiff(getXZAngleToPlayer(), ang) < 0x2000) {
-            mVelocity.rotY(0x8000);
-            mAngle.y += 0x8000;
-        }
+    if (isWithinPlayerRadius(200.0f) && getXZAngleToPlayer().absDiff(mAng::fromVec(mVelocity)) < 0x2000) {
+        mVelocity.rotY(0x8000);
+        mAngle.y += 0x8000;
     }
 
     mModel.setAnm("PutFairy_fly", m3d::PLAY_MODE_4, 0.0f);
@@ -461,7 +458,8 @@ void dAcOFairy_c::executeState_CureStart() {
         }
     } else {
         calcCurePosition(50.0f, 50.0f);
-        s32 diff = sLib::absDiff(mCureAngle, 0);
+
+        s32 diff = mCureAngle.absDiff(0);
         if (diff < mCureAngularSpeed && mCurePosYOffset == 50.0f) {
             mStateMgr.changeState(StateID_Cure);
         }
@@ -627,7 +625,7 @@ f32 dAcOFairy_c::randMaxSpeedY() const {
 }
 
 bool dAcOFairy_c::shouldAvoidLink() const {
-    return isWithinPlayerRadius(150.0f) && sLib::absDiff(mAngle.y, getXZAngleToPlayer()) < 0x2000;
+    return isWithinPlayerRadius(150.0f) && mAngle.y.absDiff(getXZAngleToPlayer()) < 0x2000;
 }
 
 bool dAcOFairy_c::isMovingAwayFromOrigY() const {

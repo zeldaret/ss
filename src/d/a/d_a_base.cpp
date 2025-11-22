@@ -19,6 +19,7 @@
 #include "m/m_heap.h"
 #include "m/m_vec.h"
 #include "toBeSorted/actor_info.h"
+#include "toBeSorted/attention.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
@@ -676,7 +677,7 @@ void dAcBase_c::registerInEvent() {}
 void dAcBase_c::unkVirtFunc_0x6C() {}
 
 void dAcBase_c::doInteraction(s32 param) {
-    if (param == 4 || param == 5 || param == 12) {
+    if (param == TALK || param == EXAMINE_TALK || param == READ) {
         Event event = Event("DefaultTalk", 400, 0x100001, nullptr, nullptr);
         EventManager::alsoSetAsCurrentEvent(this, &event, nullptr);
     }

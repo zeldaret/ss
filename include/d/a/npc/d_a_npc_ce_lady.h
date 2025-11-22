@@ -13,6 +13,7 @@ public:
 
     bool fn_12_1C20(dAcObjBase_c *);
     void fn_12_1E00(dAcObjBase_c *, bool *);
+    void fn_12_1E80(dAcObjBase_c *, bool *);
 
 private:
     /* 0x??? */ STATE_MGR_DECLARE(dAcNpcCeLady_c);

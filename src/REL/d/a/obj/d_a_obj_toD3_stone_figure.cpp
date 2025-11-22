@@ -130,7 +130,7 @@ bool dAcOtoD3StoneFigure_c::isStoneOfTrialsPlaced() const {
 }
 
 void dAcOtoD3StoneFigure_c::doInteraction(s32 arg) {
-    if (arg == 5) {
+    if (arg == EXAMINE_TALK) {
         Event event = Event("D3OpenStart", 100, 0x100001, nullptr, nullptr);
         EventManager::alsoSetAsCurrentEvent(this, &event, nullptr);
     }

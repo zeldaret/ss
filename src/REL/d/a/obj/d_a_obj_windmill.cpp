@@ -69,8 +69,8 @@ int dAcOwindmill_c::create() {
     mWindmillRotation = mRotation.y.mVal;
     mWindmillPosition = mPosition;
 
-    mWindmillPosition.x += -95.22334f * (mRotation.y + mAng(0xc17)).sin();
-    mWindmillPosition.z += -95.22334f * (mRotation.y + mAng(0xc17)).cos();
+    mWindmillPosition.x += -95.22334f * mAng(mRotation.y + 0xc17).sin();
+    mWindmillPosition.z += -95.22334f * mAng(mRotation.y + 0xc17).cos();
     mWindmillPosition.y += -86.11143f;
 
     if (mHasPropellor || isWindmillRepaired()) {
@@ -242,7 +242,9 @@ void dAcOwindmill_c::executeState_Move() {
 void dAcOwindmill_c::finalizeState_Move() {
     field_0x63A = false;
     mAnmClr.setRate(-1.f, 0);
-    mRotation.y = mWindmillRotation + (mAng)mAng::fromDeg(mCurrentStuckPos * 0x1e);
+
+    mRotation.y = mWindmillRotation;
+    mRotation.y += mAng::fromDeg(mCurrentStuckPos * 30);
 }
 
 void dAcOwindmill_c::initializeState_Collect() {}

@@ -94,7 +94,7 @@ int dAcOTumbleWeed_c::doDelete() {
 }
 
 int dAcOTumbleWeed_c::actorExecute() {
-    if (!field_0x98C && !checkStopped()) {
+    if (!field_0x98C && !isFullyStopped()) {
         field_0x968 = mVelocity;
         field_0x968.y = 0.0f;
         field_0x968.normalize();
@@ -246,7 +246,7 @@ bool dAcOTumbleWeed_c::checkSlope() {
     dBgS::GetInstance()->GetTriPla(mObjAcch.mGnd, &pla);
 
     mAng ang = mAng::fromRad(mVec3_c::Ey.angle(pla.GetN()));
-    return sLib::absDiff(ang, 0) > mAng::deg2short(1);
+    return ang.absDiff(0) > mAng::deg2short(1);
 }
 
 bool dAcOTumbleWeed_c::checkCollect() {
@@ -311,15 +311,14 @@ void dAcOTumbleWeed_c::adjustSpeed() {
     //  Tumbleweed speeds to the target + 5.0f much quicker than intended
     mAng gndAngle = mAng::fromRad(mVec3_c::Ey.angle(pla.GetN()));
 
-    dBgS::GetInstance()->GetTriPla(mObjAcch.mGnd, &pla);
+    dBgS::GetInstance()->GetTriPla(mObjAcch.GetGnd(), &pla);
 
     f32 speedStep = 0.5f;
     f32 step = gndAngle.cos() * speedStep;
 
     // Flat Ground or not in the direction of the slope
     //  Slows down
-    if (gndAngle < mAng::deg2short(1) ||
-        sLib::absDiff(cM::atan2s(pla.GetN().x, pla.GetN().z), getAngle().y) > mAng::deg2short(90)) {
+    if (gndAngle < mAng::deg2short(1) || mAng::fromVec(pla.GetN()).absDiff(mAngle.y) > mAng::deg2short(90)) {
         sLib::chase(&mSpeed, mSpeedTarget, step);
     }
     // Sloped Ground and in the direction of the slope

@@ -830,6 +830,12 @@ public:
     void SetAtFlag(u32 flag) {
         mAt.SetSPrm(flag);
     }
+    void SetAtGrp(u32 grp) {
+        mAt.SetAtFlag(GetAtGrp() | grp);
+    }
+    void OffAtGrp(u32 grp) {
+        mAt.SetAtFlag(GetAtGrp() & ~grp);
+    }
 
     void SetTgFlag_0xA(u16 flag) {
         mTg.SetFlag_0xA(flag);
@@ -1000,7 +1006,6 @@ public:
     }
 
     // Co
-
     void SetCoGrp(u32 grp) {
         mCo.SetGrp(grp << 4);
     }

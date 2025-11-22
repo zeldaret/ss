@@ -120,7 +120,7 @@ public:
     /* vt 0x64 */ virtual bool restorePosRotFromCopy();
     /* vt 0x68 */ virtual void registerInEvent();
     /* vt 0x6C */ virtual void unkVirtFunc_0x6C();
-    /* vt 0x70 */ virtual void doInteraction(s32);
+    /* vt 0x70 */ virtual void doInteraction(s32 /* InteractionType */);
 
 public:
     dAcBase_c();
@@ -149,8 +149,12 @@ public:
         return mRotation;
     }
 
-    mVec3_c getPostionDifference(const dAcBase_c &other) {
+    mVec3_c getPostionDifference(const dAcBase_c &other) const {
         return mPosition - other.mPosition;
+    }
+
+    f32 getHeightDifference(const dAcBase_c &b) const {
+        return mPosition.y - b.mPosition.y;
     }
 
     f32 getSquareDistanceTo(const mVec3_c &point) const {
