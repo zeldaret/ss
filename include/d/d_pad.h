@@ -189,11 +189,11 @@ public:
         return mFSStickMaskChanged && (mFSStickMask & 0xFF) != 0;
     }
 
-    const mVec3_c& getMPLSVelocity() const {
+    const mVec3_c &getMPLSVelocity() const {
         return mMPLSVelocity;
     }
 
-    const mVec2_c& getDpdPosScreen() const {
+    const mVec2_c &getDpdPosScreen() const {
         return mDpdPosScreen;
     }
 

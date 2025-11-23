@@ -3,6 +3,7 @@
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "f/f_base.h"
+#include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
@@ -53,17 +54,19 @@ f32 dAcODecoB_c::lbl_611_data_34 = 0.95f;
 
 void dAcODecoB_c::executeState_Wait() {
     if (dAcPy_c::GetLink() != nullptr && dAcPy_c::GetLink()->checkFlags0x350(0x2000)) {
-        mVec3_c deltaPosition = dAcPy_c::GetLink()->mPosition - mPosition;
-        f32 distance = EGG::Math<f32>::sqrt(deltaPosition.squareMagXZ());
+        f32 distance = (dAcPy_c::GetLink()->mPosition - mPosition).absXZ();
         distance = (2000.0f - distance) / 2000.0f;
         if (distance < 0.0f) {
             distance = 0.0f;
         }
-        field_0x38E = distance * 2048.0f;
+        field_0x38E = distance * 2048.f;
     }
-    field_0x38E -= mRotation.x * 0.05f;
-    field_0x38E = field_0x38E * lbl_611_data_34;
-    mRotation.x += field_0x38E;
+
+    mAng rot = mRotation.x;
+
+    field_0x38E -= s32(0.05f * rot);
+    field_0x38E *= lbl_611_data_34;
+    mRotation.x = rot + field_0x38E;
 }
 
 const f32 dAcODecoB_c::lbl_611_rodata_30 = 2000.0f;
