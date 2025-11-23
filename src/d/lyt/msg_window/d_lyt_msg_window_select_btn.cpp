@@ -64,8 +64,8 @@ void SelectBtnHelper::remove() {
 }
 
 void SelectBtnHelper::resetCursor() {
-    mAngX = mAngXCenter = mAng::ang2deg_c(dPad::ex_c::getInstance()->mMPLS.getHorizontalAngle());
-    mAngY = mAngYCenter = mAng::ang2deg_c(dPad::ex_c::getInstance()->mMPLS.getVerticalAngle());
+    mAngX = mAngXCenter = mAng::s2d_c(dPad::ex_c::getInstance()->mMPLS.getHorizontalAngle());
+    mAngY = mAngYCenter = mAng::s2d_c(dPad::ex_c::getInstance()->mMPLS.getVerticalAngle());
 }
 
 u8 SelectBtnHelper::execute() {
@@ -111,8 +111,8 @@ bool SelectBtnHelper::handleCursorInput() {
         return true;
     }
 
-    mAngX = mAng::ang2deg_c(dPad::ex_c::getInstance()->mMPLS.getHorizontalAngle());
-    mAngY = mAng::ang2deg_c(dPad::ex_c::getInstance()->mMPLS.getVerticalAngle());
+    mAngX = mAng::s2d_c(dPad::ex_c::getInstance()->mMPLS.getHorizontalAngle());
+    mAngY = mAng::s2d_c(dPad::ex_c::getInstance()->mMPLS.getVerticalAngle());
 
     mVec2_c screenPos = dPad::getDpdPosScreen();
     if (mCursorSelectTimer > 0) {
@@ -133,8 +133,8 @@ bool SelectBtnHelper::handleCursorInput() {
                 mPad::getCore()->startPatternRumble("**-*----", 0, false);
             }
             fn_8011E110(screenPos);
-            // TODO additional stack stores
             field_0x2C = dPad::getDpdPosScreen();
+            screenPos = field_0x2C;
             mAngXCenter = mAngX;
             mAngYCenter = mAngY;
         }
@@ -162,19 +162,22 @@ bool SelectBtnHelper::handleCursorInput() {
 
         if (selected != -1) {
             nw4r::math::MTX34 mtx0 = getRootPane()->GetGlobalMtx();
-            mVec2_c pos0 = mVec2_c(mtx0._03, mtx0._13);
+            mVec2_c pos0(mtx0._03, mtx0._13);
+
             nw4r::math::MTX34 mtxi = getPosPane(selected)->GetGlobalMtx();
-            mVec2_c posi = mVec2_c(mtxi._03, mtxi._13);
+            mVec2_c posi(mtxi._03, mtxi._13);
+
             mVec2_c d1 = posi - pos0;
-            s16 ang = d1.ang();
+            mAng ang = cM::atan2s(d1.y, d1.x);
 
-            mVec2_c adj;
-            adj.x = v.x * dLyt_HIO_c::getInstance()->getField0x770();
-            adj.y = v.y * dLyt_HIO_c::getInstance()->getField0x774();
-            mVec2_c d2 = posi + adj - pos0;
-            s16 ang2 = d2.ang();
+            v.x *= dLyt_HIO_c::getInstance()->getField0x770();
+            v.y *= dLyt_HIO_c::getInstance()->getField0x774();
 
-            angle = mAng::ang2deg_c(ang2) - mAng::ang2deg_c(ang);
+            mVec2_c d2 = posi + v - pos0;
+
+            mAng ang2 = cM::atan2s(d2.y, d2.x);
+
+            angle = ang2.degree_c() - ang.degree_c();
             length = d2.length() / d1.length();
         }
         if (length > 1.0f) {
@@ -338,8 +341,7 @@ bool SelectBtnHelper::handleButtonInput() {
 #undef IS
 
         if (btn == -1) {
-            // TODO
-            btn = field_0x4C != -1 ? field_0x4C : 0;
+            btn = field_0x4C != -1 ? (s8)field_0x4C : (s8)0;
         }
     }
 
@@ -417,8 +419,8 @@ bool SelectBtnHelper::hasNewFSStickButtonSelect() const {
             break;
         case MODE_3_UP:
             if (((TRIG(UP) || TRIG(UP_RIGHT) || TRIG(UP_LEFT)) && mSelectedBtnIdx == 0) ||
-                ((TRIG(DOWN) || TRIG(DOWN_RIGHT) || TRIG(DOWN_LEFT)) && (mSelectedBtnIdx == 1 || mSelectedBtnIdx == 2)
-                ) ||
+                ((TRIG(DOWN) || TRIG(DOWN_RIGHT) || TRIG(DOWN_LEFT)) &&
+                 (mSelectedBtnIdx == 1 || mSelectedBtnIdx == 2)) ||
                 ((TRIG(RIGHT) || TRIG(UP_RIGHT) || TRIG(DOWN_RIGHT)) && mSelectedBtnIdx == 1) ||
                 ((TRIG(LEFT) || TRIG(UP_LEFT) || TRIG(DOWN_LEFT)) && mSelectedBtnIdx == 2)) {
                 return false;

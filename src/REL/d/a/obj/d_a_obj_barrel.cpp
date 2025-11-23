@@ -192,7 +192,7 @@ int dAcOBarrel_c::actorCreate() {
     mMaxSpeed = -40.f;
 
     field_0xDDC = 0.f;
-    field_0xDEC = mAng::Zero();
+    field_0xDEC = mAng(0);
     quat_0xD50.set(1.f, 0.f, 0.f, 0.f);
     mScale.set(1.f, 1.f, 1.f);
     quat_0xD90.set(1.f, 0.f, 0.f, 0.f);
@@ -201,7 +201,7 @@ int dAcOBarrel_c::actorCreate() {
     quat_0xDA0.set(1.f, 0.f, 0.f, 0.f);
 
     if (isType_0()) {
-        mRotation.z += 0x4000;
+        mRotation.z += mAng(0x4000);
         unsetActorProperty(AC_PROP_0x1);
         mCyl.SetAtGrp(0x10);
     }
@@ -216,8 +216,8 @@ int dAcOBarrel_c::actorCreate() {
         qz.setAxisRotation(mVec3_c::Ez, mRotation.z.radian());
         quat_0xD80 = qx * qz;
 
-        mRotation.x = mAng::Zero();
-        mRotation.z = mAng::Zero();
+        mRotation.x = mAng(0);
+        mRotation.z = mAng(0);
     }
 
     mMdl.setPriorityDraw(0x7F, 0x7F);
@@ -429,7 +429,7 @@ void dAcOBarrel_c::executeState_Wait() {
             quat_0xD70.Set(mVec3_c::Ey, v);
         }
 
-        if (fn_293_4A90(mAng::deg2short(1.f))) {
+        if (fn_293_4A90(mAng::d2s(1.f))) {
             mStateMgr.changeState(StateID_Slope);
             return;
         }
@@ -514,8 +514,8 @@ void dAcOBarrel_c::initializeState_GrabUp() {
     bool y = mAng(ry).absDiff(0) > 0x4000;
 
     // Fakematch?
-    qy.setAxisRotation(mVec3_c::Ey, mAng::short2rad(y ? mAng(ry) - 0x8000 : ry));
-    qz.setAxisRotation(mVec3_c::Ez, mAng::short2rad(z ? 0x4000 : -0x4000));
+    qy.setAxisRotation(mVec3_c::Ey, mAng::s2r(y ? mAng(ry) - 0x8000 : ry));
+    qz.setAxisRotation(mVec3_c::Ez, mAng::s2r(z ? 0x4000 : -0x4000));
 
     quat_0xD60 = qy * qz;
     if (!field_0xE02) {
@@ -612,7 +612,7 @@ void dAcOBarrel_c::initializeState_Slope() {
     field_0xDEE -= mAngle.y;
 
     mAng ang(mAng::abs(mAngle.y - field_0xDEE));
-    field_0xDF0 = nw4r::math::FSqrt(ang.degree2() / 180.f) * 910.f;
+    field_0xDF0 = nw4r::math::FSqrt(ang.degree_c() / 180.f) * 910.f;
 
     mVec3_c v = mWorldMtx.multVecSR(-mVec3_c::Ez);
     field_0xDEA = mAng::fromVec(v);
@@ -679,7 +679,7 @@ void dAcOBarrel_c::executeState_Slope() {
             return;
         }
 
-        if (!fn_293_4A90(mAng::deg2short(1))) {
+        if (!fn_293_4A90(mAng::d2s(1))) {
             mStateMgr.changeState(StateID_Wait);
             return;
         }
@@ -732,7 +732,7 @@ void dAcOBarrel_c::executeState_Water() {
     }
 }
 void dAcOBarrel_c::finalizeState_Water() {
-    field_0xDF2 = mAng::Zero();
+    field_0xDF2 = mAng(0);
 }
 
 void dAcOBarrel_c::initializeState_Water2() {
@@ -751,7 +751,7 @@ void dAcOBarrel_c::executeState_Water2() {
     }
 }
 void dAcOBarrel_c::finalizeState_Water2() {
-    field_0xDF2 = mAng::Zero();
+    field_0xDF2 = mAng(0);
 }
 
 void dAcOBarrel_c::initializeState_Explode() {
@@ -894,7 +894,7 @@ void dAcOBarrel_c::fn_293_31B0() {
     dBgS::GetInstance()->GetTriPla(mObjAcch.GetGnd(), &pla);
 
     mAng nrmAngle = mAng::fromRad(field_0xDBC.angle(pla.GetN()));
-    if (nrmAngle > mAng::deg2short(75)) {
+    if (nrmAngle > mAng::d2s(75)) {
         field_0xE06 = true;
     }
 
@@ -911,7 +911,7 @@ void dAcOBarrel_c::fn_293_31B0() {
     mSpeed = cM::minMaxLimit(mSpeed, -20.f, 20.f);
 
     if (mAng::fromVec(pla.GetN()).absDiff(mAngle.y) < 0x2000) {
-        sLib::addCalcAngle(mAngle.y.ref(), pla.GetAngleY(), 5, mAng::deg2short(10), 0x100);
+        sLib::addCalcAngle(mAngle.y.ref(), pla.GetAngleY(), 5, mAng::d2s(10), 0x100);
     } else {
         mAngle.y = mAng::fromVec(mVelocity);
     }
@@ -927,7 +927,7 @@ void dAcOBarrel_c::fn_293_31B0() {
 
         if (field_0xE00 && field_0xE02) {
             field_0xE01 = fn_293_4ED0();
-            sLib::addCalcAngle(field_0xDEC.ref(), mAng(target) - field_0xDEA, 10, mAng::deg2short(5), 0x100);
+            sLib::addCalcAngle(field_0xDEC.ref(), mAng(target) - field_0xDEA, 10, mAng::d2s(5), 0x100);
 
             mQuat_c q;
             q.setAxisRotation(mVec3_c::Ey, field_0xDEC.radian());
@@ -954,7 +954,7 @@ void dAcOBarrel_c::fn_293_3560() {
     mAng nrmAngle = mAng::fromRad(mVec3_c::Ey.angle(pla.GetN()));
 
     f *= nrmAngle.cos();
-    if (nrmAngle < mAng::deg2short(5) || mAng::fromVec(pla.GetN()).absDiff(mAngle.y) > 0x4000) {
+    if (nrmAngle < mAng::d2s(5) || mAng::fromVec(pla.GetN()).absDiff(mAngle.y) > 0x4000) {
         if (!field_0xE00) {
             f *= 8.f;
         }
@@ -987,7 +987,7 @@ void dAcOBarrel_c::fn_293_37B0() {
 
     if (someState) {
         mVelocity.y = 0.f;
-        field_0xDE4.x = mAng::Zero();
+        field_0xDE4.x = mAng(0);
         field_0xDDC = 0.f;
         field_0xE0E = true;
     } else {
@@ -1013,7 +1013,7 @@ void dAcOBarrel_c::fn_293_37B0() {
     }
 
     if (fn_293_4BC0()) {
-        field_0xDE4.x = mAng::Zero();
+        field_0xDE4.x = mAng(0);
         mSpeed = 0.f;
         mVelocity.y = 0.f;
         field_0xE00 = false;
@@ -1163,7 +1163,7 @@ bool dAcOBarrel_c::fn_293_45A0() {
     }
 
     if (mObjAcch.ChkWallHit(nullptr)) {
-        if (mAng(mAcchCir.GetWallAngleY()).absDiff(mAngle.y) > mAng::deg2short(70) && mSpeed > 5.f) {
+        if (mAng(mAcchCir.GetWallAngleY()).absDiff(mAngle.y) > mAng::d2s(70) && mSpeed > 5.f) {
             return true;
         }
         if (mStateMgr.isState(StateID_GrabPut) && dAcPy_c::GetLink()->checkCurrentAction(/* PUT_DOWN_MEDIUM */ 0x42)) {
@@ -1263,7 +1263,7 @@ bool dAcOBarrel_c::fn_293_4D00() {
         && mYOffset >= 0.f                                                                 //
         && mObjAcch.ChkGndHit() && dBgS::GetInstance()->ChkMoveBG(mObjAcch.GetGnd(), true) //
         && isSpeedStopped() && isVerticalSpeedStopped()                                    // No Movement XZ or Y
-        && !fn_293_4A90(mAng::deg2short(0.09f))                                            // Perfectly Flat Ground
+        && !fn_293_4A90(mAng::d2s(0.09f))                                                  // Perfectly Flat Ground
     );
 }
 
@@ -1272,7 +1272,7 @@ bool dAcOBarrel_c::fn_293_4ED0() const {
     mWorldMtx.multVecSR(up);
 
     mQuat_c q;
-    q.setAxisRotation(up, mAng::short2rad(mAng::deg2short(1)));
+    q.setAxisRotation(up, mAng::s2r(mAng::d2s(1)));
 
     mMtx_c m;
     m.fromQuat(q);
@@ -1287,13 +1287,11 @@ bool dAcOBarrel_c::fn_293_4F80() {
 
     f32 rad = up.angle(mVelocity);
     mAng ang = mAng::fromRad(rad);
-    return mAng::deg2short(75.f) < ang && ang < (mAng::deg2short(105.005f));
+    return mAng::d2s(75.f) < ang && ang < (mAng::d2s(105.005f));
 }
 
 bool dAcOBarrel_c::fn_293_50B0() {
-    return (
-        field_0xE00 && field_0xE02 && mSpeed > 15.f && getXZAngleToPlayer().absDiff(mAngle.y) < mAng::deg2short(60.005)
-    );
+    return (field_0xE00 && field_0xE02 && mSpeed > 15.f && getXZAngleToPlayer().absDiff(mAngle.y) < mAng::d2s(60.005));
 }
 
 void dAcOBarrel_c::fn_293_5150() {
@@ -1366,8 +1364,8 @@ void dAcOBarrel_c::fn_293_5440() {
     field_0xDB0 = dAcPy_c::GetLink()->mVelocity;
     field_0xDB0.y = 0.f;
     field_0xDB0.normalize();
-    field_0xDF8.setF(1820.f);
-    field_0xDFA.setF(2730.f);
+    field_0xDF8 = 1820.f;
+    field_0xDFA = 2730.f;
     field_0xDFC = 90;
 }
 
@@ -1379,8 +1377,8 @@ void dAcOBarrel_c::fn_293_54D0() {
         mQuat_c qplayer1, qplayer0;
 
         qplayer0.setAxisRotation(field_0xDB0, mAng(field_0xDF4.sin() * field_0xDF8).radian());
-        field_0xDF4 += mAng::deg2short(12);
-        if (mAng::abs(field_0xDF4) < mAng::deg2short(12)) {
+        field_0xDF4 += mAng::d2s(12);
+        if (mAng::abs(field_0xDF4) < mAng::d2s(12)) {
             field_0xDF8 *= dAcOBarrel_c_Param_c::_12;
         }
 
@@ -1388,8 +1386,8 @@ void dAcOBarrel_c::fn_293_54D0() {
         m.multVecSR(vx);
 
         qplayer1.setAxisRotation(vx, mAng(field_0xDF6.sin() * field_0xDFA).radian());
-        field_0xDF6 += mAng::deg2short(20);
-        if (mAng::abs(field_0xDF6) < mAng::deg2short(20)) {
+        field_0xDF6 += mAng::d2s(20);
+        if (mAng::abs(field_0xDF6) < mAng::d2s(20)) {
             field_0xDFA *= dAcOBarrel_c_Param_c::_9;
         }
 

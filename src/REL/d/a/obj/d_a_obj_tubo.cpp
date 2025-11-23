@@ -353,7 +353,7 @@ void dAcOtubo_c::initializeState_Slope() {
     mAng plaAng = pla.GetAngleY();
     field_0x9C4 = (plaAng - mAngle.y);
     mAng other = labs((s16)(mAngle.y - field_0x9C4));
-    field_0x9C6 = nw4r::math::FSqrt(other.degree2() / 180.f) * 910.f;
+    field_0x9C6 = nw4r::math::FSqrt(other.degree_c() / 180.f) * 910.f;
 }
 void dAcOtubo_c::executeState_Slope() {
     if (mObjAcch.ChkGroundLanding()) {
@@ -567,8 +567,8 @@ void dAcOtubo_c::fn_272_2670() {
             mbField_0x9F1 = false;
         }
         static const s16 unk = {0}; // needed for rodata ordering
-        if (!cM::isZero(field_0x9CA)) {
-            mAngle.y = (*(s16 *)((u8 *)this + 0x9CA)); // HACK to force load again
+        if (!cM::isZero(field_0x9CA.mVal)) {
+            mAngle.y = field_0x9CA.mVal; // HACK to force load again
             field_0x9CA.set(0);
         } else {
             mQuat_c q;
@@ -626,7 +626,7 @@ void dAcOtubo_c::attemptDestroy() {
         return;
     }
 
-    if (mObjAcch.ChkWallHit(nullptr) && mAng(mAcchCir.GetWallAngleY()).absDiff(mAngle.y) > mAng::deg2short(70.f)) {
+    if (mObjAcch.ChkWallHit(nullptr) && mAng(mAcchCir.GetWallAngleY()).absDiff(mAngle.y) > mAng::d2s(70.f)) {
         attemptDestroyOnWall();
         mAngle.y = mAcchCir.GetWallAngleY();
         mSpeed *= 0.5f;
@@ -672,7 +672,7 @@ void dAcOtubo_c::attemptDestroy() {
 }
 
 void dAcOtubo_c::attemptDestroyOnWall(const u32 &param0, const bool &param1) {
-    if (param1 && mAng(mAcchCir.GetWallAngleY()).absDiff(mAngle.y) > mAng::deg2short(70.f) && 15.f < mSpeed) {
+    if (param1 && mAng(mAcchCir.GetWallAngleY()).absDiff(mAngle.y) > mAng::d2s(70.f) && 15.f < mSpeed) {
         destroy();
     }
 }
@@ -718,7 +718,7 @@ void dAcOtubo_c::fn_272_3020() {
 
     rot.normalize();
     rot.rotY(field_0x9CC);
-    field_0x9CC += 0x2000;
+    field_0x9CC += mAng(ang_inc);
 
     quat.makeVectorRotation(sRot, rot);
     sLib::chase(&field_0x9E0, 0.f, 0.005f);
@@ -746,7 +746,7 @@ void dAcOtubo_c::adjustAngle() {
     mSpeed = nw4r::math::FSqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z);
     mSpeed = cM::minMaxLimit(mSpeed, -30.f, 30.f);
 
-    if (mAng::fromVec(pla.GetN()).absDiff(mAngle.y) < mAng::deg2short(90.f)) {
+    if (mAng::fromVec(pla.GetN()).absDiff(mAngle.y) < mAng::d2s(90.f)) {
         sLib::addCalcAngle(mAngle.y.ref(), pla.GetAngleY(), 5, 0x71C, 0x100);
     } else {
         mAngle.y = mAng::fromVec(mVelocity);
@@ -760,7 +760,7 @@ void dAcOtubo_c::adjustSpeed() {
     mAng gndAngle = mAng::fromRad(mVec3_c::Ey.angle(pla.GetN()));
     step *= gndAngle.cos();
 
-    if (gndAngle < mAng::deg2short(5) || mAng::fromVec(pla.GetN()).absDiff(mAngle.y) > mAng::deg2short(90)) {
+    if (gndAngle < mAng::d2s(5) || mAng::fromVec(pla.GetN()).absDiff(mAngle.y) > mAng::d2s(90)) {
         f32 stepSize = mYOffset;
         sLib::chase(&mSpeed, 0.f, step + stepSize * -0.05f);
     } else {
@@ -778,7 +778,7 @@ bool dAcOtubo_c::checkSlope() {
     dBgS::GetInstance()->GetTriPla(mObjAcch.GetGnd(), &pla);
     mAng gndAngle = mAng::fromRad(mVec3_c::Ey.angle(pla.GetN()));
 
-    return gndAngle.absDiff(0) > mAng::deg2short(5);
+    return gndAngle.absDiff(0) > mAng::d2s(5);
 }
 
 bool dAcOtubo_c::fn_272_3660() {

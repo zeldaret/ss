@@ -179,7 +179,7 @@ void beginPad_BR() {
             mVec3_c baseY;
             mVec3_c baseZ;
             KPADVec kpadvec;
-            m.XrotS(mAng::deg2short(-30.f));
+            m.XrotS(mAng::d2s(-30.f));
             baseZ.z = m.m[2][2];
             baseZ.y = m.m[1][2];
             baseZ.x = m.m[0][2];
@@ -247,11 +247,19 @@ void beginPad_BR() {
         ex.mFSStick.x = mPad::getCore(0)->getFreeStickX();
         ex.mFSStick.y = mPad::getCore(0)->getFreeStickY();
         ex.mFSStickDistance = ex.mFSStick.length();
-        ex.mFSStickAngle = -ex.mFSStick.ang();
+        ex.mFSStickAngle = (s32)-ex.mFSStick.ang();
 
         ex.calcFSStickDirMask();
-
-        bool isMpls = mPad::isMpls(0) || mPad::isMplsPtFS(0);
+        // I think compiler flags or some inlining optimization ruins this.
+        // This needs to be done separate from EGG as it will break other code
+        // Changing TBuffer::checkRange() as below fixes it.
+        // From:
+        //     return 0 <= i && i < mSize;
+        // To:
+        //     bool low = 0 <= i;
+        //     bool high = i < mSize;
+        //     return low && high;
+        bool isMpls = mPad::isMpls(0) || mPad::isMplsPtFS(0) ? true : false;
         if (isMpls) {
             ex.mMPLSVelocity.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_rot);
             ex.mMPLS.mX.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_basis_x);

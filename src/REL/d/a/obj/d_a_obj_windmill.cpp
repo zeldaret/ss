@@ -66,11 +66,11 @@ int dAcOwindmill_c::create() {
     mSetRotation = getFromParams(0, 0xF);
     mSceneFlagInPlace = getFromParams(4, 0xFF);
     mSceneFlagBeingBlown = getFromParams(0xC, 0xFF);
-    mWindmillRotation = mRotation.y.mVal;
+    mWindmillRotation.set(mRotation.y.mVal);
     mWindmillPosition = mPosition;
 
-    mWindmillPosition.x += -95.22334f * mAng(mRotation.y + 0xc17).sin();
-    mWindmillPosition.z += -95.22334f * mAng(mRotation.y + 0xc17).cos();
+    mWindmillPosition.x += -95.22334f * mAng(mRotation.y + mAng::d2s(17.005f)).sin();
+    mWindmillPosition.z += -95.22334f * mAng(mRotation.y + mAng::d2s(17.005f)).cos();
     mWindmillPosition.y += -86.11143f;
 
     if (mHasPropellor || isWindmillRepaired()) {
@@ -86,7 +86,7 @@ int dAcOwindmill_c::create() {
         if (delta < 0) {
             delta += 0xC;
         }
-        mRotation.y += 0x1555 * delta;
+        mRotation.y += mAng::d2s(30) * delta;
         mCurrentStuckPos = mSetRotation;
         mStateMgr.changeState(StateID_CollectStick);
         mTimer1 = 0;
@@ -243,8 +243,7 @@ void dAcOwindmill_c::finalizeState_Move() {
     field_0x63A = false;
     mAnmClr.setRate(-1.f, 0);
 
-    mRotation.y = mWindmillRotation;
-    mRotation.y += mAng::fromDeg(mCurrentStuckPos * 30);
+    mRotation.y = mWindmillRotation + mAng::fromDeg(mCurrentStuckPos * 30);
 }
 
 void dAcOwindmill_c::initializeState_Collect() {}

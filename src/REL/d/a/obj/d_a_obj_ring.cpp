@@ -57,7 +57,7 @@ void dAcOring_c::executeState_Move() {
     if (getLinkage().checkConnection(dLinkage_c::CONNECTION_7)) {
         return;
     }
-    mRotation.addX(0x1000);
+    mRotation.x += 0x1000;
     if (field_0x38C >= mPosition.y) {
         deleteRequest();
     }

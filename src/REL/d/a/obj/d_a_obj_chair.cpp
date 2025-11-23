@@ -161,7 +161,7 @@ int dAcOChair_c::actorExecute() {
 
     if (!isBench()) {
         if (isChairTypeIdk0() && !checkObjectProperty(OBJ_PROP_0x8000)) {
-            if (mRotation.y.absDiff(getXZAngleToPlayer()) > mAng::deg2short(5)) {
+            if (mRotation.y.absDiff(getXZAngleToPlayer()) > mAng::d2s(5)) {
                 getRotation().y = getXZAngleToPlayer();
             }
         }
@@ -175,7 +175,7 @@ int dAcOChair_c::actorExecute() {
         mMdl.calc(false);
     } else {
         if (isChairTypeIdk0() && !checkObjectProperty(OBJ_PROP_0x8000)) {
-            if (mRotation.y.absDiff(getXZAngleToPlayer()) > mAng::deg2short(5)) {
+            if (mRotation.y.absDiff(getXZAngleToPlayer()) > mAng::d2s(5)) {
                 getRotation().y = getXZAngleToPlayer();
             }
         }
