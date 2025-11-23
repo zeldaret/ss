@@ -21,7 +21,7 @@ SPECIAL_ACTOR_PROFILE(TAG_BARREL, dTgBarrel_c, fProfile::TAG_BARREL, 0x221, 0, 0
 STATE_DEFINE(dTgBarrel_c, Wait);
 STATE_DEFINE(dTgBarrel_c, Stop);
 
-// Weak function ordering issue of the ctor and dtpr of the objects
+// Weak function ordering issue of the ctor and dtor of the objects
 // for the following in the member arrays
 //   dAcRef_c<dTgBarrelPos_c>
 //   dAcRef_c<dAcOBarrel_c>

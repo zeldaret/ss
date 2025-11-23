@@ -36,10 +36,10 @@ private:
     /* 0x240 */ u8 mStopFlag;       ///< Stop Sceneflag - Note there is no checking done to see if valid
     /* 0x241 */ u8 mSpawnInterval;  ///< Barrel Spawn Interval in Seconds
     /* 0x242 */ u8 mSpawnTimer;     ///< Barrel Spawn Timer
-    /* 0x243 */ u8 mBarrelPosCount; ///< Repesents the index of the highest dTgBarrelPos_c in mTgBarrelPosArr
+    /* 0x243 */ u8 mBarrelPosCount; ///< Represents the index of the highest dTgBarrelPos_c in mTgBarrelPosArr
     /* 0x244 */ u8 mBarrelPosIndex; ///< Rolling index to spawn dAcOBarrel_c from a dTgBarrelPos_c
     /* 0x245 */ u8 mLinkId;         ///< Link Id used to find correct dTgBarrelPos_c
-    /* 0x246 */ bool mSpawnActive;  ///< Used to reset the spawn timer after the player  has already entered the area
+    /* 0x246 */ bool mSpawnActive;  ///< Used to reset the spawn timer after the player has already entered the area
 };
 
 #endif
