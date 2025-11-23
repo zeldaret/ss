@@ -219,7 +219,7 @@ bool dAcOInsect_c::fn_8018FAD0() {
 void dAcOInsect_c::fn_8018FDF0(const mVec3_c &point) {
     mMtx_c mtx;
     field_0x360 = point;
-    mtx.setAxisRotation(field_0x360, mRotation.y.radian2());
+    mtx.setAxisRotation(field_0x360, mRotation.y.radian_c());
     // TODO
     f32 a_comparision = 0.99f;
 }

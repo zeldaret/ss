@@ -897,9 +897,9 @@ void dLytMapIcon01_c::draw() {
                             mVec3_c rotate(0.0f, 0.0f, 0.0f);
                             if (dLytMapGlobal_c::GetInstance()->getField_0x55() != 0) {
                                 dAcPy_c *link = getLinkPtr();
-                                rotate.z = mAng(link->mRotation.y + link->vt_0x19C() + -mapRot).degree2();
+                                rotate.z = mAng(link->mRotation.y + link->vt_0x19C() + -mapRot).degree_c();
                             } else {
-                                rotate.z = mAng(field_0x0D3A + -mapRot).degree2();
+                                rotate.z = mAng(field_0x0D3A + -mapRot).degree_c();
                             }
                             pane->SetRotate(rotate);
                             pane = pane->GetParent();
@@ -907,7 +907,7 @@ void dLytMapIcon01_c::draw() {
                         }
                         case MAP_ICON_01_PANE_DOOR_000:
                         case MAP_ICON_01_PANE_START_000: {
-                            mVec3_c rotate(0.0f, 0.0f, mAng(-mapRot + commandRot).degree2());
+                            mVec3_c rotate(0.0f, 0.0f, mAng(-mapRot + commandRot).degree_c());
                             pane->SetRotate(rotate);
                             pane = mpPanes[paneIdx]->GetParent();
                             break;
@@ -920,7 +920,7 @@ void dLytMapIcon01_c::draw() {
                         case MAP_ICON_01_PANE_UTA_000:
                         case MAP_ICON_01_PANE_MUSI_000:
                         case MAP_ICON_01_PANE_SKYLOFT_000: {
-                            mVec3_c rotate(0.0f, 0.0f, (-mapRot).degree2());
+                            mVec3_c rotate(0.0f, 0.0f, (-mapRot).degree_c());
                             pane->SetRotate(rotate);
                             pane = mpPanes[paneIdx]->GetParent();
                             break;
@@ -953,7 +953,7 @@ void dLytMapIcon01_c::draw() {
                         } else if (dScGame_c::isCurrentStage("F023")) {
                             setCloud(2, pane);
                         }
-                        mVec3_c rotate(0.0f, 0.0f, (-mapRot).degree2());
+                        mVec3_c rotate(0.0f, 0.0f, (-mapRot).degree_c());
                         pane->SetRotate(rotate);
                         pane = mpPanes[paneIdx]->GetParent();
                     }
@@ -1054,7 +1054,7 @@ static const char *sMapPrefix = "MAP_";
 void dLytMapIcon01_c::resetDrawCommands() {
     for (int i = 0; i < (int)ARRAY_LENGTH(mCommands); i++) {
         mCommands[i].position.set(0.0f, 0.0f);
-        mCommands[i].rotation.setF(0.0f);
+        mCommands[i].rotation = 0.0f;
         mCommands[i].paneIdx = MAP_ICON_01_NUM_PANES;
         mCommands[i].passIdx = 35;
         field_0x0D4B[i] = ARRAY_LENGTH(mCommands);
@@ -1732,7 +1732,7 @@ void dLytMapIcon00_c::draw() {
 void dLytMapIcon00_c::resetDrawCommands() {
     for (int i = 0; i < (int)ARRAY_LENGTH(mCommands); i++) {
         mCommands[i].position.set(0.0f, 0.0f);
-        mCommands[i].rotation.setF(0.0f);
+        mCommands[i].rotation = 0.0f;
         mCommands[i].paneIdx = 39;
         mCommands[i].passIdx = 35;
         field_0x0F20[i] = ARRAY_LENGTH(mCommands);

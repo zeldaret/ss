@@ -12,7 +12,6 @@
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/stage_render_stuff.h"
 
 class dAcOwindmill_c : public dAcObjBase_c {

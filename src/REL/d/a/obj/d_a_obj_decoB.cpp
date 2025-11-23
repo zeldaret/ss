@@ -49,8 +49,6 @@ int dAcODecoB_c::draw() {
 
 void dAcODecoB_c::initializeState_Wait() {}
 
-f32 dAcODecoB_c::lbl_611_data_34 = 0.95f;
-
 void dAcODecoB_c::executeState_Wait() {
     if (dAcPy_c::GetLink() != nullptr && dAcPy_c::GetLink()->checkFlags0x350(0x2000)) {
         mVec3_c deltaPosition = dAcPy_c::GetLink()->mPosition - mPosition;
@@ -61,9 +59,9 @@ void dAcODecoB_c::executeState_Wait() {
         }
         field_0x38E = distance * 2048.0f;
     }
-    field_0x38E -= mRotation.x * 0.05f;
-    field_0x38E = field_0x38E * lbl_611_data_34;
-    mRotation.x += field_0x38E;
+    field_0x38E -= mAng(mRotation.x * 0.05f);
+    field_0x38E *= 0.95f;
+    mRotation.x = mRotation.x + field_0x38E;
 }
 
 const f32 dAcODecoB_c::lbl_611_rodata_30 = 2000.0f;

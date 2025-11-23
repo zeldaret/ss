@@ -1019,8 +1019,7 @@ void dAcEsm_c::fn_187_4540(int param0) {
         pChild->mStateMgr.changeState(StateID_BirthJump);
 
         if (field_0xB98 == 0) {
-            mAng ang = (f + cM::rndFX(4096.f));
-            rot.y -= mAng(ang);
+            rot.y -= mAng(f + cM::rndFX(4096.f));
         } else {
             rot.y = fn_187_51F0(true);
             const f32 y = sSmDataArr[field_0xB98].field_0x04.y;
@@ -1438,7 +1437,7 @@ void dAcEsm_c::fn_187_6C20(bool param0) {
     if (!param0) {
         dCamera_c *cam = dScGame_c::getCamera(0);
         mAngle.y = cLib::targetAngleY(cam->getPositionMaybe(), cam->getField_0x78());
-        mAngle.addY(cM::rndFX(16384.f));
+        mAngle.y += cM::rndFX(16384.f);
     }
 
     field_0xBCE = 1;

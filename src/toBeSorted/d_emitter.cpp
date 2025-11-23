@@ -668,7 +668,7 @@ void dShpEmitter_c::draw(JPABaseEmitter *emitter, JPABaseParticle *particle) {
                 v.normalize();
             }
             mMtx_c m;
-            m.setAxisRotation(v, mAng((u16)particle->mRotateAngle).radian2());
+            m.setAxisRotation(v, mAng((u16)particle->mRotateAngle).radian_c());
             m.setBase(3, pos);
             mMtx_c mtx2;
             mVec3_c scale(
@@ -1003,9 +1003,7 @@ bool dEmitter_c::holdUIEffect(
     return setupEffect(false, resourceId, adjustedPosition, rot, scale, c1, c2);
 }
 
-bool dEmitter_c::holdEffect(
-    u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2
-) {
+bool dEmitter_c::holdEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2) {
     return setupEffect(false, resourceId, transform, c1, c2);
 }
 

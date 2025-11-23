@@ -246,7 +246,7 @@ bool dAcOTumbleWeed_c::checkSlope() {
     dBgS::GetInstance()->GetTriPla(mObjAcch.mGnd, &pla);
 
     mAng ang = mAng::fromRad(mVec3_c::Ey.angle(pla.GetN()));
-    return ang.absDiff(0) > mAng::deg2short(1);
+    return ang.absDiff(0) > mAng::d2s(1);
 }
 
 bool dAcOTumbleWeed_c::checkCollect() {
@@ -318,7 +318,7 @@ void dAcOTumbleWeed_c::adjustSpeed() {
 
     // Flat Ground or not in the direction of the slope
     //  Slows down
-    if (gndAngle < mAng::deg2short(1) || mAng::fromVec(pla.GetN()).absDiff(mAngle.y) > mAng::deg2short(90)) {
+    if (gndAngle < mAng::d2s(1) || mAng::fromVec(pla.GetN()).absDiff(mAngle.y) > mAng::d2s(90)) {
         sLib::chase(&mSpeed, mSpeedTarget, step);
     }
     // Sloped Ground and in the direction of the slope

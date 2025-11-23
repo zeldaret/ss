@@ -770,9 +770,7 @@ void dCsGame_c::lytItemCursor_c::lytDowsingCsr_c::updateEffects() {
         mVec2_c csPos = dPad::getDpdPosScreen();
         mVec3_c effectPos(csPos.x, csPos.y, 0.0f);
         mVec3_c effectScale(sHio.field_0x3C, sHio.field_0x3C, 1.0f);
-        mEffects1.holdUIEffect(
-            PARTICLE_RESOURCE_ID_MAPPING_725_, mVec3_c::Zero, nullptr, nullptr, nullptr, nullptr
-        );
+        mEffects1.holdUIEffect(PARTICLE_RESOURCE_ID_MAPPING_725_, mVec3_c::Zero, nullptr, nullptr, nullptr, nullptr);
         mEffects2.holdUIEffect(
             PARTICLE_RESOURCE_ID_MAPPING_726_, effectPos, &mAng3_c::Zero, &effectScale, nullptr, nullptr
         );
@@ -813,7 +811,7 @@ void dCsGame_c::lytItemCursor_c::lytDowsingCsr_c::execute() {
     mpDowsingPane->SetScale(mVec2_c(scale, scale));
 
     mVec3_c rot = mpRingAllPane->GetRotate();
-    rot.z = -mRotZ.degree2();
+    rot.z = -mRotZ.degree_c();
     mpRingAllPane->SetRotate(rot);
 
     mStateMgr.executeState();

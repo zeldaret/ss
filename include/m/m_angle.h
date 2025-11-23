@@ -8,140 +8,144 @@
 #include "nw4r/math/math_triangular.h"
 #include "s/s_Math.h"
 
-struct mAng {
+class mAng {
+public:
     mAng() {}
     mAng(s16 s) : mVal(s) {}
     mAng(const mAng &other) : mVal(other.mVal) {}
 
-    mAng &operator=(const s32 &val) {
+public:
+    void set(s16 val) {
         mVal = val;
-        return *this;
     }
 
-    void setF(const f32 &f) {
-        mVal = f;
-    }
-
-    static mAng atan2s(f32 a, f32 b) {
-        return mAng(cM::atan2s(a, b));
-    }
-    static mAng fromVec(const mVec3_c &other) {
-        return mAng(cM::atan2s(other.x, other.z));
+public:
+    s16 *ref() {
+        return &mVal;
     }
 
     operator s16() const {
         return mVal;
     }
 
-    void set(s16 val) {
-        mVal = val;
-    }
-
-    s16 *ref() {
-        return &mVal;
-    }
-
     mAng operator-() {
         return mAng(-mVal);
     }
 
-    mAng &operator+=(const mAng &other) {
-        mVal += other.mVal;
+    template <typename T>
+    mAng &operator+=(const T &other) {
+        mVal += s16(other);
         return *this;
     }
-    mAng &operator-=(const mAng &other) {
-        mVal -= other.mVal;
+    template <typename T>
+    mAng &operator-=(const T &other) {
+        mVal -= s16(other);
         return *this;
     }
-    mAng &operator*=(const s32 &other) {
+    template <typename T>
+    mAng &operator*=(const T &other) {
         mVal *= other;
         return *this;
     }
-    mAng &operator*=(const f32 &other) {
-        mVal *= other;
+    template <typename T>
+    mAng &operator=(const T &other) {
+        mVal = other;
         return *this;
     }
 
-    s32 absDiff(const mAng &other) const {
-        return sLib::absDiff(mVal, other.mVal);
-    }
-
+public:
     static s32 abs(const mAng b) {
         return labs(b);
     }
-
-    s32 step(s16 target, s32 steps, s16 max, s16 min);
-
+    s32 abs() const {
+        return abs(*this);
+    }
+    s32 absDiff(const mAng &other) const {
+        return sLib::absDiff(mVal, other.mVal);
+    }
     f32 sin() const {
         return nw4r::math::SinIdx(*this);
     }
-
     f32 cos() const {
         return nw4r::math::CosIdx(*this);
+    }
+    static mAng atan2s(f32 a, f32 b) {
+        return mAng(cM::atan2s(a, b));
+    }
+
+public:
+    s32 step(s16 target, s32 steps, s16 max, s16 min);
+
+public:
+    static mAng fromVec(const mVec3_c &other) {
+        return mAng(cM::atan2s(other.x, other.z));
+    }
+    static s16 fromDeg(f32 deg) {
+        return deg * sDegToAng;
+    }
+    static mAng fromRad(f32 rad) {
+        return rad * sRadToAng;
     }
 
     f32 degree() const {
         return (360.0f / 65536.0f) * mVal;
     }
-
-    static s16 fromDeg(f32 deg) {
-        return deg * sDegToAng;
-    }
-    f32 degree2() const {
-        return mVal * sAngToDeg;
-    }
-
     f32 radian() const {
         return ((2.f * M_PI) / 65536.0f) * mVal;
     }
 
-    f32 radian2() const {
+    f32 degree_c() const {
+        return mVal * sAngToDeg;
+    }
+    f32 radian_c() const {
         return mVal * sAngToRad;
     }
 
-    static mAng fromRad(f32 rad) {
-        return rad * sRadToAng;
+public:
+    static s16 d2s(f32 deg) {
+        return deg * (65536.0f / 360.0f);
     }
-
-    static f32 ang2deg_c(f32 ang) {
+    static f32 s2d(s16 angle) {
+        return (360.0f / 65536.0f) * angle;
+    }
+    static f32 s2d_c(f32 ang) {
         return ang * sAngToDeg;
     }
+    static f32 d2s_c(f32 ang) {
+        return ang * sDegToAng;
+    }
 
-    static f32 rad2deg_c(f32 rad) {
+    static f32 s2r(s16 angle) {
+        return ((2.f * M_PI) / 65536.0f) * angle;
+    }
+    static s16 r2s(f32 rad) {
+        return rad * (65536.0f / (2.f * M_PI));
+    }
+    static f32 s2r_c(f32 ang) {
+        return ang * sAngToRad;
+    }
+    static f32 r2s_c(f32 ang) {
+        return ang * sRadToAng;
+    }
+
+    static f32 d2r(f32 deg) {
+        return deg * ((2.f * M_PI) / 360.f);
+    }
+    static f32 r2d(f32 rad) {
+        return rad * (360.f / (2.f * M_PI));
+    }
+    static f32 d2r_c(f32 deg) {
+        return deg * sDegToRad;
+    }
+    static f32 r2d_c(f32 rad) {
         return rad * sRadToDeg;
     }
 
-    static f32 rad2deg(f32 rad) {
-        return rad * (360.f / (2.f * M_PI));
-    }
-    static f32 deg2rad(f32 deg) {
-        return deg * ((2.f * M_PI) / 360.f);
-    }
-    static s16 deg2short(f32 deg) {
-        return deg * (65536.0f / 360.0f);
-    }
-    static f32 short2deg(s16 angle) {
-        return (360.0f / 65536.0f) * angle;
-    }
-    static f32 short2rad(s16 angle) {
-        return ((2.f * M_PI) / 65536.0f) * angle;
-    }
-    static f32 short2norm(s16 angle) {
+    static f32 s2n(s16 angle) {
         return 3.0517578E-5f * angle;
-    }
-    static s16 rad2short(f32 rad) {
-        return rad * (65536.0f / (2.f * M_PI));
-    }
-
-    static f32 deg2rad_c(f32 deg) {
-        return deg * sDegToRad;
     }
 
     s16 mVal;
-
-    static const mAng Zero() {
-        return 0;
-    }
 
 private:
     static const f32 sHalfCircleDeg;
@@ -195,16 +199,6 @@ public:
 
     void clear() {
         set(0, 0, 0);
-    }
-
-    // TODO - This is the only way I could get the regswap to be fixed..
-    // Found with the pattern mAng3_c.y += cM::rndFX()
-    void addY(f32 val) {
-        y.mVal += (s16)val;
-    }
-
-    void addX(const s32 &fx) {
-        x += fx;
     }
 
     mAng x, y, z;

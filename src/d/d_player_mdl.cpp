@@ -1177,7 +1177,7 @@ void daPlayerModelBase_c::adjustMainModelChrAnm(PlayerMainModelNode_e nodeId, nw
         if (nodeId == PLAYER_MAIN_NODE_HAND_R) {
             static const mVec3_c v1(1.0f, 1.0f, 0.0f);
             mMtx_c rotMtx;
-            rotMtx.setAxisRotation(v1, mRightHandRotation.radian2());
+            rotMtx.setAxisRotation(v1, mRightHandRotation.radian_c());
             mtx += rotMtx;
         }
     }

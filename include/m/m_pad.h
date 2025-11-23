@@ -44,7 +44,7 @@ inline int getCurrentCoreID() {
 }
 
 inline bool isMpls(const int i) {
-    return g_padMg->getDevType(i) == EGG::cDEV_MPLS;
+    return g_padMg->getDevType(i) == EGG::cDEV_MPLS ? true : false;
 }
 inline bool isMplsPtFS(const int i) {
     return g_padMg->getDevType(i) == EGG::cDEV_MPLS_PT_FS;

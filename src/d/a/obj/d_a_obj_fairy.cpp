@@ -130,7 +130,7 @@ int dAcOFairy_c::create() {
 
     if (isWithinPlayerRadius(200.0f) && getXZAngleToPlayer().absDiff(mAng::fromVec(mVelocity)) < 0x2000) {
         mVelocity.rotY(0x8000);
-        mAngle.y += 0x8000;
+        mAngle.y += mAng(0x8000);
     }
 
     mModel.setAnm("PutFairy_fly", m3d::PLAY_MODE_4, 0.0f);
@@ -210,9 +210,7 @@ int dAcOFairy_c::actorExecute() {
     }
 
     if (!field_0xB89) {
-        mEffects[0].holdEffect(
-            PARTICLE_RESOURCE_ID_MAPPING_331_, mPosition, nullptr, nullptr, nullptr, nullptr
-        );
+        mEffects[0].holdEffect(PARTICLE_RESOURCE_ID_MAPPING_331_, mPosition, nullptr, nullptr, nullptr, nullptr);
         if (!isCuring() && !dAcPy_c::GetLink()->checkActionFlagsCont(0x400000)) {
             holdSound(SE_O_FAIRY_FLY_LEV);
         }
@@ -237,9 +235,7 @@ int dAcOFairy_c::actorExecute() {
     }
 
     if (isCuring() && !field_0xB89) {
-        mEffects[1].holdEffect(
-            PARTICLE_RESOURCE_ID_MAPPING_327_, mPosition, nullptr, nullptr, nullptr, nullptr
-        );
+        mEffects[1].holdEffect(PARTICLE_RESOURCE_ID_MAPPING_327_, mPosition, nullptr, nullptr, nullptr, nullptr);
     }
 
     if (!mStateMgr.isState(StateID_CatchDemo) && !isCuring()) {

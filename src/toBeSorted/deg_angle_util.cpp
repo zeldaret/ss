@@ -70,7 +70,7 @@ f32 dDegree::tan2() const {
 }
 
 f32 dDegree::toRad() const {
-    return mAng::deg2rad_c(value);
+    return mAng::d2r_c(value);
 }
 
 s16 dDegree::toIdx() {
@@ -121,8 +121,8 @@ void dPolar::setCartesian(const mVec3_c &v) {
 
     f32 magXZ = (magXZSq > 0.0) ? (f32)sqrt(magXZSq) : 0.f;
     R = (magSq > 0.0) ? (f32)sqrt(magSq) : 0.f;
-    U.Set(mAng::rad2deg_c(M_PI / 2 - cM::atan2f(magXZ, y)));
-    V.Set(mAng::rad2deg_c(cM::atan2f(x, z)));
+    U.Set(mAng::r2d_c(M_PI / 2 - cM::atan2f(magXZ, y)));
+    V.Set(mAng::r2d_c(cM::atan2f(x, z)));
     canonicalize();
 }
 

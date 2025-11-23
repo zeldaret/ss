@@ -6,7 +6,6 @@
 #include "m/m_angle.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcODecoB_c : public dAcObjBase_c {
 public:
@@ -28,7 +27,6 @@ private:
     /* 0x38C */ u16 padding_0x38C;
     /* 0x38E */ mAng field_0x38E;
 
-    static f32 lbl_611_data_34;
     static const f32 lbl_611_rodata_30;
 };
 
