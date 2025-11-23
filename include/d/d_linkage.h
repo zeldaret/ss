@@ -19,15 +19,15 @@ public:
 public:
     enum ConnectionType_e {
         CONNECTION_0 = 0,
-        CONNECTION_1 = 1,
+        CONNECTION_1 = 1, // Standard
         CONNECTION_2 = 2,
         CONNECTION_3 = 3,
-        CONNECTION_4 = 4,
-        CONNECTION_5 = 5,
-        CONNECTION_6 = 6,
-        CONNECTION_7 = 7,
-        CONNECTION_8 = 8,
-        CONNECTION_9 = 9,
+        CONNECTION_4 = 4, // clawshot
+        CONNECTION_5 = 5, // Beetle
+        CONNECTION_6 = 6, // From Sword Swing?
+        CONNECTION_7 = 7, // Whip
+        CONNECTION_8 = 8, // Arrow/Heartf
+        CONNECTION_9 = 9, // Chandelier/lotus flower
     };
     enum State_e {
         STATE_0 = 0,
@@ -71,9 +71,9 @@ public:
 public:
     void set(u32 flags, f32, f32, f32, void *unk);
     bool tryAttach(dAcObjBase_c *, dAcObjBase_c *, dAcRefBase_c *, ConnectionType_e, bool);
-    void fn_80050DC0(dAcObjBase_c *, f32, f32, mAng);
-    void fn_80050E00(dAcObjBase_c *, f32, f32, mAng);
-    void fn_80050E40(dAcObjBase_c *, f32, f32, mAng);
+    void fn_80050DC0(dAcObjBase_c *, f32 speed, f32 velocityY, mAng rotY);
+    void fn_80050E00(dAcObjBase_c *, f32 speed, f32 velocityY, mAng rotY);
+    void fn_80050E40(dAcObjBase_c *, f32 speed, f32 velocityY, mAng rotY);
     void fn_80050EA0(dAcObjBase_c *);
     void fn_800511E0(dAcObjBase_c *);
     void bushTpFunc(dBgS_Acch &);

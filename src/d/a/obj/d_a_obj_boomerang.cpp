@@ -12,6 +12,7 @@
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_pad.h"
+#include "d/d_room.h"
 #include "d/d_rumble.h"
 #include "d/d_sc_game.h"
 #include "d/d_stage.h"
@@ -359,7 +360,7 @@ void dAcBoomerang_c::fn_80262150() {
     unsetField_0x8CC(FLAG_CONTROLLABLE | FLAG_0x80000 | FLAG_0x20000);
     mRemainingFlightTime = 0;
     mFlashTimer = 0;
-    fn_80262BE0();
+    deleteCheck();
     executeTimeWarning();
 }
 
@@ -576,7 +577,7 @@ bool dAcBoomerang_c::tryGrabObject(dAcObjBase_c *pObj) {
     return false;
 }
 
-void dAcBoomerang_c::fn_80262BE0() {
+void dAcBoomerang_c::deleteCheck() {
     if (checkField_0x8CC(FLAG_DROP_ITEM)) {
         setField_0x8CC(FLAG_REQUEST_0x400);
         return;
@@ -588,9 +589,44 @@ void dAcBoomerang_c::fn_80262BE0() {
     }
 
     dAcPy_c *player = dAcPy_c::GetLink2();
-    if (player->getActorInActorRef1())
-        ;
-    ;
+    player->getOwnedObjects().Regist(pObj);
+    if (dBgS_ObjLinChk::LineCross(&mOldPosition, &pObj->mPosition, nullptr)) {
+        mVec3_c diff = mOldPosition - pObj->mPosition;
+        diff.normalize();
+
+        pObj->mPosition = dBgS_ObjLinChk::GetInstance().GetLinEnd() + diff * 15.f;
+        pObj->mOldPosition = pObj->mPosition + diff * 15.f;
+    } else {
+        pObj->mOldPosition.x = mOldPosition.x;
+        pObj->mOldPosition.z = mOldPosition.z;
+    }
+
+    pObj->getLinkage().fn_80050DC0(pObj, 20.f, 0.f, mRotation.y);
+    dRoom_c *pRoom = dStage_c::GetInstance()->getRoom(mRoomID);
+    if (pRoom && pRoom->checkFlag(0x4) && pObj->getConnectParent() == pRoom) {
+        pObj->deleteRequest();
+    }
+}
+
+void dAcBoomerang_c::fn_80262DC0() {
+    dAcPy_c *player = dAcPy_c::GetLink2();
+
+    if (EventManager::isInEvent()) {
+        mStateMgr.changeState(StateID_EventReturnWait);
+    } else if (player->retrieveBeetle()) {
+        fn_80261E10();
+        if (mStateMgr.isState(StateID_Move)) {
+            startSound(SE_BE_CATCH);
+            mStateMgr.changeState(StateID_Wait);
+        } else {
+            mStateMgr.changeState(StateID_ReturnWait);
+        }
+    } else {
+        deleteRequest();
+    }
+
+    player->unlinkActorRef1();
+    deleteCheck();
 }
 
 void dAcBoomerang_c::startRumble() {
@@ -984,7 +1020,7 @@ void dAcBoomerang_c::initializeState_MoveCancelWait() {
     }
 
     // I think the below function is responsible for giving the item to link
-    fn_80262BE0();
+    deleteCheck();
 
     // Set Fly Animation
     if (checkField_0x8CC(FLAG_CANCEL)) {
@@ -1139,7 +1175,7 @@ int dAcBoomerang_c::actorExecute() {
 
     if (checkField_0x8CC(FLAG_REQUEST_0x400)) {
         unsetField_0x8CC(FLAG_REQUEST_0x400);
-        fn_80262BE0();
+        deleteCheck();
     }
 
     if (player->checkModelUpdateFlag(0x10000 | 0x80)) {
@@ -1175,7 +1211,7 @@ int dAcBoomerang_c::actorExecute() {
         mEff1.setTransform(mWorldMtx);
 
         f32 ang = field_0x8E4.angle(mVelocity);
-        ang = 10.f - mAng::fromRad(ang) * (7.f / 256.f);
+        ang = 10.f - ((f32)mAng::fromRad(ang) * (7.f / 256.f));
         ang = nw4r::ut::Max(ang, 3.f);
         mEff1.setAwayFromCenterSpeed(ang);
     } else {

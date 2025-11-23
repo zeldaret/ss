@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_item.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/d_player_mdl.h"
 #include "m/m_angle.h"
@@ -11,6 +12,14 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
+
+class dReferenceArr {
+public:
+    /** Returns true if pObj is already present or if it was added */
+    bool Regist(dAcObjBase_c *pObj);
+
+    dAcRef_c<dAcObjBase_c> mObjRefs[16];
+};
 
 // See Below for some info
 // https://github.com/lepelog/skywardsword-tools/wiki/Player-Actor
@@ -33,7 +42,8 @@ public:
     /* vt 0x318 */ virtual void vt_0x318();
 
 protected:
-    /* 0x137C */ u8 _0x137C[0x16F0 - 0x137C];
+    /* 0x137C */ dReferenceArr mOwnedObjects; //< Made up name
+    /* 0x143C */ u8 _0x143C[0x16F0 - 0x143C];
     /* 0x16F0 */ nw4r::g3d::ResFile mHeldResFile;
     /* 0x16F4 */ u8 _0x16F4[0x4564 - 0x16F4];
     /* 0x4564 */ f32 field_0x4564;
@@ -65,6 +75,7 @@ public:
     int getBeetleWarningTimeLeft() const;
     s16 getBeetleUnkTimeLeft() const;
     void setBeetleReleasedObject(dAcObjBase_c *pObj);
+    bool retrieveBeetle();
 
     // Responsible for taking in some collision Poly Info and playing the related effect.
     // Used on Impact
@@ -74,6 +85,10 @@ public:
     static s32 calcItemWheelSelection(bool reset, s32 numOptions);
 
 public:
+    dReferenceArr &getOwnedObjects() {
+        return mOwnedObjects;
+    }
+
     f32 getField_0x4564() const {
         return field_0x4564;
     }

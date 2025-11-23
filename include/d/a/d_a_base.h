@@ -65,7 +65,7 @@ public:
         AC_PROP_0x100 = (1 << 8),
         AC_PROP_0x400 = (1 << 10),
         AC_PROP_0x800 = (1 << 11),
-        AC_PROP_0x2000000 = (1 << 25),
+        AC_PROP_0x2000000 = (1 << 25), //< Force Loaded
         AC_PROP_0x4000000 = (1 << 26),
         AC_PROP_0x8000000 = (1 << 27),
         AC_PROP_0x10000000 = (1 << 28),

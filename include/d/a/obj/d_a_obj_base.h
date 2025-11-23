@@ -29,7 +29,7 @@ public:
     enum ObjProperties_e {
         OBJ_PROP_0x1 = (1 << 0),
         OBJ_PROP_0x2 = (1 << 1),
-        OBJ_PROP_0x4 = (1 << 2),
+        OBJ_PROP_0x4 = (1 << 2), //< Attached to Clawshot
         OBJ_PROP_0x8 = (1 << 3),
         OBJ_PROP_0x10 = (1 << 4),
         OBJ_PROP_0x20 = (1 << 5),
@@ -39,7 +39,7 @@ public:
         OBJ_PROP_0x200 = (1 << 9),
         OBJ_PROP_0x400 = (1 << 10),
         OBJ_PROP_0x800 = (1 << 11),
-        OBJ_PROP_0x1000 = (1 << 12),
+        OBJ_PROP_0x1000 = (1 << 12), //< Attached to Whip
         OBJ_PROP_0x2000 = (1 << 13),
         OBJ_PROP_0x4000 = (1 << 14),
         OBJ_PROP_0x8000 = (1 << 15),
