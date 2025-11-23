@@ -26,8 +26,8 @@ public:
 private:
     /* 0x0FC */ dAcRef_c<dAcOstageSink_c> mStageRef;
     /* 0x108 */ mVec3_c mSpawnPosition;
-    /* 0x114 */ u8 mLinkIndex;
-    /* 0x115 */ u8 mLinkId;
+    /* 0x114 */ u8 mLinkIndex; ///< Link Index used in dTgBarrel_c array
+    /* 0x115 */ u8 mLinkId;    ///< Link Id used to find correct dTgBarrel_c
 };
 
 #endif

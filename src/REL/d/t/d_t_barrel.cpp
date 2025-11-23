@@ -27,10 +27,10 @@ STATE_DEFINE(dTgBarrel_c, Stop);
 //   dAcRef_c<dAcOBarrel_c>
 
 int dTgBarrel_c::actorCreate() {
-    field_0x240 = getFromParams(0, 0xFF);
-    field_0x245 = getFromParams(16, 0xF);
-    field_0x241 = getFromParams(8, 0xFF);
-    field_0x242 = 1;
+    mStopFlag = getFromParams(0, 0xFF);
+    mLinkId = getFromParams(16, 0xF);
+    mSpawnInterval = getFromParams(8, 0xFF);
+    mSpawnTimer = 1;
 
     mStageRef.link(dAcOstageSink_c::GetInstance());
     mSpawnPosition = mPosition;
@@ -52,10 +52,10 @@ int dTgBarrel_c::actorPostCreate() {
 
         if (pTgBarrelPos != nullptr) {
             u8 index = pTgBarrelPos->getLinkIndex();
-            if (field_0x245 == pTgBarrelPos->getLinkId()) {
+            if (mLinkId == pTgBarrelPos->getLinkId()) {
                 mTgBarrelPosArr[index].link(pTgBarrelPos);
-                if (index >= field_0x243) {
-                    field_0x243 = index + 1;
+                if (index >= mBarrelPosCount) {
+                    mBarrelPosCount = index + 1;
                 }
             }
         }
@@ -80,7 +80,7 @@ int dTgBarrel_c::draw() {
 
 void dTgBarrel_c::initializeState_Wait() {}
 void dTgBarrel_c::executeState_Wait() {
-    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, field_0x240)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mStopFlag)) {
         mStateMgr.changeState(StateID_Stop);
         return;
     }
@@ -98,8 +98,8 @@ void dTgBarrel_c::executeState_Wait() {
     mPosition += pos;
 
     if (checkPlayerPos(dAcPy_c::GetLink()->mPosition)) {
-        if (0 == sLib::calcTimer(&field_0x242)) {
-            field_0x246 = 1;
+        if (0 == sLib::calcTimer(&mSpawnTimer)) {
+            mSpawnActive = true;
 
             u8 idx = 0xFF;
             for (int i = 0; i < (int)ARRAY_LENGTH(mBarrelArr); ++i) {
@@ -110,7 +110,7 @@ void dTgBarrel_c::executeState_Wait() {
             }
 
             if (idx != 0xFF) {
-                dTgBarrelPos_c *pTgBarrelPos = mTgBarrelPosArr[field_0x244].get();
+                dTgBarrelPos_c *pTgBarrelPos = mTgBarrelPosArr[mBarrelPosIndex].get();
                 if (pTgBarrelPos != nullptr) {
                     mVec3_c spawnPos = pTgBarrelPos->mPosition;
                     mAng3_c spawnRot(0, 0x4000, 0);
@@ -119,15 +119,15 @@ void dTgBarrel_c::executeState_Wait() {
                     );
                     mBarrelArr[idx].link(static_cast<dAcOBarrel_c *>(pObj));
                 }
-                if (++field_0x244 >= field_0x243) {
-                    field_0x244 = 0;
+                if (++mBarrelPosIndex >= mBarrelPosCount) {
+                    mBarrelPosIndex = 0;
                 }
             }
-            field_0x242 = field_0x241 * 30;
+            mSpawnTimer = mSpawnInterval * 30;
         }
     } else {
-        if (field_0x246) {
-            field_0x242 = field_0x241 * 30;
+        if (mSpawnActive) {
+            mSpawnTimer = mSpawnInterval * 30;
         }
     }
 }
@@ -135,7 +135,7 @@ void dTgBarrel_c::finalizeState_Wait() {}
 
 void dTgBarrel_c::initializeState_Stop() {}
 void dTgBarrel_c::executeState_Stop() {
-    if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, field_0x240)) {
+    if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, mStopFlag)) {
         mStateMgr.changeState(StateID_Wait);
     }
 }
