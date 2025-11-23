@@ -6,12 +6,14 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
+#include "d/col/c/c_bg_s_poly_info.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_shadow.h"
 #include "d/lyt/d_lyt_fader.h"
 #include "m/m3d/m_anmchr.h"
 #include "m/m3d/m_anmchrblend.h"
 #include "m/m3d/m_mdl.h"
+#include "m/m_angle.h"
 #include "m/m_color.h"
 #include "m/m_fader.h"
 #include "m/m_vec.h"
@@ -105,34 +107,33 @@ public: // TYPES
         RB_FLY_FAST = 1,
         RB_FLY_MAX = 2,
     };
-    static const char *sFlyChrAnims[RB_FLY_MAX];
 
     enum Flags_e {
         /* 0x00000001 */ FLAG_CANCEL_1 = 1 << 0,
         /* 0x00000002 */ FLAG_CANCEL_2 = 1 << 1,
         /* 0x00000003 */ FLAG_CANCEL = FLAG_CANCEL_1 | FLAG_CANCEL_2,
 
-        /* 0x00000004 */ FLAG_RELEASE_ITEM = 1 << 2,
-        /* 0x00000008 */ FLAG_0x8 = (0x8),
-        /* 0x00000010 */ FLAG_0x10 = (0x10),
-        /* 0x00000020 */ FLAG_0x20 = (0x20),
-        /* 0x00000040 */ FLAG_0x40 = (0x40),
-        /* 0x00000080 */ FLAG_0x80 = (0x80),
-        /* 0x00000100 */ FLAG_STOP_TIMER_ACTIVE = (0x100),
-        /* 0x00000200 */ FLAG_DROP_ITEM = (0x200),     // related to 0x400
-        /* 0x00000400 */ FLAG_REQUEST_0x400 = (0x400), // related to 0x200
-        /* 0x00000800 */ FLAG_REQUEST_MOVE = (0x800),
-        /* 0x00001000 */ FLAG_CONTROLLABLE = (0x1000),
-        /* 0x00002000 */ FLAG_0x2000 = (0x2000),
-        /* 0x00004000 */ FLAG_RUMBLE_ACTIVE = (0x4000),
-        /* 0x00008000 */ FLAG_WING_EFFECT_ACTIVE = (0x8000),
-        /* 0x00010000 */ FLAG_0x10000 = (0x10000),
-        /* 0x00020000 */ FLAG_0x20000 = (0x40000),
-        /* 0x00040000 */ FLAG_0x40000 = (0x40000),
-        /* 0x00080000 */ FLAG_0x80000 = (0x80000),
+        /* 0x00000004 */ FLAG_RELEASE_OBJECT = 1 << 2,
+        /* 0x00000008 */ FLAG_0x8 = 1 << 3,
+        /* 0x00000010 */ FLAG_0x10 = 1 << 4,
+        /* 0x00000020 */ FLAG_0x20 = 1 << 5,
+        /* 0x00000040 */ FLAG_0x40 = 1 << 6,
+        /* 0x00000080 */ FLAG_0x80 = 1 << 7,
+        /* 0x00000100 */ FLAG_STOP_TIMER_ACTIVE = 1 << 8,
+        /* 0x00000200 */ FLAG_DROP_ITEM = 1 << 9,      // related to 0x400
+        /* 0x00000400 */ FLAG_REQUEST_0x400 = 1 << 10, // related to 0x200
+        /* 0x00000800 */ FLAG_REQUEST_MOVE = 1 << 11,
+        /* 0x00001000 */ FLAG_CONTROLLABLE = 1 << 12,
+        /* 0x00002000 */ FLAG_0x2000 = 1 << 13,
+        /* 0x00004000 */ FLAG_RUMBLE_ACTIVE = 1 << 14,
+        /* 0x00008000 */ FLAG_SPEED_UP = 1 << 15,
+        /* 0x00010000 */ FLAG_0x10000 = 1 << 16,
+        /* 0x00020000 */ FLAG_0x20000 = 1 << 17,
+        /* 0x00040000 */ FLAG_0x40000 = 1 << 18,
+        /* 0x00080000 */ FLAG_0x80000 = 1 << 19,
 
-        /* 0x0001A117 */ FLAG_COMMON_INIT = FLAG_0x10000 | FLAG_WING_EFFECT_ACTIVE | FLAG_0x2000 |
-                                            FLAG_STOP_TIMER_ACTIVE | FLAG_0x10 | FLAG_RELEASE_ITEM | FLAG_CANCEL,
+        /* 0x0001A117 */ FLAG_COMMON_INIT = FLAG_0x10000 | FLAG_SPEED_UP | FLAG_0x2000 | FLAG_STOP_TIMER_ACTIVE |
+                                            FLAG_0x10 | FLAG_RELEASE_OBJECT | FLAG_CANCEL,
     };
 
 public: // INLINES
@@ -147,6 +148,10 @@ public: // INLINES
     }
     bool isMoving() {
         return mStateMgr.isState(StateID_Move);
+    }
+
+    static const s32 getSrcFlags() {
+        return 0x209B;
     }
 
 public: // FUNCTIONS
@@ -171,8 +176,35 @@ public: // FUNCTIONS
     /** Updates the position based on where links wrist is  */
     void placeOnArm();
 
+    /**  */
+    void fn_80261E10();
+
+    /**  */
+    void fn_80262150();
+
+    /**  */
+    void calcVelocity();
+
+    /**  */
+    void playFlySound();
+
+    /**  */
+    void startHitEffect(const mVec3_c &position, const cBgS_PolyInfo &polyInfo);
+
+    /**  */
+    bool fn_80262400();
+
+    /** Gets the colliding position and the poly info of where collision happened. Returns a nullptr on no collision */
+    cBgS_PolyInfo *getCollidingPolyInfo(mVec3_c &position);
+
+    /**  */
+    void fn_80262BE0();
+
+    /**  */
+    void fn_80262DC0();
+
     /** Sets the assuming bonk flag and plays the rumble feedback */
-    void bonk();
+    void startRumble();
 
     /** Applies the selected animation to the beetle */
     void setChrAnimation(ChrAnimation_e requestedAnimation);
@@ -190,8 +222,8 @@ private:
     /* 0x0330 */ nw4r::g3d::ResFile mResFile;
     /* 0x0334 */ m3d::mdl_c mMdl;
     /* 0x0358 */ m3d::anmChrBlend_c mAnmChrBlend;
-#define BOOMERANG_ANIM_PINCERS (0)
-#define BOOMERANG_ANIM_WINGS (1)
+#define BOOMERANG_ANIM_PINCERS 0
+#define BOOMERANG_ANIM_WINGS 1
     /* 0x0380 */ m3d::anmChr_c mAnmChr[2]; /* 0 - Pincers, 1 - Wings*/
     /* 0x03F0 */ dAcBoomerangProc_c mProc;
     /* 0x0410 */ dShadowCircle_c mShadow;
@@ -208,19 +240,16 @@ private:
     /* 0x08B5 */ u8 mWindNodeID;
     /* 0x08B6 */ u8 mLeftWingNodeID;
     /* 0x08B7 */ u8 mRightWingNodeID;
-    /* 0x08B8 */ mAng field_0x8B8;
-    /* 0x08BA */ mAng field_0x8BA;
-    /* 0x08BC */ mAng field_0x8BC;
-    /* 0x08BE */ mAng field_0x8BE;
-    /* 0x08C0 */ u8 _0x8C0[0x8C8 - 0x8C0];
-    /* 0x08CA */ mAng field_0x8C8;
+    /* 0x08B8 */ mAng3_c field_0x8B8;
+    /* 0x08BE */ mAng3_c field_0x8BE;
+    /* 0x08C4 */ mAng3_c field_0x8C4;
     /* 0x08CA */ u16 mRemainingFlightTime;
     /* 0x08CC */ u32 field_0x8CC;
     /* 0x08D0 */ f32 field_0x8D0;
     /* 0x08D4 */ f32 field_0x8D4;
     /* 0x08D8 */ mVec3_c field_0x8D8;
     /* 0x08E4 */ mVec3_c field_0x8E4;
-    /* 0x08F0 */ mVec3_c field_0x8F0;
+    /* 0x08F0 */ mVec3_c mBounceVelocity;
     /* 0x08FC */ dCcD_Sph mSph0;
     /* 0x0A4C */ dCcD_Sph mSph1;
     /* 0x0B9C */ dEmitter_c mEff0;
@@ -232,10 +261,8 @@ private:
     /* 0x1150 */ u8 _0x1150[0x115C - 0x1150];
     /* 0x115C */ STATE_MGR_DECLARE(dAcBoomerang_c);
 
-    static const u32 BoomerangAtFlags;
-    static dCcD_SrcSph sSphSrc;
+    static const dCcD_SrcSph sSphSrc;
     static dBgS_BeetleLinChk sLinChk;
-    static const u32 sSrcAtType;
 };
 
 #endif

@@ -9,6 +9,8 @@
 #include "d/col/c/c_m3d_g_cyl.h"
 #include "d/col/c/c_m3d_g_lin.h"
 #include "d/col/c/c_m3d_g_pla.h"
+#include "m/m_angle.h"
+#include "m/m_vec.h"
 
 class dAcObjBase_c;
 
@@ -107,11 +109,13 @@ struct dBgS_Acch_0x1A8 {
     u8 field_0x00;
     mVec3_c field_0x04;
     mVec3_c field_0x10;
+    mVec3_c field_0x1C;
 
     dBgS_Acch_0x1A8();
 
     void Init();
     void CalcPos(mVec3_c *);
+    const mVec3_c &GetField_0x1C() const;
 };
 
 class dBgS;
@@ -568,7 +572,6 @@ public:
     /* 0x0E8 */ f32 field_0x0E8;
     /* 0x0EC */ dBgS_SphChk mSph;
     /* 0x1A8 */ dBgS_Acch_0x1A8 field_0x1A8;
-    /* 0x1C4 */ u8 _0[0x1D0 - 0x1C4];
     /* 0x1D0 */ f32 field_0x1D0;
     /* 0x1D4 */ dBgS_GndChk mGnd;
     /* 0x264 */ dBgS_RoofChk mRoof;
