@@ -142,30 +142,23 @@ void dTgBarrel_c::executeState_Stop() {
 void dTgBarrel_c::finalizeState_Stop() {}
 
 bool dTgBarrel_c::checkPlayerPos(const mVec3_c &playerPos) {
-    // NONMATCHING
-    // https://decomp.me/scratch/TM82x
     f32 scale = 0.5f;
 
-    mAng rot = mStageRef.get()->mRotation.y;
+    mVec3_c pos = playerPos - (mPosition + (mVec3_c::Ey * mScale.y * scale));
+    mAng rot = mStageRef.get()->mRotation.z;
 
-    mVec3_c pos = mPosition;
-    pos += mVec3_c::Ey * (mScale.y * 0.5f);
-    pos.x = (playerPos.x - pos.x) / mScale.x;
-    pos.y = (playerPos.y - pos.y) / mScale.y;
-    pos.z = (playerPos.z - pos.z) / mScale.z;
+    pos.x = pos.x / mScale.x;
+    pos.y = pos.y / mScale.y;
+    pos.z = pos.z / mScale.z;
 
-    f32 cos = rot.cos();
+    f32 halfCos = rot.cos() * scale;
     if (rot.cos() != 0.f) {
         scale = mScale.x * ((pos.x * rot.sin()) / rot.cos()) / mScale.y;
     }
 
-    bool ret = false;
-
-    if ((pos.x <= cos * 0.5f && -(cos * 0.5f) <= pos.x)                    //
-        && pos.y <= scale + 0.5f + 1e-6f && pos.y + -0.5f - 1e-6f <= pos.y //
-        && pos.z <= 0.5f && pos.z >= -0.5f) {
-        ret = true;
-    }
-
-    return ret;
+    return (
+        (pos.x <= halfCos && pos.x >= -halfCos)                            //
+        && pos.y <= scale + 0.5f + 1e-6f && pos.y >= scale + -0.5f - 1e-6f //
+        && pos.z <= 0.5f && pos.z >= -0.5f
+    );
 }
