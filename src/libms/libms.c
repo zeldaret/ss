@@ -17,9 +17,9 @@ void LMSi_Free(void *ptr) {
     return (MSB_FREE_FUNC)(ptr);
 }
 
-int LMSi_MemCmp(const char *p1, const char *p2, int n) {
+int LMSi_MemCmp(const void *p1, const void *p2, int n) {
     for (int i = 0; i < n; i++) {
-        if (p1[i] != p2[i]) {
+        if (((const char *)p1)[i] != ((const char *)p2)[i]) {
             return 0;
         }
     }
@@ -27,11 +27,8 @@ int LMSi_MemCmp(const char *p1, const char *p2, int n) {
     return 1;
 }
 
-void LMSi_MemCopy(char *p1, const char *p2, int n) {
-    // https://decomp.me/scratch/JOWiM
-    // NONMATCHING - register usage too optimal
-    // Look, how difficult can an unrolled memcopy be to match
+void LMSi_MemCopy(void *p1, const void *p2, int n) {
     for (int i = 0; i < n; i++) {
-        *(p1++) = *(p2++);
+        ((char *)p1)[i] = ((const char *)p2)[i];
     }
 }

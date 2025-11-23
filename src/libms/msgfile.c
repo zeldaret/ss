@@ -38,8 +38,8 @@ int LMS_GetTextIndexByLabel(struct MsbtInfo *info, const char *label) {
     int entryLen;
     int sectionIndex;
     int labelLen;
-    
-    sectionIndex =  info->lbl1Index;
+
+    sectionIndex = info->lbl1Index;
     labelLen = 0;
     if (info->lbl1Index == -1) {
         return LMS_MISSING_LBL1_DATA;
@@ -73,7 +73,7 @@ const wchar_t *LMS_GetText(struct MsbtInfo *info, int index) {
         return NULL;
     }
 
-    return LMS_OFS_TO_PTR(const wchar_t , header, header[index + 1]);
+    return LMS_OFS_TO_PTR(const wchar_t, header, header[index + 1]);
 }
 
 const wchar_t *LMS_GetTextByLabel(struct MsbtInfo *info, const char *label) {

@@ -956,7 +956,7 @@ config.libs = [
         "objects": [
             Object(Matching, "libms/commonlib.c"),
             Object(Matching, "libms/flowfile.c"),
-            Object(NonMatching, "libms/libms.c"),
+            Object(Matching, "libms/libms.c"),
             Object(Matching, "libms/msgfile.c"),
         ],
     },
