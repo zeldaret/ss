@@ -1,13 +1,171 @@
 #include "d/t/d_t_barrel.h"
 
+#include "common.h"
+#include "d/a/d_a_base.h"
+#include "d/a/d_a_player.h"
+#include "d/a/obj/d_a_obj_barrel.h"
+#include "d/a/obj/d_a_obj_base.h"
+#include "d/a/obj/d_a_obj_stage_sink.h"
+#include "d/flag/sceneflag_manager.h"
+#include "d/t/d_t_barrel_pos.h"
+#include "f/f_base.h"
+#include "f/f_manager.h"
+#include "f/f_profile_name.h"
+#include "m/m_angle.h"
+#include "m/m_mtx.h"
+#include "m/m_vec.h"
+#include "s/s_Math.h"
+
 SPECIAL_ACTOR_PROFILE(TAG_BARREL, dTgBarrel_c, fProfile::TAG_BARREL, 0x221, 0, 0);
 
 STATE_DEFINE(dTgBarrel_c, Wait);
 STATE_DEFINE(dTgBarrel_c, Stop);
 
+// Weak function ordering issue of the ctor and dtpr of the objects
+// for the following in the member arrays
+//   dAcRef_c<dTgBarrelPos_c>
+//   dAcRef_c<dAcOBarrel_c>
+
+int dTgBarrel_c::actorCreate() {
+    field_0x240 = getFromParams(0, 0xFF);
+    field_0x245 = getFromParams(16, 0xF);
+    field_0x241 = getFromParams(8, 0xFF);
+    field_0x242 = 1;
+
+    mStageRef.link(dAcOstageSink_c::GetInstance());
+    mSpawnPosition = mPosition;
+
+    for (int i = 0; i < (int)ARRAY_LENGTH(mBarrelArr); ++i) {
+        mBarrelArr[i].unlink();
+    }
+
+    mStateMgr.changeState(StateID_Wait);
+
+    return SUCCEEDED;
+}
+
+int dTgBarrel_c::actorPostCreate() {
+    dTgBarrelPos_c *pTgBarrelPos = nullptr;
+    do {
+        pTgBarrelPos =
+            static_cast<dTgBarrelPos_c *>(fManager_c::searchBaseByProfName(fProfile::TAG_BARREL_POS, pTgBarrelPos));
+
+        if (pTgBarrelPos != nullptr) {
+            u8 index = pTgBarrelPos->getLinkIndex();
+            if (field_0x245 == pTgBarrelPos->getLinkId()) {
+                mTgBarrelPosArr[index].link(pTgBarrelPos);
+                if (index >= field_0x243) {
+                    field_0x243 = index + 1;
+                }
+            }
+        }
+
+    } while (pTgBarrelPos != nullptr);
+
+    return SUCCEEDED;
+}
+
+int dTgBarrel_c::doDelete() {
+    return SUCCEEDED;
+}
+
+int dTgBarrel_c::actorExecute() {
+    mStateMgr.executeState();
+    return SUCCEEDED;
+}
+
+int dTgBarrel_c::draw() {
+    return SUCCEEDED;
+}
+
 void dTgBarrel_c::initializeState_Wait() {}
-void dTgBarrel_c::executeState_Wait() {}
+void dTgBarrel_c::executeState_Wait() {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, field_0x240)) {
+        mStateMgr.changeState(StateID_Stop);
+        return;
+    }
+    dAcOstageSink_c *pStage = mStageRef.get();
+
+    mVec3_c pos = pStage->mPosition;
+    mAng3_c rot = pStage->mRotation;
+
+    mVec3_c stageDist = mSpawnPosition - pos;
+    mMtx_c m;
+    m.transS(pos);
+    m.ZXYrotM(rot);
+    m.multVecSR(stageDist, mPosition);
+
+    mPosition += pos;
+
+    if (checkPlayerPos(dAcPy_c::GetLink()->mPosition)) {
+        if (0 == sLib::calcTimer(&field_0x242)) {
+            field_0x246 = 1;
+
+            u8 idx = 0xFF;
+            for (int i = 0; i < (int)ARRAY_LENGTH(mBarrelArr); ++i) {
+                if (!mBarrelArr[i].isLinked()) {
+                    idx = i;
+                    // I think they forgor a break here
+                }
+            }
+
+            if (idx != 0xFF) {
+                dTgBarrelPos_c *pTgBarrelPos = mTgBarrelPosArr[field_0x244].get();
+                if (pTgBarrelPos != nullptr) {
+                    mVec3_c spawnPos = pTgBarrelPos->mPosition;
+                    mAng3_c spawnRot(0, 0x4000, 0);
+                    dAcObjBase_c *pObj = dAcObjBase_c::create(
+                        fProfile::OBJ_BARREL, mRoomID, 0xFF00FF2, &spawnPos, &spawnRot, nullptr, 0xFFFFFFFF
+                    );
+                    mBarrelArr[idx].link(static_cast<dAcOBarrel_c *>(pObj));
+                }
+                if (++field_0x244 >= field_0x243) {
+                    field_0x244 = 0;
+                }
+            }
+            field_0x242 = field_0x241 * 30;
+        }
+    } else {
+        if (field_0x246) {
+            field_0x242 = field_0x241 * 30;
+        }
+    }
+}
 void dTgBarrel_c::finalizeState_Wait() {}
+
 void dTgBarrel_c::initializeState_Stop() {}
-void dTgBarrel_c::executeState_Stop() {}
+void dTgBarrel_c::executeState_Stop() {
+    if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, field_0x240)) {
+        mStateMgr.changeState(StateID_Wait);
+    }
+}
 void dTgBarrel_c::finalizeState_Stop() {}
+
+bool dTgBarrel_c::checkPlayerPos(const mVec3_c &playerPos) {
+    // NONMATCHING
+    // https://decomp.me/scratch/TM82x
+    f32 scale = 0.5f;
+
+    mAng rot = mStageRef.get()->mRotation.y;
+
+    mVec3_c pos = mPosition;
+    pos += mVec3_c::Ey * (mScale.y * 0.5f);
+    pos.x = (playerPos.x - pos.x) / mScale.x;
+    pos.y = (playerPos.y - pos.y) / mScale.y;
+    pos.z = (playerPos.z - pos.z) / mScale.z;
+
+    f32 cos = rot.cos();
+    if (rot.cos() != 0.f) {
+        scale = mScale.x * ((pos.x * rot.sin()) / rot.cos()) / mScale.y;
+    }
+
+    bool ret = false;
+
+    if ((pos.x <= cos * 0.5f && -(cos * 0.5f) <= pos.x)                    //
+        && pos.y <= scale + 0.5f + 1e-6f && pos.y + -0.5f - 1e-6f <= pos.y //
+        && pos.z <= 0.5f && pos.z >= -0.5f) {
+        ret = true;
+    }
+
+    return ret;
+}
