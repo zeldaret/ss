@@ -17,6 +17,13 @@ public:
         }
     }
 
+    void destruct() {
+        if (mPtr != nullptr) {
+            delete mPtr;
+            mPtr = nullptr;
+        }
+    }
+
     void operator=(T *ptr) {
         mPtr = ptr;
     }

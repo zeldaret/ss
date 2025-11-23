@@ -436,8 +436,9 @@ public:
     bool isCursorActive() const {
         return mCursorActive;
     }
-    void setField0x9A0(u8 val) {
-        mCursorActive = val;
+
+    void setField_0x9A2(bool value) {
+        field_0x9A2 = value;
     }
 
     void offNextCursor() {

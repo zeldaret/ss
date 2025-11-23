@@ -431,13 +431,13 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
                 case 6: mapEvent = dLytMapMain_c::MAP_EVENT_FIELD_MAP_CHANGE_8; break;
                 case 7: mapEvent = dLytMapMain_c::MAP_EVENT_GODDESS_CUBE; break;
             }
-            dMessage_c::getInstance()->setField_0x32C(mapEvent);
+            dMessage_c::getInstance()->setMapEvent(mapEvent);
             dMessage_c::getInstance()->setField_0x329(true);
             if (dMessage_c::getInstance()->getInMapEvent() == false) {
                 dMessage_c::getInstance()->setInMapEvent(true);
                 dMessage_c::getInstance()->clearLightPillarRelatedArgs();
-                if (dLytControlGame_c::getInstance()->isStateNormalOrNotInEvent()) {
-                    dLytControlGame_c::getInstance()->somehowRelatedToEnteringLightPillars(
+                if (dLytControlGame_c::getInstance()->isStateNotNormalOrInEvent()) {
+                    dLytControlGame_c::getInstance()->openMapEvent(
                         mapEvent, arg1, arg2
                     );
                 }
@@ -450,18 +450,19 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
         case EVENT_END_MAP_EVENT: {
             // TODO what do these modes do?
             if (params1n2 == 1) {
+                // Close map
                 if (!dLytControlGame_c::getInstance()->isNotInStateMap()) {
-                    dLytControlGame_c::getInstance()->fn_802CCD40(true);
+                    dLytControlGame_c::getInstance()->setMapEventDone(true);
                 }
             } else if (params1n2 == 2) {
                 dMessage_c::getInstance()->setField_0x330(1);
-                if (dMessage_c::getInstance()->getField_0x32C() != 4 &&
-                    dMessage_c::getInstance()->getField_0x32C() != 12) {
+                if (dMessage_c::getInstance()->getMapEvent() != dLytMapMain_c::MAP_EVENT_DUNGEON_MAP_GET &&
+                    dMessage_c::getInstance()->getMapEvent() != dLytMapMain_c::MAP_EVENT_MAX) {
                     dMessage_c::getInstance()->setField_0x32A(1);
                 }
             } else {
-                if (dMessage_c::getInstance()->getField_0x32C() != 4 &&
-                    dMessage_c::getInstance()->getField_0x32C() != 12) {
+                if (dMessage_c::getInstance()->getMapEvent() != dLytMapMain_c::MAP_EVENT_DUNGEON_MAP_GET &&
+                    dMessage_c::getInstance()->getMapEvent() != dLytMapMain_c::MAP_EVENT_MAX) {
                     dMessage_c::getInstance()->setField_0x32A(1);
                 }
             }
@@ -517,7 +518,7 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
             break;
         case EVENT_DEMO_COLLECTION_SCREEN:
             if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
-                dLytControlGame_c::getInstance()->openCollectionScreenDemo();
+                dLytControlGame_c::getInstance()->openPauseDemo();
             }
             break;
     }
@@ -1767,7 +1768,7 @@ void dMessage_c::init() {
     mInMapEvent = false;
     field_0x329 = 0;
     field_0x32A = 0;
-    sInstance->setField_0x32C(12);
+    sInstance->setMapEvent(dLytMapMain_c::MAP_EVENT_MAX);
     field_0x330 = 0;
 }
 

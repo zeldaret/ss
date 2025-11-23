@@ -105,8 +105,17 @@ public:
         return sIsPerformingInitialCollection;
     }
 
+    static s32 getCollectionCurrentCount() {
+        return sCollectionCurrentCount;
+    }
+
+    s32 getQuantity() const {
+        return mItemQuantity;
+    }
+
 private:
     static bool sIsPerformingInitialCollection;
+    static s32 sCollectionCurrentCount;
 
     /* 0x334 */ UNKTYPE *mpMdl; // Model has its own handling system
     /* 0x338 */ dShadowCircle_c mShdw;

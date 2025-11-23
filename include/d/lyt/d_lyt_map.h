@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/d_cursor_hit_check.h"
 #include "d/d_message.h"
+#include "d/d_sc_game.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_map_capture.h"
 #include "d/lyt/d_lyt_map_global.h"
@@ -13,6 +14,7 @@
 #include "egg/core/eggColorFader.h"
 #include "egg/core/eggFader.h"
 #include "m/m2d.h"
+#include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_bounding.h"
@@ -87,8 +89,16 @@ public:
 
     void execute();
 
+    void reset() {
+        mQueue.init();
+    }
+
     const dMapFootPrintsQueue_c *getQueue() const {
         return &mQueue;
+    }
+
+    void setFootstepMinDistSq(f32 value) {
+        mMinStepDistanceSq = value;
     }
 
 private:
@@ -636,16 +646,18 @@ public:
         /** arg1 = surface province */
         MAP_EVENT_SAVE_OBJ = 10,
         MAP_EVENT_11 = 11,
-    };
 
-private:
-    // TODO - need to come up with better names for all of these enums and concepts
+        MAP_EVENT_MAX = 12,
+    };
 
     enum SurfaceProvince_e {
         SURFACE_PROVINCE_FARON = 0,
         SURFACE_PROVINCE_ELDIN = 1,
         SURFACE_PROVINCE_LANAYRU = 2,
     };
+
+private:
+    // TODO - need to come up with better names for all of these enums and concepts
 
     enum AreaGroup_e {
         AREAGROUP_SKY = 1,
@@ -716,7 +728,7 @@ private:
     void loadTextboxes();
 
     void saveMapState();
-    void initMapState();
+    static void initMapState();
     void loadMapState();
 
     void checkCursorPointedAtMap();
@@ -745,6 +757,10 @@ private:
         return mMapEvent == MAP_EVENT_1 || mMapEvent == MAP_EVENT_SIGNAL_ADD ||
                mMapEvent == MAP_EVENT_FIELD_MAP_CHANGE_8 || mMapEvent == MAP_EVENT_GODDESS_CUBE ||
                mMapEvent == MAP_EVENT_11;
+    }
+
+    void setMapEventDone(bool done) {
+        mEventDone = done;
     }
 
     /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMapMain_c);
@@ -896,9 +912,13 @@ private:
 class dLytMap_c {
 public:
     dLytMap_c() {
+        mMapFader.setVisible(false);
         sInstance = this;
     }
     virtual ~dLytMap_c() {
+        if (dScGame_c::GetInstance() != nullptr) {
+            dScGame_c::GetInstance()->setTargetingScreenPrio(0x85);
+        }
         sInstance = nullptr;
     }
 
@@ -916,6 +936,22 @@ public:
 
     bool isOpen() const {
         return mMapMain.isOpen();
+    }
+
+    bool checkClose() const {
+        return mMapMain.checkClose();
+    }
+
+    bool isMapIntroDone() const {
+        return mMapMain.isMapIntroDone();
+    }
+
+    void close() {
+        mMapMain.close();
+    }
+
+    static void initMapState() {
+        dLytMapMain_c::initMapState();
     }
 
     bool isVisibleNoIntro() const {
@@ -938,6 +974,14 @@ public:
         return mMapMain.mMapEvent == dLytMapMain_c::MAP_EVENT_SAVE_OBJ;
     }
 
+    void startMapEvent(s32 mapEvent, s32 arg1, s32 arg2) {
+        mMapMain.startMapEvent(mapEvent, arg1, arg2);
+    }
+
+    void setMapEventDone(bool done) {
+        mMapMain.setMapEventDone(done);
+    }
+
     void queueMapEvent(s32 mapEvent, s32 arg1, s32 arg2) {
         mMapMain.queueMapEvent(mapEvent, arg1, arg2);
     }
@@ -951,7 +995,7 @@ public:
 private:
     /* 0x0004 */ d2d::ResAccIf_c mResAcc;
     /* 0x0374 */ dLytMapMain_c mMapMain;
-    /* 0x91A4 */ u8 _0x91A4[0x91C0 - 0x91A4];
+    /* 0x91A4 */ mHeapAllocator_c field_0x91A4;
     /* 0x91C0 */ dLytMapFader_c mMapFader;
 
     static dLytMap_c *sInstance;

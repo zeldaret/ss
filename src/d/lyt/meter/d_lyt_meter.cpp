@@ -1088,7 +1088,7 @@ bool dLytMeterMain_c::fn_800D56B0() {
     }
 
     if ((EventManager::isInEvent() && field_0x1377E == 0 && dAcPy_c::GetLink()->getCurrentAction() != 0x8C &&
-         dMessage_c::getInstance()->getField_0x32C() == 0xC) ||
+         dMessage_c::getInstance()->getMapEvent() == dLytMapMain_c::MAP_EVENT_MAX) ||
         mHelpOpen) {
         return true;
     }

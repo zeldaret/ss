@@ -247,12 +247,12 @@ public:
         mInMapEvent = val;
     }
 
-    s32 getField_0x32C() const {
-        return field_0x32C;
+    s32 getMapEvent() const {
+        return mMapEvent;
     }
 
-    void setField_0x32C(s32 val) {
-        field_0x32C = val;
+    void setMapEvent(s32 val) {
+        mMapEvent = val;
     }
 
     void setField_0x329(bool v) {
@@ -265,6 +265,10 @@ public:
 
     bool getField_0x32A() const {
         return field_0x32A;
+    }
+
+    bool getField_0x330() const {
+        return field_0x330;
     }
 
     void setField_0x330(bool v) {
@@ -367,8 +371,8 @@ private:
     /* 0x32A */ bool field_0x32A;
 
     /* 0x32B */ u8 field_0x32B;
-    /* 0x32C */ s32 field_0x32C;
-    /* 0x330 */ u8 field_0x330;
+    /* 0x32C */ s32 mMapEvent;
+    /* 0x330 */ bool field_0x330;
 
     /* 0x334 */ u32 mMinigameResultPoints;
     /* 0x338 */ u32 mMinigameTime;

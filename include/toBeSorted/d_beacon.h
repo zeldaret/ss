@@ -19,4 +19,6 @@ void setBeaconPositionChecked(const mVec3_c *position, u32 beaconIndex);
 /** Checks whether the current stage is ineligible for beacon placement */
 bool doesStageForbidBeaconPlacement();
 
+const mVec3_c *getBeaconPosition(u32 beaconIndex);
+
 #endif

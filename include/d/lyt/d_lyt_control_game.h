@@ -1,29 +1,58 @@
 #ifndef D_LYT_CONTROL_GAME_H
 #define D_LYT_CONTROL_GAME_H
 
+// clang-format off
+// vtable order
+#include "common.h"
 #include "d/d_base.h"
-#include "d/lyt/d_lyt_map.h"
-#include "d/lyt/d_lyt_wipe.h"
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "d/lyt/msg_window/d_lyt_simple_window.h"
+#include "d/lyt/d_lyt_wipe.h"
+#include "d/lyt/d_lyt_help.h"
+#include "d/lyt/d_lyt_map.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/raii_ptr.h"
+// clang-format on
+
+class dLytDrawMark_c;
 
 class dLytControlGame_c : public dBase_c {
 public:
     dLytControlGame_c();
     virtual ~dLytControlGame_c();
 
+    enum Cmd_e {
+        CMD_NONE = 0,
+        CMD_MAP = 1,
+        CMD_PAUSE = 2,
+        CMD_HELP = 3,
+    };
+
+    virtual int create() override;
+    virtual int doDelete() override;
+    virtual int execute() override;
+    virtual int draw() override;
+
     bool isInSomeMapState() const;
     bool isNotInStateMap() const;
-    void openCollectionScreenDemo();
-    bool isStateNormalOrNotInEvent() const;
-    void somehowRelatedToEnteringLightPillars(s32, s32, s32);
-
-    void fn_802CCD40(bool);
+    bool isStateNotNormalOrInEvent() const;
+    bool fn_802CFF60() const;
+    
+    void setMapEventDone(bool);
     void fn_802D04F0();
+    void checkForBeaconNextToMark();
+    
+    void hideHelp();
+    void changeHelpText(s32 textIndex);
+    void openPause();
+    void openPauseDemo();
+    void openHelp(s32 textIndex);
+    void openMap();
+    void openMapEvent(s32 mapEvent, s32 arg1, s32 arg2);
+
+    void resetFootsteps();
 
     const dMapFootPrintsQueue_c *getFootprintsQueue() const {
         return mFootprintsMgr.getQueue();
@@ -80,31 +109,43 @@ public:
     }
 
 private:
+    bool checkStoryflag(s32 flag) const;
+    void fn_802CFA90();
+    bool canOpenPause();
+    bool releaseRes();
+    bool decrementRes();
+
     /* 0x00068 */ UI_STATE_MGR_DECLARE(dLytControlGame_c);
-    /* 0x000A4 */ RaiiPtr<void*> field_0x000A4;
+    /* 0x000A4 */ RaiiPtr<dLytMap_c> mpMap;
     /* 0x000A8 */ dLytMeter_c mMeter;
     /* 0x13C10 */ dLytMsgWindow_c mMsgWindow;
     /* 0x14E34 */ dLytSimpleWindow_c mSimpleWindow;
     /* 0x152A0 */ dLytWipe_c mWipe;
-    /* 0x15848 */ u8 _0x15848[0x15850 - 0x15848];
+    /* 0x15848 */ dLytHelp_c *mpHelp;
+    /* 0x1584C */ dLytDrawMark_c *mpDrawMark;
     /* 0x15850 */ dMapFootPrintsMgr_c mFootprintsMgr;
 
-    /* 0x15C24 */ UNKWORD field_0x15C24;
-    /* 0x15C28 */ UNKWORD field_0x15C28;
-
+    /* 0x15C24 */ s32 mCommand;
+    /* 0x15C28 */ s32 mHelpTextIndex;
     /* 0x15C2C */ s32 mCurrentPauseDisp;
     /* 0x15C30 */ s32 mPauseDisp00Tab;
+    /* 0x15C34 */ u8 mIsEvent;
+    /* 0x15C38 */ s32 mMapEvent;
 
-    /* 0x15C34 */ u8 _0x15C34[0x15C40 - 0x15C34];
+    /* 0x15C3C */ u8 _0x15C3C[0x15C40 - 0x15C3C];
 
     /* 0x15C40 */ LayoutArcControl mLytArcControl;
 
-    /* 0x15C4C */ u8 _0x15C4C[0x15C60 - 0x15C4C];
+    /* 0x15C4C */ s32 mMapEventArg1;
+    /* 0x15C50 */ s32 mMapEventArg2;
+
+    /* 0x15C54 */ UNKWORD field_0x15C54;
+    /* 0x15C58 */ UNKWORD field_0x15C58;
+
+    /* 0x15C5C */ u8 _0x15C5C[0x15C60 - 0x15C5C];
 
     /* 0x15C60 */ u16 mItemForPauseDemo;
-
-    /* 0x15C62 */ u8 _0x15C62[0x15C64 - 0x15C62];
-
+    /* 0x15C62 */ u16 mPickupItemCount;
     /* 0x15C64 */ u16 mItemCountForPauseDemo;
     /* 0x15C66 */ u8 field_0x15C66;
     /* 0x15C67 */ bool mIsPauseDemo;

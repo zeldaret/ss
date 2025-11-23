@@ -1712,8 +1712,10 @@ d/lyt/d_lyt_control_game.cpp:
 	.text       start:0x802CC7B0 end:0x802D16A8 align:16
 	.ctors      start:0x804DB8A0 end:0x804DB8A4
 	.data       start:0x805403F8 end:0x80540C88
+	.sdata      start:0x80573EF0 end:0x80573F28
 	.sbss       start:0x80575A00 end:0x80575A18
-	.bss        start:0x805B7DD0 end:0x805B8040
+	.sdata2     start:0x8057CA68 end:0x8057CAA0
+	.bss        start:0x805B7DD0 end:0x805B8030
 
 d/lyt/d_lyt_control_title.cpp:
 	.text       start:0x802D16B0 end:0x802D17BC align:16

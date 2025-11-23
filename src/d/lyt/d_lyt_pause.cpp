@@ -559,7 +559,7 @@ void dLytPauseMgr_c::initializeState_None() {
     mPrevSelectionId = 0;
     field_0x083C = false;
     field_0x083D = false;
-    field_0x0836 = false;
+    mIsActive = false;
     field_0x0837 = false;
     field_0x0838 = false;
     mIsNavLeft = false;
@@ -830,7 +830,7 @@ void dLytPauseMgr_c::finalizeState_Out() {
 
 void dLytPauseMgr_c::inRequest() {
     mInRequest = true;
-    field_0x0836 = 1;
+    mIsActive = true;
 }
 
 bool dLytPauseMgr_c::isStateWait() const {

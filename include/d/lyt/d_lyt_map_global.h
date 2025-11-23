@@ -176,8 +176,12 @@ public:
         mMapEvent = v;
     }
 
-    u8 getField_0x54() const {
-        return field_0x54;
+    bool isInMapEvent() const {
+        return mInMapEvent;
+    }
+
+    void setInMapEvent(bool v) {
+        mInMapEvent = v;
     }
 
     void projectOntoMap(mVec2_c &result, const mVec3_c &position) const;
@@ -213,7 +217,7 @@ private:
     /* 0x4E */ u8 mAlpha;
     /* 0x4F */ u8 field_0x4F;
     /* 0x50 */ s32 mMapEvent;
-    /* 0x54 */ u8 field_0x54;
+    /* 0x54 */ bool mInMapEvent;
     /* 0x55 */ u8 field_0x55;
     /* 0x56 */ mAng field_0x56;
     /* 0x58 */ f32 field_0x58;

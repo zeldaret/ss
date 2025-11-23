@@ -5,6 +5,7 @@
 #include "d/d_message.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_map.h"
 #include "d/lyt/d_lyt_unknowns.h"
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
@@ -172,8 +173,8 @@ void dLytMeterCrossBtnParts_c::execute(bool bIsVisible) {
         mpLyt->calc();
     }
 
-    if ((EventManager::isInEvent() && dMessage_c::getInstance()->getField_0x32C() == 12 && !checkIsInSkykeepPuzzle() &&
-         !dLytMeter_c::GetInstance()->fn_800D5670()) ||
+    if ((EventManager::isInEvent() && dMessage_c::getInstance()->getMapEvent() == dLytMapMain_c::MAP_EVENT_MAX &&
+         !checkIsInSkykeepPuzzle() && !dLytMeter_c::GetInstance()->fn_800D5670()) ||
         ((dLytMeter_c::getItemSelect0x75A2() && (mIndex != 1 || mCurrentIcon != 0)) || !bIsVisible)) {
         field_0x7C = 0;
 

@@ -562,7 +562,7 @@ void dLytMsgWindow_c::finalizeState_MapOpen() {}
 void dLytMsgWindow_c::initializeState_WaitKeyMapClose() {}
 void dLytMsgWindow_c::executeState_WaitKeyMapClose() {
     if ((dPad::getDownTrigB() || dPad::getDownTrigPlus()) && !dLytControlGame_c::getInstance()->isNotInStateMap()) {
-        dLytControlGame_c::getInstance()->fn_802CCD40(true);
+        dLytControlGame_c::getInstance()->setMapEventDone(true);
         mStateMgr.changeState(StateID_MapClose);
     }
 }
