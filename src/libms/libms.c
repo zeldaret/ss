@@ -28,9 +28,6 @@ int LMSi_MemCmp(const void *p1, const void *p2, int n) {
 }
 
 void LMSi_MemCopy(void *p1, const void *p2, int n) {
-    // https://decomp.me/scratch/JOWiM
-    // NONMATCHING - register usage too optimal
-    // Look, how difficult can an unrolled memcopy be to match
     for (int i = 0; i < n; i++) {
         ((char *)p1)[i] = ((const char *)p2)[i];
     }
