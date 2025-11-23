@@ -215,6 +215,10 @@ public:
 
     void inRequest();
 
+    bool isActive() const {
+        return mIsActive;
+    }
+
     static f32 sDisp00ArrowRotation;
     static f32 sDisp00ArrowLength;
 
@@ -256,7 +260,7 @@ private:
     /* 0x0833 */ u8 mCurrentSelectionTab;
     /* 0x0834 */ u8 mTimer;
     /* 0x0835 */ u8 field_0x0835;
-    /* 0x0836 */ bool field_0x0836;
+    /* 0x0836 */ bool mIsActive;
     /* 0x0837 */ bool field_0x0837;
     /* 0x0838 */ bool field_0x0838;
     /* 0x0839 */ bool field_0x0839;

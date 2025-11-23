@@ -65,6 +65,22 @@ public:
     bool setText(s32 textIndex);
     void changeText(s32 textIndex);
 
+    static dLytHelp_c *GetInstance() {
+        return sInstance;
+    }
+
+    bool isStateEnd() const {
+        return *mStateMgr.getStateID() == StateID_End;
+    }
+
+    void requestOut() {
+        mOutRequest = true;
+    }
+
+    bool isWaiting() const {
+        return mIsWaiting;
+    }
+
 private:
     static dLytHelp_c *sInstance;
 
@@ -80,8 +96,8 @@ private:
     /* 0x04C */ d2d::ResAccIf_c mResAcc;
     /* 0x3BC */ dLytHelpMain_c *mpMain;
     /* 0x3C0 */ bool field_0x3C0;
-    /* 0x3C1 */ bool field_0x3C1;
-    /* 0x3C2 */ bool field_0x3C2;
+    /* 0x3C1 */ bool mOutRequest;
+    /* 0x3C2 */ bool mIsWaiting;
     /* 0x3C4 */ s32 mTextIndex;
     /* 0x3C8 */ s32 field_0x3C8;
 };

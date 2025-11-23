@@ -345,7 +345,7 @@ void dLytHelp_c::finalizeState_None() {}
 void dLytHelp_c::initializeState_In() {}
 void dLytHelp_c::executeState_In() {
     if (mpMain->isIdle()) {
-        field_0x3C2 = true;
+        mIsWaiting = true;
         mpMain->modeRequestWait();
         mStateMgr.changeState(StateID_Wait);
         field_0x3C8 = 0;
@@ -355,7 +355,7 @@ void dLytHelp_c::finalizeState_In() {}
 
 void dLytHelp_c::initializeState_Wait() {}
 void dLytHelp_c::executeState_Wait() {
-    if (dPad::getDownTrig2() || dPad::getDownTrigMinus() || dPad::getDownTrigB() || field_0x3C1) {
+    if (dPad::getDownTrig2() || dPad::getDownTrigMinus() || dPad::getDownTrigB() || mOutRequest) {
         mpMain->modeRequestOut();
         dSndPlayerMgr_c::GetInstance()->leaveHelp();
         dLytMeter_c::GetInstance()->setHelpOpen(false);
@@ -381,7 +381,7 @@ void dLytHelp_c::finalizeState_End() {}
 bool dLytHelp_c::setText(s32 textIndex) {
     if (*mStateMgr.getStateID() == StateID_None) {
         field_0x3C0 = true;
-        field_0x3C1 = false;
+        mOutRequest = false;
         if (textIndex <= ARRAY_LENGTH(sHelpTextKeys) - 1) {
             mTextIndex = textIndex;
         } else {
@@ -497,7 +497,7 @@ void dLytHelp_c::changeText(s32 textIndex) {
         mpMain->setText(mTextIndex);
     } else if (mTextIndex != textIndex) {
         mTextIndex = textIndex;
-        field_0x3C1 = true;
+        mOutRequest = true;
     }
 }
 
@@ -509,8 +509,8 @@ bool dLytHelp_c::build() {
     mpMain->build(&mResAcc);
     mStateMgr.changeState(StateID_None);
     field_0x3C0 = false;
-    field_0x3C1 = false;
-    field_0x3C2 = false;
+    mOutRequest = false;
+    mIsWaiting = false;
     mTextIndex = -1;
     field_0x3C8 = 0;
     m2d::setLytAllocator();

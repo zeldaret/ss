@@ -52,6 +52,7 @@ public:
     // Something like isActorInEvent maybe?
     static bool FUN_800a0570(const dAcBase_c *actor);
     static bool FUN_800a0ba0();
+    static bool fn_8009F990();
 
 private:
     /* 0x000 */ u8 _000[0x084 - 0x000];

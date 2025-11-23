@@ -60,7 +60,7 @@ enum StoryFlags_e {
     /** [Harp Cutscene (Lanayru Desert layer 2 / Lanayru Mines layer 2 / Temple of Time layer 2 / Behind The Temple
      * layer 3)] Story Flag #9 (0x0009) - JP 805ACD58 0x04 / US 805A9AD8 0x04
      */
-    STORYFLAG_9,
+    STORYFLAG_HARP_CUTSCENE,
 
     /** [Entering Ancient Cistern Cutscene]
      *  Story Flag #10 (0x000A) - JP 805ACD58 0x08 / US 805A9AD8 0x08
@@ -111,7 +111,7 @@ enum StoryFlags_e {
     /** [Fire Dragon Text after SotH part Cutscene (Eldin Volcano, Digging Mitts Cave, Volcano Summit Waterfall layer
      * 4)] Story Flag #19 (0x0013) - JP 805ACD5B 0x08 / US 805A9ADB 0x08
      */
-    STORYFLAG_19,
+    STORYFLAG_BOKO_BASE_BEATEN,
 
     /** [Set when learning 3rd SotH part (Groosenator to Lanayru ready)]
      *  Story Flag #20 (0x0014) - JP 805ACD5B 0x10 / US 805A9ADB 0x10
@@ -718,7 +718,7 @@ enum StoryFlags_e {
     /** [Groose lands in Faron after Harp (Sealed Temple layer 2)]
      *  Story Flag #140 (0x008C) - JP 805ACD67 0x04 / US 805A9AE7 0x04
      */
-    STORYFLAG_140,
+    STORYFLAG_GROOSE_LANDS_IN_FARON,
 
     /** [Ballad of the Goddess played with Impa (Sealed Grounds layer 2)]
      *  Story Flag #141 (0x008D) - JP 805ACD6C 0x01 / US 805A9AEC 0x01
@@ -863,7 +863,7 @@ enum StoryFlags_e {
     /** [Eldin Eruption Cutscene ready to play (set when Levias explains SotH quest, set and unset by Faron and Lanayru
      * SotH)] Story Flag #169 (0x00A9) - JP 805ACD62 0x01 / US 805A9AE2 0x01
      */
-    STORYFLAG_169,
+    STORYFLAG_ELDIN_VOLCANO_CAN_ERUPT,
 
     /** [Fire Dragon teaches SotH part Cutscene (Fire Dragon's Lair layer 2)]
      *  Story Flag #170 (0x00AA) - JP 805ACD62 0x02 / US 805A9AE2 0x02
@@ -948,12 +948,12 @@ enum StoryFlags_e {
     /** [Water Basin collected (unsets when scrapper picks up anything else)]
      *  Story Flag #186 (0x00BA) - JP 805ACD69 0x02 / US 805A9AE9 0x02
      */
-    STORYFLAG_186,
+    STORYFLAG_SCRAPPER_HAS_WATER_BASIN,
 
     /** [Big Frog Watered]
      *  Story Flag #187 (0x00BB) - JP 805ACD69 0x04 / US 805A9AE9 0x04
      */
-    STORYFLAG_187,
+    STORYFLAG_SUMMIT_BIG_FROG_WATERED,
 
     /** [Asking Fi about the Water Basin after finding the Big Flames in fromt of FS]
      *  Story Flag #188 (0x00BC) - JP 805ACD69 0x08 / US 805A9AE9 0x08
@@ -3738,7 +3738,7 @@ enum StoryFlags_e {
     /** [set after scrappers text at start of Water Basin Escord]
      *  Story Flag #743 (0x02E7) - JP 805ACDA6 0x80 / US 805A9B26 0x80
      */
-    STORYFLAG_743,
+    STORYFLAG_WATER_BASIN_ESCORT_STARTED,
 
     /** [Scrapper text at start of scrapper escort]
      *  Story Flag #744 (0x02E8) - JP 805ACDA9 0x01 / US 805A9B29 0x01

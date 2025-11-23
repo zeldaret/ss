@@ -74,6 +74,13 @@ public:
         POSITION_MAP = 1,
     };
 
+    enum Mode_e {
+        MODE_MAP_INIT = 0,
+        MODE_MAP = 1,
+        MODE_PAUSE = 2,
+        MODE_NONE = 4,
+    };
+
     dLytMeterMain_c();
     virtual ~dLytMeterMain_c() {}
 
@@ -248,6 +255,18 @@ public:
 
     bool itemSelectDemoRelated(s32 arg) {
         return mMain.mItemSelect.fn_800F0220(arg);
+    }
+
+    bool itemSelectFn800EFDF0(bool b) const {
+        return mMain.mItemSelect.fn_800EFDF0(b);
+    }
+
+    bool minusBtnFn800F7600() const {
+        return mMain.mMinusBtn.fn_800F7600();
+    }
+
+    bool dowsingFn800FE4B0() const {
+        return mMain.mDowsing.fn_800FE4B0();
     }
 
     bool dowsingDemoRelated(s32 arg) {
@@ -481,6 +500,12 @@ public:
             return sInstance->mMain.mShield.getCurrentDurability();
         } else {
             return 0.0f;
+        }
+    }
+
+    static void setPlusBtnCall(bool call) {
+        if (sInstance != nullptr) {
+            sInstance->mMain.mPlusBtn.setCall(call);
         }
     }
 

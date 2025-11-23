@@ -250,6 +250,10 @@ public:
     static u16 getTearBit(int tearNum);
     static bool setDungeonFlagForTear(int tearNum);
 
+    u16 getItemId_i() const {
+        return mId;
+    }
+
 private:
     u16 mId;
 

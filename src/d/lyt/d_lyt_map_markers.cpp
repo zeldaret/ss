@@ -1538,7 +1538,7 @@ void dLytMapIcon01_c::setupStageDrawCommands() {
     while ((ac = static_cast<dAcBase_c *>(fManager_c::searchBaseByGroupType(fBase_c::STAGE, ac))) != nullptr) {
         setupTgMapMarkDrawCommand(ac);
 
-        if (dLytMapGlobal_c::GetInstance()->getField_0x54()) {
+        if (dLytMapGlobal_c::GetInstance()->isInMapEvent()) {
             setupTgMapInstDrawCommand(ac);
         }
 
