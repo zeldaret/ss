@@ -12,5 +12,5 @@ _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_381_rodata_0 = .rodata:0x00000000; // type:object size:0x18 scope:local data:float
 g_profile_OBJ_FENCE_KONSAI = .data:0x00000000; // type:object size:0x44
-lbl_381_data_44 = .data:0x00000044; // type:object size:0x24 scope:local
+lbl_381_data_44 = .data:0x00000044; // type:object size:0x1F scope:local data:string
 __vt__17dAcOfenceKonsai_c = .data:0x00000068; // type:object size:0x80

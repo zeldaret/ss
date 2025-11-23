@@ -22,5 +22,5 @@ lbl_309_data_10 = .data:0x00000010; // type:object size:0x10 data:string
 lbl_309_data_20 = .data:0x00000020; // type:object size:0x8 data:string
 lbl_309_data_28 = .data:0x00000028; // type:object size:0x1C data:string
 lbl_309_data_44 = .data:0x00000044; // type:object size:0xC data:string
-lbl_309_data_50 = .data:0x00000050; // type:object size:0x10
+lbl_309_data_50 = .data:0x00000050; // type:object size:0xB data:string
 lbl_309_data_60 = .data:0x00000060; // type:object size:0x80

@@ -104,6 +104,12 @@ parser.add_argument(
     help="path to sjiswrap.exe (optional)",
 )
 parser.add_argument(
+    "--ninja",
+    metavar="BINARY",
+    type=Path,
+    help="path to ninja binary (optional)",
+)
+parser.add_argument(
     "--verbose",
     action="store_true",
     help="print verbose output",
@@ -113,6 +119,13 @@ parser.add_argument(
     dest="non_matching",
     action="store_true",
     help="builds equivalent (but non-matching) or modded objects",
+)
+parser.add_argument(
+    "--warn",
+    dest="warn",
+    type=str,
+    choices=["all", "off", "error"],
+    help="how to handle warnings",
 )
 parser.add_argument(
     "--no-progress",
@@ -135,6 +148,7 @@ config.compilers_path = args.compilers
 config.generate_map = args.map
 config.non_matching = args.non_matching
 config.sjiswrap_path = args.sjiswrap
+config.ninja_path = args.ninja
 config.progress = args.progress
 if not is_windows():
     config.wrapper = args.wrapper
@@ -144,11 +158,11 @@ if not config.non_matching:
 
 # Tool versions
 config.binutils_tag = "2.42-1"
-config.compilers_tag = "20240706"
-config.dtk_tag = "v1.5.1"
-config.objdiff_tag = "v3.0.0-beta.8"
-config.sjiswrap_tag = "v1.2.1"
-config.wibo_tag = "0.6.16"
+config.compilers_tag = "20250812"
+config.dtk_tag = "v1.7.1"
+config.objdiff_tag = "v3.4.1"
+config.sjiswrap_tag = "v1.2.2"
+config.wibo_tag = "1.0.0-beta.5"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -219,6 +233,14 @@ if args.debug:
     cflags_base.extend(["-sym on", "-DDEBUG=1"])
 else:
     cflags_base.append("-DNDEBUG=1")
+
+# Warning flags
+if args.warn == "all":
+    cflags_base.append("-W all")
+elif args.warn == "off":
+    cflags_base.append("-W off")
+elif args.warn == "error":
+    cflags_base.append("-W error")
 
 # Metrowerks library flags
 cflags_runtime = [
@@ -303,7 +325,6 @@ def Rel(status, rel_name, cpp_name, extra_cflags=[]):
         "scratch_preset_id": 170,
         "cflags": cflags_rel + extra_cflags,
         "progress_category": "game",
-        "host": False,
         "objects": [
             Object(status, cpp_name),
         ],
@@ -317,7 +338,6 @@ def RelLib(lib_name, progress_category, objects, extra_cflags=[]):
         "scratch_preset_id": 170,
         "cflags": cflags_rel + extra_cflags,
         "progress_category": progress_category,
-        "host": False,
         "objects": objects,
     }
 
@@ -329,7 +349,6 @@ def EGGLib(lib_name, objects):
         "scratch_preset_id": 169,
         "cflags": cflags_egg,
         "progress_category": "egg",
-        "host": False,
         "objects": objects,
     }
 
@@ -340,7 +359,6 @@ def nw4rLib(lib_name, objects, extra_cflags=[], mw_version=None):
         "mw_version": mw_version or "Wii/1.3",  # most seem to be around 1.2, snd is 1.6
         "cflags": cflags_nw4r + extra_cflags,
         "progress_category": "nw4r",
-        "host": False,
         "objects": objects,
     }
 
@@ -353,7 +371,6 @@ def JSystemLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
         "cflags": cflags_framework,
         "scratch_preset_id": 169,
         "progress_category": "jsystem",
-        "host": False,
         "objects": objects,
     }
 
@@ -387,7 +404,6 @@ config.libs = [
         "cflags": cflags_framework,
         "scratch_preset_id": 169,
         "progress_category": "game",
-        "host": False,
         "objects": [
             Object(NonMatching, "toBeSorted/d_lib.cpp"),
             Object(NonMatching, "toBeSorted/unk_sorajima_list.cpp"),
@@ -668,7 +684,6 @@ config.libs = [
         "mw_version": "Wii/1.5",
         "cflags": cflags_thpplayer,
         "progress_category": "thpplayer",
-        "host": False,
         "objects": [
             Object(NonMatching, "THPPlayer/THPAudioDecode.c"),
             Object(NonMatching, "THPPlayer/THPDraw.c"),
@@ -683,7 +698,6 @@ config.libs = [
         "cflags": cflags_framework + ["-str reuse,readonly"],
         "scratch_preset_id": 169,  # note: technically wrong due to -str
         "progress_category": "game",
-        "host": False,
         "objects": [
             Object(Matching, "d/col/c/c_bg_s_chk.cpp"),
             Object(Matching, "d/col/c/c_bg_s_gnd_chk.cpp"),
@@ -737,7 +751,6 @@ config.libs = [
         "cflags": cflags_framework,
         "scratch_preset_id": 169,
         "progress_category": "game",
-        "host": False,
         "objects": [
             Object(Matching, "d/snd/d_snd_mgr.cpp"),
             Object(Matching, "d/snd/d_snd_actor.cpp"),
@@ -819,7 +832,6 @@ config.libs = [
         "cflags": cflags_framework,
         "scratch_preset_id": 169,
         "progress_category": "core",
-        "host": False,
         "objects": [
             Object(NonMatching, "c/c_counter.cpp"),
             Object(NonMatching, "c/c_mem.cpp"),
@@ -836,7 +848,6 @@ config.libs = [
         "cflags": cflags_framework,
         "scratch_preset_id": 169,
         "progress_category": "core",
-        "host": False,
         "objects": [
             Object(Matching, "m/m3d/m3d.cpp"),
             Object(Matching, "m/m3d/m_proc.cpp"),
@@ -884,7 +895,6 @@ config.libs = [
         "mw_version": "Wii/1.0",
         "cflags": cflags_hbm,
         "progress_category": "hbm",
-        "host": False,
         "objects": [
             Object(NonMatching, "hbm/homebutton/HBMFrameController.cpp"),
             Object(NonMatching, "hbm/homebutton/HBMAnmController.cpp"),
@@ -911,7 +921,6 @@ config.libs = [
         "mw_version": "Wii/1.0",
         "cflags": cflags_nw4r,
         "progress_category": "nw4r",
-        "host": False,
         "objects": [
             Object(NonMatching, "hbm/nw4hbm/lyt/lyt_animation.cpp"),
             Object(NonMatching, "hbm/nw4hbm/lyt/lyt_arcResourceAccessor.cpp"),
@@ -944,7 +953,6 @@ config.libs = [
         "mw_version": "Wii/1.5",
         "cflags": cflags_libms,
         "progress_category": "core",
-        "host": False,
         "objects": [
             Object(Matching, "libms/commonlib.c"),
             Object(Matching, "libms/flowfile.c"),
@@ -958,7 +966,6 @@ config.libs = [
         "cflags": cflags_framework,
         "scratch_preset_id": 169,
         "progress_category": "core",
-        "host": False,
         "objects": [
             Object(Matching, "s/s_Assert.cpp"),
             Object(Matching, "s/s_Crc.cpp"),
@@ -977,7 +984,6 @@ config.libs = [
         "cflags": cflags_framework,
         "scratch_preset_id": 169,
         "progress_category": "core",
-        "host": False,
         "objects": [
             Object(NonMatching, "f/f_ba_helper.cpp"),
             Object(Matching, "f/f_base.cpp"),
@@ -1391,7 +1397,6 @@ config.libs = [
         "mw_version": "Wii/1.0",
         "cflags": cflags_rvl,
         "progress_category": "sdk",
-        "host": False,
         "objects": [
             Object(NonMatching, "revolution/thp/THPDec.c"),
             Object(NonMatching, "revolution/thp/THPAudio.c"),
@@ -1603,7 +1608,6 @@ config.libs = [
         "mw_version": "Wii/1.5",
         "cflags": cflags_runtime,
         "progress_category": "runtime",
-        "host": False,
         "objects": [
             Object(NonMatching, "PowerPC_EABI_Support/Runtime/Src/__mem.c"),
             Object(NonMatching, "PowerPC_EABI_Support/Runtime/Src/__va_arg.c"),
@@ -1636,7 +1640,6 @@ config.libs = [
         "mw_version": "Wii/1.5",
         "cflags": cflags_runtime,
         "progress_category": "runtime",
-        "host": False,
         "objects": [
             Object(
                 NonMatching,
@@ -1869,7 +1872,6 @@ config.libs = [
         "mw_version": "Wii/1.5",
         "cflags": cflags_trk,
         "progress_category": "runtime",
-        "host": False,
         "objects": [
             Object(
                 NonMatching,
@@ -1983,7 +1985,6 @@ config.libs = [
         "mw_version": "Wii/1.5",
         "cflags": cflags_rel,
         "progress_category": "runtime",
-        "host": False,
         "objects": [
             Object(Matching, "REL/executor.c"),
             Object(

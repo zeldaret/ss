@@ -19,5 +19,5 @@ lbl_522_rodata_0 = .rodata:0x00000000; // type:object size:0x8 data:float
 lbl_522_rodata_8 = .rodata:0x00000008; // type:object size:0x4 align:4 data:float
 lbl_522_rodata_C = .rodata:0x0000000C; // type:object size:0x24 align:4 data:float
 g_profile_OBJ_VACU_DUST = .data:0x00000000; // type:object size:0x70
-lbl_522_data_70 = .data:0x00000070; // type:object size:0x20
+lbl_522_data_70 = .data:0x00000070; // type:object size:0x1A data:string
 lbl_522_data_90 = .data:0x00000090; // type:object size:0x80

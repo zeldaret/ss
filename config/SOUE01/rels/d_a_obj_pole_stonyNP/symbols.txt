@@ -13,6 +13,6 @@ _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_307_rodata_0 = .rodata:0x00000000; // type:object size:0xA0 data:float
 g_profile_OBJ_POLE_STONY = .data:0x00000000; // type:object size:0x30
-lbl_307_data_30 = .data:0x00000030; // type:object size:0x20
+lbl_307_data_30 = .data:0x00000030; // type:object size:0x1D data:string
 lbl_307_data_50 = .data:0x00000050; // type:object size:0x80
 lbl_307_bss_8 = .bss:0x00000008; // type:object size:0xC data:byte

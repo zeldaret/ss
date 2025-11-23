@@ -14,5 +14,5 @@ _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_527_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
 lbl_527_rodata_4 = .rodata:0x00000004; // type:object size:0x4 align:4 data:float
 g_profile_OBJ_TENI_RAIL_POST = .data:0x00000000; // type:object size:0x40
-lbl_527_data_40 = .data:0x00000040; // type:object size:0x20
+lbl_527_data_40 = .data:0x00000040; // type:object size:0x1E data:string
 AcOTeniRailPost__vtable = .data:0x00000060; // type:object size:0x80

@@ -15,5 +15,5 @@ lbl_18_rodata_4 = .rodata:0x00000004; // type:object size:0x20 scope:local align
 lbl_18_rodata_24 = .rodata:0x00000024; // type:object size:0x4 scope:local align:4 data:float
 g_profile_OBJ_BSTONE = .data:0x00000000; // type:object size:0x10
 lbl_18_data_10 = .data:0x00000010; // type:object size:0x30
-lbl_18_data_40 = .data:0x00000040; // type:object size:0x20 scope:local
+lbl_18_data_40 = .data:0x00000040; // type:object size:0x19 scope:local data:string
 __vt__11dAcObstonec = .data:0x00000060; // type:object size:0x80
