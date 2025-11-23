@@ -3,7 +3,6 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOstageSink_c : public dAcObjBase_c {
 public:
@@ -13,8 +12,12 @@ public:
     STATE_FUNC_DECLARE(dAcOstageSink_c, Wait);
     STATE_FUNC_DECLARE(dAcOstageSink_c, Move);
 
+    static dAcOstageSink_c *GetInstance();
+
 private:
     /* 0x??? */ STATE_MGR_DECLARE(dAcOstageSink_c);
+
+    static dAcOstageSink_c *sInstance;
 };
 
 #endif
