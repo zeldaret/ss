@@ -1,10 +1,23 @@
 #include "d/a/obj/d_a_obj_door.h"
 
 #include "common.h"
+#include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/a/obj/d_a_obj_lock.h"
+#include "d/col/bg/d_bg_s.h"
+#include "d/col/bg/d_bg_s_gnd_chk.h"
+#include "d/col/c/c_m3d_g_aab.h"
 #include "d/d_room.h"
 #include "d/d_sc_game.h"
 #include "d/d_stage.h"
+#include "d/flag/sceneflag_manager.h"
+#include "egg/math/eggMath.h"
+#include "f/f_base.h"
+#include "f/f_manager.h"
+#include "f/f_profile_name.h"
+#include "m/m3d/m_fanm.h"
+#include "m/m_mtx.h"
+#include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "sized_string.h"
@@ -13,6 +26,10 @@
 SPECIAL_ACTOR_PROFILE(OBJ_DOOR, dAcOdoor_c, fProfile::OBJ_DOOR, 0x188, 0, 7);
 
 namespace {
+
+static mVec3_c sVecs[] = {
+    mVec3_c(70.f, 0.f, 0.f), mVec3_c(52.f, 110.f, 0.f), mVec3_c(0.f, 0.f, 70.f), mVec3_c(0.f, 0.f, -70.f)
+};
 
 const char *const DoorAnim = "DoorAnim";
 const char *const DoorAnimPull = "DoorAnimPull";
@@ -75,7 +92,7 @@ static u8 sDoorUnknown[2] = {0, 1};
 bool getDoorUnknown(u8 search, u8 &idx) {
     bool found = false;
     int i = 0;
-    while (!found && i < ARRAY_LENGTH(sDoorUnknown)) {
+    while (!found && i <= (int)ARRAY_LENGTH(sDoorUnknown) - 1) {
         if (sDoorUnknown[i] == search) {
             found = true;
         } else {
@@ -90,12 +107,12 @@ bool getDoorUnknown(u8 search, u8 &idx) {
     return found;
 }
 
-static u32 sSpecialDoorMapTypes[5] = {
+static s32 sSpecialDoorMapTypes[5] = {
     sDoorMappings[3].mType, sDoorMappings[3].mType, sDoorMappings[4].mType,
     sDoorMappings[5].mType, sDoorMappings[6].mType,
 };
 
-bool isDoorSpecial(u32 type) {
+bool isDoorSpecial(s32 type) {
     bool found = false;
     int i = 0;
     while (!found && i <= (int)ARRAY_LENGTH(sSpecialDoorMapTypes) - 1) {
@@ -167,7 +184,7 @@ const char *const DoorE_N = "DoorE_N";
 
 bool dAcOdoor_c::createHeap() {
     s32 type = getFromParams(0, 0x3F);
-    if (type == 7) {
+    if (type == SUBTYPE_7) {
         nw4r::g3d::ResFile resFile(getOarcResFile(DoorF));
         if (!resFile.IsValid()) {
             return false;
@@ -224,10 +241,12 @@ bool dAcOdoor_c::createHeap() {
 }
 
 int dAcOdoor_c::actorCreate() {
-    mSubtype = getFromParams(0, 0x3F);
+    // NONMATCHING - Regalloc issues
+    s32 subtype = getFromParams(0, 0x3F);
+    mSubtype = subtype;
     changeLoadedEntitiesWithSet();
 
-    if (mSubtype == SUBTYPE_5 && !dScGame_c::isCurrentStage("B301") && !dScGame_c::isCurrentStage("D301_1")) {
+    if (subtype == SUBTYPE_5 && !dScGame_c::isCurrentStage("B301") && !dScGame_c::isCurrentStage("D301_1")) {
         fn_572_4110();
     } else {
         fn_572_4120();
@@ -235,12 +254,193 @@ int dAcOdoor_c::actorCreate() {
 
     CREATE_ALLOCATOR(dAcOdoor_c);
 
-    // if ()
+    mSceneflag = getSceneflag();
+
+    if (getKeyParameter() == true) {
+        if (mSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag)) {
+            mLock.link(
+                static_cast<dAcOLock_c *>(
+                    create(this, fProfile::OBJ_SHUTTER_LOCK, 0, nullptr, nullptr, nullptr, 0, 0x3F)
+                )
+            );
+        }
+    } else {
+        u8 type = getSubtype2();
+        if (type <= 6) {
+            field_0x5B1 = type;
+        } else {
+            field_0x5B1 = 0;
+        }
+    }
+
+    u8 idx;
+    if (!getDoorUnknown(fn_572_3F60(), idx)) {
+        idx = 0;
+    }
+
+    fn_572_4060(idx);
+    fn_572_4070(fn_572_3F70());
+    fn_572_4080(fn_572_3F80());
+
+    mRotation.z = mAng(0);
+    mRotation.x = mAng(0);
+    {
+        s32 roomId = mRoomID;
+        addActorToRoom(-1);
+        setRoomId(roomId);
+    }
+
+    if (isDoorSpecial(subtype)) {
+        fn_572_4090();
+    } else {
+        fn_572_40A0();
+    }
+
+    if ((s32)getFromParams(0, 0x3F) == SUBTYPE_7) {
+        mAnmChr.setAnm(DoorF_Open, m3d::PLAY_MODE_4, 0.f);
+        mAnmChr.setFrame(mAnmChr.getAnm().getStartFrame());
+        mAnmChr.getModel().setPriorityDraw(0x1C, 0);
+    } else {
+        mAnmChr.setAnm(DoorAnimPull, m3d::PLAY_MODE_4, 0.f);
+        mAnmChr.setFrame(mAnmChr.getAnm().getStartFrame());
+        if (fn_572_4430()) {
+            mMdl0.setPriorityDraw(0xF, 0);
+            mMdl1.setPriorityDraw(0xB, 0);
+        } else {
+            mMdl0.setPriorityDraw(0x1C, 0);
+        }
+    }
+
+    bool inAcademy = dScGame_c::isCurrentStage("F001r");
+    if (inAcademy) {
+        inAcademy = mVec3_c(1832.5f, 0.f, -1978.0f).squareDistanceToXZ(mPosition) < 100.f;
+    }
+    field_0x5BB = inAcademy;
+
+    return SUCCEEDED;
 }
 
-int dAcOdoor_c::actorPostCreate() {}
+extern "C" void fn_80067290(dTimeBits *pBits, s32 roomId, const mVec3_c &pos, f32);
 
-int dAcOdoor_c::doDelete() {}
+int dAcOdoor_c::actorPostCreate() {
+    if (field_0x5B7) {
+        if (true) {
+            bool foundPair = false;
+            dAcOdoor_c *pDoor =
+                static_cast<dAcOdoor_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_DOOR, nullptr));
+            while (!foundPair && pDoor != nullptr) {
+                if (mID != pDoor->mID && pDoor->field_0x5B7 && !pDoor->isConnectedToOtherDoor() &&
+                    mPosition.squareDistance(pDoor->mPosition) < 40000.f) {
+                    foundPair = true;
+                    this->getConnectedDoorRef().link(pDoor);
+                    pDoor->getConnectedDoorRef().link(this);
+                    if (getKeyParameter() == true) {
+                        this->fn_572_40B0();
+                        pDoor->fn_572_40C0();
+                    } else {
+                        this->fn_572_40C0();
+                        pDoor->fn_572_40B0();
+                    }
+                }
+                pDoor = static_cast<dAcOdoor_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_DOOR, pDoor));
+            }
+
+            if (!foundPair) {
+                fn_572_40B0();
+            }
+        }
+    } else {
+        fn_572_40B0();
+    }
+
+    bool gndChk = dBgS_ObjGndChk::CheckPos(mPosition + mVec3_c::Ey * 10.f);
+    if (gndChk) {
+        mLightingInfo.mLightingCode = dBgS_ObjGndChk::GetLightingCode();
+        setPolyAttrs(dBgS_ObjGndChk::GetInstance());
+    }
+
+    if (isInOuterSandship()) {
+        fn_572_40D0();
+        unsetActorProperty(AC_PROP_0x1);
+
+        if (gndChk) {
+            dBgS *pBgS = dBgS::GetInstance();
+            if (pBgS != nullptr) {
+                const dAcObjBase_c *pObj = pBgS->GetActorPointer(dBgS_ObjGndChk::GetInstance());
+                if (pObj) {
+                    mObjRef.link(const_cast<dAcObjBase_c *>(pObj));
+                    mVec3_c v(mPosition - pObj->mPosition);
+                    v.y = dBgS_ObjGndChk::GetGroundHeight() - pObj->mPosition.y;
+
+                    v.rotY(-pObj->mRotation.y);
+
+                    mAng rotY = mRotation.y - pObj->mRotation.y;
+                    mMtx.transS(v);
+                    mMtx.YrotM(rotY);
+                }
+            }
+        }
+    }
+
+    if (!mObjRef.isLinked()) {
+        s32 type = getFromParams(0, 0x3F);
+        updateMatrix();
+        mAnmChr.getModel().setLocalMtx(mWorldMtx);
+        mAnmChr.getModel().calc(false);
+
+        if (type != SUBTYPE_7) {
+            mMtx_c m;
+            mAnmChr.getModel().getNodeWorldMtx(1, m);
+            m.transM(sVecs[0]);
+            mMdl0.setLocalMtx(m);
+            if (fn_572_4430()) {
+                mMdl1.setLocalMtx(m);
+            }
+        }
+
+        dAcOLock_c *pLock = mLock.get();
+        if (pLock == nullptr) {
+            fn_572_4440();
+        } else {
+            mPositionCopy2.set(pLock->mPosition);
+            mPositionCopy3.set(pLock->mPosition);
+        }
+        mVec3_c max(999999.f, 999999.f, 999999.f);
+        mVec3_c min(-999999.f, -999999.f, -999999.f);
+
+        if (type == SUBTYPE_7) {
+            mAnmChr.getModel().getBounds(&min, &max);
+        } else {
+            mMtx_c local;
+            mMdl0.getBounds(&min, &max);
+            mMdl0.getLocalMtx(local);
+
+            mMtx_c world = mWorldMtx;
+            world.inverse();
+
+            mVec3_c minPos = min;
+            local.multVec(minPos, minPos);
+            world.multVec(minPos, minPos);
+
+            // ...
+
+            mBoundingBox.Set(min, max);
+        }
+    }
+
+    if (fn_572_4430()) {
+        fn_80067290(&mTimeBits, mRoomID, mPosition, 200.f);
+    }
+
+    mCullingDistance = EGG::Math<f32>::maxNumber();
+
+    return SUCCEEDED;
+}
+
+int dAcOdoor_c::doDelete() {
+    changeLoadedEntitiesNoSet();
+    return SUCCEEDED;
+}
 
 int dAcOdoor_c::actorExecuteInEvent() {}
 
@@ -317,10 +517,10 @@ void dAcOdoor_c::unkVirtFunc_0x6C() {}
 void dAcOdoor_c::doInteraction(s32 interaction) {}
 
 /** */
-bool dAcOdoor_c::isKeyLocked() {} // getFromParams(6, 0x1)
+s32 dAcOdoor_c::getKeyParameter() {} // getFromParams(6, 0x1)
 
 /**  */
-u8 dAcOdoor_c::getSubtype2() {} // (mRotation.x >> 0) & 0xFF
+s32 dAcOdoor_c::getSubtype2() {} // (mRotation.x >> 0) & 0xFF
 
 /**  */
 u8 dAcOdoor_c::getSceneflag() {} // (mRotation.x >> 8) & 0xFF

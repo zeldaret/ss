@@ -2,26 +2,37 @@
 #define D_A_OBJ_DOOR_H
 
 #include "common.h"
+#include "d/a/d_a_base.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_door_base.h"
 #include "m/m3d/m_anmmdl.h"
 #include "m/m3d/m_smdl.h"
+#include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/d_flow_mgr.h"
 
+struct dTimeBits {
+    dTimeBits() : field_0x00(false), field_0x01(false) {}
+    bool field_0x00;
+    bool field_0x01;
+};
+
+class dAcOLock_c;
+
 class dAcOdoor_c : public dAcObjDoor_c {
 public:
     enum Subtype_e {
-        SUBTYPE_0,
-        SUBTYPE_1,
-        SUBTYPE_2,
-        SUBTYPE_3,
-        SUBTYPE_4,
-        SUBTYPE_5,
-        SUBTYPE_6,
-        SUBTYPE_7,
-        SUBTYPE_8,
+        SUBTYPE_0, ///< DoorA00
+        SUBTYPE_1, ///< DoorA01
+        SUBTYPE_2, ///< DoorC00
+        SUBTYPE_3, ///< DoorC01
+        SUBTYPE_4, ///< DoorB00
+        SUBTYPE_5, ///< DoorE
+        SUBTYPE_6, ///< DoorA02
+        SUBTYPE_7, ///< DoorF
+        SUBTYPE_8, ///< DoorH
     };
 
 public:
@@ -98,10 +109,10 @@ public:
     static void openCallbackCommon(dAcOdoor_c *);
 
     /** */
-    bool isKeyLocked(); // getFromParams(6, 0x1)
+    s32 getKeyParameter(); // getFromParams(6, 0x1)
 
     /**  */
-    u8 getSubtype2(); // (mRotation.x >> 0) & 0xFF
+    s32 getSubtype2(); // (mRotation.x >> 0) & 0xFF
 
     /**  */
     u8 getSceneflag(); // (mRotation.x >> 8) & 0xFF
@@ -238,6 +249,11 @@ public:
     /** */
     void playInteractionLocked() const;
 
+public:
+    // defined in main dol
+    bool isConnectedToOtherDoor() const;
+    dAcRef_c<dAcOdoor_c> &getConnectedDoorRef(); // return mConnectedDoor;
+
 private:
     /* 0x33C */ m3d::smdl_c mMdl0;
     /* 0x358 */ m3d::smdl_c mMdl1;
@@ -246,6 +262,18 @@ private:
     /* 0x42C */ dFlowMgr_c mFlowMgr;
     /* 0x4E8 */ dEmitter_c mEmmiter0;
     /* 0x51C */ dEmitter_c mEmmiter1;
+    /* 0x550 */ dTimeBits mTimeBits;
+    /* 0x554 */ dAcRef_c<dAcOdoor_c> mConnectedDoor;
+    /* 0x560 */ dAcRef_c<dAcOLock_c> mLock;
+    /* 0x56C */ dAcRef_c<dAcObjBase_c> mObjRef;
+    /* 0x578 */ mMtx_c mMtx;
+    /* 0x5A8 */ u8 _0x584[0x5B1 - 0x5A8];
+    /* 0x5B1 */ u8 field_0x5B1; ///<
+    /* 0x5B2 */ u8 mSceneflag;  ///< Used for unlocking the door
+    /* 0x5B3 */ u8 _0x5B3[0x5B7 - 0x5B3];
+    /* 0x5B7 */ bool field_0x5B7;
+    /* 0x5B8 */ u8 _0x5B8[0x5BB - 0x5B8];
+    /* 0x5BB */ bool field_0x5BB;
 };
 
 #endif
