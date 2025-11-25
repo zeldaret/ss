@@ -35,10 +35,6 @@ SPECIAL_ACTOR_PROFILE(OBJ_DOOR, dAcOdoor_c, fProfile::OBJ_DOOR, 0x188, 0, 7);
 
 namespace {
 
-static mVec3_c sVecs[] = {
-    mVec3_c(70.f, 0.f, 0.f), mVec3_c(52.f, 110.f, 0.f), mVec3_c(0.f, 0.f, 70.f), mVec3_c(0.f, 0.f, -70.f)
-};
-
 const char *const DoorAnim = "DoorAnim";
 const char *const DoorAnimPull = "DoorAnimPull";
 const char *const DoorAnimPush = "DoorAnimPush";
@@ -192,6 +188,9 @@ bool checkRoom(s8 roomID, bool &b) {
     return true;
 }
 
+static mVec3_c sVecs[] = {
+    mVec3_c(70.f, 0.f, 0.f), mVec3_c(52.f, 110.f, 0.f), mVec3_c(0.f, 0.f, 70.f), mVec3_c(0.f, 0.f, -70.f)
+};
 } // namespace
 const char *const DoorE_N = "DoorE_N";
 
@@ -1244,9 +1243,6 @@ bool dAcOdoor_c::isLeavingSealedTempleSideDoorPostSkyKeep() const {}
 
 /** fn_572_4310 */
 void dAcOdoor_c::transitionPushRoomFlags() const {}
-
-/** fn_572_4320 */
-void dAcOdoor_c::fn_572_4320() const {} // nop
 
 /** fn_572_4430 */
 bool dAcOdoor_c::transitionPullRoomFlags() const {}

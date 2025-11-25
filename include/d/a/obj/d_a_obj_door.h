@@ -216,9 +216,6 @@ public:
     /** fn_572_4310 */
     void transitionPushRoomFlags() const;
 
-    /** fn_572_4320 */
-    void fn_572_4320() const; // nop
-
     /** fn_572_4430 */
     bool transitionPullRoomFlags() const;
 
@@ -250,7 +247,7 @@ public:
     void playInteractionLocked() const;
 
 public:
-    s32 getType() const {
+    s32 getType() {
         return getFromParams(0, 0x3F);
     }
     s32 getField_0x5B4() const {
