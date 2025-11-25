@@ -116,6 +116,7 @@ public:
     int draw() override;
     void deleteReady() override;
 
+    void fn_801B3C60(int roomId);
     void drawMap(mMtx_c *mtx, int);
     dRoom_c *getRoom(s32 idx);
     void setRoom(int roomid, dRoom_c *room);

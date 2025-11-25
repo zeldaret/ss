@@ -89,7 +89,7 @@ public:
         mGroupType = m_tmpCtData.group_type;
     }
 
-    u32 getFromParams(u8 shift, u32 mask) {
+    u32 getFromParams(u8 shift, u32 mask) const {
         return (mParams >> shift) & mask;
     }
 

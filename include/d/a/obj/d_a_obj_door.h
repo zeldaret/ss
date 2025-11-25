@@ -36,7 +36,7 @@ public:
     };
 
 public:
-    dAcOdoor_c() : mEventRelated(*this, nullptr), mEmmiter0(this), mEmmiter1(this) {}
+    dAcOdoor_c() : mEventRelated(*this, nullptr), mEmmiterL(this), mEmmiterR(this) {}
     virtual ~dAcOdoor_c() {}
 
     virtual int doDelete() override;
@@ -160,7 +160,7 @@ public:
     void fn_572_4050(u32 flags); // field_0x5A8 = flags
 
     /** fn_572_4060 */
-    void fn_572_4060(u8); // field_0x5B3 = in
+    void fn_572_4060(s8); // field_0x5B3 = in
 
     /** fn_572_4070 */
     void fn_572_4070(s8); // field_0x5B4 = in
@@ -250,9 +250,22 @@ public:
     void playInteractionLocked() const;
 
 public:
-    // defined in main dol
+    s32 getType() const {
+        return getFromParams(0, 0x3F);
+    }
+    s32 getField_0x5B4() const {
+        return field_0x5B4;
+    }
+    s32 getField_0x5B5() const {
+        return field_0x5B5;
+    }
+
+public: // Functions in this section defined in main dol
     bool isConnectedToOtherDoor() const;
     dAcRef_c<dAcOdoor_c> &getConnectedDoorRef(); // return mConnectedDoor;
+
+    /** fn_80194C70 : Rotates the input by this->mRotation.y and adds this->mPosition */
+    void stepTowards(mVec3_c &newPosition) const;
 
 private:
     /* 0x33C */ m3d::smdl_c mMdl0;
@@ -260,17 +273,22 @@ private:
     /* 0x374 */ m3d::mdlAnmChr mAnmChr;
     /* 0x3DC */ ActorEventRelated mEventRelated;
     /* 0x42C */ dFlowMgr_c mFlowMgr;
-    /* 0x4E8 */ dEmitter_c mEmmiter0;
-    /* 0x51C */ dEmitter_c mEmmiter1;
+    /* 0x4E8 */ dEmitter_c mEmmiterL;
+    /* 0x51C */ dEmitter_c mEmmiterR;
     /* 0x550 */ dTimeBits mTimeBits;
     /* 0x554 */ dAcRef_c<dAcOdoor_c> mConnectedDoor;
     /* 0x560 */ dAcRef_c<dAcOLock_c> mLock;
     /* 0x56C */ dAcRef_c<dAcObjBase_c> mObjRef;
     /* 0x578 */ mMtx_c mMtx;
-    /* 0x5A8 */ u8 _0x584[0x5B1 - 0x5A8];
+    /* 0x5A8 */ u8 _0x5A8[0x5AC - 0x5A8];
+    /* 0x5AC */ u32 mRumbleIdx; ///<
+    /* 0x5B0 */ u8 field_0x5B0; ///< some timer to trigger exit
     /* 0x5B1 */ u8 field_0x5B1; ///<
     /* 0x5B2 */ u8 mSceneflag;  ///< Used for unlocking the door
-    /* 0x5B3 */ u8 _0x5B3[0x5B7 - 0x5B3];
+    /* 0x5B3 */ u8 field_0x5B3; ///<
+    /* 0x5B4 */ s8 field_0x5B4;
+    /* 0x5B5 */ s8 field_0x5B5;
+    /* 0x5B6 */ s8 field_0x5B6;
     /* 0x5B7 */ bool field_0x5B7;
     /* 0x5B8 */ u8 _0x5B8[0x5BB - 0x5B8];
     /* 0x5BB */ bool field_0x5BB;
