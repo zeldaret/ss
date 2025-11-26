@@ -35,8 +35,20 @@ public:
         SUBTYPE_8, ///< DoorH
     };
 
+    enum LockType_c {
+        LOCK_NONE = 0, ///< Door does not have a lock
+        LOCK_KEY = 1,  ///< Door usually is locked
+    };
+
 public:
-    dAcOdoor_c() : mEventRelated(*this, nullptr), mEmmiterL(this), mEmmiterR(this) {}
+    dAcOdoor_c()
+        : mEventRelated(*this, nullptr),
+          mEmmiterL(this),
+          mEmmiterR(this),
+          mFlags(0),
+          field_0x5B0(0),
+          field_0x5B9(false),
+          field_0x5BA(false) {}
     virtual ~dAcOdoor_c() {}
 
     virtual int doDelete() override;
@@ -79,10 +91,10 @@ public:
     void startOpenEvent(void *zevData);
 
     /** */
-    static void doorPullEventCallback(dAcOdoor_c *);
+    static void doorPullEventCallback(void *);
 
     /** */
-    static void doorPushEventCallback(dAcOdoor_c *);
+    static void doorPushEventCallback(void *);
 
     /** */
     void startDoorPullLockedEvent(void *zevData);
@@ -94,22 +106,22 @@ public:
     void startLockedEvent(void *zevData);
 
     /** */
-    static void pullLockedEventCallback(dAcOdoor_c *);
+    static void pullLockedEventCallback(void *);
 
     /** */
-    static void pushLockedEventCallback(dAcOdoor_c *);
+    static void pushLockedEventCallback(void *);
 
     /** */
     void startUnlockEvent();
 
     /** */
-    static void unlockEventCallback(dAcOdoor_c *);
+    static void unlockEventCallback(void *);
 
     /** */
-    static void openCallbackCommon(dAcOdoor_c *);
+    static void openCallbackCommon(void *);
 
     /** */
-    s32 getKeyParameter(); // getFromParams(6, 0x1)
+    s32 getLockParameter(); // getFromParams(6, 0x1)
 
     /**  */
     s32 getSubtype2(); // (mRotation.x >> 0) & 0xFF
@@ -126,8 +138,8 @@ public:
     /** fn_572_3F80 */
     u8 fn_572_3F80(); // (mRotation.z >> 10) & 0x3F
 
-    /** fn_572_3F90 */
-    u8 fn_572_3F90(); // (getParams2Lower() >> 0) & 0xFF
+    /**  (getParams2Lower() >> 0) & 0xFF */
+    u16 fn_572_3F90();
 
     /** fn_572_3FC0 */
     static f32 getInteractionMinX(); // -80.f
@@ -160,7 +172,7 @@ public:
     void fn_572_4050(u32 flags); // field_0x5A8 = flags
 
     /** fn_572_4060 */
-    void fn_572_4060(s8); // field_0x5B3 = in
+    void fn_572_4060(u8); // field_0x5B3 = in
 
     /** fn_572_4070 */
     void fn_572_4070(s8); // field_0x5B4 = in
@@ -217,10 +229,7 @@ public:
     void transitionPushRoomFlags() const;
 
     /** fn_572_4430 */
-    bool transitionPullRoomFlags() const;
-
-    /** fn_572_4340 */
-    void fn_572_4340() const; // nop
+    void transitionPullRoomFlags() const;
 
     /** fn_572_4370 */
     bool fn_572_4370(const mVec3_c &point) const; // Is in front of door
@@ -229,7 +238,7 @@ public:
     bool isPlayerInFrontOfDoor() const;
 
     /** */
-    bool hasFlowEntryPoint() const; // getFromParams(16, 0xFFFF)
+    bool hasFlowEntryPoint();
 
     /** fn_572_4430 */
     bool fn_572_4430() const; // field_0x5A8 & 2
@@ -244,7 +253,7 @@ public:
     bool isPlayerInteractableLocked() const;
 
     /** */
-    void playInteractionLocked() const;
+    void playInteractionLocked();
 
 public:
     s32 getType() {
@@ -277,7 +286,7 @@ private:
     /* 0x560 */ dAcRef_c<dAcOLock_c> mLock;
     /* 0x56C */ dAcRef_c<dAcObjBase_c> mObjRef;
     /* 0x578 */ mMtx_c mMtx;
-    /* 0x5A8 */ u8 _0x5A8[0x5AC - 0x5A8];
+    /* 0x5A8 */ u32 mFlags;     ///<
     /* 0x5AC */ u32 mRumbleIdx; ///<
     /* 0x5B0 */ u8 field_0x5B0; ///< some timer to trigger exit
     /* 0x5B1 */ u8 field_0x5B1; ///<
@@ -287,7 +296,9 @@ private:
     /* 0x5B5 */ s8 field_0x5B5;
     /* 0x5B6 */ s8 field_0x5B6;
     /* 0x5B7 */ bool field_0x5B7;
-    /* 0x5B8 */ u8 _0x5B8[0x5BB - 0x5B8];
+    /* 0x5B8 */ bool field_0x5B8;
+    /* 0x5B9 */ bool field_0x5B9;
+    /* 0x5BA */ bool field_0x5BA;
     /* 0x5BB */ bool field_0x5BB;
 };
 

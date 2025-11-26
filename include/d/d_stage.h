@@ -119,6 +119,7 @@ public:
     void fn_801B3C60(int roomId);
     void drawMap(mMtx_c *mtx, int);
     dRoom_c *getRoom(s32 idx);
+    void updateRoomFlags(int, int);
     void setRoom(int roomid, dRoom_c *room);
     void handleRoomChange(int roomid);
 

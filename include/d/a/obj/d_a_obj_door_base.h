@@ -11,7 +11,7 @@
 class dAcObjDoor_c : public dAcObjBase_c {
 public:
     dAcObjDoor_c();
-    ~dAcObjDoor_c() {}
+    ~dAcObjDoor_c();
 
     virtual bool canOpen() = 0;
     virtual bool hasVisitedRoom();

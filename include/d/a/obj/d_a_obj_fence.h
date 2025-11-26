@@ -11,6 +11,8 @@ public:
     virtual ~dAcOFence_c();
 
     bool fn_550_11B0() const;
+    void fn_550_1250();
+    void fn_550_12B0();
     void fn_550_12C0();
 
     void changeToRequestConfineEvent() {
