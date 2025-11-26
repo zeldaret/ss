@@ -24,20 +24,31 @@ class dAcOLock_c;
 class dAcOdoor_c : public dAcObjDoor_c {
 public:
     enum Subtype_e {
-        SUBTYPE_0, ///< DoorA00
-        SUBTYPE_1, ///< DoorA01
-        SUBTYPE_2, ///< DoorC00
-        SUBTYPE_3, ///< DoorC01
-        SUBTYPE_4, ///< DoorB00
-        SUBTYPE_5, ///< DoorE
-        SUBTYPE_6, ///< DoorA02
-        SUBTYPE_7, ///< DoorF
-        SUBTYPE_8, ///< DoorH
+        DOOR_NORMAL,            ///< DoorA00 - Normal Wooden Door
+        DOOR_METAL,             ///< DoorA01 - Metal Door - Academy(bathrooms)
+        DOOR_DOUBLE,            ///< DoorC00 - Normal Double Doors
+        DOOR_DOUBLE_OUTSIDE,    ///< DoorC01 - Outdoor Double Doors - Academy(to outside)
+        DOOR_TEMPLE_SIDE,       ///< DoorB00 - Sealed Temple Side Doors
+        DOOR_SANDSEA_TIMESHIFT, ///< DoorE   - Sandsea Timeshift Door
+        DOOR_BATREAUX,          ///< DoorA02 - Batreaux's Door
+        DOOR_TEMPLE_MAIN,       ///< DoorF   - Sealed Temple Main Door
+        DOOR_SPARRING_HALL,     ///< DoorH   - Sparring Hall Outer Doors
     };
 
-    enum LockType_c {
+    enum LockType_e {
         LOCK_NONE = 0, ///< Door does not have a lock
         LOCK_KEY = 1,  ///< Door usually is locked
+    };
+
+    enum LockBehavior_e {
+        LOCK_NEVER = 0,     ///< Door is always unlocked
+        LOCK_NOT_SET = 1,   ///< Door is locked when mSceneflag is unset
+        LOCK_NEVER1 = 2,    ///< Door is always unlocked (Kukiel's House)
+        LOCK_TIMESHIFT = 3, ///< Door is locked when mSceneflag is unset (Timeshift)
+        LOCK_SET = 4,       ///< Door is locked when mSceneflag is set
+        LOCK_DAY = 5,       ///< Door is locked during the day
+        LOCK_NIGHT = 6,     ///< Door is locked during the night
+        LOCK_MAX,
     };
 
 public:
@@ -46,8 +57,8 @@ public:
           mEmmiterL(this),
           mEmmiterR(this),
           mFlags(0),
-          field_0x5B0(0),
-          field_0x5B9(false),
+          mExitTimer(0),
+          mbInSandshipBoss(false),
           field_0x5BA(false) {}
     virtual ~dAcOdoor_c() {}
 
@@ -63,207 +74,207 @@ public:
     virtual void doInteraction(s32 /* InteractionType */) override;
     virtual bool canOpen() override;
 
-    /** */
+    /** Gets whether the player can open the door */
     bool isLocked();
 
     /** fn_572_33E0 - I Think this gets the Door open range*/
-    static f32 fn_572_33E0(); // -80.f
+    static f32 fn_572_33E0();
 
-    /** */
+    /** Self Explanatory */
     void startPullEventWithoutCallback(void *zevData);
 
-    /** */
+    /** Self Explanatory */
     void startPullEventWithCallback(void *zevData);
 
-    /** */
+    /** Self Explanatory */
     void startPushEventWithoutCallback(void *zevData);
 
-    /** */
+    /** Self Explanatory */
     void startPushEventWithCallback(void *zevData);
 
-    /** */
+    /** Self Explanatory */
     void startPullEvent(void *zevData);
 
-    /** */
+    /** Self Explanatory */
     void startPushEvent(void *zevData);
 
-    /** */
+    /** Self Explanatory */
     void startOpenEvent(void *zevData);
 
-    /** */
+    /** Self Explanatory */
     static void doorPullEventCallback(void *);
 
-    /** */
+    /** Self Explanatory */
     static void doorPushEventCallback(void *);
 
-    /** */
+    /** Self Explanatory */
     void startDoorPullLockedEvent(void *zevData);
 
-    /** */
+    /** Self Explanatory */
     void startDoorPushLockedEvent(void *zevData);
 
-    /** */
+    /** Self Explanatory */
     void startLockedEvent(void *zevData);
 
-    /** */
+    /** Self Explanatory */
     static void pullLockedEventCallback(void *);
 
-    /** */
+    /** Self Explanatory */
     static void pushLockedEventCallback(void *);
 
-    /** */
+    /** Self Explanatory */
     void startUnlockEvent();
 
-    /** */
+    /** Self Explanatory */
     static void unlockEventCallback(void *);
 
-    /** */
+    /** Self Explanatory */
     static void openCallbackCommon(void *);
 
-    /** */
-    s32 getLockParameter(); // getFromParams(6, 0x1)
+    /** Returns if the door is physically locked with the dAcOLock_c Actor */
+    s32 getLockParameter();
 
-    /**  */
-    s32 getSubtype2(); // (mRotation.x >> 0) & 0xFF
+    /** Gets the behavior of being locked when not locked with the dAcOLock_c Actor */
+    s32 getLockBehavior();
 
-    /**  */
-    u8 getSceneflag(); // (mRotation.x >> 8) & 0xFF
+    /** Get Scenflag used for locking status */
+    u8 getSceneflag();
 
-    /** fn_572_3F60 */
-    u8 fn_572_3F60(); // (mRotation.z >> 0) & 0xF
+    /** Gets whether the door has callbacks enabled */
+    u8 getDoorCallbackType();
 
-    /** fn_572_3F70 */
-    u8 fn_572_3F70(); // (mRotation.z >> 4) & 0x3F
+    /** getFrontRoomParam */
+    u8 getFrontRoomParam(); // (mRotation.z >> 4) & 0x3F
 
-    /** fn_572_3F80 */
-    u8 fn_572_3F80(); // (mRotation.z >> 10) & 0x3F
+    /** getBackRoomParam */
+    u8 getBackRoomParam(); // (mRotation.z >> 10) & 0x3F
 
-    /**  (getParams2Lower() >> 0) & 0xFF */
-    u16 fn_572_3F90();
+    /** Gets the Flag set when failed to open - Called from Try Locked Callback */
+    u16 getFailedToOpenFlag();
 
-    /** fn_572_3FC0 */
-    static f32 getInteractionMinX(); // -80.f
+    /** Interaction Radius -X */
+    static f32 getInteractionMinX();
 
-    /** fn_572_3FD0 */
-    static f32 getInteractionMaxX(); // 80.f
+    /** Interaction Radius +X */
+    static f32 getInteractionMaxX();
 
-    /** fn_572_3FE0 */
-    static f32 getInteractionMinZ(); // -100.f
+    /** Interaction Radius -Z */
+    static f32 getInteractionMinZ();
 
-    /** fn_572_3FF0 */
-    static f32 getInteractionMaxZ(); // 100.f
+    /** Interaction Radius +Z */
+    static f32 getInteractionMaxZ();
 
-    /** fn_572_4000 */
-    static f32 getInteractionLockMinX(); // -160.f
+    /** Interaction Radius -X - Door has Lock */
+    static f32 getInteractionLockMinX();
 
-    /** fn_572_4010 */
-    static f32 getInteractionLockMaxX(); // 160.f
+    /** Interaction Radius +X - Door has Lock */
+    static f32 getInteractionLockMaxX();
 
-    /** fn_572_4020 */
-    static f32 getInteractionLockMinZ(); // -100.f
+    /** Interaction Radius -Z - Door has Lock */
+    static f32 getInteractionLockMinZ();
 
-    /** fn_572_4030 */
-    static f32 getInteractionLockMaxZ(); // 100.f
+    /** Interaction Radius +Z - Door has Lock */
+    static f32 getInteractionLockMaxZ();
 
-    /** */
-    void setRoomId(s8 roomId); // mRoomId = roomId;
+    /** Sets the RoomID */
+    void setRoomId(s8 roomId);
 
-    /** fn_572_4050 */
-    void fn_572_4050(u32 flags); // field_0x5A8 = flags
+    /** Set Flag - Usually Time Door related */
+    void setFlag(u32 flags);
 
-    /** fn_572_4060 */
-    void fn_572_4060(u8); // field_0x5B3 = in
+    /** Sets the behavior on Event creation  */
+    void setEventCallbackType(u8);
 
-    /** fn_572_4070 */
-    void fn_572_4070(s8); // field_0x5B4 = in
+    /** setFrontRoom */
+    void setFrontRoom(s8); // mFrontRoomId = in
 
-    /** fn_572_4080 */
-    void fn_572_4080(s8); // field_0x5B5 = in
+    /** setBackRoom */
+    void setBackRoom(s8); // mBackRoomId = in
 
-    /** fn_572_4090 */
-    void fn_572_4090(); // field_0x5B7 = true
+    /**  Sets status indicating it can be a double door  */
+    void setDoubleDoor();
 
-    /** fn_572_40A0 */
-    void fn_572_40A0(); // field_0x5B7 = false
+    /**  Sets status indicating it cant be a double door */
+    void setNotDoubleDoor();
 
-    /** fn_572_40B0 */
-    void fn_572_40B0(); // field_0x5B8 = true
+    /** Sets status indicating its a single door / Main door */
+    void setSingleDoor();
 
-    /** fn_572_40C0 */
-    void fn_572_40C0(); // field_0x5B8 = false
+    /** Sets status indicating its not a single door / not Main door */
+    void setNotSingleDoor();
 
-    /** fn_572_40D0 */
-    void fn_572_40D0(); // field_0x5B9 = true
+    /** setInSandshipBoss */
+    void setInSandshipBoss(); // mbInSandshipBoss = true
 
-    /** fn_572_40E0 */
-    bool fn_572_40E0() const; // field_0x5A8 & 1
+    /** isTimeDoorEventActive */
+    bool isTimeDoorEventActive() const;
 
-    /** fn_572_40F0 */
-    void fn_572_40F0(); // field_0x5A8 |= 1
+    /** setTimeDoorEventActive */
+    void setTimeDoorEventActive();
 
-    /** fn_572_4100 */
-    void fn_572_4100(); // field_0x5A8 &= ~1
+    /** setTimeDoorEventInactive */
+    void setTimeDoorEventInactive();
 
-    /** fn_572_4110 */
-    void fn_572_4110(); // field_0x5A8 |= 2
+    /** Sets status indicating it is effected by Timeshift */
+    void setTimeEffected();
 
-    /** fn_572_4120 */
-    void fn_572_4120(); // field_0x5A8 &= ~2
+    /**  Sets status indicating it is not effected by Timeshift */
+    void setTimeStatic();
 
-    /** fn_572_4130 */
-    bool fn_572_4130(bool &b) const; // checkRoom(field_0x5B4,b)
+    /** Checks to see if the Front room exists(return) and has flags set(b) */
+    bool checkFrontRoom(bool &b) const;
 
-    /** fn_572_4140 */
-    bool fn_572_4140(bool &b) const; // checkRoom(field_0x5B5,b)
+    /** Checks to see if the Back room exists(return) and has flags set(b) */
+    bool checkBackRoom(bool &b) const;
 
-    /** fn_572_4150 */
-    bool fn_572_4150(bool &b) const; // fn_572_4130(b0) && fn_572_4140(b1) -> b = b0 && b1
+    /** Checks to see if the Front and Back room exists(return) and has flags set(b) */
+    bool checkRooms(bool &b) const;
 
-    /** */
+    /** Transitions the game to the next room */
     void triggerExit();
 
-    /** */
+    /** TODO(Zeldex) Whats special about this? */
     bool isLeavingSealedTempleSideDoorPostSkyKeep() const;
 
-    /** fn_572_4310 */
+    /**  */
     void transitionPushRoomFlags() const;
 
-    /** fn_572_4430 */
+    /**  */
     void transitionPullRoomFlags() const;
 
-    /** fn_572_4370 */
-    bool fn_572_4370(const mVec3_c &point) const; // Is in front of door
+    /** Checks a point to determine which side of the door it is on */
+    bool isPositionInFrontOfDoor(const mVec3_c &point) const;
 
-    /** */
-    bool isPlayerInFrontOfDoor() const;
+    /** Checks the players postion to see if it is front of the door. This means it will be pulled open */
+    bool checkPullDoor() const;
 
-    /** */
+    /** Checks to see if the door has a flow entry point */
     bool hasFlowEntryPoint();
 
-    /** fn_572_4430 */
-    bool fn_572_4430() const; // field_0x5A8 & 2
+    /** Checks to see if the Door is effected by Timeshift */
+    bool isTimeEffected() const;
 
-    /** fn_572_4440 */
-    void fn_572_4440(); // Sets the Postion Copies
+    /** Sets the Position of the Doorknob based on the Animation */
+    void setDoorKnobPosition();
 
-    /** */
+    /** Checks to see if the Player is within an interactable range */
     bool isPlayerInteractable() const;
 
-    /** fn_572_4600 */
+    /** Checks to see if the Player is within an interactable range when door is locked */
     bool isPlayerInteractableLocked() const;
 
-    /** */
+    /** Plays the talk event for when the door is locked */
     void playInteractionLocked();
 
 public:
-    s32 getType() {
-        return getFromParams(0, 0x3F);
+    s32 getType() const {
+        return mParams & 0x3F;
     }
     s32 getField_0x5B4() const {
-        return field_0x5B4;
+        return mFrontRoomId;
     }
     s32 getField_0x5B5() const {
-        return field_0x5B5;
+        return mBackRoomId;
     }
 
 public: // Functions in this section defined in main dol
@@ -282,24 +293,27 @@ private:
     /* 0x4E8 */ dEmitter_c mEmmiterL;
     /* 0x51C */ dEmitter_c mEmmiterR;
     /* 0x550 */ dTimeBits mTimeBits;
-    /* 0x554 */ dAcRef_c<dAcOdoor_c> mConnectedDoor;
+    /* 0x554 */ dAcRef_c<dAcOdoor_c> mConnectedDoor; ///< When the door is a double door, this is its pair
     /* 0x560 */ dAcRef_c<dAcOLock_c> mLock;
-    /* 0x56C */ dAcRef_c<dAcObjBase_c> mObjRef;
-    /* 0x578 */ mMtx_c mMtx;
-    /* 0x5A8 */ u32 mFlags;     ///<
-    /* 0x5AC */ u32 mRumbleIdx; ///<
-    /* 0x5B0 */ u8 field_0x5B0; ///< some timer to trigger exit
-    /* 0x5B1 */ u8 field_0x5B1; ///<
-    /* 0x5B2 */ u8 mSceneflag;  ///< Used for unlocking the door
-    /* 0x5B3 */ u8 field_0x5B3; ///<
-    /* 0x5B4 */ s8 field_0x5B4;
-    /* 0x5B5 */ s8 field_0x5B5;
-    /* 0x5B6 */ s8 field_0x5B6;
-    /* 0x5B7 */ bool field_0x5B7;
-    /* 0x5B8 */ bool field_0x5B8;
-    /* 0x5B9 */ bool field_0x5B9;
-    /* 0x5BA */ bool field_0x5BA;
-    /* 0x5BB */ bool field_0x5BB;
+    /* 0x56C */ dAcRef_c<dAcObjBase_c> mObjRef; ///< TODO(Zeldex) This is probably the Sandship stage for boss
+
+    /* 0x578 */ mMtx_c mMtx; ///< Currently unknown. I am assuming this is used to move the door on the Sandship stage
+                             ///< while the boat is rocking
+
+    /* 0x5A8 */ u32 mFlags;            ///< 0x2 - Time Effected
+    /* 0x5AC */ u32 mRumbleIdx;        ///< Rumble used for when opening the main sealed temple door
+    /* 0x5B0 */ u8 mExitTimer;         ///< Timer used to advance the Begin Pull/Push events
+    /* 0x5B1 */ u8 mLockBehavior;      ///< see LockBehavior_e
+    /* 0x5B2 */ u8 mSceneflag;         ///< Used for unlocking/locking the door.
+    /* 0x5B3 */ u8 mEventCallbackType; ///< 0 for events without callbacks, 1 for events with a callback
+    /* 0x5B4 */ s8 mFrontRoomId;       ///< Room id of the front side of the door
+    /* 0x5B5 */ s8 mBackRoomId;        ///< Room id of the back side of the door
+    /* 0x5B6 */ s8 mFramesInEvent;     ///< The count of frames in one particular event
+    /* 0x5B7 */ bool mbDoubleDoor;     ///< Set if the type was matched to be a double door variant
+    /* 0x5B8 */ bool mbSingleDoor;     ///< UNUSHED - Set if the type was matched to be a single door
+    /* 0x5B9 */ bool mbInSandshipBoss; ///< Indicates if in the Tentalus fight
+    /* 0x5BA */ bool field_0x5BA;      ///< ???
+    /* 0x5BB */ bool mbKobunDoor;      ///< Used to indicate its Cawlin and Strich's door
 };
 
 #endif

@@ -47,19 +47,19 @@ const char *const DoorAnimPull = "DoorAnimPull";
 const char *const DoorAnimPush = "DoorAnimPush";
 
 struct DoorFileMapping {
-    const u32 mType;
+    const dAcOdoor_c::Subtype_e mType;
     const char *mResName;
     const char *mMdlName;
 };
 DoorFileMapping sDoorMappings[8] = {
-    {0, "DoorA00", "DoorA00"},
-    {1, "DoorA01", "DoorA01"},
-    {6, "DoorA02", "DoorA02"},
-    {4, "DoorB00", "DoorB00"},
-    {2, "DoorC00", "DoorC00"},
-    {3, "DoorC01", "DoorC01"},
-    {5,   "DoorE", "DoorE_T"},
-    {8,   "DoorH",   "DoorH"},
+    {           dAcOdoor_c::DOOR_NORMAL, "DoorA00", "DoorA00"},
+    {            dAcOdoor_c::DOOR_METAL, "DoorA01", "DoorA01"},
+    {         dAcOdoor_c::DOOR_BATREAUX, "DoorA02", "DoorA02"},
+    {      dAcOdoor_c::DOOR_TEMPLE_SIDE, "DoorB00", "DoorB00"},
+    {           dAcOdoor_c::DOOR_DOUBLE, "DoorC00", "DoorC00"},
+    {   dAcOdoor_c::DOOR_DOUBLE_OUTSIDE, "DoorC01", "DoorC01"},
+    {dAcOdoor_c::DOOR_SANDSEA_TIMESHIFT,   "DoorE", "DoorE_T"},
+    {    dAcOdoor_c::DOOR_SPARRING_HALL,   "DoorH",   "DoorH"},
 };
 
 const char *const DoorF = "DoorF";
@@ -67,11 +67,17 @@ const char *const DoorF_ = "DoorF";
 const char *const DoorF_Open = "DoorF_Open";
 const char *const DoorF_Close = "DoorF_Close";
 
-static const u8 sDoorUnknown[2] = {0, 1};
+static const u8 sDoorCallbackTypeMap[2] = {
+    0, // Doesnt have callbacks
+    1  // Has Callbacks
+};
 
-const s32 sSpecialDoorMapTypes[5] = {
-    sDoorMappings[3].mType, sDoorMappings[3].mType, sDoorMappings[4].mType,
-    sDoorMappings[5].mType, sDoorMappings[6].mType,
+const dAcOdoor_c::Subtype_e sDoubleDoorTypes[5] = {
+    sDoorMappings[3].mType, // dAcOdoor_c::DOOR_TEMPLE_SIDE
+    sDoorMappings[4].mType, // dAcOdoor_c::DOOR_DOUBLE
+    sDoorMappings[5].mType, // dAcOdoor_c::DOOR_DOUBLE_OUTSIDE
+    sDoorMappings[6].mType, // dAcOdoor_c::DOOR_SANDSEA_TIMESHIFT
+    sDoorMappings[7].mType, // dAcOdoor_c::DOOR_SPARRING_HALL
 };
 
 const char *const DoorPull = "DoorPull";
@@ -116,11 +122,11 @@ bool getDoorMdlName(u32 type, const char *&name) {
     return found;
 }
 
-bool getDoorUnknown(u8 search, u8 &idx) {
+bool getDoorCallbackTypeMapped(u8 search, u8 &idx) {
     bool found = false;
     int i = 0;
-    while (!found && i <= (int)ARRAY_LENGTH(sDoorUnknown) - 1) {
-        if (sDoorUnknown[i] == search) {
+    while (!found && i <= (int)ARRAY_LENGTH(sDoorCallbackTypeMap) - 1) {
+        if (sDoorCallbackTypeMap[i] == search) {
             found = true;
         } else {
             i++;
@@ -134,11 +140,11 @@ bool getDoorUnknown(u8 search, u8 &idx) {
     return found;
 }
 
-bool isDoorSpecial(s32 type) {
+bool isDoubleDoorType(s32 type) {
     bool found = false;
     int i = 0;
-    while (!found && i <= (int)ARRAY_LENGTH(sSpecialDoorMapTypes) - 1) {
-        if (sSpecialDoorMapTypes[i] == type) {
+    while (!found && i <= (int)ARRAY_LENGTH(sDoubleDoorTypes) - 1) {
+        if (sDoubleDoorTypes[i] == type) {
             found = true;
         } else {
             i++;
@@ -151,12 +157,12 @@ const char *getDoorInteractionName() {
     return DoorTalk;
 }
 
-const char *const sSandShipOuterStages[2] = {"B301", "D301_1"};
-bool isInOuterSandship() {
+const char *const sSandShipBossStages[2] = {"B301", "D301_1"};
+bool isInSandshipBoss() {
     bool found = true;
     int i = 0;
-    while (found && i <= (int)ARRAY_LENGTH(sSandShipOuterStages) - 1) {
-        if (dScGame_c::isCurrentStage(sSandShipOuterStages[i])) {
+    while (found && i <= (int)ARRAY_LENGTH(sSandShipBossStages) - 1) {
+        if (dScGame_c::isCurrentStage(sSandShipBossStages[i])) {
             found = false;
         } else {
             i++;
@@ -204,11 +210,11 @@ void rodata0() {
     const f32 a[] = {0.f, 16.f, 60.f, 0.f, 80.f, 100.f, 0.f, 160.f, 100.f};
     const u32 b[] = {0x2D2D7832, 0x73010000, 0x03000000};
 }
-static mVec3_c sVec0 = mVec3_c(70.f, 0.f, 0.f);
-static mVec3_c sVec1 = mVec3_c(52.f, 110.f, 0.f);
+static mVec3_c sDoorknobOffset0(70.f, 0.f, 0.f);
+static mVec3_c sDoorknobOffset1(52.f, 110.f, 0.f);
 
-static mVec3_c sVec2 = mVec3_c(0.f, 0.f, 70.f);
-static mVec3_c sVec3 = mVec3_c(0.f, 0.f, -70.f);
+static mVec3_c sVec2(0.f, 0.f, 70.f);
+static mVec3_c sVec3(0.f, 0.f, -70.f);
 
 static const InteractionTargetDef sOpenInteraction = {
     0, 2, 1, OPEN, 0, 1000.f, 60.f, 0.f, -100.f, 100.f, 50.f, 1.f,
@@ -221,9 +227,10 @@ void rodata1() {
 }
 
 SizedString<32> sStageF402("F402");
+
 bool dAcOdoor_c::createHeap() {
     s32 type = getFromParams(0, 0x3F);
-    if (type == SUBTYPE_7) {
+    if (type == DOOR_TEMPLE_MAIN) {
         nw4r::g3d::ResFile resFile(getOarcResFile(DoorF));
         if (!resFile.IsValid()) {
             return false;
@@ -264,7 +271,7 @@ bool dAcOdoor_c::createHeap() {
             return false;
         }
 
-        if (fn_572_4430()) {
+        if (isTimeEffected()) {
             nw4r::g3d::ResMdl resMdl = resFileMdl.GetResMdl("DoorE_N");
             if (!resMdl.IsValid()) {
                 return false;
@@ -282,13 +289,14 @@ bool dAcOdoor_c::createHeap() {
 int dAcOdoor_c::actorCreate() {
     // NONMATCHING - Regalloc issues
     s32 subtype = getType();
-    mSubtype = getType();
+    setSubtype(subtype);
     changeLoadedEntitiesWithSet();
 
-    if (subtype == SUBTYPE_5 && !dScGame_c::isCurrentStage("B301") && !dScGame_c::isCurrentStage("D301_1")) {
-        fn_572_4110();
+    if (subtype == DOOR_SANDSEA_TIMESHIFT &&
+        !(dScGame_c::isCurrentStage("B301") || dScGame_c::isCurrentStage("D301_1"))) {
+        setTimeEffected();
     } else {
-        fn_572_4120();
+        setTimeStatic();
     }
 
     CREATE_ALLOCATOR(dAcOdoor_c);
@@ -304,22 +312,22 @@ int dAcOdoor_c::actorCreate() {
             );
         }
     } else {
-        u8 type = getSubtype2();
-        if (type <= 6) {
-            field_0x5B1 = type;
+        u8 type = getLockBehavior();
+        if (type <= LOCK_NIGHT) {
+            mLockBehavior = type;
         } else {
-            field_0x5B1 = 0;
+            mLockBehavior = LOCK_NEVER;
         }
     }
 
-    u8 idx;
-    if (!getDoorUnknown(fn_572_3F60(), idx)) {
-        idx = 0;
+    u8 callbackType;
+    if (!getDoorCallbackTypeMapped(getDoorCallbackType(), callbackType)) {
+        callbackType = 0; // Default to no callback
     }
+    setEventCallbackType(callbackType);
 
-    fn_572_4060(idx);
-    fn_572_4070(fn_572_3F70());
-    fn_572_4080(fn_572_3F80());
+    setFrontRoom(getFrontRoomParam());
+    setBackRoom(getBackRoomParam());
 
     mRotation.z = mAng(0);
     mRotation.x = mAng(0);
@@ -329,20 +337,20 @@ int dAcOdoor_c::actorCreate() {
         setRoomId(roomId);
     }
 
-    if (isDoorSpecial(subtype)) {
-        fn_572_4090();
+    if (isDoubleDoorType(subtype)) {
+        setDoubleDoor();
     } else {
-        fn_572_40A0();
+        setNotDoubleDoor();
     }
 
-    if (getType() == SUBTYPE_7) {
+    if (getType() == DOOR_TEMPLE_MAIN) {
         mAnmChr.setAnm(DoorF_Open, m3d::PLAY_MODE_4, 0.f);
         mAnmChr.setFrame(mAnmChr.getAnm().getStartFrame());
         mAnmChr.getModel().setPriorityDraw(0x1C, 0);
     } else {
         mAnmChr.setAnm(DoorAnimPull, m3d::PLAY_MODE_4, 0.f);
         mAnmChr.setFrame(mAnmChr.getAnm().getStartFrame());
-        if (fn_572_4430()) {
+        if (isTimeEffected()) {
             mMdl0.setPriorityDraw(0xF, 0);
             mMdl1.setPriorityDraw(0xB, 0);
         } else {
@@ -354,7 +362,7 @@ int dAcOdoor_c::actorCreate() {
     if (inAcademy) {
         inAcademy = mVec3_c(1832.5f, 0.f, -1978.0f).squareDistanceToXZ(mPosition) < 100.f;
     }
-    field_0x5BB = inAcademy;
+    mbKobunDoor = inAcademy;
 
     return SUCCEEDED;
 }
@@ -362,34 +370,38 @@ int dAcOdoor_c::actorCreate() {
 extern "C" void fn_80067290(dTimeBits *pBits, s32 roomId, const mVec3_c &pos, f32);
 
 int dAcOdoor_c::actorPostCreate() {
-    if (field_0x5B7) {
+    if (mbDoubleDoor) {
         if (!isConnectedToOtherDoor()) {
             bool foundPair = false;
             dAcOdoor_c *pDoor =
                 static_cast<dAcOdoor_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_DOOR, nullptr));
             while (!foundPair && pDoor != nullptr) {
-                if (mID != pDoor->mID && pDoor->field_0x5B7 && !pDoor->isConnectedToOtherDoor() &&
+                if (mID != pDoor->mID && pDoor->mbDoubleDoor && !pDoor->isConnectedToOtherDoor() &&
                     mPosition.squareDistance(pDoor->mPosition) < 40000.f) {
                     foundPair = true;
                     this->getConnectedDoorRef().link(pDoor);
                     pDoor->getConnectedDoorRef().link(this);
+
+                    // Not really sure the point of this
+                    // How does this prevent Door ordering issues
+                    // This may be why the field goes unused?
                     if (getLockParameter() == LOCK_KEY) {
-                        this->fn_572_40B0();
-                        pDoor->fn_572_40C0();
+                        this->setSingleDoor();
+                        pDoor->setNotSingleDoor();
                     } else {
-                        this->fn_572_40C0();
-                        pDoor->fn_572_40B0();
+                        this->setNotSingleDoor();
+                        pDoor->setSingleDoor();
                     }
                 }
                 pDoor = static_cast<dAcOdoor_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_DOOR, pDoor));
             }
 
             if (!foundPair) {
-                fn_572_40B0();
+                setSingleDoor();
             }
         }
     } else {
-        fn_572_40B0();
+        setSingleDoor();
     }
 
     mVec3_c pos = mPosition + mVec3_c::Ey * 10.f;
@@ -402,8 +414,8 @@ int dAcOdoor_c::actorPostCreate() {
         }
     }
 
-    if (isInOuterSandship()) {
-        fn_572_40D0();
+    if (isInSandshipBoss()) {
+        setInSandshipBoss();
         unsetActorProperty(AC_PROP_0x1);
 
         if (gndChk) {
@@ -431,19 +443,19 @@ int dAcOdoor_c::actorPostCreate() {
         mAnmChr.getModel().setLocalMtx(mWorldMtx);
         mAnmChr.getModel().calc(false);
 
-        if (type != SUBTYPE_7) {
+        if (type != DOOR_TEMPLE_MAIN) {
             mMtx_c m;
             mAnmChr.getModel().getNodeWorldMtx(1, m);
-            m.transM(sVec0);
+            m.transM(sDoorknobOffset0);
             mMdl0.setLocalMtx(m);
-            if (fn_572_4430()) {
+            if (isTimeEffected()) {
                 mMdl1.setLocalMtx(m);
             }
         }
 
         dAcOLock_c *pLock = mLock.get();
         if (pLock == nullptr) {
-            fn_572_4440();
+            setDoorKnobPosition();
         } else {
             mPositionCopy2.set(pLock->mPosition);
             mPositionCopy3.set(pLock->mPosition);
@@ -453,7 +465,7 @@ int dAcOdoor_c::actorPostCreate() {
         min.set(999999.f, 999999.f, 999999.f);
         max.set(-999999.f, -999999.f, -999999.f);
 
-        if (type == SUBTYPE_7) {
+        if (type == DOOR_TEMPLE_MAIN) {
             mAnmChr.getModel().getBounds(&min, &max);
         } else {
             mVec3_c min_l, max_l;
@@ -523,7 +535,7 @@ int dAcOdoor_c::actorPostCreate() {
         mBoundingBox.Set(min, max);
     }
 
-    if (fn_572_4430()) {
+    if (isTimeEffected()) {
         fn_80067290(&mTimeBits, mRoomID, mPosition, 200.f);
     }
 
@@ -538,22 +550,22 @@ int dAcOdoor_c::doDelete() {
 }
 
 int dAcOdoor_c::actorExecuteInEvent() {
-    if (fn_572_4430()) {
+    if (isTimeEffected()) {
         fn_80067290(&mTimeBits, mRoomID, mPosition, 200.f);
     }
 
     if (mEventRelated.isAdvance()) {
-        field_0x5B6 = 0;
-    } else if (field_0x5B6 < 0xFF) {
-        field_0x5B6++;
+        mFramesInEvent = 0;
+    } else if (mFramesInEvent < 0xFF) {
+        mFramesInEvent++;
     }
 
-    if (fn_572_40E0()) {
+    if (isTimeDoorEventActive()) {
         setObjectProperty(OBJ_PROP_0x200);
         return SUCCEEDED;
     }
 
-    switch (field_0x5B3) {
+    switch (mEventCallbackType) {
         case 0: {
             bool b;
             checkRoom(mRoomID, b);
@@ -564,7 +576,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
         } break;
         case 1: {
             bool b;
-            fn_572_4150(b);
+            checkRooms(b);
             if (b) {
                 setObjectProperty(OBJ_PROP_0x200);
                 return SUCCEEDED;
@@ -587,10 +599,10 @@ int dAcOdoor_c::actorExecuteInEvent() {
             if (mEventRelated.isAdvance()) {
                 mAnmChr.setAnm(DoorAnimPull, m3d::PLAY_MODE_4);
                 mAnmChr.setFrame(frame);
-                field_0x5B0 = 45;
+                mExitTimer = 45;
 
                 frame0 = frame;
-                if (field_0x5B3 == s8(1)) {
+                if (mEventCallbackType == s8(1)) {
                     transitionPullRoomFlags();
                 }
             } else {
@@ -598,9 +610,9 @@ int dAcOdoor_c::actorExecuteInEvent() {
             }
             mAnmChr.setFrame(frame);
             frame1 = mAnmChr.getAnm().getFrame();
-            bool old_time = 0 == field_0x5B0;
-            bool new_time = 0 == sLib::calcTimer(&field_0x5B0);
-            switch (field_0x5B3) {
+            bool old_time = 0 == mExitTimer;
+            bool new_time = 0 == sLib::calcTimer(&mExitTimer);
+            switch (mEventCallbackType) {
                 case 0: {
                     if (!old_time && new_time) {
                         triggerExit();
@@ -619,7 +631,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
             f32 frame = pPlayer->getCurrentAnimFrame();
             if (mEventRelated.isAdvance()) {
                 isStop = false;
-                switch (field_0x5B3) {
+                switch (mEventCallbackType) {
                     case 0: {
                         frame0 = frame;
                     } break;
@@ -640,7 +652,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
             bool postStop = mAnmChr.getAnm().isStop();
             frame1 = mAnmChr.getAnm().getFrame();
             if (!isStop && postStop) {
-                if (field_0x5B3 == 1 && getField_0x5B4() != getField_0x5B5()) {
+                if (mEventCallbackType == 1 && getField_0x5B4() != getField_0x5B5()) {
                     dRoom_c *pRoom = dStage_c::GetInstance()->getRoom(getField_0x5B4());
                     if (pRoom != nullptr) {
                         pRoom->setFlag(0x4);
@@ -680,14 +692,14 @@ int dAcOdoor_c::actorExecuteInEvent() {
         case 'pshB': {
             f32 frame = dAcPy_c::GetLink()->getCurrentAnimFrame();
             if (mEventRelated.isAdvance()) {
-                if (type == SUBTYPE_7) {
+                if (type == DOOR_TEMPLE_MAIN) {
                     mAnmChr.setAnm(DoorF_Open, m3d::PLAY_MODE_4);
-                    field_0x5B0 = 120;
+                    mExitTimer = 120;
                 } else {
                     mAnmChr.setAnm(DoorAnimPush, m3d::PLAY_MODE_4);
-                    field_0x5B0 = 45;
+                    mExitTimer = 45;
                 }
-                if (field_0x5B3 == s8(1)) {
+                if (mEventCallbackType == s8(1)) {
                     transitionPushRoomFlags();
                 }
                 frame0 = frame;
@@ -696,9 +708,9 @@ int dAcOdoor_c::actorExecuteInEvent() {
             }
             mAnmChr.setFrame(frame);
             frame1 = mAnmChr.getAnm().getFrame();
-            bool old_time = 0 == field_0x5B0;
-            bool new_time = 0 == sLib::calcTimer(&field_0x5B0);
-            switch (field_0x5B3) {
+            bool old_time = 0 == mExitTimer;
+            bool new_time = 0 == sLib::calcTimer(&mExitTimer);
+            switch (mEventCallbackType) {
                 case 0: {
                     if (!old_time && new_time) {
                         triggerExit();
@@ -716,7 +728,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
             f32 frame = dAcPy_c::GetLink()->getCurrentAnimFrame();
             if (mEventRelated.isAdvance()) {
                 isStop = false;
-                switch (field_0x5B3) {
+                switch (mEventCallbackType) {
                     case 0: {
                         frame0 = frame;
                     } break;
@@ -724,7 +736,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
                         frame0 = mAnmChr.getAnm().getFrame();
                     } break;
                 }
-                if (type == SUBTYPE_7) {
+                if (type == DOOR_TEMPLE_MAIN) {
                     mAnmChr.setAnm(DoorF_Close, m3d::PLAY_MODE_4);
                 } else {
                     mAnmChr.setAnm(DoorAnimPush, m3d::PLAY_MODE_4);
@@ -740,7 +752,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
             bool stop = mAnmChr.getAnm().isStop();
             frame1 = mAnmChr.getAnm().getFrame();
             if (!isStop && stop) {
-                if (field_0x5B3 == 1 && getField_0x5B4() != getField_0x5B5()) {
+                if (mEventCallbackType == 1 && getField_0x5B4() != getField_0x5B5()) {
                     dRoom_c *pRoom = dStage_c::GetInstance()->getRoom(getField_0x5B5());
                     if (pRoom != nullptr) {
                         pRoom->setFlag(0x4);
@@ -777,7 +789,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
                     mLock.get()->deleteRequest();
                 }
             }
-            if (type == SUBTYPE_7) {
+            if (type == DOOR_TEMPLE_MAIN) {
                 bool b;
                 if (frame0 == frame1) {
                     b = frame0 == 55.f;
@@ -804,7 +816,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
         case 'cAna': {
             mVec3_c pos;
             mAng rot;
-            if (type == SUBTYPE_7) {
+            if (type == DOOR_TEMPLE_MAIN) {
                 pos.set(0.f, 0.f, 85.f);
                 rot = mAng(0x8000);
                 rot += mRotation.y;
@@ -823,7 +835,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
             stepTowards(pos);
             dAcPy_c *pPlayer = dAcPy_c::GetLinkM();
 
-            if (field_0x5B6 > 0x1E) {
+            if (mFramesInEvent > 30) {
                 pPlayer->setPosYRot(pos, rot);
                 mEventRelated.advanceNext();
             } else {
@@ -837,7 +849,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
                     pPlayer->setPosYRot(pos, rot);
                     mEventRelated.advanceNext();
                 } else {
-                    pPlayer->setPosYRot(pos, ang);
+                    pPlayer->setPosYRot(tmp, ang);
                 }
             }
         } break;
@@ -845,7 +857,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
             mVec3_c pos;
             mAng rot;
             if (mEventRelated.isAdvance()) {
-                if (type == SUBTYPE_7) {
+                if (type == DOOR_TEMPLE_MAIN) {
                     pos.set(0.f, 0.f, 90.f);
                     rot = mRotation.y;
                 } else {
@@ -868,6 +880,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
         case 'talk':
         case 'lock': {
             if (mEventRelated.isAdvance()) {
+                // Gets the message to show when the door is locked and is failed to be opened
                 s32 flow = mLock.get() == nullptr ? mParams >> 16 : 4001;
                 s32 part2 = flow < 10000U ? 1000 : 100;
                 s32 truncate = (flow / part2);
@@ -889,7 +902,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
             } else {
                 if (mEventRelated.isAdvance()) {
                     pLock->setField_0x2090();
-                    fn_572_4440();
+                    setDoorKnobPosition();
                 }
                 if (pLock->checkField_0x2091()) {
                     mEventRelated.advanceNext();
@@ -913,12 +926,12 @@ int dAcOdoor_c::actorExecuteInEvent() {
 
     mAnmChr.getModel().calc(false);
 
-    if (type != SUBTYPE_7) {
+    if (type != DOOR_TEMPLE_MAIN) {
         mMtx_c nodeMtx;
         mAnmChr.getModel().getNodeWorldMtx(1, nodeMtx);
-        nodeMtx.transM(sVec0);
+        nodeMtx.transM(sDoorknobOffset0);
         mMdl0.setLocalMtx(nodeMtx);
-        if (fn_572_4430()) {
+        if (isTimeEffected()) {
             mMdl1.setLocalMtx(nodeMtx);
         }
     }
@@ -928,7 +941,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
         min.set(999999.f, 999999.f, 999999.f);
         max.set(-999999.f, -999999.f, -999999.f);
 
-        if (type == SUBTYPE_7) {
+        if (type == DOOR_TEMPLE_MAIN) {
             mAnmChr.getModel().getBounds(&min, &max);
         } else {
             mVec3_c min_l, max_l;
@@ -1017,7 +1030,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
 
     switch (mEventRelated.getCurrentEventCommand()) {
         case 'pshB': {
-            if (mEventRelated.isAdvance() && type == SUBTYPE_7) {
+            if (mEventRelated.isAdvance() && type == DOOR_TEMPLE_MAIN) {
                 int node;
                 node = mAnmChr.getModel().getNodeID("DoorF_L");
                 if (node >= 0) {
@@ -1034,7 +1047,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
             }
         } break;
         case 'pshE': {
-            if (mEventRelated.isAdvance() && type == SUBTYPE_7) {
+            if (mEventRelated.isAdvance() && type == DOOR_TEMPLE_MAIN) {
                 int node;
                 node = mAnmChr.getModel().getNodeID("DoorF_L");
                 if (node >= 0) {
@@ -1052,7 +1065,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
         } break;
     }
 
-    if (type != SUBTYPE_7) {
+    if (type != DOOR_TEMPLE_MAIN) {
         bool b;
         if (frame0 == frame1) {
             b = frame0 == 16.f;
@@ -1064,7 +1077,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
         }
     }
 
-    if (type != SUBTYPE_7) {
+    if (type != DOOR_TEMPLE_MAIN) {
         bool b;
         if (frame0 == frame1) {
             b = frame0 == 60.f;
@@ -1076,7 +1089,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
         }
     }
 
-    if (mEventRelated.getCurrentEventCommand() == 'pshB' && type == SUBTYPE_7) {
+    if (mEventRelated.getCurrentEventCommand() == 'pshB' && type == DOOR_TEMPLE_MAIN) {
         if (frame0 < 50.f && 50.f <= frame1) {
             // TODO(Zeldex) - Why is this a check - This seems to indicate it was a getter for a pointer
             if (&dRumble_c::sRumblePreset3) {
@@ -1092,10 +1105,10 @@ int dAcOdoor_c::actorExecuteInEvent() {
 }
 
 int dAcOdoor_c::actorExecute() {
-    if (fn_572_4430()) {
+    if (isTimeEffected()) {
         fn_80067290(&mTimeBits, mRoomID, mPosition, 200.f);
     }
-    switch (field_0x5B3) {
+    switch (mEventCallbackType) {
         case 0: {
             bool b;
             checkRoom(mRoomID, b);
@@ -1106,7 +1119,7 @@ int dAcOdoor_c::actorExecute() {
         } break;
         case 1: {
             bool b;
-            fn_572_4150(b);
+            checkRooms(b);
             if (b) {
                 setObjectProperty(OBJ_PROP_0x200);
                 return SUCCEEDED;
@@ -1122,14 +1135,14 @@ int dAcOdoor_c::actorExecute() {
                 AttentionManager::GetInstance()->addTarget(*this, sOpenInteraction, 0, nullptr);
             }
         } else {
-            if (isPlayerInFrontOfDoor()) {
+            if (isPlayerInteractableLocked()) {
                 AttentionManager::GetInstance()->addTarget(*this, sOpenInteraction, 0, nullptr);
             }
         }
     } else {
-        switch (field_0x5B1) {
+        switch (mLockBehavior) {
             case 0: {
-                if (isPlayerInFrontOfDoor()) {
+                if (isPlayerInteractable()) {
                     AttentionManager::GetInstance()->addTarget(*this, sOpenInteraction, 0, nullptr);
                 }
             } break;
@@ -1137,7 +1150,7 @@ int dAcOdoor_c::actorExecute() {
             case 4:
             case 5:
             case 6: {
-                if (isPlayerInFrontOfDoor()) {
+                if (isPlayerInteractable()) {
                     if (isLocked()) {
                         AttentionManager::GetInstance()->addTarget(*this, sLockedInteraction, 0, nullptr);
                     } else {
@@ -1146,12 +1159,12 @@ int dAcOdoor_c::actorExecute() {
                 }
             } break;
             case 2: {
-                if (isPlayerInFrontOfDoor()) {
+                if (isPlayerInteractable()) {
                     AttentionManager::GetInstance()->addTarget(*this, sOpenInteraction, 0, nullptr);
                 }
             } break;
             case 3: {
-                if (!isLocked() && isPlayerInFrontOfDoor()) {
+                if (!isLocked() && isPlayerInteractable()) {
                     AttentionManager::GetInstance()->addTarget(*this, sOpenInteraction, 0, nullptr);
                 }
             } break;
@@ -1166,12 +1179,12 @@ int dAcOdoor_c::actorExecute() {
         mAnmChr.getModel().setLocalMtx(mWorldMtx);
         mAnmChr.getModel().calc(false);
 
-        if (type != SUBTYPE_7) {
+        if (type != DOOR_TEMPLE_MAIN) {
             mMtx_c nodeMtx;
             mAnmChr.getModel().getNodeWorldMtx(1, nodeMtx);
-            nodeMtx.transM(sVec0);
+            nodeMtx.transM(sDoorknobOffset0);
             mMdl0.setLocalMtx(nodeMtx);
-            if (fn_572_4430()) {
+            if (isTimeEffected()) {
                 mMdl1.setLocalMtx(nodeMtx);
             }
         }
@@ -1182,7 +1195,7 @@ int dAcOdoor_c::actorExecute() {
         min.set(999999.f, 999999.f, 999999.f);
         max.set(-999999.f, -999999.f, -999999.f);
 
-        if (type == SUBTYPE_7) {
+        if (type == DOOR_TEMPLE_MAIN) {
             mAnmChr.getModel().getBounds(&min, &max);
         } else {
             mVec3_c min_l, max_l;
@@ -1255,7 +1268,7 @@ int dAcOdoor_c::actorExecute() {
 }
 
 int dAcOdoor_c::draw() {
-    if (fn_572_4430()) {
+    if (isTimeEffected()) {
         if (!mTimeBits.field_0x00) {
             drawModelType1(&mMdl1);
         }
@@ -1263,7 +1276,7 @@ int dAcOdoor_c::draw() {
             drawModelType1(&mMdl0);
         }
     } else {
-        if (getType() == SUBTYPE_7) {
+        if (getType() == DOOR_TEMPLE_MAIN) {
             drawModelType1(&mAnmChr.getModel());
         } else {
             drawModelType1(&mMdl0);
@@ -1277,15 +1290,29 @@ bool dAcOdoor_c::isLocked() {
         return mLock.isLinked();
     }
 
-    switch (field_0x5B1) {
-        case 0:  return false;
-        case 1:
-        case 3:  return mSceneflag < 0xFF ? !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag) : true;
-        case 2:  return false;
-        case 4:  return mSceneflag < 0xFF ? SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag) : true;
-        case 5:  return dScGame_c::currentSpawnInfo.getTimeOfDay() == SpawnInfo::DAY;
-        case 6:  return dScGame_c::currentSpawnInfo.getTimeOfDay() == SpawnInfo::NIGHT;
-        default: return true;
+    switch (mLockBehavior) {
+        case LOCK_NEVER: {
+            return false;
+        }
+        case LOCK_NOT_SET:
+        case LOCK_TIMESHIFT: {
+            return mSceneflag < 0xFF ? !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag) : true;
+        }
+        case LOCK_NEVER1: {
+            return false;
+        }
+        case LOCK_SET: {
+            return mSceneflag < 0xFF ? SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag) : true;
+        }
+        case LOCK_DAY: {
+            return dScGame_c::currentSpawnInfo.getTimeOfDay() == SpawnInfo::DAY;
+        }
+        case LOCK_NIGHT: {
+            return dScGame_c::currentSpawnInfo.getTimeOfDay() == SpawnInfo::NIGHT;
+        }
+        default: {
+            return true;
+        }
     }
 }
 
@@ -1331,27 +1358,30 @@ void dAcOdoor_c::startPushEventWithCallback(void *zevData) {
 }
 
 void dAcOdoor_c::startPullEvent(void *zevData) {
-    switch (field_0x5B3) {
+    switch (mEventCallbackType) {
         case 0: startPullEventWithoutCallback(zevData); break;
         case 1: startPullEventWithCallback(zevData); break;
     }
 }
 
 void dAcOdoor_c::startPushEvent(void *zevData) {
-    switch (field_0x5B3) {
+    switch (mEventCallbackType) {
         case 0: startPushEventWithoutCallback(zevData); break;
         case 1: startPushEventWithCallback(zevData); break;
     }
 }
 
 void dAcOdoor_c::startOpenEvent(void *zevData) {
-    if (isPlayerInFrontOfDoor()) {
+    if (checkPullDoor()) {
         startPullEvent(zevData);
-    } else if (field_0x5BB) {
-        Event event("KobunDoorPush", zevData, 100, 0x100001, nullptr, nullptr);
-        mEventRelated.scheduleEvent(event, 0);
     } else {
-        startPushEvent(zevData);
+        // Cawlin and Strich's room has an awkward angle when pushing.
+        if (mbKobunDoor) {
+            Event event("KobunDoorPush", zevData, 100, 0x100001, nullptr, nullptr);
+            mEventRelated.scheduleEvent(event, 0);
+        } else {
+            startPushEvent(zevData);
+        }
     }
 }
 
@@ -1374,7 +1404,7 @@ void dAcOdoor_c::startDoorPushLockedEvent(void *zevData) {
 }
 
 void dAcOdoor_c::startLockedEvent(void *zevData) {
-    if (isPlayerInFrontOfDoor()) {
+    if (checkPullDoor()) {
         startDoorPullLockedEvent(zevData);
     } else {
         startDoorPushLockedEvent(zevData);
@@ -1386,7 +1416,7 @@ void dAcOdoor_c::pullLockedEventCallback(void *vDoor) {
     if (pDoor->hasFlowEntryPoint()) {
         pDoor->playInteractionLocked();
     }
-    u16 flag = pDoor->fn_572_3F90(); // (getParams2Lower() >> 0) & 0xFF
+    u16 flag = pDoor->getFailedToOpenFlag();
     if (flag < 0xFF) {
         SceneflagManager::sInstance->setFlag(pDoor->mRoomID, flag);
     }
@@ -1397,7 +1427,7 @@ void dAcOdoor_c::pushLockedEventCallback(void *vDoor) {
     if (pDoor->hasFlowEntryPoint()) {
         pDoor->playInteractionLocked();
     }
-    u16 flag = pDoor->fn_572_3F90();
+    u16 flag = pDoor->getFailedToOpenFlag();
     if (flag < 0xFF) {
         SceneflagManager::sInstance->setFlag(pDoor->mRoomID, flag);
     }
@@ -1413,8 +1443,8 @@ extern "C" void increaseSmallKeyCounter(int amt);
 void dAcOdoor_c::unlockEventCallback(void *vDoor) {
     dAcOdoor_c *pDoor = static_cast<dAcOdoor_c *>(vDoor);
     void *zevData = getOarcZev("DoorAnim");
-    if (pDoor->isPlayerInFrontOfDoor()) {
-        switch (pDoor->field_0x5B3) {
+    if (pDoor->checkPullDoor()) {
+        switch (pDoor->mEventCallbackType) {
             case 0: {
                 Event event(DoorPull, zevData, 100, createBits(0x100001, 0x2), nullptr, nullptr);
                 EventManager::setEvent(pDoor, &event, nullptr);
@@ -1426,7 +1456,7 @@ void dAcOdoor_c::unlockEventCallback(void *vDoor) {
         }
 
     } else {
-        switch (pDoor->field_0x5B3) {
+        switch (pDoor->mEventCallbackType) {
             case 0: {
                 Event event(DoorPull, zevData, 100, createBits(0x100001, 0x2), nullptr, nullptr);
                 EventManager::setEvent(pDoor, &event, nullptr);
@@ -1471,16 +1501,16 @@ void dAcOdoor_c::openCallbackCommon(void *vDoor) {
 
 void dAcOdoor_c::registerInEvent() {
     if (isInTimeDoorEvent()) {
-        fn_572_40F0();
+        setTimeDoorEventActive();
     }
 }
 
 void dAcOdoor_c::unkVirtFunc_0x6C() {
-    fn_572_4100();
+    setTimeDoorEventInactive();
 }
 
 void dAcOdoor_c::doInteraction(s32 interaction) {
-    if (getType() == SUBTYPE_7) {
+    if (getType() == DOOR_TEMPLE_MAIN) {
         void *zevData = getOarcZev("DoorF");
         Event event("FTypeDoorOut", zevData, 100, createBits(0x100001, 0x2), nullptr, nullptr);
         mEventRelated.scheduleEvent(event, 0);
@@ -1514,7 +1544,7 @@ void dAcOdoor_c::doInteraction(s32 interaction) {
                 }
             } else {
                 startOpenEvent(zevData);
-                if (field_0x5B1 == 2 && mSceneflag < 0xFF) {
+                if (mLockBehavior == LOCK_NEVER1 && mSceneflag < 0xFF) {
                     SceneflagManager::sInstance->setFlag(mRoomID, mSceneflag);
                 }
             }
@@ -1529,7 +1559,7 @@ s32 dAcOdoor_c::getLockParameter() {
     return getFromParams(6, 0x1);
 }
 
-s32 dAcOdoor_c::getSubtype2() {
+s32 dAcOdoor_c::getLockBehavior() {
     return (mRotation.x >> 0) & 0xFF;
 }
 
@@ -1537,19 +1567,19 @@ u8 dAcOdoor_c::getSceneflag() {
     return (mRotation.x >> 8) & 0xFF;
 }
 
-u8 dAcOdoor_c::fn_572_3F60() {
+u8 dAcOdoor_c::getDoorCallbackType() {
     return (mRotation.z >> 0) & 0xF;
 }
 
-u8 dAcOdoor_c::fn_572_3F70() {
+u8 dAcOdoor_c::getFrontRoomParam() {
     return (mRotation.z >> 4) & 0x3F;
 }
 
-u8 dAcOdoor_c::fn_572_3F80() {
+u8 dAcOdoor_c::getBackRoomParam() {
     return (mRotation.z >> 10) & 0x3F;
 }
 
-u16 dAcOdoor_c::fn_572_3F90() {
+u16 dAcOdoor_c::getFailedToOpenFlag() {
     return getParams2Lower() & 0xFF;
 }
 
@@ -1589,76 +1619,76 @@ void dAcOdoor_c::setRoomId(s8 roomId) {
     mRoomID = roomId;
 }
 
-void dAcOdoor_c::fn_572_4050(u32 flags) {
+void dAcOdoor_c::setFlag(u32 flags) {
     mFlags = flags;
 }
 
-void dAcOdoor_c::fn_572_4060(u8 in) {
-    field_0x5B3 = in;
+void dAcOdoor_c::setEventCallbackType(u8 in) {
+    mEventCallbackType = in;
 }
 
-void dAcOdoor_c::fn_572_4070(s8 in) {
-    field_0x5B4 = in;
+void dAcOdoor_c::setFrontRoom(s8 in) {
+    mFrontRoomId = in;
 }
 
-void dAcOdoor_c::fn_572_4080(s8 in) {
-    field_0x5B5 = in;
+void dAcOdoor_c::setBackRoom(s8 in) {
+    mBackRoomId = in;
 }
 
-void dAcOdoor_c::fn_572_4090() {
-    field_0x5B7 = true;
+void dAcOdoor_c::setDoubleDoor() {
+    mbDoubleDoor = true;
 }
 
-void dAcOdoor_c::fn_572_40A0() {
-    field_0x5B7 = false;
+void dAcOdoor_c::setNotDoubleDoor() {
+    mbDoubleDoor = false;
 }
 
-void dAcOdoor_c::fn_572_40B0() {
-    field_0x5B8 = true;
+void dAcOdoor_c::setSingleDoor() {
+    mbSingleDoor = true;
 }
 
-void dAcOdoor_c::fn_572_40C0() {
-    field_0x5B8 = false;
+void dAcOdoor_c::setNotSingleDoor() {
+    mbSingleDoor = false;
 }
 
-void dAcOdoor_c::fn_572_40D0() {
-    field_0x5B9 = true;
+void dAcOdoor_c::setInSandshipBoss() {
+    mbInSandshipBoss = true;
 }
 
-bool dAcOdoor_c::fn_572_40E0() const {
+bool dAcOdoor_c::isTimeDoorEventActive() const {
     return mFlags & 1;
 }
 
-void dAcOdoor_c::fn_572_40F0() {
-    fn_572_4050(mFlags | 1);
+void dAcOdoor_c::setTimeDoorEventActive() {
+    setFlag(mFlags | 1);
 }
 
-void dAcOdoor_c::fn_572_4100() {
-    fn_572_4050(mFlags & ~1);
+void dAcOdoor_c::setTimeDoorEventInactive() {
+    setFlag(mFlags & ~1);
 }
 
-void dAcOdoor_c::fn_572_4110() {
-    fn_572_4050(mFlags | 2);
+void dAcOdoor_c::setTimeEffected() {
+    setFlag(mFlags | 2);
 }
 
-void dAcOdoor_c::fn_572_4120() {
-    fn_572_4050(mFlags & ~2);
+void dAcOdoor_c::setTimeStatic() {
+    setFlag(mFlags & ~2);
 }
 
-bool dAcOdoor_c::fn_572_4130(bool &b) const {
-    checkRoom(field_0x5B4, b);
+bool dAcOdoor_c::checkFrontRoom(bool &b) const {
+    checkRoom(mFrontRoomId, b);
 }
 
-bool dAcOdoor_c::fn_572_4140(bool &b) const {
-    checkRoom(field_0x5B5, b);
+bool dAcOdoor_c::checkBackRoom(bool &b) const {
+    checkRoom(mBackRoomId, b);
 }
 
-bool dAcOdoor_c::fn_572_4150(bool &b) const {
+bool dAcOdoor_c::checkRooms(bool &b) const {
     bool b0, b1;
-    if (!fn_572_4130(b0)) {
+    if (!checkFrontRoom(b0)) {
         return false;
     }
-    if (!fn_572_4140(b1)) {
+    if (!checkBackRoom(b1)) {
         return false;
     }
     b = b0 && b1;
@@ -1674,7 +1704,7 @@ void dAcOdoor_c::triggerExit() {
 }
 
 bool dAcOdoor_c::isLeavingSealedTempleSideDoorPostSkyKeep() const {
-    return s32(mParams & 0x3F) == SUBTYPE_4 && field_0x5B5 == 1 &&
+    return s32(mParams & 0x3F) == DOOR_TEMPLE_SIDE && mBackRoomId == 1 &&
            StoryflagManager::sInstance->getFlag(STORYFLAG_342) && dScGame_c::isCurrentStage(sStageF402);
 }
 
@@ -1692,40 +1722,41 @@ void dAcOdoor_c::transitionPullRoomFlags() const {
     dStage_c::GetInstance()->updateRoomFlags(getField_0x5B5(), getField_0x5B4());
 }
 
-bool dAcOdoor_c::fn_572_4370(const mVec3_c &point) const {
+bool dAcOdoor_c::isPositionInFrontOfDoor(const mVec3_c &point) const {
     s32 diff = mRotation.y - (point - mPosition).atan2sX_Z();
     return mAng::abs(diff) <= 0x4000;
 }
 
-bool dAcOdoor_c::isPlayerInFrontOfDoor() const {
-    return fn_572_4370(dAcPy_c::GetLink()->mPosition);
+bool dAcOdoor_c::checkPullDoor() const {
+    return isPositionInFrontOfDoor(dAcPy_c::GetLink()->mPosition);
 }
 
 bool dAcOdoor_c::hasFlowEntryPoint() {
     return getFromParams(16, 0xFFFF);
 }
 
-bool dAcOdoor_c::fn_572_4430() const {
+bool dAcOdoor_c::isTimeEffected() const {
     return mFlags & 2;
 }
 
-void dAcOdoor_c::fn_572_4440() {
+void dAcOdoor_c::setDoorKnobPosition() {
     mVec3_c pos;
-    if (getType() == SUBTYPE_7) {
+    if (getType() == DOOR_TEMPLE_MAIN) {
         pos.set(mPosition);
         pos.y += 150.f;
     } else {
         mMtx_c m;
         mAnmChr.getModel().getNodeWorldMtx(1, m);
-        m.transM(sVec0);
-        m.multVec(sVec1, pos);
+        m.transM(sDoorknobOffset0);
+        m.multVec(sDoorknobOffset1, pos);
     }
     mPositionCopy2.set(pos);
     mPositionCopy3.set(pos);
 }
 
 bool dAcOdoor_c::isPlayerInteractable() const {
-    mVec3_c v = dAcPy_c::GetLink()->mPosition - mPosition;
+    mVec3_c v = dAcPy_c::GetLink()->mPosition;
+    v -= mPosition;
     v.rotY(-mRotation.y);
 
     if (v.x < getInteractionMinX()) {
@@ -1744,7 +1775,8 @@ bool dAcOdoor_c::isPlayerInteractable() const {
 }
 
 bool dAcOdoor_c::isPlayerInteractableLocked() const {
-    mVec3_c v = dAcPy_c::GetLink()->mPosition - mPosition;
+    mVec3_c v = dAcPy_c::GetLink()->mPosition;
+    v -= mPosition;
     v.rotY(-mRotation.y);
     v.x += 80.f;
 
