@@ -27,6 +27,9 @@ public:
     static dBgS_ObjGndChk &GetInstance() {
         return sInstance;
     }
+    static dBgS_ObjGndChk *GetPInstance() {
+        return &sInstance;
+    }
     static f32 GetGroundHeight() {
         return sGroundHeight;
     }

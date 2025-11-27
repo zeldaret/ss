@@ -10,6 +10,8 @@ public:
     dAcOShutterChangeScene_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dAcOShutterChangeScene_c() {}
 
+    virtual bool canOpen() override;
+
     STATE_FUNC_DECLARE(dAcOShutterChangeScene_c, WaitOpenShutter);
     STATE_FUNC_DECLARE(dAcOShutterChangeScene_c, WaitOpenShutterForEvent);
     STATE_FUNC_DECLARE(dAcOShutterChangeScene_c, OpenShutter);

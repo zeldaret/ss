@@ -12,8 +12,18 @@ public:
 
     STATE_FUNC_DECLARE(dAcOLock_c, Wait);
 
+    bool checkField_0x2091() const {
+        return field_0x2091;
+    }
+    void setField_0x2090() {
+        field_0x2090 = true;
+    }
+
 private:
-    /* 0x??? */ STATE_MGR_DECLARE(dAcOLock_c);
+    /* 0x???? */ STATE_MGR_DECLARE(dAcOLock_c);
+    /* 0x???? */ u8 _0x36C[0x2090 - 0x36C];
+    /* 0x2090 */ bool field_0x2090;
+    /* 0x2091 */ bool field_0x2091;
 };
 
 #endif
