@@ -1676,11 +1676,11 @@ void dAcOdoor_c::setTimeStatic() {
 }
 
 bool dAcOdoor_c::checkFrontRoom(bool &b) const {
-    checkRoom(mFrontRoomId, b);
+    return checkRoom(mFrontRoomId, b);
 }
 
 bool dAcOdoor_c::checkBackRoom(bool &b) const {
-    checkRoom(mBackRoomId, b);
+    return checkRoom(mBackRoomId, b);
 }
 
 bool dAcOdoor_c::checkRooms(bool &b) const {
