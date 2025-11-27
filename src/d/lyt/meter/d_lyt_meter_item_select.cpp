@@ -688,7 +688,7 @@ void dLytMeterItemSelect_c::executeState_Wait() {
         mStateMgr.changeState(StateID_SetSpecialItemIn);
     } else if (!dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_B)) {
         mStateMgr.changeState(StateID_ToUnuse);
-    } else if (!dLytMeter_c::GetMain()->fn_800D5650() && !dLytMeter_c::GetMain()->fn_800D5680() &&
+    } else if (!dLytMeter_c::GetMain()->isInModeMap() && !dLytMeter_c::GetMain()->isInModePause() &&
                LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::ACT_IE_ETC_ITEMS &&
                LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::ACT_IE_ETC_RETURN &&
                LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::ACT_IE_ETC_DONE &&
@@ -2483,8 +2483,8 @@ bool dLytMeterItemSelect_c::fn_800EFDF0(bool b) const {
 bool dLytMeterItemSelect_c::fn_800F0030() const {
     if (!StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_B_WHEEL_UNLOCKED) &&
             !(EventManager::isInEvent() && EventManager::isCurrentEvent("ItemGetGorgeous")) ||
-        (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeter_c::GetMain()->fn_800D5650() ||
-         dLytMeter_c::GetMain()->fn_800D5680() || !dLytMeter_c::GetMain()->getItemSelectNotHiddenByAreaCaption())) {
+        (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeter_c::GetMain()->isInModeMap() ||
+         dLytMeter_c::GetMain()->isInModePause() || !dLytMeter_c::GetMain()->getItemSelectNotHiddenByAreaCaption())) {
         // If we don't have a B-Wheel and we're not currently in the ItemGetGorgeous event,
         // or (random other conditions), return false
         return false;
@@ -2715,7 +2715,7 @@ bool dLytMeterItemSelect_c::isWheelBlockedByCurrentAction() {
         dAcPy_c::LINK->checkActionFlags(dAcPy_c::FLG0_SWING_ROPE) || dAcPy_c::LINK->checkCurrentAction(0x9C) ||
         dAcPy_c::LINK->getRidingActorType() == dAcPy_c::RIDING_TRUCK_MINECART ||
         dAcPy_c::LINK->checkCurrentAction(0x95) || isInSpiralChargeTutorialMinigame() || isInRollercoasterMinigame() ||
-        dAcPy_c::LINK->checkCurrentAction(0x8C) || dLytMeter_c::GetMain()->getField_0x1377E() != 0 ||
+        dAcPy_c::LINK->checkCurrentAction(0x8C) || dLytMeter_c::GetMain()->isInSwordDrawEvent() ||
         checkIsInSkykeepPuzzle() || dLytMeter_c::GetInstance()->getMeterField_0x13770() == 0) {
         return true;
     }
