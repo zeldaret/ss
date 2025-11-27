@@ -554,6 +554,7 @@ toBeSorted/d_flow_mgr.cpp:
 
 d/d_lyt_base.cpp:
 	.text       start:0x800C4480 end:0x800C4690 align:16
+	.data       start:0x80511B30 end:0x80511B80
 
 toBeSorted/unk_npc_path_stuff_1.cpp:
 	.text       start:0x800C4690 end:0x800C731C align:16
