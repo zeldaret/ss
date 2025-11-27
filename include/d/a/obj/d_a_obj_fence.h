@@ -10,6 +10,15 @@ public:
     dAcOFence_c();
     virtual ~dAcOFence_c();
 
+    bool fn_550_11B0() const;
+    void fn_550_1250();
+    void fn_550_12B0();
+    void fn_550_12C0();
+
+    void changeToRequestConfineEvent() {
+        mStateMgr.changeState(StateID_RequestConfineEvent);
+    }
+
     STATE_FUNC_DECLARE(dAcOFence_c, WaitOpen);
     STATE_FUNC_DECLARE(dAcOFence_c, Open);
     STATE_FUNC_DECLARE(dAcOFence_c, OpenPocoAPoco);
@@ -21,7 +30,8 @@ public:
     STATE_FUNC_DECLARE(dAcOFence_c, RequestConfineEvent);
 
 private:
-    /* 0x??? */ STATE_MGR_DECLARE(dAcOFence_c);
+    /* 0x330 */ u8 _0x330[0x368 - 0x330];
+    /* 0x368 */ STATE_MGR_DECLARE(dAcOFence_c);
 };
 
 #endif

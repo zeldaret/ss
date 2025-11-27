@@ -5,6 +5,10 @@ SPECIAL_ACTOR_PROFILE(OBJ_TROLLEY_SHUTTER, dAcOTrolleyShutter_c, fProfile::OBJ_T
 STATE_DEFINE(dAcOTrolleyShutter_c, Wait);
 STATE_DEFINE(dAcOTrolleyShutter_c, OpenEvent);
 
+bool dAcOTrolleyShutter_c::canOpen() {
+    // Not implemented - Used to emit dtor
+    return true;
+}
 void dAcOTrolleyShutter_c::initializeState_Wait() {}
 void dAcOTrolleyShutter_c::executeState_Wait() {}
 void dAcOTrolleyShutter_c::finalizeState_Wait() {}

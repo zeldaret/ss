@@ -2878,7 +2878,7 @@ config.libs = [
     Rel(NonMatching, "d_t_at0", "REL/d/t/d_t_at0.cpp"),
     Rel(NonMatching, "d_t_auto_message", "REL/d/t/d_t_auto_message.cpp"),
     Rel(NonMatching, "d_t_barrel", "REL/d/t/d_t_barrel.cpp"),
-    Rel(NonMatching, "d_t_barrel_pos", "REL/d/t/d_t_barrel_pos.cpp"),
+    Rel(Matching, "d_t_barrel_pos", "REL/d/t/d_t_barrel_pos.cpp"),
     Rel(NonMatching, "d_t_bb_quake", "REL/d/t/d_t_bb_quake.cpp"),
     Rel(NonMatching, "d_t_bcal_tag", "REL/d/t/d_t_bcal_tag.cpp"),
     Rel(NonMatching, "d_t_bcz", "REL/d/t/d_t_bcz.cpp"),

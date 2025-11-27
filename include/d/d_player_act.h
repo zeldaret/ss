@@ -630,7 +630,7 @@ public:
     bool isAttackingSpinHorizontal() const;
     bool isAttackingSpinVertical() const;
     void setBonkRelatedAnimFlag(bool b);
-    void setPosYRot(const mVec3_c &pos, mAng rot, bool force, UNKWORD, UNKWORD);
+    void setPosYRot(const mVec3_c &pos, mAng rot, bool force = false, UNKWORD = 0, UNKWORD = 0);
     void setTransform(const mMtx_c &mtx, bool force, UNKWORD, UNKWORD);
     bool someTargetedActorCheck() const;
     static mAng fn_8005BA90();
@@ -645,7 +645,6 @@ public:
     static s32 getCurrentSwordType();
     static const char *getSwordName(s32);
     static s32 getCurrentlyEquippedShieldType();
-
 
     static const mColor &getEarringsColor();
 
