@@ -29,6 +29,9 @@ public:
     const mVec3_c &getField_0x78() const {
         return field_0x78;
     }
+    f32 getField_0x2A8() const {
+        return field_0x2A8;
+    }
     mAng getYRot() const;
 
     bool doFn_800918E0(s32 a1, s16 a2) {
@@ -66,7 +69,9 @@ private:
     /* 0x068 */ u8 _0x068[0x6C - 0x068];
     /* 0x06C */ mVec3_c mPositionMaybe;
     /* 0x078 */ mVec3_c field_0x78;
-    /* 0x084 */ u8 _0x084[0xD98 - 0x084];
+    /* 0x084 */ u8 _0x084[0x2A8 - 0x084];
+    /* 0x2A8 */ f32 field_0x2A8;
+    /* 0x2AC */ u8 _0x2AC[0xD98 - 0x2AC];
     /* 0xD98 */ void *field_0xD98;
     /* 0xD9C */ u8 _0xD9C[0xDA0 - 0xD9C];
     /* 0xDA0 */ void *field_0xDA0;

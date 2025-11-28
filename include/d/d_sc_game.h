@@ -203,7 +203,7 @@ public:
         sReloaderType = type;
     }
 
-    static dCamera_c *getCamera(s32 idx);
+    static dCamera_c *getCamera(s32 idx = 0);
     static void setCamera(s32 idx, dCamera_c *);
 
     bool isFaderSettled() const {
