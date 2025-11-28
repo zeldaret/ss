@@ -1618,9 +1618,10 @@ d/lyt/d_lyt_enemy_icon.cpp:
 
 d/lyt/d_lyt_mini_game.cpp:
 	.text       start:0x8028BCE0 end:0x802969E0 align:16
-	.rodata     start:0x804EE790 end:0x804EEB68
+	.rodata     start:0x804EE7D8 end:0x804EEB68
 	.data       start:0x80538E58 end:0x80539B68
 	.sbss       start:0x80575970 end:0x80575990
+	.sdata2     start:0x8057C700 end:0x8057C760
 
 d/lyt/d_lyt_meter_suiryu_score.cpp:
 	.text       start:0x802969E0 end:0x8029C2C8 align:16

@@ -474,7 +474,7 @@ bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
             newNumDigits = 3;
             setDigit(0, newNumDisplayed / 100);
             s32 rem = (newNumDisplayed % 100);
-            setDigit(1, rem / 10); // x
+            setDigit(1, rem / 10);
             setDigit(2, rem % 10);
         } else if (newNumDisplayed >= 10) {
             newNumDigits = 2;

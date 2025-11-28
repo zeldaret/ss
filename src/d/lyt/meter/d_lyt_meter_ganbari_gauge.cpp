@@ -439,7 +439,7 @@ bool dLytMeterGanbariGauge_c::execute() {
     mVec3_c diff = dAcPy_c::GetLink()->mPositionCopy3 - dScGame_c::getCamera(0)->getPositionMaybe();
     f32 len = diff.mag();
     mVec3_c v;
-    d3d::fn_80016960(v, dAcPy_c::GetLink()->mPositionCopy3);
+    d3d::worldToScreen(v, dAcPy_c::GetLink()->mPositionCopy3);
     if (!EventManager::isInEvent()) {
         field_0x524 = v;
     }
@@ -602,7 +602,7 @@ bool dLytMeterGanbariGauge_c::execute() {
 
     if (!EventManager::isInEvent() && !dAcPy_c::GetLink()->hasvt_0x1C0() &&
         !dAcPy_c::GetLink()->checkActionFlagsCont(0x10) &&
-        (d3d::fn_80016A90(dAcPy_c::GetLink()->mPositionCopy3) || fn_80104710(false) || isCrawling()) &&
+        (d3d::isOnScreen(dAcPy_c::GetLink()->mPositionCopy3) || fn_80104710(false) || isCrawling()) &&
         *mStateMgrWheel.getStateID() != StateID_Full && *mStateMgrMain.getStateID() == StateID_InvisibleWait &&
         !field_0x530) {
         mStateMgrMain.changeState(StateID_In);
@@ -611,7 +611,7 @@ bool dLytMeterGanbariGauge_c::execute() {
         mStateMgrMain.changeState(StateID_OutWait);
     } else if ((EventManager::isInEvent() || dAcPy_c::GetLink()->hasvt_0x1C0() ||
                 dAcPy_c::GetLink()->checkActionFlagsCont(0x10) ||
-                (!d3d::fn_80016A90(dAcPy_c::GetLink()->mPositionCopy3) && !fn_80104710(false) && !isCrawling())) &&
+                (!d3d::isOnScreen(dAcPy_c::GetLink()->mPositionCopy3) && !fn_80104710(false) && !isCrawling())) &&
                *mStateMgrMain.getStateID() == StateID_Wait) {
         mStateMgrMain.changeState(StateID_CameraOut);
     } else if (field_0x530 && *mStateMgrMain.getStateID() == StateID_Wait) {
