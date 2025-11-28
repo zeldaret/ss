@@ -22,11 +22,17 @@ public:
         return field_0x940;
     }
 
-    void setField_0x941(u8 v) {
-        field_0x941 = v;
+    void setForceComplete(bool v) {
+        mForceComplete = v;
     }
 
 private:
+    enum Variant_e {
+        VAR_IMP_1,
+        VAR_IMP_2,
+        VAR_IMP_3,
+    };
+
     void buildVariant01();
     void buildVariant02();
     void buildVariant03();
@@ -56,8 +62,8 @@ private:
     /* 0x504 */ d2d::ResAccIf_c mResAcc;
 
     /* 0x874 */ mVec2_c field_0x874;
-    /* 0x87C */ mVec2_c field_0x87C;
-    /* 0x884 */ mVec2_c field_0x884;
+    /* 0x87C */ mVec2_c mDpdPosLastFrame;
+    /* 0x884 */ mVec2_c mDpdPosScreen;
 
     /* 0x88C */ mVec2_c mStartPositions[6];
     /* 0x8BC */ mVec2_c mEndPositions[6];
@@ -65,12 +71,12 @@ private:
     /* 0x8EC */ s32 mLineLoopIndex;
 
     /* 0x8F0 */ s32 mVariant;
-    /* 0x8F4 */ s32 field_0x8F4;
+    /* 0x8F4 */ s32 mSavedLineLoopIndex;
     /* 0x8F8 */ s32 field_0x8F8;
     /* 0x8FC */ s32 mLineFixIndex;
     /* 0x900 */ s32 field_0x900;
-    /* 0x904 */ s32 field_0x904;
-    /* 0x908 */ s32 field_0x908;
+    /* 0x904 */ s32 mDpdPosInitTimer;
+    /* 0x908 */ s32 mSampleTimer;
 
     /* 0x90C */ u8 _0x90C[0x910 - 0x90C];
 
@@ -79,7 +85,7 @@ private:
     /* 0x918 */ f32 field_0x918[10];
 
     /* 0x940 */ bool field_0x940;
-    /* 0x941 */ bool field_0x941;
+    /* 0x941 */ bool mForceComplete;
     /* 0x942 */ bool mLastLine;
     /* 0x943 */ bool mNeedEnableLineLoop;
     /* 0x944 */ u8 field_0x944;

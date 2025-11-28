@@ -75,11 +75,12 @@ STATE_DEFINE(dLytDrawMark_c, Complete);
 #define DRAW_MARK_NUM_PANES 13
 
 bool dLytDrawMark_c::build(UNKWORD) {
-    mVariant = dScGame_c::currentSpawnInfo.layer == 3 ? 1 : dScGame_c::currentSpawnInfo.layer == 4 ? 2 : 0;
+    // enums cause deoptimization here...
+    mVariant = dScGame_c::currentSpawnInfo.layer == 3 ? /* VAR_IMP_2*/ 1 : dScGame_c::currentSpawnInfo.layer == 4 ? /* VAR_IMP_3 */ 2 : /* VAR_IMP_1 */ 0;
 
-    if (mVariant == 1) {
+    if (mVariant == VAR_IMP_2) {
         buildVariant02();
-    } else if (mVariant == 2) {
+    } else if (mVariant == VAR_IMP_3) {
         buildVariant03();
     } else {
         buildVariant01();
@@ -90,21 +91,21 @@ bool dLytDrawMark_c::build(UNKWORD) {
     mLastLine = false;
     mNeedEnableLineLoop = false;
     field_0x940 = false;
-    field_0x941 = false;
+    mForceComplete = false;
 
-    field_0x8F4 = -1;
+    mSavedLineLoopIndex = -1;
     field_0x8F8 = -1;
     mLineFixIndex = 0;
 
     field_0x944 = 0;
 
     field_0x900 = 0;
-    field_0x904 = 1;
-    field_0x908 = 0;
+    mDpdPosInitTimer = 1;
+    mSampleTimer = 0;
     mLineLoopIndex = 0;
 
     field_0x874.x = field_0x874.y = 0.0f;
-    field_0x87C.x = field_0x87C.y = 0.0f;
+    mDpdPosLastFrame.x = mDpdPosLastFrame.y = 0.0f;
 
     field_0x910 = 0.0f;
     field_0x914 = 0.0f;
@@ -173,9 +174,9 @@ void dLytDrawMark_c::initializeState_In() {
     mAnm[DRAW_MARK_ANIM_IN].setToStart();
     mAnm[DRAW_MARK_ANIM_IN].setAnimEnable(true);
     dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SEAL_APPEAR);
-    if (mVariant == 1) {
+    if (mVariant == VAR_IMP_2) {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SEAL_LINE_APPEAR_2);
-    } else if (mVariant == 2) {
+    } else if (mVariant == VAR_IMP_3) {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SEAL_LINE_APPEAR_3);
     } else {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SEAL_LINE_APPEAR_1);
@@ -214,8 +215,8 @@ void dLytDrawMark_c::initializeState_MoveWait() {
     field_0x874 = mStartPositions[mLineLoopIndex];
     // unused
     mVec2_c _ = mEndPositions[mLineLoopIndex] - mStartPositions[mLineLoopIndex];
-    if (field_0x8F4 == -1) {
-        field_0x8F4 = mLineLoopIndex;
+    if (mSavedLineLoopIndex == -1) {
+        mSavedLineLoopIndex = mLineLoopIndex;
     }
 }
 void dLytDrawMark_c::executeState_MoveWait() {
@@ -224,14 +225,14 @@ void dLytDrawMark_c::executeState_MoveWait() {
     }
     dPad::ex_c::getInstance()->setField_0x70(sHio.field_0x18);
     fn_800ADC10(mVec2_c(0.0f, 0.0f));
-    field_0x884.x = field_0x884.y = 0.0f;
-    field_0x87C.set(0.0f, 0.0f);
+    mDpdPosScreen.x = mDpdPosScreen.y = 0.0f;
+    mDpdPosLastFrame.set(0.0f, 0.0f);
     mStateMgr.changeState(StateID_MoveDraw);
 }
 void dLytDrawMark_c::finalizeState_MoveWait() {}
 
 void dLytDrawMark_c::initializeState_MoveDraw() {
-    field_0x904 = 1;
+    mDpdPosInitTimer = 1;
     field_0x900 = 0;
     field_0x914 = 0.0f;
     for (int i = 0; i < 10; i++) {
@@ -245,7 +246,7 @@ void dLytDrawMark_c::executeState_MoveDraw() {
     if (mAnm[mLineLoopIndex + DRAW_MARK_ANIM_DRAW_LINE_LOOP_OFFSET].getFrame() == 1.0f) {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SEAL_LINE_BLINK);
     }
-    if (field_0x941) {
+    if (mForceComplete) {
         mStateMgr.changeState(StateID_Complete);
     } else {
         detectSwordSwing();
@@ -274,12 +275,12 @@ void dLytDrawMark_c::executeState_MoveFix() {
             mLineLoopIndex++;
         }
         mNeedEnableLineLoop = true;
-        if (field_0x8F4 < getNumLines()) {
+        if (mSavedLineLoopIndex < getNumLines()) {
             if (mLastLine) {
                 dLytControlGame_c::getInstance()->setDrawMarkRelated(0, 0);
                 mStateMgr.changeState(StateID_Complete);
             } else {
-                field_0x8F4 = -1;
+                mSavedLineLoopIndex = -1;
                 mStateMgr.changeState(StateID_MoveWait);
             }
         }
@@ -297,12 +298,12 @@ void dLytDrawMark_c::initializeState_MoveEnd() {
     mNeedEnableLineLoop = true;
 }
 void dLytDrawMark_c::executeState_MoveEnd() {
-    if (field_0x8F4 < getNumLines()) {
+    if (mSavedLineLoopIndex < getNumLines()) {
         if (mLastLine) {
             dLytControlGame_c::getInstance()->setDrawMarkRelated(0, 0);
             mStateMgr.changeState(StateID_Complete);
         } else {
-            field_0x8F4 = -1;
+            mSavedLineLoopIndex = -1;
             mStateMgr.changeState(StateID_MoveWait);
         }
     }
@@ -333,17 +334,17 @@ void dLytDrawMark_c::finalizeState_Complete() {}
 
 void dLytDrawMark_c::detectSwordSwing() {
     dPad::ex_c::getInstance()->setField_0x70(sHio.field_0x18);
-    field_0x884 = dPad::getDpdPosScreen();
-    if (field_0x904 > 0) {
-        field_0x87C = field_0x884;
-        field_0x904--;
+    mDpdPosScreen = dPad::getDpdPosScreen();
+    if (mDpdPosInitTimer > 0) {
+        mDpdPosLastFrame = mDpdPosScreen;
+        mDpdPosInitTimer--;
     }
 
-    if (field_0x908 > 0) {
-        field_0x908--;
-        field_0x87C = field_0x884;
+    if (mSampleTimer > 0) {
+        mSampleTimer--;
+        mDpdPosLastFrame = mDpdPosScreen;
     } else {
-        mVec2_c swingDir(field_0x884.x - field_0x87C.x, field_0x884.y - field_0x87C.y);
+        mVec2_c swingDir(mDpdPosScreen.x - mDpdPosLastFrame.x, mDpdPosScreen.y - mDpdPosLastFrame.y);
         mAng swingAngle = swingDir.ang2();
         mVec2_c lineDir = mEndPositions[mLineLoopIndex] - mStartPositions[mLineLoopIndex];
         mAng lineAngle = lineDir.ang2();
@@ -396,7 +397,7 @@ void dLytDrawMark_c::detectSwordSwing() {
                 if (swingMag >= sHio.field_0x0C) {
                     field_0x910 += swingMag - sHio.field_0x0C;
                     if (field_0x910 >= sHio.field_0x08) {
-                        field_0x908 = sHio.field_0x1C;
+                        mSampleTimer = sHio.field_0x1C;
                     }
                 }
                 field_0x900 = 0;
@@ -408,8 +409,8 @@ void dLytDrawMark_c::detectSwordSwing() {
         }
 
         fn_800ADC10(mVec2_c(0.0f, 0.0f));
-        field_0x884.x = field_0x884.y = 0.0f;
-        field_0x87C.set(0.0f, 0.0f);
+        mDpdPosScreen.x = mDpdPosScreen.y = 0.0f;
+        mDpdPosLastFrame.set(0.0f, 0.0f);
         dLytDobutton_c::setActionTextStuff(dLytDobutton_c::ICON_2, dLytDobutton_c::ACT_DO_70, true);
     }
 }
@@ -585,9 +586,9 @@ void dLytDrawMark_c::buildVariant03() {
 }
 
 s32 dLytDrawMark_c::getNumLines() const {
-    if (mVariant == 1) {
+    if (mVariant == VAR_IMP_2) {
         return 4;
-    } else if (mVariant == 2) {
+    } else if (mVariant == VAR_IMP_3) {
         return 6;
     } else {
         return 3;

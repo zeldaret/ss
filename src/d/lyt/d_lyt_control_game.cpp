@@ -360,7 +360,7 @@ int dLytControlGame_c::execute() {
 
     if (mpDrawMark != nullptr) {
         if (field_0x15C54 == 0) {
-            mpDrawMark->setField_0x941(1);
+            mpDrawMark->setForceComplete(true);
         }
         mpDrawMark->execute();
         if (mpDrawMark->getField_0x940() != 0) {
