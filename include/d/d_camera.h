@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "m/m_angle.h"
 #include "m/m_vec.h"
 
 extern "C" bool fn_80081FE0(void *, const char *);
@@ -28,6 +29,7 @@ public:
     const mVec3_c &getField_0x78() const {
         return field_0x78;
     }
+    mAng getYRot() const;
 
     bool doFn_800918E0(s32 a1, s16 a2) {
         return fn_800918E0(field_0xDA0, a1, a2);
