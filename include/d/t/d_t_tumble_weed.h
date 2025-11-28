@@ -26,13 +26,13 @@ private:
     void doSpawnTumbleweed();
     void getWind(mVec3_c &);
 
-    STATE_MGR_DECLARE(dTgTumbleWeed_c);
+    /* 0x0FC */ STATE_MGR_DECLARE(dTgTumbleWeed_c);
 
-    u16 mSpawnTimer;
-    u16 padding;
-    u16 mWindTimer;
-    dAcRef_c<dAcOTumbleWeed_c> mSpawnedTumbleWeed;
-    u16 someField;
+    /* 0x138 */ u16 mSpawnTimer;
+    /* 0x13A */ u16 field_0x13A;
+    /* 0x13C */ u16 mWindTimer;
+    /* 0x140 */ dAcRef_c<dAcOTumbleWeed_c> mSpawnedTumbleWeed;
+    /* 0x14C */ u16 field_0x14C;
 };
 
 #endif

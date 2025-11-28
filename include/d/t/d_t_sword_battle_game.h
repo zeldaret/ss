@@ -1,7 +1,6 @@
 #ifndef D_T_SWORD_BATTLE_GAME_H
 #define D_T_SWORD_BATTLE_GAME_H
 
-#include "d/flag/storyflag_manager.h"
 #include "d/t/d_tg.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"

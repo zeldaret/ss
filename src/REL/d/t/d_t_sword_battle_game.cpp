@@ -13,7 +13,7 @@
 #include "toBeSorted/minigame_mgr.h"
 
 const char *sGameEvents[] = {"StartSwordBattleGame", "EndSwordBattleGame", "EndSwordBattleGame2"};
-const char *endEventNames[] = {
+const char *sEndEventNames[] = {
     "dAcBvd_c_DeadDEMO", "MG_end", "AsuraDeadB", "BKR_end", "BBossEvac", "BBoss2Evac", "BBoss3Evac", "BLS_end",
 };
 
@@ -42,10 +42,10 @@ int dTgSwordBattleGame_c::actorExecute() {
     if (EventManager::isInEvent()) {
         static const char *l_currentEvent = EventManager::getCurrentEventName();
 
-        if (strequals(l_currentEvent, endEventNames[0]) || strequals(l_currentEvent, endEventNames[1]) ||
-            strequals(l_currentEvent, endEventNames[2]) || strequals(l_currentEvent, endEventNames[3]) ||
-            strequals(l_currentEvent, endEventNames[4]) || strequals(l_currentEvent, endEventNames[5]) ||
-            strequals(l_currentEvent, endEventNames[6]) || strequals(l_currentEvent, endEventNames[7])) {
+        if (strequals(l_currentEvent, sEndEventNames[0]) || strequals(l_currentEvent, sEndEventNames[1]) ||
+            strequals(l_currentEvent, sEndEventNames[2]) || strequals(l_currentEvent, sEndEventNames[3]) ||
+            strequals(l_currentEvent, sEndEventNames[4]) || strequals(l_currentEvent, sEndEventNames[5]) ||
+            strequals(l_currentEvent, sEndEventNames[6]) || strequals(l_currentEvent, sEndEventNames[7])) {
             field_0x1AB = true;
         }
     }
@@ -244,9 +244,9 @@ void dTgSwordBattleGame_c::setInBossRushFlag() {
 
 void dTgSwordBattleGame_c::saveCurrentTime(s32 time) const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    pMgr->setFlagOrCounterToValue(STORYFLAG_533, (time / 1000) / 60);
-    pMgr->setFlagOrCounterToValue(STORYFLAG_534, (time / 1000) % 60);
-    pMgr->setFlagOrCounterToValue(STORYFLAG_535, (time % 1000) / 10);
+    pMgr->setFlagOrCounterToValue(STORYFLAG_BOSSRUSH_CURRENT_MIN, (time / 1000) / 60);
+    pMgr->setFlagOrCounterToValue(STORYFLAG_BOSSRUSH_CURRENT_SEC, (time / 1000) % 60);
+    pMgr->setFlagOrCounterToValue(STORYFLAG_BOSSRUSH_CURRENT_MS, (time % 1000) / 10);
 }
 
 s32 dTgSwordBattleGame_c::getBossHighscore() const {
@@ -274,97 +274,97 @@ s32 dTgSwordBattleGame_c::getBossHighscore() const {
 
 s32 dTgSwordBattleGame_c::getGhirahim1Highscore() const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    u16 min = pMgr->getCounterOrFlag(STORYFLAG_536);
-    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_537);
-    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_538);
+    u16 min = pMgr->getCounterOrFlag(STORYFLAG_GHIRAHIM1_TIME_MIN);
+    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_GHIRAHIM1_TIME_SEC);
+    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_GHIRAHIM1_TIME_MS);
     return TIME_CONVERT(min, sec, msec);
 }
 
 s32 dTgSwordBattleGame_c::getScalderaHighscore() const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    u16 min = pMgr->getCounterOrFlag(STORYFLAG_593);
-    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_594);
-    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_595);
+    u16 min = pMgr->getCounterOrFlag(STORYFLAG_SCALDERA_TIME_MIN);
+    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_SCALDERA_TIME_SEC);
+    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_SCALDERA_TIME_MS);
     return TIME_CONVERT(min, sec, msec);
 }
 
 s32 dTgSwordBattleGame_c::getMolderachHighscore() const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    u16 min = pMgr->getCounterOrFlag(STORYFLAG_596);
-    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_597);
-    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_598);
+    u16 min = pMgr->getCounterOrFlag(STORYFLAG_MOLDERACH_TIME_MIN);
+    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_MOLDERACH_TIME_SEC);
+    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_MOLDERACH_TIME_MS);
     return TIME_CONVERT(min, sec, msec);
 }
 
 s32 dTgSwordBattleGame_c::getKoloktosHighscore() const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    u16 min = pMgr->getCounterOrFlag(STORYFLAG_602);
-    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_603);
-    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_604);
+    u16 min = pMgr->getCounterOrFlag(STORYFLAG_KOLOKTOS_TIME_MIN);
+    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_KOLOKTOS_TIME_SEC);
+    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_KOLOKTOS_TIME_MS);
     return TIME_CONVERT(min, sec, msec);
 }
 
 s32 dTgSwordBattleGame_c::getTentalusHighscore() const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    u16 min = pMgr->getCounterOrFlag(STORYFLAG_605);
-    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_606);
-    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_607);
+    u16 min = pMgr->getCounterOrFlag(STORYFLAG_TENTALUS_TIME_MIN);
+    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_TENTALUS_TIME_SEC);
+    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_TENTALUS_TIME_MS);
     return TIME_CONVERT(min, sec, msec);
 }
 
 s32 dTgSwordBattleGame_c::getGhirahim2Highscore() const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    u16 min = pMgr->getCounterOrFlag(STORYFLAG_608);
-    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_609);
-    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_610);
+    u16 min = pMgr->getCounterOrFlag(STORYFLAG_GHIRAHIM2_TIME_MIN);
+    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_GHIRAHIM2_TIME_SEC);
+    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_GHIRAHIM2_TIME_MS);
     return TIME_CONVERT(min, sec, msec);
 }
 
 s32 dTgSwordBattleGame_c::getImprisoned1Highscore() const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    u16 min = pMgr->getCounterOrFlag(STORYFLAG_599);
-    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_600);
-    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_601);
+    u16 min = pMgr->getCounterOrFlag(STORYFLAG_IMP1_TIME_MIN);
+    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_IMP1_TIME_SEC);
+    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_IMP1_TIME_MS);
     return TIME_CONVERT(min, sec, msec);
 }
 
 s32 dTgSwordBattleGame_c::getImprisoned2Highscore() const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    u16 min = pMgr->getCounterOrFlag(STORYFLAG_611);
-    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_612);
-    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_613);
+    u16 min = pMgr->getCounterOrFlag(STORYFLAG_IMP2_TIME_MIN);
+    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_IMP2_TIME_SEC);
+    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_IMP2_TIME_MS);
     return TIME_CONVERT(min, sec, msec);
 }
 
 s32 dTgSwordBattleGame_c::getImprisoned3Highscore() const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    u16 min = pMgr->getCounterOrFlag(STORYFLAG_614);
-    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_615);
-    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_616);
+    u16 min = pMgr->getCounterOrFlag(STORYFLAG_IMP3_TIME_MIN);
+    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_IMP3_TIME_SEC);
+    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_IMP3_TIME_MS);
     return TIME_CONVERT(min, sec, msec);
 }
 
 s32 dTgSwordBattleGame_c::getHordeHighscore() const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    u16 min = pMgr->getCounterOrFlag(STORYFLAG_617);
-    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_618);
-    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_619);
+    u16 min = pMgr->getCounterOrFlag(STORYFLAG_HORDE_TIME_MIN);
+    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_HORDE_TIME_SEC);
+    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_HORDE_TIME_MS);
     return TIME_CONVERT(min, sec, msec);
 }
 
 s32 dTgSwordBattleGame_c::getGhirahim3Highscore() const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    u16 min = pMgr->getCounterOrFlag(STORYFLAG_620);
-    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_621);
-    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_622);
+    u16 min = pMgr->getCounterOrFlag(STORYFLAG_GHIRAHIM3_TIME_MIN);
+    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_GHIRAHIM3_TIME_SEC);
+    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_GHIRAHIM3_TIME_MS);
     return TIME_CONVERT(min, sec, msec);
 }
 
 s32 dTgSwordBattleGame_c::getDemiseHighscore() const {
     StoryflagManager *pMgr = StoryflagManager::sInstance;
-    u16 min = pMgr->getCounterOrFlag(STORYFLAG_623);
-    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_624);
-    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_625);
+    u16 min = pMgr->getCounterOrFlag(STORYFLAG_DEMISE_TIME_MIN);
+    u16 sec = pMgr->getCounterOrFlag(STORYFLAG_DEMISE_TIME_SEC);
+    u16 msec = pMgr->getCounterOrFlag(STORYFLAG_DEMISE_TIME_MS);
     return TIME_CONVERT(min, sec, msec);
 }
 
