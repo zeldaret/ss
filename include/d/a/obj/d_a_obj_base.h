@@ -264,4 +264,6 @@ public:
     /* 0x14 */ u8 _14[0x2C - 0x14];
 };
 
+typedef dAcRef_c<dAcObjBase_c> dAcObjRef_c;
+
 #endif

@@ -2688,32 +2688,32 @@ enum StoryFlags_e {
     /** [(not implemented yet -- 6D05)]
      *  Story Flag #533 (0x0215) - JP from 805ACE33 0x01 to 805ACE33 0x20 / US from 805A9BB3 0x01 to 805A9BB3 0x20
      */
-    STORYFLAG_533,
+    STORYFLAG_BOSSRUSH_CURRENT_MIN,
 
     /** [(not implemented yet -- 7205)]
      *  Story Flag #534 (0x0216) - JP from 805ACE3D 0x01 to 805ACE3D 0x20 / US from 805A9BBD 0x01 to 805A9BBD 0x20
      */
-    STORYFLAG_534,
+    STORYFLAG_BOSSRUSH_CURRENT_SEC,
 
     /** [(not implemented yet -- 7266)]
      *  Story Flag #535 (0x0217) - JP from 805ACE3D 0x40 to 805ACE3C 0x10 / US from 805A9BBD 0x40 to 805A9BBC 0x10
      */
-    STORYFLAG_535,
+    STORYFLAG_BOSSRUSH_CURRENT_MS,
 
     /** [(not implemented yet -- 6D65)]
      *  Story Flag #536 (0x0218) - JP from 805ACE33 0x40 to 805ACE32 0x08 / US from 805A9BB3 0x40 to 805A9BB2 0x08
      */
-    STORYFLAG_536,
+    STORYFLAG_GHIRAHIM1_TIME_MIN,
 
     /** [(not implemented yet -- 7145)]
      *  Story Flag #537 (0x0219) - JP from 805ACE3B 0x10 to 805ACE3A 0x02 / US from 805A9BBB 0x10 to 805A9BBA 0x02
      */
-    STORYFLAG_537,
+    STORYFLAG_GHIRAHIM1_TIME_SEC,
 
     /** [(not implemented yet -- 7006)]
      *  Story Flag #538 (0x021A) - JP from 805ACE39 0x01 to 805ACE39 0x40 / US from 805A9BB9 0x01 to 805A9BB9 0x40
      */
-    STORYFLAG_538,
+    STORYFLAG_GHIRAHIM1_TIME_MS,
 
     /** [(not implemented yet -- 71A5)]
      *  Story Flag #539 (0x021B) - JP from 805ACE3A 0x04 to 805ACE3A 0x80 / US from 805A9BBA 0x04 to 805A9BBA 0x80
@@ -2883,7 +2883,7 @@ enum StoryFlags_e {
     /** [In Boss Rush mode (can be unset)]
      *  Story Flag #572 (0x023C) - JP 805ACD98 0x08 / US 805A9B18 0x08
      */
-    STORYFLAG_572,
+    STORYFLAG_BOSSRUSH_ACTIVE,
 
     /** [In redoing slient realm mode?]
      *  Story Flag #573 (0x023D) - JP 805ACD98 0x10 / US 805A9B18 0x10
@@ -2988,167 +2988,167 @@ enum StoryFlags_e {
     /** [(not implemented yet -- 6875)]
      *  Story Flag #593 (0x0251) - JP from 805ACE29 0x80 to 805ACE28 0x10 / US from 805A9BA9 0x80 to 805A9BA8 0x10
      */
-    STORYFLAG_593,
+    STORYFLAG_SCALDERA_TIME_MIN,
 
     /** [(not implemented yet -- 6705)]
      *  Story Flag #594 (0x0252) - JP from 805ACE27 0x01 to 805ACE27 0x20 / US from 805A9BA7 0x01 to 805A9BA7 0x20
      */
-    STORYFLAG_594,
+    STORYFLAG_SCALDERA_TIME_SEC,
 
     /** [(not implemented yet -- 6766)]
      *  Story Flag #595 (0x0253) - JP from 805ACE27 0x40 to 805ACE26 0x10 / US from 805A9BA7 0x40 to 805A9BA6 0x10
      */
-    STORYFLAG_595,
+    STORYFLAG_SCALDERA_TIME_MS,
 
     /** [(not implemented yet -- 6605)]
      *  Story Flag #596 (0x0254) - JP from 805ACE25 0x01 to 805ACE25 0x20 / US from 805A9BA5 0x01 to 805A9BA5 0x20
      */
-    STORYFLAG_596,
+    STORYFLAG_MOLDERACH_TIME_MIN,
 
     /** [(not implemented yet -- 6665)]
      *  Story Flag #597 (0x0255) - JP from 805ACE25 0x40 to 805ACE24 0x08 / US from 805A9BA5 0x40 to 805A9BA4 0x08
      */
-    STORYFLAG_597,
+    STORYFLAG_MOLDERACH_TIME_SEC,
 
     /** [(not implemented yet -- 6506)]
      *  Story Flag #598 (0x0256) - JP from 805ACE23 0x01 to 805ACE23 0x40 / US from 805A9BA3 0x01 to 805A9BA3 0x40
      */
-    STORYFLAG_598,
+    STORYFLAG_MOLDERACH_TIME_MS,
 
     /** [(not implemented yet -- 6575)]
      *  Story Flag #599 (0x0257) - JP from 805ACE23 0x80 to 805ACE22 0x10 / US from 805A9BA3 0x80 to 805A9BA2 0x10
      */
-    STORYFLAG_599,
+    STORYFLAG_IMP1_TIME_MIN,
 
     /** [(not implemented yet -- 6405)]
      *  Story Flag #600 (0x0258) - JP from 805ACE21 0x01 to 805ACE21 0x20 / US from 805A9BA1 0x01 to 805A9BA1 0x20
      */
-    STORYFLAG_600,
+    STORYFLAG_IMP1_TIME_SEC,
 
     /** [(not implemented yet -- 6466)]
      *  Story Flag #601 (0x0259) - JP from 805ACE21 0x40 to 805ACE20 0x10 / US from 805A9BA1 0x40 to 805A9BA0 0x10
      */
-    STORYFLAG_601,
+    STORYFLAG_IMP1_TIME_MS,
 
     /** [(not implemented yet -- 6305)]
      *  Story Flag #602 (0x025A) - JP from 805ACE1F 0x01 to 805ACE1F 0x20 / US from 805A9B9F 0x01 to 805A9B9F 0x20
      */
-    STORYFLAG_602,
+    STORYFLAG_KOLOKTOS_TIME_MIN,
 
     /** [(not implemented yet -- 6365)]
      *  Story Flag #603 (0x025B) - JP from 805ACE1F 0x40 to 805ACE1E 0x08 / US from 805A9B9F 0x40 to 805A9B9E 0x08
      */
-    STORYFLAG_603,
+    STORYFLAG_KOLOKTOS_TIME_SEC,
 
     /** [(not implemented yet -- 6206)]
      *  Story Flag #604 (0x025C) - JP from 805ACE1D 0x01 to 805ACE1D 0x40 / US from 805A9B9D 0x01 to 805A9B9D 0x40
      */
-    STORYFLAG_604,
+    STORYFLAG_KOLOKTOS_TIME_MS,
 
     /** [(not implemented yet -- 6275)]
      *  Story Flag #605 (0x025D) - JP from 805ACE1D 0x80 to 805ACE1C 0x10 / US from 805A9B9D 0x80 to 805A9B9C 0x10
      */
-    STORYFLAG_605,
+    STORYFLAG_TENTALUS_TIME_MIN,
 
     /** [(not implemented yet -- 6105)]
      *  Story Flag #606 (0x025E) - JP from 805ACE1B 0x01 to 805ACE1B 0x20 / US from 805A9B9B 0x01 to 805A9B9B 0x20
      */
-    STORYFLAG_606,
+    STORYFLAG_TENTALUS_TIME_SEC,
 
     /** [(not implemented yet -- 6166)]
      *  Story Flag #607 (0x025F) - JP from 805ACE1B 0x40 to 805ACE1A 0x10 / US from 805A9B9B 0x40 to 805A9B9A 0x10
      */
-    STORYFLAG_607,
+    STORYFLAG_TENTALUS_TIME_MS,
 
     /** [(not implemented yet -- 6005)]
      *  Story Flag #608 (0x0260) - JP from 805ACE19 0x01 to 805ACE19 0x20 / US from 805A9B99 0x01 to 805A9B99 0x20
      */
-    STORYFLAG_608,
+    STORYFLAG_GHIRAHIM2_TIME_MIN,
 
     /** [(not implemented yet -- 6065)]
      *  Story Flag #609 (0x0261) - JP from 805ACE19 0x40 to 805ACE18 0x08 / US from 805A9B99 0x40 to 805A9B98 0x08
      */
-    STORYFLAG_609,
+    STORYFLAG_GHIRAHIM2_TIME_SEC,
 
     /** [(not implemented yet -- 5F06)]
      *  Story Flag #610 (0x0262) - JP from 805ACE17 0x01 to 805ACE17 0x40 / US from 805A9B97 0x01 to 805A9B97 0x40
      */
-    STORYFLAG_610,
+    STORYFLAG_GHIRAHIM2_TIME_MS,
 
     /** [(not implemented yet -- 5F75)]
      *  Story Flag #611 (0x0263) - JP from 805ACE17 0x80 to 805ACE16 0x10 / US from 805A9B97 0x80 to 805A9B96 0x10
      */
-    STORYFLAG_611,
+    STORYFLAG_IMP2_TIME_MIN,
 
     /** [(not implemented yet -- 5E05)]
      *  Story Flag #612 (0x0264) - JP from 805ACE15 0x01 to 805ACE15 0x20 / US from 805A9B95 0x01 to 805A9B95 0x20
      */
-    STORYFLAG_612,
+    STORYFLAG_IMP2_TIME_SEC,
 
     /** [(not implemented yet -- 5E66)]
      *  Story Flag #613 (0x0265) - JP from 805ACE15 0x40 to 805ACE14 0x10 / US from 805A9B95 0x40 to 805A9B94 0x10
      */
-    STORYFLAG_613,
+    STORYFLAG_IMP2_TIME_MS,
 
     /** [(not implemented yet -- 5D05)]
      *  Story Flag #614 (0x0266) - JP from 805ACE13 0x01 to 805ACE13 0x20 / US from 805A9B93 0x01 to 805A9B93 0x20
      */
-    STORYFLAG_614,
+    STORYFLAG_IMP3_TIME_MIN,
 
     /** [(not implemented yet -- 5D65)]
      *  Story Flag #615 (0x0267) - JP from 805ACE13 0x40 to 805ACE12 0x08 / US from 805A9B93 0x40 to 805A9B92 0x08
      */
-    STORYFLAG_615,
+    STORYFLAG_IMP3_TIME_SEC,
 
     /** [(not implemented yet -- 5C06)]
      *  Story Flag #616 (0x0268) - JP from 805ACE11 0x01 to 805ACE11 0x40 / US from 805A9B91 0x01 to 805A9B91 0x40
      */
-    STORYFLAG_616,
+    STORYFLAG_IMP3_TIME_MS,
 
     /** [(not implemented yet -- 5C75)]
      *  Story Flag #617 (0x0269) - JP from 805ACE11 0x80 to 805ACE10 0x10 / US from 805A9B91 0x80 to 805A9B90 0x10
      */
-    STORYFLAG_617,
+    STORYFLAG_HORDE_TIME_MIN,
 
     /** [(not implemented yet -- 5B05)]
      *  Story Flag #618 (0x026A) - JP from 805ACE0F 0x01 to 805ACE0F 0x20 / US from 805A9B8F 0x01 to 805A9B8F 0x20
      */
-    STORYFLAG_618,
+    STORYFLAG_HORDE_TIME_SEC,
 
     /** [(not implemented yet -- 5B66)]
      *  Story Flag #619 (0x026B) - JP from 805ACE0F 0x40 to 805ACE0E 0x10 / US from 805A9B8F 0x40 to 805A9B8E 0x10
      */
-    STORYFLAG_619,
+    STORYFLAG_HORDE_TIME_MS,
 
     /** [(not implemented yet -- 5A05)]
      *  Story Flag #620 (0x026C) - JP from 805ACE0D 0x01 to 805ACE0D 0x20 / US from 805A9B8D 0x01 to 805A9B8D 0x20
      */
-    STORYFLAG_620,
+    STORYFLAG_GHIRAHIM3_TIME_MIN,
 
     /** [(not implemented yet -- 5A65)]
      *  Story Flag #621 (0x026D) - JP from 805ACE0D 0x40 to 805ACE0C 0x08 / US from 805A9B8D 0x40 to 805A9B8C 0x08
      */
-    STORYFLAG_621,
+    STORYFLAG_GHIRAHIM3_TIME_SEC,
 
     /** [(not implemented yet -- 5906)]
      *  Story Flag #622 (0x026E) - JP from 805ACE0B 0x01 to 805ACE0B 0x40 / US from 805A9B8B 0x01 to 805A9B8B 0x40
      */
-    STORYFLAG_622,
+    STORYFLAG_GHIRAHIM3_TIME_MS,
 
     /** [(not implemented yet -- 5975)]
      *  Story Flag #623 (0x026F) - JP from 805ACE0B 0x80 to 805ACE0A 0x10 / US from 805A9B8B 0x80 to 805A9B8A 0x10
      */
-    STORYFLAG_623,
+    STORYFLAG_DEMISE_TIME_MIN,
 
     /** [(not implemented yet -- 5805)]
      *  Story Flag #624 (0x0270) - JP from 805ACE09 0x01 to 805ACE09 0x20 / US from 805A9B89 0x01 to 805A9B89 0x20
      */
-    STORYFLAG_624,
+    STORYFLAG_DEMISE_TIME_SEC,
 
     /** [(not implemented yet -- 5866)]
      *  Story Flag #625 (0x0271) - JP from 805ACE09 0x40 to 805ACE08 0x10 / US from 805A9B89 0x40 to 805A9B88 0x10
      */
-    STORYFLAG_625,
+    STORYFLAG_DEMISE_TIME_MS,
 
     /** [(not implemented yet -- 550D)]
      *  Story Flag #626 (0x0272) - JP from 805ACE03 0x01 to 805ACE02 0x20 / US from 805A9B83 0x01 to 805A9B82 0x20
@@ -3538,17 +3538,17 @@ enum StoryFlags_e {
     /** [Sets when you refight imp 1 (Sealed Grounds layer 2)]
      *  Story Flag #703 (0x02BF) - JP 805ACDA2 0x08 / US 805A9B22 0x08
      */
-    STORYFLAG_703,
+    STORYFLAG_IMPRISONED1_BOSSRUSH,
 
     /** [Sets when you refight imp 2 (Sealed Grounds layer 3)]
      *  Story Flag #704 (0x02C0) - JP 805ACDA2 0x10 / US 805A9B22 0x10
      */
-    STORYFLAG_704,
+    STORYFLAG_IMPRISONED2_BOSSRUSH,
 
     /** [Sets when you refight imp3 (Sealed Grounds layer 4)]
      *  Story Flag #705 (0x02C1) - JP 805ACDA2 0x20 / US 805A9B22 0x20
      */
-    STORYFLAG_705,
+    STORYFLAG_IMPRISONED3_BOSSRUSH,
 
     /** [Minecart Escort done (Lanayru Gorge layer 2)]
      *  Story Flag #706 (0x02C2) - JP 805ACDA2 0x40 / US 805A9B22 0x40
@@ -3653,7 +3653,7 @@ enum StoryFlags_e {
     /** [[Gets Set in a refight](Hylia's Realm layer 4)]
      *  Story Flag #726 (0x02D6) - JP 805ACDA4 0x40 / US 805A9B24 0x40
      */
-    STORYFLAG_726,
+    STORYFLAG_DEMISE_BOSSRUSH,
 
     /** [Talking to Fi after filling Wallet]
      *  Story Flag #727 (0x02D7) - JP 805ACDA4 0x80 / US 805A9B24 0x80

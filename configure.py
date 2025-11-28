@@ -2877,7 +2877,7 @@ config.libs = [
     Rel(Matching, "d_t_action", "REL/d/t/d_t_action.cpp"),
     Rel(NonMatching, "d_t_at0", "REL/d/t/d_t_at0.cpp"),
     Rel(NonMatching, "d_t_auto_message", "REL/d/t/d_t_auto_message.cpp"),
-    Rel(NonMatching, "d_t_barrel", "REL/d/t/d_t_barrel.cpp"),
+    Rel(Matching, "d_t_barrel", "REL/d/t/d_t_barrel.cpp"),
     Rel(Matching, "d_t_barrel_pos", "REL/d/t/d_t_barrel_pos.cpp"),
     Rel(NonMatching, "d_t_bb_quake", "REL/d/t/d_t_bb_quake.cpp"),
     Rel(NonMatching, "d_t_bcal_tag", "REL/d/t/d_t_bcal_tag.cpp"),
@@ -2957,8 +2957,8 @@ config.libs = [
     Rel(NonMatching, "d_t_sparks2", "REL/d/t/d_t_sparks2.cpp"),
     Rel(NonMatching, "d_t_sparks", "REL/d/t/d_t_sparks.cpp"),
     Rel(NonMatching, "d_t_spore", "REL/d/t/d_t_spore.cpp"),
-    Rel(NonMatching, "d_t_stream", "REL/d/t/d_t_stream.cpp"),
-    Rel(NonMatching, "d_t_sword_battle_game", "REL/d/t/d_t_sword_battle_game.cpp"),
+    Rel(Matching, "d_t_stream", "REL/d/t/d_t_stream.cpp"),
+    Rel(Matching, "d_t_sword_battle_game", "REL/d/t/d_t_sword_battle_game.cpp"),
     Rel(Matching, "d_t_sw_area", "REL/d/t/d_t_sw_area.cpp"),
     Rel(Matching, "d_t_tackle", "REL/d/t/d_t_tackle.cpp"),
     Rel(Matching, "d_t_telop", "REL/d/t/d_t_telop.cpp"),
@@ -2966,7 +2966,7 @@ config.libs = [
     Rel(Matching, "d_t_time_area_check", "REL/d/t/d_t_time_area_check.cpp"),
     Rel(Matching, "d_t_time_door_beam", "REL/d/t/d_t_time_door_beam.cpp"),
     Rel(Matching, "d_t_touch", "REL/d/t/d_t_touch.cpp"),
-    Rel(NonMatching, "d_t_tumble_weed", "REL/d/t/d_t_tumble_weed.cpp"),
+    Rel(Matching, "d_t_tumble_weed", "REL/d/t/d_t_tumble_weed.cpp"),
 ]
 
 

@@ -52,6 +52,14 @@ public:
     BOOL isLinked() const {
         return get() != nullptr;
     }
+
+    dAcRef_c<T> *getPrev() const {
+        return static_cast<dAcRef_c<T> *>(cListNd_c::getPrev());
+    }
+
+    dAcRef_c<T> *getNext() const {
+        return static_cast<dAcRef_c<T> *>(cListNd_c::getNext());
+    }
 };
 
 // Ghidra: ActorBase
