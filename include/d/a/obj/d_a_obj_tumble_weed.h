@@ -59,6 +59,8 @@ public:
     STATE_FUNC_DECLARE(dAcOTumbleWeed_c, Wait);
     STATE_FUNC_DECLARE(dAcOTumbleWeed_c, Slope);
 
+    STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dTgTumbleWeed_c);
+
 private:
     /* 0x330 */ nw4r::g3d::ResFile mResFile;
     /* 0x334 */ m3d::smdl_c mMdl;

@@ -18,6 +18,8 @@ public:
     STATE_FUNC_DECLARE(dTgTumbleWeed_c, AreaIn);
     STATE_FUNC_DECLARE(dTgTumbleWeed_c, Wind);
 
+    STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dTgTumbleWeed_c);
+
 private:
     bool shouldSpawnTumbleweed();
     bool shouldDoWind();
@@ -25,6 +27,7 @@ private:
     void getWind(mVec3_c &);
 
     STATE_MGR_DECLARE(dTgTumbleWeed_c);
+
     u16 mSpawnTimer;
     u16 padding;
     u16 mWindTimer;

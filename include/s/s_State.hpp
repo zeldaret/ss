@@ -38,6 +38,10 @@
     void changeState(const sStateIDIf_c &value) {                                                                      \
         mStateMgr.changeState(value);                                                                                  \
     }
+#define STATE_MGR_DEFINE_UTIL_EXECUTESTATE(class_name)                                                                 \
+    void executeState() {                                                                                              \
+        mStateMgr.executeState();                                                                                      \
+    }
 
 #define STATE_MGR_DEFINE_UTIL_ISSTATE(class_name)                                                                      \
     bool isState(const sFStateID_c<class_name> &value) const {                                                         \
