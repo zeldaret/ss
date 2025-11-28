@@ -310,6 +310,10 @@ public:
         return cM::atan2s(x, y);
     }
 
+    s16 ang2() const {
+        return cM::atan2s(y, x);
+    }
+
     mVec2_c operator*(f32 f) const {
         return mVec2_c(x * f, y * f);
     }

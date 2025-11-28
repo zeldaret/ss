@@ -475,6 +475,11 @@ d/lyt/d2d.cpp:
 d/lyt/d_lyt_draw_mark.cpp:
 	.text       start:0x800ACAC0 end:0x800AE958 align:16
 	.ctors      start:0x804DB6CC end:0x804DB6D0
+	.rodata     start:0x804E3850 end:0x804E39E0
+	.data       start:0x80510088 end:0x80510780
+	.sdata      start:0x805722B8 end:0x805722C0
+	.sdata2     start:0x805797B0 end:0x805797D0
+	.bss        start:0x805A6140 end:0x805A6370
 
 d/lyt/d_textbox.cpp:
 	.text       start:0x800AE960 end:0x800B1628 align:16
@@ -549,6 +554,7 @@ toBeSorted/d_flow_mgr.cpp:
 
 d/d_lyt_base.cpp:
 	.text       start:0x800C4480 end:0x800C4690 align:16
+	.data       start:0x80511B30 end:0x80511B80
 
 toBeSorted/unk_npc_path_stuff_1.cpp:
 	.text       start:0x800C4690 end:0x800C731C align:16

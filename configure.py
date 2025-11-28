@@ -492,7 +492,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/d_path.cpp"),
             Object(NonMatching, "toBeSorted/d_area.cpp"),
             Object(Matching, "d/lyt/d2d.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_draw_mark.cpp"),
+            Object(Matching, "d/lyt/d_lyt_draw_mark.cpp"),
             Object(Matching, "d/lyt/d_textbox.cpp"),
             Object(Matching, "d/lyt/d_window.cpp"),
             Object(Matching, "d/d_lyt_hio.cpp"),
