@@ -2957,7 +2957,7 @@ config.libs = [
     Rel(NonMatching, "d_t_sparks2", "REL/d/t/d_t_sparks2.cpp"),
     Rel(NonMatching, "d_t_sparks", "REL/d/t/d_t_sparks.cpp"),
     Rel(NonMatching, "d_t_spore", "REL/d/t/d_t_spore.cpp"),
-    Rel(NonMatching, "d_t_stream", "REL/d/t/d_t_stream.cpp"),
+    Rel(Matching, "d_t_stream", "REL/d/t/d_t_stream.cpp"),
     Rel(NonMatching, "d_t_sword_battle_game", "REL/d/t/d_t_sword_battle_game.cpp"),
     Rel(Matching, "d_t_sw_area", "REL/d/t/d_t_sw_area.cpp"),
     Rel(Matching, "d_t_tackle", "REL/d/t/d_t_tackle.cpp"),
