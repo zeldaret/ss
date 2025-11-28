@@ -24,11 +24,9 @@ public:
 
     bool checkInEvent(const char *eventName);
 
-    static bool checkInBossRushFlag();
+    bool checkInBossRushFlag();
     void unsetInBossRushFlag();
     void setInBossRushFlag();
-
-    static bool checkInBossRushMinigame();
 
     void unsetEarlyFightFlags() const;
     void unsetImprisonedFightFlags() const;

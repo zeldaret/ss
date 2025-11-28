@@ -28,6 +28,13 @@ public:
     static void destroy();
     static void execute();
 
+    static MinigameManager *GetInstance() {
+        return sInstance;
+    }
+    static bool checkInBossRush() {
+        return isInMinigameState(BOSS_RUSH);
+    }
+
 private:
     MinigameManager() {}
     virtual ~MinigameManager() {}

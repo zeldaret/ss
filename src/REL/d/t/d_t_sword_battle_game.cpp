@@ -5,7 +5,6 @@
 #include "d/d_sc_game.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/lyt/d_lyt_mini_game.h"
-#include "egg/prim/eggBitFlag.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "sized_string.h"
@@ -24,17 +23,13 @@ STATE_VIRTUAL_DEFINE(dTgSwordBattleGame_c, Manage);
 SPECIAL_ACTOR_PROFILE(TAG_SWORD_BATTLE_GAME, dTgSwordBattleGame_c, fProfile::TAG_SWORD_BATTLE_GAME, 0x6F, 0, 4);
 
 int dTgSwordBattleGame_c::create() {
-    if (!checkInBossRushFlag() && !checkInBossRushMinigame()) {
+    if (!checkInBossRushFlag() && !MinigameManager::GetInstance()->checkInBossRush()) {
         return FAILED;
     }
 
     init();
     mStateMgr.changeState(StateID_Wait);
     return SUCCEEDED;
-}
-// This needs to be emitted before the change state function...
-bool dTgSwordBattleGame_c::checkInBossRushMinigame() {
-    return MinigameManager::isInMinigameState(MinigameManager::BOSS_RUSH);
 }
 
 int dTgSwordBattleGame_c::doDelete() {
@@ -132,7 +127,7 @@ int dTgSwordBattleGame_c::draw() {
 
 void dTgSwordBattleGame_c::initializeState_Wait() {}
 void dTgSwordBattleGame_c::executeState_Wait() {
-    if (checkInBossRushMinigame()) {
+    if (MinigameManager::GetInstance()->checkInBossRush()) {
         if (field_0x1A8) {
             mStateMgr.changeState(StateID_Manage);
         } else {
@@ -167,7 +162,7 @@ void dTgSwordBattleGame_c::executeState_Manage() {
 void dTgSwordBattleGame_c::finalizeState_Manage() {}
 
 void dTgSwordBattleGame_c::init() {
-    if (checkInBossRushMinigame()) {
+    if (MinigameManager::GetInstance()->checkInBossRush()) {
         createBase(fProfile::LYT_MINI_GAME, this, 8, OTHER);
     }
     mTimer.vt_0x0C();
