@@ -181,6 +181,11 @@ public:
         const char *name, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
         u32 params2, u16 id, s8 viewclipId
     );
+    static dAcObjBase_c *create(
+        dAcObjBase_c *, fProfile::PROFILE_NAME_e actorId, u32 params1, const mVec3_c *pos, const mAng3_c *rot,
+        const mVec3_c *scale, u32 params2, u32 roomId
+    );
+
     static dAcObjBase_c *findObject(fProfile::PROFILE_NAME_e actorId, fLiNdBa_c *refList, dAcObjBase_c *parent);
     static dAcObjBase_c *getNextObject(fLiMgBa_c *ref, dAcObjBase_c *parent);
     bool isPlayer();

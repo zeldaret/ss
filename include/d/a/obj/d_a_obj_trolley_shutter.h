@@ -10,6 +10,8 @@ public:
     dAcOTrolleyShutter_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dAcOTrolleyShutter_c() {}
 
+    virtual bool canOpen() override;
+
     STATE_FUNC_DECLARE(dAcOTrolleyShutter_c, Wait);
     STATE_FUNC_DECLARE(dAcOTrolleyShutter_c, OpenEvent);
 

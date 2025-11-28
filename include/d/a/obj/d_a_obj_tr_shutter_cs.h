@@ -10,6 +10,8 @@ public:
     dAcOTrlyShtrChgScn_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dAcOTrlyShtrChgScn_c() {}
 
+    virtual bool canOpen() override;
+
     STATE_FUNC_DECLARE(dAcOTrlyShtrChgScn_c, Wait);
     STATE_FUNC_DECLARE(dAcOTrlyShtrChgScn_c, OpenEvent);
 

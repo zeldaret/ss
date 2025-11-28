@@ -10,6 +10,8 @@ public:
     dAcOShutter_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dAcOShutter_c() {}
 
+    virtual bool canOpen() override;
+
     STATE_FUNC_DECLARE(dAcOShutter_c, Wait);
     STATE_FUNC_DECLARE(dAcOShutter_c, Open);
     STATE_FUNC_DECLARE(dAcOShutter_c, Close);

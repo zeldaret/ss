@@ -201,7 +201,7 @@ void LytMeterTimerPart1_c::initOutAnim() {
 }
 
 void LytMeterTimerPart1_c::startInAnim() {
-    if (dLytMeter_c::GetMain()->fn_800D5650()) {
+    if (dLytMeter_c::GetMain()->isInModeMap()) {
         mAnm[TIMER_01_ANIM_MAP_POSITION].setFrame(1.0f);
     } else {
         mAnm[TIMER_01_ANIM_MAP_POSITION].setFrame(0.0f);
@@ -620,7 +620,7 @@ void LytMeterTimerPart2_c::initChangeFruitAnim() {
 }
 
 void LytMeterTimerPart2_c::startInAnim() {
-    if (dLytMeter_c::GetMain()->fn_800D5650()) {
+    if (dLytMeter_c::GetMain()->isInModeMap()) {
         mAnm[TIMER_02_ANIM_MAP_POSITION].setFrame(1.0f);
     } else {
         mAnm[TIMER_02_ANIM_MAP_POSITION].setFrame(0.0f);
@@ -1365,7 +1365,7 @@ void dLytMeterTimer_c::startIn() {
     mpPart2->stopOutAnim();
     mpPart1->startInAnim();
     mpPart2->startInAnim();
-    if (dLytMeter_c::GetMain()->fn_800D5650()) {
+    if (dLytMeter_c::GetMain()->isInModeMap()) {
         if (mStateMgr.isState(StateID_ChangeSiren)) {
             mpPart2->stopFlowerLoopAnim();
             mpPart2->resetFlowerLoopAnim();

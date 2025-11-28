@@ -4598,7 +4598,7 @@ void dLytMapMain_c::initializeState_Out() {
     if (mMapEvent == MAP_EVENT_SAVE_OBJ) {
         mPopupInfo.mStateMgr.changeState(StateID_Out);
     }
-    dLytMeter_c::GetInstance()->setMeterField_0x13750(0);
+    dLytMeter_c::GetInstance()->setMeterMode(dLytMeterMain_c::MODE_MAP_INIT);
     if (mDoCameraTransition || mMapEvent == MAP_EVENT_MAP_INTRO) {
         mpInOutAnmGroup = &mAnmGroups[MAP_MAIN_ANIM_OUT];
     } else {

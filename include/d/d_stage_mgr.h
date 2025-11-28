@@ -106,7 +106,6 @@ public:
     static dStageMgr_c *GetInstance() {
         return sInstance;
     }
-
     EGG::CpuTexture *getField_0x8898() {
         return field_0x8898;
     }
@@ -225,7 +224,7 @@ private:
     // ...
     u8 ___[438];
     /* 0x8898 */ EGG::CpuTexture *field_0x8898;
-    
+
     u8 _0x889C[4];
 
     /* 0x88A0 */ u32 field_0x88A0;

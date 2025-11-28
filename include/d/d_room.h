@@ -111,6 +111,9 @@ public:
     bool checkFlag(u32 flag) {
         return mFlags & flag;
     }
+    void setFlag(u8 flag) {
+        mFlags |= flag;
+    }
 
     void drawOnMapIfVisible(mMtx_c *mtx, int param);
     void getBounds(mVec3_c *min, mVec3_c *max) const;

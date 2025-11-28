@@ -125,6 +125,9 @@ public:
 public:
     dAcBase_c();
 
+    void setSubtype(u8 sub) {
+        mSubtype = sub;
+    }
     void setPosition(const mVec3_c &r) {
         mPosition = r;
     }

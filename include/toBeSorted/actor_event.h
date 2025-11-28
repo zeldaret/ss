@@ -18,6 +18,7 @@ public:
     bool isAdvance();
     int getSomeEventRelatedNumber();
 
+    int getSingleShortData(int *result, u32 code, u32);
     int getSingleIntData(int *result, u32 code, u32);
     int getSingleFloatData(f32 *result, u32 code, u32);
     int getSingleVecData(mVec3_c *result, u32 code, u32);

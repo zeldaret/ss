@@ -6,6 +6,11 @@ STATE_DEFINE(dAcOShutter_c, Wait);
 STATE_DEFINE(dAcOShutter_c, Open);
 STATE_DEFINE(dAcOShutter_c, Close);
 
+bool dAcOShutter_c::canOpen() {
+    // Not implemented - Used to emit dtor
+    return true;
+}
+
 void dAcOShutter_c::initializeState_Wait() {}
 void dAcOShutter_c::executeState_Wait() {}
 void dAcOShutter_c::finalizeState_Wait() {}

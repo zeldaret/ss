@@ -34,7 +34,7 @@ void dLytMeterCrossBtnParts_c::initializeState_Wait() {
     mOnDelay = 15;
 }
 void dLytMeterCrossBtnParts_c::executeState_Wait() {
-    if (dLytMeter_c::GetMain()->fn_800D5650()) {
+    if (dLytMeter_c::GetMain()->isInModeMap()) {
         mOnDelay = 0;
     }
 
@@ -150,7 +150,7 @@ void dLytMeterCrossBtnParts_c::execute(bool bIsVisible) {
         return;
     }
 
-    if (dLytMeter_c::GetInstance()->getMeterField_0x13750() == 0) {
+    if (dLytMeter_c::GetInstance()->getMeterMode() == dLytMeterMain_c::MODE_MAP_INIT) {
         if (mIndex == CROSS_BTN_PART_TOP) {
             LytDoButtonRelated::setCrossTop(LytDoButtonRelated::ACT_IE_NONE, true);
         } else if (mIndex == CROSS_BTN_PART_DOWN) {

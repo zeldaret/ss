@@ -18,6 +18,10 @@ STATE_DEFINE(dAcOdoorBoss_c, Close);
 STATE_DEFINE(dAcOdoorBoss_c, Idle);
 STATE_DEFINE(dAcOdoorBoss_c, BeforeTimeShift);
 
+bool dAcOdoorBoss_c::canOpen() {
+    // Not implemented - Used to emit dtor
+    return true;
+}
 void dAcOdoorBoss_c::initializeState_UnlockWait() {}
 void dAcOdoorBoss_c::executeState_UnlockWait() {}
 void dAcOdoorBoss_c::finalizeState_UnlockWait() {}

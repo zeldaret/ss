@@ -581,7 +581,7 @@ void dLytPauseMgr_c::executeState_None() {
         mMain.requestIn();
         mStateMgr.changeState(StateID_In);
         dBase_c::s_NextExecuteControlFlags |= BASE_PROP_0x1;
-        dLytMeter_c::GetInstance()->setMeterField_0x13750(3);
+        dLytMeter_c::GetInstance()->setMeterMode(dLytMeterMain_c::MODE_PAUSE);
         dLytControlGame_c *lytControl = dLytControlGame_c::getInstance();
         if (lytControl->isPauseDemo()) {
             mSavedPauseDisp = lytControl->getCurrentPauseDisp();

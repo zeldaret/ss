@@ -10,6 +10,8 @@ public:
     dAcOdoorBoss_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dAcOdoorBoss_c() {}
 
+    virtual bool canOpen() override;
+
     STATE_FUNC_DECLARE(dAcOdoorBoss_c, UnlockWait);
     STATE_FUNC_DECLARE(dAcOdoorBoss_c, CorrectKey);
     STATE_FUNC_DECLARE(dAcOdoorBoss_c, KeyInsertInitialInterval);
