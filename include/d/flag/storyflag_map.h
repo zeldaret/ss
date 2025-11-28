@@ -2883,7 +2883,7 @@ enum StoryFlags_e {
     /** [In Boss Rush mode (can be unset)]
      *  Story Flag #572 (0x023C) - JP 805ACD98 0x08 / US 805A9B18 0x08
      */
-    STORYFLAG_572,
+    STORYFLAG_BOSSRUSH_ACTIVE,
 
     /** [In redoing slient realm mode?]
      *  Story Flag #573 (0x023D) - JP 805ACD98 0x10 / US 805A9B18 0x10
@@ -3538,17 +3538,17 @@ enum StoryFlags_e {
     /** [Sets when you refight imp 1 (Sealed Grounds layer 2)]
      *  Story Flag #703 (0x02BF) - JP 805ACDA2 0x08 / US 805A9B22 0x08
      */
-    STORYFLAG_703,
+    STORYFLAG_IMPRISONED1_BOSSRUSH,
 
     /** [Sets when you refight imp 2 (Sealed Grounds layer 3)]
      *  Story Flag #704 (0x02C0) - JP 805ACDA2 0x10 / US 805A9B22 0x10
      */
-    STORYFLAG_704,
+    STORYFLAG_IMPRISONED2_BOSSRUSH,
 
     /** [Sets when you refight imp3 (Sealed Grounds layer 4)]
      *  Story Flag #705 (0x02C1) - JP 805ACDA2 0x20 / US 805A9B22 0x20
      */
-    STORYFLAG_705,
+    STORYFLAG_IMPRISONED3_BOSSRUSH,
 
     /** [Minecart Escort done (Lanayru Gorge layer 2)]
      *  Story Flag #706 (0x02C2) - JP 805ACDA2 0x40 / US 805A9B22 0x40
@@ -3653,7 +3653,7 @@ enum StoryFlags_e {
     /** [[Gets Set in a refight](Hylia's Realm layer 4)]
      *  Story Flag #726 (0x02D6) - JP 805ACDA4 0x40 / US 805A9B24 0x40
      */
-    STORYFLAG_726,
+    STORYFLAG_DEMISE_BOSSRUSH,
 
     /** [Talking to Fi after filling Wallet]
      *  Story Flag #727 (0x02D7) - JP 805ACDA4 0x80 / US 805A9B24 0x80
