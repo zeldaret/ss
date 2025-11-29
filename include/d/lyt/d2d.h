@@ -5,6 +5,7 @@
 #include "m/m2d.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "nw4r/lyt/lyt_picture.h"
+#include "nw4r/lyt/lyt_types.h"
 
 class dTextBox_c;
 class dWindow_c;
@@ -258,6 +259,11 @@ struct AnmGroupBase_c {
 
     inline bool isEnabled() const {
         return (mFlags & ANMGROUP_FLAG_ENABLE) != 0;
+    }
+
+    // Not sure
+    inline u8 isEnabled_() const {
+        return (mFlags & ANMGROUP_FLAG_ENABLE);
     }
 
     inline bool isStop() const {
