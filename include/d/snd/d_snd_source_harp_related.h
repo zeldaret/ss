@@ -10,6 +10,7 @@ public:
 
     /* 0x18C */ virtual void postCalc() override;
     /* 0x1D0 */ virtual void setPause(bool flag, int fadeFrames) override;
+    virtual bool harpSoundRelated(); // fn_80390FE0
 
     /* 0x1EC */ virtual UNKWORD d_s_harp_vt_0x1EC() const {
         return 0;
