@@ -483,7 +483,7 @@ bool dSndSmallEffectMgr_c::playSirenCountdownSound(s32 timer) {
     return ok;
 }
 
-bool dSndSmallEffectMgr_c::playMinigameCountdownSound() {
+bool dSndSmallEffectMgr_c::playMinigameCountdownSound(s32 timer) {
     return playSoundInternal(SE_S_MG_COUNT_DOWN_1);
 }
 

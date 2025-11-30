@@ -56,7 +56,7 @@ public:
     bool holdDowsingNearestSound();
 
     bool playSirenCountdownSound(s32 timer);
-    bool playMinigameCountdownSound();
+    bool playMinigameCountdownSound(s32 timer); ///< timer is unused
     bool playMinigameTimeUpSound(s32 timer);
     bool playMinigameStartSound();
     bool playMinigameFinishSound();
