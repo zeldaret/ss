@@ -10,6 +10,7 @@
 #include "d/snd/d_snd_wzsound.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_pane.h"
+#include "nw4r/lyt/lyt_types.h"
 #include "nw4r/math/math_arithmetic.h"
 #include "nw4r/math/math_types.h"
 #include "toBeSorted/d_d3d.h"
@@ -1284,6 +1285,7 @@ void dLytMiniGameTime_c::resetFinish() {
         mAnm[i + TIME_ANIM_FINISH_OFFSET].setForwardOnce();
         mAnm[i + TIME_ANIM_FINISH_OFFSET].setToStart();
         mAnm[i + TIME_ANIM_FINISH_OFFSET].setAnimEnable(true);
+        // NOTE: Unnecessary calc here?
         mLyt.calc();
     }
 
@@ -1834,6 +1836,13 @@ static const char *sScorePanes[] = {
     "P_position_00", "P_position_01",    "P_position_02", "P_position_03", "P_position_04",
 };
 
+#define SCORE_PANE_CENTER 0
+#define SCORE_PANE_POSITION_ALL 1
+#define SCORE_PANE_POSITION 2
+#define SCORE_PANE_UNIT 3
+
+#define SCORE_PANE_P_POSITION_0 15
+
 #define SCORE_NUM_PANES 20
 
 bool dLytMiniGameScore_c::build(d2d::ResAccIf_c *resAcc) {
@@ -1888,7 +1897,7 @@ bool dLytMiniGameScore_c::execute() {
             field_0x804 = false;
             field_0x829 = false;
         } else {
-            fn_80292030(field_0x810);
+            increaseScore(field_0x810);
         }
     }
 
@@ -1897,69 +1906,73 @@ bool dLytMiniGameScore_c::execute() {
         if (!field_0x816) {
             switch (field_0x818) {
                 case 0:
-                    if (fn_80291E50()) {
-                        fn_80291960();
+                    if (hasIncreasedScore()) {
+                        startGetScore();
                     }
                     break;
                 case 2:
                     if (field_0x829) {
-                        if (fn_80291E50()) {
-                            fn_80291960();
+                        if (hasIncreasedScore()) {
+                            startGetScore();
                         }
-                        fn_80291E90();
+
+                        if (hasDecreasedScore()) {
+                            // nothing
+                        }
+
                         field_0x829 = false;
                     }
                     break;
                 case 1:
-                    if (field_0x7D8 != 1) {
-                        if (fn_80291E50()) {
-                            fn_80291960();
+                    if (mScore != 1) {
+                        if (hasIncreasedScore()) {
+                            startGetScore();
                         }
                     }
                     break;
                 case 3:
                 case 4:
-                    if (fn_80291E50()) {
-                        fn_80291960();
+                    if (hasIncreasedScore()) {
+                        startGetScore();
                     }
                     break;
             }
         }
 
-        if (fn_80292A50()) {
-            fn_80292910();
+        if (isInEndReached()) {
+            stopIn();
             field_0x814 = true;
         }
 
-        if (fn_80292AA0()) {
-            fn_80292920();
-            fn_80292A40();
-            fn_80292880();
+        if (isOutEndReached()) {
+            stopOut();
+            stopLoop();
+            resetLoop();
             mIsVisible = false;
         }
 
-        if (fn_80292AF0()) {
-            fn_80292930();
+        if (isAlphaInEndReached()) {
+            stopAlphaIn();
             if (field_0x816) {
                 startLoop();
             }
         }
 
-        if (fn_80292B40()) {
-            fn_80292940();
+        if (isAlphaOutEndReached()) {
+            stopAlphaOut();
             if (field_0x816) {
-                fn_80292A40();
-                fn_80292880();
+                stopLoop();
+                resetLoop();
             }
             mIsVisible = false;
         }
 
-        if (fn_80292B90()) {
-            fn_80292950();
+        if (isGetScoreEndReached()) {
+            stopGetScore();
         }
 
-        if (fn_80292BE0()) {
-            fn_802929C0();
+        if (isFinishEndReached()) {
+            stopFinish();
             startLoop();
         }
 
@@ -1972,11 +1985,11 @@ bool dLytMiniGameScore_c::execute() {
         mLyt.calc();
     }
 
-    if (!field_0x816 && field_0x818 == 0 && fn_80291E50()) {
-        dSndSmallEffectMgr_c::GetInstance()->playMinigameScoreUpSound(field_0x7D8);
+    if (!field_0x816 && field_0x818 == 0 && hasIncreasedScore()) {
+        dSndSmallEffectMgr_c::GetInstance()->playMinigameScoreUpSound(mScore);
     }
 
-    fn_80292240();
+    saveScore();
 
     return true;
 }
@@ -1991,21 +2004,45 @@ bool dLytMiniGameScore_c::draw() {
     return true;
 }
 
+// TODO this is totally arbitrary and makes no sense but it sort of looks like it generates close-ish code
+// Assume the TODO also covers all the calls to `calc` below
+struct PaneCalc {
+    PaneCalc() {
+        for (int i = 4; i >= 0; i--) {
+            work[i][1] = work[i][0] = 0.0f;
+        }
+    }
+
+    void calc(nw4r::lyt::Pane *p1, nw4r::lyt::Pane *p2) {
+        nw4r::lyt::Pane *pp1 = p1->GetParent();
+        nw4r::lyt::Pane *pp2 = p2->GetParent();
+
+        work[0][0] = p1->GetScale().x;
+        work[0][1] = p1->GetScale().y;
+
+        work[1][0] = p1->GetTranslate().x + pp1->GetTranslate().x;
+        work[1][1] = p1->GetTranslate().y;
+
+        work[2][0] = p2->GetTranslate().x + pp2->GetTranslate().x;
+        work[2][1] = p2->GetTranslate().y;
+
+        work[3][0] = p1->GetSize().width * p1->GetScale().x;
+        work[3][1] = p1->GetSize().height * p1->GetScale().y;
+
+        work[4][0] = p2->GetSize().width * p2->GetScale().x;
+        work[4][1] = p2->GetSize().height * p2->GetScale().y;
+    }
+
+    f32 work[5][2];
+};
+
 void dLytMiniGameScore_c::init() {
     if (sInstance == nullptr) {
         return;
     }
 
-    // TODO here are floats (0.0f) initialized on the stack
-    // in an interesting order. Those stack slots are used in
-    // the TODOs below, but I haven't figured out how it really works yet.
-    // An array of 10 floats seems the most reasonable
-    // (5 mVec2_c-s already cause too much stack space to be used)
-
-    f32 temp[10];
-    for (int i = 9; i >= 0; i--) {
-        temp[i] = 0.0f;
-    }
+    // maybe?
+    PaneCalc calc;
 
     mAnm[SCORE_ANIM_IN].setForwardOnce();
     mAnm[SCORE_ANIM_IN].setToEnd2();
@@ -2018,8 +2055,8 @@ void dLytMiniGameScore_c::init() {
             field_0x82C = 0;
             field_0x81C = 21;
             field_0x7E4 = 4;
-            dMessage_c::getGlobalTagProcessor()->setNumericArg0(field_0x7D8);
-            fn_802933A0(1);
+            dMessage_c::getGlobalTagProcessor()->setNumericArg0(mScore);
+            loadTextVariant(1);
             fn_80293410();
             switch (field_0x830) {
                 case 1:
@@ -2041,13 +2078,9 @@ void dLytMiniGameScore_c::init() {
                 mLyt.calc();
                 mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(false);
 
-                // TODO
-                nw4r::lyt::Pane *p1 = mpPanes[15];
-                nw4r::lyt::Pane *p2 = mpPanes[i + 15];
-                mFloats[field_0x81C + i] = field_0x7E8 + (p2->GetSize().width * (p2->GetScale().x / 2.0f)) +
-                                           (p1->GetSize().width * (p1->GetScale().x / 2.0f)) +
-                                           (p1->GetParent()->GetTranslate().x + p1->GetTranslate().x) -
-                                           (p2->GetParent()->GetTranslate().x + p2->GetTranslate().x);
+                calc.calc(mpPanes[i + 15], mpPanes[15]);
+                mFloats[field_0x81C + i] =
+                    calc.work[3][0] / 2.0f + calc.work[4][0] / 2.0f + (calc.work[1][0] - calc.work[2][0]);
                 mFloats[field_0x81C + i] += field_0x7FC;
                 mFloats[field_0x81C + i] += field_0x800;
             }
@@ -2066,44 +2099,9 @@ void dLytMiniGameScore_c::init() {
                 mLyt.calc();
                 mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(false);
 
-                // init+0x474
-
-                /*
-                // Cleaned up m2c output to make the stack operations easier to understand.
-                // This looks like 5x2 f32, which matches the initialization sequence at the start
-                // of the function. Note that the stack vars aren't ever read; they're only written.
-                // There are some unused results here (e.g. the height * scale.y...), but I don't know
-                // why...
-
-                nw4r::lyt::Pane *p1 = this->unk750;
-                nw4r::lyt::Pane *p2 = this->unk74C;
-
-                sp8 = p2->mScale.x; // unused
-                spC = p2->mScale.y; // unused
-
-                sp10 = p2->mParent->mTranslate.x + p2->mTranslate.x;
-                sp14 = p2->mTranslate.y; // unused
-
-                sp18 = p1->mParent->mTranslate.x + p1->mTranslate.x;
-                sp1C = p1->mTranslate.y; // unused
-
-                sp20 = p2->mSize.width * p2->mScale.x;
-                sp24 = p2->mSize.height * p2->mScale.y; // unused
-
-                sp28 = p1->mSize.width * p1->mScale.x;
-                sp2C = p1->mSize.height * p1->mScale.y; // unused
-
-                this->mFloats[field_0x81C + i] = (f32) ((sp20 * 0.5f) + ((sp28 * 0.5f) + (sp18 - sp10)));
-                */
-
-                nw4r::lyt::Pane *p1 = mpPanes[15];
-                nw4r::lyt::Pane *p2 = mpPanes[14];
-
-                // TODO
-                mFloats[field_0x81C + i] = (p2->GetSize().width * p2->GetScale().x / 2.0f) +
-                                           (p1->GetSize().width * p1->GetScale().x / 2.0f) +
-                                           (p1->GetParent()->GetTranslate().x + p1->GetTranslate().x) -
-                                           (p2->GetParent()->GetTranslate().x + p2->GetTranslate().x);
+                calc.calc(mpPanes[14], mpPanes[15]);
+                mFloats[field_0x81C + i] =
+                    calc.work[3][0] / 2.0f + calc.work[4][0] / 2.0f + (calc.work[1][0] - calc.work[2][0]);
             }
 
             for (int i = 0; i < field_0x7E4; i++) {
@@ -2112,13 +2110,9 @@ void dLytMiniGameScore_c::init() {
                 mLyt.calc();
                 mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(false);
 
-                // TODO
-                nw4r::lyt::Pane *p1 = mpPanes[15];
-                nw4r::lyt::Pane *p2 = mpPanes[14];
-                mFloats[field_0x81C + i + 2] = (p2->GetSize().width * p2->GetScale().x / 2.0f) +
-                                               (p1->GetSize().width * p1->GetScale().x / 2.0f) +
-                                               (p1->GetParent()->GetTranslate().x + p1->GetTranslate().x) -
-                                               (p2->GetParent()->GetTranslate().x + p2->GetTranslate().x);
+                calc.calc(mpPanes[14], mpPanes[15]);
+                mFloats[field_0x81C + i + 2] =
+                    calc.work[3][0] / 2.0f + calc.work[4][0] / 2.0f + (calc.work[1][0] - calc.work[2][0]);
             }
 
             mAnm[SCORE_ANIM_RUPEE_CHANGE].setFrame(5.0f);
@@ -2132,13 +2126,9 @@ void dLytMiniGameScore_c::init() {
                 mLyt.calc();
                 mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(false);
 
-                // TODO
-                nw4r::lyt::Pane *p1 = mpPanes[15];
-                nw4r::lyt::Pane *p2 = mpPanes[14];
-                mFloats[field_0x81C + i + 4] = (p2->GetSize().width * p2->GetScale().x / 2.0f) +
-                                               (p1->GetSize().width * p1->GetScale().x / 2.0f) +
-                                               (p1->GetParent()->GetTranslate().x + p1->GetTranslate().x) -
-                                               (p2->GetParent()->GetTranslate().x + p2->GetTranslate().x);
+                calc.calc(mpPanes[14], mpPanes[15]);
+                mFloats[field_0x81C + i + 4] =
+                    calc.work[3][0] / 2.0f + calc.work[4][0] / 2.0f + (calc.work[1][0] - calc.work[2][0]);
             }
 
             mAnm[SCORE_ANIM_RUPEE_CHANGE].setFrame(4.0f);
@@ -2152,13 +2142,9 @@ void dLytMiniGameScore_c::init() {
                 mLyt.calc();
                 mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(false);
 
-                // TODO
-                nw4r::lyt::Pane *p1 = mpPanes[15];
-                nw4r::lyt::Pane *p2 = mpPanes[13];
-                mFloats[field_0x81C + i + 6] = (p2->GetSize().width * p2->GetScale().x / 2.0f) +
-                                               (p1->GetSize().width * p1->GetScale().x / 2.0f) +
-                                               (p1->GetParent()->GetTranslate().x + p1->GetTranslate().x) -
-                                               (p2->GetParent()->GetTranslate().x + p2->GetTranslate().x);
+                calc.calc(mpPanes[13], mpPanes[15]);
+                mFloats[field_0x81C + i + 6] =
+                    calc.work[3][0] / 2.0f + calc.work[4][0] / 2.0f + (calc.work[1][0] - calc.work[2][0]);
             }
             fn_80293450(field_0x81C);
             break;
@@ -2174,13 +2160,9 @@ void dLytMiniGameScore_c::init() {
                 mLyt.calc();
                 mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(false);
 
-                // TODO
-                nw4r::lyt::Pane *p1 = mpPanes[15];
-                nw4r::lyt::Pane *p2 = mpPanes[14];
-                mFloats[field_0x81C + i + 8] = (p2->GetSize().width * p2->GetScale().x / 2.0f) +
-                                               (p1->GetSize().width * p1->GetScale().x / 2.0f) +
-                                               (p1->GetParent()->GetTranslate().x + p1->GetTranslate().x) -
-                                               (p2->GetParent()->GetTranslate().x + p2->GetTranslate().x);
+                calc.calc(mpPanes[14], mpPanes[15]);
+                mFloats[field_0x81C + i + 6] =
+                    calc.work[3][0] / 2.0f + calc.work[4][0] / 2.0f + (calc.work[1][0] - calc.work[2][0]);
             }
 
             fn_80293450(field_0x81C);
@@ -2189,8 +2171,8 @@ void dLytMiniGameScore_c::init() {
             field_0x82C = 0;
             field_0x81C = 21;
             field_0x7E4 = 4;
-            dMessage_c::getGlobalTagProcessor()->setNumericArg0(field_0x7D8);
-            fn_802933A0(1);
+            dMessage_c::getGlobalTagProcessor()->setNumericArg0(mScore);
+            loadTextVariant(0);
             fn_80293410();
             switch (field_0x830) {
                 case 1:
@@ -2212,13 +2194,9 @@ void dLytMiniGameScore_c::init() {
                 mLyt.calc();
                 mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(false);
 
-                // TODO
-                nw4r::lyt::Pane *p1 = mpPanes[15];
-                nw4r::lyt::Pane *p2 = mpPanes[i + 15];
-                mFloats[field_0x81C + i] = field_0x7E8 + (p2->GetSize().width * p2->GetScale().x / 2.0f) +
-                                           (p1->GetSize().width * p1->GetScale().x / 2.0f) +
-                                           (p1->GetParent()->GetTranslate().x + p1->GetTranslate().x) -
-                                           (p2->GetParent()->GetTranslate().x + p2->GetTranslate().x);
+                calc.calc(mpPanes[i + 15], mpPanes[15]);
+                mFloats[field_0x81C + i] =
+                    calc.work[3][0] / 2.0f + calc.work[4][0] / 2.0f + (calc.work[1][0] - calc.work[2][0]);
                 mFloats[field_0x81C + i] += field_0x7FC;
                 mFloats[field_0x81C + i] += field_0x800;
             }
@@ -2237,32 +2215,28 @@ void dLytMiniGameScore_c::init() {
                 mLyt.calc();
                 mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(false);
 
-                // TODO
-                nw4r::lyt::Pane *p1 = mpPanes[15];
-                nw4r::lyt::Pane *p2 = mpPanes[12];
-
-                mFloats[field_0x81C + i + 8] = (p2->GetSize().width * p2->GetScale().x / 2.0f) +
-                                               (p1->GetSize().width * p1->GetScale().x / 2.0f) +
-                                               (p1->GetParent()->GetTranslate().x + p1->GetTranslate().x) -
-                                               (p2->GetParent()->GetTranslate().x + p2->GetTranslate().x);
+                calc.calc(mpPanes[12], mpPanes[15]);
+                // NOTE: 2.0 instead of 2.0f, so this division can't be an inline...
+                mFloats[field_0x81C + i] =
+                    calc.work[3][0] / 2.0 + calc.work[4][0] / 2.0f + (calc.work[1][0] - calc.work[2][0]);
             }
 
             fn_80293450(field_0x81C);
             break;
     }
 
-    fn_802922F0();
-    fn_80292500();
-    fn_80292590();
-    fn_80292610();
-    fn_80292710();
-    fn_80292880();
-    fn_80291BA0(0);
-    fn_80292400();
-    fn_80292480();
-    fn_80292380();
-    fn_80292250();
-    field_0x7DC = 0;
+    resetDigits();
+    resetSetPosition();
+    resetRupeeChange();
+    resetGetScore();
+    resetFinish();
+    resetLoop();
+    setScore(0);
+    resetAlphaIn();
+    resetAlphaOut();
+    resetOut();
+    resetIn();
+    mLastScore = 0;
     field_0x804 = false;
     field_0x808 = 0;
     field_0x80C = 0;
@@ -2292,14 +2266,14 @@ void dLytMiniGameScore_c::fn_80291410() {
     mIsVisible = true;
 
     if (field_0x818 == 1) {
-        fn_80291BA0(1);
-        fn_802920B0();
+        setScore(1);
+        calcNumDigits();
         mAnm[SCORE_ANIM_SET_POSITION].setFrame(field_0x81C);
         mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(true);
         fn_80292C30();
         mAnm[SCORE_ANIM_0_TO_9_OFFSET].setFrame(1.0f);
         mAnm[SCORE_ANIM_0_TO_9_OFFSET].setAnimEnable(true);
-        
+
         mLyt.getLayout()->Animate(0);
         mLyt.calc();
 
@@ -2313,7 +2287,6 @@ void dLytMiniGameScore_c::fn_802915B0() {
         return;
     }
 
-    
     if (field_0x814 && field_0x815) {
         mAnm[SCORE_ANIM_OUT].setToStart();
         mAnm[SCORE_ANIM_OUT].setAnimEnable(true);
@@ -2408,7 +2381,7 @@ void dLytMiniGameScore_c::startAlphaOut() {
     mAnm[SCORE_ANIM_ALPHA_OUT].setAnimEnable(true);
 }
 
-void dLytMiniGameScore_c::fn_80291960() {
+void dLytMiniGameScore_c::startGetScore() {
     if (sInstance == nullptr) {
         return;
     }
@@ -2417,7 +2390,7 @@ void dLytMiniGameScore_c::fn_80291960() {
         return;
     }
 
-    for (int i = 0; i <= field_0x7E0; i++) {
+    for (int i = 0; i <= mHighestDigitIndex; i++) {
         mAnm[i + SCORE_ANIM_GET_SCORE_OFFSET].setToStart();
         mAnm[i + SCORE_ANIM_GET_SCORE_OFFSET].setAnimEnable(true);
     }
@@ -2426,14 +2399,14 @@ void dLytMiniGameScore_c::fn_80291960() {
     mAnm[SCORE_ANIM_GET_SCORE_GET_TEXT_F].setAnimEnable(true);
 }
 
-void dLytMiniGameScore_c::fn_80291A30() {
+void dLytMiniGameScore_c::startFinish() {
     if (sInstance == nullptr) {
         return;
     }
 
-    fn_802920B0();
+    calcNumDigits();
 
-    for (int i = 0; i <= field_0x7E0; i++) {
+    for (int i = 0; i <= mHighestDigitIndex; i++) {
         mAnm[i + SCORE_ANIM_FINISH_SCORE_OFFSET].setToStart();
         mAnm[i + SCORE_ANIM_FINISH_SCORE_OFFSET].setAnimEnable(true);
     }
@@ -2457,19 +2430,19 @@ void dLytMiniGameScore_c::startLoop() {
     mAnm[SCORE_ANIM_LOOP_SCORE].setAnimEnable(true);
 }
 
-void dLytMiniGameScore_c::fn_80291BA0(s32 score) {
+void dLytMiniGameScore_c::setScore(s32 score) {
     if (sInstance == nullptr) {
         return;
     }
-    field_0x7D8 = score;
+    mScore = score;
 }
 
 void dLytMiniGameScore_c::fn_80291BC0() {
     s32 digits[5];
 
-    digits[4] = field_0x7D8 / 10000;
-    
-    s32 v = field_0x7D8;
+    digits[4] = mScore / 10000;
+
+    s32 v = mScore;
     v %= 10000;
     digits[3] = v / 1000;
     v %= 1000;
@@ -2479,8 +2452,8 @@ void dLytMiniGameScore_c::fn_80291BC0() {
     v %= 10;
     digits[0] = v;
 
-    fn_802920B0();
-    fn_80292110();
+    calcNumDigits();
+    realizePosition();
 
     if (field_0x818 == 1) {
         if (field_0x828) {
@@ -2492,7 +2465,7 @@ void dLytMiniGameScore_c::fn_80291BC0() {
 
     fn_80292C30();
 
-    for (int i = 0; i <= field_0x7E0; i++) {
+    for (int i = 0; i <= mHighestDigitIndex; i++) {
         setDigit(i, digits[i]);
     }
 }
@@ -2502,7 +2475,7 @@ void dLytMiniGameScore_c::fn_80291D40(s32 arg) {
         return;
     }
 
-    s32 diff = arg - field_0x7D8;
+    s32 diff = arg - mScore;
     switch (diff) {
         case 1:
             field_0x80C = 1;
@@ -2524,11 +2497,10 @@ void dLytMiniGameScore_c::fn_80291D40(s32 arg) {
             field_0x80C = 25;
             field_0x810 = 12;
             break;
-        case 0:
-            return;
+        case 0: return;
     }
 
-    if (arg < field_0x7D8) {
+    if (arg < mScore) {
         field_0x80C = nw4r::math::FAbs(diff);
         field_0x810 = -1;
     }
@@ -2537,136 +2509,322 @@ void dLytMiniGameScore_c::fn_80291D40(s32 arg) {
     field_0x829 = true;
 }
 
-bool dLytMiniGameScore_c::fn_80291E50() const {
-
+bool dLytMiniGameScore_c::hasIncreasedScore() const {
+    if (sInstance == nullptr) {
+        return false;
+    }
+    return mLastScore < mScore;
 }
 
-void dLytMiniGameScore_c::fn_80291E90() {
-
+bool dLytMiniGameScore_c::hasDecreasedScore() const {
+    if (sInstance == nullptr) {
+        return false;
+    }
+    return mScore < mLastScore;
 }
 
-void dLytMiniGameScore_c::fn_80291ED0() {
-
+void dLytMiniGameScore_c::fn_80291ED0(s32 arg) {
+    if (sInstance == nullptr) {
+        return;
+    }
+    field_0x824 = arg;
 }
 
 void dLytMiniGameScore_c::fn_80291EF0() {
+    f32 f1 = 0.0f;
+    switch (field_0x824) {
+        case 0: f1 = 4.0; break;
+        case 1: f1 = 0.0; break;
+        case 2: f1 = 1.0; break;
+        case 3: f1 = 2.0; break;
+        case 4: f1 = 5.0; break;
+        case 6: f1 = 3.0; break;
+    }
 
+    f32 f2 = 0.0f;
+    if (field_0x824 == 4) {
+        f2 = 2.0;
+    } else if (field_0x824 == 0) {
+        f2 = 4.0;
+    }
+
+    f32 frame = mAnm[SCORE_ANIM_SET_POSITION].getFrame();
+    mAnm[SCORE_ANIM_SET_POSITION].setFrame(frame + 2.0f + f2);
+    mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(true);
+
+    mAnm[SCORE_ANIM_RUPEE_CHANGE].setFrame(f1);
+    mAnm[SCORE_ANIM_RUPEE_CHANGE].setAnimEnable(true);
+
+    mLyt.calc();
+
+    mAnm[SCORE_ANIM_RUPEE_CHANGE].setAnimEnable(false);
+    mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_80292030(s32) {
-
+void dLytMiniGameScore_c::increaseScore(s32 arg) {
+    setScore(mScore + arg);
 }
 
 void dLytMiniGameScore_c::fn_80292040() {
+    mAnm[SCORE_ANIM_RUPEE_CHANGE].setFrame(6.0f);
+    mAnm[SCORE_ANIM_RUPEE_CHANGE].setAnimEnable(true);
 
+    mLyt.calc();
+
+    mAnm[SCORE_ANIM_RUPEE_CHANGE].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_802920B0() {
-
+s32 dLytMiniGameScore_c::calcNumDigits() {
+    s32 num;
+    if (mScore >= 10000) {
+        num = 4;
+    } else if (mScore >= 1000) {
+        num = 3;
+    } else if (mScore >= 100) {
+        num = 2;
+    } else if (mScore >= 10) {
+        num = 1;
+    } else {
+        num = 0;
+    }
+    mHighestDigitIndex = num;
+    return num;
 }
 
-void dLytMiniGameScore_c::fn_80292110() {
+void dLytMiniGameScore_c::realizePosition() {
+    mAnm[SCORE_ANIM_SET_POSITION].setFrame(field_0x81C + mHighestDigitIndex);
+    mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(true);
 
+    mLyt.calc();
+
+    mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(false);
 }
 
 void dLytMiniGameScore_c::setDigit(s32 digitIndex, s32 number) {
+    s32 idx = digitIndex + SCORE_ANIM_0_TO_9_OFFSET;
+    f32 frame = number;
 
+    mAnm[idx].setFrame(frame);
+    mAnm[idx].setAnimEnable(true);
+
+    mLyt.calc();
+
+    mAnm[idx].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_80292240() {
-
+void dLytMiniGameScore_c::saveScore() {
+    mLastScore = mScore;
 }
 
-void dLytMiniGameScore_c::fn_80292250() {
+void dLytMiniGameScore_c::resetIn() {
+    mAnm[SCORE_ANIM_IN].setForwardOnce();
+    mAnm[SCORE_ANIM_IN].setToStart();
+    mAnm[SCORE_ANIM_IN].setAnimEnable(true);
 
+    mLyt.getLayout()->Animate(0);
+    mLyt.calc();
+
+    mAnm[SCORE_ANIM_IN].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_802922F0() {
-
+void dLytMiniGameScore_c::resetDigits() {
+    // NOTE: includes SCORE_ANIM_SET_POSITION
+    for (int i = 0; i <= SCORE_NUM_DIGITS; i++) {
+        s32 idx = i + SCORE_ANIM_0_TO_9_OFFSET;
+        mAnm[idx].setForwardOnce();
+        mAnm[idx].setFrame(0.0f);
+        mAnm[idx].setAnimEnable(false);
+    }
 }
 
-void dLytMiniGameScore_c::fn_80292380() {
+void dLytMiniGameScore_c::resetOut() {
+    mAnm[SCORE_ANIM_OUT].setForwardOnce();
+    mAnm[SCORE_ANIM_OUT].setToStart();
+    mAnm[SCORE_ANIM_OUT].setAnimEnable(true);
 
+    mLyt.calc();
+
+    mAnm[SCORE_ANIM_OUT].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_80292400() {
+void dLytMiniGameScore_c::resetAlphaIn() {
+    mAnm[SCORE_ANIM_ALPHA_IN].setForwardOnce();
+    mAnm[SCORE_ANIM_ALPHA_IN].setToStart();
+    mAnm[SCORE_ANIM_ALPHA_IN].setAnimEnable(true);
 
+    mLyt.calc();
+
+    mAnm[SCORE_ANIM_ALPHA_IN].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_80292480() {
+void dLytMiniGameScore_c::resetAlphaOut() {
+    mAnm[SCORE_ANIM_ALPHA_OUT].setForwardOnce();
+    mAnm[SCORE_ANIM_ALPHA_OUT].setToStart();
+    mAnm[SCORE_ANIM_ALPHA_OUT].setAnimEnable(true);
 
+    mLyt.calc();
+
+    mAnm[SCORE_ANIM_ALPHA_OUT].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_80292500() {
+void dLytMiniGameScore_c::resetSetPosition() {
+    mAnm[SCORE_ANIM_SET_POSITION].setForwardOnce();
+    mAnm[SCORE_ANIM_SET_POSITION].setFrame(field_0x81C);
+    mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(true);
 
+    mLyt.calc();
+
+    mAnm[SCORE_ANIM_SET_POSITION].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_80292590() {
+void dLytMiniGameScore_c::resetRupeeChange() {
+    mAnm[SCORE_ANIM_RUPEE_CHANGE].setForwardOnce();
+    mAnm[SCORE_ANIM_RUPEE_CHANGE].setToEnd2();
+    mAnm[SCORE_ANIM_RUPEE_CHANGE].setAnimEnable(true);
 
+    mLyt.calc();
+
+    mAnm[SCORE_ANIM_RUPEE_CHANGE].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_80292610() {
+void dLytMiniGameScore_c::resetGetScore() {
+    for (int i = 0; i < SCORE_NUM_DIGITS; i++) {
+        mAnm[i + SCORE_ANIM_GET_SCORE_OFFSET].setForwardOnce();
+        mAnm[i + SCORE_ANIM_GET_SCORE_OFFSET].setToStart();
+        mAnm[i + SCORE_ANIM_GET_SCORE_OFFSET].setAnimEnable(true);
+    }
 
+    mAnm[SCORE_ANIM_GET_SCORE_GET_TEXT_F].setForwardOnce();
+    mAnm[SCORE_ANIM_GET_SCORE_GET_TEXT_F].setToStart();
+    mAnm[SCORE_ANIM_GET_SCORE_GET_TEXT_F].setAnimEnable(true);
+
+    mLyt.calc();
+
+    mAnm[SCORE_ANIM_GET_SCORE_GET_TEXT_F].setAnimEnable(false);
+
+    for (int i = 0; i < SCORE_NUM_DIGITS; i++) {
+        mAnm[i + SCORE_ANIM_GET_SCORE_OFFSET].setAnimEnable(false);
+    }
 }
 
-void dLytMiniGameScore_c::fn_80292710() {
+void dLytMiniGameScore_c::resetFinish() {
+    for (int i = 0; i < SCORE_NUM_DIGITS; i++) {
+        mAnm[i + SCORE_ANIM_FINISH_SCORE_OFFSET].setForwardOnce();
+        mAnm[i + SCORE_ANIM_FINISH_SCORE_OFFSET].setToStart();
+        mAnm[i + SCORE_ANIM_FINISH_SCORE_OFFSET].setAnimEnable(true);
+    }
 
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_W].setForwardOnce();
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_W].setToStart();
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_W].setAnimEnable(true);
+
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_X].setForwardOnce();
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_X].setToStart();
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_X].setAnimEnable(true);
+
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_F].setForwardOnce();
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_F].setToStart();
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_F].setAnimEnable(true);
+
+    mLyt.calc();
+
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_F].setAnimEnable(false);
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_X].setAnimEnable(false);
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_W].setAnimEnable(false);
+
+    for (int i = 0; i < SCORE_NUM_DIGITS; i++) {
+        mAnm[i + SCORE_ANIM_FINISH_SCORE_OFFSET].setAnimEnable(false);
+    }
 }
 
-void dLytMiniGameScore_c::fn_80292880() {
+void dLytMiniGameScore_c::resetLoop() {
+    mAnm[SCORE_ANIM_LOOP_SCORE].setForwardLoop();
+    mAnm[SCORE_ANIM_LOOP_SCORE].setFrame(0.0f);
+    mAnm[SCORE_ANIM_LOOP_SCORE].setAnimEnable(true);
 
+    mLyt.getLayout()->Animate(0);
+    mLyt.calc();
+
+    mAnm[SCORE_ANIM_LOOP_SCORE].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_80292910() {
-
+void dLytMiniGameScore_c::stopIn() {
+    mAnm[SCORE_ANIM_IN].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_80292920() {
-
+void dLytMiniGameScore_c::stopOut() {
+    mAnm[SCORE_ANIM_OUT].setAnimEnable(false);
 }
 
-bool dLytMiniGameScore_c::fn_80292930() const {
-
+void dLytMiniGameScore_c::stopAlphaIn() {
+    mAnm[SCORE_ANIM_ALPHA_IN].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_80292940() {
-
+void dLytMiniGameScore_c::stopAlphaOut() {
+    mAnm[SCORE_ANIM_ALPHA_OUT].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_80292950() {
-
+void dLytMiniGameScore_c::stopGetScore() {
+    for (int i = 0; i < SCORE_NUM_DIGITS; i++) {
+        mAnm[i + SCORE_ANIM_GET_SCORE_OFFSET].setAnimEnable(false);
+    }
+    mAnm[SCORE_ANIM_GET_SCORE_GET_TEXT_F].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_802929C0() {
+void dLytMiniGameScore_c::stopFinish() {
+    for (int i = 0; i < SCORE_NUM_DIGITS; i++) {
+        mAnm[i + SCORE_ANIM_FINISH_SCORE_OFFSET].setAnimEnable(false);
+    }
 
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_W].setAnimEnable(false);
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_X].setAnimEnable(false);
+    mAnm[SCORE_ANIM_FINISH_SCORE_GET_SCORE_F].setAnimEnable(false);
 }
 
-void dLytMiniGameScore_c::fn_80292A40() {
-
+void dLytMiniGameScore_c::stopLoop() {
+    mAnm[SCORE_ANIM_LOOP_SCORE].setAnimEnable(false);
 }
 
-bool dLytMiniGameScore_c::fn_80292A50() const {
-
+bool dLytMiniGameScore_c::isInEndReached() const {
+    if (mAnm[SCORE_ANIM_IN].isEnabled() && mAnm[SCORE_ANIM_IN].isEndReached()) {
+        return true;
+    }
+    return false;
 }
 
-bool dLytMiniGameScore_c::fn_80292AA0() const {
-
+bool dLytMiniGameScore_c::isOutEndReached() const {
+    if (mAnm[SCORE_ANIM_OUT].isEnabled() && mAnm[SCORE_ANIM_OUT].isEndReached()) {
+        return true;
+    }
+    return false;
 }
 
-bool dLytMiniGameScore_c::fn_80292AF0() const {
-
+bool dLytMiniGameScore_c::isAlphaInEndReached() const {
+    if (mAnm[SCORE_ANIM_ALPHA_IN].isEnabled() && mAnm[SCORE_ANIM_ALPHA_IN].isEndReached()) {
+        return true;
+    }
+    return false;
 }
 
-bool dLytMiniGameScore_c::fn_80292B40() const {
-
+bool dLytMiniGameScore_c::isAlphaOutEndReached() const {
+    if (mAnm[SCORE_ANIM_ALPHA_OUT].isEnabled() && mAnm[SCORE_ANIM_ALPHA_OUT].isEndReached()) {
+        return true;
+    }
+    return false;
 }
 
-bool dLytMiniGameScore_c::fn_80292B90() const {
-
+bool dLytMiniGameScore_c::isGetScoreEndReached() const {
+    if (mAnm[SCORE_ANIM_GET_SCORE_OFFSET].isEnabled() && mAnm[SCORE_ANIM_GET_SCORE_OFFSET].isEndReached()) {
+        return true;
+    }
+    return false;
 }
 
-bool dLytMiniGameScore_c::fn_80292BE0() const {
-
+bool dLytMiniGameScore_c::isFinishEndReached() const {
+    if (mAnm[SCORE_ANIM_FINISH_SCORE_OFFSET].isEnabled() && mAnm[SCORE_ANIM_FINISH_SCORE_OFFSET].isEndReached()) {
+        return true;
+    }
+    return false;
 }
 
 void dLytMiniGameScore_c::fn_80292C30() {
@@ -2675,56 +2833,112 @@ void dLytMiniGameScore_c::fn_80292C30() {
         t = field_0x824 == 4 ? 4 : field_0x824 == 0 ? 6 : 0;
     }
 
+    PaneCalc calc;
+
     switch (field_0x818) {
         case 0: {
-            dMessage_c::getGlobalTagProcessor()->setNumericArg0(field_0x7D8);
-            fn_802933A0(1);
+            dMessage_c::getGlobalTagProcessor()->setNumericArg0(mScore);
+            loadTextVariant(1);
             field_0x7E8 = mpTextBoxes[0]->GetLineWidth(nullptr);
 
             // TODO
-            nw4r::lyt::Pane *p1 = mpPanes[15];
-            nw4r::lyt::Pane *p2 = mpPanes[field_0x7E0 + 15];
-            mFloats[field_0x81C + field_0x7E0] = field_0x7E8 + (p2->GetSize().width * (p2->GetScale().x / 2.0f)) +
-                                                 (p1->GetSize().width * (p1->GetScale().x / 2.0f)) +
-                                                 (p1->GetParent()->GetTranslate().x + p1->GetTranslate().x) -
-                                                 (p2->GetParent()->GetTranslate().x + p2->GetTranslate().x);
-            mFloats[field_0x81C + field_0x7E0] += field_0x7FC;
-            mFloats[field_0x81C + field_0x7E0] += field_0x800;
+            calc.calc(mpPanes[mHighestDigitIndex + 15], mpPanes[15]);
+            mFloats[field_0x81C + mHighestDigitIndex] =
+                calc.work[3][0] / 2.0f + calc.work[4][0] / 2.0f + (calc.work[1][0] - calc.work[2][0]);
+            mFloats[field_0x81C + mHighestDigitIndex] += field_0x7FC;
+            mFloats[field_0x81C + mHighestDigitIndex] += field_0x800;
 
             break;
         }
         case 3: {
-            dMessage_c::getGlobalTagProcessor()->setNumericArg0(field_0x7D8);
-            fn_802933A0(0);
+            dMessage_c::getGlobalTagProcessor()->setNumericArg0(mScore);
+            loadTextVariant(0);
             field_0x7E8 = mpTextBoxes[0]->GetLineWidth(nullptr);
 
             // TODO
-            nw4r::lyt::Pane *p1 = mpPanes[15];
-            nw4r::lyt::Pane *p2 = mpPanes[field_0x7E0 + 15];
-            mFloats[field_0x81C + field_0x7E0] = field_0x7E8 + (p2->GetSize().width * (p2->GetScale().x / 2.0f)) +
-                                                 (p1->GetSize().width * (p1->GetScale().x / 2.0f)) +
-                                                 (p1->GetParent()->GetTranslate().x + p1->GetTranslate().x) -
-                                                 (p2->GetParent()->GetTranslate().x + p2->GetTranslate().x);
-            mFloats[field_0x81C + field_0x7E0] += field_0x7FC;
-            mFloats[field_0x81C + field_0x7E0] += field_0x800;
+            calc.calc(mpPanes[mHighestDigitIndex + 15], mpPanes[15]);
+            mFloats[field_0x81C + mHighestDigitIndex] =
+                calc.work[3][0] / 2.0f + calc.work[4][0] / 2.0f + (calc.work[1][0] - calc.work[2][0]);
+            mFloats[field_0x81C + mHighestDigitIndex] += field_0x7FC;
+            mFloats[field_0x81C + mHighestDigitIndex] += field_0x800;
 
             break;
         }
     }
+
+    f32 f = mFloats[mHighestDigitIndex + t + field_0x81C];
+
+    if (field_0x830 != 0) {
+        nw4r::lyt::Size size = mpTextBoxes[0]->GetSize();
+        switch (field_0x830) {
+            case 1: {
+                mVec3_c pos(
+                    f / 2.0f + size.width / 2.0f - field_0x7E8 + 0.0f + (f32)field_0x7F4 - (f32)field_0x800,
+                    field_0x834[1][1] + (f32)field_0x7EC + (f32)field_0x7F8, 0.0f
+                );
+                mpPanes[SCORE_PANE_UNIT]->SetTranslate(pos);
+                break;
+            }
+            case 2: {
+                mVec3_c pos(
+                    (f32)field_0x7E8 - f / 2.0f - size.width / 2.0f + 0.0 + (f32)field_0x7F4 + (f32)field_0x800,
+                    field_0x834[1][1] + (f32)field_0x7EC + (f32)field_0x7F8, 0.0f
+                );
+                mpPanes[SCORE_PANE_UNIT]->SetTranslate(pos);
+                break;
+            }
+        }
+    }
+
+    // TODO - ...
+
+    fn_80293450(mHighestDigitIndex + t + field_0x81C);
+    nw4r::math::MTX34 mtx = mpPanes[SCORE_PANE_CENTER]->GetGlobalMtx();
+    mVec3_c pos(mtx._03, mtx._13, 0.0f);
+    mpPanes[SCORE_PANE_POSITION_ALL]->SetTranslate(pos);
 }
 
-void dLytMiniGameScore_c::fn_802933A0(s32 variant) {
-
+void dLytMiniGameScore_c::loadTextVariant(s32 variant) {
+    for (int i = 0; i < SCORE_NUM_TEXTBOXES; i++) {
+        mLyt.loadTextVariant(mpTextBoxes[i], variant);
+    }
 }
 
 void dLytMiniGameScore_c::fn_80293410() {
-
+    (void)getCurrentLanguage1();
+    field_0x830 = 1;
 }
 
-void dLytMiniGameScore_c::fn_80293450(s32) {
+void dLytMiniGameScore_c::fn_80293450(s32 idx) {
+    // TODO - aaaaaaaaaaaaa
+    f32 tmp = field_0x7F0 + mFloats[idx];
 
+    mpPanes[11]->SetSize(nw4r::lyt::Size(tmp, mpPanes[11]->GetSize().height));
+    mpPanes[11]->SetTranslate(mVec3_c(0.0f, 0.0f, 0.0f));
+
+    tmp /= 2.0f;
+
+    mpPanes[9]->SetTranslate(mVec3_c(-tmp - mpPanes[9]->GetSize().width, 0.0f, 0.0f));
+    mpPanes[10]->SetTranslate(mVec3_c(tmp + mpPanes[10]->GetSize().width, 0.0f, 0.0f));
+
+    tmp = field_0x7F0 + mFloats[idx];
+
+    mpPanes[8]->SetSize(nw4r::lyt::Size(tmp, mpPanes[8]->GetSize().height));
+    mpPanes[8]->SetTranslate(mVec3_c(-2.0f, -2.0f, 0.0f));
+
+    tmp /= 2.0f;
+
+    mpPanes[6]->SetTranslate(mVec3_c(-tmp - mpPanes[6]->GetSize().width - 2.0f, -2.0f, 0.0f));
+    mpPanes[7]->SetTranslate(mVec3_c(tmp + mpPanes[7]->GetSize().width - 2.0f, -2.0f, 0.0f));
+
+    mpPanes[5]->SetSize(nw4r::lyt::Size(
+        mpPanes[10]->GetSize().width + mpPanes[11]->GetSize().width + mpPanes[9]->GetSize().width - 36.0f,
+        mpPanes[5]->GetSize().height
+    ));
+
+    mpPanes[5]->SetTranslate(mVec3_c(0.0f, 0.0f, 0.0f));
+    mpPanes[4]->SetTranslate(mVec3_c(field_0x834[2][0], field_0x834[2][1], 0.0f));
 }
-
 
 static const d2d::LytBrlanMapping brlanMapScoreSd[] = {
     {         "miniGameScoreSd_00_0to9.brlan",        "G_0to9_00"},
@@ -2733,6 +2947,12 @@ static const d2d::LytBrlanMapping brlanMapScoreSd[] = {
     {      "miniGameScoreSd_00_scoreUp.brlan",     "G_animAll_00"},
     {    "miniGameScoreSd_00_scoreDown.brlan",     "G_animAll_00"},
 };
+
+#define SCORE_SD_ANIM_0_TO_9_0 0
+#define SCORE_SD_ANIM_0_TO_9_1 1
+#define SCORE_SD_ANIM_SET_POSITION 2
+#define SCORE_SD_ANIM_SCORE_UP 3
+#define SCORE_SD_ANIM_SCORE_DOWN 4
 
 #define SCORE_SD_NUM_ANIMS 5
 
@@ -2744,6 +2964,7 @@ bool dLytMiniGameScoreSd_c::build(d2d::ResAccIf_c *resAcc) {
         mAnm[i].init(brlanMapScoreSd[i].mFile, resAcc, mLyt.getLayout(), brlanMapScoreSd[i].mName);
         mAnm[i].bind(false);
         mAnm[i].setRate(1.0f);
+        mAnm[i].setAnimEnable(false);
     }
 
     sInstance = this;
@@ -2768,13 +2989,25 @@ bool dLytMiniGameScoreSd_c::execute() {
         return true;
     }
 
-    for (int i = 0; i < SCORE_SD_NUM_ANIMS; i++) {
-        if (mAnm[i].isEnabled()) {
-            mAnm[i].play();
+    if (mIsVisible) {
+        if (fn_80294030()) {
+            fn_80294010();
+            mIsVisible = false;
         }
-    }
 
-    mLyt.calc();
+        if (fn_80294080()) {
+            fn_80294020();
+            mIsVisible = false;
+        }
+
+        for (int i = 0; i < SCORE_SD_NUM_ANIMS; i++) {
+            if (mAnm[i].isEnabled()) {
+                mAnm[i].play();
+            }
+        }
+
+        mLyt.calc();
+    }
 
     return true;
 }
@@ -2783,12 +3016,88 @@ bool dLytMiniGameScoreSd_c::draw() {
     if (sInstance == nullptr) {
         return true;
     }
-    mLyt.addToDrawList();
+    if (mIsVisible) {
+        mLyt.addToDrawList();
+    }
     return true;
 }
 
 void dLytMiniGameScoreSd_c::init() {
-    // TODO - ...
+    if (sInstance == nullptr) {
+        return;
+    }
+
+    fn_80293D40();
+    fn_80293DC0();
+    fn_80293E40();
+    fn_80293ED0();
+    fn_80293AF0(0);
+
+    mAnm[SCORE_SD_ANIM_SCORE_UP].setToEnd2();
+    mAnm[SCORE_SD_ANIM_SCORE_UP].setAnimEnable(true);
+    mLyt.calc();
+    mAnm[SCORE_SD_ANIM_SCORE_UP].setAnimEnable(false);
 }
+
+void dLytMiniGameScoreSd_c::fn_80293A30() {
+
+}
+
+void dLytMiniGameScoreSd_c::fn_80293A90() {
+
+}
+
+void dLytMiniGameScoreSd_c::fn_80293AF0(s32) {
+
+}
+
+void dLytMiniGameScoreSd_c::fn_80293BB0() {
+
+}
+
+void dLytMiniGameScoreSd_c::fn_80293C60() {
+
+}
+
+void dLytMiniGameScoreSd_c::fn_80293D40() {
+
+}
+
+void dLytMiniGameScoreSd_c::fn_80293DC0() {
+
+}
+
+void dLytMiniGameScoreSd_c::fn_80293E40() {
+
+}
+
+void dLytMiniGameScoreSd_c::fn_80293ED0() {
+
+}
+
+void dLytMiniGameScoreSd_c::fn_80293F50() {
+
+}
+
+void dLytMiniGameScoreSd_c::fn_80293FB0() {
+
+}
+
+void dLytMiniGameScoreSd_c::fn_80294010() {
+
+}
+
+void dLytMiniGameScoreSd_c::fn_80294020() {
+
+}
+
+bool dLytMiniGameScoreSd_c::fn_80294030() const {
+
+}
+
+bool dLytMiniGameScoreSd_c::fn_80294080() const {
+
+}
+
 
 SPECIAL_BASE_PROFILE(LYT_MINI_GAME, dLytMiniGame_c, fProfile::LYT_MINI_GAME, 0x2B4, 0x6F9);
