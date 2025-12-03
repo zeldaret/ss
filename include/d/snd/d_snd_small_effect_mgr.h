@@ -62,7 +62,7 @@ public:
     bool playMinigameFinishSound();
     bool playMinigameFinishWhistleSound();
     bool playMinigameScoreUpSound(s32 param);
-    bool playMinigameScoreDownSound();
+    bool playMinigameScoreDownSound(s32 score);
     bool playMinigameMusasabiSound(s32 count);
 
     bool playSkbSound(u32 soundId);

@@ -146,17 +146,27 @@ private:
 /** 2D UI - Mini Game - Time */
 class dLytMiniGameTime_c {
 public:
+    enum Variant_e {
+        TIME_VARIANT_0,
+        TIME_VARIANT_1,
+        TIME_VARIANT_2,
+        TIME_VARIANT_3,
+        TIME_VARIANT_4,
+        TIME_VARIANT_5,
+    };
+
+public:
     dLytMiniGameTime_c()
         : field_0x7D4(0),
           mCurrentTimerValueMilliSeconds(0),
           mCurrentTimerValueSeconds(0),
           mLastTimerValueSeconds(0),
-          mTimerVariant(0),
+          mTimeFormat(0),
           mHighestDigitIndex(0),
           field_0x7EC(false),
           field_0x7ED(false),
           field_0x7EE(false),
-          field_0x7F0(0),
+          mVariant(0),
           field_0x7F4(0),
           mIsVisible(false) {}
     virtual ~dLytMiniGameTime_c() {}
@@ -167,8 +177,16 @@ public:
     bool draw();
     void init();
 
+    void setVariant(s32 var) {
+        mVariant = var;
+    }
+
+    void setField_0x7EE(bool v) {
+        field_0x7EE = v;
+    }
+
 private:
-    enum TimerVariant_e {
+    enum TimeFormat_e {
         TIMER_LONG,
         TIMER_SECONDS,
     };
@@ -224,12 +242,12 @@ private:
     /* 0x7D8 */ s32 mCurrentTimerValueMilliSeconds;
     /* 0x7DC */ s32 mCurrentTimerValueSeconds;
     /* 0x7E0 */ s32 mLastTimerValueSeconds;
-    /* 0x7E4 */ u8 mTimerVariant;
+    /* 0x7E4 */ u8 mTimeFormat;
     /* 0x7E4 */ s32 mHighestDigitIndex;
     /* 0x7EC */ bool field_0x7EC;
     /* 0x7ED */ bool field_0x7ED;
     /* 0x7EE */ bool field_0x7EE;
-    /* 0x7F0 */ UNKWORD field_0x7F0;
+    /* 0x7F0 */ s32 mVariant;
     /* 0x7F4 */ u8 field_0x7F4;
     /* 0x7F5 */ bool mIsVisible;
 };
@@ -279,6 +297,15 @@ private:
 /** 2D UI - Mini Game - Score counter */
 class dLytMiniGameScore_c {
 public:
+    enum Variant_e {
+        SCORE_VARIANT_0,
+        SCORE_VARIANT_1,
+        SCORE_VARIANT_2,
+        SCORE_VARIANT_3,
+        SCORE_VARIANT_4,
+    };
+
+public:
     dLytMiniGameScore_c()
         : mScore(0),
           mLastScore(0),
@@ -298,7 +325,7 @@ public:
           field_0x814(false),
           field_0x815(false),
           field_0x816(false),
-          field_0x818(0),
+          mVariant(SCORE_VARIANT_0),
           field_0x81C(0),
           field_0x820(false),
           field_0x824(0),
@@ -314,6 +341,14 @@ public:
     bool execute();
     bool draw();
     void init();
+
+    void setVariant(s32 var) {
+        mVariant = var;
+    }
+
+    void setField_0x816(bool v) {
+        field_0x816 = v;
+    }
 
 private:
     void fn_80291410();
@@ -396,7 +431,7 @@ private:
     /* 0x814 */ bool field_0x814;
     /* 0x815 */ bool field_0x815;
     /* 0x816 */ bool field_0x816;
-    /* 0x818 */ s32 field_0x818;
+    /* 0x818 */ s32 mVariant;
     /* 0x81C */ s32 field_0x81C;
     /* 0x820 */ bool field_0x820;
     /* 0x824 */ s32 field_0x824;
@@ -423,21 +458,21 @@ public:
 private:
     static dLytMiniGameScoreSd_c *sInstance;
 
-    void fn_80293A30();
-    void fn_80293A90();
-    void fn_80293AF0(s32);
-    void fn_80293BB0();
-    void fn_80293C60();
-    void fn_80293D40();
-    void fn_80293DC0();
-    void fn_80293E40();
-    void fn_80293ED0();
-    void fn_80293F50();
-    void fn_80293FB0();
-    void fn_80294010();
-    void fn_80294020();
-    bool fn_80294030() const;
-    bool fn_80294080() const;
+    void setScoreUp(s32 score);
+    void setScoreDown(s32 score);
+    void setScoreInternal(s32 score);
+    void setHighestDigitIndex(s32);
+    void setDigit(s32 digitIndex, s32 number);
+    void resetScoreUp();
+    void resetScoreDown();
+    void resetDigits();
+    void resetPosition();
+    void startScoreUp();
+    void startScoreDown();
+    void stopScoreUp();
+    void stopScoreDown();
+    bool isScoreUpEndReached() const;
+    bool isScoreDownEndReached() const;
 
     /* 0x004 */ d2d::LytBase_c mLyt;
     /* 0x094 */ d2d::AnmGroup_c mAnm[5];
@@ -448,6 +483,37 @@ private:
 
 class dLytMiniGame_c : public dBase_c {
 public:
+    enum Variant_e {
+        VARIANT_0,
+        VARIANT_1,
+        VARIANT_2,
+        VARIANT_3,
+        VARIANT_4,
+        VARIANT_5,
+        VARIANT_6,
+        VARIANT_7,
+        VARIANT_8,
+        VARIANT_9,
+        VARIANT_10,
+        VARIANT_11,
+        VARIANT_12,
+        VARIANT_13,
+        VARIANT_14,
+        VARIANT_15,
+        VARIANT_16,
+    };
+
+private:
+    enum Slot_e {
+        SLOT_MINI_GAME,
+        SLOT_MINI_GAME_SCORE,
+        SLOT_MINI_GAME_TIME,
+        SLOT_MINI_GAME_BUGS,
+        SLOT_MINI_GAME_PUMPKIN,
+        SLOT_MINI_GAME_SCORE_SD,
+    };
+
+public:
     dLytMiniGame_c()
         : field_0x0068(0),
           field_0x0069(0),
@@ -455,13 +521,18 @@ public:
           field_0x006B(0),
           field_0x006C(0),
           field_0x006D(0),
-          field_0x1510(1),
+          mVariant(1),
           field_0x3864(0),
           field_0x3865(0),
           field_0x3866(false),
           field_0x3867(0),
           field_0x3868(0) {}
     virtual ~dLytMiniGame_c() {}
+
+    virtual int create() override;
+    virtual int doDelete() override;
+    virtual int execute() override;
+    virtual int draw() override;
 
     static dLytMiniGame_c *GetInstance() {
         return sInstance;
@@ -498,6 +569,14 @@ public:
 private:
     static dLytMiniGame_c *sInstance;
 
+    bool isLoading(const char *name) const;
+    bool loadData(const char *name, s32 slot);
+    void unloadData(const char *name);
+    void attachLoadedData(const char *name, d2d::ResAccIf_c &resAcc);
+    
+
+    void init();
+
     /* 0x0068 */ u8 field_0x0068;
     /* 0x0069 */ u8 field_0x0069;
     /* 0x006A */ u8 field_0x006A;
@@ -505,14 +584,14 @@ private:
     /* 0x006C */ u8 field_0x006C;
     /* 0x006D */ u8 field_0x006D;
 
-    /* 0x0070 */ d2d::ResAccIf_c mResAcc1;
-    /* 0x03E0 */ d2d::ResAccIf_c mResAcc2;
-    /* 0x0750 */ d2d::ResAccIf_c mResAcc3;
-    /* 0x0AC0 */ d2d::ResAccIf_c mResAcc4;
-    /* 0x0E30 */ d2d::ResAccIf_c mResAcc5;
-    /* 0x11A0 */ d2d::ResAccIf_c mResAcc6;
+    /* 0x0070 */ d2d::ResAccIf_c mResAccStart;
+    /* 0x03E0 */ d2d::ResAccIf_c mResAccScore;
+    /* 0x0750 */ d2d::ResAccIf_c mResAccTime;
+    /* 0x0AC0 */ d2d::ResAccIf_c mResAccBugs;
+    /* 0x0E30 */ d2d::ResAccIf_c mResAccPumpkin;
+    /* 0x11A0 */ d2d::ResAccIf_c mResAccScoreSd;
 
-    /* 0x1510 */ UNKWORD field_0x1510;
+    /* 0x1510 */ s32 mVariant;
 
     /* 0x1514 */ dLytMiniGameScore_c mScore;
     /* 0x1D64 */ dLytMiniGameScoreSd_c mScoreSd;

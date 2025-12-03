@@ -544,7 +544,7 @@ bool dSndSmallEffectMgr_c::playMinigameScoreUpSound(s32 param) {
     return playSoundInternal(soundId);
 }
 
-bool dSndSmallEffectMgr_c::playMinigameScoreDownSound() {
+bool dSndSmallEffectMgr_c::playMinigameScoreDownSound(s32 score) {
     return playSoundInternal(SE_S_MG_SCORE_DOWN);
 }
 
