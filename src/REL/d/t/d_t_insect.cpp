@@ -257,11 +257,11 @@ void dTgInsect_c::executeState_WaitCreate() {
 }
 void dTgInsect_c::finalizeState_WaitCreate() {}
 
-// non matching: regswap
 void dTgInsect_c::initializeState_WaitForceEscape() {
     for (s32 i = 0; i < mInsectCount; i++) {
-        if (mLinks[i].isLinked()) {
-            mLinks[i].get()->mActorProperties |= AC_PROP_0x4;
+        dAcOInsect_c* tmp = static_cast<dAcOInsect_c*>(mLinks[i].get());
+        if (tmp) {
+            tmp->setActorProperty(AC_PROP_0x4);
         }
     }
 }
