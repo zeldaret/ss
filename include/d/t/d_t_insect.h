@@ -87,31 +87,13 @@ private:
         return isSubtype(10);
     }
     bool isTrialGateType() const {
-        if (getSubtype() != SUBTYPE_BUTTERFLY) {
-            return false;
-        }
-        if (getSpawnSubtype() != SPAWN_TRIAL_GATE) {
-            return false;
-        }
-        return true;
+        return getSubtype() != SUBTYPE_BUTTERFLY ? false : getSpawnSubtype() == SPAWN_TRIAL_GATE;
     }
     bool isGossipStoneType() const {
-        if (!isButterfly()) {
-            return false;
-        }
-        if (!isSpawnSubtype(SPAWN_GOSSIP_STONE)) {
-            return false;
-        }
-        return true;
+        return getSubtype() != SUBTYPE_BUTTERFLY ? false : getSpawnSubtype() == SPAWN_GOSSIP_STONE;
     }
     bool isGoddessWallType() const {
-        if (!isButterfly()) {
-            return false;
-        }
-        if (!isSpawnSubtype(SPAWN_GODDESS_WALL)) {
-            return false;
-        }
-        return true;
+        return getSubtype() != SUBTYPE_BUTTERFLY ? false : getSpawnSubtype() == SPAWN_GODDESS_WALL;
     }
     f32 getOriginalScaleX() const {
         return 100 * mScale.x;

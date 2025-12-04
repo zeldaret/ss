@@ -45,7 +45,6 @@ const s32 *useUnused() {
     return unused;
 }
 
-// non matching
 int dTgInsect_c::actorCreate() {
     if (getSubtype() == 0) {
         return FAILED;
@@ -67,8 +66,6 @@ int dTgInsect_c::actorCreate() {
     mScale *= 0.01f;
     mRevealed = 0;
     mRevealedSpawnPos = mPosition;
-    // non matching: load of 0 in r0
-    // that is already 0
     if (isTrialGateType() || isGossipStoneType() || isGoddessWallType() || isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
         unk24E = 1;
     }
