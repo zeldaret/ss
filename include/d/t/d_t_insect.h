@@ -61,16 +61,16 @@ private:
     /* 0x260 */ mVec3_c mRevealedSpawnPos;
     /* 0x26C */ dAcRef_c<dAcBase_c> mWarpRef;
 
-    s32 getSpawnSubtype() const {
-        return (mParams >> 8 & 0xF);
+    SpawnSubtype getSpawnSubtype() const {
+        return (SpawnSubtype)(mParams >> 8 & 0xF);
     }
-    bool isSpawnSubtype(s32 spanwSubtype) const {
+    bool isSpawnSubtype(SpawnSubtype spanwSubtype) const {
         return getSpawnSubtype() == spanwSubtype;
     }
-    s32 getSubtype() const {
-        return (mParams >> 4 & 0xF);
+    Subtype getSubtype() const {
+        return (Subtype)(mParams >> 4 & 0xF);
     }
-    bool isSubtype(u8 subtype) const {
+    bool isSubtype(Subtype subtype) const {
         return getSubtype() == subtype;
     }
     s32 getInsectCount() const {

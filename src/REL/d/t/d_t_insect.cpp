@@ -77,7 +77,7 @@ inline bool checkProfile(u16 prof, u32 target) {
 }
 
 int dTgInsect_c::actorPostCreate() {
-    s32 subtype = mParams >> 4 & 0xF;
+    Subtype subtype = getSubtype();
     // ??? doesn't match without the double comparison
     if (subtype == SUBTYPE_WOODLAND_RHINO_BEETLE
         || subtype == SUBTYPE_WOODLAND_RHINO_BEETLE
