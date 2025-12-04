@@ -3699,8 +3699,8 @@ void dLytMiniGame_c::setDisplayedPoints(s32 points) {
         case VARIANT_13:            mScore.setScore(points); break;
         case VARIANT_11:
             mScore.setScore(points);
-            field_0x3864 = 1;
-            field_0x3865 = 0;
+            field_0x3864 = true;
+            field_0x3865 = false;
             break;
     }
 }
@@ -4032,15 +4032,15 @@ void dLytMiniGame_c::fn_80296000() {
 
 void dLytMiniGame_c::fn_80296070() {
     if (fn_80295DB0()) {
-        if (field_0x3864 == 1) {
+        if (field_0x3864 == true) {
             s32 score = mScore.getScore();
             s32 rupeeDiff = dLytMeter_c::getRupeeDifference();
             if (score != 0) {
                 if (rupeeDiff != 0) {
-                    field_0x3865 = 1;
+                    field_0x3865 = true;
                 }
 
-                if (field_0x3865 == 1 && rupeeDiff < score) {
+                if (field_0x3865 == true && rupeeDiff < score) {
                     mScore.setScore(rupeeDiff);
                 }
             }
@@ -4128,7 +4128,7 @@ void dLytMiniGame_c::fn_80296330() {
             mTime.startIn();
         }
 
-        if (isFadingOut() && field_0x3866 == 1) {
+        if (isFadingOut() && field_0x3866 == true) {
             mTime.startOut();
         }
     }
@@ -4187,23 +4187,23 @@ void dLytMiniGame_c::init() {
 bool dLytMiniGame_c::loadData(const char *name, s32 slot) {
     bool loadRequest = false;
     switch (slot) {
-        case SLOT_MINI_GAME:          loadRequest = field_0x0068; break;
-        case SLOT_MINI_GAME_SCORE:    loadRequest = field_0x0069; break;
-        case SLOT_MINI_GAME_TIME:     loadRequest = field_0x006A; break;
-        case SLOT_MINI_GAME_BUGS:     loadRequest = field_0x006B; break;
-        case SLOT_MINI_GAME_PUMPKIN:  loadRequest = field_0x006C; break;
-        case SLOT_MINI_GAME_SCORE_SD: loadRequest = field_0x006D; break;
+        case SLOT_MINI_GAME:          loadRequest = mLoadRequestStart; break;
+        case SLOT_MINI_GAME_SCORE:    loadRequest = mLoadRequestScore; break;
+        case SLOT_MINI_GAME_TIME:     loadRequest = mLoadRequestTime; break;
+        case SLOT_MINI_GAME_BUGS:     loadRequest = mLoadRequestBugs; break;
+        case SLOT_MINI_GAME_PUMPKIN:  loadRequest = mLoadRequestPumpkin; break;
+        case SLOT_MINI_GAME_SCORE_SD: loadRequest = mLoadRequestScoreSd; break;
     }
 
     if (!loadRequest) {
         LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(name, nullptr);
         switch (slot) {
-            case SLOT_MINI_GAME:          field_0x0068 = true; break;
-            case SLOT_MINI_GAME_SCORE:    field_0x0069 = true; break;
-            case SLOT_MINI_GAME_TIME:     field_0x006A = true; break;
-            case SLOT_MINI_GAME_BUGS:     field_0x006B = true; break;
-            case SLOT_MINI_GAME_PUMPKIN:  field_0x006C = true; break;
-            case SLOT_MINI_GAME_SCORE_SD: field_0x006D = true; break;
+            case SLOT_MINI_GAME:          mLoadRequestStart = true; break;
+            case SLOT_MINI_GAME_SCORE:    mLoadRequestScore = true; break;
+            case SLOT_MINI_GAME_TIME:     mLoadRequestTime = true; break;
+            case SLOT_MINI_GAME_BUGS:     mLoadRequestBugs = true; break;
+            case SLOT_MINI_GAME_PUMPKIN:  mLoadRequestPumpkin = true; break;
+            case SLOT_MINI_GAME_SCORE_SD: mLoadRequestScoreSd = true; break;
         }
         return true;
     }

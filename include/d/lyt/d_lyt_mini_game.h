@@ -536,18 +536,18 @@ private:
 
 public:
     dLytMiniGame_c()
-        : field_0x0068(false),
-          field_0x0069(false),
-          field_0x006A(false),
-          field_0x006B(false),
-          field_0x006C(false),
-          field_0x006D(false),
-          mVariant(1),
-          field_0x3864(0),
-          field_0x3865(0),
+        : mLoadRequestStart(false),
+          mLoadRequestScore(false),
+          mLoadRequestTime(false),
+          mLoadRequestBugs(false),
+          mLoadRequestPumpkin(false),
+          mLoadRequestScoreSd(false),
+          mVariant(VARIANT_BAMBOO_CUTTING),
+          field_0x3864(false),
+          field_0x3865(false),
           field_0x3866(false),
-          field_0x3867(0),
-          field_0x3868(0) {}
+          field_0x3867(false),
+          field_0x3868(false) {}
     virtual ~dLytMiniGame_c() {}
 
     virtual int create() override;
@@ -634,12 +634,12 @@ private:
     void fn_802963E0();
     void fn_80296480();
 
-    /* 0x0068 */ bool field_0x0068;
-    /* 0x0069 */ bool field_0x0069;
-    /* 0x006A */ bool field_0x006A;
-    /* 0x006B */ bool field_0x006B;
-    /* 0x006C */ bool field_0x006C;
-    /* 0x006D */ bool field_0x006D;
+    /* 0x0068 */ bool mLoadRequestStart;
+    /* 0x0069 */ bool mLoadRequestScore;
+    /* 0x006A */ bool mLoadRequestTime;
+    /* 0x006B */ bool mLoadRequestBugs;
+    /* 0x006C */ bool mLoadRequestPumpkin;
+    /* 0x006D */ bool mLoadRequestScoreSd;
 
     /* 0x0070 */ d2d::ResAccIf_c mResAccStart;
     /* 0x03E0 */ d2d::ResAccIf_c mResAccScore;
@@ -656,11 +656,11 @@ private:
     /* 0x209C */ dLytMiniGameTime_c mTime;
     /* 0x2894 */ dLytMiniGameBugs_c mBugs;
     /* 0x33E4 */ dLytMiniGamePumpkin_c mPumpkin;
-    /* 0x3864 */ u8 field_0x3864;
-    /* 0x3865 */ u8 field_0x3865;
+    /* 0x3864 */ bool field_0x3864;
+    /* 0x3865 */ bool field_0x3865;
     /* 0x3866 */ bool field_0x3866;
-    /* 0x3867 */ u8 field_0x3867;
-    /* 0x3868 */ u8 field_0x3868;
+    /* 0x3867 */ bool field_0x3867;
+    /* 0x3868 */ bool field_0x3868;
 };
 
 #endif
