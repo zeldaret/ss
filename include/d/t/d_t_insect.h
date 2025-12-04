@@ -104,8 +104,8 @@ private:
     inline s32 getTries() {
         return 5;
     }
-    int actorCreate();
-    int actorPostCreate();
+    int actorCreate() override;
+    int actorPostCreate() override;
 };
 
 #endif

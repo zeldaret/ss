@@ -76,8 +76,6 @@ inline bool checkProfile(u16 prof, u32 target) {
     return prof == target;
 }
 
-// non matching: the inline vecs from the distance checks
-// are in the wrong order on the stack
 int dTgInsect_c::actorPostCreate() {
     s32 subtype = (mParams >> 4 & 0xF);
     // ??? doesn't match without the double comparison
@@ -98,7 +96,6 @@ int dTgInsect_c::actorPostCreate() {
                 checkProfile(prof, fProfile::OBJ_OCT_GRASS_LEAF) || checkProfile(prof, fProfile::OBJ_FRUIT) ||
                 checkProfile(prof, fProfile::OBJ_BARREL) || checkProfile(prof, fProfile::OBJ_VSD) ||
                 checkProfile(prof, fProfile::OBJ_SOIL)
-                // inline vec 1
             ) &&
             getSquareDistanceTo(obj->mPosition) < 25) {
             if (subtype == 7 || subtype == 0xB || subtype == 8 || subtype == 0xC) {
@@ -126,8 +123,7 @@ int dTgInsect_c::actorPostCreate() {
             if (!warp->checkThisHasSongItem() || warp->isTrialComplete()) {
                 return FAILED;
             }
-            // inline vec 2
-            if ((warp->checkInRadius(mPosition, 1000000))) {
+            if ((warp->mPosition - mPosition).squareMagXZ() <  1000000.f) {
                 mWarpRef.link(warp);
             } else {
                 return FAILED;
@@ -308,18 +304,31 @@ void dTgInsect_c::spawnAll() {
 // non matching: rodata is weird, using multiple different 100.0f instead of just one
 // also the registers are wrong
 void dTgInsect_c::spawnInsect(s32 index) {
-    f32 scaledScaleY = mScale.y * SCALE_Y;
-    f32 scaledScaleX = SCALE_X * mScale.x *  0.85f;
-    bool spawnFound;
+    f32 scaleX;
+    f32 scaleY;
+    f32 scaleXExt;
+    f32 scaleYExt;
+    f32 scaledScaleY;
+    f32 scaledScaleX;
+    f32 mult;
+    f32 scaledTemp;
+    scaleY = mScale.y;
+    scaleYExt = SCALE_Y;
+    scaledScaleY = scaleY * scaleYExt;
+    mult = 0.85f;
+    scaleXExt = SCALE_X;
+    scaleX = mScale.x;
+    scaledTemp = scaleXExt * scaleX;
+    scaledScaleX = mult * scaledTemp;
+    s16 angle1;
     mVec3_c pos;
     mVec3_c tmp;
     mAng3_c rot(0, 0, 0);
-    spawnFound = false;
-    s32 tries;
-    tries = 5;
+    bool spawnFound = false;
+    s32 tries = 5;
     do {
         f32 scale = cM::rndF(scaledScaleX);
-        s16 angle1 = cM::rndFX(65536.0f);
+        angle1 = cM::rndFX(65536.0f);
         rot.y = cM::rndFX(65536.0f);
         mVec3_c v2 = mVec3_c::Ez * scale;
         cLib::offsetPos(pos, mPosition, angle1, v2);
