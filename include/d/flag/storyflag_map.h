@@ -1050,22 +1050,22 @@ enum StoryFlags_e {
      * layer 3 / Skyview Boss Room layer 3 / Lake Floria layer 1 / Water Dragon's Lair layer 1)] Story Flag #206
      * (0x00CE) - JP 805ACD70 0x04 / US 805A9AF0 0x04
      */
-    STORYFLAG_206,
+    STORYFLAG_FARON_TRIAL_COMPLETE,
 
     /** [Eldin Trial Completed (removes fi trigger in front of Volcano Summit)]
      *  Story Flag #207 (0x00CF) - JP 805ACD70 0x08 / US 805A9AF0 0x08
      */
-    STORYFLAG_207,
+    STORYFLAG_ELDIN_TRIAL_COMPLETE,
 
     /** [Lanayru Trial Completed (Lanayru Caves layer 1)]
      *  Story Flag #208 (0x00D0) - JP 805ACD70 0x10 / US 805A9AF0 0x10
      */
-    STORYFLAG_208,
+    STORYFLAG_LANAYRU_TRIAL_COMPLETE,
 
     /** [Hylia's Trial Completed (Triggers Fi Text after Skyloft Trial)]
      *  Story Flag #209 (0x00D1) - JP 805ACD70 0x20 / US 805A9AF0 0x20
      */
-    STORYFLAG_209,
+    STORYFLAG_HYLIA_TRIAL_COMPLETE,
 
     /** [Obtain Stone of Trials]
      *  Story Flag #210 (0x00D2) - JP 805ACD70 0x40 / US 805A9AF0 0x40

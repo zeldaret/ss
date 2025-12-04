@@ -36,6 +36,7 @@ struct AABB {
     AABB() {}
 
     AABB(const VEC3 &min, const VEC3 &max) : min(min), max(max) {}
+    AABB(f32 minX, f32 minY, f32 minZ, f32 maxX, f32 maxY, f32 maxZ) : min(minX, minY, minZ), max(maxX, maxY, maxZ) {}
     void Set(const VEC3 *points, unsigned int num);
     void Set(const AABB *box, const MTX34 *mtx);
 

@@ -1,17 +1,30 @@
 #include "d/t/d_t_insect.h"
+
 #include "c/c_lib.h"
 #include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/a/d_a_insect_butterfly.h"
 #include "d/a/d_a_item.h"
 #include "d/a/d_a_itembase.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/a/obj/d_a_obj_soil.h"
+#include "d/a/obj/d_a_obj_warp.h"
+#include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
+#include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/flag/itemflag_manager.h"
 #include "d/flag/sceneflag_manager.h"
+#include "d/flag/storyflag_manager.h"
+#include "f/f_base.h"
+#include "f/f_manager.h"
 #include "f/f_profile.h"
 #include "f/f_profile_name.h"
+#include "m/m_angle.h"
 #include "m/m_vec.h"
+#include "nw4r/math/math_geometry.h"
+#include "nw4r/math/math_types.h"
+#include "rvl/MTX/mtx.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_INSECT, dTgInsect_c, fProfile::TAG_INSECT, 0x167, 0, 0);
 
@@ -20,86 +33,309 @@ STATE_DEFINE(dTgInsect_c, WaitCreate);
 STATE_DEFINE(dTgInsect_c, WaitForceEscape);
 STATE_DEFINE(dTgInsect_c, End);
 
+static const s32 unused[] = {
+    0x001E0100, 0, 0, 0, 0, 0, 0, 0,
+};
+
+static const f32 different100[] = {100};
+
+static const f32 WHATEVER[] = {100, 150, 0.5f};
+
+const s32 *useUnused() {
+    return unused;
+}
+
+// non matching
+int dTgInsect_c::actorCreate() {
+    if (getSubtype() == 0) {
+        return FAILED;
+    }
+    if (getSubtype() == 1) {
+        return FAILED;
+    }
+    if (getSubtype() == 2) {
+        return FAILED;
+    }
+    mInsectCount = getInsectCount();
+    if (mInsectCount > 0xF) {
+        mInsectCount = 0xF;
+    } else {
+        if (mInsectCount == 0xF) {
+            mInsectCount = 1;
+        }
+    }
+    mScale *= 0.01f;
+    unk24C = 0;
+    unk260 = mPosition;
+    // non matching: load of 0 in r0
+    // that is already 0
+    if (isTrialGateType() || isGossipStoneType() || isGoddessWallType() || isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
+        unk24E = 1;
+    }
+    return SUCCEEDED;
+}
+
+inline bool checkProfile(u16 prof, u32 target) {
+    return prof == target;
+}
+
+// non matching: the inline vecs from the distance checks
+// are in the wrong order on the stack
+int dTgInsect_c::actorPostCreate() {
+    s32 subtype = (mParams >> 4 & 0xF);
+    // ??? doesn't match without the double comparison
+    if (subtype == 5 || subtype == 5 || subtype == 6 || subtype == 3 || subtype == 9) {
+        if (!someGroundCheck(mPosition, 1)) {
+            return FAILED;
+        }
+    }
+    dAcBase_c *obj = nullptr;
+    do {
+        obj = searchNextActor(obj);
+        if (obj == nullptr) {
+            break;
+        }
+        u16 prof = obj->mProfileName;
+        if ((
+                checkProfile(prof, fProfile::OBJ_TUBO) || checkProfile(prof, fProfile::OBJ_CARRY_STONE) ||
+                checkProfile(prof, fProfile::OBJ_OCT_GRASS_LEAF) || checkProfile(prof, fProfile::OBJ_FRUIT) ||
+                checkProfile(prof, fProfile::OBJ_BARREL) || checkProfile(prof, fProfile::OBJ_VSD) ||
+                checkProfile(prof, fProfile::OBJ_SOIL)
+                // inline vec 1
+            ) &&
+            getSquareDistanceTo(obj->mPosition) < 25) {
+            if (subtype == 7 || subtype == 0xB || subtype == 8 || subtype == 0xC) {
+                if (prof == fProfile::OBJ_SOIL && static_cast<dAcOsoil_c *>(obj)->isStateHole()) {
+                    return FAILED;
+                }
+                setActorRef(obj);
+            }
+            break;
+        }
+    } while (true);
+    if (mActorNode.isLinked()) {
+        mStateMgr.changeState(StateID_WaitCreate);
+    } else {
+        if (isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
+            for (s32 i = 0; i < 16; i++) {
+                unk1F8[i] = 0;
+            }
+            mStateMgr.changeState(StateID_Wait);
+        } else if (isTrialGateType()) {
+            dAcOWarp_c *warp = static_cast<dAcOWarp_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_WARP));
+            if (warp == nullptr) {
+                return FAILED;
+            }
+            if (!warp->checkThisHasSongItem() || warp->isTrialComplete()) {
+                return FAILED;
+            }
+            // inline vec 2
+            if ((warp->checkInRadius(mPosition, 1000000))) {
+                unk26C.link(warp);
+            } else {
+                return FAILED;
+            }
+            mStateMgr.changeState(StateID_WaitForceEscape);
+        } else if (isGossipStoneType()) {
+            if (!ItemflagManager::sInstance->getFlagDirect(ITEM_BALLAD_OF_THE_GODDESS)) {
+                return FAILED;
+            }
+            if (!StoryflagManager::sInstance->getFlag(STORYFLAG_IMPRISONED_1_DEFEATED)) {
+                return FAILED;
+            }
+            bool flag = SceneflagManager::sInstance->checkFlag(mRoomID, mParams >> 0xC & 0xFF);
+            if (flag) {
+                return FAILED;
+            }
+        } else if (isGoddessWallType()) {
+            if (!ItemflagManager::sInstance->getFlagDirect(ITEM_BALLAD_OF_THE_GODDESS)) {
+                return FAILED;
+            }
+            if (!StoryflagManager::sInstance->getFlag(STORYFLAG_FARON_TRIAL_COMPLETE)) {
+                return FAILED;
+            }
+            mStateMgr.changeState(StateID_WaitForceEscape);
+        } else {
+            mStateMgr.changeState(StateID_End);
+        }
+        spawnAll();
+    }
+    return SUCCEEDED;
+}
+
 void dTgInsect_c::initializeState_Wait() {}
-void dTgInsect_c::executeState_Wait() {}
+
+void dTgInsect_c::executeState_Wait() {
+    if (isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
+        s32 i = 0;
+        for (; i < mInsectCount; i++) {
+            if (!mLinks[i].isLinked()) {
+                if (unk208[i] > 0) {
+                    unk208[i]--;
+                } else if (unk208[i] == 0) {
+                    nw4r::math::MTX34 mtx;
+                    PSMTXTrans(mtx, mPosition.x, mPosition.y, mPosition.z);
+                    nw4r::math::MTX34 scale;
+                    PSMTXScale(scale, mScale.x, mScale.y, mScale.x);
+                    PSMTXConcat(mtx, scale, mtx);
+                    nw4r::math::AABB aabb(-100, 0, -100, 100, 100, 100);
+                    aabb.Set(&aabb, &mtx);
+                    if (fn_801BB750(&aabb, 10000)) {
+                        spawnInsect(i);
+                    }
+                } else {
+                    unk208[i] = 900;
+                }
+            }
+        }
+    }
+}
 void dTgInsect_c::finalizeState_Wait() {}
 void dTgInsect_c::initializeState_WaitCreate() {
-    if (getSpawnSubtype() != 2) {
+    if (!isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
         unk24F = 1;
         for (s32 i = 0; i < mInsectCount; i++) {
             unk250[i] = shouldSpawn();
         }
     }
 }
-void dTgInsect_c::executeState_WaitCreate() {}
+#pragma opt_strength_reduction on
+void dTgInsect_c::executeState_WaitCreate() {
+    if (mActorNode.isLinked()) {
+        if (mActorNode.get()->mProfileName == fProfile::OBJ_VSD ||
+            mActorNode.get()->mProfileName == fProfile::OBJ_SOIL) {
+            if (unk24C == 0) {
+                return;
+            }
+        } else {
+            if (mPosition.squareDistanceToXZ(mActorNode.get()->mPosition) < 25) {
+                return;
+            }
+        }
+    }
+    mActorNode.unlink();
+    for (s32 i = 0; i < mInsectCount; i++) {
+        if (!isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
+            if (unk250[i] != 0) {
+                unk250[i] = 0;
+            } else {
+                continue;
+            }
+        }
+        dAcBase_c *insect = nullptr;
+        mVec3_c tmp1 = mPosition;
+        if (unk24C) {
+            tmp1 = unk260;
+        }
+        mAng3_c rot(0, cM::rndFX(65536), 0);
+        switch (getSubtype()) {
+            case SUBTYPE_LANAYRU_ANT:
+                insect = dAcObjBase_c::createInsectActor(this, fProfile::INSECT_ANT, 1, &tmp1, &rot, nullptr, 0, 0x3f);
+                break;
+            case SUBTYPE_FARON_GRASSHOPPER:
+                insect = dAcObjBase_c::createInsectActor(
+                    this, fProfile::INSECT_GRASSHOPPER, 1, &tmp1, &rot, nullptr, 0, 0x3f
+                );
+                break;
+            case SUBTYPE_SKYLOFT_MANTIS:
+                insect = dAcObjBase_c::createInsectActor(
+                    this, fProfile::INSECT_GRASSHOPPER, 0x10000001, &tmp1, &rot, nullptr, 0, 0x3f
+                );
+                break;
+            case SUBTYPE_EDLIN_ROLLER:
+                insect =
+                    dAcObjBase_c::createInsectActor(this, fProfile::INSECT_SCARAB, 1, &tmp1, &rot, nullptr, 0, 0x3f);
+                break;
+        }
+        if (insect != nullptr) {
+            mLinks[i].link(insect);
+            unk208[i] = -1;
+        }
+    }
+    if (isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
+        mStateMgr.changeState(StateID_Wait);
+    } else {
+        mStateMgr.changeState(StateID_End);
+    }
+}
 void dTgInsect_c::finalizeState_WaitCreate() {}
-void dTgInsect_c::initializeState_WaitForceEscape() {}
-void dTgInsect_c::executeState_WaitForceEscape() {}
+
+// non matching: regswap
+void dTgInsect_c::initializeState_WaitForceEscape() {
+    for (s32 i = 0; i < mInsectCount; i++) {
+        if (mLinks[i].isLinked()) {
+            mLinks[i].get()->mActorProperties |= AC_PROP_0x4;
+        }
+    }
+}
+
+void dTgInsect_c::executeState_WaitForceEscape() {
+    if (isTrialGateType()) {
+        if (unk26C.isLinked()) {
+            dAcOWarp_c *warp = static_cast<dAcOWarp_c *>(unk26C.get());
+            if (warp->fn_0x90()) {
+                for (s32 i = 0; i < mInsectCount; i++) {
+                    if (mLinks[i].isLinked()) {
+                        static_cast<dAcInsectButterfly_c *>(mLinks[i].get())->setKillSignal();
+                        mStateMgr.changeState(StateID_End);
+                    }
+                }
+            }
+        }
+    } else if (isGoddessWallType() && unk24D) {
+        for (s32 i = 0; i < mInsectCount; i++) {
+            if (mLinks[i].isLinked()) {
+                static_cast<dAcInsectButterfly_c *>(mLinks[i].get())->setKillSignal();
+                mStateMgr.changeState(StateID_End);
+            }
+        }
+    }
+}
 void dTgInsect_c::finalizeState_WaitForceEscape() {}
 void dTgInsect_c::initializeState_End() {}
 void dTgInsect_c::executeState_End() {}
 void dTgInsect_c::finalizeState_End() {}
 
-inline bool isButterfly3(int subtype, int spawnSubtype) {
-    if (subtype != 10) return false;
-    if (spawnSubtype != 3) return false;
-    return true;
-}
-inline bool isButterfly4(int subtype, int spawnSubtype) {
-    if (subtype != 10) return false;
-    if (spawnSubtype != 4) return false;
-    return true;
-}
-inline bool isButterfly5(int subtype, int spawnSubtype) {
-    if (subtype != 10) return false;
-    if (spawnSubtype != 5) return false;
-    return true;
-}
-
 static const f32 FLOAT_ARRAY[] = {
-    0.1f,
-    -0.4f,
-    0.3f,
-    0.7f,
-    -0.7f,
+    0.1f, -0.4f, 0.3f, 0.7f, -0.7f,
 };
 
-static const f32 WHATEVER[] = {
-    100,
-    150,
-    0.5f
-};
+void dTgInsect_c::spawnAll() {
+    for (s32 i = 0; i < mInsectCount; i++) {
+        if (shouldSpawn()) {
+            spawnInsect(i);
+        }
+    }
+}
 
-static const f32 different100[] =  { 100 };
-
-
-
-// regalloc (probably)
+// non matching: rodata is weird, using multiple different 100.0f instead of just one
+// also the registers are wrong
 void dTgInsect_c::spawnInsect(s32 index) {
+    s32 tries;
     f32 scaledScale = 100 * mScale.y;
     f32 scaled2 = mScale.x * WHATEVER[0] * 0.85f;
-    mAng3_c rot(0,0,0);
+    bool spawnFound;
     mVec3_c pos;
-    bool spawnFound = false;
-    s32 tries = 5;
+    mVec3_c tmp;
+    mAng3_c rot(0, 0, 0);
+    spawnFound = false;
+    tries = 5;
     do {
         f32 scale = cM::rndF(scaled2);
         s16 angle1 = cM::rndFX(65536.0f);
-        s16 angle2 = cM::rndFX(65536.0f);
-        rot.y = angle2;
+        rot.y = cM::rndFX(65536.0f);
         mVec3_c v2 = mVec3_c::Ez * scale;
         cLib::offsetPos(pos, mPosition, angle1, v2);
-        s32 subtype = mParams >> 4 & 0xF;
-        switch (subtype) {
-            case 3:
-            case 5:
-            case 6:
-            case 9:
+        switch (getSubtype()) {
+            case SUBTYPE_VOLCANIC_LADYBUG:
+            case SUBTYPE_WOODLAND_RHINO_BEETLE:
+            case SUBTYPE_SAND_CICADA:
+            case SUBTYPE_SKY_STAG_BEETLE:
                 pos = mPosition;
-                if (subtype == 6) {
-                    mVec3_c tmp = mVec3_c::Ez;
+                if (getSubtype() == SUBTYPE_SAND_CICADA) {
+                    tmp = mVec3_c::Ez;
                     tmp.rotY(mAng(mRotation.y + 0x4000));
-                    f32 arrayResult = FLOAT_ARRAY[index % 5];
+                    f32 arrayResult = FLOAT_ARRAY[index % (s32)ARRAY_LENGTH(FLOAT_ARRAY)];
                     f32 scaledX = WHATEVER[0] * mScale.x;
                     tmp.multScalar(arrayResult * scaledX);
                     pos = mPosition + tmp;
@@ -114,59 +350,59 @@ void dTgInsect_c::spawnInsect(s32 index) {
                 }
                 spawnFound = true;
                 break;
-            case 7:
-            case 8:
-            case 0xB:
-            case 0xC:
+            case SUBTYPE_FARON_GRASSHOPPER:
+            case SUBTYPE_LANAYRU_ANT:
+            case SUBTYPE_SKYLOFT_MANTIS:
+            case SUBTYPE_EDLIN_ROLLER:
                 pos.y = different100[0] + mPosition.y;
                 if (dBgS_ObjGndChk::CheckPos(pos)) {
                     spawnFound = true;
                 }
                 break;
-            case 4:
-            case 0xA:
-            case 0xD:
+            case SUBTYPE_GERUDO_DRAGONFLY:
+            case SUBTYPE_BUTTERFLY:
+            case SUBTYPE_STARRY_FIREFLY:
                 spawnFound = true;
                 break;
         }
     } while (!spawnFound && --tries);
-    s32 subtype = mParams >> 4 & 0xF;
-    dAcBase_c* ref = nullptr;
-    if (subtype == 3) {
-        
-    }
-    switch (subtype) {
-        case 3:
+    dAcBase_c *ref = nullptr;
+    switch (getSubtype()) {
+        case SUBTYPE_VOLCANIC_LADYBUG:
             ref = dAcObjBase_c::createInsectActor(this, fProfile::INSECT_LADYBUG, 0, &pos, &rot, NULL, 0, 0x3f);
             break;
-        case 4:
+        case SUBTYPE_GERUDO_DRAGONFLY:
             ref = dAcObjBase_c::createInsectActor(this, fProfile::INSECT_DRAGONFLY, 0, &pos, &rot, NULL, 0, 0x3f);
             break;
-        case 5:
+        case SUBTYPE_WOODLAND_RHINO_BEETLE:
             ref = dAcObjBase_c::createInsectActor(this, fProfile::INSECT_BEETLE, 0, &pos, &rot, NULL, 0, 0x3f);
             break;
-        case 6:
+        case SUBTYPE_FARON_GRASSHOPPER:
             ref = dAcObjBase_c::createInsectActor(this, fProfile::INSECT_GRASSHOPPER, 0, &pos, &rot, NULL, 0, 0x3f);
             break;
-        case 7:
+        case SUBTYPE_SAND_CICADA:
             ref = dAcObjBase_c::createInsectActor(this, fProfile::INSECT_CICADA, 0, &pos, &rot, NULL, 0, 0x3f);
             break;
-        case 8:
+        case SUBTYPE_LANAYRU_ANT:
             ref = dAcObjBase_c::createInsectActor(this, fProfile::INSECT_ANT, 0, &pos, &rot, NULL, 0, 0x3f);
             break;
-        case 9:
+        case SUBTYPE_SKY_STAG_BEETLE:
             ref = dAcObjBase_c::createInsectActor(this, fProfile::INSECT_BEETLE, 0x10000000, &pos, &rot, NULL, 0, 0x3f);
             break;
-        case 0xA:
-            ref = dAcObjBase_c::createInsectActor(this, fProfile::INSECT_BUTTERFLY, mViewClipIdx, &pos, &rot, NULL, 0, 0x3f);
+        case SUBTYPE_BUTTERFLY:
+            ref = dAcObjBase_c::createInsectActor(
+                this, fProfile::INSECT_BUTTERFLY, mViewClipIdx, &pos, &rot, NULL, 0, 0x3f
+            );
             break;
-        case 0xB:
-            ref = dAcObjBase_c::createInsectActor(this, fProfile::INSECT_GRASSHOPPER, 0x10000000, &pos, &rot, NULL, 0, 0x3f);
+        case SUBTYPE_SKYLOFT_MANTIS:
+            ref = dAcObjBase_c::createInsectActor(
+                this, fProfile::INSECT_GRASSHOPPER, 0x10000000, &pos, &rot, NULL, 0, 0x3f
+            );
             break;
-        case 0xC:
+        case SUBTYPE_EDLIN_ROLLER:
             ref = dAcObjBase_c::createInsectActor(this, fProfile::INSECT_SCARAB, 0, &pos, &rot, NULL, 0, 0x3f);
             break;
-        case 0xD:
+        case SUBTYPE_STARRY_FIREFLY:
             ref = dAcObjBase_c::createInsectActor(this, fProfile::INSECT_FIREFLY, 0, &pos, &rot, NULL, 0, 0x3f);
             break;
     }
@@ -178,19 +414,17 @@ void dTgInsect_c::spawnInsect(s32 index) {
 }
 
 bool dTgInsect_c::shouldSpawn() {
-    int spawnSubtype = mParams >> 8 & 0xF;
-    if (spawnSubtype == 2) {
+    if (isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
         return true;
-    } else if (spawnSubtype == 1) {
+    } else if (isSpawnSubtype(SPAWN_SKYLOFT_BUGKID_TREE)) {
         bool tmp = SceneflagManager::sInstance->checkFlag(mRoomID, 0x3a);
         return !tmp;
     } else {
-        int subtype = mParams >> 4 & 0xF;
-        if (isButterfly3(subtype, spawnSubtype)) {
+        if (isTrialGateType()) {
             return true;
-        } else if (isButterfly4(subtype, spawnSubtype) || isButterfly5(subtype, spawnSubtype)) {
+        } else if (isGossipStoneType() || isGoddessWallType()) {
             return true;
-        } else if((subtype == 0xD) && !dAcItem_c::checkFlag(ITEM_STARRY_FIREFLY)) {
+        } else if ((isSubtype(SUBTYPE_STARRY_FIREFLY)) && !dAcItem_c::checkFlag(ITEM_STARRY_FIREFLY)) {
             return true;
         } else {
             if (cM::rndF(1.0f) >= 0.5f) {
@@ -200,4 +434,28 @@ bool dTgInsect_c::shouldSpawn() {
             }
         }
     }
+}
+
+bool dTgInsect_c::someGroundCheck(const mVec3_c &pos, s32 updateRotation) {
+    mVec3_c tmp = mVec3_c::Ez * (mScale.x * 100);
+    tmp.rotY(mRotation.y);
+    tmp += pos;
+    dBgS_LinChk linChk;
+    linChk.mBackFlag = true;
+    linChk.mFrontFlag = false;
+    linChk.Set(&pos, &tmp, nullptr);
+    if (!dBgS::GetInstance()->LineCross(&linChk)) {
+        mAng yRot = mRotation.y + 0x7FFF;
+        if (updateRotation != 0) {
+            mRotation.y = yRot;
+        }
+        tmp = mVec3_c::Ez * (mScale.x * 100);
+        tmp.rotY(yRot);
+        tmp += pos;
+        linChk.Set(&pos, &tmp, nullptr);
+        if (!dBgS::GetInstance()->LineCross(&linChk)) {
+            return false;
+        }
+    }
+    return true;
 }
