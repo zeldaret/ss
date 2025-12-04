@@ -11,6 +11,7 @@
 #include "egg/gfx/eggScreen.h"
 #include "m/m_allocator.h"
 #include "m/m_dvd.h"
+#include "m/m_fader_base.h"
 #include "nw4r/g3d/g3d_camera.h"
 #include "s/s_FPhase.h"
 #include "s/s_State.hpp"
@@ -174,6 +175,10 @@ public:
 
     bool isFaderSettled() const {
         return mFader.isSettled();
+    }
+
+    bool isFadingOut() const {
+        return mFader.isStatus(mFaderBase_c::FADING_OUT);
     }
 
     bool isInLastBoss() const {

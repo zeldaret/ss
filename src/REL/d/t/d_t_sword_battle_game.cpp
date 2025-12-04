@@ -68,12 +68,12 @@ int dTgSwordBattleGame_c::actorExecuteInEvent() {
         } break;
         case 'cndn': {
             if (advance) {
-                dLytMiniGame_c::GetInstance()->fn_80295940();
+                dLytMiniGame_c::GetInstance()->startCountdown();
 
-            } else if (dLytMiniGame_c::GetInstance()->fn_80295AB0()) {
+            } else if (dLytMiniGame_c::GetInstance()->isStartCountdownDone()) {
                 dLytMiniGame_c::GetInstance()->timeRelatedExecute();
                 dLytMiniGame_c::GetInstance()->setHighscore(getBossHighscore());
-                dLytMiniGame_c::GetInstance()->fn_80295CB0(true);
+                dLytMiniGame_c::GetInstance()->setShowBestTime(true);
                 mTimer.initUpCounter();
                 field_0x1A8 = true;
                 field_0x1AC = true;
@@ -83,8 +83,8 @@ int dTgSwordBattleGame_c::actorExecuteInEvent() {
         } break;
         case 'fnsh': {
             if (advance) {
-                dLytMiniGame_c::GetInstance()->fn_80295980();
-            } else if (dLytMiniGame_c::GetInstance()->fn_80295AD0()) {
+                dLytMiniGame_c::GetInstance()->startFinish();
+            } else if (dLytMiniGame_c::GetInstance()->isFinishAnimDone()) {
                 mEventRelated.advanceNext();
             }
             ret = SUCCEEDED;
@@ -112,7 +112,7 @@ int dTgSwordBattleGame_c::actorExecuteInEvent() {
                 setInBossRushFlag();
                 setCurrentBossNumber(mBossNumber + 1);
                 if (MinigameManager::endMinigame(MinigameManager::BOSS_RUSH)) {
-                    dLytMiniGame_c::GetInstance()->fn_80295980();
+                    dLytMiniGame_c::GetInstance()->startFinish();
                     dLytMiniGame_c::GetInstance()->timeRelated();
                 }
             }
@@ -163,7 +163,7 @@ void dTgSwordBattleGame_c::finalizeState_Manage() {}
 
 void dTgSwordBattleGame_c::init() {
     if (MinigameManager::GetInstance()->checkInBossRush()) {
-        createBase(fProfile::LYT_MINI_GAME, this, 8, OTHER);
+        createBase(fProfile::LYT_MINI_GAME, this, dLytMiniGame_c::VARIANT_BOSS_RUSH, OTHER);
     }
     mTimer.vt_0x0C();
 

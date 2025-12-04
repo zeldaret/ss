@@ -437,9 +437,7 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
                 dMessage_c::getInstance()->setInMapEvent(true);
                 dMessage_c::getInstance()->clearLightPillarRelatedArgs();
                 if (dLytControlGame_c::getInstance()->isStateNotNormalOrInEvent()) {
-                    dLytControlGame_c::getInstance()->openMapEvent(
-                        mapEvent, arg1, arg2
-                    );
+                    dLytControlGame_c::getInstance()->openMapEvent(mapEvent, arg1, arg2);
                 }
             } else {
                 dLytMap_c::GetInstance()->queueMapEvent(mapEvent, arg1, arg2);
@@ -1196,28 +1194,52 @@ void dFlow_c::createLytMiniGame() {
     if (dLytMiniGame_c::GetInstance() == nullptr) {
         switch (dMessage_c::getInstance()->getMiniGameVariant()) {
             case 0:
-                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 11, fBase_c::OTHER);
+                dBase_c::createBase(
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_11,
+                    fBase_c::OTHER
+                );
                 break;
             case 1:
-                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 10, fBase_c::OTHER);
+                dBase_c::createBase(
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_10,
+                    fBase_c::OTHER
+                );
                 break;
             case 2:
-                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 12, fBase_c::OTHER);
+                dBase_c::createBase(
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_12,
+                    fBase_c::OTHER
+                );
                 break;
             case 3:
-                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 14, fBase_c::OTHER);
+                dBase_c::createBase(
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_14,
+                    fBase_c::OTHER
+                );
                 break;
             case 4:
-                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 13, fBase_c::OTHER);
+                dBase_c::createBase(
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_13,
+                    fBase_c::OTHER
+                );
                 break;
             case 5:
-                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 2, fBase_c::OTHER);
+                dBase_c::createBase(
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_FUN_FUN_ISLAND,
+                    fBase_c::OTHER
+                );
                 break;
             case 6:
-                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 16, fBase_c::OTHER);
+                dBase_c::createBase(
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_16,
+                    fBase_c::OTHER
+                );
                 break;
             case 7:
-                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 15, fBase_c::OTHER);
+                dBase_c::createBase(
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_15,
+                    fBase_c::OTHER
+                );
                 break;
         }
     }

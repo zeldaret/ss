@@ -5,7 +5,11 @@
 #include "d/a/d_a_itembase.h"
 #include "d/d_lang.h"
 #include "d/d_message.h"
+#include "d/d_rawarchive.h"
+#include "d/d_sc_game.h"
+#include "d/d_stage_mgr.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/meter/d_lyt_meter.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
@@ -14,7 +18,18 @@
 #include "nw4r/lyt/lyt_types.h"
 #include "nw4r/math/math_arithmetic.h"
 #include "nw4r/math/math_types.h"
+#include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/d_d3d.h"
+#include "toBeSorted/event_manager.h"
+#include "toBeSorted/minigame_mgr.h"
+
+dLytMiniGamePumpkin_c *dLytMiniGamePumpkin_c::sInstance;
+dLytMiniGameBugs_c *dLytMiniGameBugs_c::sInstance;
+dLytMiniGameTime_c *dLytMiniGameTime_c::sInstance;
+dLytMiniGameStart_c *dLytMiniGameStart_c::sInstance;
+dLytMiniGameScore_c *dLytMiniGameScore_c::sInstance;
+dLytMiniGameScoreSd_c *dLytMiniGameScoreSd_c::sInstance;
+dLytMiniGame_c *dLytMiniGame_c::sInstance;
 
 static const d2d::LytBrlanMapping brlanMapPumpkin[] = {
     {    "miniGamePumpkin_00_getPoint.brlan",    "G_scoreAll_00"},
@@ -472,7 +487,7 @@ void dLytMiniGameBugs_c::startIn() {
     }
 }
 
-void dLytMiniGameBugs_c::startOutForced() {
+void dLytMiniGameBugs_c::startOutTemp() {
     if (sInstance == nullptr) {
         return;
     }
@@ -574,7 +589,7 @@ bool dLytMiniGameBugs_c::isSlotIconOnEnabled(s32 slot) const {
     return mAnm[idx].isEnabled_();
 }
 
-bool dLytMiniGameBugs_c::isSlotBugCollected(s32 slot) {
+bool dLytMiniGameBugs_c::isSlotBugCollected(s32 slot) const {
     if (sInstance == nullptr) {
         return false;
     }
@@ -873,7 +888,7 @@ bool dLytMiniGameTime_c::execute() {
         saveSecondsTimer();
     }
 
-    if (mVariant == TIME_VARIANT_0) {
+    if (mVariant == TIME_VARIANT_INSECT_CAPTURE) {
         if (mCurrentTimerValueSeconds >= 590 && mLastTimerValueSeconds != mCurrentTimerValueSeconds &&
             mCurrentTimerValueSeconds != 600) {
             dSndSmallEffectMgr_c::GetInstance()->playMinigameTimeUpSound(600 - mCurrentTimerValueSeconds);
@@ -900,12 +915,12 @@ void dLytMiniGameTime_c::init() {
     }
 
     switch (mVariant) {
-        case TIME_VARIANT_0: mTimeFormat = TIMER_LONG; break;
-        case TIME_VARIANT_1: mTimeFormat = TIMER_SECONDS; break;
-        case TIME_VARIANT_2: mTimeFormat = TIMER_SECONDS; break;
-        case TIME_VARIANT_3: mTimeFormat = TIMER_LONG; break;
-        case TIME_VARIANT_4: mTimeFormat = TIMER_LONG; break;
-        case TIME_VARIANT_5: mTimeFormat = TIMER_LONG; break;
+        case TIME_VARIANT_INSECT_CAPTURE:         mTimeFormat = TIMER_LONG; break;
+        case TIME_VARIANT_SPIRAL_CHARGE_TUTORIAL: mTimeFormat = TIMER_SECONDS; break;
+        case TIME_VARIANT_PUMPKIN_ARCHERY:        mTimeFormat = TIMER_SECONDS; break;
+        case TIME_VARIANT_ROLLERCOASTER:          mTimeFormat = TIMER_LONG; break;
+        case TIME_VARIANT_BOSS_RUSH:              mTimeFormat = TIMER_LONG; break;
+        case TIME_VARIANT_TRIAL_TIME_ATTACK:      mTimeFormat = TIMER_LONG; break;
     }
 
     resetAlphaIn();
@@ -944,7 +959,7 @@ void dLytMiniGameTime_c::fn_8028DD80() {
     mIsVisible = true;
 }
 
-void dLytMiniGameTime_c::fn_8028DE40() {
+void dLytMiniGameTime_c::startOut() {
     if (sInstance == nullptr) {
         return;
     }
@@ -958,7 +973,7 @@ void dLytMiniGameTime_c::fn_8028DE40() {
     }
 }
 
-void dLytMiniGameTime_c::fn_8028DED0() {
+void dLytMiniGameTime_c::startIn() {
     if (sInstance == nullptr) {
         return;
     }
@@ -987,7 +1002,7 @@ void dLytMiniGameTime_c::fn_8028DED0() {
     }
 }
 
-void dLytMiniGameTime_c::fn_8028DFD0() {
+void dLytMiniGameTime_c::startOutTemp() {
     if (sInstance == nullptr) {
         return;
     }
@@ -1563,7 +1578,7 @@ bool dLytMiniGameStart_c::execute() {
         }
 
         if (isTimeupEndReached()) {
-            stopFinish();
+            stopTimeup();
             resetPlayedSounds();
             mIsVisible = false;
         }
@@ -1906,12 +1921,12 @@ bool dLytMiniGameScore_c::execute() {
         fn_80291BC0();
         if (!field_0x816) {
             switch (mVariant) {
-                case SCORE_VARIANT_0:
+                case SCORE_VARIANT_BAMBOO_CUTTING:
                     if (hasIncreasedScore()) {
                         startGetScore();
                     }
                     break;
-                case SCORE_VARIANT_2:
+                case SCORE_VARIANT_THRILL_DIGGER:
                     if (field_0x829) {
                         if (hasIncreasedScore()) {
                             startGetScore();
@@ -1924,15 +1939,15 @@ bool dLytMiniGameScore_c::execute() {
                         field_0x829 = false;
                     }
                     break;
-                case SCORE_VARIANT_1:
+                case SCORE_VARIANT_FUN_FUN_ISLAND:
                     if (mScore != 1) {
                         if (hasIncreasedScore()) {
                             startGetScore();
                         }
                     }
                     break;
-                case SCORE_VARIANT_3:
-                case SCORE_VARIANT_4:
+                case SCORE_VARIANT_PUMPKIN_ARCHERY:
+                case SCORE_VARIANT_SPIRAL_CHARGE_TUTORIAL:
                     if (hasIncreasedScore()) {
                         startGetScore();
                     }
@@ -1986,7 +2001,7 @@ bool dLytMiniGameScore_c::execute() {
         mLyt.calc();
     }
 
-    if (!field_0x816 && mVariant == SCORE_VARIANT_0 && hasIncreasedScore()) {
+    if (!field_0x816 && mVariant == SCORE_VARIANT_BAMBOO_CUTTING && hasIncreasedScore()) {
         dSndSmallEffectMgr_c::GetInstance()->playMinigameScoreUpSound(mScore);
     }
 
@@ -2052,7 +2067,7 @@ void dLytMiniGameScore_c::init() {
     mAnm[SCORE_ANIM_IN].setAnimEnable(false);
 
     switch (mVariant) {
-        case SCORE_VARIANT_0:
+        case SCORE_VARIANT_BAMBOO_CUTTING:
             field_0x82C = 0;
             field_0x81C = 21;
             field_0x7E4 = 4;
@@ -2088,7 +2103,7 @@ void dLytMiniGameScore_c::init() {
 
             fn_80293450(field_0x81C);
             break;
-        case SCORE_VARIANT_1:
+        case SCORE_VARIANT_FUN_FUN_ISLAND:
             field_0x830 = 0;
             field_0x82C = 0;
             field_0x81C = 11;
@@ -2149,7 +2164,7 @@ void dLytMiniGameScore_c::init() {
             }
             fn_80293450(field_0x81C);
             break;
-        case SCORE_VARIANT_2:
+        case SCORE_VARIANT_THRILL_DIGGER:
             field_0x830 = 0;
             field_0x82C = 0;
             field_0x81C = 6;
@@ -2168,7 +2183,7 @@ void dLytMiniGameScore_c::init() {
 
             fn_80293450(field_0x81C);
             break;
-        case SCORE_VARIANT_3:
+        case SCORE_VARIANT_PUMPKIN_ARCHERY:
             field_0x82C = 0;
             field_0x81C = 21;
             field_0x7E4 = 4;
@@ -2204,7 +2219,7 @@ void dLytMiniGameScore_c::init() {
 
             fn_80293450(field_0x81C);
             break;
-        case SCORE_VARIANT_4:
+        case SCORE_VARIANT_SPIRAL_CHARGE_TUTORIAL:
             field_0x830 = 0;
             field_0x82C = 0;
             field_0x81C = 19;
@@ -2266,7 +2281,7 @@ void dLytMiniGameScore_c::fn_80291410() {
     field_0x820 = true;
     mIsVisible = true;
 
-    if (mVariant == SCORE_VARIANT_1) {
+    if (mVariant == SCORE_VARIANT_FUN_FUN_ISLAND) {
         setScore(1);
         calcNumDigits();
         mAnm[SCORE_ANIM_SET_POSITION].setFrame(field_0x81C);
@@ -2283,7 +2298,7 @@ void dLytMiniGameScore_c::fn_80291410() {
     }
 }
 
-void dLytMiniGameScore_c::fn_802915B0() {
+void dLytMiniGameScore_c::startOut() {
     if (sInstance == nullptr) {
         return;
     }
@@ -2297,7 +2312,7 @@ void dLytMiniGameScore_c::fn_802915B0() {
     }
 }
 
-void dLytMiniGameScore_c::fn_80291640() {
+void dLytMiniGameScore_c::startIn() {
     if (sInstance == nullptr) {
         return;
     }
@@ -2326,7 +2341,7 @@ void dLytMiniGameScore_c::fn_80291640() {
     }
 }
 
-void dLytMiniGameScore_c::fn_80291740() {
+void dLytMiniGameScore_c::startOutTemp() {
     if (sInstance == nullptr) {
         return;
     }
@@ -2456,11 +2471,11 @@ void dLytMiniGameScore_c::fn_80291BC0() {
     calcNumDigits();
     realizePosition();
 
-    if (mVariant == SCORE_VARIANT_1) {
+    if (mVariant == SCORE_VARIANT_FUN_FUN_ISLAND) {
         if (field_0x828) {
             fn_80291EF0();
         }
-    } else if (mVariant == SCORE_VARIANT_2) {
+    } else if (mVariant == SCORE_VARIANT_THRILL_DIGGER) {
         fn_80292040();
     }
 
@@ -2471,12 +2486,12 @@ void dLytMiniGameScore_c::fn_80291BC0() {
     }
 }
 
-void dLytMiniGameScore_c::fn_80291D40(s32 arg) {
+void dLytMiniGameScore_c::fn_80291D40(s32 score) {
     if (sInstance == nullptr) {
         return;
     }
 
-    s32 diff = arg - mScore;
+    s32 diff = score - mScore;
     switch (diff) {
         case 1:
             field_0x80C = 1;
@@ -2501,11 +2516,11 @@ void dLytMiniGameScore_c::fn_80291D40(s32 arg) {
         case 0: return;
     }
 
-    if (arg < mScore) {
+    if (score < mScore) {
         field_0x80C = nw4r::math::FAbs(diff);
         field_0x810 = -1;
     }
-    field_0x808 = arg;
+    field_0x808 = score;
     field_0x804 = true;
     field_0x829 = true;
 }
@@ -2837,7 +2852,7 @@ void dLytMiniGameScore_c::fn_80292C30() {
     PaneCalc calc;
 
     switch (mVariant) {
-        case SCORE_VARIANT_0: {
+        case SCORE_VARIANT_BAMBOO_CUTTING: {
             dMessage_c::getGlobalTagProcessor()->setNumericArg0(mScore);
             loadTextVariant(1);
             field_0x7E8 = mpTextBoxes[0]->GetLineWidth(nullptr);
@@ -2851,7 +2866,7 @@ void dLytMiniGameScore_c::fn_80292C30() {
 
             break;
         }
-        case SCORE_VARIANT_3: {
+        case SCORE_VARIANT_PUMPKIN_ARCHERY: {
             dMessage_c::getGlobalTagProcessor()->setNumericArg0(mScore);
             loadTextVariant(0);
             field_0x7E8 = mpTextBoxes[0]->GetLineWidth(nullptr);
@@ -2891,7 +2906,24 @@ void dLytMiniGameScore_c::fn_80292C30() {
         }
     }
 
-    // TODO - ...
+    // TODO - this uses similar annoying calculations and stack as above but
+    // I can't be bothered right now. Let's at least give this code
+    // a chance to be equivalent, even if it's not matching...
+
+    nw4r::lyt::Pane *p = mpPanes[SCORE_PANE_P_POSITION_0];
+    f32 fVar2 = p->GetSize().width * p->GetScale().x;
+    f32 fVar1 = field_0x834[0][1];
+    f32 fVar3 = p->GetParent()->GetTranslate().x + p->GetTranslate().x;
+    f32 local_e0 = 0.0;
+    if (field_0x830 == 0) {
+        local_e0 = ((-fVar3 + f * 0.5) - fVar2 * 0.5) + 0.0;
+    } else if (field_0x830 == 1) {
+        local_e0 = (((((-fVar3 + f * 0.5) - fVar2 * 0.5) - field_0x7E8) + 0.0) - (f32)field_0x7FC) - (f32)field_0x804;
+    } else if (field_0x830 == 2) {
+        local_e0 = ((-fVar3 + f * 0.5) - fVar2 * 0.5) + 0.0;
+    }
+    mVec3_c translate(local_e0 + (f32)field_0x7F4, fVar1 + field_0x7F8, 0.0f);
+    mpPanes[SCORE_PANE_POSITION]->SetTranslate(translate);
 
     fn_80293450(mHighestDigitIndex + t + field_0x81C);
     nw4r::math::MTX34 mtx = mpPanes[SCORE_PANE_CENTER]->GetGlobalMtx();
@@ -3056,7 +3088,7 @@ void dLytMiniGameScoreSd_c::setScoreDown(s32 score) {
         return;
     }
     setScoreInternal(score);
-    startScoreUp();
+    startScoreDown();
     dSndSmallEffectMgr_c::GetInstance()->playMinigameScoreDownSound(score);
     mIsVisible = true;
 }
@@ -3197,7 +3229,7 @@ static const char *sMiniGameSd = "MiniGameSd";
 int dLytMiniGame_c::create() {
     mVariant = mParams;
     switch (mVariant) {
-        case VARIANT_1: {
+        case VARIANT_BAMBOO_CUTTING: {
             if (loadData(sMiniGame, SLOT_MINI_GAME) || loadData(sMiniGameScore, SLOT_MINI_GAME_SCORE)) {
                 return NOT_READY;
             }
@@ -3207,12 +3239,12 @@ int dLytMiniGame_c::create() {
 
             attachLoadedData(sMiniGame, mResAccStart);
             attachLoadedData(sMiniGameScore, mResAccScore);
-            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_0);
+            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_BAMBOO_CUTTING);
             mScore.build(&mResAccScore);
             mStart.build(&mResAccStart);
             break;
         }
-        case VARIANT_2: {
+        case VARIANT_FUN_FUN_ISLAND: {
             if (loadData(sMiniGame, SLOT_MINI_GAME) || loadData(sMiniGameSd, SLOT_MINI_GAME_SCORE_SD) ||
                 loadData(sMiniGameScore, SLOT_MINI_GAME_SCORE)) {
                 return NOT_READY;
@@ -3224,13 +3256,13 @@ int dLytMiniGame_c::create() {
             attachLoadedData(sMiniGame, mResAccStart);
             attachLoadedData(sMiniGameSd, mResAccScoreSd);
             attachLoadedData(sMiniGameScore, mResAccScore);
-            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_1);
+            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_FUN_FUN_ISLAND);
             mScore.build(&mResAccScore);
             mScoreSd.build(&mResAccScoreSd);
             mStart.build(&mResAccStart);
             break;
         }
-        case VARIANT_3: {
+        case VARIANT_THRILL_DIGGER: {
             if (loadData(sMiniGame, SLOT_MINI_GAME) || loadData(sMiniGameScore, SLOT_MINI_GAME_SCORE)) {
                 return NOT_READY;
             }
@@ -3240,12 +3272,12 @@ int dLytMiniGame_c::create() {
 
             attachLoadedData(sMiniGame, mResAccStart);
             attachLoadedData(sMiniGameScore, mResAccScore);
-            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_2);
+            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_THRILL_DIGGER);
             mScore.build(&mResAccScore);
             mStart.build(&mResAccStart);
             break;
         }
-        case VARIANT_4: {
+        case VARIANT_INSECT_CAPTURE: {
             if (loadData(sMiniGame, SLOT_MINI_GAME) || loadData(sMiniGameBugs, SLOT_MINI_GAME_BUGS) ||
                 loadData(sMiniGameTime, SLOT_MINI_GAME_TIME)) {
                 return NOT_READY;
@@ -3257,13 +3289,13 @@ int dLytMiniGame_c::create() {
             attachLoadedData(sMiniGame, mResAccStart);
             attachLoadedData(sMiniGameBugs, mResAccBugs);
             attachLoadedData(sMiniGameTime, mResAccTime);
-            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_0);
+            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_INSECT_CAPTURE);
             mTime.build(&mResAccTime);
             mBugs.build(&mResAccBugs);
             mStart.build(&mResAccStart);
             break;
         }
-        case VARIANT_5: {
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL: {
             if (loadData(sMiniGame, SLOT_MINI_GAME) || loadData(sMiniGameScore, SLOT_MINI_GAME_SCORE) ||
                 loadData(sMiniGameTime, SLOT_MINI_GAME_TIME)) {
                 return NOT_READY;
@@ -3275,14 +3307,14 @@ int dLytMiniGame_c::create() {
             attachLoadedData(sMiniGame, mResAccStart);
             attachLoadedData(sMiniGameScore, mResAccScore);
             attachLoadedData(sMiniGameTime, mResAccTime);
-            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_1);
+            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_SPIRAL_CHARGE_TUTORIAL);
             mTime.build(&mResAccTime);
-            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_4);
+            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_SPIRAL_CHARGE_TUTORIAL);
             mScore.build(&mResAccScore);
             mStart.build(&mResAccStart);
             break;
         }
-        case VARIANT_6: {
+        case VARIANT_PUMPKIN_ARCHERY: {
             if (loadData(sMiniGame, SLOT_MINI_GAME) || loadData(sMiniGamePumpkin, SLOT_MINI_GAME_PUMPKIN) ||
                 loadData(sMiniGameScore, SLOT_MINI_GAME_SCORE) || loadData(sMiniGameTime, SLOT_MINI_GAME_TIME)) {
                 return NOT_READY;
@@ -3296,15 +3328,15 @@ int dLytMiniGame_c::create() {
             attachLoadedData(sMiniGamePumpkin, mResAccPumpkin);
             attachLoadedData(sMiniGameScore, mResAccScore);
             attachLoadedData(sMiniGameTime, mResAccTime);
-            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_2);
+            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_PUMPKIN_ARCHERY);
             mTime.build(&mResAccTime);
-            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_3);
+            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_PUMPKIN_ARCHERY);
             mScore.build(&mResAccScore);
             mStart.build(&mResAccStart);
             mPumpkin.build(&mResAccPumpkin);
             break;
         }
-        case VARIANT_7: {
+        case VARIANT_ROLLERCOASTER: {
             if (loadData(sMiniGame, SLOT_MINI_GAME) || loadData(sMiniGameTime, SLOT_MINI_GAME_TIME)) {
                 return NOT_READY;
             }
@@ -3314,12 +3346,12 @@ int dLytMiniGame_c::create() {
 
             attachLoadedData(sMiniGame, mResAccStart);
             attachLoadedData(sMiniGameTime, mResAccTime);
-            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_3);
+            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_ROLLERCOASTER);
             mTime.build(&mResAccTime);
             mStart.build(&mResAccStart);
             break;
         }
-        case VARIANT_8: {
+        case VARIANT_BOSS_RUSH: {
             if (loadData(sMiniGame, SLOT_MINI_GAME) || loadData(sMiniGameTime, SLOT_MINI_GAME_TIME)) {
                 return NOT_READY;
             }
@@ -3329,12 +3361,12 @@ int dLytMiniGame_c::create() {
 
             attachLoadedData(sMiniGame, mResAccStart);
             attachLoadedData(sMiniGameTime, mResAccTime);
-            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_4);
+            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_BOSS_RUSH);
             mTime.build(&mResAccTime);
             mStart.build(&mResAccStart);
             break;
         }
-        case VARIANT_9: {
+        case VARIANT_TRIAL_TIME_ATTACK: {
             if (loadData(sMiniGame, SLOT_MINI_GAME) || loadData(sMiniGameTime, SLOT_MINI_GAME_TIME)) {
                 return NOT_READY;
             }
@@ -3344,7 +3376,7 @@ int dLytMiniGame_c::create() {
 
             attachLoadedData(sMiniGame, mResAccStart);
             attachLoadedData(sMiniGameTime, mResAccTime);
-            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_5);
+            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_TRIAL_TIME_ATTACK);
             mTime.build(&mResAccTime);
             mStart.build(&mResAccStart);
             break;
@@ -3357,7 +3389,7 @@ int dLytMiniGame_c::create() {
                 return NOT_READY;
             }
             attachLoadedData(sMiniGameScore, mResAccScore);
-            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_0);
+            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_BAMBOO_CUTTING);
             mScore.setField_0x816(true);
             mScore.build(&mResAccScore);
             break;
@@ -3370,7 +3402,7 @@ int dLytMiniGame_c::create() {
                 return NOT_READY;
             }
             attachLoadedData(sMiniGameScore, mResAccScore);
-            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_2);
+            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_THRILL_DIGGER);
             mScore.setField_0x816(true);
             mScore.build(&mResAccScore);
             break;
@@ -3383,7 +3415,7 @@ int dLytMiniGame_c::create() {
                 return NOT_READY;
             }
             attachLoadedData(sMiniGameTime, mResAccTime);
-            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_0);
+            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_INSECT_CAPTURE);
             mTime.setField_0x7EE(true);
             mTime.build(&mResAccTime);
             break;
@@ -3396,7 +3428,7 @@ int dLytMiniGame_c::create() {
                 return NOT_READY;
             }
             attachLoadedData(sMiniGameScore, mResAccScore);
-            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_3);
+            mScore.setVariant(dLytMiniGameScore_c::SCORE_VARIANT_PUMPKIN_ARCHERY);
             mScore.setField_0x816(true);
             mScore.build(&mResAccScore);
             break;
@@ -3409,7 +3441,7 @@ int dLytMiniGame_c::create() {
                 return NOT_READY;
             }
             attachLoadedData(sMiniGameTime, mResAccTime);
-            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_3);
+            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_ROLLERCOASTER);
             mTime.setField_0x7EE(true);
             mTime.build(&mResAccTime);
             break;
@@ -3422,7 +3454,7 @@ int dLytMiniGame_c::create() {
                 return NOT_READY;
             }
             attachLoadedData(sMiniGameTime, mResAccTime);
-            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_4);
+            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_BOSS_RUSH);
             mTime.setField_0x7EE(true);
             mTime.build(&mResAccTime);
             break;
@@ -3435,7 +3467,7 @@ int dLytMiniGame_c::create() {
                 return NOT_READY;
             }
             attachLoadedData(sMiniGameTime, mResAccTime);
-            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_5);
+            mTime.setVariant(dLytMiniGameTime_c::TIME_VARIANT_TRIAL_TIME_ATTACK);
             mTime.setField_0x7EE(true);
             mTime.build(&mResAccTime);
             break;
@@ -3457,14 +3489,14 @@ int dLytMiniGame_c::doDelete() {
     mPumpkin.remove();
 
     switch (mVariant) {
-        case VARIANT_1: {
+        case VARIANT_BAMBOO_CUTTING: {
             mResAccStart.detach();
             mResAccScore.detach();
             unloadData(sMiniGame);
             unloadData(sMiniGameScore);
             break;
         }
-        case VARIANT_2: {
+        case VARIANT_FUN_FUN_ISLAND: {
             mResAccStart.detach();
             mResAccScoreSd.detach();
             mResAccScore.detach();
@@ -3473,14 +3505,14 @@ int dLytMiniGame_c::doDelete() {
             unloadData(sMiniGameScore);
             break;
         }
-        case VARIANT_3: {
+        case VARIANT_THRILL_DIGGER: {
             mResAccStart.detach();
             mResAccScore.detach();
             unloadData(sMiniGame);
             unloadData(sMiniGameScore);
             break;
         }
-        case VARIANT_4: {
+        case VARIANT_INSECT_CAPTURE: {
             mResAccStart.detach();
             mResAccBugs.detach();
             mResAccTime.detach();
@@ -3489,7 +3521,7 @@ int dLytMiniGame_c::doDelete() {
             unloadData(sMiniGameTime);
             break;
         }
-        case VARIANT_5: {
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL: {
             mResAccStart.detach();
             mResAccScore.detach();
             mResAccTime.detach();
@@ -3498,7 +3530,7 @@ int dLytMiniGame_c::doDelete() {
             unloadData(sMiniGameTime);
             break;
         }
-        case VARIANT_6: {
+        case VARIANT_PUMPKIN_ARCHERY: {
             mResAccStart.detach();
             mResAccPumpkin.detach();
             mResAccScore.detach();
@@ -3509,21 +3541,21 @@ int dLytMiniGame_c::doDelete() {
             unloadData(sMiniGameTime);
             break;
         }
-        case VARIANT_7: {
+        case VARIANT_ROLLERCOASTER: {
             mResAccStart.detach();
             mResAccTime.detach();
             unloadData(sMiniGame);
             unloadData(sMiniGameTime);
             break;
         }
-        case VARIANT_8: {
+        case VARIANT_BOSS_RUSH: {
             mResAccStart.detach();
             mResAccTime.detach();
             unloadData(sMiniGame);
             unloadData(sMiniGameTime);
             break;
         }
-        case VARIANT_9: {
+        case VARIANT_TRIAL_TIME_ATTACK: {
             mResAccStart.detach();
             mResAccTime.detach();
             unloadData(sMiniGame);
@@ -3572,11 +3604,575 @@ int dLytMiniGame_c::doDelete() {
 }
 
 int dLytMiniGame_c::execute() {
+    switch (mVariant) {
+        case VARIANT_BAMBOO_CUTTING:
+        case VARIANT_10:                     fn_80295F90(); break;
+        case VARIANT_FUN_FUN_ISLAND:         fn_80296000(); break;
+        case VARIANT_THRILL_DIGGER:
+        case VARIANT_11:                     fn_80296070(); break;
+        case VARIANT_INSECT_CAPTURE:
+        case VARIANT_12:                     fn_80296150(); break;
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL: fn_80296210(); break;
+        case VARIANT_PUMPKIN_ARCHERY:
+        case VARIANT_13:                     fn_802962A0(); break;
+        case VARIANT_ROLLERCOASTER:
+        case VARIANT_14:                     fn_80296330(); break;
+        case VARIANT_BOSS_RUSH:
+        case VARIANT_15:                     fn_802963E0(); break;
+        case VARIANT_TRIAL_TIME_ATTACK:
+        case VARIANT_16:                     fn_80296480(); break;
+    }
+
+    mScore.execute();
+    mScoreSd.execute();
+    mTime.execute();
+    mBugs.execute();
+    mPumpkin.execute();
+
+    if (!isPopupOpenExceptHelp()) {
+        mStart.execute();
+    }
+
     return SUCCEEDED;
 }
 
 int dLytMiniGame_c::draw() {
+    mPumpkin.draw();
+    mScoreSd.draw();
+    mBugs.draw();
+    mScore.draw();
+    mTime.draw();
+
+    if (!isPopupOpenExceptHelp()) {
+        mStart.draw();
+    }
+
     return SUCCEEDED;
+}
+
+void dLytMiniGame_c::scoreRelatedExecute() {
+    switch (mVariant) {
+        case VARIANT_BAMBOO_CUTTING:
+        case VARIANT_THRILL_DIGGER:
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL:
+        case VARIANT_PUMPKIN_ARCHERY:        mScore.fn_80291410(); break;
+        case VARIANT_FUN_FUN_ISLAND:
+            if (fn_80295DB0()) {
+                mScore.startAlphaIn();
+            } else {
+                mScore.fn_80291410();
+                mScore.setField_0x828(false);
+            }
+            break;
+        case VARIANT_10:
+        case VARIANT_11:
+        case VARIANT_13: mScore.startAlphaIn();
+    }
+}
+
+void dLytMiniGame_c::scoreRelated() {
+    switch (mVariant) {
+        case VARIANT_FUN_FUN_ISLAND:
+            if (fn_80295DB0()) {
+                mScore.startAlphaOut();
+            } else {
+                mScore.startOut();
+            }
+            break;
+        case VARIANT_10:
+        case VARIANT_11:
+        case VARIANT_13: mScore.startAlphaOut(); break;
+    }
+}
+
+void dLytMiniGame_c::setDisplayedPoints(s32 points) {
+    switch (mVariant) {
+        case VARIANT_BAMBOO_CUTTING:
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL:
+        case VARIANT_PUMPKIN_ARCHERY:        mScore.setScore(points); break;
+        case VARIANT_FUN_FUN_ISLAND:
+            fn_80295DB0();
+            mScore.setScore(points);
+            break;
+        case VARIANT_THRILL_DIGGER: mScore.fn_80291D40(points); break;
+        case VARIANT_10:
+        case VARIANT_13:            mScore.setScore(points); break;
+        case VARIANT_11:
+            mScore.setScore(points);
+            field_0x3864 = 1;
+            field_0x3865 = 0;
+            break;
+    }
+}
+
+void dLytMiniGame_c::fn_80295900(s32 arg) {
+    mScore.fn_80291ED0(arg);
+    mScore.setField_0x828(true);
+}
+
+void dLytMiniGame_c::startCountdown() {
+    switch (mVariant) {
+        case VARIANT_BAMBOO_CUTTING:
+        case VARIANT_FUN_FUN_ISLAND:
+        case VARIANT_THRILL_DIGGER:
+        case VARIANT_INSECT_CAPTURE:
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL:
+        case VARIANT_PUMPKIN_ARCHERY:
+        case VARIANT_ROLLERCOASTER:
+        case VARIANT_TRIAL_TIME_ATTACK:      mStart.startCountdown(); break;
+        case VARIANT_BOSS_RUSH:              mStart.startCountdown120(); break;
+    }
+}
+
+void dLytMiniGame_c::startFinish() {
+    switch (mVariant) {
+        case VARIANT_BAMBOO_CUTTING:
+        case VARIANT_FUN_FUN_ISLAND:
+        case VARIANT_THRILL_DIGGER:
+        case VARIANT_PUMPKIN_ARCHERY:
+            mStart.startFinish();
+            mScore.startFinish();
+            break;
+        case VARIANT_INSECT_CAPTURE:
+        case VARIANT_ROLLERCOASTER:
+        case VARIANT_BOSS_RUSH:
+        case VARIANT_TRIAL_TIME_ATTACK:
+            mStart.startFinish();
+            mTime.startFinish();
+            break;
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL:
+            mStart.startFinish();
+            mScore.startFinish();
+            break;
+    }
+}
+
+void dLytMiniGame_c::fn_80295A20() {
+    switch (mVariant) {
+        case VARIANT_BAMBOO_CUTTING:
+        case VARIANT_FUN_FUN_ISLAND:
+        case VARIANT_THRILL_DIGGER:
+            // case VARIANT_PUMPKIN_ARCHERY:
+            mStart.startTimeup();
+            mScore.startFinish();
+            break;
+        case VARIANT_INSECT_CAPTURE:
+        case VARIANT_ROLLERCOASTER:
+        case VARIANT_BOSS_RUSH:
+        case VARIANT_TRIAL_TIME_ATTACK:
+            mStart.startTimeup();
+            mTime.startFinish();
+            break;
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL:
+            mStart.startTimeup();
+            mScore.startFinish();
+            break;
+    }
+}
+
+bool dLytMiniGame_c::isStartCountdownDone() {
+    switch (mVariant) {
+        case VARIANT_BAMBOO_CUTTING:
+        case VARIANT_FUN_FUN_ISLAND:
+        case VARIANT_THRILL_DIGGER:
+        case VARIANT_INSECT_CAPTURE:
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL:
+        case VARIANT_PUMPKIN_ARCHERY:
+        case VARIANT_ROLLERCOASTER:
+        case VARIANT_BOSS_RUSH:
+        case VARIANT_TRIAL_TIME_ATTACK:      return mStart.isCountdownEndReached();
+    }
+    return false;
+}
+
+bool dLytMiniGame_c::isFinishAnimDone() {
+    switch (mVariant) {
+        case VARIANT_BAMBOO_CUTTING:
+        case VARIANT_FUN_FUN_ISLAND:
+        case VARIANT_THRILL_DIGGER:
+        case VARIANT_INSECT_CAPTURE:
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL:
+        case VARIANT_PUMPKIN_ARCHERY:
+        case VARIANT_ROLLERCOASTER:
+        case VARIANT_BOSS_RUSH:
+        case VARIANT_TRIAL_TIME_ATTACK:      return mStart.isFinishEndReached();
+    }
+    return false;
+}
+
+bool dLytMiniGame_c::isTimeupAnimDone() {
+    switch (mVariant) {
+        case VARIANT_BAMBOO_CUTTING:
+        case VARIANT_FUN_FUN_ISLAND:
+        case VARIANT_THRILL_DIGGER:
+        case VARIANT_INSECT_CAPTURE:
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL:
+        // case VARIANT_PUMPKIN_ARCHERY:
+        case VARIANT_ROLLERCOASTER:
+        case VARIANT_BOSS_RUSH:
+        case VARIANT_TRIAL_TIME_ATTACK:      return mStart.isTimeupEndReached();
+    }
+    return false;
+}
+
+void dLytMiniGame_c::fn_80295B20(s32 score) {
+    mScoreSd.setScoreUp(score);
+}
+
+void dLytMiniGame_c::fn_80295B30(s32 score) {
+    mScoreSd.setScoreDown(score);
+}
+
+void dLytMiniGame_c::timeRelatedExecute() {
+    switch (mVariant) {
+        case VARIANT_INSECT_CAPTURE:
+        case VARIANT_PUMPKIN_ARCHERY:
+        case VARIANT_ROLLERCOASTER:
+        case VARIANT_BOSS_RUSH:
+        case VARIANT_TRIAL_TIME_ATTACK: mTime.fn_8028DD80(); break;
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL:
+            if (!dScGame_c::GetInstance()->isFadingIn()) {
+                mTime.fn_8028DD80();
+            }
+            break;
+        case VARIANT_12:
+        case VARIANT_14:
+        case VARIANT_15:
+        case VARIANT_16: mTime.startAlphaIn(); break;
+    }
+}
+
+void dLytMiniGame_c::timeRelated() {
+    switch (mVariant) {
+        case VARIANT_12:
+        case VARIANT_14:
+        case VARIANT_15:
+        case VARIANT_16: mTime.startAlphaOut(); break;
+    }
+}
+
+void dLytMiniGame_c::setDisplayedTime(s32 time) {
+    switch (mVariant) {
+        case VARIANT_INSECT_CAPTURE:
+        case VARIANT_ROLLERCOASTER:
+        case VARIANT_BOSS_RUSH:
+        case VARIANT_TRIAL_TIME_ATTACK:      mTime.setTimerValueInMilliSeconds(time); break;
+        case VARIANT_PUMPKIN_ARCHERY:        mTime.setTimerSecondsValueInMilliSeconds(time); break;
+        case VARIANT_SPIRAL_CHARGE_TUTORIAL: mTime.setTimerSecondsValueInMilliSeconds(time); break;
+        case VARIANT_12:
+        case VARIANT_14:
+        case VARIANT_15:
+        case VARIANT_16:                     mTime.setTimerValueInMilliSeconds(time); break;
+    }
+}
+
+void dLytMiniGame_c::setHighscore(s32 time) {
+    switch (mVariant) {
+        case VARIANT_INSECT_CAPTURE:
+        case VARIANT_ROLLERCOASTER:
+        case VARIANT_BOSS_RUSH:
+        case VARIANT_TRIAL_TIME_ATTACK:
+        // case VARIANT_SPIRAL_CHARGE_TUTORIAL:
+        case VARIANT_PUMPKIN_ARCHERY:
+        case VARIANT_12:
+        case VARIANT_14:
+        case VARIANT_15:
+        case VARIANT_16:                mTime.setBestTime(time); break;
+    }
+}
+
+void dLytMiniGame_c::setShowBestTime(bool show) {
+    switch (mVariant) {
+        case VARIANT_INSECT_CAPTURE:
+        case VARIANT_ROLLERCOASTER:
+        case VARIANT_BOSS_RUSH:
+        case VARIANT_TRIAL_TIME_ATTACK:
+        // case VARIANT_SPIRAL_CHARGE_TUTORIAL:
+        case VARIANT_PUMPKIN_ARCHERY:
+        case VARIANT_12:
+        case VARIANT_14:
+        case VARIANT_15:
+        case VARIANT_16:                mTime.setShowBestTime(show); break;
+    }
+}
+
+void dLytMiniGame_c::startBugsAllIconsIn() {
+    mBugs.startAllIconsIn();
+}
+
+void dLytMiniGame_c::set5Bugs() {
+    mBugs.setBugsNumLevel(0);
+}
+
+void dLytMiniGame_c::set10Bugs() {
+    mBugs.setBugsNumLevel(1);
+}
+
+void dLytMiniGame_c::reInitBugs() {
+    mBugs.init();
+}
+
+void dLytMiniGame_c::setBug(s32 slot, s32 bugIndex) {
+    mBugs.setBug(slot, bugIndex);
+}
+
+void dLytMiniGame_c::collectBug(s32 slot) {
+    mBugs.collectBug(slot);
+}
+
+void dLytMiniGame_c::startBugsFlash() {
+    mBugs.startBugsFlash();
+}
+
+bool dLytMiniGame_c::isBugIconOnEndReached(s32 slot) const {
+    return mBugs.isSlotIconOnEndReached(slot);
+}
+
+bool dLytMiniGame_c::isBugCollected(s32 slot) const {
+    return mBugs.isSlotBugCollected(slot);
+}
+
+void dLytMiniGame_c::fn_80295D80() {
+    scoreRelatedExecute();
+}
+
+void dLytMiniGame_c::fn_80295D90(s32 points) {
+    setDisplayedPoints(points);
+}
+
+void dLytMiniGame_c::getPumpkin(const mVec3_c &pumpkinPos, s32 unk, bool doubleScore) {
+    mPumpkin.getPoint(pumpkinPos, unk, doubleScore);
+}
+
+// cannot be const...
+bool dLytMiniGame_c::fn_80295DB0() {
+    bool ret = false;
+    switch (mVariant) {
+        case VARIANT_10:
+        case VARIANT_11:
+        case VARIANT_12:
+        case VARIANT_13:
+        case VARIANT_14:
+        case VARIANT_15:
+        case VARIANT_16: ret = true; break;
+        case VARIANT_FUN_FUN_ISLAND:
+            if (!MinigameManager::GetInstance()->checkInFunFunIsland()) {
+                ret = true;
+            }
+            break;
+    }
+    return ret;
+}
+
+bool dLytMiniGame_c::isInEvent() const {
+    bool ret = false;
+    if (EventManager::isInEvent()) {
+        ret = true;
+    }
+    return ret;
+}
+
+bool dLytMiniGame_c::isPopupOpen() const {
+    bool ret = false;
+    if (dLytMeter_c::isPopupOpen()) {
+        ret = true;
+    }
+    return ret;
+}
+
+bool dLytMiniGame_c::isPopupOpenExceptHelp() const {
+    bool ret = false;
+    if (isPopupOpen()) {
+        ret = true;
+    }
+
+    if (dLytMeter_c::GetInstance()->isHelpOpen()) {
+        ret = false;
+    }
+
+    return ret;
+}
+
+bool dLytMiniGame_c::isFadingOut() const {
+    bool ret = false;
+    if (dStageMgr_c::GetInstance()->isFadingOut() || dScGame_c::GetInstance()->isFadingOut()) {
+        ret = true;
+    }
+    return ret;
+}
+
+void dLytMiniGame_c::fn_80295F90() {
+    if (fn_80295DB0()) {
+        // nothing
+    } else {
+        if (isPopupOpen()) {
+            mScore.startOutTemp();
+        } else {
+            mScore.startIn();
+        }
+
+        if (isFadingOut()) {
+            mScore.startOut();
+        }
+    }
+}
+
+void dLytMiniGame_c::fn_80296000() {
+    if (fn_80295DB0()) {
+        mScore.setField_0x816(true);
+    } else {
+        mScore.setField_0x816(false);
+        if (isPopupOpen()) {
+            mScore.startOutTemp();
+        } else {
+            mScore.startIn();
+        }
+    }
+}
+
+void dLytMiniGame_c::fn_80296070() {
+    if (fn_80295DB0()) {
+        if (field_0x3864 == 1) {
+            s32 score = mScore.getScore();
+            s32 rupeeDiff = dLytMeter_c::getRupeeDifference();
+            if (score != 0) {
+                if (rupeeDiff != 0) {
+                    field_0x3865 = 1;
+                }
+
+                if (field_0x3865 == 1 && rupeeDiff < score) {
+                    mScore.setScore(rupeeDiff);
+                }
+            }
+        }
+    } else {
+        if (isPopupOpen()) {
+            mScore.startOutTemp();
+        } else {
+            mScore.startIn();
+        }
+
+        if (isFadingOut()) {
+            mScore.startOut();
+        }
+    }
+}
+
+void dLytMiniGame_c::fn_80296150() {
+    if (fn_80295DB0()) {
+        // nothing
+    } else {
+        if (isInEvent() || isPopupOpen()) {
+            if (!field_0x3866) {
+                mBugs.startOutTemp();
+                mTime.startOutTemp();
+            } else {
+                mBugs.startIn();
+                mTime.startIn();
+            }
+        } else {
+            mBugs.startIn();
+            mTime.startIn();
+        }
+
+        if (isFadingOut()) {
+            mBugs.startOut();
+            mTime.startOut();
+        }
+    }
+}
+
+void dLytMiniGame_c::fn_80296210() {
+    if (isInEvent() || isPopupOpen()) {
+        mScore.startOutTemp();
+        mTime.startOutTemp();
+    } else {
+        mScore.startIn();
+        mTime.startIn();
+    }
+
+    if (isFadingOut()) {
+        mScore.startOut();
+        mTime.startOut();
+    }
+}
+
+void dLytMiniGame_c::fn_802962A0() {
+    if (!fn_80295DB0()) {
+        if (isPopupOpen()) {
+            mScore.startOutTemp();
+            mTime.startOutTemp();
+        } else {
+            mScore.startIn();
+            mTime.startIn();
+        }
+
+        if (isFadingOut()) {
+            mScore.startOut();
+            mTime.startOut();
+        }
+    }
+}
+
+void dLytMiniGame_c::fn_80296330() {
+    if (fn_80295DB0()) {
+        // nothing
+    } else {
+        if (isInEvent() || isPopupOpen()) {
+            if (!field_0x3866) {
+                mTime.startOutTemp();
+            } else {
+                mTime.startIn();
+            }
+        } else {
+            mTime.startIn();
+        }
+
+        if (isFadingOut() && field_0x3866 == 1) {
+            mTime.startOut();
+        }
+    }
+}
+
+// These two do the same thing
+void dLytMiniGame_c::fn_802963E0() {
+    if (fn_80295DB0()) {
+        // nothing
+    } else {
+        if (isInEvent() || isPopupOpen()) {
+            if (!field_0x3866) {
+                mTime.startOutTemp();
+            } else {
+                mTime.startIn();
+            }
+        } else {
+            mTime.startIn();
+        }
+
+        if (isFadingOut()) {
+            mTime.startOut();
+        }
+    }
+}
+
+void dLytMiniGame_c::fn_80296480() {
+    if (fn_80295DB0()) {
+        // nothing
+    } else {
+        if (isInEvent() || isPopupOpen()) {
+            if (!field_0x3866) {
+                mTime.startOutTemp();
+            } else {
+                mTime.startIn();
+            }
+        } else {
+            mTime.startIn();
+        }
+
+        if (isFadingOut()) {
+            mTime.startOut();
+        }
+    }
 }
 
 void dLytMiniGame_c::init() {
@@ -3586,4 +4182,48 @@ void dLytMiniGame_c::init() {
     mTime.init();
     mBugs.init();
     mPumpkin.init();
+}
+
+bool dLytMiniGame_c::loadData(const char *name, s32 slot) {
+    bool loadRequest = false;
+    switch (slot) {
+        case SLOT_MINI_GAME:          loadRequest = field_0x0068; break;
+        case SLOT_MINI_GAME_SCORE:    loadRequest = field_0x0069; break;
+        case SLOT_MINI_GAME_TIME:     loadRequest = field_0x006A; break;
+        case SLOT_MINI_GAME_BUGS:     loadRequest = field_0x006B; break;
+        case SLOT_MINI_GAME_PUMPKIN:  loadRequest = field_0x006C; break;
+        case SLOT_MINI_GAME_SCORE_SD: loadRequest = field_0x006D; break;
+    }
+
+    if (!loadRequest) {
+        LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(name, nullptr);
+        switch (slot) {
+            case SLOT_MINI_GAME:          field_0x0068 = true; break;
+            case SLOT_MINI_GAME_SCORE:    field_0x0069 = true; break;
+            case SLOT_MINI_GAME_TIME:     field_0x006A = true; break;
+            case SLOT_MINI_GAME_BUGS:     field_0x006B = true; break;
+            case SLOT_MINI_GAME_PUMPKIN:  field_0x006C = true; break;
+            case SLOT_MINI_GAME_SCORE_SD: field_0x006D = true; break;
+        }
+        return true;
+    }
+    return false;
+}
+
+bool dLytMiniGame_c::isLoading(const char *name) const {
+    return LayoutArcManager::GetInstance()->ensureLoaded1(name) != D_ARC_RESULT_OK;
+}
+
+void dLytMiniGame_c::attachLoadedData(const char *name, d2d::ResAccIf_c &resAcc) {
+    resAcc.attach(LayoutArcManager::GetInstance()->getLoadedData(name), "");
+}
+
+void dLytMiniGame_c::unloadData(const char *name) {
+    s32 res = LayoutArcManager::GetInstance()->ensureLoaded2(name);
+    if (res == D_ARC_RESULT_ERROR_NOT_FOUND) {
+        return;
+    }
+    if (res == D_ARC_RESULT_OK) {
+        LayoutArcManager::GetInstance()->decrement(name);
+    }
 }

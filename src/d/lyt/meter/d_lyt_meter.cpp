@@ -581,7 +581,7 @@ bool dLytMeterMain_c::fn_800C9FE0() {
     return false;
 }
 
-bool dLytMeterMain_c::fn_800CA040() {
+bool dLytMeterMain_c::isPopupOpen() {
     if (mHelpOpen || isInModeMap() || isInModePause()) {
         return true;
     }

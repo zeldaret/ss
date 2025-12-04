@@ -117,10 +117,11 @@ public:
         mSize = size;
     }
 
+    s32 getRupeeDifference() const;
+
 private:
     bool updateDisplayedAmount(bool suppressSound);
     bool hasChangeInRupees() const;
-    s32 getRupeeDifference() const;
     void setDigit(s32 index, s32 digit);
     void executeDigitJump();
     void executeDigitBlink(s32 amount);

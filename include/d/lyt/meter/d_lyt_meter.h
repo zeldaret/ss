@@ -93,7 +93,7 @@ public:
 
     bool fn_800C9F70();
     bool fn_800C9FE0();
-    bool fn_800CA040();
+    bool isPopupOpen();
 
     bool isInMapEvent();
     bool fn_800D5380(u8);
@@ -402,6 +402,14 @@ public:
         }
     }
 
+    static s32 getRupeeDifference() {
+        if (sInstance != nullptr) {
+            return sInstance->mMain.mRupy.getRupeeDifference();
+        } else {
+            return 0;
+        }
+    }
+
     static void setField_0x13B61(u8 val) {
         if (sInstance != nullptr) {
             sInstance->field_0x13B61 = val;
@@ -447,6 +455,14 @@ public:
     static bool getfn_800C9FE0() {
         if (sInstance != nullptr) {
             return sInstance->mMain.fn_800C9FE0();
+        } else {
+            return false;
+        }
+    }
+
+    static bool isPopupOpen() {
+        if (sInstance != nullptr) {
+            return sInstance->mMain.isPopupOpen();
         } else {
             return false;
         }
