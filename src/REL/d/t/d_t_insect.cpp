@@ -36,13 +36,13 @@ STATE_DEFINE(dTgInsect_c, End);
 static const s32 unused[] = {
     0x001E0100, 0, 0, 0, 0, 0, 0, 0,
 };
+static const f32 SCALE_X = 100;
+static const f32 SCALE_Y = 100;
 
-static const f32 different100[] = {100};
-
-static const f32 WHATEVER[] = {100, 150, 0.5f};
+static const f32 unused2[] = {150, 0.5f};
 
 const s32 *useUnused() {
-    return unused;
+    return unused + (s32)unused2;
 }
 
 int dTgInsect_c::actorCreate() {
@@ -308,17 +308,17 @@ void dTgInsect_c::spawnAll() {
 // non matching: rodata is weird, using multiple different 100.0f instead of just one
 // also the registers are wrong
 void dTgInsect_c::spawnInsect(s32 index) {
-    s32 tries;
-    f32 scaledScale = 100 * mScale.y;
-    f32 scaled2 = mScale.x * WHATEVER[0] * 0.85f;
+    f32 scaledScaleY = mScale.y * SCALE_Y;
+    f32 scaledScaleX = SCALE_X * mScale.x *  0.85f;
     bool spawnFound;
     mVec3_c pos;
     mVec3_c tmp;
     mAng3_c rot(0, 0, 0);
     spawnFound = false;
+    s32 tries;
     tries = 5;
     do {
-        f32 scale = cM::rndF(scaled2);
+        f32 scale = cM::rndF(scaledScaleX);
         s16 angle1 = cM::rndFX(65536.0f);
         rot.y = cM::rndFX(65536.0f);
         mVec3_c v2 = mVec3_c::Ez * scale;
@@ -333,17 +333,17 @@ void dTgInsect_c::spawnInsect(s32 index) {
                     tmp = mVec3_c::Ez;
                     tmp.rotY(mAng(mRotation.y + 0x4000));
                     f32 arrayResult = FLOAT_ARRAY[index % (s32)ARRAY_LENGTH(FLOAT_ARRAY)];
-                    f32 scaledX = WHATEVER[0] * mScale.x;
+                    f32 scaledX = SCALE_X * mScale.x;
                     tmp.multScalar(arrayResult * scaledX);
                     pos = mPosition + tmp;
-                    f32 scaledScale = mScale.y * 100;
+                    f32 scaledScale = SCALE_Y * mScale.y;
                     pos.y = mPosition.y + scaledScale * 0.3f;
                     pos.y += cM::rndF(scaledScale * 0.5f);
                     if (!someGroundCheck(pos, 0)) {
                         return;
                     }
                 } else {
-                    pos.y += cM::rndF(scaledScale);
+                    pos.y += cM::rndF(scaledScaleY);
                 }
                 spawnFound = true;
                 break;
@@ -351,7 +351,7 @@ void dTgInsect_c::spawnInsect(s32 index) {
             case SUBTYPE_LANAYRU_ANT:
             case SUBTYPE_SKYLOFT_MANTIS:
             case SUBTYPE_EDLIN_ROLLER:
-                pos.y = different100[0] + mPosition.y;
+                pos.y = 100 + mPosition.y;
                 if (dBgS_ObjGndChk::CheckPos(pos)) {
                     spawnFound = true;
                 }
@@ -388,7 +388,7 @@ void dTgInsect_c::spawnInsect(s32 index) {
             break;
         case SUBTYPE_BUTTERFLY:
             ref = dAcObjBase_c::createInsectActor(
-                this, fProfile::INSECT_BUTTERFLY, mViewClipIdx, &pos, &rot, NULL, 0, 0x3f
+                this, fProfile::INSECT_BUTTERFLY, (s16)mViewClipIdx, &pos, &rot, NULL, 0, 0x3f
             );
             break;
         case SUBTYPE_SKYLOFT_MANTIS:
