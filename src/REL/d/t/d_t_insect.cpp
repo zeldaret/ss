@@ -77,9 +77,13 @@ inline bool checkProfile(u16 prof, u32 target) {
 }
 
 int dTgInsect_c::actorPostCreate() {
-    s32 subtype = (mParams >> 4 & 0xF);
+    s32 subtype = mParams >> 4 & 0xF;
     // ??? doesn't match without the double comparison
-    if (subtype == 5 || subtype == 5 || subtype == 6 || subtype == 3 || subtype == 9) {
+    if (subtype == SUBTYPE_WOODLAND_RHINO_BEETLE
+        || subtype == SUBTYPE_WOODLAND_RHINO_BEETLE
+        || subtype == SUBTYPE_SAND_CICADA
+        || subtype == SUBTYPE_VOLCANIC_LADYBUG
+        || subtype == SUBTYPE_SKY_STAG_BEETLE) {
         if (!someGroundCheck(mPosition, 1)) {
             return FAILED;
         }
@@ -136,8 +140,7 @@ int dTgInsect_c::actorPostCreate() {
             if (!StoryflagManager::sInstance->getFlag(STORYFLAG_IMPRISONED_1_DEFEATED)) {
                 return FAILED;
             }
-            bool flag = SceneflagManager::sInstance->checkFlag(mRoomID, mParams >> 0xC & 0xFF);
-            if (flag) {
+            if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mParams >> 0xC & 0xFF)) {
                 return FAILED;
             }
         } else if (isGoddessWallType()) {
@@ -315,8 +318,6 @@ void dTgInsect_c::spawnAll() {
     }
 }
 
-// non matching: rodata is weird, using multiple different 100.0f instead of just one
-// also the registers are wrong
 void dTgInsect_c::spawnInsect(s32 index) {
     f32 scaleX;
     f32 scaleY;
@@ -437,8 +438,7 @@ bool dTgInsect_c::shouldSpawn() {
     if (isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
         return true;
     } else if (isSpawnSubtype(SPAWN_SKYLOFT_BUGKID_TREE)) {
-        bool tmp = SceneflagManager::sInstance->checkFlag(mRoomID, 0x3a);
-        return !tmp;
+        return !SceneflagManager::sInstance->checkBoolFlag(mRoomID, 0x3a);
     } else {
         if (isTrialGateType()) {
             return true;
