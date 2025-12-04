@@ -222,8 +222,6 @@ public:
     );
     
     // These may not belong here
-    // fn_8002F190
-    // TODO: return type is probably a superclass for all insects
     static dAcBase_c* createInsectActor(
         dAcBase_c* parent,
         fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, s32 roomId

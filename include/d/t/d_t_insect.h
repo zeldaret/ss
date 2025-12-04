@@ -80,14 +80,6 @@ private:
     bool shouldSpawn();
     void spawnAll();
     bool someGroundCheck(const mVec3_c &pos, s32 param_3);
-    void handleForceEscape(s32 i) {
-        if (mLinks[i].isLinked()) {
-            mLinks[i].get()->mActorProperties |= AC_PROP_0x4;
-        }
-    }
-    bool isButterfly() const {
-        return isSubtype(10);
-    }
     bool isTrialGateType() const {
         return getSubtype() != SUBTYPE_BUTTERFLY ? false : getSpawnSubtype() == SPAWN_TRIAL_GATE;
     }
@@ -96,15 +88,6 @@ private:
     }
     bool isGoddessWallType() const {
         return getSubtype() != SUBTYPE_BUTTERFLY ? false : getSpawnSubtype() == SPAWN_GODDESS_WALL;
-    }
-    f32 getOriginalScaleX() const {
-        return 100 * mScale.x;
-    }
-    f32 getOriginalScaleY() const {
-        return 100 * mScale.y;
-    }
-    inline s32 getTries() {
-        return 5;
     }
     int doDelete() override;
     int draw() override;
