@@ -36,8 +36,8 @@ STATE_DEFINE(dTgInsect_c, End);
 static const s32 unused[] = {
     0x001E0100, 0, 0, 0, 0, 0, 0, 0,
 };
-static const f32 SCALE_X = 100;
-static const f32 SCALE_Y = 100;
+const f32 dTgInsect_c::SCALE_X = 100;
+const f32 dTgInsect_c::SCALE_Y = 100;
 
 static const f32 unused2[] = {150, 0.5f};
 
@@ -156,8 +156,22 @@ int dTgInsect_c::actorPostCreate() {
     return SUCCEEDED;
 }
 
+int dTgInsect_c::doDelete() {
+    return SUCCEEDED;
+}
+
+int dTgInsect_c::actorExecute() {
+    mStateMgr.executeState();
+    return SUCCEEDED;
+}
+
+int dTgInsect_c::draw() {
+    return SUCCEEDED;
+}
+
 void dTgInsect_c::initializeState_Wait() {}
 
+#pragma opt_strength_reduction off
 void dTgInsect_c::executeState_Wait() {
     if (isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
         s32 i = 0;
@@ -183,6 +197,7 @@ void dTgInsect_c::executeState_Wait() {
         }
     }
 }
+#pragma opt_strength_reduction on
 void dTgInsect_c::finalizeState_Wait() {}
 void dTgInsect_c::initializeState_WaitCreate() {
     if (!isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
@@ -192,7 +207,6 @@ void dTgInsect_c::initializeState_WaitCreate() {
         }
     }
 }
-#pragma opt_strength_reduction on
 void dTgInsect_c::executeState_WaitCreate() {
     if (mActorNode.isLinked()) {
         if (mActorNode.get()->mProfileName == fProfile::OBJ_VSD ||
@@ -443,7 +457,7 @@ bool dTgInsect_c::shouldSpawn() {
 }
 
 bool dTgInsect_c::someGroundCheck(const mVec3_c &pos, s32 updateRotation) {
-    mVec3_c tmp = mVec3_c::Ez * (mScale.x * 100);
+    mVec3_c tmp = mVec3_c::Ez * (SCALE_X * mScale.x);
     tmp.rotY(mRotation.y);
     tmp += pos;
     dBgS_LinChk linChk;
@@ -455,7 +469,7 @@ bool dTgInsect_c::someGroundCheck(const mVec3_c &pos, s32 updateRotation) {
         if (updateRotation != 0) {
             mRotation.y = yRot;
         }
-        tmp = mVec3_c::Ez * (mScale.x * 100);
+        tmp = mVec3_c::Ez * (SCALE_X * mScale.x);
         tmp.rotY(yRot);
         tmp += pos;
         linChk.Set(&pos, &tmp, nullptr);
@@ -464,4 +478,8 @@ bool dTgInsect_c::someGroundCheck(const mVec3_c &pos, s32 updateRotation) {
         }
     }
     return true;
+}
+
+void moreUnused() {
+    static const s32 a = 0x3a;
 }

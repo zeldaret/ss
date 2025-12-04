@@ -2,15 +2,14 @@
 #define D_T_INSECT_H
 
 #include "d/a/d_a_base.h"
+#include "d/t/d_tg.h"
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 
-class dTgInsectSupertype_c : public dAcBase_c {};
-
 extern "C" bool fn_801BB750(nw4r::math::AABB *aabb, f32 f);
 
-class dTgInsect_c : public dTgInsectSupertype_c {
+class dTgInsect_c : public dTg_c {
 public:
     enum Subtype {
         SUBTYPE_VOLCANIC_LADYBUG = 3,
@@ -39,6 +38,9 @@ public:
     void setKillSignal() {
         mKillSignal = 1;
     }
+
+    static const f32 SCALE_X;
+    static const f32 SCALE_Y;
 
     STATE_FUNC_DECLARE(dTgInsect_c, Wait);
     STATE_FUNC_DECLARE(dTgInsect_c, WaitCreate);
@@ -104,8 +106,11 @@ private:
     inline s32 getTries() {
         return 5;
     }
+    int doDelete() override;
+    int draw() override;
     int actorCreate() override;
     int actorPostCreate() override;
+    int actorExecute() override;
 };
 
 #endif
