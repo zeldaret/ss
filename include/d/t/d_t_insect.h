@@ -30,11 +30,15 @@ public:
         SPAWN_BUG_MINIGAME,
         SPAWN_TRIAL_GATE,
         SPAWN_GOSSIP_STONE,
-        SPAWN_GODDESS_WALL, // doesn't seem to be used?
+        SPAWN_GODDESS_WALL,
         SPAWN_DEFAULT = 0xF,
     };
     dTgInsect_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dTgInsect_c() {}
+
+    void setKillSignal() {
+        mKillSignal = 1;
+    }
 
     STATE_FUNC_DECLARE(dTgInsect_c, Wait);
     STATE_FUNC_DECLARE(dTgInsect_c, WaitCreate);
@@ -44,16 +48,16 @@ public:
 private:
     /* 0x0FC */ STATE_MGR_DECLARE(dTgInsect_c);
     /* 0x138 */ dAcRef_c<dAcBase_c> mLinks[16];
-    /* 0x1F8 */ u8 unk1F8[0x208 - 0x1F8];
-    /* 0x208 */ s32 unk208[16];
+    /* 0x1F8 */ u8 unk1F8[16];
+    /* 0x208 */ s32 mInsectRespanwTimers[16];
     /* 0x248 */ s32 mInsectCount;
-    /* 0x24C */ u8 unk24C;
-    /* 0x24D */ u8 unk24D;
+    /* 0x24C */ u8 mRevealed; // used by OBJ_SOIL and OBJ_VSD to signal that the insect should be spawned now
+    /* 0x24D */ u8 mKillSignal; // used by goddess walls to signal that the insects should despawn
     /* 0x24E */ u8 unk24E;
     /* 0x24F */ u8 unk24F;
-    /* 0x250 */ u8 unk250[16];
-    /* 0x260 */ mVec3_c unk260;
-    /* 0x26C */ dAcRef_c<dAcBase_c> unk26C;
+    /* 0x250 */ u8 mShouldSpawn[16];
+    /* 0x260 */ mVec3_c mRevealedSpawnPos;
+    /* 0x26C */ dAcRef_c<dAcBase_c> mWarpRef;
 
     s32 getSpawnSubtype() const {
         return (mParams >> 8 & 0xF);

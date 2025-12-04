@@ -65,8 +65,8 @@ int dTgInsect_c::actorCreate() {
         }
     }
     mScale *= 0.01f;
-    unk24C = 0;
-    unk260 = mPosition;
+    mRevealed = 0;
+    mRevealedSpawnPos = mPosition;
     // non matching: load of 0 in r0
     // that is already 0
     if (isTrialGateType() || isGossipStoneType() || isGoddessWallType() || isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
@@ -131,7 +131,7 @@ int dTgInsect_c::actorPostCreate() {
             }
             // inline vec 2
             if ((warp->checkInRadius(mPosition, 1000000))) {
-                unk26C.link(warp);
+                mWarpRef.link(warp);
             } else {
                 return FAILED;
             }
@@ -170,9 +170,9 @@ void dTgInsect_c::executeState_Wait() {
         s32 i = 0;
         for (; i < mInsectCount; i++) {
             if (!mLinks[i].isLinked()) {
-                if (unk208[i] > 0) {
-                    unk208[i]--;
-                } else if (unk208[i] == 0) {
+                if (mInsectRespanwTimers[i] > 0) {
+                    mInsectRespanwTimers[i]--;
+                } else if (mInsectRespanwTimers[i] == 0) {
                     nw4r::math::MTX34 mtx;
                     PSMTXTrans(mtx, mPosition.x, mPosition.y, mPosition.z);
                     nw4r::math::MTX34 scale;
@@ -184,7 +184,7 @@ void dTgInsect_c::executeState_Wait() {
                         spawnInsect(i);
                     }
                 } else {
-                    unk208[i] = 900;
+                    mInsectRespanwTimers[i] = 900;
                 }
             }
         }
@@ -195,7 +195,7 @@ void dTgInsect_c::initializeState_WaitCreate() {
     if (!isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
         unk24F = 1;
         for (s32 i = 0; i < mInsectCount; i++) {
-            unk250[i] = shouldSpawn();
+            mShouldSpawn[i] = shouldSpawn();
         }
     }
 }
@@ -204,7 +204,7 @@ void dTgInsect_c::executeState_WaitCreate() {
     if (mActorNode.isLinked()) {
         if (mActorNode.get()->mProfileName == fProfile::OBJ_VSD ||
             mActorNode.get()->mProfileName == fProfile::OBJ_SOIL) {
-            if (unk24C == 0) {
+            if (mRevealed == 0) {
                 return;
             }
         } else {
@@ -216,16 +216,16 @@ void dTgInsect_c::executeState_WaitCreate() {
     mActorNode.unlink();
     for (s32 i = 0; i < mInsectCount; i++) {
         if (!isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
-            if (unk250[i] != 0) {
-                unk250[i] = 0;
+            if (mShouldSpawn[i] != 0) {
+                mShouldSpawn[i] = 0;
             } else {
                 continue;
             }
         }
         dAcBase_c *insect = nullptr;
         mVec3_c tmp1 = mPosition;
-        if (unk24C) {
-            tmp1 = unk260;
+        if (mRevealed) {
+            tmp1 = mRevealedSpawnPos;
         }
         mAng3_c rot(0, cM::rndFX(65536), 0);
         switch (getSubtype()) {
@@ -249,7 +249,7 @@ void dTgInsect_c::executeState_WaitCreate() {
         }
         if (insect != nullptr) {
             mLinks[i].link(insect);
-            unk208[i] = -1;
+            mInsectRespanwTimers[i] = -1;
         }
     }
     if (isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
@@ -271,8 +271,8 @@ void dTgInsect_c::initializeState_WaitForceEscape() {
 
 void dTgInsect_c::executeState_WaitForceEscape() {
     if (isTrialGateType()) {
-        if (unk26C.isLinked()) {
-            dAcOWarp_c *warp = static_cast<dAcOWarp_c *>(unk26C.get());
+        if (mWarpRef.isLinked()) {
+            dAcOWarp_c *warp = static_cast<dAcOWarp_c *>(mWarpRef.get());
             if (warp->fn_0x90()) {
                 for (s32 i = 0; i < mInsectCount; i++) {
                     if (mLinks[i].isLinked()) {
@@ -282,7 +282,7 @@ void dTgInsect_c::executeState_WaitForceEscape() {
                 }
             }
         }
-    } else if (isGoddessWallType() && unk24D) {
+    } else if (isGoddessWallType() && mKillSignal) {
         for (s32 i = 0; i < mInsectCount; i++) {
             if (mLinks[i].isLinked()) {
                 static_cast<dAcInsectButterfly_c *>(mLinks[i].get())->setKillSignal();
@@ -408,7 +408,7 @@ void dTgInsect_c::spawnInsect(s32 index) {
     }
     if (ref != nullptr) {
         mLinks[index].link(ref);
-        unk208[index] = -1;
+        mInsectRespanwTimers[index] = -1;
     }
     return;
 }
