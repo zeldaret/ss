@@ -220,7 +220,12 @@ public:
         fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
         u32 roomId
     );
+    
     // These may not belong here
+    static dAcBase_c* createInsectActor(
+        dAcBase_c* parent,
+        fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, s32 roomId
+    );
     static dAcBase_c *createActorUnkGroup3(
         fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale,
         u32 params2
