@@ -71,8 +71,8 @@ int dTgSwordBattleGame_c::actorExecuteInEvent() {
                 dLytMiniGame_c::GetInstance()->startCountdown();
 
             } else if (dLytMiniGame_c::GetInstance()->isStartCountdownDone()) {
-                dLytMiniGame_c::GetInstance()->timeRelatedExecute();
-                dLytMiniGame_c::GetInstance()->setHighscore(getBossHighscore());
+                dLytMiniGame_c::GetInstance()->timeRelatedInit();
+                dLytMiniGame_c::GetInstance()->setBestTime(getBossHighscore());
                 dLytMiniGame_c::GetInstance()->setShowBestTime(true);
                 mTimer.initUpCounter();
                 field_0x1A8 = true;
@@ -113,7 +113,7 @@ int dTgSwordBattleGame_c::actorExecuteInEvent() {
                 setCurrentBossNumber(mBossNumber + 1);
                 if (MinigameManager::endMinigame(MinigameManager::BOSS_RUSH)) {
                     dLytMiniGame_c::GetInstance()->startFinish();
-                    dLytMiniGame_c::GetInstance()->timeRelated();
+                    dLytMiniGame_c::GetInstance()->endTimeResult();
                 }
             }
         } break;

@@ -170,7 +170,7 @@ public:
           mHighestDigitIndex(0),
           field_0x7EC(false),
           field_0x7ED(false),
-          field_0x7EE(false),
+          mResultMode(false),
           mVariant(0),
           field_0x7F4(0),
           mIsVisible(false) {}
@@ -186,8 +186,8 @@ public:
         mVariant = var;
     }
 
-    void setField_0x7EE(bool v) {
-        field_0x7EE = v;
+    void setResultMode(bool v) {
+        mResultMode = v;
     }
 
     void fn_8028DD80();
@@ -253,7 +253,7 @@ private:
     /* 0x7E4 */ s32 mHighestDigitIndex;
     /* 0x7EC */ bool field_0x7EC;
     /* 0x7ED */ bool field_0x7ED;
-    /* 0x7EE */ bool field_0x7EE;
+    /* 0x7EE */ bool mResultMode;
     /* 0x7F0 */ s32 mVariant;
     /* 0x7F4 */ u8 field_0x7F4;
     /* 0x7F5 */ bool mIsVisible;
@@ -332,7 +332,7 @@ public:
           field_0x810(0),
           field_0x814(false),
           field_0x815(false),
-          field_0x816(false),
+          mResultMode(false),
           mVariant(SCORE_VARIANT_BAMBOO_CUTTING),
           field_0x81C(0),
           field_0x820(false),
@@ -354,8 +354,8 @@ public:
         mVariant = var;
     }
 
-    void setField_0x816(bool v) {
-        field_0x816 = v;
+    void setResultMode(bool v) {
+        mResultMode = v;
     }
 
     void setField_0x828(bool v) {
@@ -447,7 +447,7 @@ private:
     /* 0x810 */ s32 field_0x810;
     /* 0x814 */ bool field_0x814;
     /* 0x815 */ bool field_0x815;
-    /* 0x816 */ bool field_0x816;
+    /* 0x816 */ bool mResultMode;
     /* 0x818 */ s32 mVariant;
     /* 0x81C */ s32 field_0x81C;
     /* 0x820 */ bool field_0x820;
@@ -515,13 +515,13 @@ public:
         // These are created by dFlow_c and correspond to above entries.
         // They also cause things to behave a bit differently. What is the purpose
         // of these special variants?
-        VARIANT_10,
-        VARIANT_11,
-        VARIANT_12,
-        VARIANT_13,
-        VARIANT_14,
-        VARIANT_15,
-        VARIANT_16,
+        VARIANT_BAMBOO_CUTTING_RESULT,
+        VARIANT_THRILL_DIGGER_RESULT,
+        VARIANT_INSECT_CAPTURE_RESULT,
+        VARIANT_PUMPKIN_ARCHERY_RESULT,
+        VARIANT_ROLLERCOASTER_RESULT,
+        VARIANT_BOSS_RUSH_RESULT,
+        VARIANT_TRIAL_TIME_ATTACK_RESULT,
     };
 
 private:
@@ -559,33 +559,28 @@ public:
         return sInstance;
     }
 
-    /** Updates some window  */
     void startCountdown();
-    /** ??? */
     void startFinish();
-    void fn_80295A20();
-    /** Checks to see if in BAMBOO_CUTTING .. BOSS_RUSH and returns some boolean (start?) */
+    void startTimeup();
+
     bool isStartCountdownDone();
-    /** Checks to see if in BAMBOO_CUTTING .. BOSS_RUSH and returns some boolean (end?) */
     bool isFinishAnimDone();
     bool isTimeupAnimDone();
 
-    void fn_80295B20(s32);
-    void fn_80295B30(s32);
+    void setScoreUp(s32 score);
+    void setScoreDown(s32);
 
-    void setHighscore(s32 time);
-
-    /** GUESS: sets the start for the high score? */
+    void setBestTime(s32 time);
     void setShowBestTime(bool);
 
-    void timeRelatedExecute();
-    void scoreRelatedExecute();
+    void timeRelatedInit();
+    void scoreRelatedInit();
 
     void setDisplayedTime(s32 time);
     void setDisplayedPoints(s32 points);
 
-    void timeRelated();
-    void scoreRelated();
+    void endTimeResult();
+    void endScoreResult();
 
     void fn_80295900(s32);
 
@@ -622,17 +617,17 @@ private:
     bool isPopupOpenExceptHelp() const;
     bool isFadingOut() const;
 
-    void fn_80295F90();
-    void fn_80296000();
-    void fn_80296070();
-    void fn_80296150();
-    void fn_80296210();
-    void fn_802962A0();
-    void fn_80296330();
+    void executeBambooCutting();
+    void executeFunFunIsland();
+    void executeThrillDigger();
+    void executeInsectCapture();
+    void executeSpiralChargeTutorial();
+    void executePumpkinArchery();
+    void executeRollercoaster();
 
     // These two do the same thing
-    void fn_802963E0();
-    void fn_80296480();
+    void executeBossRush();
+    void executeTrialTimeAttack();
 
     /* 0x0068 */ bool mLoadRequestStart;
     /* 0x0069 */ bool mLoadRequestScore;

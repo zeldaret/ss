@@ -480,17 +480,17 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
             break;
         }
         case EVENT_LYT_MINI_GAME: {
-            if (dMessage_c::getInstance()->getField_0x340() != 0) {
-                // cancel something minigame related if running
+            if (dMessage_c::getInstance()->hasSetMinigameResult()) {
+                // clear old result
                 clearMinigame();
             }
-            // start something minigame related
+            // create new result
             dMessage_c::getInstance()->setMiniGameVariant(params1n2);
             createLytMiniGame();
             break;
         }
         case EVENT_LYT_MINI_GAME_END:
-            // cancel something minigame related
+            // hide score/time
             clearMinigame();
             break;
         case EVENT_46:              dMessage_c::getInstance()->setField_0x344(params1n2); break;
@@ -1193,51 +1193,51 @@ void dFlow_c::clear() {
 void dFlow_c::createLytMiniGame() {
     if (dLytMiniGame_c::GetInstance() == nullptr) {
         switch (dMessage_c::getInstance()->getMiniGameVariant()) {
-            case 0:
+            case dMessage_c::MG_THRILL_DIGGER:
                 dBase_c::createBase(
-                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_11,
-                    fBase_c::OTHER
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(),
+                    dLytMiniGame_c::VARIANT_THRILL_DIGGER_RESULT, fBase_c::OTHER
                 );
                 break;
-            case 1:
+            case dMessage_c::MG_BAMBOO_CUTTING:
                 dBase_c::createBase(
-                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_10,
-                    fBase_c::OTHER
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(),
+                    dLytMiniGame_c::VARIANT_BAMBOO_CUTTING_RESULT, fBase_c::OTHER
                 );
                 break;
-            case 2:
+            case dMessage_c::MG_INSECT_CAPTURE:
                 dBase_c::createBase(
-                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_12,
-                    fBase_c::OTHER
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(),
+                    dLytMiniGame_c::VARIANT_INSECT_CAPTURE_RESULT, fBase_c::OTHER
                 );
                 break;
-            case 3:
+            case dMessage_c::MG_ROLLERCOASTER:
                 dBase_c::createBase(
-                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_14,
-                    fBase_c::OTHER
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(),
+                    dLytMiniGame_c::VARIANT_ROLLERCOASTER_RESULT, fBase_c::OTHER
                 );
                 break;
-            case 4:
+            case dMessage_c::MG_PUMPKIN_ARCHERY:
                 dBase_c::createBase(
-                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_13,
-                    fBase_c::OTHER
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(),
+                    dLytMiniGame_c::VARIANT_PUMPKIN_ARCHERY_RESULT, fBase_c::OTHER
                 );
                 break;
-            case 5:
+            case dMessage_c::MG_FUN_FUN_ISLAND:
                 dBase_c::createBase(
                     fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_FUN_FUN_ISLAND,
                     fBase_c::OTHER
                 );
                 break;
-            case 6:
+            case dMessage_c::MG_TRIAL_TIME_ATTACK:
                 dBase_c::createBase(
-                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_16,
-                    fBase_c::OTHER
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(),
+                    dLytMiniGame_c::VARIANT_TRIAL_TIME_ATTACK_RESULT, fBase_c::OTHER
                 );
                 break;
-            case 7:
+            case dMessage_c::MG_BOSS_RUSH:
                 dBase_c::createBase(
-                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_15,
+                    fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), dLytMiniGame_c::VARIANT_BOSS_RUSH_RESULT,
                     fBase_c::OTHER
                 );
                 break;
@@ -1246,28 +1246,28 @@ void dFlow_c::createLytMiniGame() {
 }
 
 void dFlow_c::clearMinigame() {
-    if (dMessage_c::getInstance()->getField_0x340()) {
+    if (dMessage_c::getInstance()->hasSetMinigameResult()) {
         switch (dMessage_c::getInstance()->getMiniGameVariant()) {
-            case 0:
-            case 1:
-            case 4:
-            case 5:
+            case dMessage_c::MG_THRILL_DIGGER:
+            case dMessage_c::MG_BAMBOO_CUTTING:
+            case dMessage_c::MG_PUMPKIN_ARCHERY:
+            case dMessage_c::MG_FUN_FUN_ISLAND:
                 if (dLytMiniGame_c::GetInstance() != nullptr) {
-                    dLytMiniGame_c::GetInstance()->scoreRelated();
+                    dLytMiniGame_c::GetInstance()->endScoreResult();
                 }
                 break;
-            case 2:
-            case 3:
-            case 6:
-            case 7:
+            case dMessage_c::MG_INSECT_CAPTURE:
+            case dMessage_c::MG_ROLLERCOASTER:
+            case dMessage_c::MG_TRIAL_TIME_ATTACK:
+            case dMessage_c::MG_BOSS_RUSH:
                 if (dLytMiniGame_c::GetInstance() != nullptr) {
-                    dLytMiniGame_c::GetInstance()->timeRelated();
+                    dLytMiniGame_c::GetInstance()->endTimeResult();
                 }
                 break;
         }
     }
-    dMessage_c::getInstance()->setField_0x340(0);
-    dMessage_c::getInstance()->setMiniGameVariant(8);
+    dMessage_c::getInstance()->setHasSetMinigameResult(false);
+    dMessage_c::getInstance()->setMiniGameVariant(dMessage_c::MG_NONE);
 }
 
 SPECIAL_BASE_PROFILE(MESSAGE, dMessage_c, fProfile::MESSAGE, 0x2A8, 0);
@@ -1755,29 +1755,29 @@ void dMessage_c::clearLightPillarRelatedArgs() {
 }
 
 void dMessage_c::executeMinigame() {
-    if (mMiniGameVariant == 8) {
+    if (mMinigameVariant == MG_NONE) {
         return;
     }
-    if (!dMessage_c::getInstance()->getField_0x340()) {
-        switch (mMiniGameVariant) {
-            case 0:
-            case 1:
-            case 4:
-            case 5:
+    if (!dMessage_c::getInstance()->hasSetMinigameResult()) {
+        switch (mMinigameVariant) {
+            case MG_THRILL_DIGGER:
+            case MG_BAMBOO_CUTTING:
+            case MG_PUMPKIN_ARCHERY:
+            case MG_FUN_FUN_ISLAND:
                 if (dLytMiniGame_c::GetInstance() != nullptr) {
-                    dLytMiniGame_c::GetInstance()->scoreRelatedExecute();
+                    dLytMiniGame_c::GetInstance()->scoreRelatedInit();
                     dLytMiniGame_c::GetInstance()->setDisplayedPoints(mMinigameResultPoints);
-                    sInstance->field_0x340 = 1;
+                    sInstance->mHasSetMinigameResult = true;
                 }
                 break;
-            case 2:
-            case 3:
-            case 6:
-            case 7:
+            case MG_INSECT_CAPTURE:
+            case MG_ROLLERCOASTER:
+            case MG_TRIAL_TIME_ATTACK:
+            case MG_BOSS_RUSH:
                 if (dLytMiniGame_c::GetInstance() != nullptr) {
-                    dLytMiniGame_c::GetInstance()->timeRelatedExecute();
+                    dLytMiniGame_c::GetInstance()->timeRelatedInit();
                     dLytMiniGame_c::GetInstance()->setDisplayedTime(mMinigameTime);
-                    sInstance->field_0x340 = 1;
+                    sInstance->mHasSetMinigameResult = true;
                 }
                 break;
         }
@@ -1796,8 +1796,8 @@ void dMessage_c::init() {
 
 void dMessage_c::reset() {
     init();
-    mMiniGameVariant = 8;
-    field_0x340 = 0;
+    mMinigameVariant = MG_NONE;
+    mHasSetMinigameResult = false;
     mMinigameResultPoints = 0;
     mMinigameTime = 0;
 }
