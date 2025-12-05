@@ -611,7 +611,7 @@ private:
     void fn_80295D80();
     void fn_80295D90(s32 points);
     void getPumpkin(const mVec3_c &pumpkinPos, s32 unk, bool doubleScore);
-    bool fn_80295DB0();
+    bool isDisplayingResult();
     bool isInEvent() const;
     bool isPopupOpen() const;
     bool isPopupOpenExceptHelp() const;

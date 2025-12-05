@@ -3657,7 +3657,7 @@ void dLytMiniGame_c::scoreRelatedInit() {
         case VARIANT_SPIRAL_CHARGE_TUTORIAL:
         case VARIANT_PUMPKIN_ARCHERY:        mScore.fn_80291410(); break;
         case VARIANT_FUN_FUN_ISLAND:
-            if (fn_80295DB0()) {
+            if (isDisplayingResult()) {
                 mScore.startAlphaIn();
             } else {
                 mScore.fn_80291410();
@@ -3673,7 +3673,7 @@ void dLytMiniGame_c::scoreRelatedInit() {
 void dLytMiniGame_c::endScoreResult() {
     switch (mVariant) {
         case VARIANT_FUN_FUN_ISLAND:
-            if (fn_80295DB0()) {
+            if (isDisplayingResult()) {
                 mScore.startAlphaOut();
             } else {
                 mScore.startOut();
@@ -3691,7 +3691,7 @@ void dLytMiniGame_c::setDisplayedPoints(s32 points) {
         case VARIANT_SPIRAL_CHARGE_TUTORIAL:
         case VARIANT_PUMPKIN_ARCHERY:        mScore.setScore(points); break;
         case VARIANT_FUN_FUN_ISLAND:
-            fn_80295DB0();
+            isDisplayingResult();
             mScore.setScore(points);
             break;
         case VARIANT_THRILL_DIGGER:          mScore.fn_80291D40(points); break;
@@ -3945,7 +3945,7 @@ void dLytMiniGame_c::getPumpkin(const mVec3_c &pumpkinPos, s32 unk, bool doubleS
 }
 
 // cannot be const...
-bool dLytMiniGame_c::fn_80295DB0() {
+bool dLytMiniGame_c::isDisplayingResult() {
     bool ret = false;
     switch (mVariant) {
         case VARIANT_BAMBOO_CUTTING_RESULT:
@@ -4002,7 +4002,7 @@ bool dLytMiniGame_c::isFadingOut() const {
 }
 
 void dLytMiniGame_c::executeBambooCutting() {
-    if (fn_80295DB0()) {
+    if (isDisplayingResult()) {
         // nothing
     } else {
         if (isPopupOpen()) {
@@ -4018,7 +4018,7 @@ void dLytMiniGame_c::executeBambooCutting() {
 }
 
 void dLytMiniGame_c::executeFunFunIsland() {
-    if (fn_80295DB0()) {
+    if (isDisplayingResult()) {
         mScore.setResultMode(true);
     } else {
         mScore.setResultMode(false);
@@ -4031,7 +4031,7 @@ void dLytMiniGame_c::executeFunFunIsland() {
 }
 
 void dLytMiniGame_c::executeThrillDigger() {
-    if (fn_80295DB0()) {
+    if (isDisplayingResult()) {
         if (field_0x3864 == true) {
             s32 score = mScore.getScore();
             s32 rupeeDiff = dLytMeter_c::getRupeeDifference();
@@ -4059,7 +4059,7 @@ void dLytMiniGame_c::executeThrillDigger() {
 }
 
 void dLytMiniGame_c::executeInsectCapture() {
-    if (fn_80295DB0()) {
+    if (isDisplayingResult()) {
         // nothing
     } else {
         if (isInEvent() || isPopupOpen()) {
@@ -4098,7 +4098,9 @@ void dLytMiniGame_c::executeSpiralChargeTutorial() {
 }
 
 void dLytMiniGame_c::executePumpkinArchery() {
-    if (!fn_80295DB0()) {
+    if (isDisplayingResult()) {
+        // nothing
+    } else {
         if (isPopupOpen()) {
             mScore.startOutTemp();
             mTime.startOutTemp();
@@ -4115,7 +4117,7 @@ void dLytMiniGame_c::executePumpkinArchery() {
 }
 
 void dLytMiniGame_c::executeRollercoaster() {
-    if (fn_80295DB0()) {
+    if (isDisplayingResult()) {
         // nothing
     } else {
         if (isInEvent() || isPopupOpen()) {
@@ -4136,7 +4138,7 @@ void dLytMiniGame_c::executeRollercoaster() {
 
 // These two do the same thing
 void dLytMiniGame_c::executeBossRush() {
-    if (fn_80295DB0()) {
+    if (isDisplayingResult()) {
         // nothing
     } else {
         if (isInEvent() || isPopupOpen()) {
@@ -4156,7 +4158,7 @@ void dLytMiniGame_c::executeBossRush() {
 }
 
 void dLytMiniGame_c::executeTrialTimeAttack() {
-    if (fn_80295DB0()) {
+    if (isDisplayingResult()) {
         // nothing
     } else {
         if (isInEvent() || isPopupOpen()) {
