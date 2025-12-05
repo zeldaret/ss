@@ -18,13 +18,13 @@ public:
     STATE_FUNC_DECLARE(dAcInsectButterfly_c, Dead);
 
     void setKillSignal() {
-        killSignal = 1;
+        mKillSignal = 1;
     }
 private:
     /* 0x468 */ u8 field_0x468[0xA34-0x468];
     /* 0xA34 */ STATE_MGR_DECLARE(dAcInsectButterfly_c);
     /* 0xA70 */ u8 field_0xA70[0xAC6-0xA70];
-    /* 0xAC6 */ u8 killSignal;
+    /* 0xAC6 */ u8 mKillSignal;
 };
 
 #endif

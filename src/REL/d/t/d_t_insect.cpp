@@ -46,13 +46,13 @@ const s32 *useUnused() {
 }
 
 int dTgInsect_c::actorCreate() {
-    if (getSubtype() == 0) {
+    if (getSubtype() == SUBTYPE_INVALID0) {
         return FAILED;
     }
-    if (getSubtype() == 1) {
+    if (getSubtype() == SUBTYPE_INVALID1) {
         return FAILED;
     }
-    if (getSubtype() == 2) {
+    if (getSubtype() == SUBTYPE_INVALID2) {
         return FAILED;
     }
     mInsectCount = getInsectCount();
@@ -67,7 +67,7 @@ int dTgInsect_c::actorCreate() {
     mRevealed = 0;
     mRevealedSpawnPos = mPosition;
     if (isTrialGateType() || isGossipStoneType() || isGoddessWallType() || isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
-        unk24E = 1;
+        field_0x24e = 1;
     }
     return SUCCEEDED;
 }
@@ -84,7 +84,7 @@ int dTgInsect_c::actorPostCreate() {
         || subtype == SUBTYPE_SAND_CICADA
         || subtype == SUBTYPE_VOLCANIC_LADYBUG
         || subtype == SUBTYPE_SKY_STAG_BEETLE) {
-        if (!someGroundCheck(mPosition, 1)) {
+        if (!checkValidSpawnLocation(mPosition, 1)) {
             return FAILED;
         }
     }
@@ -102,7 +102,10 @@ int dTgInsect_c::actorPostCreate() {
                 checkProfile(prof, fProfile::OBJ_SOIL)
             ) &&
             getSquareDistanceTo(obj->mPosition) < 25) {
-            if (subtype == 7 || subtype == 0xB || subtype == 8 || subtype == 0xC) {
+            if (subtype == SUBTYPE_FARON_GRASSHOPPER
+                || subtype == SUBTYPE_SKYLOFT_MANTIS
+                || subtype == SUBTYPE_LANAYRU_ANT
+                || subtype == SUBTYPE_EDLIN_ROLLER) {
                 if (prof == fProfile::OBJ_SOIL && static_cast<dAcOsoil_c *>(obj)->isStateHole()) {
                     return FAILED;
                 }
@@ -115,8 +118,8 @@ int dTgInsect_c::actorPostCreate() {
         mStateMgr.changeState(StateID_WaitCreate);
     } else {
         if (isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
-            for (s32 i = 0; i < 16; i++) {
-                unk1F8[i] = 0;
+            for (s32 i = 0; i < (s32)ARRAY_LENGTH(field_0x1f8); i++) {
+                field_0x1f8[i] = 0;
             }
             mStateMgr.changeState(StateID_Wait);
         } else if (isTrialGateType()) {
@@ -180,9 +183,9 @@ void dTgInsect_c::executeState_Wait() {
         s32 i = 0;
         for (; i < mInsectCount; i++) {
             if (!mLinks[i].isLinked()) {
-                if (mInsectRespanwTimers[i] > 0) {
-                    mInsectRespanwTimers[i]--;
-                } else if (mInsectRespanwTimers[i] == 0) {
+                if (mInsectRespawnTimers[i] > 0) {
+                    mInsectRespawnTimers[i]--;
+                } else if (mInsectRespawnTimers[i] == 0) {
                     nw4r::math::MTX34 mtx;
                     PSMTXTrans(mtx, mPosition.x, mPosition.y, mPosition.z);
                     nw4r::math::MTX34 scale;
@@ -194,7 +197,7 @@ void dTgInsect_c::executeState_Wait() {
                         spawnInsect(i);
                     }
                 } else {
-                    mInsectRespanwTimers[i] = 900;
+                    mInsectRespawnTimers[i] = 900;
                 }
             }
         }
@@ -204,7 +207,7 @@ void dTgInsect_c::executeState_Wait() {
 void dTgInsect_c::finalizeState_Wait() {}
 void dTgInsect_c::initializeState_WaitCreate() {
     if (!isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
-        unk24F = 1;
+        field_0x24f = 1;
         for (s32 i = 0; i < mInsectCount; i++) {
             mShouldSpawn[i] = shouldSpawn();
         }
@@ -259,7 +262,7 @@ void dTgInsect_c::executeState_WaitCreate() {
         }
         if (insect != nullptr) {
             mLinks[i].link(insect);
-            mInsectRespanwTimers[i] = -1;
+            mInsectRespawnTimers[i] = -1;
         }
     }
     if (isSpawnSubtype(SPAWN_BUG_MINIGAME)) {
@@ -363,7 +366,7 @@ void dTgInsect_c::spawnInsect(s32 index) {
                     f32 scaledScale = SCALE_Y * mScale.y;
                     pos.y = mPosition.y + scaledScale * 0.3f;
                     pos.y += cM::rndF(scaledScale * 0.5f);
-                    if (!someGroundCheck(pos, 0)) {
+                    if (!checkValidSpawnLocation(pos, 0)) {
                         return;
                     }
                 } else {
@@ -429,7 +432,7 @@ void dTgInsect_c::spawnInsect(s32 index) {
     }
     if (ref != nullptr) {
         mLinks[index].link(ref);
-        mInsectRespanwTimers[index] = -1;
+        mInsectRespawnTimers[index] = -1;
     }
     return;
 }
@@ -456,7 +459,7 @@ bool dTgInsect_c::shouldSpawn() {
     }
 }
 
-bool dTgInsect_c::someGroundCheck(const mVec3_c &pos, s32 updateRotation) {
+bool dTgInsect_c::checkValidSpawnLocation(const mVec3_c &pos, bool updateRotation) {
     mVec3_c tmp = mVec3_c::Ez * (SCALE_X * mScale.x);
     tmp.rotY(mRotation.y);
     tmp += pos;
@@ -466,7 +469,7 @@ bool dTgInsect_c::someGroundCheck(const mVec3_c &pos, s32 updateRotation) {
     linChk.Set(&pos, &tmp, nullptr);
     if (!dBgS::GetInstance()->LineCross(&linChk)) {
         mAng yRot = mRotation.y + 0x7FFF;
-        if (updateRotation != 0) {
+        if (updateRotation) {
             mRotation.y = yRot;
         }
         tmp = mVec3_c::Ez * (SCALE_X * mScale.x);
