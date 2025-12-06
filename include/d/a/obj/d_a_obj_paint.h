@@ -12,6 +12,11 @@
 
 class dAcOpaint_c : public dAcObjBase_c {
 public:
+    enum Subtype {
+        Batreaux = 0,
+        Groose = 1,
+    };
+
     dAcOpaint_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dAcOpaint_c() {}
 
@@ -35,12 +40,12 @@ private:
     /* 0x568 */ STATE_MGR_DECLARE(dAcOpaint_c);
     /* 0x5A4 */ mAng mRotationZRelated;
     /* 0x5A6 */ mAng mRotationZOffset;
-    /* 0x5A8 */ s8 field_0x5A8;
+    /* 0x5A8 */ s8 mPaintingOffsetTimer;
     /* 0x5A9 */ u8 mSubtype;
-    /* 0x5AA */ bool field_0x5AA;
+    /* 0x5AA */ bool mPaintingSwayed;
 
-    static mAng rotationZRelated0;
-    static mAng rotationZRelated1;
+    static mAng rotationZRelatedBatreaux;
+    static mAng rotationZRelatedGroose;
     static const f32 lbl_613_rodata_2C;
 };
 
