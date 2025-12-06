@@ -17,6 +17,9 @@ SPECIAL_ACTOR_PROFILE(OBJ_PAINT, dAcOpaint_c, fProfile::OBJ_PAINT, 0x163, 0, 0);
 
 STATE_DEFINE(dAcOpaint_c, Wait);
 
+mAng dAcOpaint_c::rotationZRelated0 = mAng::d2s(35.0025f);
+mAng dAcOpaint_c::rotationZRelated1 = mAng::d2s(40.0015f);
+
 bool dAcOpaint_c::createHeap() {
     const char *oarcName = getOarcName();
     const char *modelName = getModelName();
