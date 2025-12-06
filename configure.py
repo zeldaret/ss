@@ -2592,7 +2592,7 @@ config.libs = [
     Rel(
         NonMatching, "d_a_obj_oct_grass_leaf", "REL/d/a/obj/d_a_obj_oct_grass_leaf.cpp"
     ),
-    Rel(NonMatching, "d_a_obj_paint", "REL/d/a/obj/d_a_obj_paint.cpp"),
+    Rel(Matching, "d_a_obj_paint", "REL/d/a/obj/d_a_obj_paint.cpp"),
     Rel(Matching, "d_a_obj_pinwheel", "REL/d/a/obj/d_a_obj_pinwheel.cpp"),
     Rel(NonMatching, "d_a_obj_pipe", "REL/d/a/obj/d_a_obj_pipe.cpp"),
     Rel(NonMatching, "d_a_obj_piston", "REL/d/a/obj/d_a_obj_piston.cpp"),
