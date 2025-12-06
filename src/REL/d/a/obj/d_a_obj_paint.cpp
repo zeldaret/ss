@@ -16,8 +16,8 @@ SPECIAL_ACTOR_PROFILE(OBJ_PAINT, dAcOpaint_c, fProfile::OBJ_PAINT, 0x163, 0, 0);
 
 STATE_DEFINE(dAcOpaint_c, Wait);
 
-mAng dAcOpaint_c::rotationZRelatedBatreaux = mAng::d2s(35.0025f);
-mAng dAcOpaint_c::rotationZRelatedGroose = mAng::d2s(40.0015f);
+mAng dAcOpaint_c::paintingTiltBatreaux = mAng::d2s(35.0025f);
+mAng dAcOpaint_c::paintingTiltGroose = mAng::d2s(40.0015f);
 
 bool dAcOpaint_c::createHeap() {
     const char *oarcName = getOarcName();
@@ -76,9 +76,9 @@ void dAcOpaint_c::executeState_Wait() {
         if (1000.f - distance > 0.f) {
             if (distance < _a + 700.f && !mPaintingSwayed) {
                 if (mSubtype == Batreaux) {
-                    mRotationZRelated = rotationZRelatedBatreaux;
+                    mPaintingTilt = paintingTiltBatreaux;
                 } else {
-                    mRotationZRelated = rotationZRelatedGroose;
+                    mPaintingTilt = paintingTiltGroose;
                 }
                 mPaintingSwayed = true;
                 startSound(SE_Paint_LOOSE);
@@ -87,15 +87,15 @@ void dAcOpaint_c::executeState_Wait() {
             mPosition.y += 10.f;
 
             if (mPaintingSwayed) {
-                mRotationZOffset = mAng(0x100);
+                mTilt = mAng(0x100);
             }
         }
     }
 
-    mRotationZOffset -= mAng((mRotation.z - mRotationZRelated) * (0.03f + (0.01f * _a)));
-    mRotationZOffset *= 0.89f + (0.01f * _a);
+    mTilt -= mAng((mRotation.z - mPaintingTilt) * (0.03f + (0.01f * _a)));
+    mTilt *= 0.89f + (0.01f * _a);
 
-    mRotation.z = mRotation.z + mRotationZOffset;
+    mRotation.z = mRotation.z + mTilt;
 
     if (mPaintingOffsetTimer > 0) {
         mPaintingOffsetTimer--;

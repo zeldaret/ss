@@ -38,14 +38,14 @@ private:
     /* 0x350 */ dShadowCircle_c mShadow;
     /* 0x358 */ dBgW mBgW;
     /* 0x568 */ STATE_MGR_DECLARE(dAcOpaint_c);
-    /* 0x5A4 */ mAng mRotationZRelated;
-    /* 0x5A6 */ mAng mRotationZOffset;
+    /* 0x5A4 */ mAng mPaintingTilt;
+    /* 0x5A6 */ mAng mTilt;
     /* 0x5A8 */ s8 mPaintingOffsetTimer;
     /* 0x5A9 */ u8 mSubtype;
     /* 0x5AA */ bool mPaintingSwayed;
 
-    static mAng rotationZRelatedBatreaux;
-    static mAng rotationZRelatedGroose;
+    static mAng paintingTiltBatreaux;
+    static mAng paintingTiltGroose;
     static const f32 lbl_613_rodata_2C;
 };
 
