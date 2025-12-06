@@ -124,7 +124,7 @@ bool dCursorHitCheckCC_c::checkHit(s32 x, s32 y) {
     );
 
     mVec3_c v;
-    d3d::fn_80016B60(v, pos);
+    d3d::screenToWorld(v, pos);
 
     nw4r::g3d::Camera cam = dStageMgr_c::GetInstance()->getCamera(0);
 

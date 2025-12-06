@@ -264,8 +264,8 @@ void dLytMsgWindow_c::initializeState_In() {
         param = 2;
     } else if (mpTagProcessor->getField_0x90D() == 3) {
         param = 1;
-    } else if (obj != nullptr && d3d::fn_80016A90(obj->mPositionCopy2)) {
-        d3d::fn_80016960(field_0x768, obj->mPositionCopy2);
+    } else if (obj != nullptr && d3d::isOnScreen(obj->mPositionCopy2)) {
+        d3d::worldToScreen(field_0x768, obj->mPositionCopy2);
         mVec3_c v = field_0x768;
         v.z = 0.f;
         field_0x768 = v;

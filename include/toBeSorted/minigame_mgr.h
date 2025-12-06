@@ -34,6 +34,9 @@ public:
     static bool checkInBossRush() {
         return isInMinigameState(BOSS_RUSH);
     }
+    static bool checkInFunFunIsland() {
+        return isInMinigameState(FUN_FUN_ISLAND);
+    }
 
 private:
     MinigameManager() {}
