@@ -78,15 +78,15 @@ void dAcOpaint_c::executeState_Wait() {
                 } else {
                     mRotationZRelated = rotationZRelated1;
                 }
+                field_0x5AA = true;
+                startSound(SE_Paint_LOOSE);
             }
-            field_0x5AA = true;
-            startSound(SE_Paint_LOOSE);
-        }
-        field_0x5A8 = 3;
-        mPosition.y += 10.f;
+            field_0x5A8 = 3;
+            mPosition.y += 10.f;
 
-        if (field_0x5AA) {
-            mRotationZOffset = mAng(0x100);
+            if (field_0x5AA) {
+                mRotationZOffset = mAng(0x100);
+            }
         }
     }
 
