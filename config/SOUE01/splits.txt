@@ -1600,6 +1600,7 @@ d/lyt/d_lyt_drop_line.cpp:
 	.ctors      start:0x804DB868 end:0x804DB86C
 	.data       start:0x80538498 end:0x80538658
 	.sbss       start:0x80575958 end:0x80575960
+	.sdata2     start:0x8057C6B0 end:0x8057C6C8
 	.bss        start:0x805B6000 end:0x805B60C0
 
 d/lyt/d_lyt_force_line.cpp:
