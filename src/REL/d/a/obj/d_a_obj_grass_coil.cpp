@@ -47,14 +47,14 @@ bool dAcOgrassCoil_c::createHeap() {
 }
 
 int dAcOgrassCoil_c::create() {
-    field_0x510 = mRotation.y;
+    mSpawnRotY = mRotation.y;
     mRotation.y = 0;
     CREATE_ALLOCATOR(dAcOgrassCoil_c);
     mStts.SetRank(8);
     mCollider.Set(sCylSrc);
     mCollider.SetStts(mStts);
     updateMatrix();
-    mWorldMtx.YrotM(field_0x510 - mRotation.y);
+    mWorldMtx.YrotM(mSpawnRotY - mRotation.y);
     mMdl[mCut].setLocalMtx(mWorldMtx);
     mStateMgr.changeState(StateID_Wait);
     mCullingDistance = 9000.0f;
@@ -67,7 +67,7 @@ int dAcOgrassCoil_c::doDelete() {
     return SUCCEEDED;
 }
 
-const s16 dAcOgrassCoil_c::sEffectRotIncrement = 0xe39;
+const s16 dAcOgrassCoil_c::sEffectRotIncrement = 0xe39; // ~20 degrees
 
 int dAcOgrassCoil_c::actorExecute() {
     if (checkObjectProperty(OBJ_PROP_0x1)) {
@@ -79,20 +79,18 @@ int dAcOgrassCoil_c::actorExecute() {
         AttentionManager::GetInstance()->addUnk3Target(*this, 1, 250.0f, -100.0f, 100.0f);
     }
     if (!mCut) {
-        bool hit = false;
+        bool hitBySlingshot = false;
         if (mCollider.ChkTgHit()) {
             if (mCollider.ChkTgAtHitType(AT_TYPE_SLINGSHOT)) {
-                hit = true;
+                hitBySlingshot = true;
             } else {
-                mEffectRot.y = field_0x510;
-                u16 effectIndex = PARTICLE_RESOURCE_ID_MAPPING_485_;
-                s32 i = 0;
+                mEffectRot.y = mSpawnRotY;
                 for (s32 i = 0; i < 2; i++) {
                     if (i == 1) {
-                        mEffectRot.y += mAng(sEffectRotIncrement);
+                        mEffectRot.y += mAng(0xe39);
                     }
                     dEmitterBase_c *emitter = dJEffManager_c::spawnEffect(
-                        effectIndex, mPosition, &mEffectRot, nullptr, nullptr, nullptr, 0, 0
+                        PARTICLE_RESOURCE_ID_MAPPING_485_, mPosition, &mEffectRot, nullptr, nullptr, nullptr, 0, 0
                     );
                     if (emitter != nullptr) {
                         emitter->bindShpEmitter(dJEffManager_c::GrassCoil, true);
@@ -100,7 +98,7 @@ int dAcOgrassCoil_c::actorExecute() {
                 }
                 mCollider.ClrTgSet();
                 mCut = true;
-                field_0x50E = mAng(-0xccd);
+                mSwayAmt = -mAng::d2s(18.0011);
                 startSound(SE_Gcoil_CUT);
                 mCollider.SetR(25.0f);
                 mCollider.SetH(70.0f);
@@ -109,31 +107,31 @@ int dAcOgrassCoil_c::actorExecute() {
                 itemDroppingAndGivingRelated(&mSpawnPos, 0);
             }
         }
-        if (hit || !(field_0x50E || !mCollider.ChkCoHit() || !(dAcPy_c::GetLink()->mSpeed > 0.0f))) {
+        if (hitBySlingshot || (mSwayAmt == 0 && mCollider.ChkCoHit() && dAcPy_c::GetLink()->mSpeed > 0.0f)) {
             if (!mCut) {
-                field_0x50E = mAng(-0x93f);
+                mSwayAmt = -mAng::d2s(13.0025);
             } else {
-                field_0x50E = mAng(-0x16c);
+                mSwayAmt = -mAng::d2s(2);
             }
-            field_0x50C = mAng(cLib::targetAngleY(dAcPy_c::GetLink()->mPosition, mPosition) - 0x8000);
+            mTargetRotY = cLib::targetAngleY(dAcPy_c::GetLink()->mPosition, mPosition) - 0x8000;
         }
     }
 
-    if (field_0x50E != 0) {
+    if (mSwayAmt != 0) {
         s32 _a = 0;
 
-        field_0x50E += mAng(-field_0x50A.mVal * (0.35f + (0.01f * _a))).mVal;
-        field_0x50E *= 0.85f + (0.01f * _a);
-        field_0x50A += field_0x50E;
+        mSwayAmt += s16(-mTargetRotX * (0.35f + (0.01f * _a)));
+        mSwayAmt *= 0.85f + (0.01f * _a);
+        mTargetRotX += mSwayAmt;
     }
-    if (field_0x50A != mRotation.x) {
-        sLib::addCalcAngle(mRotation.x.ref(), field_0x50A, 5, 0x4fa, 0xb6);
+    if (mTargetRotX != mRotation.x) {
+        sLib::addCalcAngle(mRotation.x.ref(), mTargetRotX, 5, mAng::d2s(7), mAng::d2s(1));
     }
-    if (field_0x50C != mRotation.y) {
-        sLib::addCalcAngle(mRotation.y.ref(), field_0x50C, 5, 0x4fa, 0xb6);
+    if (mTargetRotY != mRotation.y) {
+        sLib::addCalcAngle(mRotation.y.ref(), mTargetRotY, 5, mAng::d2s(7), mAng::d2s(1));
     }
     updateMatrix();
-    mWorldMtx.YrotM(field_0x510 - mRotation.y);
+    mWorldMtx.YrotM(mSpawnRotY - mRotation.y);
     mMdl[mCut].setLocalMtx(mWorldMtx);
     if (!mCut) {
         mCollider.SetC(mPosition);

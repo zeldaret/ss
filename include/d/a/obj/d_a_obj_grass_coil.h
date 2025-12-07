@@ -27,16 +27,17 @@ public:
 
 private:
     /* 0x330 */ nw4r::g3d::ResFile mResFile;
-    /* 0x334 */ m3d::smdl_c mMdl[2];
+    /* 0x334 */ m3d::smdl_c mMdl[2]; ///< Indexed by `mCut` to differentiate between noncut/cut models
     /* 0x36C */ STATE_MGR_DECLARE(dAcOgrassCoil_c);
     /* 0x3A8 */ dCcD_Cyl mCollider;
-    /* 0x4F8 */ mVec3_c mSpawnPos;
+    /* 0x4F8 */ mVec3_c mSpawnPos; ///< Spawn Position used for when an item is dropped
     /* 0x504 */ mAng3_c mEffectRot;
-    /* 0x50A */ mAng field_0x50A;
-    /* 0x50C */ mAng field_0x50C;
-    /* 0x50E */ s16 field_0x50E;
-    /* 0x510 */ mAng field_0x510;
-    /* 0x512 */ u8 pad_0x512;
+    /* 0x50A */ s16 mTargetRotX; ///< Used as target for swaying when disturbed
+    /* 0x50C */ s16 mTargetRotY; ///< Used as target for swaying when disturbed
+    /* 0x50E */ s16 mSwayAmt;    ///< Used to assist with the swaying when disturbed. Adjusts mTargetRotX
+    /* 0x510 */ mAng mSpawnRotY; ///< A copy of the spawned rotation so mRotation.y is free to adjust.
+                                 ///< The final Y-rotation is represented by `mSpawnRotY - mRotation.y`
+    /* 0x512 */ u8 _0x512;
     /* 0x513 */ bool mCut;
 
     static dCcD_SrcCyl sCylSrc;
