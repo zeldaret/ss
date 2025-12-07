@@ -80,7 +80,7 @@ void dLytDropLineParts_c::startChange(mVec3_c startPos, s32 trial, bool leftRigh
 void dLytDropLineParts_c::reset() {
     mStartPos.setZero();
     mEffectPos.setZero();
-    field_0x8C.setZero();
+    mMoveLinearCoeff.setZero();
     mMoveTimer = 0;
     mTrial = 4;
     mMoveRequest = false;
@@ -104,13 +104,13 @@ void dLytDropLineParts_c::initializeState_Move() {
     if (mpTargetPane != nullptr) {
         nw4r::math::MTX34 mtx = mpTargetPane->GetGlobalMtx();
 
-        // TODO
-        mVec2_c v1 = mVec2_c(mtx._03, mtx._13);
-        v1 -= mVec2_c(mStartPos.x, mStartPos.y);
+        // Set up the coefficients for the quadratic parabola below
+        mVec3_c v1 = mVec3_c(mtx._03, mtx._13, 0.0f);
 
-        field_0x8C.x =
-            (v1.x + ((f32)sHio.mMoveDuration * sHio.field_0x04 * (f32)sHio.mMoveDuration)) / (f32)sHio.mMoveDuration;
-        field_0x8C.y = v1.y / (f32)sHio.mMoveDuration;
+        mMoveLinearCoeff.x =
+            ((v1.x - mStartPos.x) + (sHio.field_0x04 * (f32)sHio.mMoveDuration * (f32)sHio.mMoveDuration)) /
+            (f32)sHio.mMoveDuration;
+        mMoveLinearCoeff.y = (v1.y - mStartPos.y) / (f32)sHio.mMoveDuration;
 
         if (!mIsChangeAnim) {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SIREN_SHIZUKU_GET_MOVE);
@@ -137,14 +137,14 @@ void dLytDropLineParts_c::executeState_Move() {
         if (mMoveTimer < sHio.mMoveDuration) {
             // Quadratic parabola
             if (mLeftRight) {
-                mEffectPos.x = mStartPos.x -
-                               (field_0x8C.x * (f32)mMoveTimer - sHio.field_0x04 * (f32)mMoveTimer * (f32)mMoveTimer);
+                mEffectPos.x = mStartPos.x - (mMoveLinearCoeff.x * (f32)mMoveTimer -
+                                              sHio.field_0x04 * (f32)mMoveTimer * (f32)mMoveTimer);
             } else {
-                mEffectPos.x =
-                    mStartPos.x + field_0x8C.x * (f32)mMoveTimer - sHio.field_0x04 * (f32)mMoveTimer * (f32)mMoveTimer;
+                mEffectPos.x = mStartPos.x + mMoveLinearCoeff.x * (f32)mMoveTimer -
+                               sHio.field_0x04 * (f32)mMoveTimer * (f32)mMoveTimer;
             }
 
-            mEffectPos.y = mStartPos.y + field_0x8C.y * (f32)mMoveTimer;
+            mEffectPos.y = mStartPos.y + mMoveLinearCoeff.y * (f32)mMoveTimer;
             mEffectPos.z = 0.0f;
             mMoveTimer++;
         } else {

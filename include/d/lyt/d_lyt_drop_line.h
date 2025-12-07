@@ -60,7 +60,7 @@ private:
     /* 0x40 */ dEmitter_c mEmitter;
     /* 0x74 */ mVec3_c mStartPos;
     /* 0x80 */ mVec3_c mEffectPos;
-    /* 0x8C */ mVec3_c field_0x8C;
+    /* 0x8C */ mVec3_c mMoveLinearCoeff;
     /* 0x98 */ s32 mTrial;
     /* 0x9C */ s32 mMoveTimer;
     /* 0xA0 */ bool mMoveRequest;
