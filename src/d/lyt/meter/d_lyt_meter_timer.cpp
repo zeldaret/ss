@@ -243,7 +243,7 @@ void LytMeterTimerPart1_c::startNextFruitAnim() {
 }
 
 void LytMeterTimerPart1_c::startFruitAnim(s32 index) {
-    if (field_0x780 < TIMER_01_NUM_TEARS && !mAnm[index + TIMER_01_ANIM_BOWL_NUT_OFFSET].isEnabled()) {
+    if (mChangeFruitIndex < TIMER_01_NUM_TEARS && !mAnm[index + TIMER_01_ANIM_BOWL_NUT_OFFSET].isEnabled()) {
         mAnm[index + TIMER_01_ANIM_BOWL_NUT_OFFSET].setAnimEnable(true);
     }
 }
@@ -264,7 +264,7 @@ void LytMeterTimerPart1_c::disableCurrentFruitAnim() {
 }
 
 void LytMeterTimerPart1_c::stopFinishedFruit() {
-    for (s32 i = 0; i <= field_0x780; i++) {
+    for (s32 i = 0; i <= mChangeFruitIndex; i++) {
         if (mAnm[i + TIMER_01_ANIM_BOWL_NUT_OFFSET].isEnabled() && mAnm[i + TIMER_01_ANIM_BOWL_NUT_OFFSET].isStop2()) {
             mAnm[i + TIMER_01_ANIM_BOWL_NUT_OFFSET].setAnimEnable(false);
             return;
@@ -292,7 +292,7 @@ bool LytMeterTimerPart1_c::isCurrentFruitAnimFinished() {
 }
 
 bool LytMeterTimerPart1_c::isAnyFruitAnimFinished() {
-    for (s32 i = 0; i <= field_0x780; i++) {
+    for (s32 i = 0; i <= mChangeFruitIndex; i++) {
         if (mAnm[i + TIMER_01_ANIM_BOWL_NUT_OFFSET].isEnabled() && mAnm[i + TIMER_01_ANIM_BOWL_NUT_OFFSET].isStop2()) {
             return true;
         }
@@ -312,7 +312,7 @@ bool LytMeterTimerPart1_c::isOutAnimFinished() {
 }
 
 bool LytMeterTimerPart1_c::isAnyFruitAnimAtFrame(f32 f) const {
-    for (int i = 0; i <= field_0x780; i++) {
+    for (int i = 0; i <= mChangeFruitIndex; i++) {
         if (mAnm[i + TIMER_01_ANIM_BOWL_NUT_OFFSET].isEnabled() &&
             f - 1.0f < mAnm[i + TIMER_01_ANIM_BOWL_NUT_OFFSET].getFrame() &&
             mAnm[i + TIMER_01_ANIM_BOWL_NUT_OFFSET].getFrame() <= f) {
@@ -324,7 +324,7 @@ bool LytMeterTimerPart1_c::isAnyFruitAnimAtFrame(f32 f) const {
 
 bool LytMeterTimerPart1_c::incrementTearCount() {
     mActualTearCount = ItemflagManager::sInstance->getFlagDirect(500);
-    if (mDisplayedTearCount < mActualTearCount && dLytDropLine_c::finishPartMaybe()) {
+    if (mDisplayedTearCount < mActualTearCount && dLytDropLine_c::finishPart()) {
         startNextFruitAnim();
         if (!dLytMeter_c::getfn_800C9FE0()) {
             startEffect(mActualTearCount - 1);
@@ -402,9 +402,9 @@ void LytMeterTimerPart1_c::startEffect(s32 fruitIndex) {
     );
 }
 
-void LytMeterTimerPart1_c::updateDropLine(nw4r::lyt::Pane *pane) {
-    u8 idx = field_0x780;
-    dLytDropLine_c::update(mpPanes[idx], pane, mTrial, field_0x780 % 2 != 0);
+void LytMeterTimerPart1_c::startDropLineChange(nw4r::lyt::Pane *pane) {
+    u8 idx = mChangeFruitIndex;
+    dLytDropLine_c::startChange(mpPanes[idx], pane, mTrial, mChangeFruitIndex % 2 != 0);
 }
 
 static const d2d::LytBrlanMapping brlanMapPart2[] = {
@@ -1226,7 +1226,7 @@ void dLytMeterTimer_c::executeState_ChangeFruits() {
                 mpPart2->resetSingleAnim(TIMER_02_ANIM_FLOWER_LOOP);
             }
 
-            if (dLytDropLine_c::finishPartMaybe()) {
+            if (dLytDropLine_c::finishPart()) {
                 if (mpPart1->isLastFruitAnimFinished()) {
                     mpPart2->realizeFruitsColor();
                     mpPart2->enableChangeFruitAnim();
@@ -1238,10 +1238,10 @@ void dLytMeterTimer_c::executeState_ChangeFruits() {
             }
 
             if (mpPart1->isAnyFruitAnimAtFrame(4.0f)) {
-                s32 fruit = mpPart1->getField0x780() + 1;
-                mpPart1->setField0x780(fruit);
-                if (mpPart1->getField0x780() < TIMER_01_NUM_TEARS) {
-                    mpPart1->updateDropLine(mpPart2->i_getPane());
+                s32 fruit = mpPart1->getChangeFruitIndex() + 1;
+                mpPart1->setChangeFruitIndex(fruit);
+                if (mpPart1->getChangeFruitIndex() < TIMER_01_NUM_TEARS) {
+                    mpPart1->startDropLineChange(mpPart2->i_getPane());
                     mpPart1->startFruitAnim(fruit);
                     mpPart1->startEffect(fruit);
                 }
@@ -1456,9 +1456,9 @@ void dLytMeterTimer_c::gotoSafe() {
 void dLytMeterTimer_c::gotoChangeFruits6() {
     if (mStateMgr.isState(StateID_Siren) || mStateMgr.isState(StateID_Safe)) {
         mpPart1->resetBowlNuts();
-        mpPart1->updateDropLine(mpPart2->i_getPane());
-        mpPart1->startFruitAnim(mpPart1->getField0x780());
-        mpPart1->startEffect(mpPart1->getField0x780());
+        mpPart1->startDropLineChange(mpPart2->i_getPane());
+        mpPart1->startFruitAnim(mpPart1->getChangeFruitIndex());
+        mpPart1->startEffect(mpPart1->getChangeFruitIndex());
         field_0x54 = false;
         field_0x56 = 6;
         mStateMgr.changeState(StateID_ChangeFruits);
@@ -1504,9 +1504,9 @@ void dLytMeterTimer_c::startSafe() {
 
 void dLytMeterTimer_c::doPickup() {
     mpPart1->resetBowlNuts();
-    mpPart1->updateDropLine(mpPart2->i_getPane());
-    mpPart1->startFruitAnim(mpPart1->getField0x780());
-    mpPart1->startEffect(mpPart1->getField0x780());
+    mpPart1->startDropLineChange(mpPart2->i_getPane());
+    mpPart1->startFruitAnim(mpPart1->getChangeFruitIndex());
+    mpPart1->startEffect(mpPart1->getChangeFruitIndex());
     field_0x56 = 6;
 }
 
