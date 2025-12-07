@@ -87,7 +87,7 @@ int dAcOgrassCoil_c::actorExecute() {
                 mEffectRot.y = mSpawnRotY;
                 for (s32 i = 0; i < 2; i++) {
                     if (i == 1) {
-                        mEffectRot.y += mAng(0xe39);
+                        mEffectRot.y += mAng(sEffectRotIncrement);
                     }
                     dEmitterBase_c *emitter = dJEffManager_c::spawnEffect(
                         PARTICLE_RESOURCE_ID_MAPPING_485_, mPosition, &mEffectRot, nullptr, nullptr, nullptr, 0, 0
