@@ -56,13 +56,13 @@ public:
     bool holdDowsingNearestSound();
 
     bool playSirenCountdownSound(s32 timer);
-    bool playMinigameCountdownSound();
+    bool playMinigameCountdownSound(s32 timer); ///< timer is unused
     bool playMinigameTimeUpSound(s32 timer);
     bool playMinigameStartSound();
     bool playMinigameFinishSound();
     bool playMinigameFinishWhistleSound();
     bool playMinigameScoreUpSound(s32 param);
-    bool playMinigameScoreDownSound();
+    bool playMinigameScoreDownSound(s32 score);
     bool playMinigameMusasabiSound(s32 count);
 
     bool playSkbSound(u32 soundId);
