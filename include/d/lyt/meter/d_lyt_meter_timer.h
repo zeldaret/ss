@@ -11,7 +11,7 @@
 class LytMeterTimerPart1_c : public d2d::dSubPane {
 public:
     LytMeterTimerPart1_c()
-        : mActualTearCount(0), mDisplayedTearCount(0), field_0x760(0), mTrial(dAcItem_c::TRIAL_NONE), field_0x780(0) {
+        : mActualTearCount(0), mDisplayedTearCount(0), field_0x760(0), mTrial(dAcItem_c::TRIAL_NONE), mChangeFruitIndex(0) {
         sInstance = this;
     }
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
@@ -50,7 +50,7 @@ public:
     bool isOutAnimFinished();
     void startFruitAnim(s32 index);
     void resetBowlNuts();
-    void updateDropLine(nw4r::lyt::Pane *pane);
+    void startDropLineChange(nw4r::lyt::Pane *pane);
 
     void startEffect(s32 fruitIndex);
     bool incrementTearCount();
@@ -64,12 +64,12 @@ public:
         return mDisplayedTearCount;
     }
 
-    s32 getField0x780() const {
-        return field_0x780;
+    s32 getChangeFruitIndex() const {
+        return mChangeFruitIndex;
     }
 
-    void setField0x780(s32 val) {
-        field_0x780 = val;
+    void setChangeFruitIndex(s32 val) {
+        mChangeFruitIndex = val;
     }
 
 private:
@@ -92,7 +92,7 @@ private:
     /* 0x764 */ dAcItem_c::Trial_e mTrial;
     /* 0x768 */ mColor mColors1[3];
     /* 0x774 */ mColor mColors2[3];
-    /* 0x780 */ s32 field_0x780;
+    /* 0x780 */ s32 mChangeFruitIndex;
 };
 
 class LytMeterTimerPart2_c : public d2d::dSubPane {
