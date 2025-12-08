@@ -277,6 +277,11 @@ public:
         return EGG::Vector3f::angle(other);
     }
 
+    void offsetWithAngle(s16 yRot, f32 scale) {
+        this->x += nw4r::math::SinIdx(yRot) * scale;
+        this->z += nw4r::math::CosIdx(yRot) * scale;
+    }
+
     static mVec3_c Zero;
     static mVec3_c Ex;
     static mVec3_c Ey;

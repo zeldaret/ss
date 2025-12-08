@@ -22,6 +22,11 @@ public:
 
     void reset();
 
+    void setTev1Color(GXColor color) {
+        mTev1Color = color;
+        mUseTev1 = true;
+    }
+
 public:
     /* 0x0C */ f32 field_0x0C;
     /* 0x10 */ f32 field_0x10;
