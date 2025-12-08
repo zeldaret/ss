@@ -318,10 +318,6 @@ public:
         return mVec2_c(x * f, y * f);
     }
 
-    mVec2_c operator/(f32 f) const {
-        return mVec2_c(x / f, y / f);
-    }
-
     mVec2_c operator+(const mVec2_c &v) const {
         return mVec2_c(x + v.x, y + v.y);
     }

@@ -250,7 +250,7 @@ private:
     /* 0x7DC */ s32 mCurrentTimerValueSeconds;
     /* 0x7E0 */ s32 mLastTimerValueSeconds;
     /* 0x7E4 */ u8 mTimeFormat;
-    /* 0x7E4 */ s32 mHighestDigitIndex;
+    /* 0x7E8 */ s32 mHighestDigitIndex;
     /* 0x7EC */ bool field_0x7EC;
     /* 0x7ED */ bool field_0x7ED;
     /* 0x7EE */ bool mResultMode;
@@ -452,7 +452,7 @@ private:
     /* 0x81C */ s32 field_0x81C;
     /* 0x820 */ bool field_0x820;
     /* 0x824 */ s32 field_0x824;
-    /* 0x829 */ bool field_0x828;
+    /* 0x828 */ bool field_0x828;
     /* 0x829 */ bool field_0x829;
     /* 0x82C */ UNKWORD field_0x82C;
     /* 0x830 */ s32 field_0x830;
