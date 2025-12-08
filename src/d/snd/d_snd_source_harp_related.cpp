@@ -1,5 +1,6 @@
 #include "d/snd/d_snd_source_harp_related.h"
 
+#include "d/snd/d_snd_harp_song_mgr.h"
 #include "d/snd/d_snd_source.h"
 
 dSndSourceHarpRelated_c::dSndSourceHarpRelated_c(
@@ -19,4 +20,12 @@ void dSndSourceHarpRelated_c::postCalc() {
 
 void dSndSourceHarpRelated_c::setPause(bool flag, int fadeFrames) {
     // TODO
+}
+
+bool dSndSourceHarpRelated_c::harpSoundRelated() {
+    bool isHarpSoundRelated = false;
+    if (checkFlag(1) && dSndHarpSongMgr_c::sInstance->isPlayingHarpRelated()) {
+        isHarpSoundRelated = true;
+    }
+    return isHarpSoundRelated;
 }
