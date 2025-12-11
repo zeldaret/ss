@@ -1012,9 +1012,6 @@ public:
     void OnCoSet() {
         mCo.OnSPrm(1);
     }
-    void OffCoSet() {
-        mCo.OffSPrm(1);
-    }
     u32 ChkCoSet2() const {
         return mCo.MskSPrm(0x800);
     }

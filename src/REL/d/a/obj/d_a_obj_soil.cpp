@@ -99,7 +99,7 @@ bool dAcOsoil_c::createHeap() {
 }
 
 int dAcOsoil_c::actorCreate() {
-    mSubtype = mParams & 0xF;
+    mSubtype = getFromParams(0, 0xF);
     if (mSubtype > 4) {
         mSubtype = SUBTYPE_VENT;
     }
@@ -109,21 +109,21 @@ int dAcOsoil_c::actorCreate() {
     } else {
         mItemSubtype = ITEMTYPE_DROP;
     }
-    mSceneflag = mParams >> 4 & 0xFF;
+    mSceneflag = getFromParams(4, 0xFF);
     mSpawnSceneflag = getParams2Lower() & 0xFF;
     if (mSpawnSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSpawnSceneflag)) {
         mIsHidden = true;
         mInteractionDisabled = true;
     }
-    if ((mParams >> 0x13 & 1) == 0 && mItemSubtype == ITEMTYPE_DROP && mSubtype != SUBTYPE_TBOX) {
+    if (getFromParams(0x13, 1) == 0 && mItemSubtype == ITEMTYPE_DROP && mSubtype != SUBTYPE_TBOX) {
         mForInsects = true;
     } 
     if (!mForInsects) {
-        mCountInParams = mParams >> 0xC & 0xF;
+        mCountInParams = getFromParams(0xC, 0xF);
         if (mCountInParams == 0) {
             mCountInParams = 0xF;
         }
-        if ((mParams >> 0x10 & 3) == 1) {
+        if (getFromParams(0x10, 3) == 1) {
             if (mItemSubtype == ITEMTYPE_DROP) {
                 mItemSubtype = ITEMTYPE_DIRECT_GIVE;
             }
@@ -133,11 +133,11 @@ int dAcOsoil_c::actorCreate() {
     }
     mRotation.x = mAng(0);
     mRotation.z = mAng(0);
-    if ((mParams >> 0x12 & 1) == 0) {
+    if (getFromParams(0x12, 1) == 0) {
         mDowsingStateRelated = 2;
         mAlwaysLoaded = true;
     }
-    if ((mParams >> 0x19 & 1) == 0) {
+    if (getFromParams(0x19, 1) == 0) {
         field_0x793 = true;
     }
     CREATE_ALLOCATOR(dAcOsoil_c);
@@ -155,7 +155,7 @@ int dAcOsoil_c::actorCreate() {
     }
     if (dScGame_c::currentSpawnInfo.stageName == "F200") {
         static const mVec3_c posOnSkyloft(-7301, 3768, -9309);
-        if (PSVECSquareDistance(mPosition, posOnSkyloft) < 360000) {
+        if (mPosition.squareDistance(posOnSkyloft) < 360000.f) {
             mHideWhenCameraNear = true;
         }
     }
@@ -173,7 +173,7 @@ int dAcOsoil_c::actorPostCreate() {
     if (mSubtype == SUBTYPE_TBOX) {
         mStateMgr.changeState(StateID_Soil);
     } else {
-        if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag) || (mParams >> 0x18 & 1) == 0) {
+        if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag) || getFromParams(0x18, 1) == 0) {
             mDowsingStateRelated = 0;
             if (mSubtype == SUBTYPE_DROP || mSubtype == SUBTYPE_MOGMA) {
                 mInteractionDisabled = true;
@@ -359,7 +359,7 @@ void dAcOsoil_c::executeState_Soil() {
 void dAcOsoil_c::finalizeState_Soil() {}
 void dAcOsoil_c::initializeState_Hole() {
     mModelIndex = MODEL_DUG_UP;
-    mCollider.OffCoSet();
+    mCollider.ClrCoSet();
     if (mItemSubtype == ITEMTYPE_KEY_PIECE || mItemSubtype == ITEMTYPE_DIRECT_GIVE) {
         return;
     }
@@ -535,7 +535,7 @@ bool dAcOsoil_c::checkCoHit(bool* pOut) {
 }
 
 void dAcOsoil_c::setModelColorFromParams(GXColor* pOutColor, m3d::smdl_c& mdl) {
-    u32 param = mParams >> 0x14 & 0xF;
+    u32 param = getFromParams(0x14, 0xF);
     if (param >= 5) {
         param = 0;
     }
@@ -581,7 +581,7 @@ void dAcOsoil_c::handleModelsOpacities() {
     if (mStateMgr.isState(StateID_Ready)) {
         return;
     }
-    if (PSVECSquareDistance(dAcPy_c::LINK->mPosition, mPosition) < 1000000) {
+    if (dAcPy_c::LINK->mPosition.squareDistance(mPosition) < 1000000.f) {
         dCamera_c* camera = dScGame_c::getCamera();
         if (camera != nullptr) {
             f32 dist = (camera->getPositionMaybe() - mPosition).y * (1.f / 80.f);
