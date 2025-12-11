@@ -4,10 +4,8 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
-#include "d/a/obj/d_a_obj_tbox.h"
 #include "d/col/bg/d_bg_w.h"
 #include "d/col/cc/d_cc_d.h"
-#include "d/t/d_t_insect.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
@@ -15,6 +13,9 @@
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 #include "toBeSorted/dowsing_target.h"
+
+class dAcTbox_c;
+class dTgInsect_c;
 
 class dAcOsoil_c : public dAcObjBase_c {
 public:
