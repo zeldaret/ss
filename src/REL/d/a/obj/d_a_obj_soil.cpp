@@ -216,23 +216,9 @@ int dAcOsoil_c::actorPostCreate() {
     if (mItemSubtype == ITEMTYPE_KEY_PIECE || mItemSubtype == ITEMTYPE_DIRECT_GIVE) {
         unsetActorProperty(AC_PROP_0x1);
     }
-    // this feels fake
-    f32 five;
-    f32 posZ;
-    f32 newY;
-    f32 posX;
-    f32 posY;
-    posZ = mPosition.z;
-    posX = mPosition.x;
-    posY = mPosition.y;
-    five = 5;
-    newY = posY + five;
-    mPositionCopy2.x = posX;
-    mPositionCopy2.z = posZ;
-    mPositionCopy2.y = newY;
-    mPositionCopy3.x = posX;
-    mPositionCopy3.y = newY;
-    mPositionCopy3.z = posZ;
+    mPositionCopy2 = mPosition;
+    mPositionCopy2.y += 5;
+    mPositionCopy3 = mPositionCopy2;
     return SUCCEEDED;
 }
 
