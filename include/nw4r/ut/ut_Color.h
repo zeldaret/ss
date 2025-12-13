@@ -2,6 +2,7 @@
 #define NW4R_UT_COLOR_H
 
 #include "nw4r/types_nw4r.h"
+#include "rvl/GX/GXTypes.h"
 #include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
@@ -61,6 +62,16 @@ public:
     operator u32() const {
         return ToU32ref();
     }
+
+    operator GXColorS10() const {
+        GXColorS10 c;
+        c.r = r;
+        c.g = g;
+        c.b = b;
+        c.a = a;
+        return c;
+    }
+
     // clang-format off
     static const u32 RED   = 0xFF0000FF;
     static const u32 GREEN = 0x00FF00FF;

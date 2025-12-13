@@ -1,11 +1,14 @@
 #ifndef EGG_VECTOR_H
 #define EGG_VECTOR_H
 
+#include "JSystem/JMath/JMath.h"
 #include "common.h"
 #include "egg/math/eggMath.h"
+#include "nw4r/math/math_arithmetic.h"
 #include "nw4r/math/math_triangular.h"
 
 #include "nw4r/math.h"
+#include <cmath>
 
 namespace EGG {
 
@@ -130,6 +133,10 @@ struct Vector3f : public nw4r::math::VEC3 {
 
     bool isZero() const {
         return squaredLength() <= Math<f32>::epsilon();
+    }
+
+    bool isZero2() const {
+        return fabsf(JMathInlineVEC::C_VECSquareMag(*this)) <= Math<f32>::epsilon();
     }
 
     void setZero() {

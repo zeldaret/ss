@@ -1539,7 +1539,7 @@ d/tg/d_t_mass_object.cpp:
 	.rodata     start:0x804EE5A8 end:0x804EE6C0
 	.data       start:0x80536478 end:0x80536608
 	.sbss       start:0x80575930 end:0x80575938
-	.bss        start:0x805B57A8 end:0x805B57C0
+	.bss        start:0x805B57A8 end:0x805B57BC
 
 d/tg/d_t_camera.cpp:
 	.text       start:0x8027A0B0 end:0x8027A370 align:16

@@ -214,8 +214,8 @@ namespace JMathInlineVEC {
     }
 
     inline f32 C_VECSquareMag(register const Vec* v) {
-        register f32 x_y;
         register f32 z;
+        register f32 x_y;
         register f32 res;
     #ifdef __MWERKS__
         asm {

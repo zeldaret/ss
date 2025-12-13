@@ -434,12 +434,40 @@ public:
         return field_0x2F1C;
     }
 
+    bool getfield_0x38B0() const {
+        return field_0x38B0;
+    }
+
+    void setfield_0x38B0(bool val) {
+        field_0x38B0 = val;
+    }
+
+    f32 getfield_0x38C0() const {
+        return field_0x38C0;
+    }
+
+    const mVec3_c& getfield_0x38B4() const {
+        return field_0x38B4;
+    }
+
+    mVec3_c& getfield_0x38C8() {
+        return field_0x38C8;
+    }
+
+    void setfield_0x38C4(s32 val) {
+        field_0x38C4 = val;
+    }
+
     s32 getField_0x38DC() const {
         return field_0x38DC;
     }
 
     void setField_0x38DC(s32 v) {
         field_0x38DC = v;
+    }
+
+    f32 getfield_0x5D44() const {
+        return field_0x5D44;
     }
 
     void setField_0x5D48(f32 val) {
@@ -503,7 +531,7 @@ private:
     /* 0x48E4 */ Bpm4 field_0x48E4;
     /* 0x5CE4 */ PaletteDefaultMCF field_0x5CE4;
     /* 0x5D04 */ TwoPaletteDefaultMCF field_0x5D04;
-    /* 0x5D44 */ u8 field_0x5D44[0x5D48 - 0x5D44];
+    /* 0x5D44 */ f32 field_0x5D44;
     /* 0x5D48 */ f32 field_0x5D48;
     /* 0x5D4C */ u8 field_0x5D4C[0x5D59 - 0x5D4C];
     /* 0x5D59 */ struct { // Anonymous until more is known
