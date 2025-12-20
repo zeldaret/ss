@@ -545,6 +545,10 @@ public:
         return (someFlags_0x350 & mask) != 0;
     }
 
+    inline bool checkFlags0x354(u32 mask) const {
+        return (someFlags_0x354 & mask) != 0;
+    }
+
     inline void onFlags_0x358(u32 mask) {
         someFlags_0x358 |= mask;
     }
@@ -590,6 +594,10 @@ public:
 
     bool isSittingOrUnk0xAE() const {
         return mCurrentAction == 0xAD || mCurrentAction == 0xAE;
+    }
+
+    bool checkSwordAndMoreStates(u32 mask) {
+        return mSwordAndMoreStates & mask;
     }
 
     void onModelUpdateFlag(u32 mask) {

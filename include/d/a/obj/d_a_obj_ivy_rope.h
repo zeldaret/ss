@@ -15,7 +15,6 @@
 #include "toBeSorted/attention.h"
 #include "toBeSorted/d_path.h"
 
-
 class dAcOivyRope_c : public dAcObjBase_c {
 public:
     dAcOivyRope_c() : field_0x330(0), mStateMgr(*this, sStateID::null), mStts2(this), mEvent(*this, nullptr) {}
@@ -140,6 +139,28 @@ public:
         return mSubtype == sub;
     }
 
+    mVec3_c *getPnts2() {
+        return mPnts2;
+    }
+
+    mVec3_c &getTightRopeEnd() {
+        return mTightropeEnd;
+    }
+
+    mVec3_c &getTightRopeStart() {
+        return mTightropeStart;
+    }
+
+    bool getField_0x1002() {
+        return field_0x1002;
+    }
+
+    bool getField_0x1087() {
+        return field_0x1087;
+    }
+
+    static const f32 lbl_256_rodata_40;
+
 private:
     /* 0x 330 */ UNKWORD field_0x330;
     /* 0x 334 */ m3d::smdl_c mMdlArr[2];
@@ -204,7 +225,9 @@ private:
     /* 0x FF6 */ u8 field_0xFF6;
     /* 0x FF7 */ u8 field_0xFF7;
     /* 0x FF8 */ u8 field_0xFF8;
-    /* 0x FF9 */ u8 _FF9[0x1005 - 0xFF9];
+    /* 0x FF9 */ u8 _FF9[0x1002 - 0xFF9];
+    /* 0x1002 */ bool field_0x1002;
+    /* 0x1003 */ u8 _1003[0x1005 - 0x1003];
     /* 0x1005 */ u8 field_0x1005;
     /* 0x1006 */ u8 _1006[0x1010 - 0x1006];
     /* 0x1010 */ mVec3_c field_0x1010;
@@ -235,7 +258,8 @@ private:
     /* 0x106C */ f32 field_0x106C;
     /* 0x1070 */ u8 _1070[0x1083 - 0x1070];
     /* 0x1083 */ u8 field_0x1083;
-    /* 0x1084 */ u8 _1084[0x1088 - 0x1084];
+    /* 0x1084 */ u8 _1084[0x1087 - 0x1084];
+    /* 0x1087 */ bool field_0x1087;
     /* 0x1088 */ dCcD_Cps mCpsArr2[16];
     /* 0x2788 */ mVec3_c *mPnts1;
     /* 0x278C */ mVec3_c *mPnts2;
