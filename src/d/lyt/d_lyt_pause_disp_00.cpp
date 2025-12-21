@@ -1252,6 +1252,7 @@ void dLytPauseDisp00_c::setupInventoryWheel() {
         }
 
         u32 item = getPouchItemForSlot(i, true);
+        // TODO why LYT_CMN_PouchPotionHealthPlusPlusHalf
         if (item != LYT_CMN_PouchPotionHealthPlusPlusHalf) {
             if (isPouchBocoburinLocked()) {
                 icon->setBocoburinLocked(true);
@@ -1259,7 +1260,7 @@ void dLytPauseDisp00_c::setupInventoryWheel() {
             }
             haveFrame = 1.0f;
             icon->setItem(item);
-            f32 durability = getShieldDurability(i, true);
+            f32 durability = getPouchShieldDurability(i, true);
             if (durability >= 0.0f) {
                 icon->setShieldDurability(durability);
             }
@@ -1575,6 +1576,7 @@ void dLytPauseDisp00_c::setupRingIcons(s32 tab) {
             s32 offset = PAUSE_DISP_00_BOUNDING_RING_OFFSET;
             for (int i = 0; i < PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
                 bool visible = false;
+                // TODO why LYT_CMN_PouchPotionHealthPlusPlusHalf
                 if (getPouchItemForSlot(i, true) != LYT_CMN_PouchPotionHealthPlusPlusHalf) {
                     visible = true;
                 }

@@ -29,8 +29,16 @@ public:
         mShouldBeOn = value;
     }
 
+    bool getShouldBeOn() const {
+        return mShouldBeOn;
+    }
+
     static dLytCursorStick_c *GetInstance() {
         return sInstance;
+    }
+
+    const nw4r::lyt::Pane *getAllPane() const {
+        return mpPanes[0];
     }
 
 private:

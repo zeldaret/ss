@@ -52,8 +52,16 @@ public:
         mCursorStick.setShouldBeOn(visible);
     }
 
+    bool isCursorStickVisible() const {
+        return mCursorStick.getShouldBeOn();
+    }
+
     void setCursorStickTargetPane(const nw4r::lyt::Pane *target) {
         mCursorStick.setTargetPane(target);
+    }
+
+    const nw4r::lyt::Pane *getCursorStickAllPane() const {
+        return mCursorStick.getAllPane();
     }
 
 private:
