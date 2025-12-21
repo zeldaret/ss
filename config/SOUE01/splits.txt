@@ -1605,8 +1605,10 @@ d/lyt/d_lyt_drop_line.cpp:
 d/lyt/d_lyt_force_line.cpp:
 	.text       start:0x80288500 end:0x8028A9F8 align:16
 	.ctors      start:0x804DB86C end:0x804DB870
+	.rodata     start:0x804EE790 end:0x804EE7D8
 	.data       start:0x80538658 end:0x80538CE8
 	.sbss       start:0x80575960 end:0x80575968
+	.sdata2     start:0x8057C6C8 end:0x8057C6E0
 	.bss        start:0x805B60C0 end:0x805B6160
 
 d/lyt/d_lyt_enemy_icon.cpp:
