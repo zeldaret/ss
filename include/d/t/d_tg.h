@@ -8,4 +8,6 @@ public:
     virtual ~dTg_c() {}
 };
 
+typedef dAcRef_c<dTg_c> dTgRef_c;
+
 #endif

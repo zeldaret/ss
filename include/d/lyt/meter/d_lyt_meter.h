@@ -77,7 +77,8 @@ public:
     enum Mode_e {
         MODE_MAP_INIT = 0,
         MODE_MAP = 1,
-        MODE_PAUSE = 2,
+        MODE_PAUSE_INIT = 2,
+        MODE_PAUSE = 3,
         MODE_NONE = 4,
     };
 
@@ -92,22 +93,22 @@ public:
 
     bool fn_800C9F70();
     bool fn_800C9FE0();
-    bool fn_800CA040();
+    bool isPopupOpen();
 
-    bool fn_800D5350();
+    bool isInMapEvent();
     bool fn_800D5380(u8);
-    void fn_800D5290();
+    void executeMap();
     bool fn_800D5590();
     void fn_800D5630();
-    bool fn_800D5650();
-    bool fn_800D5680();
+    bool isInModeMap();
+    bool isInModePause();
     bool fn_800D56B0();
     void checkPaneVisibility();
     bool execute();
 
     bool isSilentRealm();
 
-    bool fn_800D53D0();
+    bool isDoingSkyKeepPuzzle();
     bool fn_800D5420();
 
     void setUiMode(u16 value) const;
@@ -129,8 +130,8 @@ public:
         mPanesNotHiddenByAreaCaption[15] = visible;
     }
 
-    bool getField_0x1377E() const {
-        return field_0x1377E;
+    bool isInSwordDrawEvent() const {
+        return mIsInSwordDrawEvent;
     }
 
     bool getField_0x1377F() const {
@@ -184,7 +185,7 @@ private:
     /* 0x1373C */ mVec3_c mRupyPos;
     /* 0x13748 */ s32 mBasicPosition;
     /* 0x1374C */ s32 mSavedBasicPosition;
-    /* 0x13750 */ s32 field_0x13750;
+    /* 0x13750 */ s32 mMode;
     /* 0x13754 */ s32 field_0x13754;
     /* 0x13758 */ s32 mShieldPosIndex;
     /* 0x1375C */ s32 mRupyPosIndex;
@@ -206,7 +207,7 @@ private:
     /* 0x1377B */ bool mBossKeyVisible;
     /* 0x1377C */ bool mSmallKeyVisible;
     /* 0x1377D */ bool mDrinkVisible;
-    /* 0x1377E */ bool field_0x1377E;
+    /* 0x1377E */ bool mIsInSwordDrawEvent;
     /* 0x1377F */ bool field_0x1377F;
     /* 0x13780 */ bool field_0x13780;
     /* 0x13781 */ bool field_0x13781;
@@ -281,12 +282,12 @@ public:
     // because accessing via GetMeter->get... causes
     // different instructions sometimes
 
-    s32 getMeterField_0x13750() const {
-        return mMain.field_0x13750;
+    s32 getMeterMode() const {
+        return mMain.mMode;
     }
 
-    void setMeterField_0x13750(s32 value)  {
-        mMain.field_0x13750 = value;
+    void setMeterMode(s32 value)  {
+        mMain.mMode = value;
     }
 
     u8 getMeterField_0x13770() const {
@@ -401,6 +402,14 @@ public:
         }
     }
 
+    static s32 getRupeeDifference() {
+        if (sInstance != nullptr) {
+            return sInstance->mMain.mRupy.getRupeeDifference();
+        } else {
+            return 0;
+        }
+    }
+
     static void setField_0x13B61(u8 val) {
         if (sInstance != nullptr) {
             sInstance->field_0x13B61 = val;
@@ -443,9 +452,25 @@ public:
         }
     }
 
+    static bool getfn_800C9F70() {
+        if (sInstance != nullptr) {
+            return sInstance->mMain.fn_800C9F70();
+        } else {
+            return false;
+        }
+    }
+
     static bool getfn_800C9FE0() {
         if (sInstance != nullptr) {
             return sInstance->mMain.fn_800C9FE0();
+        } else {
+            return false;
+        }
+    }
+
+    static bool isPopupOpen() {
+        if (sInstance != nullptr) {
+            return sInstance->mMain.isPopupOpen();
         } else {
             return false;
         }

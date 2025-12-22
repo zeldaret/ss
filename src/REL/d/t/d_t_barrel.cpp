@@ -84,7 +84,7 @@ void dTgBarrel_c::executeState_Wait() {
         mStateMgr.changeState(StateID_Stop);
         return;
     }
-    dAcOstageSink_c *pStage = mStageRef.get();
+    dAcObjBase_c *pStage = mStageRef.get();
 
     mVec3_c pos = pStage->mPosition;
     mAng3_c rot = pStage->mRotation;

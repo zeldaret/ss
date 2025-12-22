@@ -19,11 +19,24 @@ public:
         HARP_PLAYING,
     };
     static bool isInMinigameState(Minigame game);
+
     static bool isInAnyMinigame();
+
+    static bool endMinigame(Minigame game);
 
     static void create();
     static void destroy();
     static void execute();
+
+    static MinigameManager *GetInstance() {
+        return sInstance;
+    }
+    static bool checkInBossRush() {
+        return isInMinigameState(BOSS_RUSH);
+    }
+    static bool checkInFunFunIsland() {
+        return isInMinigameState(FUN_FUN_ISLAND);
+    }
 
 private:
     MinigameManager() {}

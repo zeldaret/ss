@@ -1039,8 +1039,8 @@ bool dLytMeterMinusBtn_c::fn_800F7600() const {
 
 bool dLytMeterMinusBtn_c::fn_800F7760() const {
     if (!StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_POUCH_UNLOCKED) ||
-        (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeter_c::GetMain()->fn_800D5650() ||
-         dLytMeter_c::GetMain()->fn_800D5680() || !dLytMeter_c::GetMain()->getMinusBtnNotHiddenByAreaCaption())) {
+        (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeter_c::GetMain()->isInModeMap() ||
+         dLytMeter_c::GetMain()->isInModePause() || !dLytMeter_c::GetMain()->getMinusBtnNotHiddenByAreaCaption())) {
         return false;
     }
 

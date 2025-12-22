@@ -11,6 +11,7 @@
 #include "egg/gfx/eggScreen.h"
 #include "m/m_allocator.h"
 #include "m/m_dvd.h"
+#include "m/m_fader_base.h"
 #include "nw4r/g3d/g3d_camera.h"
 #include "s/s_FPhase.h"
 #include "s/s_State.hpp"
@@ -106,7 +107,6 @@ public:
     static dStageMgr_c *GetInstance() {
         return sInstance;
     }
-
     EGG::CpuTexture *getField_0x8898() {
         return field_0x8898;
     }
@@ -177,6 +177,10 @@ public:
         return mFader.isSettled();
     }
 
+    bool isFadingOut() const {
+        return mFader.isStatus(mFaderBase_c::FADING_OUT);
+    }
+
     bool isInLastBoss() const {
         return mIsInLastBoss;
     }
@@ -225,7 +229,7 @@ private:
     // ...
     u8 ___[438];
     /* 0x8898 */ EGG::CpuTexture *field_0x8898;
-    
+
     u8 _0x889C[4];
 
     /* 0x88A0 */ u32 field_0x88A0;

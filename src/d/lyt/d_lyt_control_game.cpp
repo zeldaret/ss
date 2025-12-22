@@ -79,7 +79,7 @@ static const char *const sMapSky = "MapSky";
 static const char *const sCommonArrow = "CommonArrow";
 
 void dLytControlGame_c::initializeState_Pause_SetRes() {
-    dLytMeter_c::GetInstance()->setMeterField_0x13750(dLytMeterMain_c::MODE_PAUSE);
+    dLytMeter_c::GetInstance()->setMeterMode(dLytMeterMain_c::MODE_PAUSE_INIT);
     dBase_c::s_NextExecuteControlFlags |= BASE_PROP_0x1;
     static const char *sLytArcs[] = {sMenuPause, sCommonArrow};
     mLytArcControl.set(sLytArcs, ARRAY_LENGTH(sLytArcs));
@@ -132,7 +132,7 @@ void dLytControlGame_c::executeState_Pause_DelRes() {
     mStateMgr.changeState(StateID_Normal);
 }
 void dLytControlGame_c::finalizeState_Pause_DelRes() {
-    dLytMeter_c::GetInstance()->setMeterField_0x13750(dLytMeterMain_c::MODE_NONE);
+    dLytMeter_c::GetInstance()->setMeterMode(dLytMeterMain_c::MODE_NONE);
 }
 
 void dLytControlGame_c::initializeState_Map_SetRes() {
@@ -140,7 +140,7 @@ void dLytControlGame_c::initializeState_Map_SetRes() {
     if (!EventManager::isInEvent() || mMapEvent == dLytMapMain_c::MAP_EVENT_11) {
         dBase_c::s_NextExecuteControlFlags |= BASE_PROP_0x10;
     }
-    dLytMeter_c::GetInstance()->setMeterField_0x13750(dLytMeterMain_c::MODE_MAP_INIT);
+    dLytMeter_c::GetInstance()->setMeterMode(dLytMeterMain_c::MODE_MAP_INIT);
 }
 void dLytControlGame_c::executeState_Map_SetRes() {
     LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(sMap2D, nullptr);
@@ -180,8 +180,8 @@ void dLytControlGame_c::initializeState_Map() {
 }
 void dLytControlGame_c::executeState_Map() {
     if (dLytMap_c::GetInstance()->isOpen()) {
-        if (dLytMeter_c::GetInstance()->getMeterField_0x13750() != dLytMeterMain_c::MODE_MAP) {
-            dLytMeter_c::GetInstance()->setMeterField_0x13750(dLytMeterMain_c::MODE_MAP);
+        if (dLytMeter_c::GetInstance()->getMeterMode() != dLytMeterMain_c::MODE_MAP) {
+            dLytMeter_c::GetInstance()->setMeterMode(dLytMeterMain_c::MODE_MAP);
             if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_PLUS_BTN_NOTICE)) {
                 StoryflagManager::sInstance->unsetFlag(STORYFLAG_PLUS_BTN_NOTICE);
             }
@@ -250,7 +250,7 @@ void dLytControlGame_c::executeState_Map_DelRes() {
     }
 }
 void dLytControlGame_c::finalizeState_Map_DelRes() {
-    dLytMeter_c::GetInstance()->setMeterField_0x13750(dLytMeterMain_c::MODE_NONE);
+    dLytMeter_c::GetInstance()->setMeterMode(dLytMeterMain_c::MODE_NONE);
     dLytMeter_c::GetInstance()->setBasicPosition(dLytMeterMain_c::POSITION_NORMAL);
     dMessage_c::getInstance()->setMapEvent(dLytMapMain_c::MAP_EVENT_MAX);
 }
@@ -360,7 +360,7 @@ int dLytControlGame_c::execute() {
 
     if (mpDrawMark != nullptr) {
         if (field_0x15C54 == 0) {
-            mpDrawMark->setField_0x941(1);
+            mpDrawMark->setForceComplete(true);
         }
         mpDrawMark->execute();
         if (mpDrawMark->getField_0x940() != 0) {

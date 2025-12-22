@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/d_base.h"
 #include "d/snd/d_snd_source_if.h"
+#include "f/f_profile_name.h"
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
@@ -51,6 +52,14 @@ public:
     }
     BOOL isLinked() const {
         return get() != nullptr;
+    }
+
+    dAcRef_c<T> *getPrev() const {
+        return static_cast<dAcRef_c<T> *>(cListNd_c::getPrev());
+    }
+
+    dAcRef_c<T> *getNext() const {
+        return static_cast<dAcRef_c<T> *>(cListNd_c::getNext());
     }
 };
 
@@ -125,6 +134,9 @@ public:
 public:
     dAcBase_c();
 
+    void setSubtype(u8 sub) {
+        mSubtype = sub;
+    }
     void setPosition(const mVec3_c &r) {
         mPosition = r;
     }
@@ -169,6 +181,9 @@ public:
     bool checkBeyondRadius(const mVec3_c &point, f32 radius) {
         return getSquareDistanceTo(point) > radius;
     }
+    bool checkInRadius(const mVec3_c &point, f32 radius) {
+        return getSquareDistanceTo(point) < radius;
+    }
 
     u32 getRoomId() {
         return mRoomID;
@@ -182,6 +197,10 @@ public:
     }
     bool checkActorProperty(u32 property) const {
         return mActorProperties & property;
+    }
+
+    dAcBase_c* searchNextActor(dAcBase_c* parent) {
+        return static_cast<dAcBase_c*>(fManager_c::searchBaseByGroupType(dAcBase_c::ACTOR, parent));
     }
 
 public:

@@ -94,6 +94,11 @@ public:
         return mPauseDemoDisp;
     }
 
+    void setDrawMarkRelated(UNKWORD p1, UNKWORD p2) {
+        field_0x15C54 = p1;
+        field_0x15C58 = p2;
+    }
+
     STATE_FUNC_DECLARE(dLytControlGame_c, Normal);
     STATE_FUNC_DECLARE(dLytControlGame_c, Pause_SetRes);
     STATE_FUNC_DECLARE(dLytControlGame_c, Pause_SyncRes);

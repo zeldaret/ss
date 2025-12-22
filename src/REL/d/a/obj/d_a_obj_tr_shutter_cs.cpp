@@ -5,6 +5,10 @@ SPECIAL_ACTOR_PROFILE(OBJ_TR_SHUTTER_CS, dAcOTrlyShtrChgScn_c, fProfile::OBJ_TR_
 STATE_DEFINE(dAcOTrlyShtrChgScn_c, Wait);
 STATE_DEFINE(dAcOTrlyShtrChgScn_c, OpenEvent);
 
+bool dAcOTrlyShtrChgScn_c::canOpen() {
+    // Not implemented - Used to emit dtor
+    return true;
+}
 void dAcOTrlyShtrChgScn_c::initializeState_Wait() {}
 void dAcOTrlyShtrChgScn_c::executeState_Wait() {}
 void dAcOTrlyShtrChgScn_c::finalizeState_Wait() {}

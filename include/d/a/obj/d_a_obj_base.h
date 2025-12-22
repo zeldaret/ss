@@ -181,6 +181,11 @@ public:
         const char *name, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
         u32 params2, u16 id, s8 viewclipId
     );
+    static dAcObjBase_c *create(
+        dAcObjBase_c *, fProfile::PROFILE_NAME_e actorId, u32 params1, const mVec3_c *pos, const mAng3_c *rot,
+        const mVec3_c *scale, u32 params2, u32 roomId
+    );
+
     static dAcObjBase_c *findObject(fProfile::PROFILE_NAME_e actorId, fLiNdBa_c *refList, dAcObjBase_c *parent);
     static dAcObjBase_c *getNextObject(fLiMgBa_c *ref, dAcObjBase_c *parent);
     bool isPlayer();
@@ -215,7 +220,12 @@ public:
         fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
         u32 roomId
     );
+    
     // These may not belong here
+    static dAcBase_c* createInsectActor(
+        dAcBase_c* parent,
+        fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, s32 roomId
+    );
     static dAcBase_c *createActorUnkGroup3(
         fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale,
         u32 params2
@@ -258,5 +268,7 @@ public:
     /* 0x10 */ dAcObjBase_c *refOwner;
     /* 0x14 */ u8 _14[0x2C - 0x14];
 };
+
+typedef dAcRef_c<dAcObjBase_c> dAcObjRef_c;
 
 #endif

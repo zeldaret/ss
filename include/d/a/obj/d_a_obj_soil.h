@@ -14,8 +14,13 @@ public:
     STATE_FUNC_DECLARE(dAcOsoil_c, Hole);
     STATE_FUNC_DECLARE(dAcOsoil_c, Ready);
 
+    bool isStateHole() {
+        return mStateMgr.isState(StateID_Hole);
+    }
+
 private:
-    /* 0x??? */ STATE_MGR_DECLARE(dAcOsoil_c);
+    /* 0x330 */ u8 field_0x330[0x6CC-0x330];
+    /* 0x6CC */ STATE_MGR_DECLARE(dAcOsoil_c);
 };
 
 #endif
