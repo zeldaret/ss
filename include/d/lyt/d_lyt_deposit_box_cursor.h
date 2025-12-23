@@ -10,7 +10,7 @@ class dLytDepositBoxCursor_c : public d2d::dSubPane {
 public:
     enum ItemLocation_e {
         LOC_POUCH,
-        LOC_DEPOSIT,
+        LOC_STOCK,
     };
 
 public:
@@ -35,6 +35,14 @@ public:
     void init(s32 location, s32 slot, s32 item, bool unk);
     void updateSlot(s32 location, s32 slot, s32 unk, bool unk2);
     void fn_801580A0();
+
+    bool isVisible() const {
+        return mIsVisible;
+    }
+
+    void setVisible(bool b) {
+        mIsVisible = b;
+    }
 
 private:
     void initIcon();

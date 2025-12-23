@@ -23,6 +23,9 @@ public:
     static bool drawDirectly();
 
     void setPriority(u8 priority);
+    void setPriority2(u8 priority) {
+        mLyt.setPriority(priority);
+    }
     void setTargetPane(const nw4r::lyt::Pane *pane);
 
     void setShouldBeOn(bool value) {

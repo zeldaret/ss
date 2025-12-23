@@ -93,18 +93,18 @@ bool dLytDepositStock_c::build(d2d::ResAccIf_c *resAcc) {
     mSelectedItemId = -1;
     field_0x685C = -1;
 
-    field_0x6849 = false;
-    field_0x684A = false;
+    mIsSellBlocked = false;
+    mIsSortBlocked = false;
     field_0x684B = false;
     field_0x684C = true;
     field_0x684E = false;
 
     mArrowDirection = ARROW_NONE;
 
-    field_0x6845 = false;
-    field_0x6846 = false;
-    field_0x6847 = false;
-    field_0x6848 = false;
+    mIsModePouch = false;
+    mIsModeSell = false;
+    mIsModeSort = false;
+    mIsModeFinish = false;
 
     mSavedArrowDirection = ARROW_NONE;
 
@@ -271,13 +271,13 @@ void dLytDepositStock_c::fn_80156530(bool unk) {
     }
 
     field_0x684B = false;
-    field_0x6845 = false;
-    field_0x6846 = false;
-    if (!field_0x6847) {
+    mIsModePouch = false;
+    mIsModeSell = false;
+    if (!mIsModeSort) {
         // okay
-        field_0x6847 = false;
+        mIsModeSort = false;
     }
-    field_0x6848 = false;
+    mIsModeFinish = false;
     if (mArrowDirection >= ARROW_NONE) {
         handleSpecialNavMode();
     }
@@ -298,7 +298,7 @@ void dLytDepositStock_c::handleNavOrPoint() {
         s32 dir = checkNav();
         if (!isNavModeItem()) {
             handleSpecialNavMode();
-        } else if (!field_0x6845 && !field_0x6846 && !field_0x6847 && !field_0x6848 && mSavedArrowDirection >= 2) {
+        } else if (!mIsModePouch && !mIsModeSell && !mIsModeSort && !mIsModeFinish && mSavedArrowDirection >= 2) {
             s32 target = mCurrentNavTarget;
             if (target < 0 || field_0x684C) {
                 if (dir != dPadNav::FS_STICK_NONE || dCsBase_c::GetInstance()->isCursorStickVisible()) {
@@ -397,9 +397,9 @@ void dLytDepositStock_c::handleNavOrPoint() {
             mAnm[anmIdx].setAnimEnable(false);
             dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
             mCurrentNavTarget = nextTarget;
-            field_0x6846 = false;
-            field_0x6847 = false;
-            field_0x6848 = false;
+            mIsModeSell = false;
+            mIsModeSort = false;
+            mIsModeFinish = false;
             navigateToItem();
         }
         mNavMode = 0;
@@ -446,7 +446,7 @@ s32 dLytDepositStock_c::checkNav() {
                     direction = dPadNav::FS_STICK_DOWN;
                 } else if (target >= 6) {
                     if (target >= 10) {
-                        if (field_0x684A) {
+                        if (mIsSortBlocked) {
                             if (target == 11) {
                                 direction = dPadNav::FS_STICK_NONE;
                             } else {
@@ -464,11 +464,11 @@ s32 dLytDepositStock_c::checkNav() {
             case dPadNav::FS_STICK_DOWN:
                 if (target >= 6) {
                     if (target < 8) {
-                        if (field_0x6849) {
+                        if (mIsSellBlocked) {
                             direction = dPadNav::FS_STICK_NONE;
                         }
                     } else if (target >= 10) {
-                        if (field_0x684A) {
+                        if (mIsSortBlocked) {
                             direction = dPadNav::FS_STICK_NONE;
                         }
                     } else {
@@ -478,14 +478,14 @@ s32 dLytDepositStock_c::checkNav() {
                 break;
             case dPadNav::FS_STICK_DOWN_LEFT:
                 if (target == 0 || target == 11) {
-                    if (target == 11 && field_0x684A) {
+                    if (target == 11 && mIsSortBlocked) {
                         direction = dPadNav::FS_STICK_LEFT;
                     } else {
                         direction = dPadNav::FS_STICK_DOWN;
                     }
                 } else if (target >= 6) {
                     if (target <= 7) {
-                        if (field_0x6849) {
+                        if (mIsSellBlocked) {
                             if (target == 6) {
                                 direction = dPadNav::FS_STICK_NONE;
                             } else {
@@ -495,7 +495,7 @@ s32 dLytDepositStock_c::checkNav() {
                             direction = dPadNav::FS_STICK_DOWN;
                         }
                     } else if (target == 11) {
-                        if (field_0x684A) {
+                        if (mIsSortBlocked) {
                             direction = dPadNav::FS_STICK_NONE;
                         } else {
                             direction = dPadNav::FS_STICK_DOWN;
@@ -611,33 +611,33 @@ void dLytDepositStock_c::pickUpItem(s32 slot, bool unk) {
 }
 
 void dLytDepositStock_c::navigateToPouch() {
-    field_0x6845 = true;
+    mIsModePouch = true;
     mSavedArrowDirection = ARROW_NONE;
 }
 
 void dLytDepositStock_c::navigateToSell() {
-    if (!field_0x6846) {
+    if (!mIsModeSell) {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_STK_POINT_SELL);
     }
-    field_0x6846 = true;
+    mIsModeSell = true;
     mNavMode = NAV_SELL;
     mSavedArrowDirection = ARROW_NONE;
 }
 
 void dLytDepositStock_c::navigateToSort() {
-    if (!field_0x6847) {
+    if (!mIsModeSort) {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_STK_STOCK_POINT_TRIM);
     }
-    field_0x6847 = true;
+    mIsModeSort = true;
     mNavMode = NAV_SORT;
     mSavedArrowDirection = ARROW_NONE;
 }
 
 void dLytDepositStock_c::navigateToFinish() {
-    if (!field_0x6848) {
+    if (!mIsModeFinish) {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_STK_POINT_DECIDE);
     }
-    field_0x6848 = true;
+    mIsModeFinish = true;
     mNavMode = NAV_FINISH;
     mSavedArrowDirection = ARROW_NONE;
 }

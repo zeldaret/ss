@@ -19,6 +19,10 @@ bool isItemShield(s32 item);
 u8 adventurePouchFindItemSlot(ITEM_ID item);
 u32 adventurePouchCountItem(ITEM_ID itemId);
 
+bool swapAdventurePouchItems(s32 slot1, s32 slot2);
+bool swapStockAndPouchItems(s32 pouchSlot, s32 stockSlot);
+bool swapStockItems(s32 slot1, s32 slot2);
+
 #define ITEM_CHECK_SLOT_NONE 60
 
 u16 itemCheckFindItemSlot(ITEM_ID item);

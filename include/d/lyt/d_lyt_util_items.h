@@ -18,6 +18,8 @@ enum SongLifeTreeSeedStatus_e {
     SONG_LIFETREE_HAS_SOTH = 2,
 };
 
+s32 convertLytPouchSlot2(s32 fileSlot);
+
 u8 getSongLifeTreeStatus();
 
 /** 0: no sword, 6: TMS */

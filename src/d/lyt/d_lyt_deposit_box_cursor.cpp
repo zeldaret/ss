@@ -119,6 +119,7 @@ void dLytDepositBoxCursor_c::realizeNav() {
     } else if (field_0x949) {
         s = 6;
     } else if (mItemLocation == LOC_POUCH) {
+        // Flip the cursor for pouch slot 0 so that it's not above the screen edge
         s = mSlot == 0 ? 1 : 0;
         if (field_0x950 == 12) {
             s += 2;

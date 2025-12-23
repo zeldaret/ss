@@ -26,6 +26,9 @@ public:
     void setVisible(bool val) {
         mVisible = val;
     }
+    bool isVisible() const {
+        return mVisible;
+    }
     void setDrawDirectly(bool val) {
         mDrawDirectly = val;
     }
@@ -50,6 +53,14 @@ public:
 
     void setCursorStickVisible(bool visible) {
         mCursorStick.setShouldBeOn(visible);
+    }
+
+    void setCursorStickPriority(u8 priority) {
+        mCursorStick.setPriority(priority);
+    }
+
+    void setCursorStickPriority2(u8 priority) {
+        mCursorStick.setPriority2(priority);
     }
 
     bool isCursorStickVisible() const {

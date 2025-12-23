@@ -6,6 +6,7 @@
 // vtable order
 #include "d/d_cursor_hit_check.h"
 // clang-format on
+#include "m/m_vec.h"
 #include "nw4r/lyt/lyt_bounding.h"
 #include "s/s_State.hpp"
 
@@ -59,9 +60,9 @@ public:
         mBackwards = b;
     }
     bool fn_80168760();
+    void setTranslate(const mVec2_c *);
 
 private:
-    void setTranslate(const Vec *);
     void displayElement(s32, f32);
     void unbindAt(s32);
     void tickDown(d2d::AnmGroup_c *);

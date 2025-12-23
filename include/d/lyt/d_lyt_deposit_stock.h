@@ -67,7 +67,67 @@ public:
         return mCurrentNavTarget;
     }
 
-private:
+    bool isModeSort() const {
+        return mIsModeSort;
+    }
+
+    bool isModePouch() const {
+        return mIsModePouch;
+    }
+
+    bool isModeSell() const {
+        return mIsModeSell;
+    }
+
+    void disableModeSort() {
+        mIsModeSort = false;
+    }
+
+    void disableModePouch() {
+        mIsModePouch = false;
+    }
+
+    void disableModeSell() {
+        mIsModeSell = false;
+    }
+
+    void returnToNormalMode() {
+        mIsModeFinish = false;
+        mIsModeSell = false;
+        mIsModeSort = false;
+        mIsModePouch = false;
+        mSavedArrowDirection = ARROW_NONE;
+    }
+
+    u8 getItem(s32 idx) const {
+        return mItemIds[idx];
+    }
+
+    u8 getPage() const {
+        return mItemPage;
+    }
+
+    void setPage(u8 page) {
+        mItemPage = page;
+    }
+
+    s32 getActiveItem() const {
+        return mItemIds[mCurrentNavTarget];
+    }
+
+    void setSellBlocked(bool v) {
+        mIsSellBlocked = v;
+    }
+
+    void setSortBlocked(bool v) {
+        mIsSortBlocked = v;
+    }
+
+    s32 getArrowDirection() const {
+        return mArrowDirection;
+    }
+
+//private:
     static const s32 NUM_ICONS_PER_PAGE = 12;
     static const s32 NUM_PAGES = 5;
 
@@ -93,12 +153,12 @@ private:
     /* 0x6778 */ d2d::SubPaneList mSubpaneList;
     /* 0x6784 */ d2d::SubPaneListNode mNodes[NUM_ICONS_PER_PAGE];
     /* 0x6844 */ bool field_0x6844;
-    /* 0x6845 */ bool field_0x6845;
-    /* 0x6846 */ bool field_0x6846;
-    /* 0x6847 */ bool field_0x6847;
-    /* 0x6848 */ bool field_0x6848;
-    /* 0x6849 */ bool field_0x6849;
-    /* 0x684A */ bool field_0x684A;
+    /* 0x6845 */ bool mIsModePouch;
+    /* 0x6846 */ bool mIsModeSell;
+    /* 0x6847 */ bool mIsModeSort;
+    /* 0x6848 */ bool mIsModeFinish;
+    /* 0x6849 */ bool mIsSellBlocked;
+    /* 0x684A */ bool mIsSortBlocked;
     /* 0x684B */ bool field_0x684B;
     /* 0x684C */ bool field_0x684C;
     /* 0x684D */ bool field_0x684D;

@@ -4,6 +4,7 @@
 #include "d/d_cursor_hit_check.h"
 #include "d/d_pad_nav.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
+#include "m/m_vec.h"
 #include "rvl/MTX/mtx.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 
@@ -96,8 +97,10 @@ void dLytCommonArrow_c::setState(s32 state) {
     }
 }
 
-void dLytCommonArrow_c::setTranslate(const Vec *arg) {
-    nw4r::math::VEC3 v(*arg);
+void dLytCommonArrow_c::setTranslate(const mVec2_c *arg) {
+    nw4r::math::VEC3 v;
+    v.x = arg->x;
+    v.y = arg->y;
     v.z = 0.0f;
     mLytBase.getLayout()->GetRootPane()->SetTranslate(v);
 }
