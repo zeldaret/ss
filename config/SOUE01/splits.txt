@@ -1674,7 +1674,9 @@ d/lyt/d_lyt_deposit.cpp:
 	.ctors      start:0x804DB888 end:0x804DB88C
 	.rodata     start:0x804EF970 end:0x804EFA90
 	.data       start:0x8053CFC8 end:0x8053DFC8
+	.sdata      start:0x80573C10 end:0x80573C30
 	.sbss       start:0x805759B8 end:0x805759D0
+	.sdata2     start:0x8057C7C0 end:0x8057C7E0
 	.bss        start:0x805B6C18 end:0x805B7120
 
 d/lyt/d_lyt_demo_title.cpp:

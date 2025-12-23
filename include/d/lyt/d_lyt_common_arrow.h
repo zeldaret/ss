@@ -43,6 +43,10 @@ public:
         return field_0x6B8;
     }
 
+    bool isChangingState() const {
+        return mIsChangingState;
+    }
+
     nw4r::lyt::Bounding *getArrowBounding(s32 idx) const {
         return mpBoundings[idx];
     }

@@ -5,6 +5,7 @@
 #include "d/lyt/d_lyt_common_icon_item.h"
 #include "nw4r/lyt/lyt_pane.h"
 
+// made up name
 class dLytDepositBoxCursor_c : public d2d::dSubPane {
 public:
     enum ItemLocation_e {
@@ -13,6 +14,7 @@ public:
     };
 
 public:
+    dLytDepositBoxCursor_c() : mSlot(-1), field_0x950(0), mItemLocation(0) {}
     /* vt 0x0C */ virtual bool build(d2d::ResAccIf_c *resAcc) override;
     /* vt 0x10 */ virtual bool remove() override;
     /* vt 0x14 */ virtual bool execute() override;

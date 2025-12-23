@@ -43,7 +43,8 @@ public:
     void nextPage(bool unk);
     void prevPage(bool unk);
     void fn_80156530(bool unk);
-
+    
+    void navigateToItem();
     void navigateToSell();
     void navigateToSort();
     void navigateToFinish();
@@ -62,12 +63,15 @@ public:
 
     STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dLytDepositStock_c);
 
+    s32 getCurrentNavTarget() const {
+        return mCurrentNavTarget;
+    }
+
 private:
     static const s32 NUM_ICONS_PER_PAGE = 12;
     static const s32 NUM_PAGES = 5;
 
     void initIcons();
-    void navigateToItem();
     void loadItems(s32 hiddenSlot);
     void loadIcon(s32 idx);
     void navigateToPouch();
