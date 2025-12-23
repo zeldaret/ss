@@ -1742,12 +1742,16 @@ d/tg/d_t_truck_rails.cpp:
 	.text       start:0x802D18F0 end:0x802D4FD8 align:16
 	.rodata     start:0x804F0460 end:0x804F04E0
 	.data       start:0x80540D68 end:0x80540E88
+	.sdata      start:0x80573F28 end:0x80573F38
 	.sbss       start:0x80575A18 end:0x80575A20
+	.sdata2     start:0x8057CAA0 end:0x8057CB40
+	.bss        start:0x805B8040 end:0x805B8120
 
 d/a/obj/d_a_obj_force_sign.cpp:
 	.text       start:0x802D4FE0 end:0x802D58D0 align:16
 	.ctors      start:0x804DB8A4 end:0x804DB8A8
 	.data       start:0x80540E88 end:0x80540F58
+	.bss        start:0x805B8120 end:0x805B8190
 
 d/tg/d_t_force_get_flag.cpp:
 	.text       start:0x802D58D0 end:0x802D5BF4 align:16
@@ -1766,6 +1770,7 @@ d/tg/d_t_siren_tag.cpp:
 	.text       start:0x802D6800 end:0x802D84F8 align:16
 	.ctors      start:0x804DB8B0 end:0x804DB8B4
 	.data       start:0x805411A8 end:0x805414F8
+	.sdata      start:0x80573F38 end:0x80573F58
 	.sdata2     start:0x8057CB58 end:0x8057CB80
 	.bss        start:0x805B81D0 end:0x805B8310
 
@@ -1773,6 +1778,7 @@ d/a/obj/d_a_obj_spore.cpp:
 	.text       start:0x802D8500 end:0x802D9408 align:16
 	.ctors      start:0x804DB8B4 end:0x804DB8B8
 	.data       start:0x805414F8 end:0x805416D8
+	.sdata      start:0x80573F58 end:0x80573F60
 	.sbss       start:0x80575A30 end:0x80575A38
 	.sdata2     start:0x8057CB80 end:0x8057CB98
 	.bss        start:0x805B8310 end:0x805B8360
@@ -1786,6 +1792,7 @@ d/tg/d_t_genki_mgr.cpp:
 d/a/obj/d_a_obj_water_mark.cpp:
 	.text       start:0x802D9D60 end:0x802DA0BC align:16
 	.data       start:0x80541770 end:0x80541838
+	.sdata      start:0x80573F60 end:0x80573F68
 	.sdata2     start:0x8057CBE0 end:0x8057CC18
 
 toBeSorted/d_sc_e3_title.cpp:
@@ -2429,6 +2436,7 @@ d/col/c/c_bg_s_poly_info.cpp:
 d/col/c/c_bg_s_shdw_draw.cpp:
 	.text       start:0x80327670 end:0x80328064 align:16
 	.data       start:0x805473B8 end:0x805473C8
+	.sdata2     start:0x8057CF90 end:0x8057CF98
 
 d/col/c/c_bg_w.cpp:
 	.text       start:0x80328070 end:0x80328114 align:16
@@ -2449,6 +2457,7 @@ d/col/c/c_m2d.cpp:
 d/col/c/c_m3d.cpp:
 	.text       start:0x8032BEC0 end:0x80337B58 align:16
 	.data       start:0x80547668 end:0x80547678
+	.sdata      start:0x80574050 end:0x80574058
 	.sdata2     start:0x8057CFD0 end:0x8057D030
 
 d/col/c/c_m3d_g_aab.cpp:
@@ -2479,13 +2488,17 @@ d/col/c/c_m3d_g_tri.cpp:
 
 d/col/c/c_m3d_g_unk.cpp:
 	.text       start:0x80338940 end:0x80338F4C align:16
+	.data       start:0x80547678 end:0x80547688
 	.sdata2     start:0x8057D058 end:0x8057D060
 
 d/col/c/c_partition.cpp:
 	.text       start:0x80338F50 end:0x80339BAC align:16
 	.ctors      start:0x804DB8FC end:0x804DB900
+	.rodata     start:0x804F0B80 end:0x804F0C00
 	.data       start:0x80547688 end:0x80547698
+	.sdata      start:0x80574058 end:0x80574060
 	.sbss       start:0x80575CD0 end:0x80575CF0
+	.sdata2     start:0x8057D060 end:0x8057D068
 
 d/col/bg/d_bg_pc.cpp:
 	.text       start:0x80339BB0 end:0x80339BC8 align:16
@@ -2500,6 +2513,7 @@ d/col/bg/d_bg_s.cpp:
 	.sdata      start:0x80574060 end:0x80574070
 	.sbss       start:0x80575CF0 end:0x80575CF8
 	.sdata2     start:0x8057D068 end:0x8057D100
+	.bss        start:0x805D0138 end:0x805D01C8
 
 d/col/bg/d_bg_s_acch.cpp:
 	.text       start:0x8033F150 end:0x803412F8 align:16
@@ -2616,7 +2630,9 @@ d/d_jnt_col.cpp:
 
 toBeSorted/col/cc/misc_unks.cpp:
 	.text       start:0x803598D0 end:0x80359D20 align:16
+	.data       start:0x805485B8 end:0x805485D0
 	.sbss       start:0x80575D28 end:0x80575D30
+	.sdata2     start:0x8057D2B8 end:0x8057D2C0
 
 d/snd/d_snd_mgr.cpp:
 	.text       start:0x80359D20 end:0x8035A558 align:16
@@ -2665,6 +2681,7 @@ d/snd/d_snd_3d_manager.cpp:
 d/snd/d_snd_state_mgr.cpp:
 	.text       start:0x80361460 end:0x8036642C align:16
 	.ctors      start:0x804DB918 end:0x804DB91C
+	.rodata     start:0x804F0D00 end:0x804F0D80
 	.data       start:0x805487E0 end:0x80548A28
 	.sdata      start:0x80574098 end:0x80574198
 	.sbss       start:0x80575D60 end:0x80575D78
@@ -2683,6 +2700,7 @@ d/snd/d_snd_stage_callbacks.cpp:
 	.data       start:0x80548A28 end:0x80548A48
 	.sdata      start:0x80574198 end:0x805741A0
 	.sdata2     start:0x8057D7C0 end:0x8057D808
+	.bss        start:0x805D0FB8 end:0x805D0FE8
 
 d/snd/d_snd_event_callbacks.cpp:
 	.text       start:0x80367410 end:0x803698F8 align:16
@@ -2863,6 +2881,11 @@ d/snd/d_snd_source_equipment.cpp:
 d/snd/d_snd_mgr_unk_8.cpp:
 	.text       start:0x8038F2B0 end:0x8038FF18 align:16
 	.ctors      start:0x804DB928 end:0x804DB92C
+	.data       start:0x8054BFC0 end:0x8054C3A0
+	.sdata      start:0x805747C0 end:0x805747D0
+	.sbss       start:0x80575DC8 end:0x80575DD0
+	.sdata2     start:0x8057DDB8 end:0x8057DDD0
+	.bss        start:0x805D0FF8 end:0x805D1018
 
 d/snd/d_snd_source_npc_head.cpp:
 	.text       start:0x8038FF20 end:0x80390298 align:16
@@ -2980,6 +3003,9 @@ d/snd/d_snd_fi_vocal_mgr.cpp:
 	.data       start:0x8054D760 end:0x8054D7A8
 	.sbss       start:0x80575DE0 end:0x80575DE8
 	.sdata2     start:0x8057E5C0 end:0x8057E5C8
+
+d/snd/d_snd_data.cpp:
+	.sdata2     start:0x8057E5C8 end:0x8057E5D8
 
 d/snd/d_snd_rng.cpp:
 	.text       start:0x80399A40 end:0x80399BA0 align:16

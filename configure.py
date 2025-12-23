@@ -795,6 +795,7 @@ config.libs = [
             Object(Matching, "d/snd/d_snd_source_obj.cpp"),
             Object(Matching, "d/snd/d_snd_source_obj_clef.cpp"),
             Object(Matching, "d/snd/d_snd_source_equipment.cpp"),
+            # maybe two files
             Object(NonMatching, "d/snd/d_snd_mgr_unk_8.cpp"),
             Object(Matching, "d/snd/d_snd_source_npc_head.cpp"),
             Object(Matching, "d/snd/d_snd_source_py_bird.cpp"),
@@ -818,6 +819,7 @@ config.libs = [
             Object(NonMatching, "d/snd/d_snd_sound_tgsound_callbacks.cpp"),
             Object(Matching, "d/snd/d_snd_rng_link_voice.cpp"),
             Object(NonMatching, "d/snd/d_snd_fi_vocal_mgr.cpp"),
+            Object(NonMatching, "d/snd/d_snd_data.cpp"),
             Object(NonMatching, "d/snd/d_snd_rng.cpp"),
             Object(Matching, "d/snd/d_snd_rng_mgr.cpp"),
             Object(Matching, "d/snd/d_snd_rng_id.cpp"),
