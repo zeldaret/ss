@@ -505,6 +505,8 @@ d/d_lyt_hio.cpp:
 
 d/d_textwindow_unk.cpp:
 	.text       start:0x800B20E0 end:0x800B34F0 align:16
+	.data       start:0x805108D8 end:0x805108E8
+	.sdata2     start:0x80579848 end:0x80579868
 
 d/d_tag_processor.cpp:
 	.text       start:0x800B34F0 end:0x800B9274 align:16
@@ -2281,7 +2283,7 @@ hbm/sound/synvoice.cpp:
 hbm/sound/seq.cpp:
 	.text       start:0x80316120 end:0x80316A28 align:16
 	.rodata     start:0x804F0AC8 end:0x804F0AF0
-	.data       start:0x80546CC8 end:0x80546D60
+	.data       start:0x80546CC8 end:0x80546D48
 	.bss        start:0x805CC0A0 end:0x805CC0A8
 
 JSystem/JParticle/JPAResourceManager.cpp:
@@ -3057,7 +3059,7 @@ revolution/ax/AXSPB.c:
 
 revolution/ax/AXVPB.c:
 	.text       start:0x8039E4D0 end:0x8039F288 align:16
-	.data       start:0x8054D980 end:0x8054DA20
+	.data       start:0x8054D980 end:0x8054DA10
 	.sbss       start:0x80575F50 end:0x80575F70
 	.sdata2     start:0x8057E5E8 end:0x8057E608
 	.bss        start:0x805D5260 end:0x805E6960
@@ -4843,12 +4845,12 @@ egg/core/eggDisplay.cpp:
 
 egg/core/eggColorFader.cpp:
 	.text       start:0x80497930 end:0x80497E3C align:16
-	.data       start:0x8056EAE8 end:0x8056EB10
+	.data       start:0x8056EAE8 end:0x8056EB0C
 	.sdata2     start:0x8057F308 end:0x8057F310
 
 egg/core/eggAsyncDisplay.cpp:
 	.text       start:0x80497E40 end:0x80498688 align:16
-	.data       start:0x8056EB10 end:0x8056EB80
+	.data       start:0x8056EB20 end:0x8056EB80
 	.sbss       start:0x80576790 end:0x80576798
 	.sdata2     start:0x8057F310 end:0x8057F328
 	.bss        start:0x80673B20 end:0x80673B40
@@ -4933,8 +4935,8 @@ egg/gfx/eggCapTexture.cpp:
 
 egg/gfx/eggCpuTexture.cpp:
 	.text       start:0x8049DA30 end:0x8049EC94 align:16
-	.data       start:0x8056ED80 end:0x8056EDA0
-	.sdata2     start:0x8057F418 end:0x8057F440
+	.data       start:0x8056ED80 end:0x8056ED90
+	.sdata2     start:0x8057F418 end:0x8057F430
 
 egg/gfx/eggDrawGX.cpp:
 	.text       start:0x8049ECA0 end:0x804A0C24 align:16

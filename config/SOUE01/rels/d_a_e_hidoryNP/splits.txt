@@ -11,7 +11,7 @@ REL/executor.c:
 
 REL/global_destructor_chain.c:
 	.text       start:0x00000070 end:0x000000E4 align:16
-	.dtors      start:0x00000000 end:0x00000004
+	.dtors      start:0x00000000 end:0x00000008
 	.bss        start:0x00000000 end:0x00000008
 
 REL/d/a/e/d_a_e_hidory.cpp:
