@@ -1520,7 +1520,7 @@ enum StoryFlags_e {
     /** [Set when talking to Strich]
      *  Story Flag #300 (0x012C) - JP 805ACD7D 0x40 / US 805A9AFD 0x40
      */
-    STORYFLAG_300,
+    STORYFLAG_TALKED_TO_STRICH,
 
     /** [Kukiel screams]
      *  Story Flag #301 (0x012D) - JP 805ACD7D 0x80 / US 805A9AFD 0x80

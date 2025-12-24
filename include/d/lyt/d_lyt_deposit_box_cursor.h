@@ -14,7 +14,7 @@ public:
     };
 
 public:
-    dLytDepositBoxCursor_c() : mSlot(-1), field_0x950(0), mItemLocation(0) {}
+    dLytDepositBoxCursor_c() : mSlot(-1), mItem(0), mItemLocation(0) {}
     /* vt 0x0C */ virtual bool build(d2d::ResAccIf_c *resAcc) override;
     /* vt 0x10 */ virtual bool remove() override;
     /* vt 0x14 */ virtual bool execute() override;
@@ -33,7 +33,7 @@ public:
     bool draw();
 
     void init(s32 location, s32 slot, s32 item, bool unk);
-    void updateSlot(s32 location, s32 slot, s32 unk, bool unk2);
+    void updateSlot(s32 location, s32 slot, s32 item, bool unk2);
     void fn_801580A0();
 
     bool isVisible() const {
@@ -58,7 +58,7 @@ private:
     /* 0x948 */ bool mIsVisible;
     /* 0x948 */ bool field_0x949;
     /* 0x94C */ s32 mSlot;
-    /* 0x950 */ s32 field_0x950;
+    /* 0x950 */ s32 mItem;
     /* 0x954 */ s32 mItemLocation;
 };
 

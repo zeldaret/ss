@@ -11,6 +11,7 @@
 #include "d/lyt/d_lyt_deposit_stock.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/d_window.h"
+#include "m/m_vec.h"
 #include "nw4r/lyt/lyt_bounding.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "s/s_State.hpp"
@@ -32,6 +33,11 @@ public:
     void setModeCheck();
     void setModeChange(bool unk);
     void setModeArrangement();
+    void setModeReverseChange();
+    void setModeScroll(bool leftRight, bool viaButton);
+    void setModeRecycle();
+    void setModeArrangementOut();
+    void setModeOut();
 
     bool isSellableItem() const {
         return field_0x19524 && mItemSellValue > 0;
@@ -53,6 +59,30 @@ public:
         return mIsIdle;
     }
 
+    bool isPointingAtToStockBounding() const {
+        return mIsPointingAtToStockBounding;
+    }
+
+    bool isPointingAtToPouchBounding() const {
+        return mIsPointingAtToPouchBounding;
+    }
+
+    bool getField_0x19523() const {
+        return field_0x19523;
+    }
+
+    bool getField_0x19525() const {
+        return field_0x19525;
+    }
+
+    bool getField_0x1952B() const {
+        return field_0x1952B;
+    }
+
+    bool isHoldingItem() const {
+        return mCurrentlyHoldingItemSlot >= 0;
+    }
+
 private:
     static const s32 NUM_STOCKS = 3;
     static const s32 STOCK_ACTIVE = 0;
@@ -65,28 +95,32 @@ private:
     static const s32 NUM_PAGES = 5;
 
     void setPouchItemsVisible(bool visible);
-    void fn_802AA7E0();
+    void buildSubpanes();
     void fn_802AD370();
 
-    void fn_802AAFC0();
-    void fn_802AB210();
+    void checkPointToStock();
+    void handleNavOrPoint();
     void checkForItemPickupOrDrop();
     void fn_802ABB60();
 
-    void fn_802AB080();
+    void checkPointToPouch();
     void fn_802AC3C0();
     void fn_802AD4C0();
     void loadItemText(s32 itemId, s32 where);
     void fn_802AC670();
     void fn_802AC290(s32);
     void fn_802AD460();
-    void loadItems(s32 hiddenSlot);
+    void loadStockItems(s32 hiddenSlot);
     s32 getItemSellValueFrame(s32 value);
     void fn_802AC0E0(s32);
-    void fn_802AAEC0(s32);
+    void loadPouchItem(s32 slot);
     void fn_8018ADA0(s32);
-    void fn_802AAB30();
+    void loadInitialState();
     void fn_802AD400();
+    void navigateOffIcon();
+    s32 checkNav();
+    void fn_802AC980();
+    void fn_802AC360(s32);
 
     STATE_FUNC_DECLARE(dLytDepositMain_c, ModeNone);
     STATE_FUNC_DECLARE(dLytDepositMain_c, ModeIn);
@@ -115,9 +149,7 @@ private:
     /* 0x00A3C */ dWindow_c *mpWindows[2];
     /* 0x00A44 */ dTextBox_c *mpSizeBoxes[2];
     /* 0x00A4C */ dCursorHitCheckLyt_c mCsHitCheck;
-
-    u8 _0x00002[0x8];
-
+    /* 0x00A74 */ mVec2_c mCsPosition;
     /* 0x00A7C */ dLytDepositStock_c mStock[NUM_STOCKS];
     /* 0x143F0 */ dLytDepositBoxCursor_c mCursor;
     /* 0x14D48 */ dLytCommonIconItem_c mPouchItems[RING_NUM_ITEMS];
@@ -127,8 +159,8 @@ private:
     /* 0x19494 */ d2d::SubPaneList mRingList;
     /* 0x194A0 */ d2d::SubPaneListNode mRingNodes[RING_NUM_ITEMS];
     /* 0x19520 */ bool mIsIdle;
-    /* 0x19521 */ bool field_0x19521;
-    /* 0x19522 */ bool field_0x19522;
+    /* 0x19521 */ bool mIsPointingAtToStockBounding;
+    /* 0x19522 */ bool mIsPointingAtToPouchBounding;
     /* 0x19523 */ bool field_0x19523;
     /* 0x19524 */ bool field_0x19524;
     /* 0x19525 */ bool field_0x19525;
@@ -189,9 +221,9 @@ private:
     /* 0x08C */ UI_STATE_MGR_DECLARE(dLytDeposit_c);
     /* 0x0C8 */ d2d::ResAccIf_c mResAcc;
     /* 0x438 */ dLytDepositMain_c mMain;
-    /* 0x19998 */ bool field_0x19998;
-    /* 0x19999 */ bool field_0x19999;
-    /* 0x1999A */ bool field_0x1999A;
+    /* 0x19998 */ bool mInRequest;
+    /* 0x19999 */ bool mIsMovingOut;
+    /* 0x1999A */ bool mScrollViaArrowButton;
 };
 
 #endif

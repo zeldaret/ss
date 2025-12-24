@@ -5,6 +5,7 @@
 #include "d/d_pad_nav.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_common_icon_item.h"
+#include "d/lyt/d_lyt_common_icon_item_maps.h"
 #include "d/lyt/d_lyt_util_items.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_group.h"
@@ -114,17 +115,17 @@ void dLytDepositBoxCursor_c::realizeNav() {
         s = mAnm[DEPOSIT_BOX_CURSOR_ANIM_STICK_CURSOR].getLastFrame();
     } else if (dPadNav::isPointerVisible()) {
         s = 4;
-    } else if (field_0x950 == 50) {
+    } else if (mItem == LYT_CMN_PouchPotionHealthPlusPlusHalf) {
         s = 5;
     } else if (field_0x949) {
         s = 6;
     } else if (mItemLocation == LOC_POUCH) {
         // Flip the cursor for pouch slot 0 so that it's not above the screen edge
         s = mSlot == 0 ? 1 : 0;
-        if (field_0x950 == 12) {
+        if (mItem == LYT_CMN_PouchBlank4) {
             s += 2;
         }
-    } else if (field_0x950 == 12) {
+    } else if (mItem == LYT_CMN_PouchBlank4) {
         s = 2;
     } else {
         s = 0;
@@ -182,13 +183,13 @@ void dLytDepositBoxCursor_c::init(s32 location, s32 slot, s32 item, bool unk) {
     }
 
     mNode.mpPane->SetVisible(true);
-    field_0x950 = 12;
+    mItem = LYT_CMN_PouchBlank4;
     realizeNav();
     mIsVisible = true;
 }
 
-void dLytDepositBoxCursor_c::updateSlot(s32 location, s32 slot, s32 unk, bool unk2) {
-    field_0x950 = unk;
+void dLytDepositBoxCursor_c::updateSlot(s32 location, s32 slot, s32 item, bool unk2) {
+    mItem = item;
     mItemLocation = location;
     field_0x949 = unk2;
     if (mItemLocation == LOC_POUCH) {

@@ -118,7 +118,7 @@ bool dLytDepositStock_c::execute() {
         mNodes[i].mpLytPane->execute();
     }
 
-    if (field_0x684D) {
+    if (mIsMainStock) {
         mStateMgr.executeState();
     }
 

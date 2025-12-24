@@ -79,6 +79,10 @@ public:
         return mIsModeSell;
     }
 
+    bool isModeFinish() const {
+        return mIsModeFinish;
+    }
+
     void disableModeSort() {
         mIsModeSort = false;
     }
@@ -91,11 +95,22 @@ public:
         mIsModeSell = false;
     }
 
-    void returnToNormalMode() {
+    void disableModeFinish() {
+        mIsModeFinish = false;
+    }
+
+    void returnToNoneMode() {
         mIsModeFinish = false;
         mIsModeSell = false;
         mIsModeSort = false;
         mIsModePouch = false;
+        mSavedArrowDirection = ARROW_NONE;
+    }
+
+    void disableSpecialModes() {
+        mIsModeSell = false;
+        mIsModeFinish = false;
+        mIsModeSort = false;
         mSavedArrowDirection = ARROW_NONE;
     }
 
@@ -125,6 +140,10 @@ public:
 
     s32 getArrowDirection() const {
         return mArrowDirection;
+    }
+
+    void setMainStock(bool b) {
+        mIsMainStock = b;
     }
 
 //private:
@@ -161,7 +180,7 @@ public:
     /* 0x684A */ bool mIsSortBlocked;
     /* 0x684B */ bool field_0x684B;
     /* 0x684C */ bool field_0x684C;
-    /* 0x684D */ bool field_0x684D;
+    /* 0x684D */ bool mIsMainStock;
     /* 0x684E */ bool field_0x684E;
     /* 0x6850 */ s32 mCurrentNavTarget;
     /* 0x6854 */ UNKWORD field_0x6854;

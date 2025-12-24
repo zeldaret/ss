@@ -39,7 +39,7 @@ public:
         mCalibrationPointCenterEnabled = val;
     }
 
-    dCursorHitCheck_c *getHitCheck() {
+    dCursorHitCheck_c *getHitCheck() const {
         return mCursorIf.getHit();
     }
 
