@@ -290,7 +290,7 @@ void dLytPauseMain_c::executeState_Wait() {
             mRingToggleRequest = false;
             mStateMgr.changeState(StateID_Ring);
         }
-        mpArrow->unk();
+        mpArrow->setActiveArrow(mpArrow->getPointedAtArrow());
     }
 }
 void dLytPauseMain_c::finalizeState_Wait() {}
@@ -874,7 +874,7 @@ nw4r::lyt::Bounding *dLytPauseMgr_c::getArrowBounding(int idx) const {
 }
 
 void dLytPauseMgr_c::setSelectedArrowBounding(int idx) {
-    mMain.getArrow()->setField_0x6B8(idx);
+    mMain.getArrow()->setActiveArrow(idx);
 }
 
 void dLytPauseMgr_c::setSelection(dLytPauseMgr_c::SelectionType_e type, u16 id, bool restricted) {
@@ -957,8 +957,8 @@ bool dLytPauseMgr_c::checkChangeDisp() {
         }
         nav = true;
     }
-    s32 arrowPane = mMain.getArrow()->getField_0x6B8();
-    if (arrowPane != dLytCommonArrow_c::ARROW_NONE && dPad::getDownTrigA() && mMain.getArrow()->fn_80168760()) {
+    s32 arrowPane = mMain.getArrow()->getActiveArrow();
+    if (arrowPane != dLytCommonArrow_c::ARROW_NONE && dPad::getDownTrigA() && mMain.getArrow()->triggerArrowPress()) {
         if (arrowPane == dLytCommonArrow_c::ARROW_LEFT) {
             mIsNavLeft = true;
         } else {

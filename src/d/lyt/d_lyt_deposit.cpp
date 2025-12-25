@@ -1,3 +1,8 @@
+// clang-format off
+// need this vtable order so that stripped vtable alignment gaps work out
+#include "d/lyt/d2d.h"
+// clang-format on
+
 #include "d/lyt/d_lyt_deposit.h"
 
 #include "common.h"
@@ -10,7 +15,7 @@
 #include "d/d_pouch.h"
 #include "d/d_rumble.h"
 #include "d/flag/storyflag_manager.h"
-#include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_common_arrow.h"
 #include "d/lyt/d_lyt_common_icon_item.h"
 #include "d/lyt/d_lyt_common_icon_item_maps.h"
 #include "d/lyt/d_lyt_deposit_box_cursor.h"
@@ -193,7 +198,7 @@ void dLytDepositMain_c::initializeState_ModeCheck() {
 }
 void dLytDepositMain_c::executeState_ModeCheck() {
     checkPointToStock();
-    handleNavOrPoint();
+    checkPouchItems();
     checkForItemPickupOrDrop();
     checkSellOrFinish();
     mIsIdle = true;
@@ -206,7 +211,7 @@ void dLytDepositMain_c::initializeState_ModeChange() {
 }
 void dLytDepositMain_c::executeState_ModeChange() {
     if (mIsIdle) {
-        fn_802AC3C0();
+        checkSort();
         checkPointToPouch();
         if (field_0x19550 != 0) {
             field_0x19550--;
@@ -232,7 +237,7 @@ void dLytDepositMain_c::executeState_ModeChange() {
             dCsBase_c::GetInstance()->setCursorStickTargetPane(
                 mpItemBoundings[mStock[STOCK_ACTIVE].getCurrentNavTarget()]
             );
-            fn_802AD4C0();
+            updateStockCursor();
         }
         s32 slot = mStock[STOCK_ACTIVE].getCurrentSlot();
         s32 v;
@@ -254,7 +259,7 @@ void dLytDepositMain_c::executeState_ModeChange() {
         }
         loadItemText(v, dLytDepositBoxCursor_c::LOC_STOCK);
         checkSellOrFinish();
-        fn_802AC670();
+        checkArrows();
     } else {
         if (mAnm[DEPOSIT_ANIM_CHANGE].isStop() && mArrow.isChangingState()) {
             mAnm[DEPOSIT_ANIM_CHANGE].setAnimEnable(false);
@@ -273,8 +278,8 @@ void dLytDepositMain_c::executeState_ModeChange() {
             if (!dPadNav::isPointerVisible()) {
                 returnCursorAfterCancellingSell(target);
             }
-            fn_802AD460();
-            fn_802AD4C0();
+            showCursor();
+            updateStockCursor();
             field_0x19550 = 1;
             mIsIdle = true;
         }
@@ -310,7 +315,7 @@ void dLytDepositMain_c::executeState_ModeReverseChange() {
             mStateStep = 1;
         }
     } else {
-        fn_802AD460();
+        showCursor();
         selectPouchSlot(4);
         mIsIdle = true;
     }
@@ -332,10 +337,10 @@ void dLytDepositMain_c::executeState_ModeScroll() {
             }
             mStock[STOCK_ACTIVE].fn_80156530(true);
             field_0x1954C = 1;
-            fn_802AD370();
-            fn_802AD460();
-            if (mStock[STOCK_ACTIVE].getArrowDirection() >= dLytDepositStock_c::ARROW_NONE) {
-                fn_802AD4C0();
+            loadPageText();
+            showCursor();
+            if (mStock[STOCK_ACTIVE].getArrowDirection() >= dLytCommonArrow_c::ARROW_NONE) {
+                updateStockCursor();
             }
             field_0x1952C = true;
             mIsIdle = true;
@@ -358,10 +363,10 @@ void dLytDepositMain_c::executeState_ModeScroll() {
             }
             mStock[STOCK_ACTIVE].fn_80156530(true);
             field_0x1954C = 1;
-            fn_802AD370();
-            fn_802AD460();
-            if (mStock[STOCK_ACTIVE].getArrowDirection() >= dLytDepositStock_c::ARROW_NONE) {
-                fn_802AD4C0();
+            loadPageText();
+            showCursor();
+            if (mStock[STOCK_ACTIVE].getArrowDirection() >= dLytCommonArrow_c::ARROW_NONE) {
+                updateStockCursor();
             }
             field_0x1952C = true;
             mIsIdle = true;
@@ -577,7 +582,7 @@ bool dLytDepositMain_c::build(d2d::ResAccIf_c *resAcc) {
     buildSubpanes();
     mCsHitCheck.init(mLyt.getLayout()->GetRootPane(), 0x1, 0, 0);
     dCsMgr_c::GetInstance()->registCursorTarget(&mCsHitCheck);
-    fn_802AD370();
+    loadPageText();
 
     mCursor.build(resAcc);
 
@@ -590,7 +595,7 @@ bool dLytDepositMain_c::build(d2d::ResAccIf_c *resAcc) {
     mIsPointingAtToPouchBounding = false;
     mIsFinishActive = false;
     mIsSellActive = false;
-    field_0x19525 = false;
+    mIsSortActive = false;
     field_0x19526 = false;
     field_0x19527 = false;
     field_0x19528 = false;
@@ -761,7 +766,7 @@ void dLytDepositMain_c::setModeCheck() {
         slot += RING_NUM_ITEMS;
     }
     dCsBase_c::GetInstance()->setCursorStickTargetPane(mpRingBoundings[slot]);
-    fn_802AD460();
+    showCursor();
     mStateMgr.changeState(StateID_ModeCheck);
     mIsIdle = false;
 }
@@ -778,7 +783,7 @@ void dLytDepositMain_c::setModeChange(bool unk) {
         mLyt.calc();
 
         mIsIdle = false;
-        fn_802AD400();
+        hideCursor();
         mArrow.requestIn();
         mStateStep = 0;
     }
@@ -810,7 +815,7 @@ void dLytDepositMain_c::setModeReverseChange() {
     mStock[STOCK_ACTIVE].navigateToItem();
     mStock[STOCK_ACTIVE].returnToNoneMode();
     mCurrentPouchNavTarget = -4;
-    fn_802AD400();
+    hideCursor();
     mArrow.requestOut();
     dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_STK_CHANGE_POUCH);
     mStateStep = 0;
@@ -831,9 +836,9 @@ void dLytDepositMain_c::setModeScroll(bool leftRight, bool viaButton) {
     mStock[STOCK_ACTIVE].field_0x684B = true;
     mStock[STOCK_ACTIVE].fn_80156530(false);
     if (viaButton) {
-        mArrow.fn_80168760();
+        mArrow.triggerArrowPress();
     }
-    fn_802AD400();
+    hideCursor();
     mHasScrolledOtherStocks = false;
     mStateMgr.changeState(StateID_ModeScroll);
     mIsIdle = false;
@@ -877,7 +882,7 @@ void dLytDepositMain_c::setModeOut() {
     mAnm[DEPOSIT_ANIM_BTN_DECIDE_00].setFrame(0.0f);
     mLyt.calc();
 
-    if (*mStateMgr.getStateID() == StateID_ModeChange) {
+    if (*mStateMgr.getStateID() == StateID_ModeCheck) {
         navigateOffIcon();
     } else {
         mStock[STOCK_ACTIVE].navigateOffIcon();
@@ -1018,7 +1023,7 @@ void dLytDepositMain_c::loadInitialState() {
     mIsPointingAtToPouchBounding = false;
     mIsFinishActive = false;
     mIsSellActive = false;
-    field_0x19525 = false;
+    mIsSortActive = false;
     field_0x19526 = false;
     field_0x19527 = false;
     field_0x19528 = false;
@@ -1076,9 +1081,11 @@ void dLytDepositMain_c::checkPointToPouch() {
         nw4r::math::MTX34 mtx = p->GetGlobalMtx();
         mVec3_c v(0.0f, 0.0f, 0.0f);
         MTXMultVec(mtx, v, v);
-        // TODO I hate vectors
-        mVec2_c pos = mVec2_c(v.x, v.y);
-        if (pos.squareDistanceTo(mCsPosition) < radius) {
+        // TODO maybe fake
+        mVec2_c pos2 = mVec2_c(v.x, v.y);
+        mVec2_c dist = pos2;
+        dist -= mCsPosition;
+        if (dist.squaredLength() < radius) {
             // TODO: field_0x19522 is always false at this point
             if (!mIsPointingAtToPouchBounding) {
                 dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
@@ -1088,7 +1095,7 @@ void dLytDepositMain_c::checkPointToPouch() {
     }
 }
 
-void dLytDepositMain_c::handleNavOrPoint() {
+void dLytDepositMain_c::checkPouchItems() {
     bool selectIcon = false;
     s32 nextTarget = 0;
     if (dPadNav::isPointerVisible()) {
@@ -1148,7 +1155,7 @@ void dLytDepositMain_c::handleNavOrPoint() {
                     case dPadNav::FS_STICK_DOWN_LEFT:
                         nextTarget = -1;
                         mStock[STOCK_ACTIVE].navigateToSell();
-                        fn_802AC980();
+                        loadCursor();
                         break;
                     case dPadNav::FS_STICK_LEFT:
                         nextTarget = mCurrentPouchNavTarget - 1;
@@ -1434,8 +1441,8 @@ void dLytDepositMain_c::checkSellOrFinish() {
                     case dPadNav::FS_STICK_UP:
                     case dPadNav::FS_STICK_UP_RIGHT: {
                         mStock[STOCK_ACTIVE].disableModeFinish();
-                        mArrow.setField_0x6B8(1);
-                        mStock[STOCK_ACTIVE].navigateToArrow(dLytDepositStock_c::ARROW_RIGHT);
+                        mArrow.setActiveArrow(1);
+                        mStock[STOCK_ACTIVE].navigateToArrow(dLytCommonArrow_c::ARROW_RIGHT);
                         dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
                         mStock[STOCK_ACTIVE].saveArrowDirection();
                         break;
@@ -1456,7 +1463,7 @@ void dLytDepositMain_c::checkSellOrFinish() {
         } else if (mStock[STOCK_ACTIVE].isModeSell()) {
             if (!mIsSellActive || field_0x1952A) {
                 dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingItem12);
-                mCursor.fn_801580A0();
+                mCursor.activateSell();
                 updateFlags = 2;
             } else if (field_0x1954C == 0) {
                 switch (direction) {
@@ -1482,8 +1489,8 @@ void dLytDepositMain_c::checkSellOrFinish() {
                 switch (direction) {
                     case dPadNav::FS_STICK_UP: {
                         mStock[STOCK_ACTIVE].disableModeSell();
-                        mArrow.setField_0x6B8(0);
-                        mStock[STOCK_ACTIVE].navigateToArrow(dLytDepositStock_c::ARROW_LEFT);
+                        mArrow.setActiveArrow(0);
+                        mStock[STOCK_ACTIVE].navigateToArrow(dLytCommonArrow_c::ARROW_LEFT);
                         dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
                         break;
                     }
@@ -1581,12 +1588,12 @@ void dLytDepositMain_c::selectPouchSlot(s32 slot) {
     mAnm[mCurrentPouchNavTarget + DEPOSIT_ANIM_FLASH_OFFSET].setAnimEnable(false);
 }
 
-void dLytDepositMain_c::returnCursorAfterCancellingSell(s32 targetSlot) {
+void dLytDepositMain_c::returnCursorAfterCancellingSell(s32 idx) {
     mStock[STOCK_ACTIVE].disableModeSell();
     if (dPadNav::isPointerVisible()) {
-        targetSlot -= 12;
+        idx -= 12;
     }
-    mStock[STOCK_ACTIVE].selectNavTarget(targetSlot);
+    mStock[STOCK_ACTIVE].selectNavTarget(idx);
     mStock[STOCK_ACTIVE].navigateToItem();
     s32 navTarget = mStock[STOCK_ACTIVE].getCurrentNavTarget();
     if (navTarget >= 0) {
@@ -1613,6 +1620,212 @@ s32 dLytDepositMain_c::calcNumDigits(s32 value) {
     return i;
 }
 
+void dLytDepositMain_c::checkSort() {
+    bool b = false;
+    dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
+    if (dPadNav::isPointerVisible()) {
+        if (d != nullptr && d->getType() == 'lyt ') {
+            if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBoundingCleanUp &&
+                mCurrentlyHoldingItemSlot < 0) {
+                mStock[STOCK_ACTIVE].navigateToSort();
+                mStock[STOCK_ACTIVE].disableModeSell();
+                mStock[STOCK_ACTIVE].disableModeFinish();
+                b = true;
+            }
+        }
+    } else {
+        if (mStock[STOCK_ACTIVE].isModeSort()) {
+            if (!mIsSortActive || field_0x1952A) {
+                dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingCleanUp);
+                b = true;
+            } else {
+                switch (dPadNav::getFSStickNavDirection()) {
+                    case dPadNav::FS_STICK_UP:
+                    case dPadNav::FS_STICK_UP_RIGHT:
+                        mStock[STOCK_ACTIVE].disableModeSort();
+                        returnCursorAfterCancellingSort(11);
+                        break;
+                    case dPadNav::FS_STICK_RIGHT:
+                    case dPadNav::FS_STICK_DOWN_RIGHT:
+                    case dPadNav::FS_STICK_DOWN:
+                        mStock[STOCK_ACTIVE].disableModeSort();
+                        mStock[STOCK_ACTIVE].navigateToFinish();
+                        dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingChoices);
+                        break;
+                    case dPadNav::FS_STICK_LEFT:
+                    case dPadNav::FS_STICK_UP_LEFT:
+                        mStock[STOCK_ACTIVE].disableModeSort();
+                        returnCursorAfterCancellingSort(10);
+                        break;
+                    case dPadNav::FS_STICK_NONE:
+                    case dPadNav::FS_STICK_DOWN_LEFT:
+                        dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingCleanUp);
+                        b = true;
+                        break;
+                }
+            }
+        }
+    }
+
+    if (b) {
+        if (!mIsSortActive) {
+            mAnm[DEPOSIT_ANIM_BTN_ON_OFF_01].setAnimEnable(true);
+            mAnm[DEPOSIT_ANIM_BTN_ON_OFF_01].setFrame(0.0f);
+            mAnm[DEPOSIT_ANIM_BTN_ON_OFF_01].setForwardOnce();
+            dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
+        }
+        dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingCleanUp);
+        mIsSortActive = true;
+    } else if (mIsSortActive) {
+        mAnm[DEPOSIT_ANIM_BTN_ON_OFF_01].setAnimEnable(true);
+        mAnm[DEPOSIT_ANIM_BTN_ON_OFF_01].setBackwardsOnce();
+        mStock[STOCK_ACTIVE].disableModeSort();
+        mIsSortActive = false;
+    }
+}
+
+void dLytDepositMain_c::returnCursorAfterCancellingSort(s32 idx) {
+    mStock[STOCK_ACTIVE].selectNavTarget(idx);
+    s32 target = mStock[STOCK_ACTIVE].getCurrentNavTarget();
+    mStock[STOCK_ACTIVE].navigateToItem();
+    if (target >= 0) {
+        dCsBase_c::GetInstance()->setCursorStickTargetPane(mpItemBoundings[target]);
+    }
+}
+
+void dLytDepositMain_c::checkArrows() {
+    if (dPadNav::isPointerVisible()) {
+        s32 pointArrow = mArrow.getPointedAtArrow();
+        if (pointArrow < dLytCommonArrow_c::ARROW_NONE) {
+            if (pointArrow != mStock[STOCK_ACTIVE].getArrowDirection()) {
+                mArrow.setActiveArrow(pointArrow);
+                dCsBase_c::GetInstance()->setCursorStickTargetPane(mArrow.getArrowBounding(pointArrow));
+                dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
+                mStock[STOCK_ACTIVE].navigateToArrow(pointArrow);
+                mStock[STOCK_ACTIVE].saveArrowDirection();
+            }
+        } else if (mStock[STOCK_ACTIVE].getArrowDirection() < dLytCommonArrow_c::ARROW_NONE) {
+            mStock[STOCK_ACTIVE].navigateToArrow(pointArrow);
+            mArrow.setActiveArrow(mArrow.getPointedAtArrow());
+        }
+
+    } else {
+        if (field_0x1952A && mStock[STOCK_ACTIVE].getSavedArrowDirection() < dLytCommonArrow_c::ARROW_NONE) {
+            s32 dir = mStock[STOCK_ACTIVE].restoreArrowDirection();
+            if (mStock[STOCK_ACTIVE].getArrowDirection() >= dLytCommonArrow_c::ARROW_NONE) {
+                mArrow.setActiveArrow(dir);
+                dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
+            }
+            dCsBase_c::GetInstance()->setCursorStickTargetPane(mArrow.getArrowBounding(dir));
+            if (mCurrentlyHoldingItemSlot >= 0) {
+                s32 slot = mCurrentlyHoldingItemSlot;
+                s32 loc;
+                if (slot < SLOT_STOCK_OFFSET) {
+                    loc = dLytDepositBoxCursor_c::LOC_POUCH;
+                } else {
+                    loc = dLytDepositBoxCursor_c::LOC_STOCK;
+                    slot -= SLOT_STOCK_OFFSET;
+                }
+                mCursor.updateSlot(loc, slot, LYT_CMN_PouchPotionHealthPlusPlusHalf, false);
+            }
+        } else if (mStock[STOCK_ACTIVE].getSavedArrowDirection() < dLytCommonArrow_c::ARROW_NONE) {
+            s32 dir = mStock[STOCK_ACTIVE].restoreArrowDirection();
+            dCsBase_c::GetInstance()->setCursorStickTargetPane(mArrow.getArrowBounding(dir));
+            if (mCurrentlyHoldingItemSlot >= 0) {
+                s32 slot = mCurrentlyHoldingItemSlot;
+                s32 loc;
+                if (slot < SLOT_STOCK_OFFSET) {
+                    loc = dLytDepositBoxCursor_c::LOC_POUCH;
+                } else {
+                    loc = dLytDepositBoxCursor_c::LOC_STOCK;
+                    slot -= SLOT_STOCK_OFFSET;
+                }
+                mCursor.updateSlot(loc, slot, LYT_CMN_PouchPotionHealthPlusPlusHalf, false);
+            }
+            mArrow.setActiveArrow(dir);
+            if (!field_0x1952A) {
+                switch (dPadNav::getFSStickNavDirection()) {
+                    case dPadNav::FS_STICK_UP_RIGHT:
+                    case dPadNav::FS_STICK_RIGHT:
+                        if (dir == dLytCommonArrow_c::ARROW_LEFT) {
+                            returnCursorAfterCancellingArrow(0);
+                        }
+                        break;
+                    case dPadNav::FS_STICK_DOWN_RIGHT:
+                        if (dir == dLytCommonArrow_c::ARROW_LEFT) {
+                            returnCursorAfterCancellingArrow(6);
+                        }
+                        break;
+                    case dPadNav::FS_STICK_DOWN:
+                        if (dir == dLytCommonArrow_c::ARROW_LEFT) {
+                            if (mItemSellValue != 0) {
+                                mArrow.setActiveArrow(dLytCommonArrow_c::ARROW_NONE);
+                                mStock[STOCK_ACTIVE].navigateToArrow(dLytCommonArrow_c::ARROW_NONE);
+                                mStock[STOCK_ACTIVE].navigateToSell();
+                                dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingItem12);
+                                loadCursor();
+                            }
+                        } else if (mCurrentlyHoldingItemSlot < 0) {
+                            mArrow.setActiveArrow(dLytCommonArrow_c::ARROW_NONE);
+                            mStock[STOCK_ACTIVE].navigateToArrow(dLytCommonArrow_c::ARROW_NONE);
+                            mStock[STOCK_ACTIVE].navigateToFinish();
+                            loadCursor();
+                        }
+                        break;
+                    case dPadNav::FS_STICK_LEFT:
+                    case dPadNav::FS_STICK_UP_LEFT:
+                        if (dir == dLytCommonArrow_c::ARROW_RIGHT) {
+                            returnCursorAfterCancellingArrow(5);
+                        }
+                        break;
+                    case dPadNav::FS_STICK_DOWN_LEFT:
+                        if (dir == dLytCommonArrow_c::ARROW_RIGHT) {
+                            returnCursorAfterCancellingArrow(11);
+                        }
+                        break;
+                }
+            }
+        }
+    }
+}
+
+void dLytDepositMain_c::loadCursor() {
+    if (mCurrentlyHoldingItemSlot >= 0) {
+        s32 slot;
+        s32 loc;
+        s32 item;
+        if (mCurrentlyHoldingItemSlot < SLOT_STOCK_OFFSET) {
+            slot = mCurrentlyHoldingItemSlot;
+            item = mPouchItemIds[mCurrentlyHoldingItemSlot];
+            loc = dLytDepositBoxCursor_c::LOC_POUCH;
+        } else {
+            slot = mCurrentlyHoldingItemSlot - SLOT_STOCK_OFFSET;
+            item = mStock[STOCK_ACTIVE].getActiveItem();
+            loc = dLytDepositBoxCursor_c::LOC_STOCK;
+        }
+        mCursor.updateSlot(loc, slot, item, mStock[STOCK_ACTIVE].isModeSell());
+    }
+}
+
+void dLytDepositMain_c::returnCursorAfterCancellingArrow(s32 idx) {
+    mArrow.setActiveArrow(dLytCommonArrow_c::ARROW_NONE);
+    mStock[STOCK_ACTIVE].navigateToArrow(dLytCommonArrow_c::ARROW_NONE);
+    mStock[STOCK_ACTIVE].selectNavTarget(idx);
+    mStock[STOCK_ACTIVE].setSavedArrowDirection(dLytCommonArrow_c::ARROW_NONE);
+    mStock[STOCK_ACTIVE].navigateToItem();
+    if (mStock[STOCK_ACTIVE].getCurrentNavTarget() >= 0) {
+        dCsBase_c::GetInstance()->setCursorStickTargetPane(mpItemBoundings[mStock[STOCK_ACTIVE].getCurrentNavTarget()]);
+    }
+}
+
+void dLytDepositMain_c::setPouchItemsVisible(bool visible) {
+    for (int i = 0; i < RING_NUM_ITEMS; i++) {
+        if (mPouchItemIds[i] < LYT_CMN_PouchPotionHealthPlusPlusHalf) {
+            mPouchItems[i].setVisible(visible);
+        }
+    }
+}
+
 void dLytDepositMain_c::checkForItemPickupOrDrop() {
     bool anyPickup = false;
 
@@ -1621,8 +1834,8 @@ void dLytDepositMain_c::checkForItemPickupOrDrop() {
         if (mCurrentlyHoldingItemSlot < 0) {
             // Not holding an item...
             if (mCurrentPouchNavTarget >= 0 && mPouchItemIds[mCurrentPouchNavTarget] != LYT_CMN_PouchBlank4 &&
-                // ... and picking up an item from the pouch
                 mPouchItemIds[mCurrentPouchNavTarget] != LYT_CMN_PouchPotionHealthPlusPlusHalf) {
+                // ... and picking up an item from the pouch
                 mCursorLocation = dLytDepositBoxCursor_c::LOC_POUCH;
                 field_0x19540 = convertLytPouchSlot2(mCurrentPouchNavTarget);
                 item = getPouchItemIdForIndex(mCurrentPouchNavTarget, false);
@@ -1803,7 +2016,9 @@ void dLytDepositMain_c::checkForItemPickupOrDrop() {
                             mStock[STOCK_ACTIVE].getPage()) {
                         returnCursorAfterCancellingSell(0);
                     } else {
-                        returnCursorAfterCancellingSell((mCurrentlyHoldingItemSlot - SLOT_STOCK_OFFSET) % NUM_ICONS_PER_PAGE);
+                        returnCursorAfterCancellingSell(
+                            (mCurrentlyHoldingItemSlot - SLOT_STOCK_OFFSET) % NUM_ICONS_PER_PAGE
+                        );
                     }
                 }
             }
@@ -1827,6 +2042,57 @@ void dLytDepositMain_c::checkForItemPickupOrDrop() {
             field_0x1952B = 1;
         }
     }
+}
+
+s32 dLytDepositMain_c::getItemSellValueFrame(s32 value) {
+    if (value >= 100) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+void dLytDepositMain_c::loadPageText() {
+    static wchar_t buf[4];
+    swprintf(buf, ARRAY_LENGTH(buf), L"%1d/5", mStock[STOCK_ACTIVE].getPage() + 1);
+    mLyt.getTextBox("T_page_00")->setTextWithGlobalTextProcessor(buf, nullptr);
+    mLyt.getTextBox("T_pageS_00")->setTextWithGlobalTextProcessor(buf, nullptr);
+}
+
+void dLytDepositMain_c::hideCursor() {
+    if (!dPadNav::isPointerVisible()) {
+        dPadNav::setCursorStickInvisible();
+        dCsBase_c::GetInstance()->setCursorStickVisible(false);
+        if (mCurrentlyHoldingItemSlot >= 0) {
+            mCursor.setVisible(false);
+        }
+    }
+}
+
+void dLytDepositMain_c::showCursor() {
+    if (!dPadNav::isPointerVisible()) {
+        dCsBase_c::GetInstance()->setCursorStickVisible(true);
+    }
+    dPadNav::setCursorStickVisible();
+    if (mCurrentlyHoldingItemSlot >= 0) {
+        mCursor.setVisible(true);
+    }
+}
+
+void dLytDepositMain_c::updateStockCursor() {
+    s32 navTarget = mStock[STOCK_ACTIVE].getCurrentNavTarget();
+    if (navTarget < 0) {
+        navTarget += 12;
+    }
+    s32 slot = navTarget + mStock[STOCK_ACTIVE].getPage() * NUM_ICONS_PER_PAGE;
+    s32 item;
+    item = mStock[STOCK_ACTIVE].getActiveItem();
+    if (mCurrentlyHoldingItemSlot >= 0 && slot == mCurrentlyHoldingItemSlot - SLOT_STOCK_OFFSET) {
+        item = LYT_CMN_PouchBlank4;
+    } else {
+        item = mStock[STOCK_ACTIVE].getItem(navTarget);
+    }
+    mCursor.updateSlot(dLytDepositBoxCursor_c::LOC_STOCK, slot, item, false);
 }
 
 STATE_DEFINE(dLytDeposit_c, None);
@@ -1985,6 +2251,8 @@ void dLytDeposit_c::finalizeState_Out() {}
 
 SPECIAL_BASE_PROFILE(LYT_DEPOSIT, dLytDeposit_c, fProfile::LYT_DEPOSIT, 0x2B9, 0);
 
+dLytDeposit_c *dLytDeposit_c::sInstance;
+
 bool dLytDeposit_c::build() {
     void *data = LayoutArcManager::GetInstance()->getLoadedData("Shop");
     mResAcc.attach(data, "");
@@ -2039,7 +2307,7 @@ bool dLytDeposit_c::checkForNavRight() {
         }
     }
 
-    if (dPad::getDownTrigA() && mMain.getArrowDirection() == dLytDepositStock_c::ARROW_RIGHT) {
+    if (dPad::getDownTrigA() && mMain.getArrowDirection() == dLytCommonArrow_c::ARROW_RIGHT) {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_STK_STOCK_SELECT_TURN_PAGE_RIGHT);
         mScrollViaArrowButton = true;
         return true;
@@ -2060,7 +2328,7 @@ bool dLytDeposit_c::checkForNavLeft() {
         }
     }
 
-    if (dPad::getDownTrigA() && mMain.getArrowDirection() == dLytDepositStock_c::ARROW_LEFT) {
+    if (dPad::getDownTrigA() && mMain.getArrowDirection() == dLytCommonArrow_c::ARROW_LEFT) {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_STK_STOCK_SELECT_TURN_PAGE_LEFT);
         mScrollViaArrowButton = true;
         return true;

@@ -77,7 +77,7 @@ bool dLytCommonArrow_c::execute() {
     mLytBase.calc();
     mCsHitCheck.resetCachedHitboxes();
     mCsHitCheck.execute();
-    field_0x6BC = field_0x6B8;
+    mLastActiveArrow = mActiveArrow;
     return true;
 }
 
@@ -121,9 +121,9 @@ bool dLytCommonArrow_c::requestOut() {
     return true;
 }
 
-bool dLytCommonArrow_c::fn_80168760() {
-    if (field_0x6C0 == ARROW_NONE && field_0x6B8 != ARROW_NONE) {
-        field_0x6C0 = field_0x6B8;
+bool dLytCommonArrow_c::triggerArrowPress() {
+    if (mTriggeredArrow == ARROW_NONE && mActiveArrow != ARROW_NONE) {
+        mTriggeredArrow = mActiveArrow;
         return true;
     }
     return false;
@@ -180,9 +180,9 @@ void dLytCommonArrow_c::initializeState_None() {
     mIsChangingState = false;
     mVisible = false;
     mPointedAtArrow = ARROW_NONE;
-    field_0x6B8 = ARROW_NONE;
-    field_0x6BC = ARROW_NONE;
-    field_0x6C0 = ARROW_NONE;
+    mActiveArrow = ARROW_NONE;
+    mLastActiveArrow = ARROW_NONE;
+    mTriggeredArrow = ARROW_NONE;
     mTimer = 0;
     displayElement(ANIM_IN, 0.0f);
     mBackwards = true;
@@ -241,11 +241,11 @@ void dLytCommonArrow_c::executeState_Wait() {
     }
 
     checkPointAtPane();
-    if (field_0x6B8 == ARROW_LEFT) {
+    if (mActiveArrow == ARROW_LEFT) {
         d2d::AnmGroup_c &g = mAnmGroups[ANIM_ONOFF_L];
         g.play();
         tickDown(&mAnmGroups[ANIM_ONOFF_R]);
-    } else if (field_0x6B8 == ARROW_RIGHT) {
+    } else if (mActiveArrow == ARROW_RIGHT) {
         d2d::AnmGroup_c &g = mAnmGroups[ANIM_ONOFF_R];
         g.play();
         tickDown(&mAnmGroups[ANIM_ONOFF_L]);
@@ -263,9 +263,9 @@ void dLytCommonArrow_c::executeState_Wait() {
 
     switch (mTimer) {
         case 0:
-            if (field_0x6C0 != ARROW_NONE) {
-                displayElement(field_0x6C0 + ANIM_DECIDE_OFFSET, 0.0f);
-                if (field_0x6C0 == 0) {
+            if (mTriggeredArrow != ARROW_NONE) {
+                displayElement(mTriggeredArrow + ANIM_DECIDE_OFFSET, 0.0f);
+                if (mTriggeredArrow == ARROW_LEFT) {
                     dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_SELECT_TURN_PAGE_LEFT);
                 } else {
                     dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_SELECT_TURN_PAGE_RIGHT);
@@ -274,7 +274,7 @@ void dLytCommonArrow_c::executeState_Wait() {
             }
             break;
         case 1: {
-            d2d::AnmGroup_c &g = mAnmGroups[field_0x6C0 + ANIM_DECIDE_OFFSET];
+            d2d::AnmGroup_c &g = mAnmGroups[mTriggeredArrow + ANIM_DECIDE_OFFSET];
             if (g.isEndReached() == true) {
                 mTimer++;
                 mIsChangingState = true;
@@ -282,15 +282,15 @@ void dLytCommonArrow_c::executeState_Wait() {
             g.play();
         } break;
         case 2:
-            unbindAt(field_0x6C0 + ANIM_DECIDE_OFFSET);
+            unbindAt(mTriggeredArrow + ANIM_DECIDE_OFFSET);
             mTimer = 0;
             mIsChangingState = false;
-            field_0x6C0 = ARROW_NONE;
+            mTriggeredArrow = ARROW_NONE;
             break;
     }
 
-    if (field_0x6BC != field_0x6B8 && field_0x6B8 != ARROW_NONE) {
-        if (field_0x6B8 == ARROW_LEFT) {
+    if (mLastActiveArrow != mActiveArrow && mActiveArrow != ARROW_NONE) {
+        if (mActiveArrow == ARROW_LEFT) {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_POINT_TURN_PAGE_LEFT);
         } else {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_POINT_TURN_PAGE_RIGHT);

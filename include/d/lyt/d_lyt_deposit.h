@@ -72,7 +72,7 @@ public:
     }
 
     bool getField_0x19525() const {
-        return field_0x19525;
+        return mIsSortActive;
     }
 
     bool getField_0x1952B() const {
@@ -94,33 +94,39 @@ private:
     static const s32 NUM_ICONS_PER_PAGE = 12;
     static const s32 NUM_PAGES = 5;
 
-    void setPouchItemsVisible(bool visible);
     void buildSubpanes();
-    void fn_802AD370();
-
+    void loadInitialState();
+    
+    void checkPouchItems();
     void checkPointToStock();
-    void handleNavOrPoint();
     void checkForItemPickupOrDrop();
     void checkSellOrFinish();
-
     void checkPointToPouch();
-    void fn_802AC3C0();
-    void fn_802AD4C0();
-    void loadItemText(s32 itemId, s32 where);
-    void fn_802AC670();
-    void returnCursorAfterCancellingSell(s32 targetSlot);
-    void fn_802AD460();
-    void loadStockItems(s32 hiddenSlot);
-    s32 getItemSellValueFrame(s32 value);
-    void selectPouchSlot(s32 slot);
-    void loadPouchItem(s32 slot);
-    void fn_8018ADA0(s32);
-    void loadInitialState();
-    void fn_802AD400();
-    void navigateOffIcon();
+    void checkSort();
+    void checkArrows();
     s32 checkNav();
-    void fn_802AC980();
-    s32 calcNumDigits(s32);
+    
+    void loadItemText(s32 itemId, s32 where);
+    void loadStockItems(s32 hiddenSlot);
+    void loadPouchItem(s32 slot);
+    void loadPageText();
+    
+    void setPouchItemsVisible(bool visible);
+    
+    void selectPouchSlot(s32 slot);
+    void navigateOffIcon();
+    
+    void updateStockCursor();
+    void showCursor();
+    void hideCursor();
+    void loadCursor();
+
+    void returnCursorAfterCancellingSell(s32 idx);
+    void returnCursorAfterCancellingSort(s32 idx);
+    void returnCursorAfterCancellingArrow(s32 idx);
+
+    s32 getItemSellValueFrame(s32 value);
+    s32 calcNumDigits(s32 value);
 
     STATE_FUNC_DECLARE(dLytDepositMain_c, ModeNone);
     STATE_FUNC_DECLARE(dLytDepositMain_c, ModeIn);
@@ -132,6 +138,8 @@ private:
     STATE_FUNC_DECLARE(dLytDepositMain_c, ModeRecycle);
     STATE_FUNC_DECLARE(dLytDepositMain_c, ModeArrangementOut);
     STATE_FUNC_DECLARE(dLytDepositMain_c, ModeOut);
+
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytDepositMain_c);
 
     /* 0x00004 */ UI_STATE_MGR_DECLARE(dLytDepositMain_c);
     /* 0x00040 */ d2d::LytBase_c mLyt;
@@ -163,7 +171,7 @@ private:
     /* 0x19522 */ bool mIsPointingAtToPouchBounding;
     /* 0x19523 */ bool mIsFinishActive;
     /* 0x19524 */ bool mIsSellActive;
-    /* 0x19525 */ bool field_0x19525;
+    /* 0x19525 */ bool mIsSortActive;
     /* 0x19526 */ bool field_0x19526;
     /* 0x19527 */ bool field_0x19527;
     /* 0x19528 */ bool field_0x19528;
@@ -217,6 +225,9 @@ private:
     STATE_FUNC_DECLARE(dLytDeposit_c, Recycle);
     STATE_FUNC_DECLARE(dLytDeposit_c, ArrangementOut);
     STATE_FUNC_DECLARE(dLytDeposit_c, Out);
+
+    STATE_MGR_DEFINE_UTIL_ISSTATE(dLytDeposit_c);
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytDeposit_c);
 
     /* 0x08C */ UI_STATE_MGR_DECLARE(dLytDeposit_c);
     /* 0x0C8 */ d2d::ResAccIf_c mResAcc;

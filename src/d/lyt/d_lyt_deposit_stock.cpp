@@ -4,6 +4,7 @@
 #include "d/d_pad_nav.h"
 #include "d/d_rumble.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_common_arrow.h"
 #include "d/lyt/d_lyt_common_icon_item.h"
 #include "d/lyt/d_lyt_common_icon_item_maps.h"
 #include "d/lyt/d_lyt_util_items.h"
@@ -99,14 +100,14 @@ bool dLytDepositStock_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x684C = true;
     field_0x684E = false;
 
-    mArrowDirection = ARROW_NONE;
+    mArrowDirection = dLytCommonArrow_c::ARROW_NONE;
 
     mIsModePouch = false;
     mIsModeSell = false;
     mIsModeSort = false;
     mIsModeFinish = false;
 
-    mSavedArrowDirection = ARROW_NONE;
+    mSavedArrowDirection = dLytCommonArrow_c::ARROW_NONE;
 
     navigateToItem();
 
@@ -278,7 +279,7 @@ void dLytDepositStock_c::fn_80156530(bool unk) {
         mIsModeSort = false;
     }
     mIsModeFinish = false;
-    if (mArrowDirection >= ARROW_NONE) {
+    if (mArrowDirection >= dLytCommonArrow_c::ARROW_NONE) {
         handleSpecialNavMode();
     }
 }
@@ -324,7 +325,7 @@ void dLytDepositStock_c::handleNavOrPoint() {
                         break;
                     case dPadNav::FS_STICK_RIGHT:
                         if (target % 6 == 5) {
-                            navigateToArrow(ARROW_RIGHT);
+                            navigateToArrow(dLytCommonArrow_c::ARROW_RIGHT);
                             saveArrowDirection();
                             dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
                         } else {
@@ -352,7 +353,7 @@ void dLytDepositStock_c::handleNavOrPoint() {
                         break;
                     case dPadNav::FS_STICK_LEFT:
                         if (target % 6 == 0) {
-                            navigateToArrow(ARROW_LEFT);
+                            navigateToArrow(dLytCommonArrow_c::ARROW_LEFT);
                             saveArrowDirection();
                             dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
                         } else {
@@ -374,7 +375,7 @@ void dLytDepositStock_c::handleNavOrPoint() {
     }
 
     if (selectIcon) {
-        mSavedArrowDirection = ARROW_NONE;
+        mSavedArrowDirection = dLytCommonArrow_c::ARROW_NONE;
         if (mCurrentNavTarget != nextTarget) {
             if (mCurrentNavTarget >= 0) {
                 mIcons[mCurrentNavTarget].setOff();
@@ -612,7 +613,7 @@ void dLytDepositStock_c::pickUpItem(s32 slot, bool unk) {
 
 void dLytDepositStock_c::navigateToPouch() {
     mIsModePouch = true;
-    mSavedArrowDirection = ARROW_NONE;
+    mSavedArrowDirection = dLytCommonArrow_c::ARROW_NONE;
 }
 
 void dLytDepositStock_c::navigateToSell() {
@@ -621,7 +622,7 @@ void dLytDepositStock_c::navigateToSell() {
     }
     mIsModeSell = true;
     mNavMode = NAV_SELL;
-    mSavedArrowDirection = ARROW_NONE;
+    mSavedArrowDirection = dLytCommonArrow_c::ARROW_NONE;
 }
 
 void dLytDepositStock_c::navigateToSort() {
@@ -630,7 +631,7 @@ void dLytDepositStock_c::navigateToSort() {
     }
     mIsModeSort = true;
     mNavMode = NAV_SORT;
-    mSavedArrowDirection = ARROW_NONE;
+    mSavedArrowDirection = dLytCommonArrow_c::ARROW_NONE;
 }
 
 void dLytDepositStock_c::navigateToFinish() {
@@ -639,7 +640,7 @@ void dLytDepositStock_c::navigateToFinish() {
     }
     mIsModeFinish = true;
     mNavMode = NAV_FINISH;
-    mSavedArrowDirection = ARROW_NONE;
+    mSavedArrowDirection = dLytCommonArrow_c::ARROW_NONE;
 }
 
 void dLytDepositStock_c::saveArrowDirection() {
@@ -648,13 +649,13 @@ void dLytDepositStock_c::saveArrowDirection() {
 
 void dLytDepositStock_c::navigateToArrow(s32 arrowDirection) {
     mArrowDirection = arrowDirection;
-    if (mArrowDirection < ARROW_NONE) {
+    if (mArrowDirection < dLytCommonArrow_c::ARROW_NONE) {
         mNavMode = NAV_ARROW;
     }
 }
 
 s32 dLytDepositStock_c::restoreArrowDirection() {
-    if (mSavedArrowDirection < ARROW_NONE && mArrowDirection >= ARROW_NONE) {
+    if (mSavedArrowDirection < dLytCommonArrow_c::ARROW_NONE && mArrowDirection >= dLytCommonArrow_c::ARROW_NONE) {
         navigateToArrow(mSavedArrowDirection);
     }
     return mArrowDirection;
@@ -670,7 +671,7 @@ void dLytDepositStock_c::handleSpecialNavMode() {
         case NAV_SORT:   navigateToSort(); break;
         case NAV_FINISH: navigateToFinish(); break;
         case NAV_ARROW:
-            if (mArrowDirection < ARROW_NONE) {
+            if (mArrowDirection < dLytCommonArrow_c::ARROW_NONE) {
                 saveArrowDirection();
             }
             break;

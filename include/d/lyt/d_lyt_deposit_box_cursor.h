@@ -32,9 +32,9 @@ public:
 
     bool draw();
 
-    void init(s32 location, s32 slot, s32 item, bool unk);
-    void updateSlot(s32 location, s32 slot, s32 item, bool unk2);
-    void fn_801580A0();
+    void init(s32 location, s32 slot, s32 item, bool isSell);
+    void updateSlot(s32 location, s32 slot, s32 item, bool isSell);
+    void activateSell();
 
     bool isVisible() const {
         return mIsVisible;
@@ -56,7 +56,7 @@ private:
     /* 0x930 */ d2d::SubPaneList mSubpaneList;
     /* 0x938 */ d2d::SubPaneListNode mNode;
     /* 0x948 */ bool mIsVisible;
-    /* 0x948 */ bool field_0x949;
+    /* 0x948 */ bool mIsSellMode;
     /* 0x94C */ s32 mSlot;
     /* 0x950 */ s32 mItem;
     /* 0x954 */ s32 mItemLocation;

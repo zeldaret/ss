@@ -2,19 +2,13 @@
 #define D_LYT_DEPOSIT_STOCK_H
 
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_common_arrow.h"
 #include "d/lyt/d_lyt_common_icon_item.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "s/s_State.hpp"
 
 class dLytDepositStock_c : public d2d::dSubPane {
 public:
-    enum ArrowDirection_e {
-        ARROW_LEFT,
-        ARROW_RIGHT,
-
-        ARROW_NONE,
-    };
-
     enum NavMode_e {
         NAV_ITEM,
         NAV_SELL,
@@ -104,14 +98,14 @@ public:
         mIsModeSell = false;
         mIsModeSort = false;
         mIsModePouch = false;
-        mSavedArrowDirection = ARROW_NONE;
+        mSavedArrowDirection = dLytCommonArrow_c::ARROW_NONE;
     }
 
     void disableSpecialModes() {
         mIsModeSell = false;
         mIsModeFinish = false;
         mIsModeSort = false;
-        mSavedArrowDirection = ARROW_NONE;
+        mSavedArrowDirection = dLytCommonArrow_c::ARROW_NONE;
     }
 
     u8 getItem(s32 idx) const {
@@ -140,6 +134,14 @@ public:
 
     s32 getArrowDirection() const {
         return mArrowDirection;
+    }
+
+    s32 getSavedArrowDirection() const {
+        return mSavedArrowDirection;
+    }
+
+    void setSavedArrowDirection(s32 dir) {
+        mSavedArrowDirection = dir;
     }
 
     void setMainStock(bool b) {

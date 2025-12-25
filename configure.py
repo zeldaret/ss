@@ -656,7 +656,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/d_lyt_boss_caption.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_demo_dowsing.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_shop.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_deposit.cpp"),
+            Object(Matching, "d/lyt/d_lyt_deposit.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_demo_title.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_end_roll.cpp"),
             Object(NonMatching, "toBeSorted/d_a_bullet.cpp"),

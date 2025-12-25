@@ -42,7 +42,7 @@ bool dLytDepositBoxCursor_c::build(d2d::ResAccIf_c *resAcc) {
     mpGetIconPane = mLyt.findPane("N_getIcon_00");
     initIcon();
     mIsVisible = false;
-    field_0x949 = false;
+    mIsSellMode = false;
     return true;
 }
 
@@ -117,7 +117,7 @@ void dLytDepositBoxCursor_c::realizeNav() {
         s = 4;
     } else if (mItem == LYT_CMN_PouchPotionHealthPlusPlusHalf) {
         s = 5;
-    } else if (field_0x949) {
+    } else if (mIsSellMode) {
         s = 6;
     } else if (mItemLocation == LOC_POUCH) {
         // Flip the cursor for pouch slot 0 so that it's not above the screen edge
@@ -148,9 +148,9 @@ void dLytDepositBoxCursor_c::realizeNav() {
     mAnm[DEPOSIT_BOX_CURSOR_ANIM_STICK_CURSOR].setAnimEnable(false);
 }
 
-void dLytDepositBoxCursor_c::init(s32 location, s32 slot, s32 item, bool unk) {
+void dLytDepositBoxCursor_c::init(s32 location, s32 slot, s32 item, bool isSell) {
     mItemLocation = location;
-    field_0x949 = unk;
+    mIsSellMode = isSell;
 
     s32 number;
     f32 durability;
@@ -188,10 +188,10 @@ void dLytDepositBoxCursor_c::init(s32 location, s32 slot, s32 item, bool unk) {
     mIsVisible = true;
 }
 
-void dLytDepositBoxCursor_c::updateSlot(s32 location, s32 slot, s32 item, bool unk2) {
+void dLytDepositBoxCursor_c::updateSlot(s32 location, s32 slot, s32 item, bool isSell) {
     mItem = item;
     mItemLocation = location;
-    field_0x949 = unk2;
+    mIsSellMode = isSell;
     if (mItemLocation == LOC_POUCH) {
         mSlot = slot;
     } else {
@@ -199,7 +199,7 @@ void dLytDepositBoxCursor_c::updateSlot(s32 location, s32 slot, s32 item, bool u
     }
 }
 
-void dLytDepositBoxCursor_c::fn_801580A0() {
-    field_0x949 = true;
+void dLytDepositBoxCursor_c::activateSell() {
+    mIsSellMode = true;
     realizeNav();
 }
