@@ -195,7 +195,7 @@ void dLytDepositMain_c::executeState_ModeCheck() {
     checkPointToStock();
     handleNavOrPoint();
     checkForItemPickupOrDrop();
-    fn_802ABB60();
+    checkSellOrFinish();
     mIsIdle = true;
 }
 void dLytDepositMain_c::finalizeState_ModeCheck() {}
@@ -253,7 +253,7 @@ void dLytDepositMain_c::executeState_ModeChange() {
             }
         }
         loadItemText(v, dLytDepositBoxCursor_c::LOC_STOCK);
-        fn_802ABB60();
+        checkSellOrFinish();
         fn_802AC670();
     } else {
         if (mAnm[DEPOSIT_ANIM_CHANGE].isStop() && mArrow.isChangingState()) {
@@ -271,7 +271,7 @@ void dLytDepositMain_c::executeState_ModeChange() {
             }
             dCsBase_c::GetInstance()->setCursorStickTargetPane(mpItemBoundings[target]);
             if (!dPadNav::isPointerVisible()) {
-                fn_802AC290(target);
+                returnCursorAfterCancellingSell(target);
             }
             fn_802AD460();
             fn_802AD4C0();
@@ -311,7 +311,7 @@ void dLytDepositMain_c::executeState_ModeReverseChange() {
         }
     } else {
         fn_802AD460();
-        fn_802AC0E0(4);
+        selectPouchSlot(4);
         mIsIdle = true;
     }
 }
@@ -588,8 +588,8 @@ bool dLytDepositMain_c::build(d2d::ResAccIf_c *resAcc) {
 
     mIsPointingAtToStockBounding = false;
     mIsPointingAtToPouchBounding = false;
-    field_0x19524 = false;
-    field_0x19523 = false;
+    mIsFinishActive = false;
+    mIsSellActive = false;
     field_0x19525 = false;
     field_0x19526 = false;
     field_0x19527 = false;
@@ -1016,8 +1016,8 @@ void dLytDepositMain_c::loadInitialState() {
     loadStockItems(mCurrentlyHoldingItemSlot - 8);
     mIsPointingAtToStockBounding = false;
     mIsPointingAtToPouchBounding = false;
-    field_0x19523 = false;
-    field_0x19524 = false;
+    mIsFinishActive = false;
+    mIsSellActive = false;
     field_0x19525 = false;
     field_0x19526 = false;
     field_0x19527 = false;
@@ -1358,173 +1358,10 @@ s32 dLytDepositMain_c::checkNav() {
     return direction;
 }
 
-void dLytDepositMain_c::fn_802ABB60() {
-    s32 updateFlags = 0;
-    dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
-    if (dPadNav::isPointerVisible()) {
-        if (d != nullptr && d->getType() == 'lyt ') {
-            if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBoundingChoices &&
-                mCurrentlyHoldingItemSlot < 0) {
-                mStock[STOCK_ACTIVE].navigateToFinish();
-                mStock[STOCK_ACTIVE].disableModeSort();
-                mStock[STOCK_ACTIVE].disableModeSell();
-                updateFlags = 1;
-            } else if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBoundingItem12 &&
-                       mItemSellValue != 0) {
-                mStock[STOCK_ACTIVE].navigateToSell();
-                mStock[STOCK_ACTIVE].disableModeFinish();
-                mStock[STOCK_ACTIVE].disableModeSort();
-                updateFlags = 2;
-            }
-        }
-    } else {
-        s32 direction = dPadNav::getFSStickNavDirection();
-        if (mStock[STOCK_ACTIVE].isModeFinish()) {
-            if (!field_0x19523 || field_0x1952A) {
-                dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingChoices);
-                updateFlags = 1;
-            } else if (field_0x1954C == 0) {
-                switch (direction) {
-                    case 1:
-                    case 8:
-                        mStock[STOCK_ACTIVE].disableModeFinish();
-                        fn_802AC0E0(2);
-                        break;
-                    case 7:
-                        mStock[STOCK_ACTIVE].disableModeFinish();
-                        fn_802AC0E0(3);
-                        break;
-                    default: updateFlags = 1; break;
-                }
-            } else {
-                switch (direction) {
-                    case 1:
-                    case 2: {
-                        mStock[STOCK_ACTIVE].disableModeFinish();
-                        mArrow.setField_0x6B8(1);
-                        mStock[STOCK_ACTIVE].navigateToArrow(dLytDepositStock_c::ARROW_RIGHT);
-                        dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
-                        mStock[STOCK_ACTIVE].saveArrowDirection();
-                        break;
-                    }
-                    case 7:
-                    case 8: {
-                        mStock[STOCK_ACTIVE].disableModeFinish();
-                        mStock[STOCK_ACTIVE].navigateToSort();
-                        dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingCleanUp);
-                        break;
-                    }
-                    default: {
-                        updateFlags = 1;
-                        break;
-                    }
-                }
-            }
-        } else if (mStock[STOCK_ACTIVE].isModeSell()) {
-            if (!field_0x19524 || field_0x1952A) {
-                dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingItem12);
-                mCursor.fn_801580A0();
-                updateFlags = 2;
-            } else if (field_0x1954C == 0) {
-                switch (direction) {
-                    case 1:
-                    case 2:
-                        mStock[STOCK_ACTIVE].disableModeSell();
-                        fn_802AC0E0(6);
-                        break;
-                    case 3:
-                        mStock[STOCK_ACTIVE].disableModeSell();
-                        fn_802AC0E0(5);
-                        break;
-                    case 4:
-                        if (mCurrentlyHoldingItemSlot < 0) {
-                            mStock[STOCK_ACTIVE].disableModeSell();
-                            mStock[STOCK_ACTIVE].navigateToFinish();
-                            dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingChoices);
-                        }
-                        break;
-                    default: updateFlags = 2; break;
-                }
-            } else {
-                switch (direction) {
-                    case 1: {
-                        mStock[STOCK_ACTIVE].disableModeSell();
-                        mArrow.setField_0x6B8(0);
-                        mStock[STOCK_ACTIVE].navigateToArrow(dLytDepositStock_c::ARROW_LEFT);
-                        dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
-                        break;
-                    }
-                    case 2:
-                    case 3: {
-                        mStock[STOCK_ACTIVE].disableModeSell();
-                        fn_802AC290(6);
-                        break;
-                    }
-                    default: {
-                        updateFlags = 2;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    if (updateFlags & 1) {
-        if (!field_0x19523) {
-            mAnm[DEPOSIT_ANIM_BTN_ON_OFF_00].setAnimEnable(true);
-            mAnm[DEPOSIT_ANIM_BTN_ON_OFF_00].setFrame(0.0f);
-            mAnm[DEPOSIT_ANIM_BTN_ON_OFF_00].setForwardOnce();
-            dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
-        }
-        dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingChoices);
-        field_0x19523 = true;
-    } else if (field_0x19523) {
-        mAnm[DEPOSIT_ANIM_BTN_ON_OFF_00].setAnimEnable(true);
-        mAnm[DEPOSIT_ANIM_BTN_ON_OFF_00].setBackwardsOnce();
-        mStock[STOCK_ACTIVE].disableModeFinish();
-        field_0x19523 = false;
-    }
-
-    if (updateFlags & 2) {
-        if (!field_0x19524 && mItemSellValue != 0) {
-            mAnm[DEPOSIT_ANIM_RECYCLE].setAnimEnable(true);
-            mAnm[DEPOSIT_ANIM_RECYCLE].setFrame(0.0f);
-            mAnm[DEPOSIT_ANIM_RECYCLE].setForwardOnce();
-            mpPaneABtn->SetVisible(true);
-            mpPanePrice->SetVisible(true);
-
-            dTextBox_c *box1, *box2;
-            box1 = mLyt.getTextBox("T_recycle_01");
-            box2 = mLyt.getTextBox("T_recycleS_01");
-            fn_802AC360(mItemSellValue);
-            static wchar_t buf[5];
-            swprintf(buf, ARRAY_LENGTH(buf), L"%d", mItemSellValue);
-            box1->setTextWithGlobalTextProcessor(buf, nullptr);
-            box2->setTextWithGlobalTextProcessor(buf, nullptr);
-            dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
-            if (field_0x1954C != 0) {
-                mArrow.setBackwards(false);
-            }
-        }
-        dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingItem12);
-        field_0x19524 = true;
-    } else {
-        if (field_0x19524) {
-            mAnm[DEPOSIT_ANIM_RECYCLE].setAnimEnable(true);
-            mAnm[DEPOSIT_ANIM_RECYCLE].setBackwardsOnce();
-            mStock[STOCK_ACTIVE].disableModeSell();
-            field_0x19524 = false;
-        }
-        if (field_0x1954C != 0) {
-            mArrow.setBackwards(true);
-        }
-    }
-}
-
 void dLytDepositMain_c::loadItemText(s32 itemId, s32 where) {
     dTextBox_c *box1, *box2;
 
-    if (where == 0) {
+    if (where == dLytDepositBoxCursor_c::LOC_POUCH) {
         box1 = mLyt.getTextBox("T_message_08");
         box2 = mLyt.getTextBox("T_messageS_08");
     } else {
@@ -1552,6 +1389,228 @@ void dLytDepositMain_c::loadItemText(s32 itemId, s32 where) {
         box1->setTextWithGlobalTextProcessor(str);
         box2->setTextWithGlobalTextProcessor(str);
     }
+}
+
+void dLytDepositMain_c::checkSellOrFinish() {
+    s32 updateFlags = 0;
+    dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
+    if (dPadNav::isPointerVisible()) {
+        if (d != nullptr && d->getType() == 'lyt ') {
+            if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBoundingChoices &&
+                mCurrentlyHoldingItemSlot < 0) {
+                mStock[STOCK_ACTIVE].navigateToFinish();
+                mStock[STOCK_ACTIVE].disableModeSort();
+                mStock[STOCK_ACTIVE].disableModeSell();
+                updateFlags = 1;
+            } else if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBoundingItem12 &&
+                       mItemSellValue != 0) {
+                mStock[STOCK_ACTIVE].navigateToSell();
+                mStock[STOCK_ACTIVE].disableModeFinish();
+                mStock[STOCK_ACTIVE].disableModeSort();
+                updateFlags = 2;
+            }
+        }
+    } else {
+        s32 direction = dPadNav::getFSStickNavDirection();
+        if (mStock[STOCK_ACTIVE].isModeFinish()) {
+            if (!mIsFinishActive || field_0x1952A) {
+                dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingChoices);
+                updateFlags = 1;
+            } else if (field_0x1954C == 0) {
+                switch (direction) {
+                    case dPadNav::FS_STICK_UP:
+                    case dPadNav::FS_STICK_UP_LEFT:
+                        mStock[STOCK_ACTIVE].disableModeFinish();
+                        selectPouchSlot(2);
+                        break;
+                    case dPadNav::FS_STICK_LEFT:
+                        mStock[STOCK_ACTIVE].disableModeFinish();
+                        selectPouchSlot(3);
+                        break;
+                    default: updateFlags = 1; break;
+                }
+            } else {
+                switch (direction) {
+                    case dPadNav::FS_STICK_UP:
+                    case dPadNav::FS_STICK_UP_RIGHT: {
+                        mStock[STOCK_ACTIVE].disableModeFinish();
+                        mArrow.setField_0x6B8(1);
+                        mStock[STOCK_ACTIVE].navigateToArrow(dLytDepositStock_c::ARROW_RIGHT);
+                        dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
+                        mStock[STOCK_ACTIVE].saveArrowDirection();
+                        break;
+                    }
+                    case dPadNav::FS_STICK_LEFT:
+                    case dPadNav::FS_STICK_UP_LEFT: {
+                        mStock[STOCK_ACTIVE].disableModeFinish();
+                        mStock[STOCK_ACTIVE].navigateToSort();
+                        dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingCleanUp);
+                        break;
+                    }
+                    default: {
+                        updateFlags = 1;
+                        break;
+                    }
+                }
+            }
+        } else if (mStock[STOCK_ACTIVE].isModeSell()) {
+            if (!mIsSellActive || field_0x1952A) {
+                dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingItem12);
+                mCursor.fn_801580A0();
+                updateFlags = 2;
+            } else if (field_0x1954C == 0) {
+                switch (direction) {
+                    case dPadNav::FS_STICK_UP:
+                    case dPadNav::FS_STICK_UP_RIGHT:
+                        mStock[STOCK_ACTIVE].disableModeSell();
+                        selectPouchSlot(6);
+                        break;
+                    case dPadNav::FS_STICK_RIGHT:
+                        mStock[STOCK_ACTIVE].disableModeSell();
+                        selectPouchSlot(5);
+                        break;
+                    case dPadNav::FS_STICK_DOWN_RIGHT:
+                        if (mCurrentlyHoldingItemSlot < 0) {
+                            mStock[STOCK_ACTIVE].disableModeSell();
+                            mStock[STOCK_ACTIVE].navigateToFinish();
+                            dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingChoices);
+                        }
+                        break;
+                    default: updateFlags = 2; break;
+                }
+            } else {
+                switch (direction) {
+                    case dPadNav::FS_STICK_UP: {
+                        mStock[STOCK_ACTIVE].disableModeSell();
+                        mArrow.setField_0x6B8(0);
+                        mStock[STOCK_ACTIVE].navigateToArrow(dLytDepositStock_c::ARROW_LEFT);
+                        dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
+                        break;
+                    }
+                    case dPadNav::FS_STICK_UP_RIGHT:
+                    case dPadNav::FS_STICK_RIGHT:    {
+                        mStock[STOCK_ACTIVE].disableModeSell();
+                        returnCursorAfterCancellingSell(6);
+                        break;
+                    }
+                    default: {
+                        updateFlags = 2;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    if (updateFlags & 1) {
+        if (!mIsFinishActive) {
+            mAnm[DEPOSIT_ANIM_BTN_ON_OFF_00].setAnimEnable(true);
+            mAnm[DEPOSIT_ANIM_BTN_ON_OFF_00].setFrame(0.0f);
+            mAnm[DEPOSIT_ANIM_BTN_ON_OFF_00].setForwardOnce();
+            dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
+        }
+        dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingChoices);
+        mIsFinishActive = true;
+    } else if (mIsFinishActive) {
+        mAnm[DEPOSIT_ANIM_BTN_ON_OFF_00].setAnimEnable(true);
+        mAnm[DEPOSIT_ANIM_BTN_ON_OFF_00].setBackwardsOnce();
+        mStock[STOCK_ACTIVE].disableModeFinish();
+        mIsFinishActive = false;
+    }
+
+    if (updateFlags & 2) {
+        if (!mIsSellActive && mItemSellValue != 0) {
+            mAnm[DEPOSIT_ANIM_RECYCLE].setAnimEnable(true);
+            mAnm[DEPOSIT_ANIM_RECYCLE].setFrame(0.0f);
+            mAnm[DEPOSIT_ANIM_RECYCLE].setForwardOnce();
+            mpPaneABtn->SetVisible(true);
+            mpPanePrice->SetVisible(true);
+
+            dTextBox_c *box1, *box2;
+            box1 = mLyt.getTextBox("T_recycle_01");
+            box2 = mLyt.getTextBox("T_recycleS_01");
+            (void)calcNumDigits(mItemSellValue);
+            static wchar_t buf[5];
+            swprintf(buf, ARRAY_LENGTH(buf), L"%d", mItemSellValue);
+            box1->setTextWithGlobalTextProcessor(buf, nullptr);
+            box2->setTextWithGlobalTextProcessor(buf, nullptr);
+            dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
+            if (field_0x1954C != 0) {
+                mArrow.setBackwards(false);
+            }
+        }
+        dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundingItem12);
+        mIsSellActive = true;
+    } else {
+        if (mIsSellActive) {
+            mAnm[DEPOSIT_ANIM_RECYCLE].setAnimEnable(true);
+            mAnm[DEPOSIT_ANIM_RECYCLE].setBackwardsOnce();
+            mStock[STOCK_ACTIVE].disableModeSell();
+            mIsSellActive = false;
+        }
+        if (field_0x1954C != 0) {
+            mArrow.setBackwards(true);
+        }
+    }
+}
+
+void dLytDepositMain_c::selectPouchSlot(s32 slot) {
+    dCsBase_c::GetInstance()->setCursorStickTargetPane(mpRingBoundings[slot]);
+    mStock[STOCK_ACTIVE].navigateToItem();
+    mCurrentPouchNavTarget = slot;
+    if (!dPadNav::isPointerVisible()) {
+        dRumble_c::start(dRumble_c::sRumblePreset1, dRumble_c::FLAG_SLOT0);
+    }
+    s32 item = mPouchItemIds[slot];
+    if (mCurrentPouchNavTarget >= 0) {
+        if (mCurrentlyHoldingItemSlot >= 0 && mCurrentlyHoldingItemSlot == mCurrentPouchNavTarget) {
+            item = LYT_CMN_PouchBlank4;
+        }
+        mCursor.updateSlot(dLytDepositBoxCursor_c::LOC_POUCH, mCurrentPouchNavTarget, item, false);
+    }
+    if (item != LYT_CMN_PouchBlank4 && item != LYT_CMN_PouchPotionHealthPlusPlusHalf && !dPadNav::isPointerVisible()) {
+        mPouchItems[slot].setOn();
+        loadItemText(getPouchItemIdForIndex(slot, false), dLytDepositBoxCursor_c::LOC_POUCH);
+    } else {
+        loadItemText(-1, dLytDepositBoxCursor_c::LOC_POUCH);
+    }
+
+    mAnm[mCurrentPouchNavTarget + DEPOSIT_ANIM_FLASH_OFFSET].setAnimEnable(true);
+    mAnm[mCurrentPouchNavTarget + DEPOSIT_ANIM_FLASH_OFFSET].setFrame(0.0f);
+    mLyt.calc();
+    mAnm[mCurrentPouchNavTarget + DEPOSIT_ANIM_FLASH_OFFSET].setAnimEnable(false);
+}
+
+void dLytDepositMain_c::returnCursorAfterCancellingSell(s32 targetSlot) {
+    mStock[STOCK_ACTIVE].disableModeSell();
+    if (dPadNav::isPointerVisible()) {
+        targetSlot -= 12;
+    }
+    mStock[STOCK_ACTIVE].selectNavTarget(targetSlot);
+    mStock[STOCK_ACTIVE].navigateToItem();
+    s32 navTarget = mStock[STOCK_ACTIVE].getCurrentNavTarget();
+    if (navTarget >= 0) {
+        dCsBase_c::GetInstance()->setCursorStickTargetPane(mpItemBoundings[navTarget]);
+        s32 item;
+        if (mCurrentlyHoldingItemSlot >= 0 && navTarget == mCurrentlyHoldingItemSlot - SLOT_STOCK_OFFSET) {
+            item = LYT_CMN_PouchBlank4;
+        } else {
+            item = mStock[STOCK_ACTIVE].getActiveItem();
+        }
+        mCursor.updateSlot(dLytDepositBoxCursor_c::LOC_STOCK, navTarget, item, false);
+    }
+}
+
+s32 dLytDepositMain_c::calcNumDigits(s32 value) {
+    int cmp = 1000;
+    int i = 4;
+    for (; i > 1; i--) {
+        if (value >= cmp) {
+            break;
+        }
+        cmp /= 10;
+    }
+    return i;
 }
 
 void dLytDepositMain_c::checkForItemPickupOrDrop() {
@@ -1730,21 +1789,21 @@ void dLytDepositMain_c::checkForItemPickupOrDrop() {
                 mAnm[DEPOSIT_ANIM_RECYCLE].setAnimEnable(true);
                 mAnm[DEPOSIT_ANIM_RECYCLE].setBackwardsOnce();
                 mStock[STOCK_ACTIVE].disableModeSell();
-                field_0x19524 = false;
+                mIsSellActive = false;
                 if (field_0x1954C == 0) {
                     // TODO: Why is this not >= ...
                     if (mCurrentlyHoldingItemSlot > SLOT_STOCK_OFFSET) {
-                        fn_802AC0E0(0);
+                        selectPouchSlot(0);
                     } else {
-                        fn_802AC0E0(mCurrentlyHoldingItemSlot);
+                        selectPouchSlot(mCurrentlyHoldingItemSlot);
                     }
                 } else {
                     if ((mCurrentlyHoldingItemSlot < SLOT_STOCK_OFFSET) ||
                         ((mCurrentlyHoldingItemSlot - SLOT_STOCK_OFFSET) / NUM_ICONS_PER_PAGE) !=
                             mStock[STOCK_ACTIVE].getPage()) {
-                        fn_802AC290(0);
+                        returnCursorAfterCancellingSell(0);
                     } else {
-                        fn_802AC290((mCurrentlyHoldingItemSlot - SLOT_STOCK_OFFSET) % NUM_ICONS_PER_PAGE);
+                        returnCursorAfterCancellingSell((mCurrentlyHoldingItemSlot - SLOT_STOCK_OFFSET) % NUM_ICONS_PER_PAGE);
                     }
                 }
             }

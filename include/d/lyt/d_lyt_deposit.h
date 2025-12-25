@@ -40,7 +40,7 @@ public:
     void setModeOut();
 
     bool isSellableItem() const {
-        return field_0x19524 && mItemSellValue > 0;
+        return mIsSellActive && mItemSellValue > 0;
     }
 
     s32 getArrowDirection() const {
@@ -68,7 +68,7 @@ public:
     }
 
     bool getField_0x19523() const {
-        return field_0x19523;
+        return mIsFinishActive;
     }
 
     bool getField_0x19525() const {
@@ -101,18 +101,18 @@ private:
     void checkPointToStock();
     void handleNavOrPoint();
     void checkForItemPickupOrDrop();
-    void fn_802ABB60();
+    void checkSellOrFinish();
 
     void checkPointToPouch();
     void fn_802AC3C0();
     void fn_802AD4C0();
     void loadItemText(s32 itemId, s32 where);
     void fn_802AC670();
-    void fn_802AC290(s32);
+    void returnCursorAfterCancellingSell(s32 targetSlot);
     void fn_802AD460();
     void loadStockItems(s32 hiddenSlot);
     s32 getItemSellValueFrame(s32 value);
-    void fn_802AC0E0(s32);
+    void selectPouchSlot(s32 slot);
     void loadPouchItem(s32 slot);
     void fn_8018ADA0(s32);
     void loadInitialState();
@@ -120,7 +120,7 @@ private:
     void navigateOffIcon();
     s32 checkNav();
     void fn_802AC980();
-    void fn_802AC360(s32);
+    s32 calcNumDigits(s32);
 
     STATE_FUNC_DECLARE(dLytDepositMain_c, ModeNone);
     STATE_FUNC_DECLARE(dLytDepositMain_c, ModeIn);
@@ -161,8 +161,8 @@ private:
     /* 0x19520 */ bool mIsIdle;
     /* 0x19521 */ bool mIsPointingAtToStockBounding;
     /* 0x19522 */ bool mIsPointingAtToPouchBounding;
-    /* 0x19523 */ bool field_0x19523;
-    /* 0x19524 */ bool field_0x19524;
+    /* 0x19523 */ bool mIsFinishActive;
+    /* 0x19524 */ bool mIsSellActive;
     /* 0x19525 */ bool field_0x19525;
     /* 0x19526 */ bool field_0x19526;
     /* 0x19527 */ bool field_0x19527;
