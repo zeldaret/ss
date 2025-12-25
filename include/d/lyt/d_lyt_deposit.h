@@ -48,7 +48,7 @@ public:
     }
 
     void setField_0x1952C(bool b) {
-        field_0x1952C = b;
+        mPreventCancellingSelection = b;
     }
 
     s32 getStateStep() const {
@@ -76,7 +76,7 @@ public:
     }
 
     bool getField_0x1952B() const {
-        return field_0x1952B;
+        return mDidDropCancelItem;
     }
 
     bool isHoldingItem() const {
@@ -172,23 +172,23 @@ private:
     /* 0x19523 */ bool mIsFinishActive;
     /* 0x19524 */ bool mIsSellActive;
     /* 0x19525 */ bool mIsSortActive;
-    /* 0x19526 */ bool field_0x19526;
+    /* 0x19526 */ bool mIsRecycleActive;
     /* 0x19527 */ bool field_0x19527;
-    /* 0x19528 */ bool field_0x19528;
-    /* 0x19529 */ bool mHasScrolledOtherStocks;
-    /* 0x1952A */ bool field_0x1952A;
-    /* 0x1952B */ bool field_0x1952B;
-    /* 0x1952C */ bool field_0x1952C;
+    /* 0x19528 */ bool mIsArrangementDone;
+    /* 0x19529 */ bool mHasHandledScrollTempItems;
+    /* 0x1952A */ bool mPrevPointerVisible;
+    /* 0x1952B */ bool mDidDropCancelItem;
+    /* 0x1952C */ bool mPreventCancellingSelection;
     /* 0x19530 */ s32 mCurrentPouchNavTarget;
-    /* 0x19534 */ s32 mCurrentlyHoldingItemSlot;
+    /* 0x19534 */ s32 mCurrentlyHoldingItemSlot; // encoded with SLOT_STOCK_OFFSET
     /* 0x19538 */ s32 mStateStep;
     /* 0x1953C */ s32 mCursorLocation;
-    /* 0x19540 */ UNKWORD field_0x19540;
+    /* 0x19540 */ s32 mCurrentlyHoldingStockOrPouchSlot; // always raw slot
     /* 0x19544 */ s32 mItemSellValue;
-    /* 0x19548 */ UNKWORD field_0x19548;
-    /* 0x1954C */ UNKWORD field_0x1954C;
-    /* 0x19550 */ UNKWORD field_0x19550;
-    /* 0x19554 */ UNKWORD field_0x19554;
+    /* 0x19548 */ UNKWORD field_0x19548; // always -1
+    /* 0x1954C */ s32 mNextLocation;
+    /* 0x19550 */ s32 mChangeCooldown;
+    /* 0x19554 */ s32 mDroppedStockSlot;
     /* 0x19558 */ u8 mPouchItemIds[RING_NUM_ITEMS];
 };
 

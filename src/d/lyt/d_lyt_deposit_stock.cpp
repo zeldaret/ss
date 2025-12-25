@@ -18,7 +18,7 @@ STATE_DEFINE(dLytDepositStock_c, None);
 
 void dLytDepositStock_c::initializeState_None() {}
 void dLytDepositStock_c::executeState_None() {
-    field_0x6844 = true;
+    mIsIdle = true;
 }
 void dLytDepositStock_c::finalizeState_None() {}
 
@@ -92,13 +92,13 @@ bool dLytDepositStock_c::build(d2d::ResAccIf_c *resAcc) {
 
     mCurrentNavTarget = -12;
     mSelectedItemId = -1;
-    field_0x685C = -1;
+    mPickedUpIdx = -1;
 
     mIsSellBlocked = false;
     mIsSortBlocked = false;
-    field_0x684B = false;
-    field_0x684C = true;
-    field_0x684E = false;
+    mPreventCancellingSelection = false;
+    mPrevPointerVisible = true;
+    mPickedUpItemOnThisPage = false;
 
     mArrowDirection = dLytCommonArrow_c::ARROW_NONE;
 
@@ -115,7 +115,7 @@ bool dLytDepositStock_c::build(d2d::ResAccIf_c *resAcc) {
 }
 
 bool dLytDepositStock_c::execute() {
-    for (int i = 0; i < field_0x6854; i++) {
+    for (int i = 0; i < mNumSlots; i++) {
         mNodes[i].mpLytPane->execute();
     }
 
@@ -135,7 +135,7 @@ bool dLytDepositStock_c::execute() {
 
     mLyt.calc();
 
-    field_0x684C = dPadNav::isPointerVisible();
+    mPrevPointerVisible = dPadNav::isPointerVisible();
 
     return true;
 }
@@ -181,7 +181,7 @@ void dLytDepositStock_c::initIcons() {
         }
     }
 
-    for (int i = 0; i < field_0x6854; i++) {
+    for (int i = 0; i < mNumSlots; i++) {
         mNodes[i].mpPane->SetVisible(false);
     }
 }
@@ -189,8 +189,8 @@ void dLytDepositStock_c::initIcons() {
 void dLytDepositStock_c::loadItems(s32 hiddenSlot) {
     s32 slot = mItemPage * NUM_ICONS_PER_PAGE;
 
-    field_0x6854 = 0;
-    field_0x684E = false;
+    mNumSlots = 0;
+    mPickedUpItemOnThisPage = false;
 
     for (int i = 0; i < NUM_ICONS_PER_PAGE; i++) {
         mIcons[i].reset();
@@ -214,7 +214,7 @@ void dLytDepositStock_c::loadItems(s32 hiddenSlot) {
         mAnm[i + DEPOSIT_STOCK_ANIM_HAVE_BOX_OFFSET].setAnimEnable(false);
 
         slot++;
-        field_0x6854++;
+        mNumSlots++;
     }
 }
 
@@ -241,21 +241,21 @@ void dLytDepositStock_c::loadIcon(s32 idx) {
     }
 }
 
-void dLytDepositStock_c::nextPage(bool unk) {
+void dLytDepositStock_c::nextPage(bool preventCancellingSelection) {
     mItemPage++;
     if (mItemPage >= NUM_PAGES) {
         mItemPage = 0;
     }
-    field_0x684B = unk;
+    mPreventCancellingSelection = preventCancellingSelection;
 }
 
-void dLytDepositStock_c::prevPage(bool unk) {
+void dLytDepositStock_c::prevPage(bool preventCancellingSelection) {
     if (mItemPage != 0) {
         mItemPage--;
     } else {
         mItemPage = NUM_PAGES - 1;
     }
-    field_0x684B = unk;
+    mPreventCancellingSelection = preventCancellingSelection;
 }
 
 void dLytDepositStock_c::fn_80156530(bool unk) {
@@ -263,7 +263,7 @@ void dLytDepositStock_c::fn_80156530(bool unk) {
         mIcons[i].setVisible(unk);
     }
 
-    if (!field_0x684B) {
+    if (!mPreventCancellingSelection) {
         if (mCurrentNavTarget >= 0) {
             mAnm[mCurrentNavTarget + DEPOSIT_STOCK_ANIM_FLASH_OFFSET].setAnimEnable(true);
             mSelectedItemId = -1;
@@ -271,7 +271,7 @@ void dLytDepositStock_c::fn_80156530(bool unk) {
         mCurrentNavTarget = -10;
     }
 
-    field_0x684B = false;
+    mPreventCancellingSelection = false;
     mIsModePouch = false;
     mIsModeSell = false;
     if (!mIsModeSort) {
@@ -301,7 +301,7 @@ void dLytDepositStock_c::handleNavOrPoint() {
             handleSpecialNavMode();
         } else if (!mIsModePouch && !mIsModeSell && !mIsModeSort && !mIsModeFinish && mSavedArrowDirection >= 2) {
             s32 target = mCurrentNavTarget;
-            if (target < 0 || field_0x684C) {
+            if (target < 0 || mPrevPointerVisible) {
                 if (dir != dPadNav::FS_STICK_NONE || dCsBase_c::GetInstance()->isCursorStickVisible()) {
                     if (target < 0) {
                         target += NUM_ICONS_PER_PAGE;
@@ -533,7 +533,7 @@ void dLytDepositStock_c::setItem(s32 idx, s32 item) {
     mItemIds[idx] = item;
     realizeItem(idx);
     mIcons[idx].setOn();
-    field_0x684E = false;
+    mPickedUpItemOnThisPage = false;
 }
 
 void dLytDepositStock_c::realizeItem(s32 idx) {
@@ -567,37 +567,37 @@ void dLytDepositStock_c::selectNavTarget(s32 idx) {
     }
 }
 
-void dLytDepositStock_c::pickUpItem(s32 slot, bool unk) {
+void dLytDepositStock_c::pickUpOrPlaceItem(s32 slot, bool place) {
     s32 page = slot / NUM_ICONS_PER_PAGE;
     s32 idx = slot % NUM_ICONS_PER_PAGE;
-    if (unk) {
-        mNodes[idx].mpPane->SetVisible(unk);
+    if (place) {
+        mNodes[idx].mpPane->SetVisible(place);
     }
 
     if (mItemPage != page) {
-        if (unk) {
-            field_0x684E = false;
+        if (place) {
+            mPickedUpItemOnThisPage = false;
         }
     } else {
         s32 item = mItemIds[idx];
         f32 frame;
-        if (unk) {
+        if (place) {
             // TODO why LYT_CMN_PouchPotionHealthPlusPlusHalf
             if (item != LYT_CMN_PouchPotionHealthPlusPlusHalf && item != LYT_CMN_PouchBlank4) {
                 frame = 1.0f;
-                if (field_0x684E) {
-                    s32 otherIdx = field_0x685C % NUM_ICONS_PER_PAGE;
+                if (mPickedUpItemOnThisPage) {
+                    s32 otherIdx = mPickedUpIdx % NUM_ICONS_PER_PAGE;
                     mIcons[idx].setItem(mItemIds[otherIdx]);
-                    field_0x684E = false;
+                    mPickedUpItemOnThisPage = false;
                 }
             } else {
                 frame = 0.0f;
             }
-            field_0x685C = -1;
+            mPickedUpIdx = -1;
         } else {
-            field_0x685C = slot;
+            mPickedUpIdx = slot;
             frame = 0.0f;
-            field_0x684E = true;
+            mPickedUpItemOnThisPage = true;
             mIcons[idx].setOff();
             mIcons[idx].setHasNumber(false);
             mIcons[idx].setItem(LYT_CMN_PouchBlank4);

@@ -34,8 +34,8 @@ public:
         return mLyt.getName();
     }
 
-    void nextPage(bool unk);
-    void prevPage(bool unk);
+    void nextPage(bool preventCancellingSelection);
+    void prevPage(bool preventCancellingSelection);
     void fn_80156530(bool unk);
     
     void navigateToItem();
@@ -50,10 +50,11 @@ public:
     void navigateOffIcon();
     void handleNavOrPoint();
 
-    void pickUpItem(s32 slot, bool unk);
+    void pickUpOrPlaceItem(s32 slot, bool place);
     void selectNavTarget(s32 idx);
     void setItem(s32 idx, s32 item);
     s32 getCurrentSlot() const;
+    void loadItems(s32 hiddenSlot);
 
     STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dLytDepositStock_c);
 
@@ -147,13 +148,20 @@ public:
     void setMainStock(bool b) {
         mIsMainStock = b;
     }
+    
+    void onDropItem() {
+        mPickedUpItemOnThisPage = false;
+    }
 
-//private:
+    void setPreventCancellingSelection() {
+        mPreventCancellingSelection = true;
+    }
+
+private:
     static const s32 NUM_ICONS_PER_PAGE = 12;
     static const s32 NUM_PAGES = 5;
 
     void initIcons();
-    void loadItems(s32 hiddenSlot);
     void loadIcon(s32 idx);
     void navigateToPouch();
     void realizeItem(s32 idx);
@@ -173,21 +181,21 @@ public:
     /* 0x0718 */ dLytCommonIconItem_c mIcons[NUM_ICONS_PER_PAGE];
     /* 0x6778 */ d2d::SubPaneList mSubpaneList;
     /* 0x6784 */ d2d::SubPaneListNode mNodes[NUM_ICONS_PER_PAGE];
-    /* 0x6844 */ bool field_0x6844;
+    /* 0x6844 */ bool mIsIdle;
     /* 0x6845 */ bool mIsModePouch;
     /* 0x6846 */ bool mIsModeSell;
     /* 0x6847 */ bool mIsModeSort;
     /* 0x6848 */ bool mIsModeFinish;
     /* 0x6849 */ bool mIsSellBlocked;
     /* 0x684A */ bool mIsSortBlocked;
-    /* 0x684B */ bool field_0x684B;
-    /* 0x684C */ bool field_0x684C;
+    /* 0x684B */ bool mPreventCancellingSelection;
+    /* 0x684C */ bool mPrevPointerVisible;
     /* 0x684D */ bool mIsMainStock;
-    /* 0x684E */ bool field_0x684E;
+    /* 0x684E */ bool mPickedUpItemOnThisPage;
     /* 0x6850 */ s32 mCurrentNavTarget;
-    /* 0x6854 */ UNKWORD field_0x6854;
+    /* 0x6854 */ s32 mNumSlots;
     /* 0x6858 */ s32 mSelectedItemId;
-    /* 0x685C */ UNKWORD field_0x685C;
+    /* 0x685C */ s32 mPickedUpIdx;
     /* 0x6860 */ s32 mArrowDirection;
     /* 0x6864 */ s32 mSavedArrowDirection;
     /* 0x6868 */ s32 mNavMode;
