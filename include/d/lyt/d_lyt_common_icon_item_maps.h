@@ -55,7 +55,7 @@
 #define LYT_CMN_ItemInvalid (18)     // -------------------------
 
 // Pouch Items
-#define LYT_CMN_PouchPotionHealyh (0)              // [12] uc_bottleKusuriA_00.tpl
+#define LYT_CMN_PouchPotionHealth (0)              // [12] uc_bottleKusuriA_00.tpl
 #define LYT_CMN_PouchBottle (1)                    // [ 5] uc_bottleEmpty_00.tpl
 #define LYT_CMN_PouchShieldWoodA (2)               // [39] uc_shieldWoodA_00.tpl
 #define LYT_CMN_PouchShieldIronA (3)               // [36] uc_shieldIronA_00.tpl
@@ -68,8 +68,8 @@
 #define LYT_CMN_PouchPotionAirPlus (10)            // [ 4] uc_bottleAirB_00.tpl
 #define LYT_CMN_PouchPotionStaminaPlus (11)        // [ 8] uc_bottleGutsB_00.tpl
 #define LYT_CMN_PouchBlank4 (12)                   // [ 0] tr_black4_00.tpl
-#define LYT_CMN_PouchPotionGaurdian (13)           // [16] uc_bottleMutekiA_00.tpl
-#define LYT_CMN_PouchPotionGaurdianPlus (14)       // [17] uc_bottleMutekiB_00.tpl
+#define LYT_CMN_PouchPotionGuardian (13)           // [16] uc_bottleMutekiA_00.tpl
+#define LYT_CMN_PouchPotionGuardianPlus (14)       // [17] uc_bottleMutekiB_00.tpl
 #define LYT_CMN_PouchShieldWoodB (15)              // [40] uc_shieldWoodB_00.tpl
 #define LYT_CMN_PouchShieldWoodC (16)              // [41] uc_shieldWoodC_00.tpl
 #define LYT_CMN_PouchShieldIronB (17)              // [37] uc_shieldIronB_00.tpl
