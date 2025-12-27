@@ -43,13 +43,13 @@ dCcD_SrcCyl dAcOsoil_c::sCylSrc = {
      {0, 0x111, {0, 0, 0x407}, 0, 0},
      /* mObjCo */ {0xC9}},
     /* mCylInf */
-    {10.0f, 15.0f}
+    {10.f, 15.f}
 };
 
 s32 useUnused() {
     static const f32 a1[] = {
-        240,
-        240,
+        240.f,
+        240.f,
     };
     static const s32 a2[] = {
         1,
@@ -144,8 +144,8 @@ int dAcOsoil_c::actorCreate() {
     mStts.SetRank(0);
     mCollider.Set(sCylSrc);
     mCollider.SetStts(mStts);
-    mAcceleration = 0;
-    mMaxSpeed = -40;
+    mAcceleration = 0.f;
+    mMaxSpeed = -40.f;
     updateMatrix();
     if (isSubtypeVentOrDrop()) {
         mModels[MODEL_DUG_UP].setLocalMtx(mWorldMtx);
@@ -154,12 +154,12 @@ int dAcOsoil_c::actorCreate() {
         mModels[MODEL_COVERED].setLocalMtx(mWorldMtx);
     }
     if (dScGame_c::currentSpawnInfo.stageName == "F200") {
-        static const mVec3_c posOnSkyloft(-7301, 3768, -9309);
-        if (mPosition.squareDistance(posOnSkyloft) < 360000.f) {
+        static const mVec3_c posInEldin(-7301.f, 3768.f, -9309.f);
+        if (mPosition.squareDistance(posInEldin) < 360000.f) {
             mHideWhenCameraNear = true;
         }
     }
-    mBoundingBox.Set(mVec3_c(-100, -10, -100), mVec3_c(100, 50, 100));
+    mBoundingBox.Set(mVec3_c(-100.f, -10.f, -100.f), mVec3_c(100.f, 50.f, 100.f));
     if (mAlwaysLoaded) {
         s32 roomId = mRoomID;
         if (addActorToRoom(-1) != 0) {
@@ -184,7 +184,7 @@ int dAcOsoil_c::actorPostCreate() {
         }
     }
     if (mDowsingStateRelated == 2) {
-        mDowsingTarget.initialize(DowsingTarget::SLOT_QUEST, 0, nullptr, 5000);
+        mDowsingTarget.initialize(DowsingTarget::SLOT_QUEST, 0, nullptr, 5000.f);
         if (mItemSubtype == ITEMTYPE_KEY_PIECE && !DowsingTarget::hasKeyPieceDowsing()) {
             mDowsingStateRelated = 1;
             unsetActorProperty(AC_PROP_0x1);
@@ -198,7 +198,7 @@ int dAcOsoil_c::actorPostCreate() {
             tgInsect = static_cast<dTgInsect_c*>(fManager_c::searchBaseByProfName(fProfile::TAG_INSECT, tgInsect));
             if (tgInsect != nullptr) {
                 f32 dist = tgInsect->mPosition.squareDistanceToXZ(mPosition);
-                if (dist < 10000) {
+                if (dist < 10000.f) {
                     mInsectLink.link(tgInsect);
                     break;
                 }
@@ -217,7 +217,7 @@ int dAcOsoil_c::actorPostCreate() {
         unsetActorProperty(AC_PROP_0x1);
     }
     mPositionCopy2 = mPosition;
-    mPositionCopy2.y += 5;
+    mPositionCopy2.y += 5.f;
     mPositionCopy3 = mPositionCopy2;
     return SUCCEEDED;
 }
@@ -265,7 +265,7 @@ int dAcOsoil_c::actorExecute() {
         bool hit = false;
         checkCoHit(&hit);
         if (!hit && mStateMgr.isState(StateID_Soil)) {
-            dAcPy_c::addDigInteractionTarget(this, 240);
+            dAcPy_c::addDigInteractionTarget(this, 240.f);
         }
     }
     mCollider.SetC(mPosition);
@@ -364,7 +364,7 @@ void dAcOsoil_c::initializeState_Ready() {
     mInteractionDisabled = true;
     if (isSubtypeVentOrDrop()) {
         mMtx_c tmpMtx = mWorldMtx;
-        tmpMtx.transM(0, 0.2f, 0);
+        tmpMtx.transM(0.f, 0.2f, 0.f);
         mModels[MODEL_COVERED].setLocalMtx(tmpMtx);
     }
     if (mModelIndex == MODEL_COVERED) {
@@ -416,7 +416,7 @@ void dAcOsoil_c::tryLinkTbox() {
     if (mSubtype == SUBTYPE_TBOX && !mHasTriedTboxLink) {
         mHasTriedTboxLink = true;
         dAcTbox_c* tbox = nullptr;
-        f32 minDist = 100;
+        f32 minDist = 100.f;
         do {
             tbox = static_cast<dAcTbox_c*>(fManager_c::searchBaseByProfName(fProfile::TBOX, tbox));
             if (tbox != nullptr) {
@@ -476,7 +476,7 @@ void dAcOsoil_c::giveItemFinal() {
 
 void dAcOsoil_c::calcItemAndInsectSpawnPos() {
     mItemAndInsectSpawnPos = mPosition;
-    mItemAndInsectSpawnPos.offsetWithAngle(dAcPy_c::LINK->getRotation().y, 30);
+    mItemAndInsectSpawnPos.offsetWithAngle(dAcPy_c::LINK->getRotation().y, 30.f);
 }
 
 void dAcOsoil_c::fn_255_1A50() {
@@ -572,11 +572,11 @@ void dAcOsoil_c::handleModelsOpacities() {
         if (camera != nullptr) {
             f32 dist = (camera->getPositionMaybe() - mPosition).y * (1.f / 80.f);
             if (dist < 0.1f) {
-                dist = 0;
+                dist = 0.f;
             } else if (dist > 1) {
-                dist = 1;
+                dist = 1.f;
             }
-            mColors[mModelIndex].a = 255 * dist;
+            mColors[mModelIndex].a = 255.f * dist;
             mModels[mModelIndex].setTevColorAll(GX_TEVREG1, mColors[mModelIndex], false);
             mLightingInfo.setTev1Color(mColors[mModelIndex]);
         }
