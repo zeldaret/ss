@@ -18,6 +18,18 @@ public:
         SERVICE_SHIELD_REPAIR,
     };
 
+    struct ShopUpgradeMaterialCost {
+        /* 0x0 */ s16 itemId;
+        /* 0x2 */ s16 amount;
+    };
+
+    struct ShopUpgradeCosts {
+        /* 0x0 */ s16 newItemId;
+        /* 0x2 */ s16 oldItemId;
+        /* 0x4 */ s16 price;
+        /* 0x6 */ ShopUpgradeMaterialCost matCosts[4];
+    };
+
 private:
     enum Phase_e {
         PHASE_SELECT_ITEM,
@@ -43,12 +55,12 @@ public:
         return mService;
     }
 
-    bool getField_0x116DD() const {
-        return field_0x116DD;
+    bool isCancel() const {
+        return mIsCancel;
     }
 
-    bool getField_0x116DE() const {
-        return field_0x116DE;
+    bool isConfirm() const {
+        return mIsConfirm;
     }
 
     void retry() {
@@ -64,29 +76,34 @@ public:
     void setModeOut();
     void setModeInOut();
 
+    ShopUpgradeCosts getSelectedUpgradeCosts() const;
+    s32 getCurrentlySelectedPouchItemId() const;
+    bool isMaterialCheck() const;
+
 private:
     static const s32 NUM_ITEMS = 12;
+    static const s32 NUM_MATERIAL_CHECK_ITEMS = 8;
 
     void buildSubpanes();
     void handleNavigation();
     s32 checkNav();
     void buildMaterialCheckIcons(d2d::ResAccIf_c *resAcc, u8 variant);
-    
+
     void addItemToDisplayed(s32 itemIdx, s32 itemKind, s32 pouchSlot);
-    void updateShopStuffMaybe();
+    void displayMaterialCheck();
     void prepareRemodelStoreStuff(s32 service);
-    void showShopLytMaybe();
-    void showPriceMaybe(s32 value);
-    
+    void loadMaterialCheckItemText();
+    void loadPrice(s32 value);
+
     s32 getItemTier(s32 item);
     s32 calcNumDigits(s32 value);
 
-    void fn_802A5CA0(bool);
-    void fn_802A5BD0();
-    s32 fn_802A4490(s32);
-    s32 fn_802A4500(s32);
-    s32 fn_802A5760(u8);
-    s32 fn_802A5780(u8);
+    void hideUpgradeCostPanes();
+    void setShowCancelButtons(bool show);
+    s32 getItemIndex(s32 id);
+    s32 getItemKind(s32 index);
+    s32 getItemIconOffset(u8 variant);
+    s32 getMaterialIconOffset(u8 variant);
 
     STATE_FUNC_DECLARE(dLytShopMain_c, ModeNone);
     STATE_FUNC_DECLARE(dLytShopMain_c, ModeSelectIn);
@@ -113,11 +130,11 @@ private:
     /* 0x11610 */ d2d::SubPaneList mUpgradeList;
     /* 0x1161C */ d2d::SubPaneListNode mUpgradeNodes[12];
     /* 0x116DC */ bool mIsIdle;
-    /* 0x116DD */ bool field_0x116DD;
-    /* 0x116DE */ bool field_0x116DE;
+    /* 0x116DD */ bool mIsCancel;
+    /* 0x116DE */ bool mIsConfirm;
     /* 0x116DF */ bool mUpgradeLoaded;
     /* 0x116E0 */ bool mPrevPointerVisible;
-    /* 0x116E1 */ bool field_0x116E1;
+    /* 0x116E1 */ bool mShowCancelBtns;
     /* 0x116E4 */ s32 mPhase;
     /* 0x116E8 */ s32 mCurrentNavTarget;
     /* 0x116EC */ s32 mStateStep;
@@ -125,11 +142,11 @@ private:
     /* 0x116F4 */ s32 mService;
     /* 0x116F8 */ s32 mItemCount;
     /* 0x116FC */ s32 mUpgradeCostCount;
-    /* 0x11700 */ UNKWORD field_0x11700;
+    /* 0x11700 */ s32 mConfirmedNavTarget;
     /* 0x11704 */ s32 mItemUpgradeIdxes[NUM_ITEMS];
     /* 0x11734 */ s32 mItemPouchSlots[NUM_ITEMS];
     /* 0x11764 */ u8 mItemKinds[NUM_ITEMS];
-    /* 0x11770 */ u8 field_0x11770[8];
+    /* 0x11770 */ u8 mMaterialCheckItemKinds[NUM_MATERIAL_CHECK_ITEMS];
 };
 
 class dLytShop_c : public dLytBase_c {
@@ -148,6 +165,10 @@ public:
     virtual int execute() override;
     virtual int draw() override;
     virtual int doDelete() override;
+
+    dLytShopMain_c::ShopUpgradeCosts getSelectedUpgradeCosts() const;
+
+    // TODO - add more inlines for REL 44
 
 private:
     static dLytShop_c *sInstance;

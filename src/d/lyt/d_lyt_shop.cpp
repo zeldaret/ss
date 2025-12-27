@@ -1,3 +1,8 @@
+// clang-format off
+// need this vtable order so that stripped vtable alignment gaps work out
+#include "d/lyt/d2d.h"
+// clang-format on
+
 #include "d/lyt/d_lyt_shop.h"
 
 #include "common.h"
@@ -11,7 +16,6 @@
 #include "d/d_pad.h"
 #include "d/d_pad_nav.h"
 #include "d/d_rumble.h"
-#include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_common_icon_item.h"
 #include "d/lyt/d_lyt_common_icon_item_maps.h"
 #include "d/lyt/d_lyt_common_icon_material.h"
@@ -30,24 +34,12 @@
 
 #include <cwchar>
 
-struct ShopUpgradeMaterialCost {
-    /* 0x0 */ s16 itemId;
-    /* 0x2 */ s16 amount;
-};
-
-struct ShopUpgradeCosts {
-    /* 0x0 */ s16 newItemId;
-    /* 0x2 */ s16 oldItemId;
-    /* 0x4 */ s16 price;
-    /* 0x6 */ ShopUpgradeMaterialCost matCosts[4];
-};
-
 struct ShopUpgradeItemData {
     /* 0x0 */ s32 itemId;
     /* 0x4 */ bool canBeUpgraded;
 };
 
-static const ShopUpgradeCosts sGearUpgrades[] = {
+static const dLytShopMain_c::ShopUpgradeCosts sGearUpgrades[] = {
     {      ITEM_BANDED_SHIELD,
      ITEM_WOODEN_SHIELD,  30,
      {
@@ -194,7 +186,7 @@ static const ShopUpgradeCosts sGearUpgrades[] = {
      }},
 };
 
-static const ShopUpgradeCosts sPotionUpgrades[] = {
+static const dLytShopMain_c::ShopUpgradeCosts sPotionUpgrades[] = {
     {            ITEM_HEART_POTION_PLUS,
      ITEM_HEART_POTION, 20,
      {
@@ -406,59 +398,36 @@ STATE_DEFINE(dLytShopMain_c, ModeMaterialCheck);
 STATE_DEFINE(dLytShopMain_c, ModeOut);
 STATE_DEFINE(dLytShopMain_c, ModeInOut);
 
-static const char *sLytNames[] = {
-    "itemSelect_00.brlyt",
-    "materialCheck_00.brlyt",
-    "shopInfo_00.brlyt",
-};
+#define SHOP_ITEM_SELECT_ANIM_IN 0
+#define SHOP_ITEM_SELECT_ANIM_BTN 1
+#define SHOP_ITEM_SELECT_ANIM_BTN_B 2
+#define SHOP_ITEM_SELECT_ANIM_BTN_LOOP 3
+#define SHOP_ITEM_SELECT_BTN_DECIDE 4
+#define SHOP_ITEM_SELECT_ANIM_OUT 5
+#define SHOP_ITEM_SELECT_ANIM_LOOP 6
+#define SHOP_ITEM_SELECT_ANIM_BTN_CANCEL 7
 
-static const d2d::LytBrlanMapping brlanMapItemSelect[] = {
-    {        "itemSelect_00_in.brlan",     "G_inOut_00"},
-    {  "itemSelect_00_btnOnOff.brlan",       "G_btn_00"},
-    {  "itemSelect_00_btnOnOff.brlan",    "G_onOffB_00"},
-    {   "itemSelect_00_btnLoop.brlan",   "G_btnLoop_00"},
-    { "itemSelect_00_btnDecide.brlan",       "G_btn_00"},
-    {       "itemSelect_00_out.brlan",     "G_inOut_00"},
-    {      "itemSelect_00_loop.brlan",      "G_loop_00"},
-    { "itemSelect_00_btnCancel.brlan", "G_btnCancel_00"},
-    {"itemSelect_00_shopChange.brlan",    "G_change_00"},
-};
+#define SHOP_MATERIAL_CHECK_ANIM_IN 0
+#define SHOP_MATERIAL_CHECK_ANIM_OUT 1
+#define SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_00 2
+#define SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_01 3
+#define SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_B 4
+#define SHOP_MATERIAL_CHECK_ANIM_BTN_DECIDE_00 5
+#define SHOP_MATERIAL_CHECK_ANIM_BTN_DECIDE_01 6
+#define SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_00 7
+#define SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_01 8
+#define SHOP_MATERIAL_CHECK_ANIM_LOOP 9
+#define SHOP_MATERIAL_CHECK_ANIM_KETA 10
+#define SHOP_MATERIAL_CHECK_ANIM_ITEM_FLAG 11
+#define SHOP_MATERIAL_CHECK_ANIM_ITEM_NUMBER 15
+#define SHOP_MATERIAL_CHECK_ANIM_BTN_CANCEL 16
+#define SHOP_MATERIAL_CHECK_ANIM_SHOP_CHANGE 17
 
-static const d2d::LytBrlanMapping brlanMapMaterialCheck[] = {
-    {        "materialCheck_00_in.brlan",      "G_inOut_00"},
-    {       "materialCheck_00_out.brlan",      "G_inOut_00"},
-    {  "materialCheck_00_btnOnOff.brlan",        "G_btn_00"},
-    {  "materialCheck_00_btnOnOff.brlan",        "G_btn_01"},
-    {  "materialCheck_00_btnOnOff.brlan",     "G_onOffB_00"},
-    { "materialCheck_00_btnDecide.brlan",        "G_btn_00"},
-    { "materialCheck_00_btnDecide.brlan",        "G_btn_01"},
-    {   "materialCheck_00_btnLoop.brlan",    "G_btnLoop_00"},
-    {   "materialCheck_00_btnLoop.brlan",    "G_btnLoop_01"},
-    {      "materialCheck_00_loop.brlan",       "G_loop_00"},
-    {      "materialCheck_00_keta.brlan",       "G_keta_00"},
-    {  "materialCheck_00_itemFlag.brlan",   "G_itemFlag_00"},
-    {  "materialCheck_00_itemFlag.brlan",   "G_itemFlag_01"},
-    {  "materialCheck_00_itemFlag.brlan",   "G_itemFlag_02"},
-    {  "materialCheck_00_itemFlag.brlan",   "G_itemFlag_03"},
-    {"materialCheck_00_itemNumber.brlan", "G_itemNumber_00"},
-    { "materialCheck_00_btnCancel.brlan",  "G_btnCancel_00"},
-    {"materialCheck_00_shopChange.brlan",     "G_change_00"},
-};
+#define SHOP_INFO_ANIM_IN 0
+#define SHOP_INFO_ANIM_OUT 1
 
-static const d2d::LytBrlanMapping brlanMapShopInfo[] = {
-    { "shopInfo_00_in.brlan", "G_inOut_00"},
-    {"shopInfo_00_out.brlan", "G_inOut_00"},
-};
-
-static const char *sItemSelectBoundings[] = {
-    "B_item_00", "B_item_01", "B_item_02", "B_item_03", "B_item_04", "B_item_05",    "B_item_06",
-    "B_item_07", "B_item_08", "B_item_09", "B_item_10", "B_item_11", "B_choices_00",
-};
-
-static const char *sMaterialCheckChoiceBoundings[] = {
-    "B_choices_00",
-    "B_choices_01",
-};
+#define SHOP_MATERIAL_CHECK_BOUNDING_CHOICE_00 0
+#define SHOP_MATERIAL_CHECK_BOUNDING_CHOICE_01 1
 
 #define SHOP_MATERIAL_CHECK_CHOICE_NUM_BOUNDINGS 2
 
@@ -485,9 +454,9 @@ void dLytShopMain_c::finalizeState_ModeNone() {}
 
 void dLytShopMain_c::initializeState_ModeSelectIn() {}
 void dLytShopMain_c::executeState_ModeSelectIn() {
-    if (mAnmItemSelect[0].isEndReached() && mAnmShopInfo[0].isEndReached()) {
-        mAnmItemSelect[0].setAnimEnable(false);
-        mAnmShopInfo[0].setAnimEnable(false);
+    if (mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_IN].isEndReached() && mAnmShopInfo[SHOP_INFO_ANIM_IN].isEndReached()) {
+        mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_IN].setAnimEnable(false);
+        mAnmShopInfo[SHOP_INFO_ANIM_IN].setAnimEnable(false);
 
         for (int i = 0; i < NUM_ITEMS; i++) {
             mpItemBoundings[i + SHOP_ITEM_SELECT_BOUNDING_ITEM_OFFSET]->SetVisible(false);
@@ -501,19 +470,19 @@ void dLytShopMain_c::finalizeState_ModeSelectIn() {}
 
 void dLytShopMain_c::initializeState_ModeSelectCheck() {
     mCurrentNavTarget = -12;
-    field_0x116DD = false;
-    field_0x116DE = false;
-    field_0x11700 = false;
+    mIsCancel = false;
+    mIsConfirm = false;
+    mConfirmedNavTarget = 0;
 }
 void dLytShopMain_c::executeState_ModeSelectCheck() {
     if (dPad::getDownTrigB()) {
-        field_0x116DD = true;
-        fn_802A5CA0(false);
+        mIsCancel = true;
+        setShowCancelButtons(false);
         mIsIdle = true;
     } else if (dPad::getDownTrigA() && mCurrentNavTarget >= 0 &&
-               (mCurrentNavTarget < mItemCount || mCurrentNavTarget == 12)) {
-        if (mCurrentNavTarget == 12) {
-            field_0x116DD = true;
+               (mCurrentNavTarget < mItemCount || mCurrentNavTarget == SHOP_ITEM_SELECT_BOUNDING_CHOICES)) {
+        if (mCurrentNavTarget == SHOP_ITEM_SELECT_BOUNDING_CHOICES) {
+            mIsCancel = true;
         }
         mIsIdle = true;
     } else {
@@ -528,12 +497,12 @@ void dLytShopMain_c::finalizeState_ModeSelectCheck() {}
 
 void dLytShopMain_c::initializeState_ModeSelectOut() {}
 void dLytShopMain_c::executeState_ModeSelectOut() {
-    if (field_0x116DD) {
-        if (mAnmItemSelect[4].isEndReached()) {
+    if (mIsCancel) {
+        if (mAnmItemSelect[SHOP_ITEM_SELECT_BTN_DECIDE].isEndReached()) {
             mUpgradeIdx = 0;
             mItemCount = 0;
             if (mCurrentNavTarget == 12) {
-                mAnmItemSelect[1].setAnimEnable(false);
+                mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN].setAnimEnable(false);
             }
             mCurrentNavTarget = -13;
             mIsIdle = true;
@@ -550,37 +519,37 @@ void dLytShopMain_c::finalizeState_ModeSelectOut() {}
 void dLytShopMain_c::initializeState_ModeOutIn() {}
 void dLytShopMain_c::executeState_ModeOutIn() {
     if (mStateStep == 0) {
-        bool b = false;
-        if (field_0x116DD) {
-            if (mAnmItemSelect[4].isEndReached()) {
-                mAnmItemSelect[4].setAnimEnable(false);
-                b = true;
+        bool showMaterialCheck = false;
+        if (mIsCancel) {
+            if (mAnmItemSelect[SHOP_ITEM_SELECT_BTN_DECIDE].isEndReached()) {
+                mAnmItemSelect[SHOP_ITEM_SELECT_BTN_DECIDE].setAnimEnable(false);
+                showMaterialCheck = true;
             }
         } else {
             s32 offset = mItemKinds[mCurrentNavTarget] == dLytCommonIconItem_c::B_WHEEL ? 0 : 12;
             if (mBWheelOrPouchItemIcons[mCurrentNavTarget + offset].isDoneDeciding()) {
-                b = true;
+                showMaterialCheck = true;
                 mUpgradeIdx = mItemUpgradeIdxes[mCurrentNavTarget];
             }
         }
 
-        if (b) {
-            mAnmItemSelect[5].setAnimEnable(true);
-            mAnmItemSelect[5].setFrame(0.0f);
-            mAnmItemSelect[1].setAnimEnable(true);
-            mAnmItemSelect[1].setFrame(0.0f);
-            mAnmItemSelect[3].setAnimEnable(true);
-            mAnmItemSelect[3].setFrame(0.0f);
+        if (showMaterialCheck) {
+            mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_OUT].setAnimEnable(true);
+            mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_OUT].setFrame(0.0f);
+            mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN].setAnimEnable(true);
+            mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN].setFrame(0.0f);
+            mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN_LOOP].setAnimEnable(true);
+            mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN_LOOP].setFrame(0.0f);
             mLyts[SHOP_LYT_ITEM_SELECT].calc();
-            mAnmItemSelect[1].setAnimEnable(false);
-            mAnmItemSelect[3].setAnimEnable(false);
+            mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN].setAnimEnable(false);
+            mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN_LOOP].setAnimEnable(false);
 
-            mAnmMaterialCheck[0].setAnimEnable(true);
-            mAnmMaterialCheck[0].setFrame(0.0f);
-            mAnmMaterialCheck[16].setAnimEnable(true);
-            mAnmMaterialCheck[16].setFrame(1.0f);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_IN].setAnimEnable(true);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_IN].setFrame(0.0f);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_CANCEL].setAnimEnable(true);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_CANCEL].setFrame(1.0f);
 
-            updateShopStuffMaybe();
+            displayMaterialCheck();
 
             f32 f;
             if (mService != SERVICE_POTION_INFUSE) {
@@ -593,16 +562,17 @@ void dLytShopMain_c::executeState_ModeOutIn() {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_MDS_P2_APPEAR);
             }
 
-            mAnmMaterialCheck[17].setAnimEnable(true);
-            mAnmMaterialCheck[17].setFrame(f);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_SHOP_CHANGE].setAnimEnable(true);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_SHOP_CHANGE].setFrame(f);
             mLyts[SHOP_LYT_MATERIAL_CHECK].calc();
-            mAnmMaterialCheck[17].setAnimEnable(false);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_SHOP_CHANGE].setAnimEnable(false);
             mStateStep = 1;
         }
     } else {
-        if (mAnmItemSelect[5].isEndReached() && mAnmMaterialCheck[0].isEndReached()) {
-            mAnmItemSelect[5].setAnimEnable(false);
-            mAnmMaterialCheck[0].setAnimEnable(false);
+        if (mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_OUT].isEndReached() &&
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_IN].isEndReached()) {
+            mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_OUT].setAnimEnable(false);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_IN].setAnimEnable(false);
 
             s32 offset = mItemKinds[mCurrentNavTarget] == dLytCommonIconItem_c::B_WHEEL ? 0 : 12;
             mBWheelOrPouchItemIcons[mCurrentNavTarget + offset].setOff();
@@ -618,16 +588,16 @@ void dLytShopMain_c::finalizeState_ModeOutIn() {}
 
 void dLytShopMain_c::initializeState_ModeMaterialCheck() {
     mCurrentNavTarget = -2;
-    field_0x116DD = false;
-    field_0x116DE = false;
+    mIsCancel = false;
+    mIsConfirm = false;
 }
 void dLytShopMain_c::executeState_ModeMaterialCheck() {
     if (dPad::getDownTrigB()) {
-        if (field_0x116DE) {
-            mAnmMaterialCheck[3].setBackwardsOnce();
+        if (mIsConfirm) {
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_01].setBackwardsOnce();
         }
-        field_0x116DD = true;
-        fn_802A5CA0(false);
+        mIsCancel = true;
+        setShowCancelButtons(false);
         mIsIdle = true;
     } else if (dPad::getDownTrigA() && mCurrentNavTarget >= 0) {
         if (mCurrentNavTarget != 0) {
@@ -647,26 +617,26 @@ void dLytShopMain_c::finalizeState_ModeMaterialCheck() {}
 void dLytShopMain_c::initializeState_ModeOut() {}
 void dLytShopMain_c::executeState_ModeOut() {
     if (mStateStep == 0) {
-        if (mAnmMaterialCheck[6].isEndReached()) {
-            mAnmMaterialCheck[6].setAnimEnable(false);
-            mAnmMaterialCheck[1].setAnimEnable(true);
-            mAnmMaterialCheck[1].setFrame(0.0f);
-            mAnmMaterialCheck[3].setAnimEnable(true);
-            mAnmMaterialCheck[3].setFrame(0.0f);
+        if (mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_DECIDE_01].isEndReached()) {
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_DECIDE_01].setAnimEnable(false);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_OUT].setAnimEnable(true);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_OUT].setFrame(0.0f);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_01].setAnimEnable(true);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_01].setFrame(0.0f);
             mLyts[SHOP_LYT_MATERIAL_CHECK].calc();
-            mAnmMaterialCheck[3].setAnimEnable(false);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_01].setAnimEnable(false);
 
-            mAnmShopInfo[1].setAnimEnable(true);
-            mAnmShopInfo[1].setFrame(0.0f);
+            mAnmShopInfo[SHOP_INFO_ANIM_OUT].setAnimEnable(true);
+            mAnmShopInfo[SHOP_INFO_ANIM_OUT].setFrame(0.0f);
             mLyts[SHOP_LYT_SHOP_INFO].calc();
             dCsBase_c::GetInstance()->setVisible(false);
             mStateStep = 1;
         }
     } else {
-        if (mAnmMaterialCheck[1].isEndReached()) {
-            mAnmMaterialCheck[1].setAnimEnable(false);
-            mAnmShopInfo[1].setAnimEnable(false);
-            fn_802A5BD0();
+        if (mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_OUT].isEndReached()) {
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_OUT].setAnimEnable(false);
+            mAnmShopInfo[SHOP_INFO_ANIM_OUT].setAnimEnable(false);
+            hideUpgradeCostPanes();
             mIsIdle = true;
         }
     }
@@ -676,28 +646,28 @@ void dLytShopMain_c::finalizeState_ModeOut() {}
 void dLytShopMain_c::initializeState_ModeInOut() {}
 void dLytShopMain_c::executeState_ModeInOut() {
     if (mStateStep == 0) {
-        if (mAnmMaterialCheck[5].isEndReached()) {
-            mAnmMaterialCheck[5].setAnimEnable(false);
+        if (mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_DECIDE_00].isEndReached()) {
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_DECIDE_00].setAnimEnable(false);
 
-            mAnmItemSelect[0].setAnimEnable(true);
-            mAnmItemSelect[0].setFrame(0.0f);
+            mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_IN].setAnimEnable(true);
+            mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_IN].setFrame(0.0f);
             mLyts[SHOP_LYT_ITEM_SELECT].calc();
 
-            mAnmMaterialCheck[1].setAnimEnable(true);
-            mAnmMaterialCheck[1].setFrame(0.0f);
-            mAnmMaterialCheck[2].setAnimEnable(true);
-            mAnmMaterialCheck[2].setFrame(0.0f);
-            mAnmMaterialCheck[3].setAnimEnable(true);
-            mAnmMaterialCheck[3].setFrame(0.0f);
-            mAnmMaterialCheck[7].setAnimEnable(true);
-            mAnmMaterialCheck[7].setFrame(0.0f);
-            mAnmMaterialCheck[8].setAnimEnable(true);
-            mAnmMaterialCheck[8].setFrame(0.0f);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_OUT].setAnimEnable(true);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_OUT].setFrame(0.0f);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_00].setAnimEnable(true);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_00].setFrame(0.0f);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_01].setAnimEnable(true);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_01].setFrame(0.0f);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_00].setAnimEnable(true);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_00].setFrame(0.0f);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_01].setAnimEnable(true);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_01].setFrame(0.0f);
             mLyts[SHOP_LYT_MATERIAL_CHECK].calc();
-            mAnmMaterialCheck[2].setAnimEnable(false);
-            mAnmMaterialCheck[3].setAnimEnable(false);
-            mAnmMaterialCheck[7].setAnimEnable(false);
-            mAnmMaterialCheck[8].setAnimEnable(false);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_00].setAnimEnable(false);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_01].setAnimEnable(false);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_00].setAnimEnable(false);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_01].setAnimEnable(false);
 
             if (mService == SERVICE_POTION_INFUSE) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_MDS_P1_APPEAR);
@@ -705,14 +675,15 @@ void dLytShopMain_c::executeState_ModeInOut() {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_JNK_RC_P1_APPEAR);
             }
 
-            fn_802A5CA0(true);
+            setShowCancelButtons(true);
             mStateStep = 1;
         }
     } else {
-        if (mAnmItemSelect[0].isEndReached() && mAnmMaterialCheck[1].isEndReached()) {
-            mAnmItemSelect[0].setAnimEnable(false);
-            mAnmMaterialCheck[1].setAnimEnable(false);
-            fn_802A5BD0();
+        if (mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_IN].isEndReached() &&
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_OUT].isEndReached()) {
+            mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_IN].setAnimEnable(false);
+            mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_OUT].setAnimEnable(false);
+            hideUpgradeCostPanes();
             mPhase = PHASE_SELECT_ITEM;
             dPadNav::setNavEnabled(true, false);
             mIsIdle = true;
@@ -724,8 +695,64 @@ void dLytShopMain_c::finalizeState_ModeInOut() {}
 dLytShopMain_c::dLytShopMain_c() : mStateMgr(*this) {}
 
 bool dLytShopMain_c::build(d2d::ResAccIf_c *resAcc) {
+    // This works only if sLytNames is defined inside of ::build, otherwise we get instruction
+    // order problems. I really don't want to change all the other files right now but maybe we'll
+    // do it for consistency later.
+    static const char *sLytNames[] = {
+        "itemSelect_00.brlyt",
+        "materialCheck_00.brlyt",
+        "shopInfo_00.brlyt",
+    };
+
+    static const d2d::LytBrlanMapping brlanMapItemSelect[] = {
+        {        "itemSelect_00_in.brlan",     "G_inOut_00"},
+        {  "itemSelect_00_btnOnOff.brlan",       "G_btn_00"},
+        {  "itemSelect_00_btnOnOff.brlan",    "G_onOffB_00"},
+        {   "itemSelect_00_btnLoop.brlan",   "G_btnLoop_00"},
+        { "itemSelect_00_btnDecide.brlan",       "G_btn_00"},
+        {       "itemSelect_00_out.brlan",     "G_inOut_00"},
+        {      "itemSelect_00_loop.brlan",      "G_loop_00"},
+        { "itemSelect_00_btnCancel.brlan", "G_btnCancel_00"},
+        {"itemSelect_00_shopChange.brlan",    "G_change_00"},
+    };
+
+    static const d2d::LytBrlanMapping brlanMapMaterialCheck[] = {
+        {        "materialCheck_00_in.brlan",      "G_inOut_00"},
+        {       "materialCheck_00_out.brlan",      "G_inOut_00"},
+        {  "materialCheck_00_btnOnOff.brlan",        "G_btn_00"},
+        {  "materialCheck_00_btnOnOff.brlan",        "G_btn_01"},
+        {  "materialCheck_00_btnOnOff.brlan",     "G_onOffB_00"},
+        { "materialCheck_00_btnDecide.brlan",        "G_btn_00"},
+        { "materialCheck_00_btnDecide.brlan",        "G_btn_01"},
+        {   "materialCheck_00_btnLoop.brlan",    "G_btnLoop_00"},
+        {   "materialCheck_00_btnLoop.brlan",    "G_btnLoop_01"},
+        {      "materialCheck_00_loop.brlan",       "G_loop_00"},
+        {      "materialCheck_00_keta.brlan",       "G_keta_00"},
+        {  "materialCheck_00_itemFlag.brlan",   "G_itemFlag_00"},
+        {  "materialCheck_00_itemFlag.brlan",   "G_itemFlag_01"},
+        {  "materialCheck_00_itemFlag.brlan",   "G_itemFlag_02"},
+        {  "materialCheck_00_itemFlag.brlan",   "G_itemFlag_03"},
+        {"materialCheck_00_itemNumber.brlan", "G_itemNumber_00"},
+        { "materialCheck_00_btnCancel.brlan",  "G_btnCancel_00"},
+        {"materialCheck_00_shopChange.brlan",     "G_change_00"},
+    };
+
+    static const d2d::LytBrlanMapping brlanMapShopInfo[] = {
+        { "shopInfo_00_in.brlan", "G_inOut_00"},
+        {"shopInfo_00_out.brlan", "G_inOut_00"},
+    };
+
+    static const char *sItemSelectBoundings[] = {
+        "B_item_00", "B_item_01", "B_item_02", "B_item_03", "B_item_04", "B_item_05",    "B_item_06",
+        "B_item_07", "B_item_08", "B_item_09", "B_item_10", "B_item_11", "B_choices_00",
+    };
+
+    static const char *sMaterialCheckChoiceBoundings[] = {
+        "B_choices_00",
+        "B_choices_01",
+    };
+
     for (int i = 0; i < SHOP_NUM_LYTS; i++) {
-        // TODO instruction swap, maybe will resolve itself?
         mLyts[i].setResAcc(resAcc);
         mLyts[i].build(sLytNames[i], nullptr);
     }
@@ -770,35 +797,34 @@ bool dLytShopMain_c::build(d2d::ResAccIf_c *resAcc) {
 
     buildSubpanes();
 
-    mAnmItemSelect[0].setAnimEnable(true);
-    mAnmItemSelect[0].setFrame(mAnmItemSelect[0].getLastFrame());
-    mAnmItemSelect[6].setAnimEnable(true);
-    mAnmItemSelect[6].setFrame(0.0f);
+    mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_IN].setAnimEnable(true);
+    mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_IN].setFrame(mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_IN].getLastFrame());
+    mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_LOOP].setAnimEnable(true);
+    mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_LOOP].setFrame(0.0f);
     mLyts[SHOP_LYT_ITEM_SELECT].calc();
-    mAnmItemSelect[0].setAnimEnable(false);
+    mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_IN].setAnimEnable(false);
+    mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN_LOOP].setForwardLoop();
 
-    mAnmItemSelect[3].setForwardLoop();
-    mAnmMaterialCheck[7].setForwardLoop();
-    mAnmMaterialCheck[8].setForwardLoop();
-
-    mAnmMaterialCheck[0].setAnimEnable(true);
-    mAnmMaterialCheck[0].setFrame(0.0f);
-    mAnmMaterialCheck[7].setAnimEnable(true);
-    mAnmMaterialCheck[7].setFrame(0.0f);
-    mAnmMaterialCheck[8].setAnimEnable(true);
-    mAnmMaterialCheck[8].setFrame(0.0f);
-    mAnmMaterialCheck[9].setAnimEnable(true);
-    mAnmMaterialCheck[9].setFrame(0.0f);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_00].setForwardLoop();
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_01].setForwardLoop();
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_IN].setAnimEnable(true);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_IN].setFrame(0.0f);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_00].setAnimEnable(true);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_00].setFrame(0.0f);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_01].setAnimEnable(true);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_01].setFrame(0.0f);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_LOOP].setAnimEnable(true);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_LOOP].setFrame(0.0f);
     mLyts[SHOP_LYT_MATERIAL_CHECK].calc();
-    mAnmMaterialCheck[0].setAnimEnable(false);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_IN].setAnimEnable(false);
 
-    mAnmShopInfo[0].setAnimEnable(true);
-    mAnmShopInfo[0].setFrame(0.0f);
+    mAnmShopInfo[SHOP_INFO_ANIM_IN].setAnimEnable(true);
+    mAnmShopInfo[SHOP_INFO_ANIM_IN].setFrame(0.0f);
     mLyts[SHOP_LYT_SHOP_INFO].calc();
-    mAnmShopInfo[0].setAnimEnable(false);
+    mAnmShopInfo[SHOP_INFO_ANIM_IN].setAnimEnable(false);
 
-    mCsHitChecks[0].init(mLyts[SHOP_LYT_ITEM_SELECT].getLayout()->GetRootPane(), 1, 0, 0);
-    mCsHitChecks[1].init(mLyts[SHOP_LYT_MATERIAL_CHECK].getLayout()->GetRootPane(), 1, 0, 0);
+    mCsHitChecks[PHASE_SELECT_ITEM].init(mLyts[SHOP_LYT_ITEM_SELECT].getLayout()->GetRootPane(), 1, 0, 0);
+    mCsHitChecks[PHASE_MATERIAL_CHECK].init(mLyts[SHOP_LYT_MATERIAL_CHECK].getLayout()->GetRootPane(), 1, 0, 0);
 
     dCsMgr_c::GetInstance()->registCursorTarget(&mCsHitChecks[0]);
     dCsMgr_c::GetInstance()->registCursorTarget(&mCsHitChecks[1]);
@@ -806,12 +832,12 @@ bool dLytShopMain_c::build(d2d::ResAccIf_c *resAcc) {
     dCsBase_c::GetInstance()->setCursorStickTargetPane(mpItemBoundings[0]);
 
     setModeNone();
-    field_0x116DD = false;
-    field_0x116DE = false;
+    mIsCancel = false;
+    mIsConfirm = false;
     mUpgradeLoaded = false;
     mPrevPointerVisible = true;
 
-    fn_802A5CA0(true);
+    setShowCancelButtons(true);
 
     mPhase = PHASE_SELECT_ITEM;
     mCurrentNavTarget = -12;
@@ -819,7 +845,7 @@ bool dLytShopMain_c::build(d2d::ResAccIf_c *resAcc) {
     mUpgradeIdx = 0;
     mItemCount = 0;
     mUpgradeCostCount = 0;
-    field_0x11700 = 0;
+    mConfirmedNavTarget = 0;
 
     return true;
 }
@@ -840,12 +866,12 @@ bool dLytShopMain_c::execute() {
     if (mUpgradeLoaded) {
         for (int i = 0; i < mUpgradeCostCount; i++) {
             if (i < 2) {
-                if (field_0x11770[i] == 0) {
+                if (mMaterialCheckItemKinds[i] == dLytCommonIconItem_c::B_WHEEL) {
                     mUpgradeNodes[i].mpLytPane->execute();
                 } else {
                     mUpgradeNodes[i + 6].mpLytPane->execute();
                 }
-            } else if (field_0x11770[i] == 0) {
+            } else if (mMaterialCheckItemKinds[i] == dLytCommonIconMaterial_c::BUG) {
                 mUpgradeNodes[i + 6].mpLytPane->execute();
             } else {
                 mUpgradeNodes[i].mpLytPane->execute();
@@ -856,17 +882,17 @@ bool dLytShopMain_c::execute() {
     for (int i = 0; i < 7; i++) {
         if (mAnmItemSelect[i].isEnabled()) {
             mAnmItemSelect[i].play();
-            if (i == 1) {
+            if (i == SHOP_ITEM_SELECT_ANIM_BTN) {
                 f32 frame;
-                if (!field_0x116E1 || mAnmItemSelect[i].getFrame() == mAnmItemSelect[i].getLastFrame()) {
+                if (!mShowCancelBtns || mAnmItemSelect[i].getFrame() == mAnmItemSelect[i].getLastFrame()) {
                     frame = 0.0f;
                 } else {
                     frame = 1.0f;
                 }
-                mAnmItemSelect[7].setAnimEnable(true);
-                mAnmItemSelect[7].setFrame(frame);
+                mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN_CANCEL].setAnimEnable(true);
+                mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN_CANCEL].setFrame(frame);
                 mLyts[SHOP_LYT_ITEM_SELECT].calc();
-                mAnmItemSelect[7].setAnimEnable(false);
+                mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN_CANCEL].setAnimEnable(false);
             }
         }
     }
@@ -874,17 +900,17 @@ bool dLytShopMain_c::execute() {
     for (int i = 0; i < 10; i++) {
         if (mAnmMaterialCheck[i].isEnabled()) {
             mAnmMaterialCheck[i].play();
-            if (i == 2) {
+            if (i == SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_00) {
                 f32 frame;
-                if (!field_0x116E1 || mAnmMaterialCheck[i].getFrame() == mAnmMaterialCheck[i].getLastFrame()) {
+                if (!mShowCancelBtns || mAnmMaterialCheck[i].getFrame() == mAnmMaterialCheck[i].getLastFrame()) {
                     frame = 0.0f;
                 } else {
                     frame = 1.0f;
                 }
-                mAnmMaterialCheck[16].setAnimEnable(true);
-                mAnmMaterialCheck[16].setFrame(frame);
+                mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_CANCEL].setAnimEnable(true);
+                mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_CANCEL].setFrame(frame);
                 mLyts[SHOP_LYT_MATERIAL_CHECK].calc();
-                mAnmMaterialCheck[16].setAnimEnable(false);
+                mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_CANCEL].setAnimEnable(false);
             }
         }
     }
@@ -978,18 +1004,18 @@ void dLytShopMain_c::setModeSelectIn() {
 
     f32 frame = mService != SERVICE_POTION_INFUSE ? 0.0f : 1.0f;
 
-    mAnmItemSelect[8].setAnimEnable(true);
-    mAnmItemSelect[8].setFrame(frame);
-    mAnmItemSelect[0].setAnimEnable(true);
-    mAnmItemSelect[7].setAnimEnable(true);
-    mAnmItemSelect[7].setFrame(1.0f);
-    mAnmItemSelect[3].setAnimEnable(true);
-    mAnmItemSelect[3].setFrame(0.0f);
+    mAnmItemSelect[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_01].setAnimEnable(true);
+    mAnmItemSelect[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_01].setFrame(frame);
+    mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_IN].setAnimEnable(true);
+    mAnmItemSelect[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_00].setAnimEnable(true);
+    mAnmItemSelect[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_00].setFrame(1.0f);
+    mAnmItemSelect[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_01].setAnimEnable(true);
+    mAnmItemSelect[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_01].setFrame(0.0f);
     mLyts[SHOP_LYT_ITEM_SELECT].calc();
-    mAnmItemSelect[8].setAnimEnable(false);
+    mAnmItemSelect[SHOP_MATERIAL_CHECK_ANIM_BTN_LOOP_01].setAnimEnable(false);
 
-    mAnmShopInfo[0].setAnimEnable(true);
-    mAnmShopInfo[0].setFrame(0.0f);
+    mAnmShopInfo[SHOP_INFO_ANIM_IN].setAnimEnable(true);
+    mAnmShopInfo[SHOP_INFO_ANIM_IN].setFrame(0.0f);
     mLyts[SHOP_LYT_SHOP_INFO].calc();
 
     mStateMgr.changeState(StateID_ModeSelectIn);
@@ -1003,13 +1029,13 @@ void dLytShopMain_c::setModeSelectCheck() {
 
 void dLytShopMain_c::setModeSelectOut() {
     mStateStep = 0;
-    if (field_0x116DD) {
-        mAnmItemSelect[4].setAnimEnable(true);
-        mAnmItemSelect[4].setFrame(0.0f);
+    if (mIsCancel) {
+        mAnmItemSelect[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_B].setAnimEnable(true);
+        mAnmItemSelect[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_B].setFrame(0.0f);
         mLyts[SHOP_LYT_ITEM_SELECT].calc();
     } else {
         mBWheelOrPouchItemIcons[mCurrentNavTarget + 12].startConfirm();
-        field_0x11700 = mCurrentNavTarget;
+        mConfirmedNavTarget = mCurrentNavTarget;
     }
     dCsBase_c::GetInstance()->setVisible(false);
     dPadNav::setNavEnabled(false, false);
@@ -1018,22 +1044,22 @@ void dLytShopMain_c::setModeSelectOut() {
 }
 
 void dLytShopMain_c::setModeOutIn() {
-    if (field_0x116DD) {
+    if (mIsCancel) {
         mStateStep = 0;
-        mAnmItemSelect[4].setAnimEnable(true);
-        mAnmItemSelect[4].setFrame(0.0f);
+        mAnmItemSelect[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_B].setAnimEnable(true);
+        mAnmItemSelect[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_B].setFrame(0.0f);
         mLyts[SHOP_LYT_ITEM_SELECT].calc();
     } else {
         s32 offset = mItemKinds[mCurrentNavTarget] == dLytCommonIconItem_c::B_WHEEL ? 0 : 12;
         mStateStep = 0;
         mBWheelOrPouchItemIcons[mCurrentNavTarget + offset].startConfirm();
         if (mCurrentNavTarget < 12) {
-            field_0x11700 = mCurrentNavTarget;
+            mConfirmedNavTarget = mCurrentNavTarget;
         } else {
-            field_0x11700 = mCurrentNavTarget - 12;
+            mConfirmedNavTarget = mCurrentNavTarget - 12;
         }
     }
-    mStateMgr.changeState(StateID_ModeSelectOut);
+    mStateMgr.changeState(StateID_ModeOutIn);
     mIsIdle = false;
 }
 
@@ -1045,17 +1071,17 @@ void dLytShopMain_c::setModeMaterialCheck() {
 
 void dLytShopMain_c::setModeOut() {
     mStateStep = 0;
-    mAnmMaterialCheck[6].setAnimEnable(true);
-    mAnmMaterialCheck[6].setFrame(0.0f);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_DECIDE_01].setAnimEnable(true);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_DECIDE_01].setFrame(0.0f);
     mLyts[SHOP_LYT_MATERIAL_CHECK].calc();
-    mStateMgr.changeState(StateID_ModeMaterialCheck);
+    mStateMgr.changeState(StateID_ModeOut);
     mIsIdle = false;
 }
 
 void dLytShopMain_c::setModeInOut() {
     mStateStep = 0;
-    mAnmMaterialCheck[5].setAnimEnable(true);
-    mAnmMaterialCheck[5].setFrame(0.0f);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_DECIDE_00].setAnimEnable(true);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_DECIDE_00].setFrame(0.0f);
     mLyts[SHOP_LYT_MATERIAL_CHECK].calc();
     dMessage_c::getInstance()->setField_0x2FC(-2);
     dLytMeter_c::setRupyField_0x8AC(0);
@@ -1311,20 +1337,45 @@ s32 dLytShopMain_c::getItemTier(s32 i) {
     }
 }
 
+s32 dLytShopMain_c::getItemIndex(s32 id) {
+    for (int i = 0; i < (int)ARRAY_LENGTH(sItemData); i++) {
+        if (sItemData[i].itemId == id) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+s32 dLytShopMain_c::getItemKind(s32 index) {
+    if (index >= 52) {
+        return dLytCommonIconMaterial_c::TREASURE;
+    }
+    if (index >= 40) {
+        return dLytCommonIconMaterial_c::BUG;
+    }
+    if (index >= 10) {
+        return dLytCommonIconItem_c::POUCH;
+    }
+    if (index >= 0) {
+        return dLytCommonIconItem_c::B_WHEEL;
+    }
+    return 3; // invalid
+}
+
 void dLytShopMain_c::handleNavigation() {
     dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
     s32 nextTarget;
     bool selectIcon = false;
-    s32 i1, i2;
+    s32 numNavTargets, btnAnimOffset;
     if (mPhase == PHASE_SELECT_ITEM) {
-        i1 = 13;
-        i2 = 1;
+        numNavTargets = SHOP_ITEM_SELECT_NUM_BOUNDINGS;
+        btnAnimOffset = SHOP_ITEM_SELECT_ANIM_BTN;
         for (int i = 0; i < NUM_ITEMS; i++) {
             mpItemBoundings[i + SHOP_ITEM_SELECT_BOUNDING_ITEM_OFFSET]->SetVisible(false);
         }
     } else {
-        i1 = 2;
-        i2 = 2;
+        numNavTargets = SHOP_MATERIAL_CHECK_CHOICE_NUM_BOUNDINGS;
+        btnAnimOffset = SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_00;
     }
 
     bool pointerVisible = dPadNav::isPointerVisible();
@@ -1348,7 +1399,7 @@ void dLytShopMain_c::handleNavigation() {
                 nextTarget = mCurrentNavTarget;
                 if (nextTarget < 0 || mPrevPointerVisible) {
                     if (nextTarget == -13) {
-                        nextTarget = 12;
+                        nextTarget = SHOP_ITEM_SELECT_BOUNDING_CHOICES;
                     } else if (nextTarget < 0) {
                         nextTarget += 12;
                     }
@@ -1393,8 +1444,8 @@ void dLytShopMain_c::handleNavigation() {
                             nextTarget = mCurrentNavTarget;
                             break;
                     }
-                    if (nextTarget >= 12) {
-                        nextTarget = 12;
+                    if (nextTarget >= SHOP_ITEM_SELECT_NUM_BOUNDINGS - 1) {
+                        nextTarget = SHOP_ITEM_SELECT_BOUNDING_CHOICES;
                     }
                     dCsBase_c::GetInstance()->setCursorStickTargetPane(mpItemBoundings[nextTarget]);
                 }
@@ -1406,7 +1457,7 @@ void dLytShopMain_c::handleNavigation() {
     } else {
         if (!pointerVisible) {
             if (mPrevPointerVisible) {
-                // Sorry what? Why is dPadNav not good enough here?
+                // TODO: Sorry what? Why is dPadNav not good enough here?
                 if (dPad::ex_c::getInstance()->getFSStickTrig(0x1) || dPad::ex_c::getInstance()->getFSStickTrig(0x10)) {
                     // up/down
                     dPadNav::setNavEnabled(true, false);
@@ -1429,16 +1480,16 @@ void dLytShopMain_c::handleNavigation() {
                 }
             } else {
                 switch (dPadNav::getFSStickNavDirection()) {
-                    case 2:
-                    case 3:
-                    case 4:
+                    case dPadNav::FS_STICK_UP_RIGHT:
+                    case dPadNav::FS_STICK_RIGHT:
+                    case dPadNav::FS_STICK_DOWN_RIGHT:
                         nextTarget = 1;
                         dCsBase_c::GetInstance()->setCursorStickTargetPane(mpMaterialCheckChoiceBoundings[1]);
                         selectIcon = true;
                         break;
-                    case 6:
-                    case 7:
-                    case 8:
+                    case dPadNav::FS_STICK_DOWN_LEFT:
+                    case dPadNav::FS_STICK_LEFT:
+                    case dPadNav::FS_STICK_UP_LEFT:
                         nextTarget = 0;
                         dCsBase_c::GetInstance()->setCursorStickTargetPane(mpMaterialCheckChoiceBoundings[0]);
                         selectIcon = true;
@@ -1451,11 +1502,11 @@ void dLytShopMain_c::handleNavigation() {
 
     if (!selectIcon && pointerVisible) {
         if (d != nullptr && d->getType() == 'lyt ') {
-            for (nextTarget = 0; nextTarget < i1; nextTarget++) {
+            for (nextTarget = 0; nextTarget < numNavTargets; nextTarget++) {
                 nw4r::lyt::Bounding *b;
-                if (mPhase == 0) {
-                    b = mpItemBoundings[12];
-                    nextTarget = 12;
+                if (mPhase == PHASE_SELECT_ITEM) {
+                    b = mpItemBoundings[SHOP_ITEM_SELECT_BOUNDING_CHOICES];
+                    nextTarget = SHOP_ITEM_SELECT_BOUNDING_CHOICES;
                 } else {
                     b = mpMaterialCheckChoiceBoundings[nextTarget];
                 }
@@ -1471,17 +1522,17 @@ void dLytShopMain_c::handleNavigation() {
         if (mCurrentNavTarget != nextTarget) {
             if (mCurrentNavTarget >= 0) {
                 if (mPhase == PHASE_SELECT_ITEM) {
-                    if (mCurrentNavTarget == 12) {
-                        mAnmItemSelect[i2].setBackwardsOnce();
-                        mAnmItemSelect[2].setBackwardsOnce();
-                        field_0x116DD = false;
+                    if (mCurrentNavTarget == SHOP_ITEM_SELECT_BOUNDING_CHOICES) {
+                        mAnmItemSelect[btnAnimOffset].setBackwardsOnce();
+                        mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN_B].setBackwardsOnce();
+                        mIsCancel = false;
                     } else if (mItemKinds[mCurrentNavTarget] == dLytCommonIconItem_c::B_WHEEL) {
                         mBWheelOrPouchItemIcons[mCurrentNavTarget].setOff();
                     } else {
                         mBWheelOrPouchItemIcons[mCurrentNavTarget + 12].setOff();
                     }
                 } else {
-                    mAnmMaterialCheck[i2 + mCurrentNavTarget].setBackwardsOnce();
+                    mAnmMaterialCheck[btnAnimOffset + mCurrentNavTarget].setBackwardsOnce();
                     if (mCurrentNavTarget == 0) {
                         mAnmMaterialCheck[4].setBackwardsOnce();
                     }
@@ -1489,12 +1540,12 @@ void dLytShopMain_c::handleNavigation() {
             }
 
             if (mPhase == PHASE_SELECT_ITEM) {
-                if (nextTarget == 12) {
-                    mAnmItemSelect[i2].setAnimEnable(true);
-                    mAnmItemSelect[i2].setFrame(0.0f);
-                    mAnmItemSelect[i2].setForwardOnce();
-                    mAnmItemSelect[2].setForwardOnce();
-                    field_0x116DD = true;
+                if (nextTarget == SHOP_ITEM_SELECT_BOUNDING_CHOICES) {
+                    mAnmItemSelect[btnAnimOffset].setAnimEnable(true);
+                    mAnmItemSelect[btnAnimOffset].setFrame(0.0f);
+                    mAnmItemSelect[btnAnimOffset].setForwardOnce();
+                    mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN_B].setForwardOnce();
+                    mIsCancel = true;
                     if (mService == SERVICE_POTION_INFUSE) {
                         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_MDS_P1_POINT_BACK);
                     } else if (mService == SERVICE_GEAR_UPGRADE) {
@@ -1517,24 +1568,24 @@ void dLytShopMain_c::handleNavigation() {
                     }
                 }
             } else {
-                mAnmMaterialCheck[i2 + nextTarget].setAnimEnable(true);
-                mAnmMaterialCheck[i2 + nextTarget].setFrame(0.0f);
-                mAnmMaterialCheck[i2 + nextTarget].setForwardOnce();
-                if (nextTarget == 0) {
-                    mAnmMaterialCheck[4].setForwardOnce();
+                mAnmMaterialCheck[btnAnimOffset + nextTarget].setAnimEnable(true);
+                mAnmMaterialCheck[btnAnimOffset + nextTarget].setFrame(0.0f);
+                mAnmMaterialCheck[btnAnimOffset + nextTarget].setForwardOnce();
+                if (nextTarget == SHOP_MATERIAL_CHECK_BOUNDING_CHOICE_00) {
+                    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_ON_OFF_B].setForwardOnce();
                 }
 
-                if (nextTarget == 0) {
-                    field_0x116DD = true;
-                    field_0x116DE = false;
+                if (nextTarget == SHOP_MATERIAL_CHECK_BOUNDING_CHOICE_00) {
+                    mIsCancel = true;
+                    mIsConfirm = false;
                     if (mService == SERVICE_POTION_INFUSE) {
                         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_MDS_P2_POINT_BACK);
                     } else if (mService == SERVICE_GEAR_UPGRADE) {
                         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_JNK_RC_P2_POINT_BACK);
                     }
-                } else if (nextTarget == 1) {
-                    field_0x116DE = true;
-                    field_0x116DD = false;
+                } else if (nextTarget == SHOP_MATERIAL_CHECK_BOUNDING_CHOICE_01) {
+                    mIsConfirm = true;
+                    mIsCancel = false;
                     if (mService == SERVICE_POTION_INFUSE) {
                         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_MDS_P2_POINT_BLEND);
                     } else if (mService == SERVICE_GEAR_UPGRADE) {
@@ -1548,8 +1599,8 @@ void dLytShopMain_c::handleNavigation() {
     } else {
         if (mCurrentNavTarget >= 0) {
             if (mPhase == PHASE_SELECT_ITEM) {
-                if (mCurrentNavTarget == 12) {
-                    mAnmItemSelect[i2].setBackwardsOnce();
+                if (mCurrentNavTarget == SHOP_ITEM_SELECT_BOUNDING_CHOICES) {
+                    mAnmItemSelect[btnAnimOffset].setBackwardsOnce();
                     mCurrentNavTarget = -13;
                 } else {
                     if (mItemKinds[mCurrentNavTarget] == dLytCommonIconItem_c::B_WHEEL) {
@@ -1560,16 +1611,105 @@ void dLytShopMain_c::handleNavigation() {
                     mCurrentNavTarget -= 12;
                 }
             } else {
-                mAnmMaterialCheck[i2 + mCurrentNavTarget].setBackwardsOnce();
+                mAnmMaterialCheck[btnAnimOffset + mCurrentNavTarget].setBackwardsOnce();
                 mCurrentNavTarget -= 2;
             }
-            field_0x116DD = false;
-            field_0x116DE = false;
+            mIsCancel = false;
+            mIsConfirm = false;
         }
     }
 }
 
-void dLytShopMain_c::updateShopStuffMaybe() {
+s32 dLytShopMain_c::checkNav() {
+    s32 target = mCurrentNavTarget;
+    if (target < 0) {
+        target += 12;
+    }
+
+    s32 direction = dPadNav::getFSStickNavDirection();
+    switch (direction) {
+        case dPadNav::FS_STICK_UP:
+            if (target < 6) {
+                direction = dPadNav::FS_STICK_NONE;
+            }
+            break;
+        case dPadNav::FS_STICK_UP_RIGHT:
+            if (target == 11) {
+                direction = dPadNav::FS_STICK_UP;
+            } else if (target >= 6) {
+                // allowed
+            } else if (target == 5) {
+                direction = direction = dPadNav::FS_STICK_NONE;
+            } else {
+                direction = dPadNav::FS_STICK_RIGHT;
+            }
+            break;
+        case dPadNav::FS_STICK_RIGHT:
+            if (target == SHOP_ITEM_SELECT_BOUNDING_CHOICES) {
+                direction = dPadNav::FS_STICK_NONE;
+            } else if (target % 6 == 5) {
+                direction = dPadNav::FS_STICK_NONE;
+            }
+            break;
+        case dPadNav::FS_STICK_DOWN_RIGHT:
+            if (target == SHOP_ITEM_SELECT_BOUNDING_CHOICES) {
+                direction = dPadNav::FS_STICK_NONE;
+            } else if (target == 5) {
+                direction = dPadNav::FS_STICK_DOWN;
+            } else if (target < 6) {
+                // allowed
+            } else if (target == 6) {
+                direction = dPadNav::FS_STICK_DOWN;
+            } else if (target == 11) {
+                direction = dPadNav::FS_STICK_NONE;
+            } else {
+                direction = dPadNav::FS_STICK_RIGHT;
+            }
+            break;
+        case dPadNav::FS_STICK_DOWN:
+            if (target >= 8) {
+                direction = dPadNav::FS_STICK_NONE;
+            }
+            break;
+        case dPadNav::FS_STICK_DOWN_LEFT:
+            if (target == 0) {
+                direction = dPadNav::FS_STICK_DOWN;
+            } else if (target == SHOP_ITEM_SELECT_BOUNDING_CHOICES) {
+                direction = dPadNav::FS_STICK_NONE;
+            } else if (target < 6) {
+                // allowed
+            } else if (target <= 8) {
+                direction = dPadNav::FS_STICK_DOWN;
+            } else {
+                direction = dPadNav::FS_STICK_LEFT;
+            }
+            break;
+        case dPadNav::FS_STICK_LEFT:
+            if (target == SHOP_ITEM_SELECT_BOUNDING_CHOICES) {
+                direction = dPadNav::FS_STICK_NONE;
+            } else if (target % 6 == 0) {
+                direction = dPadNav::FS_STICK_NONE;
+            }
+            break;
+        case dPadNav::FS_STICK_UP_LEFT:
+            if (target == SHOP_ITEM_SELECT_BOUNDING_CHOICES) {
+                direction = dPadNav::FS_STICK_UP;
+            } else if (target == 6) {
+                direction = dPadNav::FS_STICK_UP;
+            } else if (target >= 6) {
+                // allowed
+            } else if (target == 0) {
+                direction = dPadNav::FS_STICK_NONE;
+            } else {
+                direction = dPadNav::FS_STICK_LEFT;
+            }
+            break;
+    }
+
+    return direction;
+}
+
+void dLytShopMain_c::displayMaterialCheck() {
     // TODO - Nonmatching. Probably equivalent.
 
     SizedString<64> buf;
@@ -1580,36 +1720,36 @@ void dLytShopMain_c::updateShopStuffMaybe() {
         costs = sPotionUpgrades[mUpgradeIdx];
     }
 
-    showShopLytMaybe();
-    showPriceMaybe(costs.price);
+    loadMaterialCheckItemText();
+    loadPrice(costs.price);
 
-    s32 someFrame = 0;
+    s32 numberOfUpgradesFrame = 0;
 
-    s32 a1 = fn_802A4490(costs.oldItemId);
-    s32 a2 = fn_802A4500(a1);
-    s32 a3 = fn_802A5760(a2);
-    field_0x11770[0] = a2;
-    mUpgradePreviewIcons[a3].setUnk(false);
-    mUpgradePreviewIcons[a3].setHasNumber(false);
-    mUpgradePreviewIcons[a3].setItem(sLytIconMapping[a1]);
-    mUpgradePreviewIcons[a3].setShieldOnOff(false);
+    s32 itemIndex = getItemIndex(costs.oldItemId);
+    s32 itemKind = getItemKind(itemIndex);
+    s32 iconOffset = getItemIconOffset(itemKind);
+    mMaterialCheckItemKinds[0] = itemKind;
+    mUpgradePreviewIcons[iconOffset].setUnk(false);
+    mUpgradePreviewIcons[iconOffset].setHasNumber(false);
+    mUpgradePreviewIcons[iconOffset].setItem(sLytIconMapping[itemIndex]);
+    mUpgradePreviewIcons[iconOffset].setShieldOnOff(false);
 
-    if (field_0x11770[0] == 0) {
+    if (mMaterialCheckItemKinds[0] == dLytCommonIconItem_c::B_WHEEL) {
         mUpgradeNodes[0].mpPane->SetVisible(true);
     } else {
         mUpgradeNodes[6].mpPane->SetVisible(true);
     }
 
-    a1 = fn_802A4490(costs.newItemId);
-    a2 = fn_802A4500(a1);
-    a3 = fn_802A5760(a2);
-    field_0x11770[1] = a2;
-    mUpgradePreviewIcons[a3 + 1].setUnk(false);
-    mUpgradePreviewIcons[a3 + 1].setHasNumber(false);
-    mUpgradePreviewIcons[a3 + 1].setItem(sLytIconMapping[a1]);
-    mUpgradePreviewIcons[a3 + 1].setShieldOnOff(false);
+    itemIndex = getItemIndex(costs.newItemId);
+    itemKind = getItemKind(itemIndex);
+    iconOffset = getItemIconOffset(itemKind);
+    mMaterialCheckItemKinds[1] = itemKind;
+    mUpgradePreviewIcons[iconOffset + 1].setUnk(false);
+    mUpgradePreviewIcons[iconOffset + 1].setHasNumber(false);
+    mUpgradePreviewIcons[iconOffset + 1].setItem(sLytIconMapping[itemIndex]);
+    mUpgradePreviewIcons[iconOffset + 1].setShieldOnOff(false);
 
-    if (field_0x11770[1] == 0) {
+    if (mMaterialCheckItemKinds[1] == dLytCommonIconItem_c::B_WHEEL) {
         mUpgradeNodes[1].mpPane->SetVisible(true);
     } else {
         mUpgradeNodes[7].mpPane->SetVisible(true);
@@ -1626,7 +1766,7 @@ void dLytShopMain_c::updateShopStuffMaybe() {
     for (int i = 0; i < 4; i++) {
         s32 i1 = i * 3 + 2;
         s32 i2 = i * 2;
-        s32 i3 = i2 + 1;
+        s32 i3 = i * 2 + 1;
 
         buf.sprintf("T_message_%02d", i1);
         b1 = mLyts[SHOP_LYT_MATERIAL_CHECK].getTextBox(buf);
@@ -1641,7 +1781,7 @@ void dLytShopMain_c::updateShopStuffMaybe() {
         buf.sprintf("T_matNumS_%02d", i3);
         b6 = mLyts[SHOP_LYT_MATERIAL_CHECK].getTextBox(buf);
 
-        mAnmMaterialCheck[i + 11].setAnimEnable(true);
+        mAnmMaterialCheck[i + SHOP_MATERIAL_CHECK_ANIM_ITEM_FLAG].setAnimEnable(true);
 
         static wchar_t sBuf[5];
         for (int j = 0; j < (int)ARRAY_LENGTH(sBuf); j++) {
@@ -1655,7 +1795,7 @@ void dLytShopMain_c::updateShopStuffMaybe() {
             b5->setTextWithGlobalTextProcessor(sBuf, nullptr);
             b6->setTextWithGlobalTextProcessor(sBuf, nullptr);
 
-            someFrame = 1;
+            numberOfUpgradesFrame = 1;
             mUpgradeNodes[i + 2].mpPane->SetVisible(false);
             mUpgradeNodes[i + 8].mpPane->SetVisible(false);
         } else {
@@ -1680,30 +1820,29 @@ void dLytShopMain_c::updateShopStuffMaybe() {
                                  costs.matCosts[i].itemId - ITEM_UNK_139 :
                                  costs.matCosts[i].itemId - ITEM_SMALL_QUIVER;
 
-            // Probably some register weirdness around here
             bool shadow = !dAcItem_c::checkFlag((u16)costs.matCosts[i].itemId);
             s32 counter = getCounterByIndex(counterIdx);
             (void)calcNumDigits(counter);
-            swprintf(sBuf, ARRAY_LENGTH(sBuf), L"%d", amt);
+            swprintf(sBuf, ARRAY_LENGTH(sBuf), L"%d", counter);
             b3->setTextWithGlobalTextProcessor(sBuf, nullptr);
             b6->setTextWithGlobalTextProcessor(sBuf, nullptr);
 
             if (counter != 0 && counter >= costs.matCosts[i].amount) {
-                mAnmMaterialCheck[i + 11].setFrame(0.0f);
+                mAnmMaterialCheck[i + SHOP_MATERIAL_CHECK_ANIM_ITEM_FLAG].setFrame(0.0f);
             } else {
-                mAnmMaterialCheck[i + 11].setFrame(1.0f);
+                mAnmMaterialCheck[i + SHOP_MATERIAL_CHECK_ANIM_ITEM_FLAG].setFrame(1.0f);
             }
 
-            a1 = fn_802A4490(costs.matCosts[i].itemId);
-            a2 = fn_802A4500(a1);
-            a3 = fn_802A5780(a2);
-            field_0x11770[mUpgradeCostCount] = a2;
-            mUpgradeCostIcons[a3 + i].setBg(false);
-            mUpgradeCostIcons[a3 + i].setHasNumber(false);
-            mUpgradeCostIcons[a3 + i].setShadow(shadow);
-            mUpgradeCostIcons[a3 + i].setItem(sLytIconMapping[a1]);
+            itemIndex = getItemIndex(costs.matCosts[i].itemId);
+            itemKind = getItemKind(itemIndex);
+            iconOffset = getMaterialIconOffset(itemKind);
+            mMaterialCheckItemKinds[mUpgradeCostCount] = itemKind;
+            mUpgradeCostIcons[iconOffset + i].setBg(false);
+            mUpgradeCostIcons[iconOffset + i].setHasNumber(false);
+            mUpgradeCostIcons[iconOffset + i].setShadow(shadow);
+            mUpgradeCostIcons[iconOffset + i].setItem(sLytIconMapping[itemIndex]);
 
-            if (field_0x11770[mUpgradeCostCount] == 0) {
+            if (mMaterialCheckItemKinds[mUpgradeCostCount] == dLytCommonIconMaterial_c::BUG) {
                 mUpgradeNodes[i + 2].mpPane->SetVisible(false);
                 mUpgradeNodes[i + 8].mpPane->SetVisible(true);
             } else {
@@ -1714,9 +1853,23 @@ void dLytShopMain_c::updateShopStuffMaybe() {
         }
     }
 
-    mAnmMaterialCheck[15].setAnimEnable(true);
-    mAnmMaterialCheck[15].setFrame(someFrame);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_ITEM_NUMBER].setAnimEnable(true);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_ITEM_NUMBER].setFrame(numberOfUpgradesFrame);
     mUpgradeLoaded = true;
+}
+
+s32 dLytShopMain_c::getItemIconOffset(u8 variant) {
+    switch (variant) {
+        case dLytCommonIconItem_c::B_WHEEL: return 0;
+        default:                            return 2;
+    }
+}
+
+s32 dLytShopMain_c::getMaterialIconOffset(u8 variant) {
+    switch (variant) {
+        case dLytCommonIconMaterial_c::BUG: return 4;
+        default:                            return 0;
+    }
 }
 
 s32 dLytShopMain_c::calcNumDigits(s32 value) {
@@ -1729,6 +1882,148 @@ s32 dLytShopMain_c::calcNumDigits(s32 value) {
         cmp /= 10;
     }
     return i;
+}
+
+static const char *sUpgradeLabels[] = {
+    "POWUP_WSHILD",  "POWUP_WSHILD",   "POWUP_ISHILD",   "POWUP_ISHILD",   "POWUP_SSHILD",
+    "POWUP_SSHILD",  "POWUP_PACHINKO", "POWUP_KABUTO",   "POWUP_KABUTO",   "POWUP_BOW",
+    "POWUP_BOW",     "POWUP_SEEDBAG",  "POWUP_SEEDBAG",  "POWUP_ARROWBAG", "POWUP_ARROWBAG",
+    "POWUP_BOMBBAG", "POWUP_BOMBBAG",  "POWUP_NET",      "DS_PUP_DRUG",    "DS_PUP_DRUG",
+    "DS_PUP_AIR",    "DS_PUP_STAMINA", "DS_PUP_SHILDUP", "DS_PUP_SHILDUP", "DS_PUP_MUTEKI",
+};
+
+static const int sUpgradeLabelSuffixes[] = {
+    3, 4, 3, 4, 3, 4, 2, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 2, 3, 4, 2, 2, 3, 4, 2,
+};
+
+static const int sUpgradeLabelSuffixes2[] = {
+    0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1,
+    2, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 0, 1, 1, 2, 0, 1, 0, 1, 0, 1, 1, 2, 0, 1,
+};
+
+void dLytShopMain_c::loadMaterialCheckItemText() {
+    SizedString<64> buf;
+
+    s32 upgradeIdx;
+    if (mService != SERVICE_POTION_INFUSE) {
+        upgradeIdx = mUpgradeIdx;
+    } else {
+        upgradeIdx = mUpgradeIdx + 18;
+    }
+
+    dTextBox_c *box;
+
+    box = mLyts[SHOP_LYT_MATERIAL_CHECK].getTextBox("T_message_00");
+    buf.sprintf("%s_%02d", sUpgradeLabels[upgradeIdx], sUpgradeLabelSuffixes[upgradeIdx]);
+    box->setMessageWithGlobalTextProcessor2(buf, nullptr);
+    box = mLyts[SHOP_LYT_MATERIAL_CHECK].getTextBox("T_messageS_00");
+    box->setMessageWithGlobalTextProcessor2(buf, nullptr);
+
+    box = mLyts[SHOP_LYT_MATERIAL_CHECK].getTextBox("T_message_01");
+    box->setMessageWithGlobalTextProcessor2(sUpgradeLabels[upgradeIdx], nullptr);
+    box = mLyts[SHOP_LYT_MATERIAL_CHECK].getTextBox("T_messageS_01");
+    box->setMessageWithGlobalTextProcessor2(sUpgradeLabels[upgradeIdx], nullptr);
+
+    box = mLyts[SHOP_LYT_MATERIAL_CHECK].getTextBox("T_message_14");
+    s32 idx = upgradeIdx * 2;
+    buf.sprintf("%s_%02d", sUpgradeLabels[upgradeIdx], sUpgradeLabelSuffixes2[idx]);
+    box->setMessageWithGlobalTextProcessor2(buf, nullptr);
+    box = mLyts[SHOP_LYT_MATERIAL_CHECK].getTextBox("T_messageS_14");
+    box->setMessageWithGlobalTextProcessor2(buf, nullptr);
+
+    box = mLyts[SHOP_LYT_MATERIAL_CHECK].getTextBox("T_message_15");
+    s32 idx2 = upgradeIdx * 2 + 1;
+    buf.sprintf("%s_%02d", sUpgradeLabels[upgradeIdx], sUpgradeLabelSuffixes2[idx2]);
+    box->setMessageWithGlobalTextProcessor2(buf, nullptr);
+    box = mLyts[SHOP_LYT_MATERIAL_CHECK].getTextBox("T_messageS_15");
+    box->setMessageWithGlobalTextProcessor2(buf, nullptr);
+}
+
+static const char *sTNumberNames[] = {
+    "T_number_08",
+    "T_number_09",
+    "T_number_10",
+    "T_number_11",
+};
+
+static const char *sTNumberSNames[] = {
+    "T_numberS_08",
+    "T_numberS_09",
+    "T_numberS_10",
+    "T_numberS_11",
+};
+
+void dLytShopMain_c::loadPrice(s32 value) {
+    s32 len = calcNumDigits(value);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_KETA].setAnimEnable(true);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_KETA].setFrame(len - 1);
+    static wchar_t sBuf1[2];
+    for (int i = 0; i < (int)ARRAY_LENGTH(sBuf1); i++) {
+        sBuf1[i] = L'\0';
+    }
+
+    static wchar_t sBuf2[5];
+    swprintf(sBuf2, ARRAY_LENGTH(sBuf2), L"%d", value);
+
+    for (int i = 0; i < len; i++) {
+        dTextBox_c *box = mLyts[SHOP_LYT_MATERIAL_CHECK].getTextBox(sTNumberNames[i]);
+
+        sBuf1[0] = sBuf2[i];
+        box->setTextWithGlobalTextProcessor(sBuf1, nullptr);
+        box = mLyts[SHOP_LYT_MATERIAL_CHECK].getTextBox(sTNumberSNames[i]);
+        box->setTextWithGlobalTextProcessor(sBuf1, nullptr);
+    }
+}
+
+dLytShopMain_c::ShopUpgradeCosts dLytShopMain_c::getSelectedUpgradeCosts() const {
+    if (mService != SERVICE_POTION_INFUSE) {
+        return sGearUpgrades[mUpgradeIdx];
+    } else {
+        return sPotionUpgrades[mUpgradeIdx];
+    }
+}
+
+s32 dLytShopMain_c::getCurrentlySelectedPouchItemId() const {
+    return getPouchItemIdForIndex(mItemPouchSlots[mCurrentNavTarget], false);
+}
+
+bool dLytShopMain_c::isMaterialCheck() const {
+    return mPhase == PHASE_MATERIAL_CHECK;
+}
+
+void dLytShopMain_c::hideUpgradeCostPanes() {
+    if (mUpgradeLoaded) {
+        for (int i = 0; i < mUpgradeCostCount; i++) {
+            if (i < 2) {
+                if (mMaterialCheckItemKinds[i] == dLytCommonIconItem_c::B_WHEEL) {
+                    mUpgradeNodes[i].mpPane->SetVisible(false);
+                } else {
+                    mUpgradeNodes[i + 6].mpPane->SetVisible(false);
+                }
+            } else if (mMaterialCheckItemKinds[i] == dLytCommonIconMaterial_c::BUG) {
+                mUpgradeNodes[i + 6].mpPane->SetVisible(false);
+            } else {
+                mUpgradeNodes[i].mpPane->SetVisible(false);
+            }
+        }
+        mUpgradeLoaded = false;
+        mUpgradeCostCount = 0;
+    }
+}
+
+void dLytShopMain_c::setShowCancelButtons(bool show) {
+    mShowCancelBtns = show;
+
+    f32 frame = mShowCancelBtns ? 1.0f : 0.0f;
+    mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN_CANCEL].setAnimEnable(true);
+    mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN_CANCEL].setFrame(frame);
+    mLyts[SHOP_LYT_ITEM_SELECT].calc();
+    mAnmItemSelect[SHOP_ITEM_SELECT_ANIM_BTN_CANCEL].setAnimEnable(false);
+
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_CANCEL].setAnimEnable(true);
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_CANCEL].setFrame(frame);
+    mLyts[SHOP_LYT_MATERIAL_CHECK].calc();
+    mAnmMaterialCheck[SHOP_MATERIAL_CHECK_ANIM_BTN_CANCEL].setAnimEnable(false);
 }
 
 STATE_DEFINE(dLytShop_c, None);
@@ -1765,7 +2060,7 @@ void dLytShop_c::initializeState_SelectCheck() {}
 void dLytShop_c::executeState_SelectCheck() {
     if (mMain.isIdle()) {
         s32 service = mMain.getService();
-        if (mMain.getField_0x116DD()) {
+        if (mMain.isCancel()) {
             mMain.setModeSelectOut();
             mStateMgr.changeState(StateID_SelectOut);
 
@@ -1816,7 +2111,7 @@ void dLytShop_c::initializeState_MaterialCheck() {}
 void dLytShop_c::executeState_MaterialCheck() {
     if (mMain.isIdle()) {
         s32 service = mMain.getService();
-        if (mMain.getField_0x116DD()) {
+        if (mMain.isCancel()) {
             mMain.setModeInOut();
             mStateMgr.changeState(StateID_InOut);
 
@@ -1825,7 +2120,7 @@ void dLytShop_c::executeState_MaterialCheck() {
             } else if (service == dLytShopMain_c::SERVICE_GEAR_UPGRADE) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SHOP_JNK_RC_P2_SELECT_BACK);
             }
-        } else if (mMain.getField_0x116DE()) {
+        } else if (mMain.isConfirm()) {
             mMain.setModeOut();
             mStateMgr.changeState(StateID_Out);
             if (service == dLytShopMain_c::SERVICE_POTION_INFUSE) {
@@ -1863,6 +2158,8 @@ void dLytShop_c::executeState_End() {}
 void dLytShop_c::finalizeState_End() {}
 
 SPECIAL_BASE_PROFILE(LYT_SHOP, dLytShop_c, fProfile::LYT_SHOP, 0x2B8, 0);
+
+dLytShop_c *dLytShop_c::sInstance;
 
 bool dLytShop_c::build() {
     void *data = LayoutArcManager::GetInstance()->getLoadedData("Shop");
@@ -1906,4 +2203,8 @@ int dLytShop_c::doDelete() {
     mResAcc.detach();
     sInstance = nullptr;
     return SUCCEEDED;
+}
+
+dLytShopMain_c::ShopUpgradeCosts dLytShop_c::getSelectedUpgradeCosts() const {
+    return mMain.getSelectedUpgradeCosts();
 }
