@@ -4,6 +4,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/d_stage.h"
+#include "d/d_vec.h"
 #include "d/flag/sceneflag_manager.h"
 #include "f/f_base.h"
 #include "m/m_angle.h"
@@ -18,12 +19,6 @@ SPECIAL_ACTOR_PROFILE(OBJ_SHED, dAcOShed_c, fProfile::OBJ_SHED, 0x256, 0, 6);
 
 STATE_DEFINE(dAcOShed_c, Wait);
 STATE_DEFINE(dAcOShed_c, Move);
-
-// copy from d_a_obj_fairy - TODO move it to a shared file
-inline static void vecCylCalc(mVec3_c &target, const mAng &rot, f32 factor) {
-    target.x += factor * rot.sin();
-    target.z += factor * rot.cos();
-}
 
 bool dAcOShed_c::createHeap() {
     void *data = CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres");
@@ -50,7 +45,7 @@ int dAcOShed_c::create() {
         if (flag) {
             mIsOpen = true;
             mVec = mPosition;
-            vecCylCalc(mVec, mRotation.y - 0x4000, 230.0f);
+            getXZCirclePoint(mVec, mRotation.y - 0x4000, 230.0f);
             mPosition = mVec;
         }
     }
@@ -103,7 +98,7 @@ void dAcOShed_c::initializeState_Move() {
     }
     mAngle.y = mRotation.y + 0x4000;
     mVec = mPosition;
-    vecCylCalc(mVec, mAngle.y, 230.0f);
+    getXZCirclePoint(mVec, mAngle.y, 230.0f);
     mMoveTimer = 0x3c;
 }
 

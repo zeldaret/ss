@@ -8,6 +8,7 @@
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_lin.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_vec.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "egg/math/eggMath.h"
@@ -21,12 +22,6 @@
 #include "rvl/MTX/mtxvec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
-
-// TODO inline?
-inline void addAng(mVec3_c &pnt, const f32 step, const mAng &angle) {
-    pnt.x += step * angle.sin();
-    pnt.z += step * angle.cos();
-}
 
 SPECIAL_ACTOR_PROFILE(OBJ_IVY_ROPE, dAcOivyRope_c, fProfile::OBJ_IVY_ROPE, 0x262, 0, 2);
 
@@ -570,8 +565,7 @@ void dAcOivyRope_c::fn_256_BE80() {
 
             mPnts1[i].set(0.f, 0.f, 0.f);
 
-            // inline is required
-            addAng(mPnts1[i], step, angle);
+            getXZCirclePoint(mPnts1[i], angle, step);
         }
     }
 }
@@ -590,14 +584,7 @@ void dAcOivyRope_c::fn_256_BFF0(int ang, f32 float0, f32 float1) {
             mAng angle = f;
 
             mPnts1[i].set(0.f, 0.f, 0.f);
-
-            // inline is required
-            addAng(mPnts1[i], step, angle);
-            // mVec3_c &pnt = mPnts1[i];
-            // f32 step1 = step;
-            // pnt.x += step1 * angle.sin();
-            // pnt.z += step1 * angle.cos();
-
+            getXZCirclePoint(mPnts1[i], angle, step);
             mPnts1[i].y = float1;
         }
     }
@@ -860,8 +847,7 @@ void dAcOivyRope_c::fn_256_D3D0(mVec3_c &pOut1, mVec3_c &pOut2, s16 param2, bool
     }
 
     mVec3_c somevec(0.f, 0.f, 0.f);
-    somevec.x += something * swingAngle.sin();
-    somevec.z += something * swingAngle.cos();
+    getXZCirclePoint(somevec, swingAngle, something);
 
     mVec3_c somevec2(0.f, -25.f, float0);
     PSMTXMultVec(m, somevec, somevec2);

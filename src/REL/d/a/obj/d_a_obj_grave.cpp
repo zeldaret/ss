@@ -9,6 +9,7 @@
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_sc_game.h"
 #include "d/d_stage.h"
+#include "d/d_vec.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
@@ -76,12 +77,6 @@ bool dAcOGrave_c::createHeap() {
     return !mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale);
 }
 
-// copy from d_a_obj_fairy - TODO move it to a shared file
-inline static void vecCylCalc(mVec3_c &target, const mAng &rot, f32 factor) {
-    target.x += factor * rot.sin();
-    target.z += factor * rot.cos();
-}
-
 int dAcOGrave_c::create() {
     mShouldGlow = getFromParams(0, 3) == 0;
     mSceneflag = getFromParams(2, 0xFF);
@@ -103,7 +98,7 @@ int dAcOGrave_c::create() {
         }
         field_0x7F6 = false;
         mOrigPos2 = mPosition;
-        vecCylCalc(mOrigPos2, mRotation.y.mVal + 0x8000, dAcPy_c::sPushRelatedConstant);
+        getXZCirclePoint(mOrigPos2, mRotation.y.mVal + 0x8000, dAcPy_c::sPushRelatedConstant);
         mPosition.set(mOrigPos2.x, mOrigPos2.y, mOrigPos2.z);
         mOldPosition.set(mOrigPos2.x, mOrigPos2.y, mOrigPos2.z);
     }
@@ -167,7 +162,7 @@ void dAcOGrave_c::executeState_Wait() {
     s32 diff = getXZAngleToPlayer().absDiff(mRotation.y);
     if (field_0x7F6) {
         mOrigPos2 = mPosition;
-        vecCylCalc(mOrigPos2, mAngle.y, dAcPy_c::sPushRelatedConstant);
+        getXZCirclePoint(mOrigPos2, mAngle.y, dAcPy_c::sPushRelatedConstant);
         if ((mPush && (s16)diff < 0x2000) || (mPull && (s16)diff > 0x6000)) {
             field_0x7F6 = false;
             mStateMgr.changeState(StateID_Move);
