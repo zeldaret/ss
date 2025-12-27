@@ -16,6 +16,7 @@
 #include "d/d_sc_game.h"
 #include "d/d_stage.h"
 #include "d/d_stage_mgr.h"
+#include "d/d_vec.h"
 #include "d/flag/dungeonflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/lyt/d2d.h"
@@ -31,10 +32,6 @@
 #include "nw4r/lyt/lyt_types.h"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
-
-inline mVec3_c vec2ToVec3XY(const mVec2_c &v) {
-    return mVec3_c(v.x, v.y, 0.0f);
-}
 
 static bool checkHasMap() {
     return DungeonflagManager::sInstance->getCounterOrFlag(2, 8);
@@ -1038,8 +1035,7 @@ void dLytMapIcon01_c::draw() {
     for (int i = 0; i < field_0x0E13; i++) {
         if (mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->IsVisible()) {
             v2 = mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].boundingPos;
-            mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->SetTranslate(
-                vec2ToVec3XY(v2 + field_0x0D40)
+            mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->SetTranslate(vec2ToVec3XY(v2 + field_0x0D40)
             );
             mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->CalculateMtx(mLyt.getDrawInfo());
             mPopupConfigs[i + MAP_ICON_01_BOUNDING_COMMONICON_00].bounding->Draw(mLyt.getDrawInfo());

@@ -3,6 +3,7 @@
 #define NEED_DIRECT_FRAMECTRL_ACCESS
 
 #include "c/c_math.h"
+#include "d/d_vec.h"
 #include "d/d_player_act.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "toBeSorted/minigame_mgr.h"
@@ -123,10 +124,6 @@ dLytMap_HIO_c::dLytMap_HIO_c() {
 }
 
 dLytMap_HIO_c::~dLytMap_HIO_c() {}
-
-inline mVec3_c vec2ToVec3XY(const mVec2_c &v) {
-    return mVec3_c(v.x, v.y, 0.0f);
-}
 
 void dMapFootPrintsQueue_c::init() {
     int j = ARRAY_LENGTH(mEntries) - 1;
