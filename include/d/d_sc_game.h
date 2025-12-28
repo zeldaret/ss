@@ -172,6 +172,10 @@ public:
         sUpdateFrameCount = 0;
     }
 
+    static u32 getUpdateFrameCount() {
+        return sUpdateFrameCount;
+    }
+
     bool savePromptFlag() const {
         return mSavePromptFlag;
     }
