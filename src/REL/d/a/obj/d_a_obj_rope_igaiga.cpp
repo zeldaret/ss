@@ -372,7 +372,7 @@ void dAcOropeIgaiga_c::initializeState_Stick() {
     f32 rnd = cM::rndF(10.f);
     mVelocity.y = rnd + 3.f;
     if (dAcPy_c::GetLink()->checkActionFlags(0x10000)) {
-        s16 rotationYOffset = cM::rndInt(0x31C7) + 0x38e4;
+        s16 rotationYOffset = cM::rndInt(0x31C7) + 0x38E4;
         f32 f1 = (rotationYOffset - 0x38E4) / 12743.f;
         if (f1 > 1.f) {
             f1 = 1.f;
@@ -380,16 +380,16 @@ void dAcOropeIgaiga_c::initializeState_Stick() {
             f1 = 0.f;
         }
         f32 f2 = cM::rndF(3.f) + 15.f;
-        mXZCirclePointFactor = 15.f * f1 + f2;
+        mRadius = 15.f * f1 + f2;
         if ((mYOffsetIdx & 1) == 0) {
             rotationYOffset = -rotationYOffset;
         }
         mRotationYOffset = rotationYOffset;
     } else {
         if (mYOffsetIdx >= 4) {
-            mXZCirclePointFactor = cM::rndF(10.f);
+            mRadius = cM::rndF(10.f);
         } else {
-            mXZCirclePointFactor = cM::rndF(35.f);
+            mRadius = cM::rndF(35.f);
         }
         s16 rotationYOffset = cM::rndInt(0x1555) + 0x2aab;
         if ((mYOffsetIdx & 1) == 0) {
@@ -571,7 +571,7 @@ s32 dAcOropeIgaiga_c::fn_257_1D20() {
     }
     if (mCollider.ChkTgHit()) {
         fn_257_1FD0();
-        if (mCollider.ChkTgAtHitType(2)) {
+        if (mCollider.ChkTgAtHitType(AT_TYPE_SWORD)) {
             startSound(SE_SW_HIT_RopeIga);
         }
         dAcObjBase_c *tgActor = mCollider.GetTgActor();
@@ -589,11 +589,11 @@ void dAcOropeIgaiga_c::fn_257_1DF0() {
         if (field_0x91E == 3) {
             mCollider.OnAtSet();
             mCollider.SetR(50.f);
-            mCollider.mCo.OffSPrm(1);
-            mVec3_c pos = mPosition;
-            pos.y += 20.f;
+            mCollider.ClrCoSet();
+            mVec3_c particlePosition = mPosition;
+            particlePosition.y += 20.f;
             dJEffManager_c::spawnEffect(
-                PARTICLE_RESOURCE_ID_MAPPING_498_, pos, nullptr, nullptr, nullptr, nullptr, 0, 0
+                PARTICLE_RESOURCE_ID_MAPPING_498_, particlePosition, nullptr, nullptr, nullptr, nullptr, 0, 0
             );
             startSound(SE_RopeIga_EXPLODE);
         } else if (field_0x91E == 0) {
@@ -610,11 +610,11 @@ void dAcOropeIgaiga_c::fn_257_1DF0() {
 void dAcOropeIgaiga_c::fn_257_1F20() {
     s16 ang = mStateMgr.isState(StateID_Rope) ? 0xb6 : 0x4fa;
     s16 random = cM::rndInt(0x222);
-    s32 ang2 = ang + random;
-    if (ang2 & 1) {
-        ang2 = (s16)-ang2;
+    s32 rotationXOffset = ang + random;
+    if (rotationXOffset & 1) {
+        rotationXOffset = (s16)-rotationXOffset;
     }
-    mRotationXOffset = ang2;
+    mRotationXOffset = rotationXOffset;
 }
 
 void dAcOropeIgaiga_c::fn_257_1FD0() {
@@ -706,9 +706,7 @@ const f32 dAcOropeIgaiga_c::sLinkCenterTranslationYOffset[6] = {20.f, 30.f, -55.
 bool dAcOropeIgaiga_c::fn_257_2310(s16 rotationYOffset) {
     if (mStickTimer != 0) {
         mVec3_c linkCenterTranslation = dAcPy_c::GetLink()->getCenterTranslation();
-        getXZCirclePoint(
-            linkCenterTranslation, dAcPy_c::GetLink()->mRotation.y + rotationYOffset, mXZCirclePointFactor
-        );
+        getXZCirclePoint(linkCenterTranslation, dAcPy_c::GetLink()->mRotation.y + rotationYOffset, mRadius);
         linkCenterTranslation.y += sLinkCenterTranslationYOffset[mYOffsetIdx];
         if (mStickTimer == 10 && mYOffsetIdx < 4) {
             mVec3_c linkPos = dAcPy_c::GetLink()->mPosition;

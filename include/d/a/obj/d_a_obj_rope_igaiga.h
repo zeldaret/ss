@@ -29,8 +29,8 @@ public:
     void fn_257_1DF0();
     void fn_257_1F20();
     void fn_257_1FD0();
-    bool fn_257_1FF0(f32 *, bool);
-    void fn_257_20F0(f32, f32);
+    bool fn_257_1FF0(f32 *posY, bool p2);
+    void fn_257_20F0(f32 speed, f32 velocityY);
     void fn_257_21A0();
     bool fn_257_21D0();
     bool fn_257_2310(s16 rotationOffset);
@@ -70,7 +70,7 @@ private:
     /* 0x92A */ s8 mVelocityYRelated;
     /* 0x92C */ f32 mLinkSpeedRelated;
     /* 0x930 */ f32 mPositionYRelated;
-    /* 0x934 */ f32 mXZCirclePointFactor;
+    /* 0x934 */ f32 mRadius;
     /* 0x938 */ bool field_0x938;
     /* 0x939 */ bool mLinkShieldBash;
     /* 0x93A */ bool mLinkHigher;
