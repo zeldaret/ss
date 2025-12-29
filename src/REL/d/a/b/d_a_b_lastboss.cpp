@@ -170,14 +170,14 @@ int dAcBlastboss_c::create() {
     mCcList.addCc(mCc2, sSrcCyl2);
     mCcList.addCc(mCc3, sSrcCyl3);
 
-    for (int i = 0; i < (int)ARRAY_LENGTH(field_0x1260); i++) {
-        field_0x1260[i].field_0x000 = i;
-        field_0x1260[i].field_0x002 = cM::rndF(65536.0f);
-        mCcList.addCc(field_0x1260[i].mCc, sSrcSph);
-        for (int j = 0; j < (int)ARRAY_LENGTH(field_0x1260[j].field_0x014); j++) {
-            field_0x1260[i].field_0x014[j] = mPosition;
+    for (int i = 0; i < (int)ARRAY_LENGTH(field_0x1268); i++) {
+        field_0x1268[i].field_0x000 = i;
+        field_0x1268[i].field_0x002 = cM::rndF(65536.0f);
+        mCcList.addCc(field_0x1268[i].mCc, sSrcSph);
+        for (int j = 0; j < (int)ARRAY_LENGTH(field_0x1268[j].field_0x014); j++) {
+            field_0x1268[i].field_0x014[j] = mPosition;
         }
-        field_0x1260[i].field_0x008 = i * 15000;
+        field_0x1268[i].field_0x008 = i * 15000;
     }
 
     // TODO loop of length 1 might not exist
@@ -265,8 +265,8 @@ int dAcBlastboss_c::actorExecute() {
         }
     }
 
-    if (mMdlCallback.field_0x04 != 0) {
-        mMdlCallback.field_0x04--;
+    if (mMdlCallback.field_0x04.mVal != 0) {
+        mMdlCallback.field_0x04.mVal--;
     }
 
     if (field_0x117C != 0) {
@@ -287,10 +287,10 @@ int dAcBlastboss_c::actorExecute() {
 
     mVec3_c vEff;
     mVec3_c linkPos = link->getPosition();
-    field_0x116A = cLib::targetAngleY(mPosition, linkPos);
-    field_0x1190 = link->getPosition().absXZTo(mPosition);
+    mYAngleToLink = cLib::targetAngleY(mPosition, linkPos);
+    mXZDistanceToLink = link->getPosition().absXZTo(mPosition);
 
-    field_0x1186 = field_0x116A - mRotation.y;
+    mYRotationRelativeToLink = mYAngleToLink - mRotation.y;
     mSwordMdl.setAttackActive(false);
 
     mCc4.ClrAtSet();
@@ -346,10 +346,13 @@ int dAcBlastboss_c::actorExecute() {
     mMdl.getModel().calc(false);
 
     nw4r::g3d::ResMdl resMdl = mMdl.getModel().getResMdl();
+    // TODO: These very deliberately placed matrices might work better with
+    // inlines but I haven't found an inline that places rotMtx where it needs
+    // to be.
     mMtx_c nodeMtx;
-    mMdl.getModel().getNodeWorldMtx(resMdl.GetResNode("loc_sword01").GetID(), nodeMtx);
     mMtx_c rotMtx;
     mMtx_c scaleMtx;
+    mMdl.getModel().getNodeWorldMtx(resMdl.GetResNode("loc_sword01").GetID(), nodeMtx);
     scaleMtx.scaleS(1.05f, 1.05f, 1.05f);
     MTXConcat(nodeMtx, scaleMtx, nodeMtx);
 
@@ -359,8 +362,8 @@ int dAcBlastboss_c::actorExecute() {
     // TODO number
     if ((s32)field_0x1144 == 9) {
         vEff.y = -80.0f;
-        if (field_0x1190 > 300.0f) {
-            vEff.y -= (field_0x1190 - 300.0f);
+        if (mXZDistanceToLink > 300.0f) {
+            vEff.y -= (mXZDistanceToLink - 300.0f);
             if (vEff.y < -280.0f) {
                 vEff.y = -280.0f;
             }
@@ -437,8 +440,8 @@ int dAcBlastboss_c::actorExecute() {
             tmpCc.x = 0.0f;
             tmpCc.y = 0.0f;
             tmpCc.z = 100.0f;
-            if (field_0x1190 > 300.0f) {
-                tmpCc.z = (field_0x1190 - 300.0f) + 100.0f;
+            if (mXZDistanceToLink > 300.0f) {
+                tmpCc.z = (mXZDistanceToLink - 300.0f) + 100.0f;
                 if (tmpCc.z > 300) {
                     tmpCc.z = 300.0f;
                 }
@@ -460,7 +463,7 @@ int dAcBlastboss_c::actorExecute() {
     MTXMultVec(nodeMtx, tmpCc, tmpCc);
     tmpCc += mPosition;
 
-    if (link->isAttacking() && field_0x1190 < 400.0f) {
+    if (link->isAttacking() && mXZDistanceToLink < 400.0f) {
         tmpCc.y += 100.0f;
         mCc1.SetH(100.0f);
     } else {
@@ -491,7 +494,7 @@ int dAcBlastboss_c::actorExecute() {
     field_0x1250[0] = mToeTranslation[0] + (mToeTranslation[1] - mToeTranslation[0]) * 0.5f;
     // UB: this should use string comparison functions for robustness, but
     // probably works fine in MWCC
-    if ((field_0x2D1C == "CatchThunderEnd" || field_0x2D1C == "Stan") && mMdl.getAnm().getFrame() <= 3.0f) {
+    if ((mpCurrentAnm == "CatchThunderEnd" || mpCurrentAnm == "Stan") && mMdl.getAnm().getFrame() <= 3.0f) {
         field_0x11A4 = 25.0f;
     }
 
@@ -546,73 +549,73 @@ int dAcBlastboss_c::actorExecute() {
     bool footSplash[2] = {false, false};
     // UB: this should use string comparison functions for robustness, but
     // probably works fine in MWCC
-    if (field_0x2D1C == "Walk" || field_0x2D1C == "WalkBt") {
+    if (mpCurrentAnm == "Walk" || mpCurrentAnm == "WalkBt") {
         if (mMdl.getAnm().checkFrame(22.0f)) {
             footSplash[0] = true;
         } else if (mMdl.getAnm().checkFrame(48.0f)) {
             footSplash[1] = true;
         }
-    } else if (field_0x2D1C == "TurnR") {
+    } else if (mpCurrentAnm == "TurnR") {
         if (mMdl.getAnm().checkFrame(31.0f)) {
             footSplash[0] = true;
         } else if (mMdl.getAnm().checkFrame(19.0f)) {
             footSplash[1] = true;
         }
-    } else if (field_0x2D1C == "TurnL") {
+    } else if (mpCurrentAnm == "TurnL") {
         if (mMdl.getAnm().checkFrame(31.0f)) {
             footSplash[1] = true;
         } else if (mMdl.getAnm().checkFrame(19.0f)) {
             footSplash[0] = true;
         }
-    } else if (field_0x2D1C == "AttackBreak") {
+    } else if (mpCurrentAnm == "AttackBreak") {
         if (mMdl.getAnm().checkFrame(16.0f)) {
             footSplash[0] = true;
         }
-    } else if (field_0x2D1C == "AttackL") {
+    } else if (mpCurrentAnm == "AttackL") {
         if (mMdl.getAnm().checkFrame(26.0f)) {
             footSplash[1] = true;
         }
-    } else if (field_0x2D1C == "AttackR") {
+    } else if (mpCurrentAnm == "AttackR") {
         if (mMdl.getAnm().checkFrame(24.0f)) {
             footSplash[1] = true;
         }
-    } else if (field_0x2D1C == "AttackU") {
+    } else if (mpCurrentAnm == "AttackU") {
         if (mMdl.getAnm().checkFrame(10.0f)) {
             footSplash[1] = true;
         } else if (mMdl.getAnm().checkFrame(24.0f)) {
             footSplash[0] = true;
         }
-    } else if (field_0x2D1C == "Counter") {
+    } else if (mpCurrentAnm == "Counter") {
         if (mMdl.getAnm().checkFrame(21.0f)) {
             footSplash[0] = true;
         } else if (mMdl.getAnm().checkFrame(45.0f)) {
             footSplash[1] = true;
         }
-    } else if (field_0x2D1C == "AttackJumpEnd") {
+    } else if (mpCurrentAnm == "AttackJumpEnd") {
         if (mMdl.getAnm().checkFrame(6.0f)) {
             footSplash[1] = true;
         }
-    } else if (field_0x2D1C == "DownGetUp") {
+    } else if (mpCurrentAnm == "DownGetUp") {
         if (mMdl.getAnm().checkFrame(137.0f)) {
             footSplash[1] = true;
         }
-    } else if (field_0x2D1C == "DownEscapeL") {
+    } else if (mpCurrentAnm == "DownEscapeL") {
         if (mMdl.getAnm().checkFrame(15.0f)) {
             footSplash[0] = true;
         } else if (mMdl.getAnm().checkFrame(17.0f)) {
             footSplash[1] = true;
         }
-    } else if (field_0x2D1C == "DownEscapeR") {
+    } else if (mpCurrentAnm == "DownEscapeR") {
         if (mMdl.getAnm().checkFrame(15.0f)) {
             footSplash[1] = true;
         } else if (mMdl.getAnm().checkFrame(17.0f)) {
             footSplash[0] = true;
         }
-    } else if (field_0x2D1C == "ThunderDemo") {
+    } else if (mpCurrentAnm == "ThunderDemo") {
         if (mMdl.getAnm().checkFrame(18.0f)) {
             footSplash[1] = true;
         }
-    } else if (field_0x2D1C == "AttackThunder") {
+    } else if (mpCurrentAnm == "AttackThunder") {
         if (mMdl.getAnm().checkFrame(25.0f)) {
             footSplash[0] = true;
         }
@@ -750,7 +753,7 @@ int dAcBlastboss_c::actorExecute() {
         }
     }
 
-    if (field_0x1149) {
+    if (field_0x1149 != 0) {
         // "Target lock: Demise" (Phase 2)
         mTargetFiTextID = 0x38;
     } else {
@@ -761,50 +764,366 @@ int dAcBlastboss_c::actorExecute() {
     return SUCCEEDED;
 }
 
-void dAcBlastboss_c::callback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip *manip, nw4r::g3d::ResMdl mdl) {}
+void dAcBlastboss_c::callback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip *manip, nw4r::g3d::ResMdl mdl) {
+    u32 baseNodeIdSkirt = 0;
+    u32 baseNodeIdHair = 0;
+    int r27;
+    int param_4;
 
-void dAcBlastboss_c::initializeState_Fight() {}
-void dAcBlastboss_c::executeState_Fight() {}
+    if (nodeId >= B_LAST_BOSS_NODE_skirtA1 && nodeId < B_LAST_BOSS_NODE_skirtAU1) {
+        baseNodeIdSkirt = B_LAST_BOSS_NODE_skirtA1;
+        param_4 = 0;
+    } else if (nodeId >= B_LAST_BOSS_NODE_skirtB1 && nodeId < B_LAST_BOSS_NODE_skirtBU1) {
+        baseNodeIdSkirt = B_LAST_BOSS_NODE_skirtB1;
+        param_4 = 1;
+    } else if (nodeId >= B_LAST_BOSS_NODE_skirtC1 && nodeId < B_LAST_BOSS_NODE_skirtCU1) {
+        baseNodeIdSkirt = B_LAST_BOSS_NODE_skirtC1;
+        param_4 = 2;
+    } else if (nodeId >= B_LAST_BOSS_NODE_skirtD1 && nodeId < B_LAST_BOSS_NODE_skirtDU1) {
+        baseNodeIdSkirt = B_LAST_BOSS_NODE_skirtD1;
+        param_4 = 3;
+    } else if (nodeId >= B_LAST_BOSS_NODE_skirtE1 && nodeId < B_LAST_BOSS_NODE_skirtEU1) {
+        baseNodeIdSkirt = B_LAST_BOSS_NODE_skirtE1;
+        param_4 = 4;
+    } else if (nodeId >= B_LAST_BOSS_NODE_skirtF1 && nodeId < B_LAST_BOSS_NODE_skirtFU1) {
+        baseNodeIdSkirt = B_LAST_BOSS_NODE_skirtF1;
+        param_4 = 5;
+    } else if (nodeId >= B_LAST_BOSS_NODE_skirtG1 && nodeId < B_LAST_BOSS_NODE_skirtGU1) {
+        baseNodeIdSkirt = B_LAST_BOSS_NODE_skirtG1;
+        param_4 = 6;
+    } else if (nodeId >= B_LAST_BOSS_NODE_skirtH1 && nodeId < B_LAST_BOSS_NODE_skirtHU1) {
+        baseNodeIdSkirt = B_LAST_BOSS_NODE_skirtH1;
+        param_4 = 7;
+    }
+
+    if (baseNodeIdSkirt != 0) {
+        u32 nodeOffset = nodeId - baseNodeIdSkirt;
+
+        mMtx_c mtx;
+        mtx.transS(mpOwner->field_0x1268[param_4].field_0x014[nodeOffset]);
+        mtx.XrotM(mpOwner->field_0x1268[param_4].field_0x08C[nodeOffset].x);
+        mtx.YrotM(mpOwner->field_0x1268[param_4].field_0x08C[nodeOffset].y);
+        mtx.ZrotM(-mpOwner->field_0x1268[param_4].field_0x08C[nodeOffset].z);
+        mtx.scaleM(0.95f, 0.95f, 1.0f);
+        mtx.YrotM(-0x4000);
+        manip->SetMtx(mtx);
+    }
+
+    if (nodeId >= B_LAST_BOSS_NODE_hairA1 && nodeId < B_LAST_BOSS_NODE_hairBL1) {
+        baseNodeIdHair = B_LAST_BOSS_NODE_hairA1;
+        r27 = 0;
+    }
+
+    if (baseNodeIdHair != 0) {
+        u32 nodeOffset = nodeId - baseNodeIdHair;
+        mMtx_c mtx;
+        mtx.transS(mpOwner->field_0x2948[r27].field_0x008[nodeOffset]);
+        mtx.YrotM(mpOwner->field_0x2948[r27].field_0x044[nodeOffset].y);
+        mtx.XrotM(mpOwner->field_0x2948[r27].field_0x044[nodeOffset].x);
+        mtx.ZrotM(-mpOwner->field_0x2948[r27].field_0x044[nodeOffset].z);
+        mtx.scaleM(0.95f, 0.95f, 1.0f);
+        mtx.YrotM(-0x4000);
+        manip->SetMtx(mtx);
+    }
+
+    if (nodeId == B_LAST_BOSS_NODE_center) {
+        mMtx_c mtx;
+        manip->GetMtx(mtx);
+        mtx.XrotM(-field_0x0E.mVal / 2);
+        mtx.ZrotM(-field_0x10.mVal / 2);
+        manip->SetMtx(mtx);
+    } else if (nodeId == B_LAST_BOSS_NODE_backbone1 || nodeId == B_LAST_BOSS_NODE_backbone2) {
+        mMtx_c mtx;
+        manip->GetMtx(mtx);
+        mtx.YrotM(field_0x0E);
+        mtx.XrotM(field_0x2E - field_0x0E);
+        mtx.ZrotM(-field_0x10);
+        manip->SetMtx(mtx);
+    } else if (nodeId == B_LAST_BOSS_NODE_head) {
+        mMtx_c mtx;
+        manip->GetMtx(mtx);
+        mtx.YrotM(field_0x0E * 2 + field_0x08 + field_0x06);
+        mtx.ZrotM(field_0x0A - field_0x10 * 2);
+        mtx.XrotM(field_0x0C);
+        manip->SetMtx(mtx);
+    } else if (nodeId == B_LAST_BOSS_NODE_chin) {
+        mMtx_c mtx;
+        manip->GetMtx(mtx);
+        mtx.ZrotM(field_0x12);
+        manip->SetMtx(mtx);
+    } else if (nodeId >= B_LAST_BOSS_NODE_hairBL1 && nodeId <= B_LAST_BOSS_NODE_hairC3) {
+        mMtx_c mtx;
+        manip->GetMtx(mtx);
+
+        if (nodeId >= B_LAST_BOSS_NODE_hairC1) {
+            mtx.XrotM(field_0x1C[nodeId - B_LAST_BOSS_NODE_hairBL1]);
+            mtx.ZrotM(field_0x1C[nodeId - B_LAST_BOSS_NODE_hairBL1]);
+        } else {
+            mtx.YrotM(field_0x1C[nodeId - B_LAST_BOSS_NODE_hairBL1]);
+            mtx.XrotM(field_0x1C[nodeId - B_LAST_BOSS_NODE_hairBL1]);
+        }
+
+        manip->SetMtx(mtx);
+    } else if (nodeId == B_LAST_BOSS_NODE_armR1) {
+        int blah = field_0x04 * mAng(field_0x04 * 0x4300).sin() * 80.0f;
+
+        mMtx_c mtx;
+        manip->GetMtx(mtx);
+
+        mtx.XrotM(blah + (int)(300.0f * field_0x30));
+        mtx.ZrotM(blah + (int)(200.0f * field_0x30));
+
+        manip->SetMtx(mtx);
+    } else if (nodeId == B_LAST_BOSS_NODE_armR2) {
+        mMtx_c mtx;
+        manip->GetMtx(mtx);
+        mtx.ZrotM(field_0x30 * 200.0f);
+        manip->SetMtx(mtx);
+    } else if (nodeId == B_LAST_BOSS_NODE_wristR) {
+        // unused
+        int blah = field_0x04 * (f32)mAng(field_0x04 * 0x4300).sin();
+
+        mMtx_c mtx;
+        manip->GetMtx(mtx);
+
+        int i2 = 0;
+        if (field_0x30 > 0.0f) {
+            i2 = field_0x30 * -200.0f;
+        }
+
+        mtx.XrotM(i2 + field_0x18);
+        mtx.ZrotM(i2 + field_0x1A);
+
+        manip->SetMtx(mtx);
+    } else if (nodeId == B_LAST_BOSS_NODE_legR1 || nodeId == B_LAST_BOSS_NODE_legR2) {
+        mMtx_c mtx;
+        manip->GetMtx(mtx);
+        mtx.XrotM(field_0x14);
+        if (nodeId == B_LAST_BOSS_NODE_legR2) {
+            mtx.XrotM(field_0x14);
+        }
+        manip->SetMtx(mtx);
+    } else if (nodeId == B_LAST_BOSS_NODE_legL1 || nodeId == B_LAST_BOSS_NODE_legL2) {
+        mMtx_c mtx;
+        manip->GetMtx(mtx);
+        mtx.XrotM(field_0x16);
+        if (nodeId == B_LAST_BOSS_NODE_legL2) {
+            mtx.XrotM(field_0x16);
+        }
+        manip->SetMtx(mtx);
+    }
+}
+
+void dAcBlastboss_c::initializeState_Fight() {
+    setAnm("WaitBt", 20.0f);
+    mAnmRate = 1.0f;
+    field_0x1166 = 0;
+    field_0x118A = 0;
+    if (field_0x1149 == 0) {
+        field_0x1156[2] = cM::rndF(50.0f) + 50.0f;
+    } else {
+        field_0x1156[2] = cM::rndF(20.0f) + 10.0f;
+    }
+    field_0x1144 = 9;
+}
+void dAcBlastboss_c::executeState_Fight() {
+    dAcPy_c *link = dAcPy_c::GetLinkM();
+    field_0x1131 = 1;
+    f32 targetSpeed = 0.0f;
+    f32 targetAnmRate = 1.5f;
+    f32 puVar2 = 0.0f;
+
+    s16 diff = mAngle.y - mYAngleToLink;
+    bool b = false;
+
+    if (field_0x2CEC >= 100 && field_0x2CEC < 300) {
+        puVar2 = -100.0f;
+        field_0x1156[2] = cM::rndF(50.0f) + 100.0f;
+    }
+
+    switch (field_0x1166) {
+        case 0: {
+            b = true;
+            field_0x118C = 0;
+            targetAnmRate = 1.0f;
+            field_0x117E = 0;
+            if (mXZDistanceToLink > puVar2 + 450.0f) {
+                field_0x1166 = 2;
+            } else if (mXZDistanceToLink < puVar2 + 250.0f + 100.0f) {
+                field_0x1166 = 1;
+                field_0x1156[0] = 8;
+                mAnmRate = -1.0f;
+                field_0x1180 = 0;
+            } else {
+                setAnm("WaitBt", 20.0f);
+                mAnmRate = targetAnmRate;
+                if (diff < -0x1000 || diff > 0x1000) {
+                    field_0x1166 = 4;
+                    if (diff < 0) {
+                        setAnm("TurnL", 10.0f);
+                    } else {
+                        setAnm("TurnR", 10.0f);
+                    }
+                }
+            }
+            break;
+        }
+        case 1: {
+            b = true;
+            setAnm("WalkBt", 20.0f);
+            targetSpeed = -5.0f;
+            targetAnmRate = -2.5f;
+            if (mXZDistanceToLink < 200.0f) {
+                field_0x1180++;
+                if (field_0x1180 > 40) {
+                    mStateMgr.changeState(StateID_PunchAttack);
+                    return;
+                }
+            } else if (mXZDistanceToLink >= puVar2 + 200.0f && field_0x1156[0] == 0) {
+                field_0x1166 = 0;
+            }
+            break;
+        }
+        case 2: {
+            b = true;
+            field_0x117E = 0;
+            if (mXZDistanceToLink > puVar2 + 850.0f) {
+                field_0x1166 = 3;
+            } else {
+                setAnm("WalkBt", 20.0f);
+                if (mMdl.getAnm().getFrame() >= 25.0f && mMdl.getAnm().getFrame() <= 50.0f) {
+                    targetSpeed = 5.0f;
+                }
+                field_0x11A4 = 5.0f;
+                targetAnmRate = 1.5f;
+            }
+            if (mXZDistanceToLink < puVar2 + 400.0f) {
+                field_0x1166 = 0;
+                if (field_0x1149 == 0) {
+                    field_0x1156[2] = cM::rndF(50.0f) + 50.0f;
+                } else {
+                    field_0x1156[2] = cM::rndF(20.0f) + 10.0f;
+                }
+            }
+            break;
+        }
+        case 3: {
+            setAnm("Walk", 20.0f);
+            targetSpeed = 7.5f;
+            field_0x11A4 = 7.5f;
+            targetAnmRate = 1.0f;
+            if (mXZDistanceToLink < puVar2 + 750.0f) {
+                field_0x1166 = 3;
+            } else if (!link->isRecovering()) {
+                field_0x117E++;
+                if (field_0x117E > 70) {
+                    mStateMgr.changeState(StateID_DashAttack);
+                    return;
+                }
+            } else {
+                field_0x117E = 0;
+            }
+            break;
+        }
+        case 4: {
+            field_0x117E = 0;
+            b = true;
+            if (mMdl.getAnm().isStop()) {
+                field_0x1166 = 0;
+            }
+            break;
+        }
+    }
+
+    sLib::addCalcScaledDiff(&mAnmRate, targetAnmRate, 1.0f, 0.5f);
+    setAnmRate(mAnmRate);
+    sLib::addCalcScaledDiff(&mSpeed, targetSpeed, 1.0f, 2.0f);
+
+    if (field_0x1166 != 0) {
+        sLib::addCalcAngle(field_0x118C.ref(), 0x800, 1, 100);
+        sLib::addCalcAngle(mAngle.y.ref(), mYAngleToLink, 2, field_0x118C);
+    }
+
+    if (b) {
+        if (diff > 0x1000) {
+            diff = 0x1000;
+        } else if (diff < -0x1000) {
+            diff = -0x1000;
+        }
+        field_0x1172 = diff / 2;
+        // TODO what is this constant
+        sLib::addCalcScaledDiff(&mMdlCallback.field_0x30, diff * (1.0f / 409.6f), 0.5f, 1.0f);
+    }
+}
 void dAcBlastboss_c::finalizeState_Fight() {}
+
 void dAcBlastboss_c::initializeState_Guard() {}
 void dAcBlastboss_c::executeState_Guard() {}
 void dAcBlastboss_c::finalizeState_Guard() {}
+
 void dAcBlastboss_c::initializeState_GuardBreak() {}
 void dAcBlastboss_c::executeState_GuardBreak() {}
 void dAcBlastboss_c::finalizeState_GuardBreak() {}
+
 void dAcBlastboss_c::initializeState_Attack() {}
 void dAcBlastboss_c::executeState_Attack() {}
 void dAcBlastboss_c::finalizeState_Attack() {}
+
 void dAcBlastboss_c::initializeState_CounterAttack() {}
 void dAcBlastboss_c::executeState_CounterAttack() {}
 void dAcBlastboss_c::finalizeState_CounterAttack() {}
+
 void dAcBlastboss_c::initializeState_PunchAttack() {}
 void dAcBlastboss_c::executeState_PunchAttack() {}
 void dAcBlastboss_c::finalizeState_PunchAttack() {}
+
 void dAcBlastboss_c::initializeState_DashAttack() {}
 void dAcBlastboss_c::executeState_DashAttack() {}
 void dAcBlastboss_c::finalizeState_DashAttack() {}
+
 void dAcBlastboss_c::initializeState_SmallAttack() {}
 void dAcBlastboss_c::executeState_SmallAttack() {}
 void dAcBlastboss_c::finalizeState_SmallAttack() {}
+
 void dAcBlastboss_c::initializeState_ThunderAttack() {}
 void dAcBlastboss_c::executeState_ThunderAttack() {}
 void dAcBlastboss_c::finalizeState_ThunderAttack() {}
+
 void dAcBlastboss_c::initializeState_Damage() {}
 void dAcBlastboss_c::executeState_Damage() {}
 void dAcBlastboss_c::finalizeState_Damage() {}
+
 void dAcBlastboss_c::initializeState_SitDamage() {}
 void dAcBlastboss_c::executeState_SitDamage() {}
 void dAcBlastboss_c::finalizeState_SitDamage() {}
+
 void dAcBlastboss_c::initializeState_Down() {}
 void dAcBlastboss_c::executeState_Down() {}
 void dAcBlastboss_c::finalizeState_Down() {}
+
 void dAcBlastboss_c::initializeState_Stun() {}
 void dAcBlastboss_c::executeState_Stun() {}
 void dAcBlastboss_c::finalizeState_Stun() {}
+
 void dAcBlastboss_c::initializeState_ThunderWait() {}
 void dAcBlastboss_c::executeState_ThunderWait() {}
 void dAcBlastboss_c::finalizeState_ThunderWait() {}
+
+void dAcBlastboss_c::setAnm(const char *name, f32 blend) {
+    if (mpCurrentAnm != name) {
+        mMdl.setAnm(name, m3d::PLAY_MODE_4, blend);
+        mpCurrentAnm = name;
+    }
+}
+
+void dAcBlastboss_c::forceSetAnm(const char *name, f32 blend) {
+    mMdl.setAnm(name, m3d::PLAY_MODE_4, blend);
+    mpCurrentAnm = name;
+}
+
+void dAcBlastboss_c::setAnmRate(f32 rate) {
+    mMdl.setRate(rate);
+}
 
 int dAcBlastboss_c::draw() {
     drawModelType1(&mMdl.getModel());

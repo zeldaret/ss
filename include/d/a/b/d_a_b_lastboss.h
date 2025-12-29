@@ -43,10 +43,25 @@ class dAcBlastboss_c : public dAcEnBase_c {
     public:
         virtual void timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) override;
 
-        /* 0x04 */ s16 field_0x04;
-        /* 0x06 */ u8 _0x06[0x34 - 0x06];
+        /* 0x04 */ mAng field_0x04;
+        /* 0x06 */ mAng field_0x06;
+        /* 0x08 */ mAng field_0x08;
+        /* 0x0A */ mAng field_0x0A;
+        /* 0x0C */ mAng field_0x0C;
+        /* 0x0E */ mAng field_0x0E;
+        /* 0x10 */ mAng field_0x10;
+        /* 0x12 */ mAng field_0x12;
+        /* 0x14 */ mAng field_0x14;
+        /* 0x16 */ mAng field_0x16;
+        /* 0x18 */ mAng field_0x18;
+        /* 0x1A */ mAng field_0x1A;
+        /* 0x1C */ mAng field_0x1C[9];
+        /* 0x2E */ mAng field_0x2E;
+        /* 0x30 */ f32 field_0x30;
         /* 0x34 */ dAcBlastboss_c *mpOwner;
     };
+
+    friend class callback_c;
 
     // BLastBoss.arc > g3d > model.brres > 3DModels(NW4R) > LastBoss > Bones > ...
     enum BLastBossModelNode_e {
@@ -214,10 +229,13 @@ public:
 
 private:
     void fn_143_6720();
-    void fn_143_A110(s32);
+    void setAnm(const char *anim, f32 blend);
+    void forceSetAnm(const char *anim, f32 blend);
+    void setAnmRate(f32 rate);
     void fn_143_7B00();
     void fn_143_7F80();
     void fn_143_9610();
+    void fn_143_A110(s32);
 
     /* 0x0378 */ d3d::AnmMdlWrapper mMdl;
     /* 0x03E8 */ m3d::anmTexSrt_c mAnmTexSrt;
@@ -275,31 +293,42 @@ private:
     /* 0x1162 */ u8 _0x1162[0x1164 - 0x1162];
 
     /* 0x1164 */ s16 field_0x1164;
+    /* 0x1166 */ s16 field_0x1166;
 
-    /* 0x1166 */ u8 _0x1166[0x116A - 0x1166];
+    /* 0x1168 */ u8 _0x1168[0x116A - 0x1168];
 
-    /* 0x116A */ s16 field_0x116A;
+    /* 0x116A */ s16 mYAngleToLink;
 
-    /* 0x116C */ u8 _0x116C[0x117C - 0x116C];
+    /* 0x116C */ u8 _0x116C[0x1172 - 0x116C];
+
+    /* 0x1172 */ s16 field_0x1172;
+
+    /* 0x1174 */ u8 _0x1174[0x117C - 0x1174];
 
     /* 0x117C */ s16 field_0x117C;
-
-    /* 0x117E */ u8 _0x117E[0x1184 - 0x117E];
-
+    /* 0x117E */ s16 field_0x117E;
+    /* 0x1180 */ s16 field_0x1180;
+    /* 0x1180 */ s16 field_0x1182;
     /* 0x1184 */ s16 field_0x1184;
-    /* 0x1186 */ s16 field_0x1186;
+    /* 0x1186 */ s16 mYRotationRelativeToLink;
 
-    /* 0x1188 */ u8 _0x1188[0x1190 - 0x1188];
+    /* 0x1188 */ u8 _0x1188[0x118A - 0x1188];
 
-    /* 0x1190 */ f32 field_0x1190;
+    /* 0x118A */ mAng field_0x118A;
+    /* 0x118C */ mAng field_0x118C;
+
+    /* 0x118E */ u8 _0x118E[0x1190 - 0x118E];
+
+    /* 0x1190 */ f32 mXZDistanceToLink;
 
     /* 0x1194 */ u8 _0x1194[0x119C - 0x1194];
 
     /* 0x119C */ f32 field_0x119C;
     /* 0x11A0 */ f32 field_0x11A0;
     /* 0x11A4 */ f32 field_0x11A4;
+    /* 0x11A8 */ f32 mAnmRate;
 
-    /* 0x11A8 */ u8 _0x11A8[0x11B0 - 0x11A8];
+    /* 0x11AC */ u8 _0x11AC[0x11B0 - 0x11AC];
 
     /* 0x11B0 */ f32 field_0x11B0;
 
@@ -330,7 +359,7 @@ private:
     /* 0x1238 */ mVec3_c mToeTranslation[2];
     /* 0x1250 */ mVec3_c field_0x1250[2];
 
-    /* 0x1268 */ UnkLastBossCcSph2 field_0x1260[8];
+    /* 0x1268 */ UnkLastBossCcSph2 field_0x1268[8];
     /* 0x2948 */ UnkLastBossCcSph1 field_0x2948[1];
 
     /* 0x2B64 */ dEmitter_c mWaterEmitter;
@@ -341,9 +370,9 @@ private:
     /* 0x2C68 */ dEmitter_c mEmitter6;
     /* 0x2C9C */ dEmitter_c mEmitter7;
     /* 0x2CD0 */ LIGHT_INFLUENCE mLightInfo;
-    /* 0x2CEC */ u16 field_0x2CEC;
+    /* 0x2CEC */ s16 field_0x2CEC;
     /* 0x2CEE */ u8 _0x2CEE[0x2D1C - 0x2CEE];
-    /* 0x2D1C */ const char *field_0x2D1C;
+    /* 0x2D1C */ const char *mpCurrentAnm;
     /* 0x2D20 */ dTgSwordBattleGame_c *mpSwordBattleGame;
 };
 
