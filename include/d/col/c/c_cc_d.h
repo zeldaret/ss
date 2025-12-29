@@ -836,6 +836,12 @@ public:
     void OffAtGrp(u32 grp) {
         mAt.SetAtFlag(GetAtGrp() & ~grp);
     }
+    void SetTgRpm(u32 f) {
+        mTg.SetRPrm(f);
+    }
+    void SetAtRpm(u32 f) {
+        mAt.SetRPrm(f);
+    }
 
     void SetTgFlag_0xA(u16 flag) {
         mTg.SetFlag_0xA(flag);
@@ -878,7 +884,9 @@ public:
         return mTg.ChkSet();
     }
 
-
+    void ClrAtActorInfo() { mAt.ClrActorInfo(); }
+    void ClrTgActorInfo() { mTg.ClrActorInfo(); }
+    void ClrCoActorInfo() { mCo.ClrActorInfo(); }
     bool ChkAtEffCounter() { return mAt.ChkEffCounter(); }
     bool ChkTgEffCounter() { return mTg.ChkEffCounter(); }
     void ClrAtEffCounter() { mAt.ClrEffCounter(); }
@@ -980,6 +988,9 @@ public:
     }
     void ClrTgElectric() {
         return mTg.OffSPrm(0x40000);
+    }
+    void ClrTg_0x10000() {
+        return mTg.OffSPrm(0x10000);
     }
     u32 ChkTgBonk() const {
         return mTg.MskSPrm(0x200000);

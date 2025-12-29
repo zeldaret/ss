@@ -5,15 +5,21 @@
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/col/cc/d_cc_s.h"
 #include "d/d_base.h"
 #include "d/d_light_env.h"
+#include "d/d_rumble.h"
 #include "d/d_sc_game.h"
+#include "d/d_stage_mgr.h"
+#include "d/d_vec.h"
+#include "d/flag/sceneflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "d/t/d_t_sword_battle_game.h"
 #include "f/f_base.h"
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
 #include "m/m3d/m_fanm.h"
+#include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
@@ -205,7 +211,7 @@ int dAcBlastboss_c::create() {
 
     field_0x11D4 = field_0x11D8 = -1;
 
-    mEmitter1.init(this);
+    mWaterEmitter.init(this);
     mEmitter2.init(this);
     // mEmitter3.init(this); // TODO why not this one...
     mEmitter4.init(this);
@@ -226,6 +232,9 @@ int dAcBlastboss_c::create() {
     return SUCCEEDED;
 }
 
+// TODO
+extern "C" const s16 notsure[] = {0xA000, 0xC000, 0xE000, 0xF000, 0x0000, 0x1000, 0x2000, 0x4000};
+
 int dAcBlastboss_c::doDelete() {
     dLightEnv_c::GetPInstance()->plight_cut(&mLightInfo);
     return SUCCEEDED;
@@ -245,33 +254,15 @@ int dAcBlastboss_c::actorExecute() {
     field_0x1131 = 0;
     field_0x1141 = 0;
     field_0x114E = 0;
-    
+
     field_0x11A4 = 0.0f;
     mLightInfo.mScale = 0.0f;
     field_0x11B0 = 0.7f;
 
-    if (field_0x1156 != 0) {
-        field_0x1156--;
-    }
-
-    if (field_0x1158 != 0) {
-        field_0x1158--;
-    }
-
-    if (field_0x115A != 0) {
-        field_0x115A--;
-    }
-
-    if (field_0x115C != 0) {
-        field_0x115C--;
-    }
-
-    if (field_0x115E != 0) {
-        field_0x115E--;
-    }
-
-    if (field_0x1160 != 0) {
-        field_0x1160--;
+    for (int i = 0; i < 6; i++) {
+        if (field_0x1156[i] != 0) {
+            field_0x1156[i]--;
+        }
     }
 
     if (mMdlCallback.field_0x04 != 0) {
@@ -294,16 +285,14 @@ int dAcBlastboss_c::actorExecute() {
         field_0x113E--;
     }
 
+    mVec3_c vEff;
     mVec3_c linkPos = link->getPosition();
     field_0x116A = cLib::targetAngleY(mPosition, linkPos);
-    // TODO maybe inline
-    mVec3_c posDiff = link->getPosition() - mPosition;
-    field_0x1190 = posDiff.absXZ();
-
+    field_0x1190 = link->getPosition().absXZTo(mPosition);
 
     field_0x1186 = field_0x116A - mRotation.y;
     mSwordMdl.setAttackActive(false);
-    
+
     mCc4.ClrAtSet();
     mCc5.ClrAtSet();
 
@@ -312,9 +301,9 @@ int dAcBlastboss_c::actorExecute() {
         mStateMgr.executeState();
     }
 
-    mRotation.x = mRotationCopy.x;
-    mRotation.z = mRotationCopy.z;
-    sLib::addCalcAngle(&mRotation.y.mVal, mRotationCopy.y, 2, 0x800);
+    mRotation.x = mAngle.x;
+    mRotation.z = mAngle.z;
+    sLib::addCalcAngle(&mRotation.y.mVal, mAngle.y, 2, 0x800);
 
     mMdl.play();
     if (!field_0x114F) {
@@ -350,7 +339,7 @@ int dAcBlastboss_c::actorExecute() {
     mScale.set(0.95f, 0.95f, 0.95f);
     mMdl.getModel().setScale(mScale);
     mMdl.getModel().setLocalMtx(mWorldMtx);
-    if (!field_0x114F) {
+    if (!field_0x1141) {
         mAnmTexSrt.play();
     }
 
@@ -359,15 +348,15 @@ int dAcBlastboss_c::actorExecute() {
     nw4r::g3d::ResMdl resMdl = mMdl.getModel().getResMdl();
     mMtx_c nodeMtx;
     mMdl.getModel().getNodeWorldMtx(resMdl.GetResNode("loc_sword01").GetID(), nodeMtx);
+    mMtx_c rotMtx;
     mMtx_c scaleMtx;
     scaleMtx.scaleS(1.05f, 1.05f, 1.05f);
     MTXConcat(nodeMtx, scaleMtx, nodeMtx);
 
-    // TODO - inline?
-    mVec3_c v(mRotation.y.sin(), 0.0f, mRotation.y.cos());
-    mSwordMdl.calc(nodeMtx, v, false);
+    mSwordMdl.calc(nodeMtx, mRotation.y, false);
 
-    mVec3_c vEff(0.0f, -120.0f, 0.0f);
+    vEff.set(0.0f, -120.0f, 0.0f);
+    // TODO number
     if ((s32)field_0x1144 == 9) {
         vEff.y = -80.0f;
         if (field_0x1190 > 300.0f) {
@@ -415,39 +404,359 @@ int dAcBlastboss_c::actorExecute() {
         field_0x114B = 0;
     }
 
-    // TODO NODE IDs
-    mMdl.getModel().getNodeWorldMtx(0x26, nodeMtx);
-    nodeMtx.getTranslation(field_0x11E4);
-    mMdl.getModel().getNodeWorldMtx(1, nodeMtx);
-    nodeMtx.getTranslation(field_0x11F0);
-    mMdl.getModel().getNodeWorldMtx(3, nodeMtx);
-    nodeMtx.getTranslation(field_0x11FC);
-    mMdl.getModel().getNodeWorldMtx(0x3C, nodeMtx);
-    nodeMtx.getTranslation(field_0x1238[0]);
-    mMdl.getModel().getNodeWorldMtx(0x40, nodeMtx);
-    nodeMtx.getTranslation(field_0x1238[1]);
+    mMdl.getModel().getNodeWorldMtx(B_LAST_BOSS_NODE_thumbL2, nodeMtx);
+    nodeMtx.getTranslation(mThumbL2Translation);
+    mMdl.getModel().getNodeWorldMtx(B_LAST_BOSS_NODE_backbone1, nodeMtx);
+    nodeMtx.getTranslation(mBackbone1Translation);
+    mMdl.getModel().getNodeWorldMtx(B_LAST_BOSS_NODE_chest, nodeMtx);
+    nodeMtx.getTranslation(mChestTranslation);
+    mMdl.getModel().getNodeWorldMtx(B_LAST_BOSS_NODE_toeL, nodeMtx);
+    nodeMtx.getTranslation(mToeTranslation[0]);
+    mMdl.getModel().getNodeWorldMtx(B_LAST_BOSS_NODE_toeR, nodeMtx);
+    nodeMtx.getTranslation(mToeTranslation[1]);
 
-    mMdl.getModel().getNodeWorldMtx(5, nodeMtx);
+    mMdl.getModel().getNodeWorldMtx(B_LAST_BOSS_NODE_head, nodeMtx);
     mVec3_c tmp1(0.0f, 0.0f, 0.0f);
     MTXMultVec(nodeMtx, tmp1, mPositionCopy2);
-    // TODO
-    mPositionCopy3 = mVec3_c(mPositionCopy2.x, mPositionCopy2.y + 50.0f, mPositionCopy2.z);
+    mVec3_c v3;
+    v3.x = mPositionCopy2.x;
+    v3.y = mPositionCopy2.y + 50.0f;
+    v3.z = mPositionCopy2.z;
+    mPositionCopy3 = v3;
 
     if (field_0x1132) {
         fn_80030c20(0, 1500.0f, 50.0f, -200.0f, 200.0f);
     }
 
     nodeMtx.YrotS(mRotation.y);
+
     mVec3_c tmpCc;
-    if (link->isAttacking() && *mStateMgr.getStateID() == StateID_Guard) {
-        if (field_0x1144 == 9) {
+    if (link->isAttacking() && mStateMgr.isState(StateID_Guard)) {
+        // TODO number
+        if ((s32)field_0x1144 == 9) {
+            tmpCc.x = 0.0f;
+            tmpCc.y = 0.0f;
             tmpCc.z = 100.0f;
-            // TODO - ...
+            if (field_0x1190 > 300.0f) {
+                tmpCc.z = (field_0x1190 - 300.0f) + 100.0f;
+                if (tmpCc.z > 300) {
+                    tmpCc.z = 300.0f;
+                }
+            }
+        } else {
+            tmpCc.x = 0.0f;
+            tmpCc.y = 0.0f;
+            tmpCc.z = 130.0f;
         }
+        mCc1.SetR(20.0f);
+    } else if (mStateMgr.isState(StateID_ThunderWait)) {
+        tmpCc.set(0.0f, 0.0f, 0.0f);
+        mCc1.SetR(150.0f);
+    } else {
+        tmpCc.set(0.0f, 0.0f, 80.0f);
+        mCc1.SetR(55.0f);
     }
 
     MTXMultVec(nodeMtx, tmpCc, tmpCc);
     tmpCc += mPosition;
+
+    if (link->isAttacking() && field_0x1190 < 400.0f) {
+        tmpCc.y += 100.0f;
+        mCc1.SetH(100.0f);
+    } else {
+        mCc1.SetH(250.0f);
+    }
+    mCc1.SetC(tmpCc);
+
+    // TODO - ...
+    tmpCc.x = mChestTranslation.x;
+    tmpCc.y = mChestTranslation.y;
+    tmpCc.z = mChestTranslation.z;
+    tmpCc.y = mPosition.y;
+
+    if (!field_0x1141) {
+        mCc3.SetR(100.0f);
+    } else {
+        mCc3.SetR(200.0f);
+    }
+    mCc3.SetC(tmpCc);
+
+    tmpCc.x = mPosition.x;
+    tmpCc.y = mPosition.y + 150.0f;
+    tmpCc.z = mPosition.z;
+
+    mCc2.SetC(tmpCc);
+
+    // TODO
+    field_0x1250[0] = mToeTranslation[0] + (mToeTranslation[1] - mToeTranslation[0]) * 0.5f;
+    // UB: this should use string comparison functions for robustness, but
+    // probably works fine in MWCC
+    if ((field_0x2D1C == "CatchThunderEnd" || field_0x2D1C == "Stan") && mMdl.getAnm().getFrame() <= 3.0f) {
+        field_0x11A4 = 25.0f;
+    }
+
+    fn_143_7F80();
+
+    if (!link->isAttacking()) {
+        field_0x1143 = 1;
+    }
+
+    if (field_0x1143 == 0) {
+        mCc1.SetTg_0x4B(1);
+        // TODO
+        mCc1.mTg.field_0x6C = field_0x1208;
+    } else {
+        field_0x1143--;
+        tmpCc.set(0.0f, -10000.0f, 0.0);
+        mCc1.SetTg_0x4B(1);
+        // TODO
+        mCc1.mTg.field_0x6C = tmpCc;
+    }
+
+    mCc1.ClrTg_0x10000();
+
+    if (field_0x1142 != 0) {
+        field_0x1142--;
+        mCcList.ClrTg();
+    } else {
+        mCcList.TgSet();
+    }
+    mCcList.registerColliders();
+
+    if (field_0x1139 != 0) {
+        mCc4.OnAtSet();
+        if (field_0x1139 == 1) {
+            mCc4.setCenter(mThumbL2Translation);
+            field_0x1139 = 2;
+        } else {
+            mCc4.moveCenter(mThumbL2Translation);
+        }
+        dCcS::GetInstance()->Set(&mCc4);
+    }
+
+    static mAng3_c sEffRot(0, 0, 0);
+    static mVec3_c sEffScale(1.5f, 1.5f, 1.5f);
+    mVec3_c effPos(mPosition.x, 10.0f, mPosition.z);
+    // Basically the same code as in dWaterEffect_c::execute
+    mWaterEmitter.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_127_, effPos, &sEffRot, &sEffScale, nullptr, nullptr);
+    f32 rate = nw4r::math::FAbs(mSpeed) * 0.02f;
+    rate = rate > 0.95f ? 0.95f : rate;
+    mWaterEmitter.setRate(rate + 0.05f);
+
+    bool footSplash[2] = {false, false};
+    // UB: this should use string comparison functions for robustness, but
+    // probably works fine in MWCC
+    if (field_0x2D1C == "Walk" || field_0x2D1C == "WalkBt") {
+        if (mMdl.getAnm().checkFrame(22.0f)) {
+            footSplash[0] = true;
+        } else if (mMdl.getAnm().checkFrame(48.0f)) {
+            footSplash[1] = true;
+        }
+    } else if (field_0x2D1C == "TurnR") {
+        if (mMdl.getAnm().checkFrame(31.0f)) {
+            footSplash[0] = true;
+        } else if (mMdl.getAnm().checkFrame(19.0f)) {
+            footSplash[1] = true;
+        }
+    } else if (field_0x2D1C == "TurnL") {
+        if (mMdl.getAnm().checkFrame(31.0f)) {
+            footSplash[1] = true;
+        } else if (mMdl.getAnm().checkFrame(19.0f)) {
+            footSplash[0] = true;
+        }
+    } else if (field_0x2D1C == "AttackBreak") {
+        if (mMdl.getAnm().checkFrame(16.0f)) {
+            footSplash[0] = true;
+        }
+    } else if (field_0x2D1C == "AttackL") {
+        if (mMdl.getAnm().checkFrame(26.0f)) {
+            footSplash[1] = true;
+        }
+    } else if (field_0x2D1C == "AttackR") {
+        if (mMdl.getAnm().checkFrame(24.0f)) {
+            footSplash[1] = true;
+        }
+    } else if (field_0x2D1C == "AttackU") {
+        if (mMdl.getAnm().checkFrame(10.0f)) {
+            footSplash[1] = true;
+        } else if (mMdl.getAnm().checkFrame(24.0f)) {
+            footSplash[0] = true;
+        }
+    } else if (field_0x2D1C == "Counter") {
+        if (mMdl.getAnm().checkFrame(21.0f)) {
+            footSplash[0] = true;
+        } else if (mMdl.getAnm().checkFrame(45.0f)) {
+            footSplash[1] = true;
+        }
+    } else if (field_0x2D1C == "AttackJumpEnd") {
+        if (mMdl.getAnm().checkFrame(6.0f)) {
+            footSplash[1] = true;
+        }
+    } else if (field_0x2D1C == "DownGetUp") {
+        if (mMdl.getAnm().checkFrame(137.0f)) {
+            footSplash[1] = true;
+        }
+    } else if (field_0x2D1C == "DownEscapeL") {
+        if (mMdl.getAnm().checkFrame(15.0f)) {
+            footSplash[0] = true;
+        } else if (mMdl.getAnm().checkFrame(17.0f)) {
+            footSplash[1] = true;
+        }
+    } else if (field_0x2D1C == "DownEscapeR") {
+        if (mMdl.getAnm().checkFrame(15.0f)) {
+            footSplash[1] = true;
+        } else if (mMdl.getAnm().checkFrame(17.0f)) {
+            footSplash[0] = true;
+        }
+    } else if (field_0x2D1C == "ThunderDemo") {
+        if (mMdl.getAnm().checkFrame(18.0f)) {
+            footSplash[1] = true;
+        }
+    } else if (field_0x2D1C == "AttackThunder") {
+        if (mMdl.getAnm().checkFrame(25.0f)) {
+            footSplash[0] = true;
+        }
+    }
+
+    // Spawn splash effects
+    for (int i = 0; i < 2; i++) {
+        if (footSplash[i]) {
+            mToeTranslation[i].y = 10.0f;
+            dJEffManager_c::spawnEffect(
+                PARTICLE_RESOURCE_ID_MAPPING_855_, mToeTranslation[i], nullptr, nullptr, nullptr, nullptr, 0, 0
+            );
+        }
+    }
+
+    if (field_0x1149 != 0) {
+        if (!link->checkSwordAndMoreStates(0x400000) && (field_0x1149 < 0 || !mIsSwordEmpowered)) {
+            if (field_0x1184 == 0) {
+                if (dLightEnv_c::GetPInstance()->getField_0x38DC() == 0) {
+                    dLightEnv_c::GetPInstance()->setField_0x38DC(1);
+                    fn_143_A110(100);
+                }
+            } else if (!mIsSwordEmpowered || (dScGame_c::getUpdateFrameCount() & 0b11) == 0) {
+                field_0x1184--;
+            }
+        } else {
+            fn_143_A110(100);
+        }
+        sLib::addCalcScaledDiff(&field_0x11CC, 1.0f, 1.0f, 0.1f);
+    }
+
+    // TODO: inline doesn't work :(
+    dLightEnv_c::GetInstance().GetOverrideSpf().mIdxStart = 1;
+    dLightEnv_c::GetInstance().GetOverrideSpf().mIdxEnd = 2;
+    dLightEnv_c::GetInstance().GetOverrideSpf().mRatio = field_0x11CC;
+
+    if (field_0x1147 && field_0x1148 != 0) {
+        field_0x1148--;
+        field_0x1220 += field_0x122C;
+        nodeMtx.transS(field_0x1220);
+        nodeMtx.ZXYrotM(field_0x11DC);
+
+        if (!field_0x1150) {
+            if (mCc5.ChkAtHit() || mCc5.ChkTgHit()) {
+                dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_850_, nodeMtx, nullptr, nullptr, 0, 0);
+                if (mCc5.ChkTgHit() && mCc5.ChkTgAtHitType(AT_TYPE_BUGNET)) {
+                    getSoundSource()->startSoundAtPosition2(SE_BLasBos_EmitThunderBeam, field_0x1220);
+                    field_0x1148 = 0x3C;
+                    field_0x122C *= -1.0f;
+                    dRumble_c::start(dRumble_c::sRumblePreset2, dRumble_c::FLAG_SLOT0);
+                    dStageMgr_c::GetInstance()->fn_80199B60(3);
+                    field_0x1150 = 1;
+                } else {
+                    field_0x1147 = 0;
+                    mMtx_c mtx;
+                    mtx.transS(0.0f, -100000.0f, 0.0f);
+                    MTXConcat(nodeMtx, mtx, nodeMtx);
+                    getSoundSource()->startSoundAtPosition2(SE_BLasBos_BeamCrossCrush, field_0x1220);
+                }
+                mCc5.SetTgRpm(0);
+                mCc5.ClrTgActorInfo();
+                mCc5.SubtractTgEffCounter();
+                mCc5.SetAtRpm(0);
+                mCc5.ClrAtActorInfo();
+                mCc5.SubtractAtEffCounter();
+            }
+        } else {
+            if ((field_0x1220 - mPosition).absXZ() < 150.0f) {
+                dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_850_, nodeMtx, nullptr, nullptr, 0, 0);
+                field_0x1147 = false;
+                mMtx_c mtx;
+                mtx.transS(0.0f, -100000.0f, 0.0f);
+                MTXConcat(nodeMtx, mtx, nodeMtx);
+                getSoundSource()->startSoundAtPosition2(SE_BLasBos_BeamCrossCrush, field_0x1220);
+                v3.set(0.0f, 0.0f, 20.0f);
+                rotMtx.YrotS(link->mRotation.y);
+                MTXMultVec(rotMtx, v3, v3);
+                field_0x119C = v3.x;
+                field_0x11A0 = v3.z;
+                mStateMgr.changeState(StateID_Stun);
+            }
+        }
+        mLightInfo.mPos = field_0x1220;
+        if ((dScGame_c::getUpdateFrameCount() & 2) != 0) {
+            mLightInfo.SetScale(300.0f);
+        } else {
+            mLightInfo.SetScale(200.0f);
+        }
+
+        if (field_0x1148 <= 10) {
+            // TODO: lightning timer?
+            if (field_0x1148 == 10) {
+                mEmitter5.setFading(10);
+            }
+            if (field_0x1148 == 0) {
+                field_0x1147 = 0;
+            }
+            mCc5.ClrAtSet();
+        } else {
+            if (!field_0x1150) {
+                mCc5.OnAtSet();
+                mCc5.SetR(100.0f);
+                mCc5.moveCenter(field_0x1220);
+                dCcS::GetInstance()->Set(&mCc5);
+            }
+            getSoundSource()->holdSoundAtPosition(SE_BLasBos_ThunderBeamFly, field_0x1220);
+        }
+        mEmitter5.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_618_, nodeMtx, nullptr, nullptr);
+    }
+
+    if (field_0x114A != 0) {
+        field_0x114A--;
+        mCc5.OnAtSet();
+        mCc5.SetC(mPosition);
+        mCc5.SetR(300.0f - field_0x114A * 30.0f);
+        mCc5.SetAtVec(link->getPosition() - mPosition);
+        dCcS::GetInstance()->Set(&mCc5);
+        if (field_0x114A == 8) {
+            vEff.x = mPosition.x;
+            vEff.y = 10.0f;
+            vEff.z = mPosition.z;
+            dJEffManager_c::spawnEffect(
+                PARTICLE_RESOURCE_ID_MAPPING_842_, vEff, nullptr, nullptr, nullptr, nullptr, 0, 0
+            );
+        }
+    }
+    fn_143_9610();
+
+    SceneflagManager *mgr = SceneflagManager::sInstance;
+    if (mgr != nullptr) {
+        if (mStateMgr.isState(StateID_ThunderWait)) {
+            mgr->setFlag(getRoomId(), field_0x1130);
+        } else {
+            mgr->unsetFlag(getRoomId(), field_0x1130);
+        }
+    }
+
+    if (field_0x1149) {
+        // "Target lock: Demise" (Phase 2)
+        mTargetFiTextID = 0x38;
+    } else {
+        // "Target lock: Demise" (Phase 1)
+        mTargetFiTextID = 0x37;
+    }
 
     return SUCCEEDED;
 }

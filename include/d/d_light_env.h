@@ -414,6 +414,10 @@ public:
         return currentSpf;
     }
 
+    SpfSetting &GetOverrideSpf() {
+        return mOverrideSpfSetting;
+    }
+
     const PaletteEAF_smol_entry &getSmallEAF(s32 idx1, s32 idx2) {
         return field_0x38E4.field_0x00[idx1].field_0x00[idx2];
     }
@@ -428,6 +432,14 @@ public:
 
     f32 getfield_0x2F1C() const {
         return field_0x2F1C;
+    }
+
+    u32 getField_0x38DC() const {
+        return field_0x38DC;
+    }
+
+    void setField_0x38DC(u32 v) {
+        field_0x38DC = v;
     }
 
 private:

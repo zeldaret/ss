@@ -169,6 +169,8 @@ public:
 
     nw4r::g3d::Camera getCamera(s32 idx);
 
+    void fn_80199B60(u8);
+
     dFader_c *getFader() {
         return &mFader;
     }

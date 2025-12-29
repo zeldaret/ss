@@ -8,6 +8,7 @@
 #include "egg/gfx/eggTexture.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_allocator.h"
+#include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
@@ -45,6 +46,11 @@ public:
     );
 
     void calc(const mMtx_c &mtx, const mVec3_c &v1, bool mass);
+    void calc(const mMtx_c &mtx, mAng angle, bool mass) {
+        // A bit of a wild inline but this vector is very low on the dAcBlastboss_c::actorExecute stack
+        mVec3_c v1 = mVec3_c(angle.sin(), 0.0f, angle.cos());
+        calc(mtx, v1, mass);
+    }
     bool entry(dAcObjBase_c *obj, dShadowCircle_c *shadow, mQuat_c *quat);
 
     void fn_8006B640();
