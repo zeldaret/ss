@@ -3,7 +3,6 @@
 
 #include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
-#include "d/a/obj/d_a_obj_ivy_rope.h"
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/cc/d_cc_d.h"
 #include "m/m3d/m_smdl.h"
@@ -11,6 +10,8 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
+
+class dAcOivyRope_c;
 
 class dAcOropeIgaiga_c : public dAcObjBase_c {
 public:
@@ -49,7 +50,7 @@ private:
     /* 0x4A0 */ dBgS_AcchCir mAcchCir;
     /* 0x4FC */ dBgS_ObjAcch mObjAcch;
     /* 0x8AC */ STATE_MGR_DECLARE(dAcOropeIgaiga_c);
-    /* 0x8E8 */ dAcRef_c<dAcOivyRope_c> ivyRopeRef;
+    /* 0x8E8 */ dAcRef_c<dAcOivyRope_c> mIvyRopeRef;
     /* 0x8F4 */ mVec3_c mPositionOffset;
     /* 0x900 */ mVec3_c mPositionRelated;
     /* 0x90C */ mVec3_c mLinkPosDiff;
@@ -64,16 +65,16 @@ private:
     /* 0x925 */ u8 mStartStateTree;
     /* 0x926 */ u8 mSceneflag;
     /* 0x927 */ u8 mStickTimer;
-    /* 0x928 */ u8 field_0x928;
+    /* 0x928 */ u8 mYOffsetIdx;
     /* 0x929 */ u8 mGroundTimer;
     /* 0x92A */ s8 mVelocityYRelated;
     /* 0x92C */ f32 mLinkSpeedRelated;
     /* 0x930 */ f32 mPositionYRelated;
-    /* 0x934 */ f32 mVecCylCalcFactor;
+    /* 0x934 */ f32 mXZCirclePointFactor;
     /* 0x938 */ bool field_0x938;
     /* 0x939 */ bool mLinkShieldBash;
     /* 0x93A */ bool mLinkHigher;
-    /* 0x93B */ bool mIdleOnVinesNoStamina;
+    /* 0x93B */ bool field_0x93B;
     /* 0x93C */ bool mSoundPlayed;
 
     static dCcD_SrcSph sSphSrc;
@@ -92,7 +93,7 @@ private:
     static const f32 lbl_257_rodata_28;
     static const s16 lbl_257_rodata_90;
     static const f32 sSquareXZDistanceThreshold;
-    static const f32 sFloats2[6];
+    static const f32 sLinkCenterTranslationYOffset[6];
 };
 
 #endif

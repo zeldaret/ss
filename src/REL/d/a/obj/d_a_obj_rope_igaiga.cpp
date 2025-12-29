@@ -6,10 +6,12 @@
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/a/obj/d_a_obj_ivy_rope.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_wtr_chk.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_vec.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
@@ -34,8 +36,9 @@ STATE_DEFINE(dAcOropeIgaiga_c, Water);
 
 dCcD_SrcSph dAcOropeIgaiga_c::sSphSrc = {
     /* mObjInf */
-    {/* mObjAt */ {0x400, 0x1F, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
-     /* mObjTg */ {0xFEB77DFF, 0x311, {0, 0, 0x407}, 0, 0},
+    {/* mObjAt */ {AT_TYPE_DAMAGE, 0x1F, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
+     /* mObjTg */
+     {~(AT_TYPE_WIND | AT_TYPE_0x8000 | AT_TYPE_0x80000 | AT_TYPE_BEETLE | AT_TYPE_BUGNET), 0x311, {0, 0, 0x407}, 0, 0},
      /* mObjCo */ {0xA9}},
     /* mSphInf */
     {20.f},
@@ -54,12 +57,6 @@ const s16 dAcOropeIgaiga_c::lbl_257_rodata_1C = 0x4;
 const s16 dAcOropeIgaiga_c::lbl_257_rodata_1E = 0x41;
 const s16 dAcOropeIgaiga_c::lbl_257_rodata_20 = 0x64;
 const f32 dAcOropeIgaiga_c::lbl_257_rodata_28 = 20.f;
-
-// copy from d_a_obj_fairy - TODO move it to a shared file
-inline static void vecCylCalc(mVec3_c &target, const mAng &rot, f32 factor) {
-    target.x += factor * rot.sin();
-    target.z += factor * rot.cos();
-}
 
 bool dAcOropeIgaiga_c::createHeap() {
     void *data = getOarcResFile("NeedleBall");
@@ -90,7 +87,7 @@ int dAcOropeIgaiga_c::create() {
     mInitTimer = 5;
     mPnts2Idx = 0xff;
     field_0x91E = -1;
-    field_0x928 = 0xff;
+    mYOffsetIdx = 0xff;
     if (mStartStateTree == 1) {
         mStateMgr.changeState(StateID_Tree);
     } else {
@@ -153,17 +150,17 @@ void dAcOropeIgaiga_c::executeState_Init() {
         if (mCollider.ChkCoHit()) {
             dAcOivyRope_c *rope = (dAcOivyRope_c *)mCollider.GetCoActor();
             if (rope != NULL && (rope->mProfileName == fProfile::OBJ_IVY_ROPE) && rope->checkSubtype(1)) {
-                ivyRopeRef.link(rope);
+                mIvyRopeRef.link(rope);
                 mInitTimer = 0;
                 mPnts2Idx = 0.5f + mPosition.distance(rope->mPosition) * rope->lbl_256_rodata_40;
                 mPosition = rope->getPnts2()[mPnts2Idx];
-                f32 vecCylCalcFactor = cM::rndF(5.f) + 15.f;
+                f32 xzCirclePointFactor = cM::rndF(5.f) + 15.f;
                 mPositionOffset.x = 0.f;
                 mPositionOffset.y = 0.f;
                 mPositionOffset.z = 0.f;
                 s16 ang1 = cLib::targetAngleY(rope->getTightRopeEnd(), rope->getTightRopeStart());
                 s16 ang2 = cM::rndInt(100) & 1 ? -1 : 1;
-                vecCylCalc(mPositionOffset, ang1 + ang2 * 0x4000, vecCylCalcFactor);
+                getXZCirclePoint(mPositionOffset, ang1 + ang2 * 0x4000, xzCirclePointFactor);
                 f32 positionYOffset = cM::rndFX(15.f);
                 mPositionOffset.y += positionYOffset;
                 mPosition += mPositionOffset;
@@ -195,7 +192,7 @@ void dAcOropeIgaiga_c::executeState_Rope() {
     mVec3_c pos = mPosition;
     bool rope0x1087 = false;
     bool rope0x1002 = false;
-    dAcOivyRope_c *rope = ivyRopeRef.get();
+    dAcOivyRope_c *rope = mIvyRopeRef.get();
     if (rope != nullptr) {
         rope0x1002 = rope->getField_0x1002();
         rope0x1087 = rope->getField_0x1087();
@@ -366,9 +363,9 @@ void dAcOropeIgaiga_c::initializeState_Stick() {
     } else {
         random = cM::rndInt(600);
     }
-    field_0x928 = random / 100;
-    if (field_0x928 > 5) {
-        field_0x928 = 5;
+    mYOffsetIdx = random / 100;
+    if (mYOffsetIdx > 5) {
+        mYOffsetIdx = 5;
     }
     field_0x91A = 0;
     mCollider.ClrTgSet();
@@ -383,31 +380,31 @@ void dAcOropeIgaiga_c::initializeState_Stick() {
             f1 = 0.f;
         }
         f32 f2 = cM::rndF(3.f) + 15.f;
-        mVecCylCalcFactor = 15.f * f1 + f2;
-        if ((field_0x928 & 1) == 0) {
+        mXZCirclePointFactor = 15.f * f1 + f2;
+        if ((mYOffsetIdx & 1) == 0) {
             rotationYOffset = -rotationYOffset;
         }
         mRotationYOffset = rotationYOffset;
     } else {
-        if (field_0x928 >= 4) {
-            mVecCylCalcFactor = cM::rndF(10.f);
+        if (mYOffsetIdx >= 4) {
+            mXZCirclePointFactor = cM::rndF(10.f);
         } else {
-            mVecCylCalcFactor = cM::rndF(35.f);
+            mXZCirclePointFactor = cM::rndF(35.f);
         }
         s16 rotationYOffset = cM::rndInt(0x1555) + 0x2aab;
-        if ((field_0x928 & 1) == 0) {
+        if ((mYOffsetIdx & 1) == 0) {
             rotationYOffset = -rotationYOffset;
         }
-        if (field_0x928 >= 4) {
+        if (mYOffsetIdx >= 4) {
             rotationYOffset += cM::rndInt(0x1555) + 0x2aab;
         }
         mRotationYOffset = rotationYOffset;
     }
     mLinkPosDiff = mPosition - dAcPy_c::GetLink()->getCenterTranslation();
-    if (dAcPy_c::GetLink()->getCurrentAction() == 0x25 /* (IDL_ON_VINES|NO_STAMINA) */) {
-        mIdleOnVinesNoStamina = true;
+    if (dAcPy_c::GetLink()->getCurrentAction() == 0x25) {
+        field_0x93B = true;
     } else {
-        mIdleOnVinesNoStamina = false;
+        field_0x93B = false;
     }
 }
 
@@ -430,7 +427,7 @@ void dAcOropeIgaiga_c::executeState_Stick() {
         mVec3_c linkPos = dAcPy_c::GetLink()->getCenterTranslation();
 
         f32 linkPosDiffAbsXZ = mLinkPosDiff.absXZ();
-        if (mIdleOnVinesNoStamina) {
+        if (field_0x93B) {
             linkPosDiffAbsXZ *= 0.3f;
         }
         if (!dAcPy_c::GetLinkM()->isRoomID(mRoomID)) {
@@ -439,7 +436,7 @@ void dAcOropeIgaiga_c::executeState_Stick() {
             mVelocity.y = 20.f;
             mStateMgr.changeState(StateID_Ground);
         } else {
-            vecCylCalc(linkPos, dAcPy_c::GetLink()->mRotation.y + mRotationYOffset, linkPosDiffAbsXZ);
+            getXZCirclePoint(linkPos, dAcPy_c::GetLink()->mRotation.y + mRotationYOffset, linkPosDiffAbsXZ);
             linkPos.y += mLinkPosDiff.y;
             mRotation.y = cLib::targetAngleY(linkPos, dAcPy_c::GetLink()->mPosition);
             mPosition.x = linkPos.x;
@@ -488,7 +485,7 @@ void dAcOropeIgaiga_c::executeState_Stick() {
 }
 
 void dAcOropeIgaiga_c::finalizeState_Stick() {
-    field_0x928 = 0xff;
+    mYOffsetIdx = 0xff;
     mCollider.OnTgSet();
     mCollider.OnCoSet();
 }
@@ -602,7 +599,7 @@ void dAcOropeIgaiga_c::fn_257_1DF0() {
         } else if (field_0x91E == 0) {
             deleteRequest();
         }
-        if ((u16)(field_0x91E - 1) <= 1) {
+        if (field_0x91E > 0 && field_0x91E < 3) {
             if (mCollider.ChkAtHit()) {
                 deleteRequest();
             }
@@ -672,7 +669,7 @@ bool dAcOropeIgaiga_c::fn_257_21D0() {
         field_0x91A--;
     }
     dAcPy_c *link = dAcPy_c::GetLinkM();
-    if (link->getCurrentAction() == 0x49 /* SHIELD_BASH */) {
+    if (link->getCurrentAction() == 0x49) {
         if (!mLinkShieldBash) {
             field_0x91A += lbl_257_rodata_1E;
         }
@@ -683,20 +680,20 @@ bool dAcOropeIgaiga_c::fn_257_21D0() {
             field_0x91A += lbl_257_rodata_14;
         } else if (link->checkFlags0x354(0x4)) {
             field_0x91A += lbl_257_rodata_16;
-        } else if (link->getCurrentAction() == 0xC /* ROLL */) {
+        } else if (link->getCurrentAction() == 0xC) {
             field_0x91A += lbl_257_rodata_18;
-        } else if (link->getCurrentAction() == 0x27 /* START_VINE_LEAP */) {
+        } else if (link->getCurrentAction() == 0x27) {
             field_0x91A += lbl_257_rodata_1A;
-        } else if (link->checkSwordAndMoreStates(0x40) /* SPRINTING */) {
+        } else if (link->checkSwordAndMoreStates(0x40)) {
             field_0x91A += lbl_257_rodata_1C;
         }
     }
-    if (mIdleOnVinesNoStamina) {
-        if (dAcPy_c::GetLink()->getCurrentAction() != 0x25 /* (IDL_ON_VINES|NO_STAMINA) */) {
+    if (field_0x93B) {
+        if (dAcPy_c::GetLink()->getCurrentAction() != 0x25) {
             field_0x91A += lbl_257_rodata_20;
         }
     } else if (dAcPy_c::GetLink()->getCurrentAction() == 0x25) {
-        mIdleOnVinesNoStamina = true;
+        field_0x93B = true;
     }
     if ((s32)field_0x91A >= 100) {
         return true;
@@ -704,38 +701,40 @@ bool dAcOropeIgaiga_c::fn_257_21D0() {
     return false;
 }
 
-const f32 dAcOropeIgaiga_c::sFloats2[6] = {20.f, 30.f, -55.f, -65.f, -25.f, -35.f};
+const f32 dAcOropeIgaiga_c::sLinkCenterTranslationYOffset[6] = {20.f, 30.f, -55.f, -65.f, -25.f, -35.f};
 
 bool dAcOropeIgaiga_c::fn_257_2310(s16 rotationYOffset) {
     if (mStickTimer != 0) {
-        mVec3_c translation = dAcPy_c::GetLink()->getCenterTranslation();
-        vecCylCalc(translation, dAcPy_c::GetLink()->mRotation.y + rotationYOffset, mVecCylCalcFactor);
-        translation.y += sFloats2[field_0x928];
-        if (mStickTimer == 10 && field_0x928 < 4) {
-            mVec3_c pos = dAcPy_c::GetLink()->mPosition;
-            s16 ang1 = cLib::targetAngleY(pos, mPosition);
-            s16 ang2 = cLib::targetAngleY(pos, translation);
+        mVec3_c linkCenterTranslation = dAcPy_c::GetLink()->getCenterTranslation();
+        getXZCirclePoint(
+            linkCenterTranslation, dAcPy_c::GetLink()->mRotation.y + rotationYOffset, mXZCirclePointFactor
+        );
+        linkCenterTranslation.y += sLinkCenterTranslationYOffset[mYOffsetIdx];
+        if (mStickTimer == 10 && mYOffsetIdx < 4) {
+            mVec3_c linkPos = dAcPy_c::GetLink()->mPosition;
+            s16 ang1 = cLib::targetAngleY(linkPos, mPosition);
+            s16 ang2 = cLib::targetAngleY(linkPos, linkCenterTranslation);
             if (sLib::absDiff(ang1, ang2) > 0x471C) {
-                if (field_0x928 & 1) {
-                    field_0x928--;
+                if (mYOffsetIdx & 1) {
+                    mYOffsetIdx--;
                 } else {
-                    field_0x928++;
+                    mYOffsetIdx++;
                 }
-                if (field_0x928 > 5) {
-                    field_0x928 = 5;
+                if (mYOffsetIdx > 5) {
+                    mYOffsetIdx = 5;
                 }
             }
         }
         mStickTimer--;
         mRotation.y = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
         mRotation.x += mRotationXOffset;
-        cLib::addCalcPosXZ(&mPosition, translation, 0.3f, 10.f, 1.f);
+        cLib::addCalcPosXZ(&mPosition, linkCenterTranslation, 0.3f, 10.f, 1.f);
         calcVelocity();
         if (mLinkHigher) {
             if (mVelocity.y < -5.f) {
                 mVelocity.y = 10.f;
             }
-            if (mPosition.y > translation.y) {
+            if (mPosition.y > linkCenterTranslation.y) {
                 mVelocity.y = 0.f;
                 if (mStickTimer > 10) {
                     mStickTimer = 0;
@@ -748,7 +747,7 @@ bool dAcOropeIgaiga_c::fn_257_2310(s16 rotationYOffset) {
                 mVelocity.y = 0.f;
             }
             mPosition.y += mVelocity.y;
-            if (mPosition.y < translation.y) {
+            if (mPosition.y < linkCenterTranslation.y) {
                 mVelocity.y = 10.f;
                 if (mStickTimer > 10) {
                     mStickTimer = 0;
@@ -759,14 +758,14 @@ bool dAcOropeIgaiga_c::fn_257_2310(s16 rotationYOffset) {
             mLinkPosDiff = mPosition - dAcPy_c::GetLink()->getCenterTranslation();
         } else {
             if (dAcPy_c::GetLinkM()->checkActionFlags(0xc70852) == 0) {
-                translation = (translation + mPosition) * 0.5f;
+                linkCenterTranslation = (linkCenterTranslation + mPosition) * 0.5f;
             }
-            mLinkPosDiff = translation - dAcPy_c::GetLink()->getCenterTranslation();
+            mLinkPosDiff = linkCenterTranslation - dAcPy_c::GetLink()->getCenterTranslation();
             mStickTimer = 0;
         }
         return false;
     }
-    mCollider.OffCoSet();
+    mCollider.ClrCoSet();
     return true;
 }
 
