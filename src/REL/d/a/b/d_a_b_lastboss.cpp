@@ -917,7 +917,7 @@ void dAcBlastboss_c::callback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip *m
 void dAcBlastboss_c::initializeState_Fight() {
     setAnm("WaitBt", 20.0f);
     mAnmRate = 1.0f;
-    field_0x1166 = 0;
+    mFightState = FIGHT_STATE_0;
     field_0x118A = 0;
     if (field_0x1149 == 0) {
         field_0x1156[2] = cM::rndF(50.0f) + 50.0f;
@@ -933,42 +933,44 @@ void dAcBlastboss_c::executeState_Fight() {
     f32 targetAnmRate = 1.5f;
     f32 puVar2 = 0.0f;
 
-    s16 diff = mAngle.y - mYAngleToLink;
     bool b = false;
+    s16 diff = mAngle.y - mYAngleToLink;
 
-    if (field_0x2CEC >= 100 && field_0x2CEC < 300) {
+    if (field_0x2CEC >= 200 && field_0x2CEC < 300) {
         puVar2 = -100.0f;
         field_0x1156[2] = cM::rndF(50.0f) + 100.0f;
     }
 
-    switch (field_0x1166) {
-        case 0: {
+    switch (mFightState) {
+        case FIGHT_STATE_0: {
             b = true;
             field_0x118C = 0;
             targetAnmRate = 1.0f;
             field_0x117E = 0;
             if (mXZDistanceToLink > puVar2 + 450.0f) {
-                field_0x1166 = 2;
+                mFightState = FIGHT_STATE_2;
+                break;
             } else if (mXZDistanceToLink < puVar2 + 250.0f + 100.0f) {
-                field_0x1166 = 1;
+                mFightState = FIGHT_STATE_1;
                 field_0x1156[0] = 8;
                 mAnmRate = -1.0f;
                 field_0x1180 = 0;
+                // fall-through...
             } else {
                 setAnm("WaitBt", 20.0f);
-                mAnmRate = targetAnmRate;
+                mAnmRate = 1.0f;
                 if (diff < -0x1000 || diff > 0x1000) {
-                    field_0x1166 = 4;
+                    mFightState = FIGHT_STATE_4;
                     if (diff < 0) {
                         setAnm("TurnL", 10.0f);
                     } else {
                         setAnm("TurnR", 10.0f);
                     }
                 }
+                break;
             }
-            break;
         }
-        case 1: {
+        case FIGHT_STATE_1: {
             b = true;
             setAnm("WalkBt", 20.0f);
             targetSpeed = -5.0f;
@@ -980,15 +982,15 @@ void dAcBlastboss_c::executeState_Fight() {
                     return;
                 }
             } else if (mXZDistanceToLink >= puVar2 + 200.0f && field_0x1156[0] == 0) {
-                field_0x1166 = 0;
+                mFightState = FIGHT_STATE_0;
             }
             break;
         }
-        case 2: {
+        case FIGHT_STATE_2: {
             b = true;
             field_0x117E = 0;
             if (mXZDistanceToLink > puVar2 + 850.0f) {
-                field_0x1166 = 3;
+                mFightState = FIGHT_STATE_3;
             } else {
                 setAnm("WalkBt", 20.0f);
                 if (mMdl.getAnm().getFrame() >= 25.0f && mMdl.getAnm().getFrame() <= 50.0f) {
@@ -998,7 +1000,7 @@ void dAcBlastboss_c::executeState_Fight() {
                 targetAnmRate = 1.5f;
             }
             if (mXZDistanceToLink < puVar2 + 400.0f) {
-                field_0x1166 = 0;
+                mFightState = FIGHT_STATE_0;
                 if (field_0x1149 == 0) {
                     field_0x1156[2] = cM::rndF(50.0f) + 50.0f;
                 } else {
@@ -1007,13 +1009,13 @@ void dAcBlastboss_c::executeState_Fight() {
             }
             break;
         }
-        case 3: {
+        case FIGHT_STATE_3: {
             setAnm("Walk", 20.0f);
             targetSpeed = 7.5f;
             field_0x11A4 = 7.5f;
             targetAnmRate = 1.0f;
             if (mXZDistanceToLink < puVar2 + 750.0f) {
-                field_0x1166 = 3;
+                mFightState = FIGHT_STATE_2;
             } else if (!link->isRecovering()) {
                 field_0x117E++;
                 if (field_0x117E > 70) {
@@ -1025,11 +1027,11 @@ void dAcBlastboss_c::executeState_Fight() {
             }
             break;
         }
-        case 4: {
+        case FIGHT_STATE_4: {
             field_0x117E = 0;
             b = true;
             if (mMdl.getAnm().isStop()) {
-                field_0x1166 = 0;
+                mFightState = FIGHT_STATE_0;
             }
             break;
         }
@@ -1039,7 +1041,7 @@ void dAcBlastboss_c::executeState_Fight() {
     setAnmRate(mAnmRate);
     sLib::addCalcScaledDiff(&mSpeed, targetSpeed, 1.0f, 2.0f);
 
-    if (field_0x1166 != 0) {
+    if (mFightState != FIGHT_STATE_0) {
         sLib::addCalcAngle(field_0x118C.ref(), 0x800, 1, 100);
         sLib::addCalcAngle(mAngle.y.ref(), mYAngleToLink, 2, field_0x118C);
     }
@@ -1053,6 +1055,52 @@ void dAcBlastboss_c::executeState_Fight() {
         field_0x1172 = diff / 2;
         // TODO what is this constant
         sLib::addCalcScaledDiff(&mMdlCallback.field_0x30, diff * (1.0f / 409.6f), 0.5f, 1.0f);
+        if (field_0x2CEC == 0 && !link->isUsingShield() && link->isUsingSword()) {
+            mMtx_c rotMtx;
+            rotMtx.YrotS(-mYAngleToLink);
+            mVec3_c v = mVec3_c(link->getSwordPos() - mPosition);
+            MTXMultVec(rotMtx, v, v);
+            if (v.x > 150.0f) {
+                v.x = 150.0f;
+            } else if (v.x < -150.0f) {
+                v.x = -150.0f;
+            }
+            sLib::addCalcAngle(field_0x118A.ref(), 400, 1, 20);
+            sLib::addCalcAngle(mMdlCallback.field_0x18.ref(), mAng(v.x * -40.0f), 2, field_0x118A);
+            v.y -= 270.0f;
+            if (v.y > 100.0f) {
+                v.y = 100.0f;
+            } else if (v.y < -150.0f) {
+                v.y = -150.0f;
+            }
+            sLib::addCalcAngle(mMdlCallback.field_0x1A.ref(), mAng(v.y * -40.0f), 2, field_0x118A);
+        } else {
+            field_0x118A = 0;
+            sLib::addCalcAngle(mMdlCallback.field_0x18.ref(),0, 4, 400);
+            sLib::addCalcAngle(mMdlCallback.field_0x1A.ref(),0, 4, 400);
+        }
+        field_0x1133 = 1;
+    }
+
+    if (field_0x117C == 0) {
+        if (!fn_143_75A0()) {
+            fn_143_7420();
+            fn_143_77C0();
+        }
+        // TODO
+        mCc1.mTg.mSrc.field_0x0E = 0x1FF;
+    } else {
+        // TODO
+        mCc1.mTg.mSrc.field_0x0E = 0;
+    }
+
+    if (field_0x1156[4] == 1) {
+        field_0x1178 = 0x28;
+    } else if (field_0x1156[4] <= 10) {
+        field_0x1136 = 0;
+        field_0x1135 = 0;
+        field_0x113A = 0;
+        field_0x11D4 = field_0x11D8 = -1;
     }
 }
 void dAcBlastboss_c::finalizeState_Fight() {}

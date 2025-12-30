@@ -202,6 +202,14 @@ class dAcBlastboss_c : public dAcEnBase_c {
         B_LAST_BOSS_NODE_skirtHU1 = 134,
     };
 
+    enum FightState_e {
+        FIGHT_STATE_0,
+        FIGHT_STATE_1,
+        FIGHT_STATE_2,
+        FIGHT_STATE_3,
+        FIGHT_STATE_4,
+    };
+
 public:
     dAcBlastboss_c() : mStateMgr(*this, sStateID::null), mScnCallback(this) {}
     virtual ~dAcBlastboss_c() {}
@@ -228,10 +236,14 @@ public:
     STATE_FUNC_DECLARE(dAcBlastboss_c, ThunderWait);
 
 private:
-    void fn_143_6720();
     void setAnm(const char *anim, f32 blend);
     void forceSetAnm(const char *anim, f32 blend);
     void setAnmRate(f32 rate);
+
+    void fn_143_6720();
+    bool fn_143_7420();
+    bool fn_143_75A0();
+    bool fn_143_77C0();
     void fn_143_7B00();
     void fn_143_7F80();
     void fn_143_9610();
@@ -293,7 +305,7 @@ private:
     /* 0x1162 */ u8 _0x1162[0x1164 - 0x1162];
 
     /* 0x1164 */ s16 field_0x1164;
-    /* 0x1166 */ s16 field_0x1166;
+    /* 0x1166 */ s16 mFightState;
 
     /* 0x1168 */ u8 _0x1168[0x116A - 0x1168];
 
@@ -303,8 +315,10 @@ private:
 
     /* 0x1172 */ s16 field_0x1172;
 
-    /* 0x1174 */ u8 _0x1174[0x117C - 0x1174];
+    /* 0x1174 */ u8 _0x1174[0x1178 - 0x1174];
 
+    /* 0x1178 */ s16 field_0x1178;
+    /* 0x117A */ s16 field_0x117A;
     /* 0x117C */ s16 field_0x117C;
     /* 0x117E */ s16 field_0x117E;
     /* 0x1180 */ s16 field_0x1180;
