@@ -84,7 +84,8 @@ public:
     // a ptmf. It's not immediately clear how this works,
     // does every actor subclass the LinkedCollider___,
     // or are the functions all added here for the other
-    // files to implement?
+    // files to implement? d_a_b_lastboss commits a typing crime here
+    // to make it work...
     typedef bool (cCcD_Obj::*ccPtmf)();
     cCcD_Obj *find(ccPtmf f) const;
 

@@ -992,6 +992,9 @@ public:
     void ClrTg_0x10000() {
         return mTg.OffSPrm(0x10000);
     }
+    void ClrTg_0x8000000() {
+        return mTg.OffSPrm(0x8000000);
+    }
     u32 ChkTgBonk() const {
         return mTg.MskSPrm(0x200000);
     }

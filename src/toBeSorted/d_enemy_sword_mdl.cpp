@@ -69,10 +69,10 @@ bool dEnemySwordMdl_c::create(
     return true;
 }
 
-void dEnemySwordMdl_c::fn_8006B640() {
+void dEnemySwordMdl_c::enableAttack() {
     mCcs[0].OnAtSet();
-    field_0x070 = true;
-    field_0x071 = false;
+    mIsActive = true;
+    mFirstFramePassed = false;
 }
 
 // TODO - ...
@@ -83,7 +83,7 @@ void dEnemySwordMdl_c::calc(const mMtx_c &mtx, const mVec3_c &v1, bool mass) {
     MTXMultVec(mtx, field_0x074, field_0x08C);
     MTXMultVec(mtx, field_0x080, field_0x098);
 
-    if (field_0x070) {
+    if (mIsActive) {
         mVec3_c v = field_0x098 - field_0x08C;
         v.normalize();
 
@@ -97,11 +97,11 @@ void dEnemySwordMdl_c::calc(const mMtx_c &mtx, const mVec3_c &v1, bool mass) {
         mCcs[1].SetAtVec(v1);
         mCcs[2].SetAtVec(v1);
 
-        if (field_0x071 && !mCcs[1].ChkAtSet()) {
+        if (mFirstFramePassed && !mCcs[1].ChkAtSet()) {
             mCcs[1].OnAtSet();
             mCcs[2].OnAtSet();
         } else {
-            field_0x071 = true;
+            mFirstFramePassed = true;
         }
 
         mCcList.registerColliders();
@@ -109,7 +109,7 @@ void dEnemySwordMdl_c::calc(const mMtx_c &mtx, const mVec3_c &v1, bool mass) {
             dCcS::GetInstance()->GetMassMng().SetObj(&mCcs[0], 2);
         }
     } else {
-        field_0x071 = false;
+        mFirstFramePassed = false;
         if (mCcs[0].ChkAtSet()) {
             mCcList.ClrAt();
         }

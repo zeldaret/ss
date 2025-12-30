@@ -21,8 +21,8 @@ public:
     /* 0x01C */ dSwordSwingEffectProcMgr_c mProc;
 
 private:
-    /* 0x070 */ bool field_0x070;
-    /* 0x071 */ bool field_0x071;
+    /* 0x070 */ bool mIsActive;
+    /* 0x071 */ bool mFirstFramePassed;
     /* 0x074 */ mVec3_c field_0x074;
     /* 0x080 */ mVec3_c field_0x080;
     /* 0x08C */ mVec3_c field_0x08C;
@@ -30,6 +30,8 @@ private:
     /* 0x0A4 */ f32 field_0x0A4;
     /* 0x0A8 */ f32 field_0x0A8;
     /* 0x0AC */ dCcD_Linked_Cps mCcs[3];
+
+public:
     /* 0x52C */ dColliderLinkedList mCcList;
 
 public:
@@ -53,11 +55,19 @@ public:
     }
     bool entry(dAcObjBase_c *obj, dShadowCircle_c *shadow, mQuat_c *quat);
 
-    void fn_8006B640();
+    void enableAttack();
     void fn_8006B660(UNKWORD, UNKWORD, UNKWORD, UNKWORD, UNKWORD, UNKWORD, UNKWORD, UNKWORD, UNKWORD, f32);
+    void setDamageMaybe(u8 damage);
+    void fn_8006B7A0(u32);
+    void fn_8006B800(u32);
 
-    void setAttackActive(bool b) {
-        field_0x070 = b;
+    void enable() {
+        enableAttack();
+        mProc.setActive(true);
+    }
+
+    void disable() {
+        mIsActive = false;
         mProc.setActive(false);
     }
 };

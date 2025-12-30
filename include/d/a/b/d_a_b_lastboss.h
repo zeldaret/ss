@@ -202,12 +202,18 @@ class dAcBlastboss_c : public dAcEnBase_c {
         B_LAST_BOSS_NODE_skirtHU1 = 134,
     };
 
+    // TODO: mFightState probably means different things in
+    // different states, so maybe we need to either remove
+    // this again or split this up further.
     enum FightState_e {
-        FIGHT_STATE_0,
+        FIGHT_STATE_0 = 0,
         FIGHT_STATE_1,
         FIGHT_STATE_2,
         FIGHT_STATE_3,
         FIGHT_STATE_4,
+
+        FIGHT_STATE_10 = 10,
+        FIGHT_STATE_11,
     };
 
 public:
@@ -246,6 +252,7 @@ private:
     bool fn_143_77C0();
     void fn_143_7B00();
     void fn_143_7F80();
+    bool fn_143_9420();
     void fn_143_9610();
     void fn_143_A110(s32);
 
@@ -284,7 +291,7 @@ private:
     /* 0x1141 */ u8 field_0x1141;
     /* 0x1142 */ u8 field_0x1142;
     /* 0x1143 */ u8 field_0x1143;
-    /* 0x1144 */ u8 field_0x1144;
+    /* 0x1144 */ s8 field_0x1144;
     /* 0x1145 */ u8 field_0x1145;
     /* 0x1146 */ bool mIsSwordEmpowered;
     /* 0x1147 */ u8 field_0x1147;
@@ -297,9 +304,8 @@ private:
     /* 0x114E */ u8 field_0x114E;
     /* 0x114F */ u8 field_0x114F;
     /* 0x1150 */ u8 field_0x1150;
-
-    /* 0x1151 */ u8 _0x1151[0x1156 - 0x1151];
-
+    /* 0x1152 */ u16 field_0x1152;
+    /* 0x1154 */ u16 field_0x1154;
     /* 0x1156 */ u16 field_0x1156[6];
 
     /* 0x1162 */ u8 _0x1162[0x1164 - 0x1162];
@@ -346,7 +352,9 @@ private:
 
     /* 0x11B0 */ f32 field_0x11B0;
 
-    /* 0x11B4 */ u8 _0x11B4[0x11BC - 0x11B4];
+    /* 0x11B4 */ u8 _0x11B4[0x11B8 - 0x11B4];
+    
+    /* 0x11B8 */ f32 field_0x11B8;
 
     /* 0x11BC */ f32 field_0x11BC;
     /* 0x11C0 */ f32 field_0x11C0;
