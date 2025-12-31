@@ -305,7 +305,7 @@ int dAcBlastboss_c::actorExecute() {
 
     mRotation.x = mAngle.x;
     mRotation.z = mAngle.z;
-    sLib::addCalcAngle(&mRotation.y.mVal, mAngle.y, 2, 0x800);
+    sLib::addCalcAngle(mRotation.y.ref(), mAngle.y, 2, 0x800);
 
     mMdl.play();
     if (!field_0x114F) {
@@ -938,7 +938,7 @@ void dAcBlastboss_c::callback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip *m
 void dAcBlastboss_c::initializeState_Fight() {
     setAnm("WaitBt", 20.0f);
     mAnmRate = 1.0f;
-    mFightState = FIGHT_STATE_0;
+    mSubState = SUB_STATE_0;
     field_0x118A = 0;
     if (field_0x1149 == 0) {
         field_0x1156[2] = cM::rndF(50.0f) + 50.0f;
@@ -962,17 +962,17 @@ void dAcBlastboss_c::executeState_Fight() {
         field_0x1156[2] = cM::rndF(50.0f) + 100.0f;
     }
 
-    switch (mFightState) {
-        case FIGHT_STATE_0: {
+    switch (mSubState) {
+        case SUB_STATE_0: {
             b = true;
             field_0x118C = 0;
             targetAnmRate = 1.0f;
             field_0x117E = 0;
             if (mXZDistanceToLink > puVar2 + 450.0f) {
-                mFightState = FIGHT_STATE_2;
+                mSubState = SUB_STATE_2;
                 break;
             } else if (mXZDistanceToLink < puVar2 + 250.0f + 100.0f) {
-                mFightState = FIGHT_STATE_1;
+                mSubState = SUB_STATE_1;
                 field_0x1156[0] = 8;
                 mAnmRate = -1.0f;
                 field_0x1180 = 0;
@@ -981,7 +981,7 @@ void dAcBlastboss_c::executeState_Fight() {
                 setAnm("WaitBt", 20.0f);
                 mAnmRate = 1.0f;
                 if (diff < -0x1000 || diff > 0x1000) {
-                    mFightState = FIGHT_STATE_4;
+                    mSubState = SUB_STATE_4;
                     if (diff < 0) {
                         setAnm("TurnL", 10.0f);
                     } else {
@@ -991,7 +991,7 @@ void dAcBlastboss_c::executeState_Fight() {
                 break;
             }
         }
-        case FIGHT_STATE_1: {
+        case SUB_STATE_1: {
             b = true;
             setAnm("WalkBt", 20.0f);
             targetSpeed = -5.0f;
@@ -1003,15 +1003,15 @@ void dAcBlastboss_c::executeState_Fight() {
                     return;
                 }
             } else if (mXZDistanceToLink >= puVar2 + 200.0f && field_0x1156[0] == 0) {
-                mFightState = FIGHT_STATE_0;
+                mSubState = SUB_STATE_0;
             }
             break;
         }
-        case FIGHT_STATE_2: {
+        case SUB_STATE_2: {
             b = true;
             field_0x117E = 0;
             if (mXZDistanceToLink > puVar2 + 850.0f) {
-                mFightState = FIGHT_STATE_3;
+                mSubState = SUB_STATE_3;
             } else {
                 setAnm("WalkBt", 20.0f);
                 if (mMdl.getAnm().getFrame() >= 25.0f && mMdl.getAnm().getFrame() <= 50.0f) {
@@ -1021,7 +1021,7 @@ void dAcBlastboss_c::executeState_Fight() {
                 targetAnmRate = 1.5f;
             }
             if (mXZDistanceToLink < puVar2 + 400.0f) {
-                mFightState = FIGHT_STATE_0;
+                mSubState = SUB_STATE_0;
                 if (field_0x1149 == 0) {
                     field_0x1156[2] = cM::rndF(50.0f) + 50.0f;
                 } else {
@@ -1030,13 +1030,13 @@ void dAcBlastboss_c::executeState_Fight() {
             }
             break;
         }
-        case FIGHT_STATE_3: {
+        case SUB_STATE_3: {
             setAnm("Walk", 20.0f);
             targetSpeed = 7.5f;
             field_0x11A4 = 7.5f;
             targetAnmRate = 1.0f;
             if (mXZDistanceToLink < puVar2 + 750.0f) {
-                mFightState = FIGHT_STATE_2;
+                mSubState = SUB_STATE_2;
             } else if (!link->isRecovering()) {
                 field_0x117E++;
                 if (field_0x117E > 70) {
@@ -1048,11 +1048,11 @@ void dAcBlastboss_c::executeState_Fight() {
             }
             break;
         }
-        case FIGHT_STATE_4: {
+        case SUB_STATE_4: {
             field_0x117E = 0;
             b = true;
             if (mMdl.getAnm().isStop()) {
-                mFightState = FIGHT_STATE_0;
+                mSubState = SUB_STATE_0;
             }
             break;
         }
@@ -1062,7 +1062,7 @@ void dAcBlastboss_c::executeState_Fight() {
     setAnmRate(mAnmRate);
     sLib::addCalcScaledDiff(&mSpeed, targetSpeed, 1.0f, 2.0f);
 
-    if (mFightState != FIGHT_STATE_0) {
+    if (mSubState != SUB_STATE_0) {
         sLib::addCalcAngle(field_0x118C.ref(), 0x800, 1, 100);
         sLib::addCalcAngle(mAngle.y.ref(), mYAngleToLink, 2, field_0x118C);
     }
@@ -1115,7 +1115,7 @@ void dAcBlastboss_c::executeState_Fight() {
     }
 
     if (field_0x1156[4] == 1) {
-        field_0x1178 = 0x28;
+        field_0x1178 = 40;
     } else if (field_0x1156[4] <= 10) {
         field_0x1136 = 0;
         field_0x1135 = 0;
@@ -1127,7 +1127,7 @@ void dAcBlastboss_c::finalizeState_Fight() {}
 
 void dAcBlastboss_c::initializeState_Attack() {
     f32 rnd = cM::rnd();
-    mFightState = FIGHT_STATE_0;
+    mSubState = SUB_STATE_0;
     if (rnd < 0.3333f) {
         setAnm("AttackU", 5.0f);
     } else if (rnd < 0.6666f) {
@@ -1150,8 +1150,8 @@ void dAcBlastboss_c::executeState_Attack() {
     // TODO major typing crime here but I'm not sure how this actually works
     cCcD_Obj *atHit = mSwordMdl.mCcList.find((dColliderLinkedList::ccPtmf)&dCcD_Check::ChkAtHit);
 
-    switch (mFightState) {
-        case FIGHT_STATE_0: {
+    switch (mSubState) {
+        case SUB_STATE_0: {
             if (field_0x1152 >= 15 && mMdl.getAnm().checkFrame(7.0f) && cM::rnd() < 0.1f) {
                 mStateMgr.changeState(StateID_Fight);
                 field_0x113F = 20;
@@ -1167,10 +1167,10 @@ void dAcBlastboss_c::executeState_Attack() {
                     field_0x113D = 10;
                 }
                 if (atHit != nullptr) {
-                    mFightState = FIGHT_STATE_1;
+                    mSubState = SUB_STATE_1;
                 } else {
                     if (mMdl.getAnm().getFrame() > 28.0f) {
-                        mFightState = FIGHT_STATE_1;
+                        mSubState = SUB_STATE_1;
                         if (field_0x113E != 0) {
                             setAnmRate(0.5f);
                         }
@@ -1179,7 +1179,7 @@ void dAcBlastboss_c::executeState_Attack() {
             }
             break;
         }
-        case FIGHT_STATE_1: {
+        case SUB_STATE_1: {
             if (mMdl.getAnm().isStop()) {
                 mStateMgr.changeState(StateID_Fight);
             }
@@ -1193,7 +1193,7 @@ void dAcBlastboss_c::executeState_Attack() {
     }
     if (field_0x113E != 0) {
         if (field_0x1149) {
-            mFightState = FIGHT_STATE_0;
+            mSubState = SUB_STATE_0;
             mStateMgr.changeState(StateID_CounterAttack);
             return;
         }
@@ -1204,7 +1204,7 @@ void dAcBlastboss_c::executeState_Attack() {
         } else if (mpCurrentAnm == "AttackL") {
             mCc1.SetTgFlag_0xA(0xE0);
         } else {
-            mCc1.SetTgFlag_0xA(1);
+            mCc1.SetTgFlag_0xA(0x1);
         }
     }
     fn_143_77C0();
@@ -1213,7 +1213,7 @@ void dAcBlastboss_c::finalizeState_Attack() {}
 
 void dAcBlastboss_c::initializeState_CounterAttack() {
     mSwordMdl.fn_8006B7A0(0x20000);
-    if (mFightState == 0) {
+    if (mSubState == 0) {
         setAnm("Counter", 5.0f);
     } else {
         f32 rnd = cM::rnd();
@@ -1236,7 +1236,7 @@ void dAcBlastboss_c::executeState_CounterAttack() {
     f32 speed = 0.0f;
     bool b = false;
     field_0x1131 = 1;
-    if (mFightState == FIGHT_STATE_0) {
+    if (mSubState == SUB_STATE_0) {
         if (mMdl.getAnm().getFrame() < 15.0f) {
             speed = -10.0f;
         }
@@ -1298,7 +1298,7 @@ void dAcBlastboss_c::finalizeState_CounterAttack() {}
 void dAcBlastboss_c::initializeState_PunchAttack() {
     setAnm("AttackBreak", 5.0f);
     mSwordMdl.fn_8006B7A0(0x20000);
-    mFightState = 0;
+    mSubState = 0;
 }
 void dAcBlastboss_c::executeState_PunchAttack() {
     f32 speed = 0.0f;
@@ -1325,7 +1325,7 @@ void dAcBlastboss_c::executeState_PunchAttack() {
 void dAcBlastboss_c::finalizeState_PunchAttack() {}
 
 void dAcBlastboss_c::initializeState_DashAttack() {
-    mFightState = 0;
+    mSubState = 0;
     mSwordMdl.setDamageMaybe(8);
     mSwordMdl.fn_8006B7A0(0x20000);
 }
@@ -1335,42 +1335,42 @@ void dAcBlastboss_c::executeState_DashAttack() {
     f32 stepSize = 40.0f; // never set differently
     mCc1.SetTgFlag_0xA(0x1FF);
     sLib::addCalcAngle(mAngle.y.ref(), mYAngleToLink, 2, 0x1000);
-    switch (mFightState) {
-        case FIGHT_STATE_0: {
+    switch (mSubState) {
+        case SUB_STATE_0: {
             if (mXZDistanceToLink < 400.0f) {
                 mStateMgr.changeState(StateID_CounterAttack);
                 return;
             }
             setAnm("AttackJumpStart", 5.0f);
             mSwordMdl.fn_8006B7A0(0x20000);
-            mFightState = FIGHT_STATE_1;
+            mSubState = SUB_STATE_1;
             // fall-through
         }
-        case FIGHT_STATE_1: {
+        case SUB_STATE_1: {
             if (mMdl.getAnm().getFrame() >= 23.0f) {
                 field_0x11A4 = 30.0f;
                 targetSpeed = 40.0f;
             }
             if (mMdl.getAnm().isStop()) {
                 setAnm("AttackJumpLoop", 0.0f);
-                mFightState = FIGHT_STATE_2;
+                mSubState = SUB_STATE_2;
                 field_0x1156[0] = 200;
             }
             break;
         }
-        case FIGHT_STATE_2: {
+        case SUB_STATE_2: {
             field_0x11A4 = 30.0f;
             targetSpeed = 80.0f;
             field_0x11B8 = 5.0f;
             if (mXZDistanceToLink < 750.0f) {
                 setAnm("AttackJumpEnd", 0.0f);
-                mFightState = FIGHT_STATE_3;
+                mSubState = SUB_STATE_3;
             } else if (field_0x1156[0] == 0) {
                 mStateMgr.changeState(StateID_Fight);
             }
             break;
         }
-        case FIGHT_STATE_3: {
+        case SUB_STATE_3: {
             if (mXZDistanceToLink > 300.0f && mMdl.getAnm().getFrame() <= 6.0f) {
                 targetSpeed = 80.0f;
             } else {
@@ -1401,7 +1401,7 @@ void dAcBlastboss_c::finalizeState_DashAttack() {}
 
 void dAcBlastboss_c::initializeState_SmallAttack() {
     setAnm("AttackSwordBreak", 5.0f);
-    mFightState = FIGHT_STATE_0;
+    mSubState = SUB_STATE_0;
 }
 void dAcBlastboss_c::executeState_SmallAttack() {
     dAcPy_c *link = dAcPy_c::GetLinkM();
@@ -1409,8 +1409,8 @@ void dAcBlastboss_c::executeState_SmallAttack() {
     f32 targetSpeed = 0.0f;
 
     mCc1.SetTgFlag_0xA(0);
-    switch (mFightState) {
-        case FIGHT_STATE_0: {
+    switch (mSubState) {
+        case SUB_STATE_0: {
             if (mMdl.getAnm().getFrame() >= 31.0f && mMdl.getAnm().getFrame() <= 33.0f) {
                 field_0x11A4 = 15.0f;
                 if (fn_143_9420()) {
@@ -1423,14 +1423,14 @@ void dAcBlastboss_c::executeState_SmallAttack() {
                     dRumble_c::start(dRumble_c::sRumblePreset4, dRumble_c::FLAG_SLOT0);
                     startSound(SE_BLasBos_SwordBySword);
                     link->onForceOrPreventActionFlags(0x80000);
-                    mFightState = FIGHT_STATE_1;
+                    mSubState = SUB_STATE_1;
                 }
             }
             break;
         }
     }
 
-    if (mMdl.getAnm().checkFrame(44.0f) && mFightState != FIGHT_STATE_1) {
+    if (mMdl.getAnm().checkFrame(44.0f) && mSubState != SUB_STATE_1) {
         mStateMgr.changeState(StateID_Fight);
         mpCurrentAnm = nullptr;
         setAnm("WaitBt", 40.0f);
@@ -1455,7 +1455,7 @@ void dAcBlastboss_c::finalizeState_SmallAttack() {}
 
 void dAcBlastboss_c::initializeState_ThunderAttack() {
     setAnm("AttackThunder", 5.0f);
-    mFightState = FIGHT_STATE_0;
+    mSubState = SUB_STATE_0;
 }
 void dAcBlastboss_c::executeState_ThunderAttack() {
     field_0x1131 = 1;
@@ -1495,7 +1495,7 @@ void dAcBlastboss_c::executeState_ThunderAttack() {
 void dAcBlastboss_c::finalizeState_ThunderAttack() {}
 
 void dAcBlastboss_c::initializeState_Guard() {
-    mFightState = FIGHT_STATE_0;
+    mSubState = SUB_STATE_0;
     mMdlCallback.field_0x30 = 0.0f;
     mMdlCallback.field_0x18 = 0;
 }
@@ -1508,12 +1508,23 @@ void dAcBlastboss_c::executeState_Guard() {
         "GuardR", "GuardRU", "GuardRD", "GuardL", "GuardLU", "GuardLD", "GuardU", "GuardD", "GuardC", "WaitBt",
     };
 
-    static const u32 sGuardFlags[] = {0xE, 0xE, 0x1E, 0xE0, 0xE0, 0xF0, 0x83, 0x38, 0x100, 0x1FF};
+    static const u32 sGuardFlags[] = {
+        0x8 | 0x4 | 0x2,
+        0x8 | 0x4 | 0x2,
+        0x10 | 0x8 | 0x4 | 0x2,
+        0x80 | 0x40 | 0x20,
+        0x80 | 0x40 | 0x20,
+        0x80 | 0x40 | 0x20 | 0x10,
+        0x80 | 0x2 | 0x1,
+        0x20 | 0x10 | 0x8,
+        0x100,
+        0x100 | 0x80 | 0x40 | 0x20 | 0x10 | 0x8 | 0x4 | 0x2 | 0x1,
+    };
 
-    switch (mFightState) {
-        case FIGHT_STATE_0: {
+    switch (mSubState) {
+        case SUB_STATE_0: {
             if (link->isAttackingJumpSlash()) {
-                mFightState = FIGHT_STATE_2;
+                mSubState = SUB_STATE_2;
                 setAnm("WalkBt", 2.0f);
                 setAnmRate(-2.0f);
                 field_0x1156[0] = 5;
@@ -1525,11 +1536,11 @@ void dAcBlastboss_c::executeState_Guard() {
                 } else {
                     setAnm(sGuardNames[field_0x1144], 3.0f);
                 }
-                mFightState = FIGHT_STATE_1;
+                mSubState = SUB_STATE_1;
                 // fall-through
             }
         }
-        case FIGHT_STATE_1: {
+        case SUB_STATE_1: {
             if (link->isAttackingSpin()) {
                 field_0x1156[0] = 5;
             }
@@ -1550,17 +1561,17 @@ void dAcBlastboss_c::executeState_Guard() {
             }
             break;
         }
-        case FIGHT_STATE_2: {
+        case SUB_STATE_2: {
             field_0x11A4 = 20.0f;
             targetSpeed = -30.0f;
             if (field_0x1156[0] == 0) {
                 field_0x1144 = 6;
                 forceSetAnm(sGuardNames[field_0x1144], 3.0);
-                mFightState = FIGHT_STATE_1;
+                mSubState = SUB_STATE_1;
             }
             break;
         }
-        case FIGHT_STATE_10: {
+        case SUB_STATE_10: {
             if (field_0x1144 == 0) {
                 setAnm("AttackRGuard", 3.0f);
             } else if (field_0x1144 == 3) {
@@ -1568,10 +1579,10 @@ void dAcBlastboss_c::executeState_Guard() {
             } else {
                 setAnm("GuardU", 3.0f);
             }
-            mFightState = FIGHT_STATE_11;
+            mSubState = SUB_STATE_11;
             // fall-through
         }
-        case FIGHT_STATE_11: {
+        case SUB_STATE_11: {
             if (mMdl.getAnm().getFrame() >= 13.0f) {
                 mStateMgr.changeState(StateID_Fight);
                 field_0x1156[4] = 15;
@@ -1608,28 +1619,442 @@ void dAcBlastboss_c::executeState_Guard() {
 }
 void dAcBlastboss_c::finalizeState_Guard() {}
 
-void dAcBlastboss_c::initializeState_GuardBreak() {}
-void dAcBlastboss_c::executeState_GuardBreak() {}
+void dAcBlastboss_c::initializeState_GuardBreak() {
+    s32 side;
+    s32 attackDir = dAcPy_c::GetLinkM()->getSpecificAttackDirection();
+    if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_LEFT ||
+        attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWNLEFT ||
+        attackDir == daPlayerActBase_c::ATTACK_DIRECTION_UPLEFT) {
+        side = 0;
+    } else if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_RIGHT ||
+               attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWNRIGHT ||
+               attackDir == daPlayerActBase_c::ATTACK_DIRECTION_UPRIGHT) {
+        side = 1;
+    } else {
+        side = (s32)cM::rndF(1.99f);
+    }
+
+    if (side == 0) {
+        setAnm("GuardBreak", 5.0f);
+    } else {
+        setAnm("GuardBreakB", 5.0f);
+    }
+    mSubState = 0;
+    field_0x1156[0] = 3;
+}
+void dAcBlastboss_c::executeState_GuardBreak() {
+    if (mMdl.getAnm().isStop()) {
+        mStateMgr.changeState(StateID_Fight);
+        field_0x1156[4] = 15;
+    }
+
+    if (field_0x1156[0] == 1) {
+        mSpeed = -30.0f;
+    }
+    sLib::addCalcScaled(&mSpeed, 1.0f, 4.0f);
+    mCc1.SetTgFlag_0xA(0x1FF);
+    fn_143_77C0();
+}
 void dAcBlastboss_c::finalizeState_GuardBreak() {}
 
-void dAcBlastboss_c::initializeState_Damage() {}
-void dAcBlastboss_c::executeState_Damage() {}
+void dAcBlastboss_c::initializeState_Damage() {
+    forceSetAnm("Damage", 5.0f);
+    mSubState = SUB_STATE_0;
+    mSpeed = -20.0f;
+    field_0x113A++;
+    field_0x1142 = 5;
+    startSound(SE_BLasBos_VO_DamageNormal);
+}
+void dAcBlastboss_c::executeState_Damage() {
+    dAcPy_c *link = dAcPy_c::GetLinkM();
+    sLib::addCalcScaled(&mSpeed, 1.0f, 2.0f);
+    if (mMdl.getAnm().isStop()) {
+        mStateMgr.changeState(StateID_Fight);
+        field_0x1156[4] = 15;
+        field_0x1156[2] = 0;
+    }
+    field_0x113E = 0;
+    if (field_0x1149 == 0 && !link->isAttackingSpin()) {
+        mCc1.SetTgFlag_0xA(0x1FF);
+    }
+    fn_143_77C0();
+}
 void dAcBlastboss_c::finalizeState_Damage() {}
 
-void dAcBlastboss_c::initializeState_SitDamage() {}
-void dAcBlastboss_c::executeState_SitDamage() {}
+void dAcBlastboss_c::initializeState_SitDamage() {
+    setAnm("Chance", 5.0f);
+    mSubState = 0;
+    mSpeed = -20.0f;
+    field_0x113A = 0;
+    field_0x1156[0] = 80;
+    field_0x1142 = 5;
+    field_0x113C++;
+}
+void dAcBlastboss_c::executeState_SitDamage() {
+    sLib::addCalcScaled(&mSpeed, 1.0f, 2.0f);
+    switch (mSubState) {
+        case SUB_STATE_0: {
+            if (mMdl.getAnm().isStop()) {
+                setAnm("ChanceLoop", 0.0f);
+                mSubState = SUB_STATE_1;
+            }
+            break;
+        }
+        case SUB_STATE_1: {
+            if (field_0x1156[0] == 0 || field_0x113A >= 5) {
+                setAnm("ChanceReverse", 5.0f);
+                mSubState = SUB_STATE_2;
+                // fall-through
+            } else {
+                break;
+            }
+        }
+        case SUB_STATE_2: {
+            if (mMdl.getAnm().isStop()) {
+                mStateMgr.changeState(StateID_Fight);
+                field_0x1156[4] = 15;
+            }
+            fn_143_77C0();
+            mCc1.SetTgFlag_0xA(0x1FF);
+            return;
+        }
+        case SUB_STATE_5: {
+            if (field_0x1137 == 0) {
+                setAnm("ChanceDamageU", 2.0f);
+            } else if (field_0x1137 == 1) {
+                setAnm("ChanceDamageR", 2.0f);
+            } else if (field_0x1137 == 2) {
+                setAnm("ChanceDamageL", 2.0f);
+            } else {
+                setAnm("ChanceDamageD", 2.0f);
+            }
+            mSubState = SUB_STATE_6;
+            break;
+        }
+        case SUB_STATE_6: {
+            if (field_0x1156[0] == 0 || field_0x113A >= 5) {
+                setAnm("ChanceReverse", 5.0f);
+                mSubState = SUB_STATE_2;
+                // fall-through
+            } else if (mMdl.getAnm().isStop()) {
+                setAnm("ChanceLoop", 0.0f);
+                mSubState = SUB_STATE_1;
+            }
+        }
+    }
+    mCc1.SetTgFlag_0xA(0);
+}
 void dAcBlastboss_c::finalizeState_SitDamage() {}
 
-void dAcBlastboss_c::initializeState_Down() {}
-void dAcBlastboss_c::executeState_Down() {}
+void dAcBlastboss_c::initializeState_Down() {
+    setAnm("DownBStart", 5.0f);
+    mSubState = SUB_STATE_0;
+    mSpeed = -20.0f;
+    mAcceleration = -5.0f;
+    mVelocity.y = 60.0f;
+    mIsSwordEmpowered = false;
+    mCc1.ClrTg_0x8000000();
+    mSwordMdl.fn_8006B800(0);
+}
+void dAcBlastboss_c::executeState_Down() {
+    mVec3_c v;
+    mMtx_c mtx;
+
+    field_0x1141 = 1;
+    field_0x1142 = 5;
+    bool b = false;
+    fn_143_A110(30);
+    field_0x1144 = -1;
+
+    // TODO: Are all these fall-throughs intentional??????
+    switch (mSubState) {
+        case SUB_STATE_0: {
+            if (mMdl.getAnm().isStop()) {
+                mSubState = SUB_STATE_1;
+                setAnm("DownBLoop", 0.0f);
+                field_0x11C0 = 20.0f;
+            }
+            // fall-through
+        }
+        case SUB_STATE_1: {
+            sLib::addCalcAngle(mAngle.x.ref(), -0x4000, 2, 0x300);
+            if (field_0x11BC <= -10.0f && field_0x1140) {
+                mSubState = SUB_STATE_2;
+                b = true;
+                setAnm("DownBEnd", 2.0f);
+                mVelocity.y = 30.0f;
+            } else {
+                field_0x11A4 = -30.0f;
+                break;
+            }
+            // fall-through
+        }
+        case SUB_STATE_2: {
+            if (mVelocity.y < 0.0f) {
+                field_0x11C0 = -35.0f;
+            }
+            sLib::addCalcAngle(mAngle.x.ref(), -0x4000, 2, 0x300);
+            if (field_0x11BC <= -10.0f && field_0x1140) {
+                b = true;
+            }
+            if (mMdl.getAnm().isStop()) {
+                setAnm("DownLoop", 0.0f);
+                mSubState = SUB_STATE_3;
+                if (field_0x113B >= 3 || field_0x2CEC != 0) {
+                    field_0x1156[0] = 70;
+                } else if (field_0x113B == 2) {
+                    field_0x1156[0] = 40;
+                } else {
+                    field_0x1156[0] = 25;
+                }
+                field_0x113B++;
+            } else {
+                sLib::addCalcScaled(&mSpeed, 1.0f, 1.0f);
+                if (mSpeed < 1.0f) {
+                    mFinalBlowPosition.set(mChestTranslation.x, mChestTranslation.y, mChestTranslation.z);
+                    setInteractionFlags(INTERACT_0x1);
+                }
+                break;
+            }
+            // fall-through
+        }
+        case SUB_STATE_3: {
+            mFinalBlowPosition.set(mChestTranslation.x, mChestTranslation.y, mChestTranslation.z);
+            sLib::addCalcScaled(&mSpeed, 1.0f, 1.0f);
+            if (checkInteractionFlags(INTERACT_0x1000)) {
+                setAnm("End", 3.0f);
+                mSubState = 50;
+                field_0x2CEC = 100;
+                startSound(SE_BLasBos_LastHit);
+                field_0x114F = 1;
+                resetInteractionFlags(INTERACT_0x1000);
+                resetInteractionFlags(INTERACT_0x1);
+            } else if (field_0x1156[0] == 0) {
+                if (cM::rnd() < 0.5f || field_0x2CEC != 0) {
+                    setAnm("DownEscapeR", 10.0f);
+                } else {
+                    setAnm("DownEscapeL", 10.0f);
+                }
+                setAnmRate(0.65f);
+                mSubState = SUB_STATE_5;
+                field_0x11C8 = 0.0f;
+                resetInteractionFlags(INTERACT_0x1);
+                if (field_0x2CEC != 0) {
+                    field_0x2CEC = 3;
+                    field_0x2D00 = 0.0f;
+                    dLightEnv_c::GetPInstance()->setField_0x38DC(1);
+                }
+            }
+            break;
+        }
+        case SUB_STATE_4: {
+            if (mMdl.getAnm().getFrame() >= 52.0f) {
+                field_0x1141 = 0;
+                sLib::addCalcAngle(mAngle.x.ref(), 0, 1, 910);
+            }
+            if (mMdl.getAnm().getFrame() >= 170.0f) {
+                field_0x1131 = 2;
+            }
+            if (mMdl.getAnm().isStop()) {
+                mStateMgr.changeState(StateID_Fight);
+                field_0x1156[4] = 15;
+            }
+            break;
+        }
+        case SUB_STATE_5: {
+            sLib::addCalcAngle(mAngle.x.ref(), 0, 1, 0x400);
+            if ((int)mMdl.getAnm().getFrame() <= 14) {
+                sLib::addCalcScaledDiff(&field_0x11C8, 15.0f, 1.0f, 5.0f);
+                field_0x11A4 = 20.0f;
+            } else {
+                field_0x1141 = 0;
+                sLib::addCalcAngle(mAngle.y.ref(), mYAngleToLink, 2, 0x800);
+                sLib::addCalcScaled(&field_0x11C8, 1.0f, 5.0f);
+            }
+            mtx.YrotS(mRotation.y);
+            if (mpCurrentAnm == "DownEscapeR") {
+                v.set(-field_0x11C8, 0.0f, 0.0f);
+            } else {
+                v.set(field_0x11C8, 0.0f, 0.0f);
+            }
+            MTXMultVec(mtx, v, v);
+            mPosition.x += v.x;
+            mPosition.z += v.z;
+
+            if (mMdl.getAnm().isStop()) {
+                if (field_0x2CEC != 0) {
+                    setAnm("ThunderDemo", 10.0f);
+                    mSubState = SUB_STATE_20;
+                } else {
+                    if (field_0x113B >= 3 && mXZDistanceToLink < 500.0f) {
+                        mStateMgr.changeState(StateID_Attack);
+                        mMdl.setFrame(10.0f);
+                    } else {
+                        mStateMgr.changeState(StateID_Fight);
+                        field_0x1156[4] = 15;
+                    }
+                }
+            }
+            break;
+        }
+        case SUB_STATE_10: {
+            // TODO: Is this state ever set?
+            if (mMdl.getAnm().isStop()) {
+                setAnm("DownGetUp", 10.0f);
+                mSubState = SUB_STATE_4;
+            }
+            break;
+        }
+        case SUB_STATE_20: {
+            field_0x1141 = 0;
+            if (mMdl.getAnm().isStop()) {
+                mSubState = SUB_STATE_21;
+                setAnm("CatchThunderLoop", 0.0f);
+            }
+            break;
+        }
+        case SUB_STATE_21: {
+            field_0x1141 = 0;
+            if (mMdl.getAnm().isStop()) {
+                mStateMgr.changeState(StateID_Fight);
+                field_0x1156[4] = 15;
+                field_0x2CEC = 1000;
+            }
+            break;
+        }
+    }
+
+    if (b) {
+        v.set(0.0f, 0.0f, -100.0f);
+        mtx.YrotS(mRotation.y);
+        MTXMultVec(mtx, v, v);
+        v.x += mBackbone1Translation.x;
+        v.z += mBackbone1Translation.z;
+        v.y = 10.0f;
+
+        static mVec3_c sScale(3.0f, 3.0f, 3.0f);
+        dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_91_, v, nullptr, &sScale, nullptr, nullptr, 0, 0);
+    }
+}
 void dAcBlastboss_c::finalizeState_Down() {}
 
-void dAcBlastboss_c::initializeState_Stun() {}
-void dAcBlastboss_c::executeState_Stun() {}
+void dAcBlastboss_c::initializeState_Stun() {
+    setAnm("Stan", 3.0f);
+    mSubState = SUB_STATE_0;
+    field_0x113A = 0;
+    field_0x1143 = 10;
+    field_0x1154++;
+    mIsSwordEmpowered = false;
+    mCc1.ClrTg_0x8000000();
+    mSwordMdl.fn_8006B800(0);
+    startSound(SE_BLasBos_HitThunderBeam);
+}
+void dAcBlastboss_c::executeState_Stun() {
+    fn_143_A110(40);
+    field_0x114B = 1;
+    int frame = mMdl.getAnm().getFrame();
+    switch (mSubState) {
+        case SUB_STATE_0: {
+            if (mMdl.getAnm().isStop()) {
+                mSubState = SUB_STATE_1;
+                setAnm("StanLoop", 0.0f);
+                field_0x1156[0] = 100;
+            }
+            break;
+        }
+        case SUB_STATE_1: {
+            if (field_0x1156[0] == 0) {
+                mSubState = SUB_STATE_2;
+                setAnm("StanReverse", 10.0f);
+            }
+            break;
+        }
+        case SUB_STATE_2: {
+            if (frame <= 58) {
+                if (frame == 58) {
+                    field_0x114B = 2;
+                }
+            } else {
+                field_0x114B = 0;
+                if (frame <= 61) {
+                    field_0x11A4 = 25.0f;
+                }
+            }
+            if (mMdl.getAnm().isStop()) {
+                mStateMgr.changeState(StateID_Fight);
+            }
+            break;
+        }
+    }
+
+    sLib::addCalcScaled(&mSpeed, 1.0f, 10.0f);
+    if (field_0x113A >= 7) {
+        mCc1.SetTgFlag_0xA(0x1FF);
+        fn_143_77C0();
+    } else {
+        if (field_0x1143 != 0) {
+            mCc1.SetTgFlag_0xA(0x1FF);
+        } else {
+            mCc1.SetTgFlag_0xA(0);
+        }
+    }
+}
 void dAcBlastboss_c::finalizeState_Stun() {}
 
-void dAcBlastboss_c::initializeState_ThunderWait() {}
-void dAcBlastboss_c::executeState_ThunderWait() {}
+void dAcBlastboss_c::initializeState_ThunderWait() {
+    setAnm("CatchThunderStart", 10.0f);
+    mSubState = SUB_STATE_0;
+    field_0x1144 = -1;
+    field_0x1156[0] = 30;
+}
+void dAcBlastboss_c::executeState_ThunderWait() {
+    dAcPy_c *link = dAcPy_c::GetLinkM();
+    mCc1.SetTgFlag_0xA(0);
+
+    switch (mSubState) {
+        case SUB_STATE_0: {
+            if (mMdl.getAnm().isStop()) {
+                mSubState = SUB_STATE_1;
+                setAnm("CatchThunderLoop", 0.0f);
+            }
+            // fall-through
+        }
+        case SUB_STATE_1: {
+            if (link->checkSwordAndMoreStates(0x400000)) {
+                mStateMgr.changeState(StateID_Fight);
+            } else if (field_0x1156[0] == 0) {
+                dLightEnv_c::GetPInstance()->setField_0x38DC(7);
+                mSubState = SUB_STATE_5;
+                setAnm("CatchThunderEnd", 5.0f);
+                mVec3_c vEff;
+                vEff.x = field_0x1208.x;
+                vEff.y = field_0x1208.y + 110.0f;
+                vEff.z = field_0x1208.z;
+                dJEffManager_c::spawnEffect(
+                    PARTICLE_RESOURCE_ID_MAPPING_624_, vEff, nullptr, nullptr, nullptr, nullptr, 0, 0
+                );
+                field_0x1156[3] = cM::rndF(100.0f) + 900.0f;
+                mIsSwordEmpowered = true;
+                mSwordMdl.fn_8006B800(4);
+                mCc1.OnTg_0x8000000();
+                field_0x114A = 10;
+                startSound(SE_BLasBos_ThunderFallSword);
+            }
+            break;
+        }
+        case SUB_STATE_5: {
+            if (mMdl.getAnm().getFrame() >= 20.0f) {
+                mCc1.SetTgFlag_0xA(0x1FF);
+                fn_143_77C0();
+            }
+            if (mMdl.getAnm().isStop()) {
+                mStateMgr.changeState(StateID_Fight);
+            }
+            break;
+        }
+    }
+    sLib::addCalcScaled(&mSpeed, 1.0f, 4.0f);
+}
 void dAcBlastboss_c::finalizeState_ThunderWait() {}
 
 void dAcBlastboss_c::setAnm(const char *name, f32 blend) {

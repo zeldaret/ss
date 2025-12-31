@@ -205,15 +205,20 @@ class dAcBlastboss_c : public dAcEnBase_c {
     // TODO: mFightState probably means different things in
     // different states, so maybe we need to either remove
     // this again or split this up further.
-    enum FightState_e {
-        FIGHT_STATE_0 = 0,
-        FIGHT_STATE_1,
-        FIGHT_STATE_2,
-        FIGHT_STATE_3,
-        FIGHT_STATE_4,
+    enum SubState_e {
+        SUB_STATE_0 = 0,
+        SUB_STATE_1,
+        SUB_STATE_2,
+        SUB_STATE_3,
+        SUB_STATE_4,
+        SUB_STATE_5,
+        SUB_STATE_6,
 
-        FIGHT_STATE_10 = 10,
-        FIGHT_STATE_11,
+        SUB_STATE_10 = 10,
+        SUB_STATE_11,
+
+        SUB_STATE_20 = 20,
+        SUB_STATE_21,
     };
 
 public:
@@ -311,7 +316,7 @@ private:
     /* 0x1162 */ u8 _0x1162[0x1164 - 0x1162];
 
     /* 0x1164 */ s16 field_0x1164;
-    /* 0x1166 */ s16 mFightState;
+    /* 0x1166 */ s16 mSubState;
 
     /* 0x1168 */ u8 _0x1168[0x116A - 0x1168];
 
@@ -359,8 +364,9 @@ private:
     /* 0x11BC */ f32 field_0x11BC;
     /* 0x11C0 */ f32 field_0x11C0;
 
-    /* 0x11C4 */ u8 _0x11C4[0x11CC - 0x11C4];
+    /* 0x11C4 */ u8 _0x11C4[0x11C8 - 0x11C4];
 
+    /* 0x11CC */ f32 field_0x11C8;
     /* 0x11CC */ f32 field_0x11CC;
 
     /* 0x11D0 */ u8 _0x11D0[0x11D4 - 0x11D0];
@@ -393,7 +399,9 @@ private:
     /* 0x2C9C */ dEmitter_c mEmitter7;
     /* 0x2CD0 */ LIGHT_INFLUENCE mLightInfo;
     /* 0x2CEC */ s16 field_0x2CEC;
-    /* 0x2CEE */ u8 _0x2CEE[0x2D1C - 0x2CEE];
+    /* 0x2CEE */ u8 _0x2CEE[0x2D00 - 0x2CEE];
+    /* 0x2D00 */ f32 field_0x2D00;
+    /* 0x2D04 */ u8 _0x2D04[0x2D1C - 0x2D04];
     /* 0x2D1C */ const char *mpCurrentAnm;
     /* 0x2D20 */ dTgSwordBattleGame_c *mpSwordBattleGame;
 };

@@ -843,6 +843,7 @@ public:
         mAt.SetRPrm(f);
     }
 
+    // Related to directional attacks?
     void SetTgFlag_0xA(u16 flag) {
         mTg.SetFlag_0xA(flag);
     }
@@ -985,6 +986,9 @@ public:
     }
     void OnTgElectric() {
         return mTg.OnSPrm(0x40000);
+    }
+    void OnTg_0x8000000() {
+        return mTg.OnSPrm(0x8000000);
     }
     void ClrTgElectric() {
         return mTg.OffSPrm(0x40000);

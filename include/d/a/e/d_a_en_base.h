@@ -16,6 +16,14 @@ struct dAcEnData {
 // non-official name
 class dAcEnBase_c : public dAcObjBase_c {
 public:
+    enum InteractionFlags_e {
+        INTERACT_0x1 = (1 << 0),
+        INTERACT_0x4 = (1 << 2),
+        INTERACT_0x40 = (1 << 6),
+        INTERACT_0x1000 = (1 << 12),
+    };
+
+public:
     dAcEnBase_c();
     virtual ~dAcEnBase_c();
 
@@ -36,7 +44,9 @@ public:
     /* 0x33C */ u32 mInteractionFlags;
     /* 0x340 */ u16 field_0x338;
     /* 0x342 */ u16 mHealth;
-    /* 0x344 */ u8 _344[0x374 - 0x344];
+    /* 0x344 */ u8 _344[0x358 - 0x344];
+    /* 0x358 */ mVec3_c mFinalBlowPosition;
+    /* 0x364 */ u8 _364[0x374 - 0x364];
     /* 0x374 */ dAcEnData *mpEnemyData;
 
     bool checkInteractionFlags(u32 mask) {
