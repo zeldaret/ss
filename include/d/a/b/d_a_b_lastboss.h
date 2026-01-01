@@ -264,8 +264,8 @@ private:
 
     bool checkDamage();
     bool checkForCloseRangeAttack();
-    bool fn_143_75A0();
-    bool fn_143_77C0();
+    bool checkForRangeAttack();
+    bool checkForCounter();
     void fn_143_7B00();
     void fn_143_7F80();
     bool fn_143_9420();

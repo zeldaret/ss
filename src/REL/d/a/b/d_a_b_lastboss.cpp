@@ -1105,9 +1105,9 @@ void dAcBlastboss_c::executeState_Fight() {
     }
 
     if (field_0x117C == 0) {
-        if (!fn_143_75A0()) {
+        if (!checkForRangeAttack()) {
             checkForCloseRangeAttack();
-            fn_143_77C0();
+            checkForCounter();
         }
         mCc1.SetTgFlag_0xA(0x1FF);
     } else {
@@ -1208,7 +1208,7 @@ void dAcBlastboss_c::executeState_Attack() {
             mCc1.SetTgFlag_0xA(0x1);
         }
     }
-    fn_143_77C0();
+    checkForCounter();
 }
 void dAcBlastboss_c::finalizeState_Attack() {}
 
@@ -1286,7 +1286,7 @@ void dAcBlastboss_c::executeState_CounterAttack() {
     } else if (b) {
         mCc1.SetTgFlag_0xA(0x1FF);
         field_0x1142 = 0;
-        fn_143_77C0();
+        checkForCounter();
     }
 
     if (mMdl.getAnm().isStop()) {
@@ -1535,7 +1535,7 @@ void dAcBlastboss_c::executeState_Guard() {
                     setAnm(sGuardNames[field_0x1144], 3.0f);
                     mTimers[TIMER_0] = 14;
                 } else {
-                    setAnm(sGuardNames[field_0x1144], 3.0f);
+                    forceSetAnm(sGuardNames[field_0x1144], 3.0f);
                 }
                 mSubState = SUB_STATE_1;
                 // fall-through
@@ -1558,7 +1558,7 @@ void dAcBlastboss_c::executeState_Guard() {
             }
 
             if (!link->isAttackingJumpSlash()) {
-                fn_143_77C0();
+                checkForCounter();
             }
             break;
         }
@@ -1616,7 +1616,7 @@ void dAcBlastboss_c::executeState_Guard() {
     }
 
     mCc1.SetTgFlag_0xA(sGuardFlags[field_0x1144]);
-    fn_143_75A0();
+    checkForRangeAttack();
 }
 void dAcBlastboss_c::finalizeState_Guard() {}
 
@@ -1654,7 +1654,7 @@ void dAcBlastboss_c::executeState_GuardBreak() {
     }
     sLib::addCalcScaled(&mSpeed, 1.0f, 4.0f);
     mCc1.SetTgFlag_0xA(0x1FF);
-    fn_143_77C0();
+    checkForCounter();
 }
 void dAcBlastboss_c::finalizeState_GuardBreak() {}
 
@@ -1678,7 +1678,7 @@ void dAcBlastboss_c::executeState_Damage() {
     if (field_0x1149 == 0 && !link->isAttackingSpin()) {
         mCc1.SetTgFlag_0xA(0x1FF);
     }
-    fn_143_77C0();
+    checkForCounter();
 }
 void dAcBlastboss_c::finalizeState_Damage() {}
 
@@ -1715,19 +1715,19 @@ void dAcBlastboss_c::executeState_SitDamage() {
                 mStateMgr.changeState(StateID_Fight);
                 mTimers[TIMER_4] = 15;
             }
-            fn_143_77C0();
+            checkForCounter();
             mCc1.SetTgFlag_0xA(0x1FF);
             return;
         }
         case SUB_STATE_5: {
             if (field_0x1137 == 0) {
-                setAnm("ChanceDamageU", 2.0f);
+                forceSetAnm("ChanceDamageU", 2.0f);
             } else if (field_0x1137 == 1) {
-                setAnm("ChanceDamageR", 2.0f);
+                forceSetAnm("ChanceDamageR", 2.0f);
             } else if (field_0x1137 == 2) {
-                setAnm("ChanceDamageL", 2.0f);
+                forceSetAnm("ChanceDamageL", 2.0f);
             } else {
-                setAnm("ChanceDamageD", 2.0f);
+                forceSetAnm("ChanceDamageD", 2.0f);
             }
             mSubState = SUB_STATE_6;
             break;
@@ -1991,7 +1991,7 @@ void dAcBlastboss_c::executeState_Stun() {
     sLib::addCalcScaled(&mSpeed, 1.0f, 10.0f);
     if (mChanceAttackCounter >= 7) {
         mCc1.SetTgFlag_0xA(0x1FF);
-        fn_143_77C0();
+        checkForCounter();
     } else {
         if (field_0x1143 != 0) {
             mCc1.SetTgFlag_0xA(0x1FF);
@@ -2046,7 +2046,7 @@ void dAcBlastboss_c::executeState_ThunderWait() {
         case SUB_STATE_5: {
             if (mMdl.getAnm().getFrame() >= 20.0f) {
                 mCc1.SetTgFlag_0xA(0x1FF);
-                fn_143_77C0();
+                checkForCounter();
             }
             if (mMdl.getAnm().isStop()) {
                 mStateMgr.changeState(StateID_Fight);
@@ -2146,7 +2146,6 @@ bool dAcBlastboss_c::checkDamage() {
                     if (fn_143_9570(attackDir) == fn_143_9570(mLastAttackDir)) {
                         x = 1;
                     }
-                    // TODO the branches here are wrong
                     if (field_0x1136 >= x ||
                         (field_0x11D8 >= 0 && (fn_143_9570(field_0x11D8) & 2) == (fn_143_9570(attackDir) & 2))) {
                         mSubState = SUB_STATE_0;
@@ -2425,7 +2424,7 @@ bool dAcBlastboss_c::checkForCloseRangeAttack() {
     return ret;
 }
 
-bool dAcBlastboss_c::fn_143_75A0() {
+bool dAcBlastboss_c::checkForRangeAttack() {
     dAcPy_c *link = dAcPy_c::GetLinkM();
 
     bool ret = false;
@@ -2469,7 +2468,73 @@ bool dAcBlastboss_c::fn_143_75A0() {
     return ret;
 }
 
-bool dAcBlastboss_c::fn_143_77C0() {}
+bool dAcBlastboss_c::checkForCounter() {
+    bool ret = false;
+
+    if (field_0x113E != 0) {
+        return false;
+    }
+
+    f32 attackRange = 450.0f;
+    if (dAcPy_c::GetLinkM()->isAttackingJumpSlash()) {
+        attackRange = 750.0f;
+    }
+
+    if (mXZDistanceToLink < attackRange) {
+        dAcPy_c *link = dAcPy_c::GetLinkM();
+        if (link->checkFlags0x354(0x04)) {
+            if (link->isAttackingSpin()) {
+                field_0x11A4 = 15.0f;
+            } else if (link->isAttacking()) {
+                field_0x11A4 = 7.0f;
+            }
+
+            s32 attackDir = link->getSpecificAttackDirection();
+
+            if (mStateMgr.isState(StateID_Attack)) {
+                if (mpCurrentAnm == "AttackR" &&
+                    (attackDir == dAcPy_c::ATTACK_DIRECTION_RIGHT || attackDir == dAcPy_c::ATTACK_DIRECTION_UPRIGHT ||
+                     attackDir == dAcPy_c::ATTACK_DIRECTION_DOWNRIGHT)) {
+                    field_0x1144 = 0;
+                } else if (mpCurrentAnm == "AttackL" && (attackDir == dAcPy_c::ATTACK_DIRECTION_LEFT ||
+                                                         attackDir == dAcPy_c::ATTACK_DIRECTION_UPLEFT ||
+                                                         attackDir == dAcPy_c::ATTACK_DIRECTION_DOWNLEFT)) {
+                    field_0x1144 = 3;
+                } else if (mpCurrentAnm == "AttackU" && attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWN) {
+                    field_0x1144 = 6;
+                } else {
+                    return false;
+                }
+
+                mStateMgr.changeState(StateID_Guard);
+                mSubState = SUB_STATE_10;
+            } else {
+                if ((field_0x1149 > 0 || mXZDistanceToLink < 200.0f) && field_0x1135 < 1) {
+                    field_0x1135 = 1;
+                }
+
+                switch (attackDir) {
+                    case daPlayerActBase_c::ATTACK_DIRECTION_DOWN:      field_0x1144 = 6; break;
+                    case daPlayerActBase_c::ATTACK_DIRECTION_LEFT:      field_0x1144 = 3; break;
+                    case daPlayerActBase_c::ATTACK_DIRECTION_DOWNLEFT:  field_0x1144 = 4; break;
+                    case daPlayerActBase_c::ATTACK_DIRECTION_UPLEFT:    field_0x1144 = 5; break;
+                    case daPlayerActBase_c::ATTACK_DIRECTION_RIGHT:     field_0x1144 = 0; break;
+                    case daPlayerActBase_c::ATTACK_DIRECTION_DOWNRIGHT: field_0x1144 = 1; break;
+                    case daPlayerActBase_c::ATTACK_DIRECTION_UPRIGHT:   field_0x1144 = 2; break;
+                    case daPlayerActBase_c::ATTACK_DIRECTION_UP:        field_0x1144 = 7; break;
+                    default:                                            field_0x1144 = 8; break;
+                }
+                if (!mStateMgr.isState(StateID_Guard)) {
+                    mStateMgr.changeState(StateID_Guard);
+                }
+
+                mSubState = SUB_STATE_0;
+            }
+            ret = true;
+        }
+    }
+    return ret;
+}
 
 void dAcBlastboss_c::fn_143_7B00() {}
 
