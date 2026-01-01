@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_bomb.h"
+#include "d/d_cc.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 
@@ -71,6 +72,8 @@ public:
     void fn_800306d0();
     void fn_80030700();
     void fn_80030c20(u32 flags, f32, f32, f32, f32);
+
+    s32 someEnemyDamageCollisionStuffMaybe(dColliderLinkedList &list, u16 *pOutFlags);
 
     bool ChkCrossPlayer(f32 height);
 

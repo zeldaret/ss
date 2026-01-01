@@ -221,6 +221,17 @@ class dAcBlastboss_c : public dAcEnBase_c {
         SUB_STATE_21,
     };
 
+    enum Timer_e {
+        TIMER_0,
+        TIMER_1,
+        TIMER_2,
+        TIMER_3,
+        TIMER_4,
+        TIMER_5,
+
+        TIMER_MAX,
+    };
+
 public:
     dAcBlastboss_c() : mStateMgr(*this, sStateID::null), mScnCallback(this) {}
     virtual ~dAcBlastboss_c() {}
@@ -251,13 +262,14 @@ private:
     void forceSetAnm(const char *anim, f32 blend);
     void setAnmRate(f32 rate);
 
-    void fn_143_6720();
-    bool fn_143_7420();
+    bool checkDamage();
+    bool checkForCloseRangeAttack();
     bool fn_143_75A0();
     bool fn_143_77C0();
     void fn_143_7B00();
     void fn_143_7F80();
     bool fn_143_9420();
+    u8 fn_143_9570(s32 dir);
     void fn_143_9610();
     void fn_143_A110(s32);
 
@@ -281,14 +293,14 @@ private:
     /* 0x1132 */ u8 field_0x1132;
     /* 0x1133 */ u8 field_0x1133;
     /* 0x1134 */ u8 field_0x1134;
-    /* 0x1135 */ u8 field_0x1135;
-    /* 0x1136 */ u8 field_0x1136;
+    /* 0x1135 */ s8 field_0x1135;
+    /* 0x1136 */ s8 field_0x1136;
     /* 0x1137 */ u8 field_0x1137;
     /* 0x1138 */ u8 field_0x1138;
     /* 0x1139 */ u8 field_0x1139;
-    /* 0x113A */ u8 field_0x113A;
+    /* 0x113A */ u8 mChanceAttackCounter;
     /* 0x113B */ u8 field_0x113B;
-    /* 0x113C */ u8 field_0x113C;
+    /* 0x113C */ u8 mChanceCounter;
     /* 0x113D */ u8 field_0x113D;
     /* 0x113E */ u8 field_0x113E;
     /* 0x113F */ u8 field_0x113F;
@@ -297,7 +309,7 @@ private:
     /* 0x1142 */ u8 field_0x1142;
     /* 0x1143 */ u8 field_0x1143;
     /* 0x1144 */ s8 field_0x1144;
-    /* 0x1145 */ u8 field_0x1145;
+    /* 0x1145 */ s8 mLinkCloseRangeShieldTime;
     /* 0x1146 */ bool mIsSwordEmpowered;
     /* 0x1147 */ u8 field_0x1147;
     /* 0x1148 */ u8 field_0x1148;
@@ -311,10 +323,8 @@ private:
     /* 0x1150 */ u8 field_0x1150;
     /* 0x1152 */ u16 field_0x1152;
     /* 0x1154 */ u16 field_0x1154;
-    /* 0x1156 */ u16 field_0x1156[6];
-
-    /* 0x1162 */ u8 _0x1162[0x1164 - 0x1162];
-
+    /* 0x1156 */ u16 mTimers[TIMER_MAX];
+    /* 0x1162 */ u16 field_0x1162;
     /* 0x1164 */ s16 field_0x1164;
     /* 0x1166 */ s16 mSubState;
 
@@ -333,12 +343,10 @@ private:
     /* 0x117C */ s16 field_0x117C;
     /* 0x117E */ s16 field_0x117E;
     /* 0x1180 */ s16 field_0x1180;
-    /* 0x1180 */ s16 field_0x1182;
+    /* 0x1182 */ s16 field_0x1182;
     /* 0x1184 */ s16 field_0x1184;
     /* 0x1186 */ s16 mYRotationRelativeToLink;
-
-    /* 0x1188 */ u8 _0x1188[0x118A - 0x1188];
-
+    /* 0x1188 */ s16 field_0x1188;
     /* 0x118A */ mAng field_0x118A;
     /* 0x118C */ mAng field_0x118C;
 
@@ -371,7 +379,7 @@ private:
 
     /* 0x11D0 */ u8 _0x11D0[0x11D4 - 0x11D0];
 
-    /* 0x11D4 */ s32 field_0x11D4;
+    /* 0x11D4 */ s32 mLastAttackDir;
     /* 0x11D8 */ s32 field_0x11D8;
 
     /* 0x11DC */ mAng3_c field_0x11DC;

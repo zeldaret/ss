@@ -434,11 +434,11 @@ public:
         return field_0x2F1C;
     }
 
-    u32 getField_0x38DC() const {
+    s32 getField_0x38DC() const {
         return field_0x38DC;
     }
 
-    void setField_0x38DC(u32 v) {
+    void setField_0x38DC(s32 v) {
         field_0x38DC = v;
     }
 

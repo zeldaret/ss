@@ -15,6 +15,7 @@
 #include "d/d_sc_game.h"
 #include "d/d_stage_mgr.h"
 #include "d/flag/sceneflag_manager.h"
+#include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "d/t/d_t_sword_battle_game.h"
 #include "f/f_base.h"
@@ -211,7 +212,7 @@ int dAcBlastboss_c::create() {
     mHealth = 400;
     mPositionCopy3 = mPosition;
 
-    field_0x11D4 = field_0x11D8 = -1;
+    mLastAttackDir = field_0x11D8 = -1;
 
     mWaterEmitter.init(this);
     mEmitter2.init(this);
@@ -261,9 +262,9 @@ int dAcBlastboss_c::actorExecute() {
     mLightInfo.mScale = 0.0f;
     field_0x11B0 = 0.7f;
 
-    for (int i = 0; i < 6; i++) {
-        if (field_0x1156[i] != 0) {
-            field_0x1156[i]--;
+    for (int i = 0; i < TIMER_MAX; i++) {
+        if (mTimers[i] != 0) {
+            mTimers[i]--;
         }
     }
 
@@ -298,7 +299,7 @@ int dAcBlastboss_c::actorExecute() {
     mCc4.ClrAtSet();
     mCc5.ClrAtSet();
 
-    fn_143_6720();
+    checkDamage();
     if (mpSwordBattleGame == nullptr || mpSwordBattleGame->checkFightStarted() == true) {
         mStateMgr.executeState();
     }
@@ -941,9 +942,9 @@ void dAcBlastboss_c::initializeState_Fight() {
     mSubState = SUB_STATE_0;
     field_0x118A = 0;
     if (field_0x1149 == 0) {
-        field_0x1156[2] = cM::rndF(50.0f) + 50.0f;
+        mTimers[TIMER_2] = cM::rndF(50.0f) + 50.0f;
     } else {
-        field_0x1156[2] = cM::rndF(20.0f) + 10.0f;
+        mTimers[TIMER_2] = cM::rndF(20.0f) + 10.0f;
     }
     field_0x1144 = 9;
 }
@@ -959,7 +960,7 @@ void dAcBlastboss_c::executeState_Fight() {
 
     if (field_0x2CEC >= 200 && field_0x2CEC < 300) {
         puVar2 = -100.0f;
-        field_0x1156[2] = cM::rndF(50.0f) + 100.0f;
+        mTimers[TIMER_2] = cM::rndF(50.0f) + 100.0f;
     }
 
     switch (mSubState) {
@@ -973,7 +974,7 @@ void dAcBlastboss_c::executeState_Fight() {
                 break;
             } else if (mXZDistanceToLink < puVar2 + 250.0f + 100.0f) {
                 mSubState = SUB_STATE_1;
-                field_0x1156[0] = 8;
+                mTimers[TIMER_0] = 8;
                 mAnmRate = -1.0f;
                 field_0x1180 = 0;
                 // fall-through...
@@ -1002,7 +1003,7 @@ void dAcBlastboss_c::executeState_Fight() {
                     mStateMgr.changeState(StateID_PunchAttack);
                     return;
                 }
-            } else if (mXZDistanceToLink >= puVar2 + 200.0f && field_0x1156[0] == 0) {
+            } else if (mXZDistanceToLink >= puVar2 + 200.0f && mTimers[TIMER_0] == 0) {
                 mSubState = SUB_STATE_0;
             }
             break;
@@ -1023,9 +1024,9 @@ void dAcBlastboss_c::executeState_Fight() {
             if (mXZDistanceToLink < puVar2 + 400.0f) {
                 mSubState = SUB_STATE_0;
                 if (field_0x1149 == 0) {
-                    field_0x1156[2] = cM::rndF(50.0f) + 50.0f;
+                    mTimers[TIMER_2] = cM::rndF(50.0f) + 50.0f;
                 } else {
-                    field_0x1156[2] = cM::rndF(20.0f) + 10.0f;
+                    mTimers[TIMER_2] = cM::rndF(20.0f) + 10.0f;
                 }
             }
             break;
@@ -1105,7 +1106,7 @@ void dAcBlastboss_c::executeState_Fight() {
 
     if (field_0x117C == 0) {
         if (!fn_143_75A0()) {
-            fn_143_7420();
+            checkForCloseRangeAttack();
             fn_143_77C0();
         }
         mCc1.SetTgFlag_0xA(0x1FF);
@@ -1114,13 +1115,13 @@ void dAcBlastboss_c::executeState_Fight() {
         mCc1.SetTgFlag_0xA(0);
     }
 
-    if (field_0x1156[4] == 1) {
+    if (mTimers[TIMER_4] == 1) {
         field_0x1178 = 40;
-    } else if (field_0x1156[4] <= 10) {
+    } else if (mTimers[TIMER_4] <= 10) {
         field_0x1136 = 0;
         field_0x1135 = 0;
-        field_0x113A = 0;
-        field_0x11D4 = field_0x11D8 = -1;
+        mChanceAttackCounter = 0;
+        mLastAttackDir = field_0x11D8 = -1;
     }
 }
 void dAcBlastboss_c::finalizeState_Fight() {}
@@ -1229,7 +1230,7 @@ void dAcBlastboss_c::initializeState_CounterAttack() {
 
     field_0x1136 = 0;
     field_0x1135 = 0;
-    field_0x11D4 = field_0x11D8 = -1;
+    mLastAttackDir = field_0x11D8 = -1;
 }
 void dAcBlastboss_c::executeState_CounterAttack() {
     dAcPy_c *link = dAcPy_c::GetLinkM();
@@ -1354,7 +1355,7 @@ void dAcBlastboss_c::executeState_DashAttack() {
             if (mMdl.getAnm().isStop()) {
                 setAnm("AttackJumpLoop", 0.0f);
                 mSubState = SUB_STATE_2;
-                field_0x1156[0] = 200;
+                mTimers[TIMER_0] = 200;
             }
             break;
         }
@@ -1365,7 +1366,7 @@ void dAcBlastboss_c::executeState_DashAttack() {
             if (mXZDistanceToLink < 750.0f) {
                 setAnm("AttackJumpEnd", 0.0f);
                 mSubState = SUB_STATE_3;
-            } else if (field_0x1156[0] == 0) {
+            } else if (mTimers[TIMER_0] == 0) {
                 mStateMgr.changeState(StateID_Fight);
             }
             break;
@@ -1527,12 +1528,12 @@ void dAcBlastboss_c::executeState_Guard() {
                 mSubState = SUB_STATE_2;
                 setAnm("WalkBt", 2.0f);
                 setAnmRate(-2.0f);
-                field_0x1156[0] = 5;
+                mTimers[TIMER_0] = 5;
                 break;
             } else {
                 if (field_0x1144 == 9) {
                     setAnm(sGuardNames[field_0x1144], 3.0f);
-                    field_0x1156[0] = 14;
+                    mTimers[TIMER_0] = 14;
                 } else {
                     setAnm(sGuardNames[field_0x1144], 3.0f);
                 }
@@ -1542,18 +1543,18 @@ void dAcBlastboss_c::executeState_Guard() {
         }
         case SUB_STATE_1: {
             if (link->isAttackingSpin()) {
-                field_0x1156[0] = 5;
+                mTimers[TIMER_0] = 5;
             }
 
             if (field_0x1144 == 9) {
                 field_0x1133 = 1;
-                if (field_0x1156[0] == 0) {
+                if (mTimers[TIMER_0] == 0) {
                     mStateMgr.changeState(StateID_Fight);
-                    field_0x1156[4] = 15;
+                    mTimers[TIMER_4] = 15;
                 }
             } else if (mMdl.getAnm().getFrame() >= 13.0f) {
                 mStateMgr.changeState(StateID_Fight);
-                field_0x1156[4] = 15;
+                mTimers[TIMER_4] = 15;
             }
 
             if (!link->isAttackingJumpSlash()) {
@@ -1564,7 +1565,7 @@ void dAcBlastboss_c::executeState_Guard() {
         case SUB_STATE_2: {
             field_0x11A4 = 20.0f;
             targetSpeed = -30.0f;
-            if (field_0x1156[0] == 0) {
+            if (mTimers[TIMER_0] == 0) {
                 field_0x1144 = 6;
                 forceSetAnm(sGuardNames[field_0x1144], 3.0);
                 mSubState = SUB_STATE_1;
@@ -1585,7 +1586,7 @@ void dAcBlastboss_c::executeState_Guard() {
         case SUB_STATE_11: {
             if (mMdl.getAnm().getFrame() >= 13.0f) {
                 mStateMgr.changeState(StateID_Fight);
-                field_0x1156[4] = 15;
+                mTimers[TIMER_4] = 15;
             }
             break;
         }
@@ -1640,15 +1641,15 @@ void dAcBlastboss_c::initializeState_GuardBreak() {
         setAnm("GuardBreakB", 5.0f);
     }
     mSubState = 0;
-    field_0x1156[0] = 3;
+    mTimers[TIMER_0] = 3;
 }
 void dAcBlastboss_c::executeState_GuardBreak() {
     if (mMdl.getAnm().isStop()) {
         mStateMgr.changeState(StateID_Fight);
-        field_0x1156[4] = 15;
+        mTimers[TIMER_4] = 15;
     }
 
-    if (field_0x1156[0] == 1) {
+    if (mTimers[TIMER_0] == 1) {
         mSpeed = -30.0f;
     }
     sLib::addCalcScaled(&mSpeed, 1.0f, 4.0f);
@@ -1661,7 +1662,7 @@ void dAcBlastboss_c::initializeState_Damage() {
     forceSetAnm("Damage", 5.0f);
     mSubState = SUB_STATE_0;
     mSpeed = -20.0f;
-    field_0x113A++;
+    mChanceAttackCounter++;
     field_0x1142 = 5;
     startSound(SE_BLasBos_VO_DamageNormal);
 }
@@ -1670,8 +1671,8 @@ void dAcBlastboss_c::executeState_Damage() {
     sLib::addCalcScaled(&mSpeed, 1.0f, 2.0f);
     if (mMdl.getAnm().isStop()) {
         mStateMgr.changeState(StateID_Fight);
-        field_0x1156[4] = 15;
-        field_0x1156[2] = 0;
+        mTimers[TIMER_4] = 15;
+        mTimers[TIMER_2] = 0;
     }
     field_0x113E = 0;
     if (field_0x1149 == 0 && !link->isAttackingSpin()) {
@@ -1685,10 +1686,10 @@ void dAcBlastboss_c::initializeState_SitDamage() {
     setAnm("Chance", 5.0f);
     mSubState = 0;
     mSpeed = -20.0f;
-    field_0x113A = 0;
-    field_0x1156[0] = 80;
+    mChanceAttackCounter = 0;
+    mTimers[TIMER_0] = 80;
     field_0x1142 = 5;
-    field_0x113C++;
+    mChanceCounter++;
 }
 void dAcBlastboss_c::executeState_SitDamage() {
     sLib::addCalcScaled(&mSpeed, 1.0f, 2.0f);
@@ -1701,7 +1702,7 @@ void dAcBlastboss_c::executeState_SitDamage() {
             break;
         }
         case SUB_STATE_1: {
-            if (field_0x1156[0] == 0 || field_0x113A >= 5) {
+            if (mTimers[TIMER_0] == 0 || mChanceAttackCounter >= 5) {
                 setAnm("ChanceReverse", 5.0f);
                 mSubState = SUB_STATE_2;
                 // fall-through
@@ -1712,7 +1713,7 @@ void dAcBlastboss_c::executeState_SitDamage() {
         case SUB_STATE_2: {
             if (mMdl.getAnm().isStop()) {
                 mStateMgr.changeState(StateID_Fight);
-                field_0x1156[4] = 15;
+                mTimers[TIMER_4] = 15;
             }
             fn_143_77C0();
             mCc1.SetTgFlag_0xA(0x1FF);
@@ -1732,7 +1733,7 @@ void dAcBlastboss_c::executeState_SitDamage() {
             break;
         }
         case SUB_STATE_6: {
-            if (field_0x1156[0] == 0 || field_0x113A >= 5) {
+            if (mTimers[TIMER_0] == 0 || mChanceAttackCounter >= 5) {
                 setAnm("ChanceReverse", 5.0f);
                 mSubState = SUB_STATE_2;
                 // fall-through
@@ -1801,11 +1802,11 @@ void dAcBlastboss_c::executeState_Down() {
                 setAnm("DownLoop", 0.0f);
                 mSubState = SUB_STATE_3;
                 if (field_0x113B >= 3 || field_0x2CEC != 0) {
-                    field_0x1156[0] = 70;
+                    mTimers[TIMER_0] = 70;
                 } else if (field_0x113B == 2) {
-                    field_0x1156[0] = 40;
+                    mTimers[TIMER_0] = 40;
                 } else {
-                    field_0x1156[0] = 25;
+                    mTimers[TIMER_0] = 25;
                 }
                 field_0x113B++;
             } else {
@@ -1829,7 +1830,7 @@ void dAcBlastboss_c::executeState_Down() {
                 field_0x114F = 1;
                 resetInteractionFlags(INTERACT_0x1000);
                 resetInteractionFlags(INTERACT_0x1);
-            } else if (field_0x1156[0] == 0) {
+            } else if (mTimers[TIMER_0] == 0) {
                 if (cM::rnd() < 0.5f || field_0x2CEC != 0) {
                     setAnm("DownEscapeR", 10.0f);
                 } else {
@@ -1857,7 +1858,7 @@ void dAcBlastboss_c::executeState_Down() {
             }
             if (mMdl.getAnm().isStop()) {
                 mStateMgr.changeState(StateID_Fight);
-                field_0x1156[4] = 15;
+                mTimers[TIMER_4] = 15;
             }
             break;
         }
@@ -1891,7 +1892,7 @@ void dAcBlastboss_c::executeState_Down() {
                         mMdl.setFrame(10.0f);
                     } else {
                         mStateMgr.changeState(StateID_Fight);
-                        field_0x1156[4] = 15;
+                        mTimers[TIMER_4] = 15;
                     }
                 }
             }
@@ -1917,7 +1918,7 @@ void dAcBlastboss_c::executeState_Down() {
             field_0x1141 = 0;
             if (mMdl.getAnm().isStop()) {
                 mStateMgr.changeState(StateID_Fight);
-                field_0x1156[4] = 15;
+                mTimers[TIMER_4] = 15;
                 field_0x2CEC = 1000;
             }
             break;
@@ -1941,7 +1942,7 @@ void dAcBlastboss_c::finalizeState_Down() {}
 void dAcBlastboss_c::initializeState_Stun() {
     setAnm("Stan", 3.0f);
     mSubState = SUB_STATE_0;
-    field_0x113A = 0;
+    mChanceAttackCounter = 0;
     field_0x1143 = 10;
     field_0x1154++;
     mIsSwordEmpowered = false;
@@ -1958,12 +1959,12 @@ void dAcBlastboss_c::executeState_Stun() {
             if (mMdl.getAnm().isStop()) {
                 mSubState = SUB_STATE_1;
                 setAnm("StanLoop", 0.0f);
-                field_0x1156[0] = 100;
+                mTimers[TIMER_0] = 100;
             }
             break;
         }
         case SUB_STATE_1: {
-            if (field_0x1156[0] == 0) {
+            if (mTimers[TIMER_0] == 0) {
                 mSubState = SUB_STATE_2;
                 setAnm("StanReverse", 10.0f);
             }
@@ -1988,7 +1989,7 @@ void dAcBlastboss_c::executeState_Stun() {
     }
 
     sLib::addCalcScaled(&mSpeed, 1.0f, 10.0f);
-    if (field_0x113A >= 7) {
+    if (mChanceAttackCounter >= 7) {
         mCc1.SetTgFlag_0xA(0x1FF);
         fn_143_77C0();
     } else {
@@ -2005,7 +2006,7 @@ void dAcBlastboss_c::initializeState_ThunderWait() {
     setAnm("CatchThunderStart", 10.0f);
     mSubState = SUB_STATE_0;
     field_0x1144 = -1;
-    field_0x1156[0] = 30;
+    mTimers[TIMER_0] = 30;
 }
 void dAcBlastboss_c::executeState_ThunderWait() {
     dAcPy_c *link = dAcPy_c::GetLinkM();
@@ -2022,7 +2023,7 @@ void dAcBlastboss_c::executeState_ThunderWait() {
         case SUB_STATE_1: {
             if (link->checkSwordAndMoreStates(0x400000)) {
                 mStateMgr.changeState(StateID_Fight);
-            } else if (field_0x1156[0] == 0) {
+            } else if (mTimers[TIMER_0] == 0) {
                 dLightEnv_c::GetPInstance()->setField_0x38DC(7);
                 mSubState = SUB_STATE_5;
                 setAnm("CatchThunderEnd", 5.0f);
@@ -2033,7 +2034,7 @@ void dAcBlastboss_c::executeState_ThunderWait() {
                 dJEffManager_c::spawnEffect(
                     PARTICLE_RESOURCE_ID_MAPPING_624_, vEff, nullptr, nullptr, nullptr, nullptr, 0, 0
                 );
-                field_0x1156[3] = cM::rndF(100.0f) + 900.0f;
+                mTimers[TIMER_3] = cM::rndF(100.0f) + 900.0f;
                 mIsSwordEmpowered = true;
                 mSwordMdl.fn_8006B800(4);
                 mCc1.OnTg_0x8000000();
@@ -2056,6 +2057,309 @@ void dAcBlastboss_c::executeState_ThunderWait() {
     sLib::addCalcScaled(&mSpeed, 1.0f, 4.0f);
 }
 void dAcBlastboss_c::finalizeState_ThunderWait() {}
+
+bool dAcBlastboss_c::checkDamage() {
+    mVec3_c v;
+    mVec3_c v2;
+    mMtx_c mtx;
+
+    mHealth = 400;
+    // TODO: typing crime
+    cCcD_Obj *atHit = mSwordMdl.mCcList.find((dColliderLinkedList::ccPtmf)&dCcD_Check::ChkAtHit);
+    if (atHit != nullptr && atHit->GetAtFlag0x8()) {
+        field_0x113E = 20;
+    }
+
+    if (sLib::calcTimer(&field_0x1134) == 0) {
+        // TODO: regswap between unk and link.
+        // Making this a u16 or s16 fixes regalloc but breaks instructions...
+        s32 unk = someEnemyDamageCollisionStuffMaybe(mCcList, nullptr);
+
+        // TODO: typing crime
+        cCcD_Obj *tgHit = mCcList.find((dColliderLinkedList::ccPtmf)&dCcD_Check::ChkTgHit);
+        if (tgHit == nullptr) {
+            return false;
+        }
+
+        dAcPy_c *link = dAcPy_c::GetLinkM();
+        s32 attackDir = link->getSpecificAttackDirection();
+
+        // TODO: enum?
+        switch (unk) {
+            case 0: {
+                break;
+            }
+            case 6: {
+                startSound(SE_BLasBos_SwordBySword);
+                // TODO inline?
+                if (tgHit->GetTgDamageFlags() & 0x4) {
+                    v.x = 0.0f;
+                    v.y = 0.0f;
+                    v.z = 20.0f;
+                    mtx.YrotS(link->mRotation.y);
+                    MTXMultVec(mtx, v, v2);
+                    field_0x119C = v2.x;
+                    field_0x11A0 = v2.z;
+                    mStateMgr.changeState(StateID_Stun);
+                    break;
+                }
+
+                if (tgHit->ChkTgAtHitType(AT_TYPE_0x800000)) {
+                    field_0x1144 = 6;
+                    mStateMgr.changeState(StateID_Guard);
+                    break;
+                }
+                mMdlCallback.field_0x04.set(7);
+                if (field_0x113F != 0) {
+                    mSubState = SUB_STATE_1;
+                    mStateMgr.changeState(StateID_CounterAttack);
+                    break;
+                } else if (field_0x1144 == 9) {
+                    if (fn_143_9570(attackDir) == fn_143_9570(mLastAttackDir)) {
+                        field_0x1135++;
+                    } else {
+                        field_0x1136++;
+                    }
+                    if (field_0x1136 >= 2) {
+                        mSubState = SUB_STATE_1;
+                        mStateMgr.changeState(StateID_CounterAttack);
+                        break;
+                    }
+
+                    if (fn_143_9570(attackDir) == 0) {
+                        mMdlCallback.field_0x30 += 3.0f;
+                        mMdlCallback.field_0x18 += 0x7D0;
+                    } else if (fn_143_9570(attackDir) == 1) {
+                        mMdlCallback.field_0x30 -= 3.0f;
+                        mMdlCallback.field_0x18 -= 0x7D0;
+                    }
+                    if (field_0x1135 >= 1) {
+                        mStateMgr.changeState(StateID_GuardBreak);
+                    }
+                } else if (mLastAttackDir >= 0) {
+                    if (fn_143_9570(attackDir) == fn_143_9570(mLastAttackDir)) {
+                        field_0x1136++;
+                    } else {
+                        field_0x1135++;
+                    }
+                    s8 x = 3;
+                    if (fn_143_9570(attackDir) == fn_143_9570(mLastAttackDir)) {
+                        x = 1;
+                    }
+                    // TODO the branches here are wrong
+                    if (field_0x1136 >= x ||
+                        (field_0x11D8 >= 0 && (fn_143_9570(field_0x11D8) & 2) == (fn_143_9570(attackDir) & 2))) {
+                        mSubState = SUB_STATE_0;
+                        mStateMgr.changeState(StateID_CounterAttack);
+                    } else {
+                        if (field_0x1135 >= 1) {
+                            field_0x113E = 25;
+                            field_0x1135 = 1;
+                            field_0x1182 = 20;
+                        }
+                    }
+                }
+                v.x = 0.0f;
+                v.y = 0.0f;
+                v.z = -5.0f;
+                mtx.YrotS(mYAngleToLink);
+                MTXMultVec(mtx, v, v2);
+                field_0x119C = v2.x;
+                field_0x11A0 = v2.z;
+                mLastAttackDir = attackDir;
+                break;
+            }
+            case 7: {
+                break;
+            }
+            default: {
+                if (tgHit != nullptr &&
+                    (tgHit->ChkTgAtHitType(AT_TYPE_SLINGSHOT) || tgHit->ChkTgAtHitType(AT_TYPE_CLAWSHOT) ||
+                     tgHit->ChkTgAtHitType(AT_TYPE_BOMB) || tgHit->ChkTgAtHitType(AT_TYPE_ARROW) ||
+                     tgHit->ChkTgAtHitType(AT_TYPE_WHIP) || tgHit->ChkTgAtHitType(AT_TYPE_0x40))) {
+                    field_0x1144 = 6;
+                    mStateMgr.changeState(StateID_Guard);
+
+                    if (tgHit->ChkTgAtHitType(AT_TYPE_BOMB)) {
+                        field_0x11A4 = 30.0f;
+                        field_0x11B8 = 15.0f;
+                        v.x = 0.0f;
+                        v.y = 0.0f;
+                        v.z = -10.0f;
+                        mtx.YrotS(mRotation.y);
+                        MTXMultVec(mtx, v, v2);
+                        field_0x119C = v2.x;
+                        field_0x11A0 = v2.z;
+                    }
+
+                    break;
+                }
+
+                // TODO inline?
+                if (tgHit->GetTgDamageFlags() & 4) {
+                    v.x = 0.0f;
+                    v.y = 0.0f;
+                    v.z = 20.0f;
+                    mtx.YrotS(link->mRotation.y);
+                    MTXMultVec(mtx, v, v2);
+                    field_0x119C = v2.x;
+                    field_0x11A0 = v2.z;
+                    mStateMgr.changeState(StateID_Stun);
+                    break;
+                }
+
+                field_0x1152++;
+                if (field_0x1152 == 15) {
+                    dSndBgmMgr_c::GetInstance()->fn_80372D70(3);
+                }
+
+                if (field_0x1149 >= 0) {
+                    if (field_0x1152 == 30) {
+                        dStageMgr_c::GetInstance()->fn_80199B60(4);
+                        mStateMgr.changeState(StateID_Down);
+                        field_0x2CEC = 1;
+                        startSound(SE_BLasBos_DownHit);
+                        break;
+                    }
+                } else {
+                    if (field_0x1152 == 50) {
+                        mStateMgr.changeState(StateID_Down);
+                        field_0x1152 = 45;
+
+                        break;
+                    }
+                }
+
+                if ((!field_0x113E && (mStateMgr.isState(StateID_Attack) || mStateMgr.isState(StateID_SmallAttack) ||
+                                       mStateMgr.isState(StateID_CounterAttack))) ||
+                    mStateMgr.isState(StateID_ThunderWait)) {
+                    field_0x1188 = 10;
+                    break;
+                }
+
+                if (field_0x113E != 0 && field_0x1149 != 0) {
+                    field_0x1188 = 10;
+                    break;
+                }
+
+                if (mStateMgr.isState(StateID_Stun)) {
+                    field_0x1136 = 0;
+                    field_0x11D8 = attackDir;
+                    mChanceAttackCounter++;
+
+                    v.x = 0.0f;
+                    v.y = 0.0f;
+                    v.z = -20.0f;
+                    mtx.YrotS(mYAngleToLink);
+                    MTXMultVec(mtx, v, v2);
+                    field_0x119C = v2.x;
+                    field_0x11A0 = v2.z;
+                    field_0x1138 = 10;
+                    field_0x11B8 = 5.0f;
+                    field_0x11A4 = 7.0f;
+                    if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_LEFT ||
+                        attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWNLEFT ||
+                        attackDir == daPlayerActBase_c::ATTACK_DIRECTION_UPLEFT) {
+                        field_0x1137 = 1;
+                    } else if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_RIGHT ||
+                               attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWNRIGHT ||
+                               attackDir == daPlayerActBase_c::ATTACK_DIRECTION_UPRIGHT) {
+                        field_0x1137 = 2;
+                    } else if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_STAB) {
+                        field_0x1137 = 3;
+                    } else {
+                        field_0x1137 = 0;
+                    }
+                    startSound(SE_BLasBos_VO_DamageChance);
+                    break;
+                }
+
+                if (mStateMgr.isState(StateID_SitDamage)) {
+                    field_0x1136 = 0;
+                    field_0x11D8 = attackDir;
+                    mChanceAttackCounter++;
+
+                    if (mChanceAttackCounter >= 5 && mChanceCounter >= 3) {
+                        if (field_0x1149 >= 0) {
+                            mChanceAttackCounter = 0;
+                            field_0x1152 = 30;
+                            dStageMgr_c::GetInstance()->fn_80199B60(4);
+                            mStateMgr.changeState(StateID_Down);
+                            field_0x2CEC = 1;
+                            startSound(SE_BLasBos_DownHit);
+                            break;
+                        }
+                        mStateMgr.changeState(StateID_Down);
+                        field_0x1152 = 45;
+                        break;
+                    }
+
+                    v.x = 0.0f;
+                    v.y = 0.0f;
+                    v.z = -20.0f;
+                    mtx.YrotS(mYAngleToLink);
+                    MTXMultVec(mtx, v, v2);
+                    field_0x119C = v2.x;
+                    field_0x11A0 = v2.z;
+                    field_0x11B8 = 5.0f;
+                    field_0x11A4 = 7.0f;
+                    if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_LEFT ||
+                        attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWNLEFT ||
+                        attackDir == daPlayerActBase_c::ATTACK_DIRECTION_UPLEFT) {
+                        field_0x1137 = 1;
+                    } else if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_RIGHT ||
+                               attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWNRIGHT ||
+                               attackDir == daPlayerActBase_c::ATTACK_DIRECTION_UPRIGHT) {
+                        field_0x1137 = 2;
+                    } else if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWN) {
+                        field_0x1137 = 3;
+                    } else {
+                        field_0x1137 = 0;
+                    }
+                    mSubState = SUB_STATE_5;
+                    startSound(SE_BLasBos_VO_DamageChance);
+                    break;
+                }
+
+                if (mChanceAttackCounter >= 3) {
+                    mStateMgr.changeState(StateID_SitDamage);
+                    mChanceAttackCounter = 0;
+                } else {
+                    mStateMgr.changeState(StateID_Damage);
+                }
+
+                field_0x1136 = -1;
+                field_0x11D8 = attackDir;
+                v.x = 0.0f;
+                v.y = 0.0f;
+                v.z = -20.0f;
+                mtx.YrotS(mYAngleToLink);
+                MTXMultVec(mtx, v, v2);
+                field_0x119C = v2.x;
+                field_0x11A0 = v2.z;
+                field_0x1138 = 10;
+                field_0x11B8 = 5.0f;
+                field_0x11A4 = 7.0f;
+                if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_LEFT ||
+                    attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWNLEFT ||
+                    attackDir == daPlayerActBase_c::ATTACK_DIRECTION_UPLEFT) {
+                    field_0x1137 = 1;
+                } else if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_RIGHT ||
+                           attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWNRIGHT ||
+                           attackDir == daPlayerActBase_c::ATTACK_DIRECTION_UPRIGHT) {
+                    field_0x1137 = 2;
+                } else if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_STAB) {
+                    field_0x1137 = 3;
+                } else {
+                    field_0x1137 = 0;
+                }
+                break;
+            }
+        }
+    }
+
+    return true;
+}
 
 void dAcBlastboss_c::setAnm(const char *name, f32 blend) {
     if (mpCurrentAnm != name) {
@@ -2081,3 +2385,98 @@ int dAcBlastboss_c::draw() {
     }
     return SUCCEEDED;
 }
+
+bool dAcBlastboss_c::checkForCloseRangeAttack() {
+    dAcPy_c *link = dAcPy_c::GetLinkM();
+
+    bool ret = false;
+    if (mXZDistanceToLink < 500.0f) {
+        if (field_0x1149 != 0) {
+            if (mTimers[TIMER_2] == 0) {
+                mStateMgr.changeState(StateID_Attack);
+                ret = true;
+            }
+        } else {
+            if (link->isUsingShield()) {
+                mLinkCloseRangeShieldTime++;
+            } else {
+                mLinkCloseRangeShieldTime = 0;
+            }
+            if (mLinkCloseRangeShieldTime > 40) {
+                mStateMgr.changeState(StateID_PunchAttack);
+                ret = true;
+            } else if (mTimers[TIMER_2] == 0) {
+                if (fn_143_9420() && cM::rnd() < 0.35f) {
+                    mStateMgr.changeState(StateID_SmallAttack);
+                    ret = true;
+                } else {
+                    mStateMgr.changeState(StateID_Attack);
+                    ret = true;
+                }
+                mLinkCloseRangeShieldTime = 0;
+            }
+            // ret = true;
+        }
+
+    } else {
+        mLinkCloseRangeShieldTime = 0;
+    }
+
+    return ret;
+}
+
+bool dAcBlastboss_c::fn_143_75A0() {
+    dAcPy_c *link = dAcPy_c::GetLinkM();
+
+    bool ret = false;
+
+    if (field_0x1149 != 0 && !link->isRecovering() && field_0x1154 != 0 && link->getSwordPos().y > 270.0f) {
+        field_0x1162++;
+    } else {
+        field_0x1162 = 0;
+    }
+
+    if (field_0x1149 != 0) {
+        if (field_0x1162 >= 20) {
+            mStateMgr.changeState(StateID_DashAttack);
+            return true;
+        } else if (mIsSwordEmpowered) {
+            if ((link->checkSwordAndMoreStates(0x400000) && field_0x1154 != 0) ||
+                (mXZDistanceToLink < 1500.0f && mTimers[TIMER_3] == 0)) {
+                mStateMgr.changeState(StateID_ThunderAttack);
+                ret = true;
+            }
+        } else {
+            if (link->checkSwordAndMoreStates(0x400000)) {
+                if ((field_0x1164 & 7) == 0 && field_0x1154 != 0) {
+                    mStateMgr.changeState(StateID_DashAttack);
+                    ret = true;
+                }
+            } else {
+                if (mXZDistanceToLink < 1500.0f && dLightEnv_c::GetPInstance()->getField_0x38DC() == 6) {
+                    if (field_0x1162 > 10) {
+                        mStateMgr.changeState(StateID_DashAttack);
+                        ret = true;
+                    } else {
+                        mStateMgr.changeState(StateID_ThunderWait);
+                        ret = true;
+                    }
+                }
+            }
+        }
+    }
+
+    return ret;
+}
+
+bool dAcBlastboss_c::fn_143_77C0() {}
+
+void dAcBlastboss_c::fn_143_7B00() {}
+
+void dAcBlastboss_c::fn_143_7F80() {}
+
+bool dAcBlastboss_c::fn_143_9420() {
+    return true;
+}
+
+void dAcBlastboss_c::fn_143_9610() {}

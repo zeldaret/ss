@@ -101,6 +101,8 @@ public:
     // always returns false
     bool weirdCheckAlwaysFalse();
 
+    void fn_80372D70(UNKWORD);
+
     dSndBgmSound_c *getActiveBgmSound();
     // I don't love this inline but it fixes one regswap
     // TODO look into getting rid of this one
