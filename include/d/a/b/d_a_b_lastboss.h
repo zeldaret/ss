@@ -255,21 +255,21 @@ class dAcBlastboss_c : public dAcEnBase_c {
         GUARD_BT, // not sure
     };
 
-    enum DemoState_e {
-        DEMO_STATE_NONE = 0,
+    enum LightningState_e {
+        LIGHTNING_STRIKE_STATE_NONE = 0,
 
-        DEMO_STATE_1 = 1,
-        DEMO_STATE_2,
-        DEMO_STATE_3,
+        LIGHTNING_STRIKE_START_DEMO = 1,
+        LIGHTNING_STRIKE_DEMO,
+        LIGHTNING_STRIKE_WAIT,
 
-        DEMO_STATE_100 = 100,
-        DEMO_STATE_101,
+        LIGHTNING_STRIKE_TRIGGER_END = 100,
+        LIGHTNING_STRIKE_ENDING,
 
-        DEMO_STATE_200 = 200,
-        DEMO_STATE_201,
-        DEMO_STATE_2XX_LAST = 299,
+        LIGHTNING_STRIKE_TRIGGER_START = 200,
+        LIGHTNING_STRIKE_START,
+        LIGHTNING_STRIKE_START_LAST = 299,
 
-        DEMO_STATE_1000 = 1000,
+        LIGHTNING_STRIKE_FINISH = 1000,
     };
 
 public:
@@ -312,7 +312,7 @@ private:
     void updateHairTransform(s32 level);
     bool checkForLinkSwordBySwordHit();
     u8 classifyAttackDirection(s32 attackDir);
-    void executeDemo();
+    void executeLightningStrike();
     void setLightningTimerMaybe(s32);
 
     /* 0x0378 */ d3d::AnmMdlWrapper mMdl;
@@ -355,11 +355,11 @@ private:
     /* 0x1146 */ bool mIsSwordEmpowered;
     /* 0x1147 */ u8 field_0x1147;
     /* 0x1148 */ u8 field_0x1148;
-    /* 0x1149 */ s8 field_0x1149;
+    /* 0x1149 */ s8 mIsPhaseTwo;
     /* 0x114A */ u8 field_0x114A;
     /* 0x114B */ u8 field_0x114B;
     /* 0x114C */ u8 field_0x114C;
-    /* 0x114D */ u8 field_0x114D;
+    /* 0x114D */ bool mInBossRush;
     /* 0x114E */ u8 field_0x114E;
     /* 0x114F */ u8 field_0x114F;
     /* 0x1150 */ u8 field_0x1150;
@@ -438,7 +438,7 @@ private:
     /* 0x2C68 */ dEmitter_c mEmitter6;
     /* 0x2C9C */ dEmitter_c mEmitter7;
     /* 0x2CD0 */ LIGHT_INFLUENCE mLightInfo;
-    /* 0x2CEC */ s16 mDemoState;
+    /* 0x2CEC */ s16 mLightingStrikeState;
     /* 0x2CEE */ s16 field_0x2CEE;
     /* 0x2CF0 */ s16 field_0x2CF0;
     /* 0x2CF4 */ f32 field_0x2CF4;

@@ -172,7 +172,7 @@ bool dAcBlastboss_c::createHeap() {
 int dAcBlastboss_c::create() {
     field_0x1130 = getFromParams(0, 0xFF);
     if (MinigameManager::GetInstance()->checkInBossRush()) {
-        field_0x114D = 1;
+        mInBossRush = true;
     }
     CREATE_ALLOCATOR(dAcBlastboss_c);
 
@@ -235,8 +235,8 @@ int dAcBlastboss_c::create() {
     dLightEnv_c::GetPInstance()->plight_set(&mLightInfo);
     setLightningTimerMaybe(100);
 
-    if (!field_0x114D) {
-        mDemoState = DEMO_STATE_200;
+    if (!mInBossRush) {
+        mLightingStrikeState = LIGHTNING_STRIKE_TRIGGER_START;
         setActorProperty(AC_PROP_0x4);
     }
 
@@ -252,7 +252,7 @@ int dAcBlastboss_c::doDelete() {
 }
 
 int dAcBlastboss_c::actorExecute() {
-    if (field_0x114D && mpSwordBattleGame == nullptr) {
+    if (mInBossRush && mpSwordBattleGame == nullptr) {
         mpSwordBattleGame = static_cast<dTgSwordBattleGame_c *>(
             fManager_c::searchBaseByProfName(fProfile::TAG_SWORD_BATTLE_GAME, mpSwordBattleGame)
         );
@@ -638,8 +638,8 @@ int dAcBlastboss_c::actorExecute() {
         }
     }
 
-    if (field_0x1149 != 0) {
-        if (!link->checkSwordAndMoreStates(0x400000) && (field_0x1149 < 0 || !mIsSwordEmpowered)) {
+    if (mIsPhaseTwo != 0) {
+        if (!link->checkSwordAndMoreStates(0x400000) && (mIsPhaseTwo < 0 || !mIsSwordEmpowered)) {
             if (mLightningTimerMaybe == 0) {
                 if (dLightEnv_c::GetPInstance()->getField_0x38DC() == 0) {
                     dLightEnv_c::GetPInstance()->setField_0x38DC(1);
@@ -749,7 +749,7 @@ int dAcBlastboss_c::actorExecute() {
             );
         }
     }
-    executeDemo();
+    executeLightningStrike();
 
     SceneflagManager *mgr = SceneflagManager::sInstance;
     if (mgr != nullptr) {
@@ -760,7 +760,7 @@ int dAcBlastboss_c::actorExecute() {
         }
     }
 
-    if (field_0x1149 != 0) {
+    if (mIsPhaseTwo != 0) {
         // "Target lock: Demise" (Phase 2)
         mTargetFiTextID = 0x38;
     } else {
@@ -945,7 +945,7 @@ void dAcBlastboss_c::initializeState_Fight() {
     mAnmRate = 1.0f;
     mSubState = SUB_STATE_0;
     field_0x118A = 0;
-    if (field_0x1149 == 0) {
+    if (mIsPhaseTwo == 0) {
         mTimers[TIMER_2] = cM::rndF(50.0f) + 50.0f;
     } else {
         mTimers[TIMER_2] = cM::rndF(20.0f) + 10.0f;
@@ -962,7 +962,7 @@ void dAcBlastboss_c::executeState_Fight() {
     bool b = false;
     s16 diff = mAngle.y - mYAngleToLink;
 
-    if (mDemoState >= DEMO_STATE_200 && mDemoState <= DEMO_STATE_2XX_LAST) {
+    if (mLightingStrikeState >= LIGHTNING_STRIKE_TRIGGER_START && mLightingStrikeState <= LIGHTNING_STRIKE_START_LAST) {
         puVar2 = -100.0f;
         mTimers[TIMER_2] = cM::rndF(50.0f) + 100.0f;
     }
@@ -1027,7 +1027,7 @@ void dAcBlastboss_c::executeState_Fight() {
             }
             if (mXZDistanceToLink < puVar2 + 400.0f) {
                 mSubState = SUB_STATE_0;
-                if (field_0x1149 == 0) {
+                if (mIsPhaseTwo == 0) {
                     mTimers[TIMER_2] = cM::rndF(50.0f) + 50.0f;
                 } else {
                     mTimers[TIMER_2] = cM::rndF(20.0f) + 10.0f;
@@ -1081,7 +1081,7 @@ void dAcBlastboss_c::executeState_Fight() {
         field_0x1172 = diff / 2;
         // TODO what is this constant
         sLib::addCalcScaledDiff(&mMdlCallback.field_0x30, diff * (1.0f / 409.59937f), 0.5f, 1.0f);
-        if (mDemoState == DEMO_STATE_NONE && !link->isUsingShield() && link->isUsingSword()) {
+        if (mLightingStrikeState == LIGHTNING_STRIKE_STATE_NONE && !link->isUsingShield() && link->isUsingSword()) {
             mMtx_c rotMtx;
             rotMtx.YrotS(-mYAngleToLink);
             mVec3_c v = mVec3_c(link->getSwordPos() - mPosition);
@@ -1193,11 +1193,11 @@ void dAcBlastboss_c::executeState_Attack() {
     }
 
     mSpeed = speed;
-    if (!field_0x1149 && link->checkCurrentAction(/* BACKFLIP */ 0x62)) {
+    if (!mIsPhaseTwo && link->checkCurrentAction(/* BACKFLIP */ 0x62)) {
         field_0x113E = 20;
     }
     if (field_0x113E != 0) {
-        if (field_0x1149) {
+        if (mIsPhaseTwo) {
             mSubState = SUB_STATE_0;
             mStateMgr.changeState(StateID_CounterAttack);
             return;
@@ -1679,7 +1679,7 @@ void dAcBlastboss_c::executeState_Damage() {
         mTimers[TIMER_2] = 0;
     }
     field_0x113E = 0;
-    if (field_0x1149 == 0 && !link->isAttackingSpin()) {
+    if (mIsPhaseTwo == 0 && !link->isAttackingSpin()) {
         mCc1.SetTgFlag_0xA(0x1FF);
     }
     checkForCounter();
@@ -1805,7 +1805,7 @@ void dAcBlastboss_c::executeState_Down() {
             if (mMdl.getAnm().isStop()) {
                 setAnm("DownLoop", 0.0f);
                 mSubState = SUB_STATE_3;
-                if (field_0x113B >= 3 || mDemoState != DEMO_STATE_NONE) {
+                if (field_0x113B >= 3 || mLightingStrikeState != LIGHTNING_STRIKE_STATE_NONE) {
                     mTimers[TIMER_0] = 70;
                 } else if (field_0x113B == 2) {
                     mTimers[TIMER_0] = 40;
@@ -1829,13 +1829,13 @@ void dAcBlastboss_c::executeState_Down() {
             if (checkInteractionFlags(INTERACT_0x1000)) {
                 setAnm("End", 3.0f);
                 mSubState = SUB_STATE_50;
-                mDemoState = DEMO_STATE_100;
+                mLightingStrikeState = LIGHTNING_STRIKE_TRIGGER_END;
                 startSound(SE_BLasBos_LastHit);
                 field_0x114F = 1;
                 resetInteractionFlags(INTERACT_0x1000);
                 resetInteractionFlags(INTERACT_0x1);
             } else if (mTimers[TIMER_0] == 0) {
-                if (cM::rnd() < 0.5f || mDemoState != DEMO_STATE_NONE) {
+                if (cM::rnd() < 0.5f || mLightingStrikeState != LIGHTNING_STRIKE_STATE_NONE) {
                     setAnm("DownEscapeR", 10.0f);
                 } else {
                     setAnm("DownEscapeL", 10.0f);
@@ -1844,8 +1844,8 @@ void dAcBlastboss_c::executeState_Down() {
                 mSubState = SUB_STATE_5;
                 field_0x11C8 = 0.0f;
                 resetInteractionFlags(INTERACT_0x1);
-                if (mDemoState != DEMO_STATE_NONE) {
-                    mDemoState = DEMO_STATE_3;
+                if (mLightingStrikeState != LIGHTNING_STRIKE_STATE_NONE) {
+                    mLightingStrikeState = LIGHTNING_STRIKE_WAIT;
                     field_0x2D00 = 0.0f;
                     dLightEnv_c::GetPInstance()->setField_0x38DC(1);
                 }
@@ -1887,7 +1887,7 @@ void dAcBlastboss_c::executeState_Down() {
             mPosition.z += v.z;
 
             if (mMdl.getAnm().isStop()) {
-                if (mDemoState != DEMO_STATE_NONE) {
+                if (mLightingStrikeState != LIGHTNING_STRIKE_STATE_NONE) {
                     setAnm("ThunderDemo", 10.0f);
                     mSubState = SUB_STATE_20;
                 } else {
@@ -1923,7 +1923,7 @@ void dAcBlastboss_c::executeState_Down() {
             if (mMdl.getAnm().isStop()) {
                 mStateMgr.changeState(StateID_Fight);
                 mTimers[TIMER_4] = 15;
-                mDemoState = DEMO_STATE_1000;
+                mLightingStrikeState = LIGHTNING_STRIKE_FINISH;
             }
             break;
         }
@@ -2219,11 +2219,11 @@ bool dAcBlastboss_c::checkDamage() {
                     dSndBgmMgr_c::GetInstance()->fn_80372D70(3);
                 }
 
-                if (field_0x1149 >= 0) {
+                if (mIsPhaseTwo >= 0) {
                     if (field_0x1152 == 30) {
                         dStageMgr_c::GetInstance()->fn_80199B60(4);
                         mStateMgr.changeState(StateID_Down);
-                        mDemoState = DEMO_STATE_1;
+                        mLightingStrikeState = LIGHTNING_STRIKE_START_DEMO;
                         startSound(SE_BLasBos_DownHit);
                         break;
                     }
@@ -2242,7 +2242,7 @@ bool dAcBlastboss_c::checkDamage() {
                     break;
                 }
 
-                if (field_0x113E != 0 && field_0x1149 != 0) {
+                if (field_0x113E != 0 && mIsPhaseTwo != 0) {
                     field_0x1188 = 10;
                     break;
                 }
@@ -2285,12 +2285,12 @@ bool dAcBlastboss_c::checkDamage() {
                     mChanceAttackCounter++;
 
                     if (mChanceAttackCounter >= 5 && mChanceCounter >= 3) {
-                        if (field_0x1149 >= 0) {
+                        if (mIsPhaseTwo >= 0) {
                             mChanceAttackCounter = 0;
                             field_0x1152 = 30;
                             dStageMgr_c::GetInstance()->fn_80199B60(4);
                             mStateMgr.changeState(StateID_Down);
-                            mDemoState = DEMO_STATE_1;
+                            mLightingStrikeState = LIGHTNING_STRIKE_START_DEMO;
                             startSound(SE_BLasBos_DownHit);
                             break;
                         }
@@ -2396,7 +2396,7 @@ bool dAcBlastboss_c::checkForCloseRangeAttack() {
 
     bool ret = false;
     if (mXZDistanceToLink < 500.0f) {
-        if (field_0x1149 != 0) {
+        if (mIsPhaseTwo != 0) {
             if (mTimers[TIMER_2] == 0) {
                 mStateMgr.changeState(StateID_Attack);
                 ret = true;
@@ -2435,13 +2435,13 @@ bool dAcBlastboss_c::checkForRangeAttack() {
 
     bool ret = false;
 
-    if (field_0x1149 != 0 && !link->isRecovering() && mStunCounter != 0 && link->getSwordPos().y > 270.0f) {
+    if (mIsPhaseTwo != 0 && !link->isRecovering() && mStunCounter != 0 && link->getSwordPos().y > 270.0f) {
         field_0x1162++;
     } else {
         field_0x1162 = 0;
     }
 
-    if (field_0x1149 != 0) {
+    if (mIsPhaseTwo != 0) {
         if (field_0x1162 >= 20) {
             mStateMgr.changeState(StateID_DashAttack);
             return true;
@@ -2515,7 +2515,7 @@ bool dAcBlastboss_c::checkForCounter() {
                 mStateMgr.changeState(StateID_Guard);
                 mSubState = SUB_STATE_10;
             } else {
-                if ((field_0x1149 > 0 || mXZDistanceToLink < 200.0f) && mNumConsecutiveOppositeDirectionAttacks < 1) {
+                if ((mIsPhaseTwo > 0 || mXZDistanceToLink < 200.0f) && mNumConsecutiveOppositeDirectionAttacks < 1) {
                     mNumConsecutiveOppositeDirectionAttacks = 1;
                 }
 
@@ -2585,7 +2585,7 @@ void dAcBlastboss_c::updateMainNodeTransforms() {
         sLib::addCalcAngle(mMdlCallback.field_0x0C.ref(), field_0x1170, 8, 0x200);
     } else {
         mMdlCallback.field_0x06 = mMdlCallback.field_0x0A = mMdlCallback.field_0x0C = 0;
-        if (mDemoState == DEMO_STATE_101) {
+        if (mLightingStrikeState == LIGHTNING_STRIKE_ENDING) {
             mMdlCallback.field_0x0A = 2000;
         }
     }
@@ -2654,7 +2654,7 @@ void dAcBlastboss_c::updateSkirtHairTransforms() {
     };
 
     static const s16 sAngs[] = {
-        0x2000, 0x4000, 0x6000, 0x8000, 0xA000, 0xC000, 0xE000,
+        0x2000, 0x2000, 0x4000, 0x6000, 0x8000, 0xA000, 0xC000, 0xE000,
     };
 
     f32 f = 80.0f;
@@ -2990,7 +2990,7 @@ u8 dAcBlastboss_c::classifyAttackDirection(s32 attackDir) {
     }
 }
 
-void dAcBlastboss_c::executeDemo() {
+void dAcBlastboss_c::executeLightningStrike() {
     dCamera_c *cam = dScGame_c::getCamera();
     dAcPy_c *link = dAcPy_c::GetLinkM();
 
@@ -3004,8 +3004,8 @@ void dAcBlastboss_c::executeDemo() {
     bool spawnEffect = false;
     dLightEnv_c &lightEnv = dLightEnv_c::GetInstance();
 
-    switch (mDemoState) {
-        case DEMO_STATE_1: {
+    switch (mLightingStrikeState) {
+        case LIGHTNING_STRIKE_START_DEMO: {
             {
                 // this works but I don't like it
                 static volatile u32 FLAGS_1 = 0x00000001;
@@ -3019,7 +3019,7 @@ void dAcBlastboss_c::executeDemo() {
                 field_0x2CEE = 0;
                 field_0x2D00 = 0.0f;
                 field_0x2CFC = 60.0f;
-                mDemoState = DEMO_STATE_2;
+                mLightingStrikeState = LIGHTNING_STRIKE_DEMO;
                 // huh
                 field_0x2D10.x = cam->getField_0x78().x;
                 field_0x2D10.y = cam->getField_0x78().y;
@@ -3027,13 +3027,13 @@ void dAcBlastboss_c::executeDemo() {
                 field_0x2D04.x = cam->getPositionMaybe().x;
                 field_0x2D04.y = cam->getPositionMaybe().y;
                 field_0x2D04.z = cam->getPositionMaybe().z;
-                field_0x1149 = -1;
+                mIsPhaseTwo = -1;
                 // fall-through
             } else {
                 break;
             }
         }
-        case DEMO_STATE_2: {
+        case LIGHTNING_STRIKE_DEMO: {
             if (field_0x2CEE < 30) {
                 b2 = true;
             }
@@ -3048,7 +3048,7 @@ void dAcBlastboss_c::executeDemo() {
             }
             // fall-through
         }
-        case DEMO_STATE_3: {
+        case LIGHTNING_STRIKE_WAIT: {
             b1 = true;
             if (field_0x2CEE > 205) {
                 sLib::addCalcScaledDiff(&field_0x2D00, 1.0f, 1.0f, 0.1f);
@@ -3084,7 +3084,7 @@ void dAcBlastboss_c::executeDemo() {
             }
             break;
         }
-        case DEMO_STATE_100: {
+        case LIGHTNING_STRIKE_TRIGGER_END: {
             {
                 // this works but I don't like it
                 static volatile u32 FLAGS_1 = 0x00000001;
@@ -3098,7 +3098,7 @@ void dAcBlastboss_c::executeDemo() {
                 field_0x2CEE = 0;
                 field_0x2D00 = 0.0f;
                 field_0x2CFC = 50.0f;
-                mDemoState = DEMO_STATE_101;
+                mLightingStrikeState = LIGHTNING_STRIKE_ENDING;
                 link->onFlags_0x360(0x200);
                 if (mpSwordBattleGame != nullptr) {
                     mpSwordBattleGame->notifyBossDeath(false);
@@ -3110,7 +3110,7 @@ void dAcBlastboss_c::executeDemo() {
                 break;
             }
         }
-        case DEMO_STATE_101: {
+        case LIGHTNING_STRIKE_ENDING: {
             b1 = true;
             if (field_0x2CEE < 30) {
                 b2 = true;
@@ -3146,7 +3146,7 @@ void dAcBlastboss_c::executeDemo() {
             }
 
             if (field_0x2CEE == 270 && mpSwordBattleGame != nullptr) {
-                mDemoState = DEMO_STATE_1000;
+                mLightingStrikeState = LIGHTNING_STRIKE_FINISH;
             } else {
                 lightEnv.setField_0x5D48(field_0x11C4);
                 if (field_0x2CEE == 360) {
@@ -3155,7 +3155,7 @@ void dAcBlastboss_c::executeDemo() {
             }
             break;
         }
-        case DEMO_STATE_200: {
+        case LIGHTNING_STRIKE_TRIGGER_START: {
             {
                 // this works but I don't like it
                 static volatile u32 FLAGS_1 = 0x00000001;
@@ -3169,7 +3169,7 @@ void dAcBlastboss_c::executeDemo() {
                 field_0x2CEE = 0;
                 field_0x2D00 = 0.0f;
                 field_0x2CFC = 60.0f;
-                mDemoState = DEMO_STATE_201;
+                mLightingStrikeState = LIGHTNING_STRIKE_START;
                 field_0x2D10.set(0.0f, 200.0f, -587.0f);
                 field_0x2D04.set(0.0f, 197.0f, -207.0f);
                 dAcPy_c::GetLinkM()->vt_0x2AC();
@@ -3179,7 +3179,7 @@ void dAcBlastboss_c::executeDemo() {
                 break;
             }
         }
-        case DEMO_STATE_201: {
+        case LIGHTNING_STRIKE_START: {
             b1 = true;
             sLib::addCalcScaledDiff(&field_0x2D00, 1.0f, 1.0f, 0.05f);
             cLib::addCalcPos2(&field_0x2D10, mVec3_c(-2.6f, 118.0f, 298.0f), 0.1f, field_0x2D00 * 80.0f);
@@ -3200,15 +3200,15 @@ void dAcBlastboss_c::executeDemo() {
             if (field_0x2CEE >= 140) {
                 EventManager::finishEvent(this, nullptr);
                 dScGame_c::getCamera()->fn_8019EA70(true);
-                mDemoState = DEMO_STATE_NONE;
+                mLightingStrikeState = LIGHTNING_STRIKE_STATE_NONE;
                 unsetActorProperty(AC_PROP_0x4);
             }
             break;
         }
-        case DEMO_STATE_1000: {
+        case LIGHTNING_STRIKE_FINISH: {
             EventManager::finishEvent(this, nullptr);
             dScGame_c::getCamera()->fn_8019EA70(true);
-            mDemoState = DEMO_STATE_NONE;
+            mLightingStrikeState = LIGHTNING_STRIKE_STATE_NONE;
             break;
         }
     }
