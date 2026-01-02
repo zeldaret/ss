@@ -19,7 +19,10 @@ class dTgSwordBattleGame_c;
 
 // TODO this might be a template but what about the offset?
 struct UnkLastBossCcSph1 {
-    /* 0x000 */ u8 _0x000[0x008 - 0x000];
+    /* 0x000 */ u8 _0x000[0x002 - 0x000];
+    /* 0x002 */ s16 field_0x002;
+    /* 0x004 */ s16 field_0x004;
+    /* 0x006 */ s16 field_0x006;
     /* 0x008 */ mVec3_c field_0x008[5];
     /* 0x044 */ mVec3_c field_0x044[5];
     /* 0x080 */ mVec3_c field_0x080[5];
@@ -29,9 +32,12 @@ struct UnkLastBossCcSph1 {
 struct UnkLastBossCcSph2 {
     /* 0x000 */ s16 field_0x000;
     /* 0x002 */ s16 field_0x002;
-    /* 0x004 */ u8 _0x004[0x008 - 0x004];
+    /* 0x004 */ s16 field_0x004;
+    /* 0x006 */ s16 field_0x006;
     /* 0x008 */ s16 field_0x008;
-    /* 0x00A */ u8 _0x00A[0x014 - 0x00A];
+    /* 0x00A */ s16 field_0x00A;
+    /* 0x00C */ f32 field_0x00C;
+    /* 0x010 */ f32 field_0x010;
     /* 0x014 */ mVec3_c field_0x014[10];
     /* 0x08C */ mVec3_c field_0x08C[10];
     /* 0x104 */ mVec3_c field_0x104[10];
@@ -219,6 +225,8 @@ class dAcBlastboss_c : public dAcEnBase_c {
 
         SUB_STATE_20 = 20,
         SUB_STATE_21,
+
+        SUB_STATE_50 = 50,
     };
 
     enum Timer_e {
@@ -230,6 +238,38 @@ class dAcBlastboss_c : public dAcEnBase_c {
         TIMER_5,
 
         TIMER_MAX,
+    };
+
+    // TODO: Maybe reused in other sword fight bosses?
+    // Names taken from the string array
+    enum GuardDirection_e {
+        GUARD_RIGHT,
+        GUARD_UPRIGHT,
+        GUARD_DOWNRIGHT,
+        GUARD_LEFT,
+        GUARD_UPLEFT,
+        GUARD_DOWNLEFT,
+        GUARD_UP,
+        GUARD_DOWN,
+        GUARD_CENTER,
+        GUARD_BT, // not sure
+    };
+
+    enum DemoState_e {
+        DEMO_STATE_NONE = 0,
+
+        DEMO_STATE_1 = 1,
+        DEMO_STATE_2,
+        DEMO_STATE_3,
+
+        DEMO_STATE_100 = 100,
+        DEMO_STATE_101,
+
+        DEMO_STATE_200 = 200,
+        DEMO_STATE_201,
+        DEMO_STATE_2XX_LAST = 299,
+
+        DEMO_STATE_1000 = 1000,
     };
 
 public:
@@ -266,12 +306,14 @@ private:
     bool checkForCloseRangeAttack();
     bool checkForRangeAttack();
     bool checkForCounter();
-    void fn_143_7B00();
-    void fn_143_7F80();
-    bool fn_143_9420();
-    u8 fn_143_9570(s32 dir);
-    void fn_143_9610();
-    void fn_143_A110(s32);
+    void updateMainNodeTransforms();
+    void updateSkirtHairTransforms();
+    void updateSkirtTransform(s32 level);
+    void updateHairTransform(s32 level);
+    bool checkForLinkSwordBySwordHit();
+    u8 classifyAttackDirection(s32 attackDir);
+    void executeDemo();
+    void setLightningTimerMaybe(s32);
 
     /* 0x0378 */ d3d::AnmMdlWrapper mMdl;
     /* 0x03E8 */ m3d::anmTexSrt_c mAnmTexSrt;
@@ -293,8 +335,8 @@ private:
     /* 0x1132 */ u8 field_0x1132;
     /* 0x1133 */ u8 field_0x1133;
     /* 0x1134 */ u8 field_0x1134;
-    /* 0x1135 */ s8 field_0x1135;
-    /* 0x1136 */ s8 field_0x1136;
+    /* 0x1135 */ s8 mNumConsecutiveOppositeDirectionAttacks;
+    /* 0x1136 */ s8 mNumConsecutiveSameDirectionAttacks;
     /* 0x1137 */ u8 field_0x1137;
     /* 0x1138 */ u8 field_0x1138;
     /* 0x1139 */ u8 field_0x1139;
@@ -307,8 +349,8 @@ private:
     /* 0x1140 */ u8 field_0x1140;
     /* 0x1141 */ u8 field_0x1141;
     /* 0x1142 */ u8 field_0x1142;
-    /* 0x1143 */ u8 field_0x1143;
-    /* 0x1144 */ s8 field_0x1144;
+    /* 0x1143 */ u8 mInvulnerabilityTimerMaybe;
+    /* 0x1144 */ s8 mGuardDirection;
     /* 0x1145 */ s8 mLinkCloseRangeShieldTime;
     /* 0x1146 */ bool mIsSwordEmpowered;
     /* 0x1147 */ u8 field_0x1147;
@@ -322,21 +364,23 @@ private:
     /* 0x114F */ u8 field_0x114F;
     /* 0x1150 */ u8 field_0x1150;
     /* 0x1152 */ u16 field_0x1152;
-    /* 0x1154 */ u16 field_0x1154;
+    /* 0x1154 */ u16 mStunCounter;
     /* 0x1156 */ u16 mTimers[TIMER_MAX];
     /* 0x1162 */ u16 field_0x1162;
-    /* 0x1164 */ s16 field_0x1164;
+    /* 0x1164 */ s16 mCounter;
     /* 0x1166 */ s16 mSubState;
 
     /* 0x1168 */ u8 _0x1168[0x116A - 0x1168];
 
     /* 0x116A */ s16 mYAngleToLink;
 
-    /* 0x116C */ u8 _0x116C[0x1172 - 0x116C];
+    /* 0x116C */ u8 _0x116C[0x1170 - 0x116C];
 
+    /* 0x1170 */ s16 field_0x1170;
     /* 0x1172 */ s16 field_0x1172;
+    /* 0x1174 */ s16 field_0x1174;
 
-    /* 0x1174 */ u8 _0x1174[0x1178 - 0x1174];
+    /* 0x1176 */ u8 _0x1176[0x1178 - 0x1176];
 
     /* 0x1178 */ s16 field_0x1178;
     /* 0x117A */ s16 field_0x117A;
@@ -344,7 +388,7 @@ private:
     /* 0x117E */ s16 field_0x117E;
     /* 0x1180 */ s16 field_0x1180;
     /* 0x1182 */ s16 field_0x1182;
-    /* 0x1184 */ s16 field_0x1184;
+    /* 0x1184 */ s16 mLightningTimerMaybe;
     /* 0x1186 */ s16 mYRotationRelativeToLink;
     /* 0x1188 */ s16 field_0x1188;
     /* 0x118A */ mAng field_0x118A;
@@ -360,36 +404,24 @@ private:
     /* 0x11A0 */ f32 field_0x11A0;
     /* 0x11A4 */ f32 field_0x11A4;
     /* 0x11A8 */ f32 mAnmRate;
-
-    /* 0x11AC */ u8 _0x11AC[0x11B0 - 0x11AC];
-
+    /* 0x11AC */ f32 field_0x11AC;
     /* 0x11B0 */ f32 field_0x11B0;
-
-    /* 0x11B4 */ u8 _0x11B4[0x11B8 - 0x11B4];
-    
+    /* 0x11B0 */ f32 field_0x11B4;
     /* 0x11B8 */ f32 field_0x11B8;
-
     /* 0x11BC */ f32 field_0x11BC;
     /* 0x11C0 */ f32 field_0x11C0;
-
-    /* 0x11C4 */ u8 _0x11C4[0x11C8 - 0x11C4];
-
-    /* 0x11CC */ f32 field_0x11C8;
+    /* 0x11C4 */ f32 field_0x11C4;
+    /* 0x11C8 */ f32 field_0x11C8;
     /* 0x11CC */ f32 field_0x11CC;
-
-    /* 0x11D0 */ u8 _0x11D0[0x11D4 - 0x11D0];
-
+    /* 0x11D0 */ f32 field_0x11D0;
     /* 0x11D4 */ s32 mLastAttackDir;
-    /* 0x11D8 */ s32 field_0x11D8;
-
+    /* 0x11D8 */ s32 mSecondLastAttackDirection;
     /* 0x11DC */ mAng3_c field_0x11DC;
     /* 0x11E4 */ mVec3_c mThumbL2Translation;
     /* 0x11F0 */ mVec3_c mBackbone1Translation;
     /* 0x11FC */ mVec3_c mChestTranslation;
     /* 0x1208 */ mVec3_c field_0x1208;
-
-    /* 0x1214 */ u8 _0x1214[0x1220 - 0x1214];
-
+    /* 0x1214 */ mVec3_c mBugNetPos;
     /* 0x1220 */ mVec3_c field_0x1220;
     /* 0x122C */ mVec3_c field_0x122C;
     /* 0x1238 */ mVec3_c mToeTranslation[2];
@@ -406,10 +438,15 @@ private:
     /* 0x2C68 */ dEmitter_c mEmitter6;
     /* 0x2C9C */ dEmitter_c mEmitter7;
     /* 0x2CD0 */ LIGHT_INFLUENCE mLightInfo;
-    /* 0x2CEC */ s16 field_0x2CEC;
-    /* 0x2CEE */ u8 _0x2CEE[0x2D00 - 0x2CEE];
+    /* 0x2CEC */ s16 mDemoState;
+    /* 0x2CEE */ s16 field_0x2CEE;
+    /* 0x2CF0 */ s16 field_0x2CF0;
+    /* 0x2CF4 */ f32 field_0x2CF4;
+    /* 0x2CF8 */ u8 _0x2CF8[0x2CFC - 0x2CF8];
+    /* 0x2CFC */ f32 field_0x2CFC;
     /* 0x2D00 */ f32 field_0x2D00;
-    /* 0x2D04 */ u8 _0x2D04[0x2D1C - 0x2D04];
+    /* 0x2D04 */ mVec3_c field_0x2D04;
+    /* 0x2D10 */ mVec3_c field_0x2D10;
     /* 0x2D1C */ const char *mpCurrentAnm;
     /* 0x2D20 */ dTgSwordBattleGame_c *mpSwordBattleGame;
 };

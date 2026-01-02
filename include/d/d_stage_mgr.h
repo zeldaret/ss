@@ -5,6 +5,7 @@
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_base.h"
 #include "d/d_bzs_types.h"
+#include "d/d_cursor_hit_check.h"
 #include "d/d_dylink.h"
 #include "d/d_fader.h"
 #include "egg/gfx/eggCpuTexture.h"
@@ -12,6 +13,7 @@
 #include "m/m_allocator.h"
 #include "m/m_dvd.h"
 #include "m/m_fader_base.h"
+#include "m/m_mtx.h"
 #include "nw4r/g3d/g3d_camera.h"
 #include "s/s_FPhase.h"
 #include "s/s_State.hpp"
@@ -103,6 +105,9 @@ public:
     s32 getMapNameId() const;
 
     bool fn_80199250();
+    void procfn_800192F0(u8 a1, const mMtx_c &mtx, u8 a2) {
+        mProc1.fn_800192F0(a1, mtx, a2);
+    }
 
     static dStageMgr_c *GetInstance() {
         return sInstance;
@@ -204,11 +209,19 @@ private:
     /* 0x0580 */ LayoutArcControl mLayoutArcCtrl2;
     /* 0x058C */ dBgS mBg;
     // ...
-    u8 _0x00001[0x778];
+    u8 _0x00001[0x6C8];
+
+    /* 0x3E38 */ // ...
+
     /* 0x3E40 */ dCcS mCc;
+
+    /* 0x75D8 */ dCursorHitCheckCC_c mCsHitCheck;
     // ...
     /* 0x7814 */ dParticle::tex_c mParticleTex[2];
-    // ...
+    /* 0x7898 */ d3d::EggTextureProc mProc1;
+    /* 0x78EC */ d3d::XluProc mProc2;
+    u8 _0x00002[0x28];
+    /* 0x790C */ // ...
     /* 0x7930 */ dFader_c mFader;
 
     /* 0x7954 */ u16 mPcamCount;
@@ -220,6 +233,8 @@ private:
     /* 0x7964 */ const STIF *mpStif;
     /* 0x7968 */ const RMPL *mpRmpl;
 
+    u8 _0x00003[0x30];
+
     /* 0x799C */ mDvd_callback_c *mpDvdCallback;
     /* 0x79A0 */ mDvd_callback_c *mpDvdCallback2;
 
@@ -229,7 +244,7 @@ private:
     /* 0x8694 */ dTimeAreaMgr_c mTimeAreaMgr;
 
     // ...
-    u8 ___[438];
+    u8 ___[390];
     /* 0x8898 */ EGG::CpuTexture *field_0x8898;
 
     u8 _0x889C[4];

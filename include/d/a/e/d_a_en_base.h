@@ -28,6 +28,10 @@ public:
     dAcEnBase_c();
     virtual ~dAcEnBase_c();
 
+    virtual int preExecute() override;
+    virtual void postExecute(MAIN_STATE_e state) override;
+    virtual int preDraw() override;
+
     virtual void *getObjectListEntry() override {
         return &mEnemyLink;
     }

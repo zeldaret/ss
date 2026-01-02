@@ -442,6 +442,10 @@ public:
         field_0x38DC = v;
     }
 
+    void setField_0x5D48(f32 val) {
+        field_0x5D48 = val;
+    }
+
 private:
     /* 0x0004 */ Spf currentSpf;
     /* 0x020C */ Spf spfs[20];
@@ -499,7 +503,9 @@ private:
     /* 0x48E4 */ Bpm4 field_0x48E4;
     /* 0x5CE4 */ PaletteDefaultMCF field_0x5CE4;
     /* 0x5D04 */ TwoPaletteDefaultMCF field_0x5D04;
-    /* 0x5D44 */ u8 field_0x5D44[0x5D59 - 0x5D44];
+    /* 0x5D44 */ u8 field_0x5D44[0x5D48 - 0x5D44];
+    /* 0x5D48 */ f32 field_0x5D48;
+    /* 0x5D4C */ u8 field_0x5D4C[0x5D59 - 0x5D4C];
     /* 0x5D59 */ struct { // Anonymous until more is known
         bool mEnabled;
         u8 mValue;
