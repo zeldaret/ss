@@ -170,7 +170,7 @@ bool dAcBlastboss_c::createHeap() {
 }
 
 int dAcBlastboss_c::create() {
-    field_0x1130 = getFromParams(0, 0xFF);
+    mThunderWaitSceneFlag = getFromParams(0, 0xFF);
     if (MinigameManager::GetInstance()->checkInBossRush()) {
         mInBossRush = true;
     }
@@ -204,9 +204,9 @@ int dAcBlastboss_c::create() {
     mCc4.Set(sSrcSph1);
     mCc4.SetStts(mStts);
 
-    mCc5.Set(sSrcSph2);
-    mCc5.mTg.Set_0x4C(-1);
-    mCc5.SetStts(mStts);
+    mLightningCc.Set(sSrcSph2);
+    mLightningCc.mTg.Set_0x4C(-1);
+    mLightningCc.SetStts(mStts);
 
     mAcceleration = -5.0f;
     mMaxSpeed = -80.0f;
@@ -214,7 +214,7 @@ int dAcBlastboss_c::create() {
     mBoundingBox.Set(mVec3_c(-200.0f, -300.0f, -200.0f), mVec3_c(200.0f, 300.0f, 200.0f));
     mStateMgr.changeState(StateID_Fight);
 
-    field_0x1132 = 1;
+    field_0x1132 = true;
     mCounter = cM::rndF(65536.0f);
 
     mHealth = 400;
@@ -263,7 +263,7 @@ int dAcBlastboss_c::actorExecute() {
 
     field_0x1133 = 0;
     field_0x1131 = 0;
-    field_0x1141 = 0;
+    mIsDown = false;
     field_0x114E = 0;
 
     field_0x11A4 = 0.0f;
@@ -305,7 +305,7 @@ int dAcBlastboss_c::actorExecute() {
     mSwordMdl.disable();
 
     mCc4.ClrAtSet();
-    mCc5.ClrAtSet();
+    mLightningCc.ClrAtSet();
 
     checkDamage();
     if (mpSwordBattleGame == nullptr || mpSwordBattleGame->checkFightStarted() == true) {
@@ -317,30 +317,30 @@ int dAcBlastboss_c::actorExecute() {
     sLib::addCalcAngle(mRotation.y.ref(), mAngle.y, 2, 0x800);
 
     mMdl.play();
-    if (!field_0x114F) {
+    if (!mIsDead) {
         mAnmMatClr1.play();
     }
 
     calcVelocity();
     mPosition += mVelocity;
     mPosition += mStts.GetCcMove();
-    mPosition.x += field_0x119C;
-    mPosition.z += field_0x11A0;
+    mPosition.x += mAttackKnockbackX;
+    mPosition.z += mAttackKnockbackZ;
 
-    field_0x119C *= 0.6f;
-    field_0x11A0 *= 0.6f;
+    mAttackKnockbackX *= 0.6f;
+    mAttackKnockbackZ *= 0.6f;
 
     f32 f5 = 0.0f;
     if (mRotation.x != 0) {
         f5 += field_0x11C0 * mRotation.x.sin();
     }
 
-    field_0x1140 = 0;
+    field_0x1140 = false;
     if (mPosition.y <= f5) {
         mPosition.y = f5;
         field_0x11BC = mVelocity.y;
         mVelocity.y = 0.0f;
-        field_0x1140 = 1;
+        field_0x1140 = true;
     }
 
     updateMainNodeTransforms();
@@ -350,7 +350,7 @@ int dAcBlastboss_c::actorExecute() {
     mScale.set(0.95f, 0.95f, 0.95f);
     mMdl.getModel().setScale(mScale);
     mMdl.getModel().setLocalMtx(mWorldMtx);
-    if (!field_0x1141) {
+    if (!mIsDown) {
         mAnmTexSrt.play();
     }
 
@@ -379,11 +379,11 @@ int dAcBlastboss_c::actorExecute() {
             }
         }
     }
-    MTXMultVec(nodeMtx, vEff, field_0x1208);
+    MTXMultVec(nodeMtx, vEff, mSwordPosition);
 
     if (mIsSwordEmpowered) {
         mEmitter4.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_619_, nodeMtx, nullptr, nullptr);
-        mLightInfo.mPos = field_0x1208;
+        mLightInfo.mPos = mSwordPosition;
         if (dScGame_c::getUpdateFrameCount() & 2) {
             mLightInfo.SetScale(300.0f);
         } else {
@@ -392,13 +392,13 @@ int dAcBlastboss_c::actorExecute() {
         holdSound(SE_BLasBos_SwordEnpowered);
     }
 
-    if (field_0x114B != 0) {
-        if (field_0x114B == 1) {
+    if (mStunState != 0) {
+        if (mStunState == 1) {
             mEmitter7.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_852_, nodeMtx, nullptr, nullptr);
             mMdl.getModel().getNodeWorldMtx(resMdl.GetResNode("backbone2").GetID(), nodeMtx);
             mEmitter6.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_853_, nodeMtx, nullptr, nullptr);
             holdSound(SE_BLasBos_UnderElecShock);
-        } else if (field_0x114B == 2) {
+        } else if (mStunState == 2) {
             mMdl.getModel().getNodeWorldMtx(resMdl.GetResNode("backbone2").GetID(), nodeMtx);
             dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_851_, nodeMtx, nullptr, nullptr, 0, 0);
             mMtx_c transMtx;
@@ -408,13 +408,13 @@ int dAcBlastboss_c::actorExecute() {
             mEmitter6.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_853_, nodeMtx, nullptr, nullptr);
             holdSound(SE_BLasBos_KillOffElecShock);
         }
-        mLightInfo.mPos = field_0x1208;
+        mLightInfo.mPos = mSwordPosition;
         if (dScGame_c::getUpdateFrameCount() & 2) {
             mLightInfo.SetScale(400.0f);
         } else {
             mLightInfo.SetScale(300.0f);
         }
-        field_0x114B = 0;
+        mStunState = 0;
     }
 
     mMdl.getModel().getNodeWorldMtx(B_LAST_BOSS_NODE_thumbL2, nodeMtx);
@@ -485,7 +485,7 @@ int dAcBlastboss_c::actorExecute() {
     tmpCc.z = mChestTranslation.z;
     tmpCc.y = mPosition.y;
 
-    if (!field_0x1141) {
+    if (!mIsDown) {
         mCc3.SetR(100.0f);
     } else {
         mCc3.SetR(200.0f);
@@ -514,7 +514,7 @@ int dAcBlastboss_c::actorExecute() {
     if (mInvulnerabilityTimerMaybe == 0) {
         mCc1.SetTg_0x4B(1);
         // TODO
-        mCc1.mTg.field_0x6C = field_0x1208;
+        mCc1.mTg.field_0x6C = mSwordPosition;
     } else {
         mInvulnerabilityTimerMaybe--;
         tmpCc.set(0.0f, -10000.0f, 0.0);
@@ -659,88 +659,90 @@ int dAcBlastboss_c::actorExecute() {
     dLightEnv_c::GetInstance().GetOverrideSpf().mIdxEnd = 2;
     dLightEnv_c::GetInstance().GetOverrideSpf().mRatio = field_0x11CC;
 
-    if (field_0x1147 && field_0x1148 != 0) {
-        field_0x1148--;
-        field_0x1220 += field_0x122C;
-        nodeMtx.transS(field_0x1220);
-        nodeMtx.ZXYrotM(field_0x11DC);
+    if (mIsThunderBeamAttackActive && mThunderBeamTimer != 0) {
+        mThunderBeamTimer--;
+        mThunderBeamPosition += mThunderBeamVelocity;
+        nodeMtx.transS(mThunderBeamPosition);
+        nodeMtx.ZXYrotM(mThunderBeamRotation);
 
-        if (!field_0x1150) {
-            if (mCc5.ChkAtHit() || mCc5.ChkTgHit()) {
+        if (!mThunderBeamReflected) {
+            if (mLightningCc.ChkAtHit() || mLightningCc.ChkTgHit()) {
                 dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_850_, nodeMtx, nullptr, nullptr, 0, 0);
-                if (mCc5.ChkTgHit() && mCc5.ChkTgAtHitType(AT_TYPE_BUGNET)) {
-                    getSoundSource()->startSoundAtPosition2(SE_BLasBos_EmitThunderBeam, field_0x1220);
-                    field_0x1148 = 0x3C;
-                    field_0x122C *= -1.0f;
+                if (mLightningCc.ChkTgHit() && mLightningCc.ChkTgAtHitType(AT_TYPE_BUGNET)) {
+                    // Reflect thunder beam attack with Bug Net
+                    getSoundSource()->startSoundAtPosition2(SE_BLasBos_EmitThunderBeam, mThunderBeamPosition);
+                    mThunderBeamTimer = 0x3C;
+                    mThunderBeamVelocity *= -1.0f;
                     dRumble_c::start(dRumble_c::sRumblePreset2, dRumble_c::FLAG_SLOT0);
                     dStageMgr_c::GetInstance()->fn_80199B60(3);
-                    field_0x1150 = 1;
+                    mThunderBeamReflected = true;
                 } else {
-                    field_0x1147 = 0;
+                    mIsThunderBeamAttackActive = false;
                     mMtx_c mtx;
                     mtx.transS(0.0f, -100000.0f, 0.0f);
                     MTXConcat(nodeMtx, mtx, nodeMtx);
-                    getSoundSource()->startSoundAtPosition2(SE_BLasBos_BeamCrossCrush, field_0x1220);
+                    getSoundSource()->startSoundAtPosition2(SE_BLasBos_BeamCrossCrush, mThunderBeamPosition);
                 }
-                mCc5.SetTgRpm(0);
-                mCc5.ClrTgActorInfo();
-                mCc5.SubtractTgEffCounter();
-                mCc5.SetAtRpm(0);
-                mCc5.ClrAtActorInfo();
-                mCc5.SubtractAtEffCounter();
+                mLightningCc.SetTgRpm(0);
+                mLightningCc.ClrTgActorInfo();
+                mLightningCc.SubtractTgEffCounter();
+                mLightningCc.SetAtRpm(0);
+                mLightningCc.ClrAtActorInfo();
+                mLightningCc.SubtractAtEffCounter();
             }
         } else {
-            if ((field_0x1220 - mPosition).absXZ() < 150.0f) {
+            if ((mThunderBeamPosition - mPosition).absXZ() < 150.0f) {
+                // Boss hit by bug net reflected attack
                 dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_850_, nodeMtx, nullptr, nullptr, 0, 0);
-                field_0x1147 = false;
+                mIsThunderBeamAttackActive = false;
                 mMtx_c mtx;
                 mtx.transS(0.0f, -100000.0f, 0.0f);
                 MTXConcat(nodeMtx, mtx, nodeMtx);
-                getSoundSource()->startSoundAtPosition2(SE_BLasBos_BeamCrossCrush, field_0x1220);
+                getSoundSource()->startSoundAtPosition2(SE_BLasBos_BeamCrossCrush, mThunderBeamPosition);
                 v3.set(0.0f, 0.0f, 20.0f);
                 rotMtx.YrotS(link->mRotation.y);
                 MTXMultVec(rotMtx, v3, v3);
-                field_0x119C = v3.x;
-                field_0x11A0 = v3.z;
+                mAttackKnockbackX = v3.x;
+                mAttackKnockbackZ = v3.z;
                 mStateMgr.changeState(StateID_Stun);
             }
         }
-        mLightInfo.mPos = field_0x1220;
+        mLightInfo.mPos = mThunderBeamPosition;
         if ((dScGame_c::getUpdateFrameCount() & 2) != 0) {
             mLightInfo.SetScale(300.0f);
         } else {
             mLightInfo.SetScale(200.0f);
         }
 
-        if (field_0x1148 <= 10) {
+        if (mThunderBeamTimer <= 10) {
             // TODO: lightning timer?
-            if (field_0x1148 == 10) {
+            if (mThunderBeamTimer == 10) {
                 mEmitter5.setFading(10);
             }
-            if (field_0x1148 == 0) {
-                field_0x1147 = 0;
+            if (mThunderBeamTimer == 0) {
+                mIsThunderBeamAttackActive = false;
             }
-            mCc5.ClrAtSet();
+            mLightningCc.ClrAtSet();
         } else {
-            if (!field_0x1150) {
-                mCc5.OnAtSet();
-                mCc5.SetR(100.0f);
-                mCc5.moveCenter(field_0x1220);
-                dCcS::GetInstance()->Set(&mCc5);
+            if (!mThunderBeamReflected) {
+                mLightningCc.OnAtSet();
+                mLightningCc.SetR(100.0f);
+                mLightningCc.moveCenter(mThunderBeamPosition);
+                dCcS::GetInstance()->Set(&mLightningCc);
             }
-            getSoundSource()->holdSoundAtPosition(SE_BLasBos_ThunderBeamFly, field_0x1220);
+            getSoundSource()->holdSoundAtPosition(SE_BLasBos_ThunderBeamFly, mThunderBeamPosition);
         }
         mEmitter5.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_618_, nodeMtx, nullptr, nullptr);
     }
 
-    if (field_0x114A != 0) {
-        field_0x114A--;
-        mCc5.OnAtSet();
-        mCc5.SetC(mPosition);
-        mCc5.SetR(300.0f - field_0x114A * 30.0f);
-        mCc5.SetAtVec(link->getPosition() - mPosition);
-        dCcS::GetInstance()->Set(&mCc5);
-        if (field_0x114A == 8) {
+    if (mLightingFallSwordTimer != 0) {
+        mLightingFallSwordTimer--;
+        mLightningCc.OnAtSet();
+        mLightningCc.SetC(mPosition);
+        mLightningCc.SetR(300.0f - mLightingFallSwordTimer * 30.0f);
+        mLightningCc.SetAtVec(link->getPosition() - mPosition);
+        dCcS::GetInstance()->Set(&mLightningCc);
+        if (mLightingFallSwordTimer == 8) {
             vEff.x = mPosition.x;
             vEff.y = 10.0f;
             vEff.z = mPosition.z;
@@ -754,9 +756,9 @@ int dAcBlastboss_c::actorExecute() {
     SceneflagManager *mgr = SceneflagManager::sInstance;
     if (mgr != nullptr) {
         if (mStateMgr.isState(StateID_ThunderWait)) {
-            mgr->setFlag(getRoomId(), field_0x1130);
+            mgr->setFlag(getRoomId(), mThunderWaitSceneFlag);
         } else {
-            mgr->unsetFlag(getRoomId(), field_0x1130);
+            mgr->unsetFlag(getRoomId(), mThunderWaitSceneFlag);
         }
     }
 
@@ -1474,19 +1476,19 @@ void dAcBlastboss_c::executeState_ThunderAttack() {
             mIsSwordEmpowered = false;
             mCc1.ClrTg_0x8000000();
             mSwordMdl.fn_8006B800(0);
-            field_0x1147 = 1;
-            field_0x1148 = 60;
-            field_0x1150 = 0;
-            field_0x11DC = mRotation;
+            mIsThunderBeamAttackActive = true;
+            mThunderBeamTimer = 60;
+            mThunderBeamReflected = false;
+            mThunderBeamRotation = mRotation;
             mVec3_c v(0.0f, 100.0f, 300.0f);
             mMtx_c mtx;
             mtx.YrotS(mRotation.y);
-            MTXMultVec(mtx, v, field_0x1220);
-            field_0x1220 += mPosition;
+            MTXMultVec(mtx, v, mThunderBeamPosition);
+            mThunderBeamPosition += mPosition;
 
             v.set(0.0f, 0.0f, 50.0f);
-            MTXMultVec(mtx, v, field_0x122C);
-            mCc5.setCenter(field_0x1220);
+            MTXMultVec(mtx, v, mThunderBeamVelocity);
+            mLightningCc.setCenter(mThunderBeamPosition);
             setLightningTimerMaybe(30);
             startSound(SE_BLasBos_EmitThunderBeam);
         }
@@ -1765,7 +1767,7 @@ void dAcBlastboss_c::executeState_Down() {
     mVec3_c v;
     mMtx_c mtx;
 
-    field_0x1141 = 1;
+    mIsDown = true;
     field_0x1142 = 5;
     bool b = false;
     setLightningTimerMaybe(30);
@@ -1831,7 +1833,7 @@ void dAcBlastboss_c::executeState_Down() {
                 mSubState = SUB_STATE_50;
                 mLightingStrikeState = LIGHTNING_STRIKE_TRIGGER_END;
                 startSound(SE_BLasBos_LastHit);
-                field_0x114F = 1;
+                mIsDead = true;
                 resetInteractionFlags(INTERACT_0x1000);
                 resetInteractionFlags(INTERACT_0x1);
             } else if (mTimers[TIMER_0] == 0) {
@@ -1854,7 +1856,7 @@ void dAcBlastboss_c::executeState_Down() {
         }
         case SUB_STATE_4: {
             if (mMdl.getAnm().getFrame() >= 52.0f) {
-                field_0x1141 = 0;
+                mIsDown = false;
                 sLib::addCalcAngle(mAngle.x.ref(), 0, 1, 910);
             }
             if (mMdl.getAnm().getFrame() >= 170.0f) {
@@ -1872,7 +1874,7 @@ void dAcBlastboss_c::executeState_Down() {
                 sLib::addCalcScaledDiff(&field_0x11C8, 15.0f, 1.0f, 5.0f);
                 field_0x11A4 = 20.0f;
             } else {
-                field_0x1141 = 0;
+                mIsDown = false;
                 sLib::addCalcAngle(mAngle.y.ref(), mYAngleToLink, 2, 0x800);
                 sLib::addCalcScaled(&field_0x11C8, 1.0f, 5.0f);
             }
@@ -1911,7 +1913,7 @@ void dAcBlastboss_c::executeState_Down() {
             break;
         }
         case SUB_STATE_20: {
-            field_0x1141 = 0;
+            mIsDown = 0;
             if (mMdl.getAnm().isStop()) {
                 mSubState = SUB_STATE_21;
                 setAnm("CatchThunderLoop", 0.0f);
@@ -1919,7 +1921,7 @@ void dAcBlastboss_c::executeState_Down() {
             break;
         }
         case SUB_STATE_21: {
-            field_0x1141 = 0;
+            mIsDown = false;
             if (mMdl.getAnm().isStop()) {
                 mStateMgr.changeState(StateID_Fight);
                 mTimers[TIMER_4] = 15;
@@ -1956,7 +1958,7 @@ void dAcBlastboss_c::initializeState_Stun() {
 }
 void dAcBlastboss_c::executeState_Stun() {
     setLightningTimerMaybe(40);
-    field_0x114B = 1;
+    mStunState = 1;
     int frame = mMdl.getAnm().getFrame();
     switch (mSubState) {
         case SUB_STATE_0: {
@@ -1977,10 +1979,10 @@ void dAcBlastboss_c::executeState_Stun() {
         case SUB_STATE_2: {
             if (frame <= 58) {
                 if (frame == 58) {
-                    field_0x114B = 2;
+                    mStunState = 2;
                 }
             } else {
-                field_0x114B = 0;
+                mStunState = 0;
                 if (frame <= 61) {
                     field_0x11A4 = 25.0f;
                 }
@@ -2032,9 +2034,9 @@ void dAcBlastboss_c::executeState_ThunderWait() {
                 mSubState = SUB_STATE_5;
                 setAnm("CatchThunderEnd", 5.0f);
                 mVec3_c vEff;
-                vEff.x = field_0x1208.x;
-                vEff.y = field_0x1208.y + 110.0f;
-                vEff.z = field_0x1208.z;
+                vEff.x = mSwordPosition.x;
+                vEff.y = mSwordPosition.y + 110.0f;
+                vEff.z = mSwordPosition.z;
                 dJEffManager_c::spawnEffect(
                     PARTICLE_RESOURCE_ID_MAPPING_624_, vEff, nullptr, nullptr, nullptr, nullptr, 0, 0
                 );
@@ -2042,7 +2044,7 @@ void dAcBlastboss_c::executeState_ThunderWait() {
                 mIsSwordEmpowered = true;
                 mSwordMdl.fn_8006B800(4);
                 mCc1.OnTg_0x8000000();
-                field_0x114A = 10;
+                mLightingFallSwordTimer = 10;
                 startSound(SE_BLasBos_ThunderFallSword);
             }
             break;
@@ -2102,8 +2104,8 @@ bool dAcBlastboss_c::checkDamage() {
                     v.z = 20.0f;
                     mtx.YrotS(link->mRotation.y);
                     MTXMultVec(mtx, v, v2);
-                    field_0x119C = v2.x;
-                    field_0x11A0 = v2.z;
+                    mAttackKnockbackX = v2.x;
+                    mAttackKnockbackZ = v2.z;
                     mStateMgr.changeState(StateID_Stun);
                     break;
                 }
@@ -2170,8 +2172,8 @@ bool dAcBlastboss_c::checkDamage() {
                 v.z = -5.0f;
                 mtx.YrotS(mYAngleToLink);
                 MTXMultVec(mtx, v, v2);
-                field_0x119C = v2.x;
-                field_0x11A0 = v2.z;
+                mAttackKnockbackX = v2.x;
+                mAttackKnockbackZ = v2.z;
                 mLastAttackDir = mLastAttackDirection;
                 break;
             }
@@ -2194,8 +2196,8 @@ bool dAcBlastboss_c::checkDamage() {
                         v.z = -10.0f;
                         mtx.YrotS(mRotation.y);
                         MTXMultVec(mtx, v, v2);
-                        field_0x119C = v2.x;
-                        field_0x11A0 = v2.z;
+                        mAttackKnockbackX = v2.x;
+                        mAttackKnockbackZ = v2.z;
                     }
 
                     break;
@@ -2208,8 +2210,8 @@ bool dAcBlastboss_c::checkDamage() {
                     v.z = 20.0f;
                     mtx.YrotS(link->mRotation.y);
                     MTXMultVec(mtx, v, v2);
-                    field_0x119C = v2.x;
-                    field_0x11A0 = v2.z;
+                    mAttackKnockbackX = v2.x;
+                    mAttackKnockbackZ = v2.z;
                     mStateMgr.changeState(StateID_Stun);
                     break;
                 }
@@ -2257,8 +2259,8 @@ bool dAcBlastboss_c::checkDamage() {
                     v.z = -20.0f;
                     mtx.YrotS(mYAngleToLink);
                     MTXMultVec(mtx, v, v2);
-                    field_0x119C = v2.x;
-                    field_0x11A0 = v2.z;
+                    mAttackKnockbackX = v2.x;
+                    mAttackKnockbackZ = v2.z;
                     field_0x1138 = 10;
                     field_0x11B8 = 5.0f;
                     field_0x11A4 = 7.0f;
@@ -2304,8 +2306,8 @@ bool dAcBlastboss_c::checkDamage() {
                     v.z = -20.0f;
                     mtx.YrotS(mYAngleToLink);
                     MTXMultVec(mtx, v, v2);
-                    field_0x119C = v2.x;
-                    field_0x11A0 = v2.z;
+                    mAttackKnockbackX = v2.x;
+                    mAttackKnockbackZ = v2.z;
                     field_0x11B8 = 5.0f;
                     field_0x11A4 = 7.0f;
                     if (mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_LEFT ||
@@ -2340,8 +2342,8 @@ bool dAcBlastboss_c::checkDamage() {
                 v.z = -20.0f;
                 mtx.YrotS(mYAngleToLink);
                 MTXMultVec(mtx, v, v2);
-                field_0x119C = v2.x;
-                field_0x11A0 = v2.z;
+                mAttackKnockbackX = v2.x;
+                mAttackKnockbackZ = v2.z;
                 field_0x1138 = 10;
                 field_0x11B8 = 5.0f;
                 field_0x11A4 = 7.0f;
@@ -2420,7 +2422,6 @@ bool dAcBlastboss_c::checkForCloseRangeAttack() {
                 }
                 mLinkCloseRangeShieldTime = 0;
             }
-            // ret = true;
         }
 
     } else {
@@ -2751,7 +2752,7 @@ void dAcBlastboss_c::updateSkirtHairTransforms() {
         updateHairTransform(i);
     }
 
-    if (field_0x1141 == 0) {
+    if (!mIsDown) {
         for (int i = 0; i < 9; i++) {
             f32 f = (i % 3) * 3 + 1;
             if (i < 3) {
@@ -2849,7 +2850,7 @@ void dAcBlastboss_c::updateSkirtTransform(s32 level) {
         cc.mCc.SetR(50.0f);
     }
 
-    if (field_0x1141 != 0) {
+    if (mIsDown) {
         offset2 = 0;
         v4.set(0.0f, 0.0f, 0.0f);
         p2.set(0.0f, 0.0f, 0.0f);
@@ -2864,7 +2865,7 @@ void dAcBlastboss_c::updateSkirtTransform(s32 level) {
     s32 actual = offset2 - 1;
 
     for (u32 i = 1; i < 10; i++) {
-        // TODO: These strength reduced and moved to before the loop.
+        // TODO: These are strength reduced and moved to before the loop.
         // However, we need them at the start of the function!
         mVec3_c *v1 = &cc.field_0x014[i];
         mVec3_c *v2 = &cc.field_0x08C[i] - 1;
@@ -2888,7 +2889,7 @@ void dAcBlastboss_c::updateSkirtTransform(s32 level) {
         }
 
         f32 f4;
-        if (field_0x1141 != 0) {
+        if (mIsDown) {
             f4 = 5.0f;
         } else {
             f4 = sFloats[i - 1];
@@ -2943,12 +2944,91 @@ void dAcBlastboss_c::updateSkirtTransform(s32 level) {
 }
 
 void dAcBlastboss_c::updateHairTransform(s32 level) {
-    // Might hold off with this one until updateSkirtTransform is fixed
+    // NONMATCHING but probably equivalent
 
-    // floats
-    47.5f;
-    0.9f;
-    1.6f;
+    UnkLastBossCcSph1 &cc = field_0x2948[level];
+
+    mMtx_c mtx2;
+    mMtx_c mtx;
+    mVec3_c t1(0.0f, 0.0f, 47.5f);
+    mVec3_c v;
+    mVec3_c t2(0.0f, 0.0f, -10.0f);
+
+    mtx.YrotS(cc.field_0x002);
+    mtx.XrotM(cc.field_0x004);
+    MTXMultVec(mtx, t2, t2);
+
+    f32 f1 = field_0x11B8;
+    f32 f2 = -field_0x11B8;
+    f32 fAdd = -5.0f;
+    f32 fScale = 1.0f;
+    f32 f4 = 0.9f;
+
+    for (u32 i = 1; i < 5; i++) {
+        // TODO: These are strength reduced and moved to before the loop.
+        // However, we need them at the start of the function!
+        mVec3_c *v1 = &cc.field_0x008[i];
+        mVec3_c *v2 = &cc.field_0x044[i] - 1;
+        mVec3_c *v3 = &cc.field_0x080[i];
+
+        v.x = f1 * mAng(mCounter * 12000 - (i * 20000)).sin();
+        v.y = f1 * mAng(mCounter * 10000 - (i * 20000)).sin();
+        v.z = f2;
+        v.x += mAng(mCounter * 10000 - (i * 20000)).sin() * fScale;
+        v.y += mAng(mCounter * 12000 - (i * 20000)).sin() * fScale;
+        MTXMultVec(mtx, v, v);
+
+        f1 *= 1.6f;
+
+        f32 f13;
+        if (field_0x113D != 0) {
+            f13 = fAdd + v1[0].y + t2.y + v3[0].y + v.y;
+            if (f13 < mPositionCopy2.y) {
+                f13 = mPositionCopy2.y;
+            }
+            f13 = f13 - v1[-1].y;
+        } else if (mIsDown) {
+            f13 = fAdd + v1[0].y + v3[0].y;
+            if (f13 <= 0.0f) {
+                f13 = 0.0f;
+            }
+            f13 = f13 - v1[-1].y;
+            v.set(0.0f, 0.0f, 0.0f);
+        } else {
+            f13 = fAdd + (v1[0].y - v1[-1].y) + t2.y + v3[0].y + v.y;
+        }
+
+        f32 fX2 = (v1[0].x - v1[-1].x) + t2.x + v3[0].x + v.x;
+        f32 fZ2 = (v1[0].z - v1[-1].z) + t2.z + v3[0].z + v.z;
+
+        t2.x *= 0.6f;
+        t2.y *= 0.6f;
+        t2.z *= 0.6f;
+        v2[0].y = cM::atan2s(fX2, fZ2);
+        f32 f8 = nw4r::math::FSqrt(fX2 * fX2 + fZ2 * fZ2);
+        v2[0].x = -cM::atan2s(f13, f8);
+        v2[0].z = cc.field_0x006;
+
+        mtx2.YrotS(v2[0].y);
+        mtx2.XrotM(v2[0].x);
+        MTXMultVec(mtx2, t1, v);
+
+        v3[0] = v1[0];
+        v1[0] = v1[-1] + v;
+        v3[0] = (v1[0] - v3[0]) * f4;
+    }
+
+    f32 target = 0.0f;
+    cc.mCc.SetC(mPositionCopy2);
+    cc.mCc.SetR(30.0f);
+    if (cc.mCc.ChkTgHit()) {
+        target = 7.0f;
+        holdSound(SE_BLasBos_HairAir);
+        if (field_0x1178 == 0) {
+            field_0x1178 = 18;
+        }
+    }
+    sLib::addCalcScaledDiff(&field_0x11B8, target, 0.2f, 0.7f);
 }
 
 bool dAcBlastboss_c::checkForLinkSwordBySwordHit() {
@@ -3065,7 +3145,7 @@ void dAcBlastboss_c::executeLightningStrike() {
                         dLightEnv_c::GetPInstance()->setField_0x38DC(7);
                         setAnm("CatchThunderEnd", 5.0f);
                         spawnEffect = true;
-                        effPos.set(field_0x1208.x, field_0x1208.y + 110.0f, field_0x1208.z);
+                        effPos.set(mSwordPosition.x, mSwordPosition.y + 110.0f, mSwordPosition.z);
                         mIsSwordEmpowered = true;
                         mSwordMdl.fn_8006B800(4);
                         mCc1.OnTg_0x8000000();
@@ -3217,7 +3297,7 @@ void dAcBlastboss_c::executeLightningStrike() {
         dJEffManager_c::spawnEffect(
             PARTICLE_RESOURCE_ID_MAPPING_624_, effPos, nullptr, nullptr, nullptr, nullptr, 0, 0
         );
-        field_0x114A = 10;
+        mLightingFallSwordTimer = 10;
     }
 
     if (b1) {
