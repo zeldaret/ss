@@ -2774,6 +2774,9 @@ void dAcBlastboss_c::updateSkirtTransform(s32 level) {
     // NONMATCHING but probably equivalent
 
     UnkLastBossCcSph2 &cc = field_0x1268[level];
+    mVec3_c *v1 = &cc.field_0x014[1];
+    mVec3_c *v2 = &cc.field_0x08C[0];
+    mVec3_c *v3 = &cc.field_0x104[1];
 
     mVec3_c t1(0.0f, 0.0f, 33.25f);
 
@@ -2864,13 +2867,7 @@ void dAcBlastboss_c::updateSkirtTransform(s32 level) {
 
     s32 actual = offset2 - 1;
 
-    for (u32 i = 1; i < 10; i++) {
-        // TODO: These are strength reduced and moved to before the loop.
-        // However, we need them at the start of the function!
-        mVec3_c *v1 = &cc.field_0x014[i];
-        mVec3_c *v2 = &cc.field_0x08C[i] - 1;
-        mVec3_c *v3 = &cc.field_0x104[i];
-
+    for (u32 i = 1; i < 10; i++, v1++, v2++, v3++) {
         mtx.YrotS(cc.field_0x006);
         d1.x = 0.0f;
         d1.y = mAng(cc.field_0x008 - i * 8000).sin() * f1;
@@ -2914,15 +2911,15 @@ void dAcBlastboss_c::updateSkirtTransform(s32 level) {
             }
         }
 
-        f32 fX2 = fX - v1[-1].x;
-        f32 fY2 = fY - v1[-1].y;
-        f32 fZ2 = fZ - v1[-1].z;
+        fX -= v1[-1].x;
+        fY -= v1[-1].y;
+        fZ -= v1[-1].z;
         v5.x *= 0.4f;
         v5.z *= 0.4f;
-        v2[0].x = -cM::atan2s(fY2, fZ2);
-        f32 f8 = nw4r::math::FSqrt(fY2 * fY2 + fZ2 * fZ2);
+        v2[0].x = -cM::atan2s(fY, fZ);
+        f32 f8 = nw4r::math::FSqrt(fY * fY + fZ * fZ);
 
-        v2[0].y = cM::atan2s(fX2, f8);
+        v2[0].y = cM::atan2s(fX, f8);
         v2[0].z = mRotation.y;
 
         mtx.XrotS(v2[0].x);
@@ -2947,6 +2944,9 @@ void dAcBlastboss_c::updateHairTransform(s32 level) {
     // NONMATCHING but probably equivalent
 
     UnkLastBossCcSph1 &cc = field_0x2948[level];
+    mVec3_c *v1 = &cc.field_0x008[1];
+    mVec3_c *v2 = &cc.field_0x044[0];
+    mVec3_c *v3 = &cc.field_0x080[1];
 
     mMtx_c mtx2;
     mMtx_c mtx;
@@ -2960,17 +2960,11 @@ void dAcBlastboss_c::updateHairTransform(s32 level) {
 
     f32 f1 = field_0x11B8;
     f32 f2 = -field_0x11B8;
+    f32 f4 = 0.9f;
     f32 fAdd = -5.0f;
     f32 fScale = 1.0f;
-    f32 f4 = 0.9f;
 
-    for (u32 i = 1; i < 5; i++) {
-        // TODO: These are strength reduced and moved to before the loop.
-        // However, we need them at the start of the function!
-        mVec3_c *v1 = &cc.field_0x008[i];
-        mVec3_c *v2 = &cc.field_0x044[i] - 1;
-        mVec3_c *v3 = &cc.field_0x080[i];
-
+    for (u32 i = 1; i < 5; i++, v1++, v2++, v3++) {
         v.x = f1 * mAng(mCounter * 12000 - (i * 20000)).sin();
         v.y = f1 * mAng(mCounter * 10000 - (i * 20000)).sin();
         v.z = f2;
