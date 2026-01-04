@@ -3304,10 +3304,10 @@ void dLytMapMain_c::setupEvent(s32 event, s32 arg1, s32 arg2) {
     }
 
     if (mDoCameraTransition) {
-        dScGame_c::getCamera(0)->doFn_80093380();
+        dScGame_c::getCamera(0)->getMapCam()->fn_80093380();
     } else {
-        dScGame_c::getCamera(0)->doFn_80093360();
-        dScGame_c::getCamera(0)->doFn_80093340();
+        dScGame_c::getCamera(0)->getMapCam()->fn_80093360();
+        dScGame_c::getCamera(0)->getMapCam()->fn_80093340();
     }
     dScGame_c::getCamera(0)->fn_8019E410();
     dLytMapMain_vt0x10();
@@ -3357,7 +3357,7 @@ void dLytMapMain_c::close() {
             }
         } else if (mRoomType == ROOMTYPE_DUNGEON && !field_0x8CAE && !mMapUpDirection) {
             mDoCameraTransition = false;
-            dScGame_c::getCamera(0)->doFn_80093340();
+            dScGame_c::getCamera(0)->getMapCam()->fn_80093340();
         }
     }
 
@@ -3367,9 +3367,9 @@ void dLytMapMain_c::close() {
     }
 
     if (mDoCameraTransition) {
-        dScGame_c::getCamera(0)->doFn_80093380();
+        dScGame_c::getCamera(0)->getMapCam()->fn_80093380();
     } else {
-        dScGame_c::getCamera(0)->doFn_80093360();
+        dScGame_c::getCamera(0)->getMapCam()->fn_80093360();
     }
 
     if (mMapEvent == MAP_EVENT_NONE) {
@@ -5047,7 +5047,7 @@ void dLytMapMain_c::forceOut() {
     mAnmGroups[MAP_MAIN_ANIM_OUT].unbind();
     dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x10;
     dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x10;
-    dScGame_c::getCamera(0)->doFn_80093360();
+    dScGame_c::getCamera(0)->getMapCam()->fn_80093360();
     dScGame_c::getCamera(0)->fn_8019E430();
     mStateMgr.changeState(StateID_Invisible);
 }

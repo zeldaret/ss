@@ -372,7 +372,7 @@ void dLytMeterDowsing_c::executeState_Invisible() {
 }
 void dLytMeterDowsing_c::finalizeState_Invisible() {
     if (getSelectedDowsingSlot() != DowsingTarget::SLOT_NONE &&
-        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52) {
+        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::ACT_IE_INFO_DOWSE) {
         mAnm[DOWSING_ANIM_DECIDE].setToEnd();
         mAnm[DOWSING_ANIM_DECIDE].setAnimEnable(true);
         mLyt.calc();
@@ -404,7 +404,7 @@ void dLytMeterDowsing_c::executeState_Wait() {
                dLytMeter_c::GetMain()->fn_800D5380(0) && !dLytMeter_c::GetMain()->isInModeMap() &&
                !dLytMeter_c::GetMain()->isInModePause() && getSelectedDowsingSlot() != DowsingTarget::SLOT_LOOK &&
                getSelectedDowsingSlot() != DowsingTarget::SLOT_NONE &&
-               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52) {
+               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::ACT_IE_INFO_DOWSE) {
         mAnm[DOWSING_ANIM_IN].setBackwardsOnce();
         mAnm[DOWSING_ANIM_IN].setToEnd2();
         mAnm[DOWSING_ANIM_IN].setAnimEnable(true);
@@ -498,7 +498,7 @@ void dLytMeterDowsing_c::initializeState_MenuSelectingOut() {
     mAnm[DOWSING_ANIM_IN].setAnimEnable(true);
     field_0x550A = 0;
     if (getSelectedDowsingSlot() != DowsingTarget::SLOT_NONE &&
-        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52) {
+        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::ACT_IE_INFO_DOWSE) {
         if (getSelectedDowsingSlot() != DowsingTarget::SLOT_LOOK) {
             field_0x550A = 1;
         }
@@ -551,8 +551,9 @@ void dLytMeterDowsing_c::initializeState_ToUse() {
     mAnm[DOWSING_ANIM_INPUT_0].setAnimEnable(true);
 
     if (FileManager::GetInstance()->getDowsingSlotIdx() != 8 &&
-        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52 && dLytMeter_c::GetMain()->fn_800D5380(0) &&
-        !dLytMeter_c::GetMain()->isInModeMap() && !dLytMeter_c::GetMain()->isInModePause()) {
+        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::ACT_IE_INFO_DOWSE &&
+        dLytMeter_c::GetMain()->fn_800D5380(0) && !dLytMeter_c::GetMain()->isInModeMap() &&
+        !dLytMeter_c::GetMain()->isInModePause()) {
         mAnm[DOWSING_ANIM_RESET].setAnimEnable(true);
         mAnm[DOWSING_ANIM_RESET].setBackwardsOnce();
         mAnm[DOWSING_ANIM_RESET].setToStart();
@@ -560,8 +561,9 @@ void dLytMeterDowsing_c::initializeState_ToUse() {
 }
 void dLytMeterDowsing_c::executeState_ToUse() {
     if (FileManager::GetInstance()->getDowsingSlotIdx() != 8 &&
-        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52 && dLytMeter_c::GetMain()->fn_800D5380(0) &&
-        !dLytMeter_c::GetMain()->isInModeMap() && !dLytMeter_c::GetMain()->isInModePause()) {
+        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::ACT_IE_INFO_DOWSE &&
+        dLytMeter_c::GetMain()->fn_800D5380(0) && !dLytMeter_c::GetMain()->isInModeMap() &&
+        !dLytMeter_c::GetMain()->isInModePause()) {
         if (mAnm[DOWSING_ANIM_INPUT_0].isStop2()) {
             if (!mAnm[DOWSING_ANIM_RESET].isEnabled() || mAnm[DOWSING_ANIM_RESET].isStop2()) {
                 mStateMgr.changeState(StateID_Wait);
@@ -594,8 +596,9 @@ void dLytMeterDowsing_c::initializeState_ToUnuse() {
     mAnm[DOWSING_ANIM_INPUT_0].setAnimEnable(true);
 
     if (FileManager::GetInstance()->getDowsingSlotIdx() != 8 &&
-        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52 && dLytMeter_c::GetMain()->fn_800D5380(0) &&
-        !dLytMeter_c::GetMain()->isInModeMap() && !dLytMeter_c::GetMain()->isInModePause()) {
+        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::ACT_IE_INFO_DOWSE &&
+        dLytMeter_c::GetMain()->fn_800D5380(0) && !dLytMeter_c::GetMain()->isInModeMap() &&
+        !dLytMeter_c::GetMain()->isInModePause()) {
         mAnm[DOWSING_ANIM_RESET].setAnimEnable(true);
         mAnm[DOWSING_ANIM_RESET].setForwardOnce();
         mAnm[DOWSING_ANIM_RESET].setToStart();

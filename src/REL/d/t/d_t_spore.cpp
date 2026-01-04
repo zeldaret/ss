@@ -158,9 +158,9 @@ void dSporeProc_c::execute() {
                         mSporesPos[i] += point * (field_0x12D8[i] * 5.f);
                     }
 
-                    f32 camY = pCam->getField_0x2A8();
-                    if (end != camY && mSporesPos[i].y < camY) {
-                        mSporesPos[i].y = camY;
+                    f32 waterHeight = pCam->getWaterHeight();
+                    if (end != waterHeight && mSporesPos[i].y < waterHeight) {
+                        mSporesPos[i].y = waterHeight;
                     }
                 } break;
             }

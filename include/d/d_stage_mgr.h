@@ -52,6 +52,7 @@ public:
     STATE_FUNC_DECLARE(dStageMgr_c, RestartScene);
 
 public:
+    void setGlobalAlpha(u8 alpha);
     u8 getGlobalAlpha() const;
 
     bool isAreaTypeNormal() const;
@@ -123,6 +124,10 @@ public:
     void initUnkWithWater(u32 val, d3d::UnkWithWater *waterThing);
     void destroyUnkWithWater(u32 val, d3d::UnkWithWater *waterThing);
 
+    const STIF *getStif() const {
+        return mpStif;
+    }
+
     const RMPL *getRmpl() const {
         return mpRmpl;
     }
@@ -173,6 +178,7 @@ public:
     void addActorId(u16 actorId);
 
     nw4r::g3d::Camera getCamera(s32 idx);
+    EGG::Screen *getScreen(s32 idx);
 
     void fn_80199B60(u8);
 
