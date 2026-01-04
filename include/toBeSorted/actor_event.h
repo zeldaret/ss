@@ -8,7 +8,6 @@
 
 class ActorEventRelated {
 public:
-    ActorEventRelated();
     ActorEventRelated(dAcBase_c &owner, void *);
     ActorEventRelated(UNKWORD, void *);
     ~ActorEventRelated();
