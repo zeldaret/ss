@@ -336,11 +336,12 @@ bool dCameraGame_c::create() {
     mView.field_0x0C.y += 150.0f;
 
     field_0x02C.Set(320.0f, 15.0f, mAng::s2d_c(field_0x098->mRotation.y) + 180.0f);
-    mView.field_0x00 = mView.field_0x0C + field_0x02C.toCartesian();
+    const mVec3_c &v = mView.field_0x0C; // needed to avoid double load... TODO maybe inline?
+    mView.field_0x00 = v + field_0x02C.toCartesian();
     mView.mFov = 60.0f;
     mView2 = mView;
 
-    field_0x264 = mView.field_0x00.y;
+    field_0x264 = v.y;
     field_0x268 = mView.field_0x00.y;
 
     GROOSENATOR_REF = nullptr;
