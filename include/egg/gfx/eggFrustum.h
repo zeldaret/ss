@@ -110,6 +110,10 @@ public:
         SetSizeY(size.y);
     }
 
+    f32 GetAspect() const {
+        return GetSize().x / GetSize().y;
+    }
+
     void SetNearZ(f32 nearZ) {
         mNearZ = nearZ;
     }

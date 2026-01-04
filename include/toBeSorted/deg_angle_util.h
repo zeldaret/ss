@@ -43,6 +43,7 @@ public:
 
 struct dPolar {
 public:
+    dPolar() : R(0.0f), U(0.0f), V(0.0f) {}
     dPolar(f32 r, f32 u, f32 v);
     dPolar(const mVec3_c &v);
 

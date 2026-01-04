@@ -222,6 +222,17 @@ public:
 
     bool checkLink2() const;
 
+    dAcObjBase_c *getTargetedActor() {
+        if (!isInNormalGameState() || !mTargeted) {
+            return nullptr;
+        }
+        return getTargetedActorUnchecked();
+    }
+
+    dAcObjBase_c *getTargetedActorUnchecked() {
+        return mGroups[1].getOtherPool()->getActor(mModels.mCurrentTargetInfoIdx);
+    }
+
 private:
     bool isInNormalGameState() const;
     bool checkZButtonPressed() const;

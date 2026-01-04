@@ -37,7 +37,7 @@ struct CAM {
     /* 0x04 */ mVec3_c position;
     /* 0x10 */ f32 angle;
     /* 0x14 */ u8 _0x14[8];
-    /* 0x1C */ char name[16];
+    /* 0x1C */ char trendName[16];
 };
 
 // Size 0x38
@@ -61,6 +61,7 @@ struct EVNT {
 
 // Size 0x???
 struct bzsFILE {
+    /* 0x00 */ s16 field_0x00;
     // ???
 };
 

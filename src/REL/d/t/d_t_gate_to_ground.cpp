@@ -39,7 +39,6 @@ int dTgGateToGround_c::doDelete() {
 
 int dTgGateToGround_c::actorExecute() {
     dAcPy_c *player;
-    dCamera_c *cam;
 
     if (params_FF_FF_00_00 != -1 && StoryflagManager::sInstance->getCounterOrFlag(params_FF_FF_00_00) == 0) {
         return SUCCEEDED;
@@ -57,8 +56,7 @@ int dTgGateToGround_c::actorExecute() {
             }
         } else {
             if (params_00_00_00_FF != -1) {
-                cam = dScGame_c::getCamera(0);
-                fn_80080960(cam->getField_0xD98(), params_00_00_00_FF, 0, mRoomID, 0);
+                dScGame_c::getCamera(0)->getGameCam1()->fn_80080960(params_00_00_00_FF, 0, mRoomID, 0);
             }
             delayFrames = 0;
         }
