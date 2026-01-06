@@ -139,8 +139,8 @@ public:
     static s32 sStyleIdxes[CAM_STYLE_IDX_MAX];
 
     dCameraGame_c();
-    /* vt 0x08 */ virtual void vt_0x08() override;
-    /* vt 0x0C */ virtual void vt_0x0C() override;
+    /* vt 0x08 */ virtual void onBecomeActive() override;
+    /* vt 0x0C */ virtual void onBecomeInactive() override;
     /* vt 0x10 */ virtual bool create() override;
     /* vt 0x14 */ virtual bool remove() override;
     /* vt 0x18 */ virtual bool execute() override;
@@ -150,6 +150,14 @@ public:
 
     CamId getCamId0x60() {
         return field_0x060;
+    }
+
+    bool getField_0x078() const {
+        return field_0x078;
+    }
+    
+    f32 getField_0x0AC() const {
+        return field_0x0AC;
     }
 
     void clearCamIds();
@@ -184,7 +192,7 @@ private:
     /* 0x06C */ UNKWORD field_0x06C;
     /* 0x070 */ UNKWORD field_0x070;
     /* 0x074 */ UNKWORD field_0x074;
-    /* 0x078 */ u8 field_0x078;
+    /* 0x078 */ bool field_0x078;
     /* 0x079 */ u8 field_0x079;
     /* 0x07A */ u8 field_0x07A;
     /* 0x07C */ UNKWORD field_0x07C;

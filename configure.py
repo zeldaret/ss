@@ -612,7 +612,7 @@ config.libs = [
             Object(NonMatching, "d/d_hbm.cpp"),
             Object(NonMatching, "d/d_stage_mgr.cpp"),
             Object(NonMatching, "d/d_last.cpp"),
-            Object(NonMatching, "d/d_camera.cpp"),
+            Object(Matching, "d/d_camera.cpp"),
             Object(NonMatching, "d/d_light_obj.cpp"),
             Object(NonMatching, "d/tg/d_t_weather.cpp"),
             Object(Matching, "d/d_message.cpp"),

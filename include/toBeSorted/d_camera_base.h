@@ -7,6 +7,7 @@
 // A basic description of a camera perspective, simplified.
 struct CamView {
     CamView() : mPosition(0.0f, 0.0f, 0.0f), mTarget(0.0f, 0.0f, 1.0f), mFov(50.0f), mTilt(0.0f) {}
+    CamView(const mVec3_c &pos, const mVec3_c &target, f32 fov, f32 tilt) : mPosition(pos), mTarget(target), mFov(fov), mTilt(tilt) {}
     ~CamView() {}
 
     /* 0x00 */ mVec3_c mPosition;
@@ -20,13 +21,13 @@ struct CamView {
 class dCameraBase_c {
 protected:
     /* 0x00 */ bool mCreated;
-    /* 0x01 */ u8 field_0x01;
+    /* 0x01 */ u8 mPrevIsActive;
     /* 0x02 */ bool mIsActive;
     /* 0x04 */ s32 mIndex;
     /* 0x08 */ CamView mView;
 
 public:
-    dCameraBase_c() : mCreated(false), field_0x01(0), mIsActive(false), mIndex(-1) {}
+    dCameraBase_c() : mCreated(false), mPrevIsActive(0), mIsActive(false), mIndex(-1) {}
 
     bool doCreate(s32 index);
     bool doRemove();
@@ -34,8 +35,8 @@ public:
     bool doDraw();
 
     // vt at 0x28
-    /* vt 0x08 */ virtual void vt_0x08() {}
-    /* vt 0x0C */ virtual void vt_0x0C() {}
+    /* vt 0x08 */ virtual void onBecomeActive() {}
+    /* vt 0x0C */ virtual void onBecomeInactive() {}
     /* vt 0x10 */ virtual bool create() {
         return true;
     }

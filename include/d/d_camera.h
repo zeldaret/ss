@@ -66,6 +66,10 @@ private:
     };
 
     enum Flags_e {
+        CAM_FLAGS_MAP = (1 << 1),
+        CAM_FLAGS_0x4 = (1 << 2),
+        CAM_FLAGS_0x10 = (1 << 4),
+        CAM_FLAGS_EVENT = (1 << 5),
         CAM_FLAGS_UNDERWATER = (1 << 6),
         CAM_FLAGS_IN_EVENT = (1 << 7),
         CAM_FLAGS_0x100 = (1 << 8),
@@ -123,21 +127,37 @@ public:
     bool isUnderwater() const;
     f32 getUnderwaterDepth() const;
 
-    void fn_8019EA00(const mVec3_c &, const mVec3_c &, f32, f32);
-    void fn_8019E430();
-    void fn_8019E410();
+    bool setEventCamView(const mVec3_c &, const mVec3_c &, f32, f32);
     mAng getYAngle() const;
     mAng getXZAngle() const;
     void apply();
+    
+    bool fn_8019E3C0() const;
+    void enterMap();
+    void leaveMap();
+    bool fn_8019E4D0() const;
+    f32 fn_8019EB90();
 
 private:
+    void onFlag(u32 flag) {
+        mFlags |= flag;
+    }
+
+    void offFlag(u32 flag) {
+        mFlags &= ~flag;
+    }
+
+    bool checkFlag(u32 flag) const {
+        return mFlags & flag;
+    }
+
     void updateView();
     void applyTilt();
 
     s32 setActiveCamera(s32 newCamIdx);
 
-    void fn_8019DB80();
-    f32 fn_8019E1F0();
+    void checkCameraChange();
+    f32 getEventLetterboxAmount();
     bool fn_8019EA70(bool);
 
     void updateUnderwaterDepth(const mVec3_c &pos);

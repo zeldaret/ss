@@ -282,7 +282,7 @@ dCameraGame_c::dCameraGame_c()
       field_0x06C(0),
       field_0x070(0xFFFF),
       field_0x074(0),
-      field_0x078(0),
+      field_0x078(false),
       field_0x07C(0),
       field_0x08C(-1),
       field_0x090(-1),
@@ -324,7 +324,7 @@ bool dCameraGame_c::create() {
     mFlags = 0xA00;
     field_0x07C = 0;
     field_0x096 = 0;
-    field_0x078 = 0;
+    field_0x078 = false;
 
     mChk.fn_8007E130(this);
     mChk.fn_8007E1B0(field_0x098);
@@ -416,9 +416,9 @@ void dCameraGame_c::setView(const CamView &view) {
     mView = view;
     mVec3_c diff = view.mPosition - view.mTarget;
     field_0x02C.setCartesian(diff);
-    field_0x078 = 0;
+    field_0x078 = false;
 }
 
-void dCameraGame_c::vt_0x08() {
+void dCameraGame_c::onBecomeActive() {
     // TODO - ...
 }
