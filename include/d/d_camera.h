@@ -6,6 +6,7 @@
 #include "egg/gfx/eggCamera.h"
 #include "m/m_angle.h"
 #include "m/m_frustum.h"
+#include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "toBeSorted/d_camera_base.h"
 #include "toBeSorted/d_camera_event.h"
@@ -20,7 +21,7 @@ private:
 
         void setCamera(dCamera_c *cam);
         void fn_8019E890();
-        mAng fn_8019E930();
+        mAng fn_8019E930() const;
         void fn_8019E940();
 
     private:
@@ -30,6 +31,29 @@ private:
         /* 0x02 */ mAng mFSStickAngle;
         /* 0x04 */ mAng field_0x04;
         /* 0x08 */ dCamera_c *mpCamera;
+    };
+
+    class screen_shaker {
+    public:
+        screen_shaker() {}
+
+        void init(dCamera_c *cam) {
+            mpCamera = cam;
+            mScreenShakeIntensity = 0.0f;
+            mShakeOffset = mVec3_c::Zero;
+        }
+
+        void setScreenShakeIntensity(f32 val) {
+            mScreenShakeIntensity = val;
+        }
+
+        bool execute();
+        mVec3_c getShakeOffset() const;
+
+    private:
+        /* 0x00 */ dCamera_c *mpCamera;
+        /* 0x04 */ f32 mScreenShakeIntensity;
+        /* 0x08 */ mVec3_c mShakeOffset;
     };
 
     enum CameraIdx_e {
@@ -42,10 +66,10 @@ private:
     };
 
     enum Flags_e {
-        CAM_FLAGS_0x40 = (1 << 6),
-        CAM_FLAGS_0x80 = (1 << 7),
+        CAM_FLAGS_UNDERWATER = (1 << 6),
+        CAM_FLAGS_IN_EVENT = (1 << 7),
         CAM_FLAGS_0x100 = (1 << 8),
-        CAM_FLAGS_0x200 = (1 << 9),
+        CAM_FLAGS_NO_LETTERBOX_IN_EVENT = (1 << 9),
     };
 
 public:
@@ -55,6 +79,7 @@ public:
     virtual int execute() override;
     virtual int draw() override;
 
+    void setWorldOffset(f32 x, f32 z);
     void setFrustum(f32 fov, f32 near, f32 far);
 
     dCameraGame_c *getGameCam1() {
@@ -73,19 +98,22 @@ public:
         return static_cast<dCameraMap_c *>(mpCameras[CAM_MAP]);
     }
 
-    const mVec3_c &getPositionMaybe() const {
-        return mView.field_0x00;
+    const mVec3_c &getPosition() const {
+        return mView.mPosition;
     }
-    const mVec3_c &getField_0x78() const {
-        return mView.field_0x0C;
+
+    const mVec3_c &getTarget() const {
+        return mView.mTarget;
     }
     f32 getWaterHeight() const {
         return mWaterHeight;
     }
+
+    // TODO what makes this different?
     mAng getYRot() const;
 
     void setScreenShakeIntensity(f32 val) {
-        mScreenShakeIntensity = val;
+        mScreenShaker.setScreenShakeIntensity(val);
     }
 
     UNKWORD getField_0xDA8() const {
@@ -98,13 +126,19 @@ public:
     void fn_8019EA00(const mVec3_c &, const mVec3_c &, f32, f32);
     void fn_8019E430();
     void fn_8019E410();
-    mAng fn_8019E3B0() const;
+    mAng getYAngle() const;
+    mAng getXZAngle() const;
+    void apply();
 
 private:
+    void updateView();
+    void applyTilt();
+
+    s32 setActiveCamera(s32 newCamIdx);
+
     void fn_8019DB80();
-    void fn_8019DCE0();
-    void fn_8019DE70();
     f32 fn_8019E1F0();
+    bool fn_8019EA70(bool);
 
     void updateUnderwaterDepth(const mVec3_c &pos);
     bool isUnderwater_() const;
@@ -112,11 +146,13 @@ private:
     /* 0x068 */ s32 mMyCameraIndex;
     /* 0x06C */ CamView mView;
     /* 0x08C */ mVec3_c field_0x08C;
-    /* 0x098 */ mAng field_0x098;
-    /* 0x09A */ mAng field_0x09A;
+    /* 0x098 */ mAng mYAngle;
+    /* 0x09A */ mAng mXZAngle;
     /* 0x09C */ mFrustum_c mFrustum;
+    /* 0x18C */ mMtx_c mMtx;
+    /* 0x1BC */ mMtx_c mMtxInv;
 
-    /* 0x18C */ u8 _0x18C[0x1F8 - 0x18C];
+    /* 0x1EC */ u8 field_0x1EC[0x1F8 - 0x1EC];
 
     /* 0x1F8 */ UNKWORD field_0x1F8;
     /* 0x1FC */ u8 field_0x1FC;
@@ -138,18 +174,16 @@ private:
     /* 0x2B4 */ dCameraGame_c mGameCam1;
     /* 0x728 */ dCameraGame_c mGameCam2;
     /* 0xB9C */ dCameraEvent_c mEventCam;
-    /* 0xCDC */ dCameraMap_c mMapCam;
+    /* 0xCD0 */ dCameraMap_c mMapCam;
 
     /* 0xD8C */ u8 _0xD8C[0xD94 - 0xD8C];
 
     /* 0xD94 */ f32 field_0xD94;
     /* 0xD98 */ dCameraBase_c *mpCameras[CAM_MAX];
     /* 0xDA8 */ s32 mActiveCameraIdx;
-    /* 0xDAC */ void *field_0xDAC;
-    /* 0xDB0 */ f32 mScreenShakeIntensity;
-    /* 0xDB4 */ mVec3_c field_0xDB4;
+    /* 0xDAC */ screen_shaker mScreenShaker;
     /* 0xDC0 */ substruct_1 field_0xDC0;
-    /* 0xDCC */ u8 field_0xDCC;
+    /* 0xDCC */ bool field_0xDCC;
     /* 0xDD0 */ CamView mView1;
 };
 

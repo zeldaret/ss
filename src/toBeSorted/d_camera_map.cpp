@@ -96,22 +96,22 @@ bool dCameraMap_c::execute() {
     field_0x40 = 1.0f;
 
     if (sHio.field_0x3C & 0x8) {
-        mView3 = mView2;
+        mTargetView = mSourceView;
     }
 
     dBgS_CamLinChk chk;
-    chk.Set(&mView2.field_0x00, &mView3.field_0x00, (dAcObjBase_c *)nullptr);
+    chk.Set(&mSourceView.mPosition, &mTargetView.mPosition, (dAcObjBase_c *)nullptr);
     if (dBgS::GetInstance()->LineCross(&chk)) {
-        mView3 = mView2;
+        mTargetView = mSourceView;
     }
 
     if (sHio.field_0x3C & 0x10) {
         if (sHio.field_0x3E == 1) {
-            dPolar polar(mView2.field_0x00 - mView2.field_0x0C);
+            dPolar polar(mSourceView.mPosition - mSourceView.mTarget);
             polar.V.Set(0.0f);
-            mView2.field_0x00 = mView2.field_0x0C + polar.toCartesian();
+            mSourceView.mPosition = mSourceView.mTarget + polar.toCartesian();
         }
-        mView3 = mView2;
+        mTargetView = mSourceView;
         field_0xB8 = 1;
     }
 
@@ -132,16 +132,16 @@ bool dCameraMap_c::execute() {
     f32 f5 = camEaseInOut(f, sHio.field_0x2C);
     f32 f6 = camEaseInOut(f, sHio.field_0x30);
     f32 f8 = f5 * 0.99f;
-    f32 f7 = camEaseInOut(f, sHio.field_0x34);
+    f32 tiltFovInterp = camEaseInOut(f, sHio.field_0x34);
 
-    mView.field_0x0C = mView2.field_0x0C + (mView3.field_0x0C - mView2.field_0x0C) * f5;
-    mView.field_0x00.x = mView2.field_0x00.x + (mView3.field_0x00.x - mView2.field_0x00.x) * f8;
-    mView.field_0x00.y = mView2.field_0x00.y + (mView3.field_0x00.y - mView2.field_0x00.y) * f6;
-    mView.field_0x00.z = mView2.field_0x00.z + (mView3.field_0x00.z - mView2.field_0x00.z) * f8;
+    mView.mTarget = mSourceView.mTarget + (mTargetView.mTarget - mSourceView.mTarget) * f5;
+    mView.mPosition.x = mSourceView.mPosition.x + (mTargetView.mPosition.x - mSourceView.mPosition.x) * f8;
+    mView.mPosition.y = mSourceView.mPosition.y + (mTargetView.mPosition.y - mSourceView.mPosition.y) * f6;
+    mView.mPosition.z = mSourceView.mPosition.z + (mTargetView.mPosition.z - mSourceView.mPosition.z) * f8;
 
-    mView.field_0x00 = fn_800929C0(mView.field_0x0C, mView.field_0x00, field_0x44);
-    mView.mFov = mView2.mFov + (mView3.mFov - mView2.mFov) * f7;
-    mView.field_0x1C = mView2.field_0x1C + (mView3.field_0x1C - mView2.field_0x1C) * f7;
+    mView.mPosition = fn_800929C0(mView.mTarget, mView.mPosition, field_0x44);
+    mView.mFov = mSourceView.mFov + (mTargetView.mFov - mSourceView.mFov) * tiltFovInterp;
+    mView.mTilt = mSourceView.mTilt + (mTargetView.mTilt - mSourceView.mTilt) * tiltFovInterp;
 
     return true;
 }

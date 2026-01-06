@@ -1,18 +1,25 @@
 #include "d/d_camera.h"
 
+#include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
+#include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/col/bg/d_bg_s_roof_chk.h"
 #include "d/d_gfx.h"
 #include "d/d_pad.h"
 #include "d/d_sc_game.h"
 #include "d/d_stage_mgr.h"
+#include "d/snd/d_snd_3d_manager.h"
 #include "egg/gfx/eggFrustum.h"
+#include "egg/math/eggMatrix.h"
 #include "f/f_base.h"
 #include "f/f_profile.h"
+#include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
+#include "nw4r/g3d/g3d_camera.h"
+#include "toBeSorted/d_camera_base.h"
 #include "toBeSorted/d_camera_math.h"
 #include "toBeSorted/event_manager.h"
 
@@ -63,15 +70,13 @@ void debugPrintf7(const char *fmt, ...);
 dCamera_c::dCamera_c()
     : mMyCameraIndex(0),
       mpScreen(dStageMgr_c::GetInstance()->getScreen(0)),
-      field_0x098(0),
-      field_0x09A(0),
+      mYAngle(0),
+      mXZAngle(0),
       field_0xD94(0.0f),
       field_0x1F8(0),
       field_0x1FC(0),
       mFlags(0) {
-    field_0xDAC = this;
-    mScreenShakeIntensity = 0.0f;
-    field_0xDB4.set(mVec3_c::Zero.x, mVec3_c::Zero.y, mVec3_c::Zero.z);
+    mScreenShaker.init(this);
     field_0xDC0.setCamera(this);
     field_0x08C = mVec3_c(0.0f, 1.0f, 0.0f);
 
@@ -102,11 +107,11 @@ int dCamera_c::create() {
     debugWarn2("u can NOT use debug camera!!"); // aww
     mActiveCameraIdx = 0;
 
-    mpCameras[0]->vt_0x28();
+    mpCameras[0]->activate();
 
     mLetterboxAmount = fn_8019E1F0();
     field_0x290 = 1.0f;
-    mFlags |= CAM_FLAGS_0x80;
+    mFlags |= CAM_FLAGS_IN_EVENT;
 
     // TODO maybe struct + inline
     mGlobalAlpha = 1.0f;
@@ -117,13 +122,13 @@ int dCamera_c::create() {
 
     mView1 = mpCameras[mActiveCameraIdx]->getView();
 
-    field_0xDCC = 0;
-    field_0x098 = 0;
-    field_0x09A = 0;
+    field_0xDCC = false;
+    mYAngle = 0;
+    mXZAngle = 0;
 
     dScGame_c::setCamera(mMyCameraIndex, this);
-    fn_8019DCE0();
-    fn_8019DE70();
+    updateView();
+    apply();
 
     const STIF *stif = dStageMgr_c::GetInstance()->getStif();
     if (stif != nullptr) {
@@ -135,7 +140,7 @@ int dCamera_c::create() {
     if ((dScGame_c::isCurrentStage("F000") && 26 <= dScGame_c::currentSpawnInfo.layer &&
          dScGame_c::currentSpawnInfo.layer <= 28) ||
         dScGame_c::isInCredits() || dScGame_c::isSeekerStoneStageAndLayer()) {
-        mFlags |= 0x200;
+        mFlags |= CAM_FLAGS_NO_LETTERBOX_IN_EVENT;
         dScGame_c::GetInstance()->setTargetingScreenLetterboxAmount(0.0f);
     }
 
@@ -163,6 +168,19 @@ int dCamera_c::doDelete() {
     return SUCCEEDED;
 }
 
+void dCamera_c::setWorldOffset(f32 x, f32 z) {
+    mView.mPosition.x += x;
+    mView.mPosition.z += z;
+    mView.mTarget.x += x;
+    mView.mTarget.z += z;
+    // TODO maybe inline
+    getGameCam1()->setView(mView);
+    getGameCam1()->onFlag(0x1);
+    getGameCam1()->onFlag(0x4000);
+    updateView();
+    apply();
+}
+
 int dCamera_c::execute() {
     dAcPy_c *link = dAcPy_c::GetLinkM();
 
@@ -179,16 +197,16 @@ int dCamera_c::execute() {
         static_cast<dCameraGame_c *>(mpCameras[0])->clearCamIds();
     }
 
-    fn_8019DCE0();
-    fn_8019DE70();
+    updateView();
+    apply();
     field_0xDC0.fn_8019E940();
 
-    field_0xDCC = 0;
+    field_0xDCC = false;
     if (mActiveCameraIdx == CAM_EVENT) {
-        mFlags |= CAM_FLAGS_0x80;
+        mFlags |= CAM_FLAGS_IN_EVENT;
     }
 
-    if ((mFlags & (CAM_FLAGS_0x100 | CAM_FLAGS_0x80)) != 0) {
+    if ((mFlags & (CAM_FLAGS_0x100 | CAM_FLAGS_IN_EVENT)) != 0) {
         field_0x290 += (1.0f / sHio.field_0x24);
         if (field_0x290 > 1.0f) {
             field_0x290 = 1.0f;
@@ -200,16 +218,16 @@ int dCamera_c::execute() {
         }
     }
 
-    f32 scale = (mFlags & CAM_FLAGS_0x80) != 0 ? fn_8019E1F0() : sHio.field_0x20;
+    f32 scale = (mFlags & CAM_FLAGS_IN_EVENT) != 0 ? fn_8019E1F0() : sHio.field_0x20;
     f32 target = camEaseInOut(field_0x290, 1.0f);
     mLetterboxAmount += (target * scale - mLetterboxAmount) * 0.5f;
 
-    if (mActiveCameraIdx == CAM_EVENT && (mFlags & CAM_FLAGS_0x200) != 0) {
+    if (mActiveCameraIdx == CAM_EVENT && (mFlags & CAM_FLAGS_NO_LETTERBOX_IN_EVENT) != 0) {
         mLetterboxAmount = 0.0f;
     }
 
     dScGame_c::GetInstance()->setTargetingScreenLetterboxAmount(mLetterboxAmount);
-    mFlags &= ~(CAM_FLAGS_0x100 | CAM_FLAGS_0x80);
+    mFlags &= ~(CAM_FLAGS_0x100 | CAM_FLAGS_IN_EVENT);
 
     if (!link->checkActionFlagsCont(0x400000)) {
         field_0x299 = 0;
@@ -238,6 +256,19 @@ int dCamera_c::execute() {
     return SUCCEEDED;
 }
 
+void dCamera_c::updateView() {
+    if (field_0xDCC) {
+        mView = mView1;
+        field_0xDCC = 0;
+    } else {
+        mView = mpCameras[mActiveCameraIdx]->getView();
+    }
+
+    mVec3_c dir = mView.mTarget - mView.mPosition;
+    mYAngle = cM::atan2s(dir.y, dir.absXZ());
+    mXZAngle = cM::atan2s(dir.x, dir.z);
+}
+
 int dCamera_c::draw() {
     if (mpCameras[mActiveCameraIdx] != nullptr) {
         mpCameras[mActiveCameraIdx]->doDraw();
@@ -246,7 +277,60 @@ int dCamera_c::draw() {
 }
 
 bool dCamera_c::isUnderwater() const {
-    return mFlags & CAM_FLAGS_0x40;
+    return mFlags & CAM_FLAGS_UNDERWATER;
+}
+
+void dCamera_c::apply() {
+    updateUnderwaterDepth(mView.mPosition);
+    if (isUnderwater_()) {
+        mFlags |= CAM_FLAGS_UNDERWATER;
+    } else {
+        mFlags &= ~CAM_FLAGS_UNDERWATER;
+    }
+
+    if (mScreenShaker.execute()) {
+        mView.mPosition += mScreenShaker.getShakeOffset();
+        mView.mTarget += mScreenShaker.getShakeOffset();
+    }
+
+    mLookAtCamera.mPos = mView.mPosition;
+    mLookAtCamera.mAt = mView.mTarget;
+    if (mLookAtCamera.mAt.x == mLookAtCamera.mPos.x && mLookAtCamera.mAt.z == mLookAtCamera.mPos.z) {
+        mLookAtCamera.mPos.z += 1.0f;
+    }
+    mLookAtCamera.mUp = mVec3_c::Ey;
+    mLookAtCamera.doUpdateMatrix();
+    mMtx.copyFrom(mLookAtCamera.getViewMatrix());
+    // TODO: Maybe mutating mtx wasn't intended here but it's probably unproblematic
+    mMtx.inverse();
+    mMtxInv = mMtx;
+    mMtxInv.m[0][3] = 0.0f;
+    mMtxInv.m[1][3] = 0.0f;
+    mMtxInv.m[2][3] = 0.0f;
+
+    dSnd3DManager_c::GetInstance()->updateFromCamera(mLookAtCamera);
+    applyTilt();
+    setFrustum(mView.mFov, sHio.field_0x04, sHio.field_0x08);
+    nw4r::g3d::Camera cam = dStageMgr_c::GetInstance()->getCamera(mMyCameraIndex);
+    mpScreen->CopyToG3D(cam);
+    mLookAtCamera.setG3DCamera(cam);
+}
+
+s32 dCamera_c::setActiveCamera(s32 newCamIdx) {
+    if (mpCameras[newCamIdx] == nullptr) {
+        return mActiveCameraIdx;
+    } else if (mActiveCameraIdx == newCamIdx) {
+        return newCamIdx;
+    } else {
+        for (int i = 0; i < CAM_MAX; i++) {
+            mpCameras[i]->deactivate();
+        }
+        mpCameras[newCamIdx]->activate();
+        debugPrintf7("unit %d -> %d", mActiveCameraIdx, newCamIdx);
+        mActiveCameraIdx = newCamIdx;
+        return newCamIdx;
+    }
+
 }
 
 void dCamera_c::setFrustum(f32 fov, f32 near, f32 far) {
@@ -276,6 +360,25 @@ void dCamera_c::setFrustum(f32 fov, f32 near, f32 far) {
     // takes mMtx_c while it's clear that EGG cameras return EGG matrices.
     mMtx_c mtx = *(mMtx_c *)&mLookAtCamera.getViewMatrix();
     mFrustum.set(fov, mpScreen->GetAspect(), near, far, mtx);
+}
+
+mAng dCamera_c::getYAngle() const {
+    return mYAngle;
+}
+
+mAng dCamera_c::getYRot() const {
+    return field_0xDC0.fn_8019E930();
+}
+
+mAng dCamera_c::getXZAngle() const {
+    return mXZAngle;
+}
+
+void dCamera_c::applyTilt() {
+    EGG::Matrix34f &mtx = mLookAtCamera.getViewMatrix();
+    mMtx_c rotMtx;
+    rotMtx.ZrotS(mAng::fromDeg(-mView.mTilt));
+    MTXConcat(rotMtx, mtx.m, mtx.m);
 }
 
 void dCamera_c::updateUnderwaterDepth(const mVec3_c &pos) {
@@ -318,12 +421,54 @@ f32 dCamera_c::getUnderwaterDepth() const {
     return mUnderwaterDepth;
 }
 
+bool dCamera_c::screen_shaker::execute() {
+    mShakeOffset = mVec3_c::Zero;
+    bool ret = false;
+    if (mScreenShakeIntensity > 0.001f) {
+        static s32 upOrDown = 0;
+        upOrDown = upOrDown ^ 1;
+
+        f32 f;
+        if (upOrDown) {
+            f = 400.0f;
+        } else {
+            f = -400.0f;
+        }
+
+        mVec3_c shakeOffset(cM::rndFX(100.0f), cM::rndF(f), 0.0f);
+        shakeOffset.normalize();
+        // Note: the difference in coordinates here is due to the camera view using a different
+        // coordinate convention than game code.
+        shakeOffset.rotX(mpCamera->getYAngle());
+        shakeOffset.rotY(mpCamera->getXZAngle());
+
+        mVec3_c chckVector = shakeOffset * (mScreenShakeIntensity + 5.0f);
+        shakeOffset *= mScreenShakeIntensity;
+        mVec3_c pos = mpCamera->getPosition();
+        mVec3_c dest = pos + chckVector;
+
+        dBgS_CamLinChk chk;
+        chk.Set(&pos, &dest, nullptr);
+
+        if (!dBgS::GetInstance()->LineCross(&chk)) {
+            mShakeOffset = shakeOffset;
+            ret = true;
+        }
+    }
+    mScreenShakeIntensity = 0.0f;
+    return ret;
+}
+
+mVec3_c dCamera_c::screen_shaker::getShakeOffset() const {
+    return mShakeOffset;
+}
+
 void dCamera_c::substruct_1::setCamera(dCamera_c *cam) {
     mpCamera = cam;
 }
 
 void dCamera_c::substruct_1::fn_8019E890() {
-    fn_8019E8D0(mpCamera->fn_8019E3B0());
+    fn_8019E8D0(mpCamera->getXZAngle());
 }
 
 void dCamera_c::substruct_1::fn_8019E8D0(const mAng &ang) {
@@ -334,7 +479,7 @@ void dCamera_c::substruct_1::fn_8019E8D0(const mAng &ang) {
     }
 }
 
-mAng dCamera_c::substruct_1::fn_8019E930() {
+mAng dCamera_c::substruct_1::fn_8019E930() const {
     return field_0x04;
 }
 
@@ -348,7 +493,25 @@ void dCamera_c::substruct_1::fn_8019E940() {
     }
 
     if (!mActive) {
-        field_0x04 = mpCamera->fn_8019E3B0();
+        field_0x04 = mpCamera->getXZAngle();
         mFSStickAngle = dPad::getFSStickAngle();
     }
+}
+
+bool dCamera_c::fn_8019EA70(bool b) {
+    CamView view = getEventCam()->getView();
+    mVec3_c dest;
+
+    dest = camGetPointOnLine(view.mTarget, view.mPosition, dAcPy_c::GetLinkM()->mPositionCopy3);
+    view.mTarget = dest;
+    // TODO maybe inline
+    getGameCam1()->setView(view);
+    getGameCam1()->onFlag(0x1);
+    if (b) {
+        getGameCam1()->onFlag(0x4000);
+    } else {
+        getGameCam1()->offFlag(0x200);
+    }
+
+    return true;
 }

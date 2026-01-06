@@ -27,13 +27,13 @@ bool dCameraBase_c::doRemove() {
 }
 
 bool dCameraBase_c::doExecute() {
-    if (field_0x02 && !field_0x01) {
+    if (mIsActie && !field_0x01) {
         vt_0x08();
-    } else if (!field_0x02 && field_0x01) {
+    } else if (!mIsActie && field_0x01) {
         vt_0x0C();
     }
-    field_0x01 = field_0x02;
-    if (!field_0x02) {
+    field_0x01 = mIsActie;
+    if (!mIsActie) {
         return false;
     } else {
         return execute();

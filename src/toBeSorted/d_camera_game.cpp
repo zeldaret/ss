@@ -276,7 +276,7 @@ void UnkCamChecks::fn_8007E1B0(dAcObjBase_c *ac) {
 }
 
 dCameraGame_c::dCameraGame_c()
-    : field_0x058(0),
+    : mFlags(0),
       field_0x05C(0),
       mCurrentTrendIdx(-1),
       field_0x06C(0),
@@ -321,7 +321,7 @@ bool dCameraGame_c::create() {
 
     field_0x0AC = 0.0f;
     field_0x0B0 = 0.0f;
-    field_0x058 = 0xA00;
+    mFlags = 0xA00;
     field_0x07C = 0;
     field_0x096 = 0;
     field_0x078 = 0;
@@ -332,17 +332,17 @@ bool dCameraGame_c::create() {
     field_0x22C = 32;
     field_0x230 = 45;
 
-    mView.field_0x0C = field_0x098->mPosition;
-    mView.field_0x0C.y += 150.0f;
+    mView.mTarget = field_0x098->mPosition;
+    mView.mTarget.y += 150.0f;
 
     field_0x02C.Set(320.0f, 15.0f, mAng::s2d_c(field_0x098->mRotation.y) + 180.0f);
-    const mVec3_c &v = mView.field_0x0C; // needed to avoid double load... TODO maybe inline?
-    mView.field_0x00 = v + field_0x02C.toCartesian();
+    const mVec3_c &v = mView.mTarget; // needed to avoid double load... TODO maybe inline?
+    mView.mPosition = v + field_0x02C.toCartesian();
     mView.mFov = 60.0f;
     mView2 = mView;
 
     field_0x264 = v.y;
-    field_0x268 = mView.field_0x00.y;
+    field_0x268 = mView.mPosition.y;
 
     GROOSENATOR_REF = nullptr;
     lbl_80575364 = nullptr;
@@ -414,7 +414,7 @@ bool dCameraGame_c::isCurrentTrend(const char *name) const {
 void dCameraGame_c::setView(const CamView &view) {
     mView2 = view;
     mView = view;
-    mVec3_c diff = view.field_0x00 - view.field_0x0C;
+    mVec3_c diff = view.mPosition - view.mTarget;
     field_0x02C.setCartesian(diff);
     field_0x078 = 0;
 }

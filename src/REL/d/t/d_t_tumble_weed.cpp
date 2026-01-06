@@ -119,7 +119,7 @@ void dTgTumbleWeed_c::doSpawnTumbleweed() {
         pos.rotY(angle);
 
         pos *= 600.f;
-        pos += pCam->getPositionMaybe();
+        pos += pCam->getPosition();
 
         if (dBgS_ObjGndChk::CheckPos(pos + mVec3_c::Ey * 100.f)) {
             pos.y = dBgS_ObjGndChk::GetGroundHeight() + 10.f;
