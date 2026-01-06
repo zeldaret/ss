@@ -7,8 +7,8 @@
 class dCameraEvent_c : public dCameraBase_c {
 public:
     dCameraEvent_c();
-    /* vt 0x08 */ virtual void vt_0x08() override;
-    /* vt 0x0C */ virtual void vt_0x0C() override;
+    /* vt 0x08 */ virtual void onBecomeActive() override;
+    /* vt 0x0C */ virtual void onBecomeInactive() override;
     /* vt 0x10 */ virtual bool create() override;
     /* vt 0x14 */ virtual bool remove() override;
     /* vt 0x18 */ virtual bool execute() override;

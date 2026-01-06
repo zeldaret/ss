@@ -8,8 +8,8 @@ class dAcObjBase_c;
 class dCameraMap_c : public dCameraBase_c {
 public:
     dCameraMap_c() {}
-    /* vt 0x08 */ virtual void vt_0x08() override;
-    /* vt 0x0C */ virtual void vt_0x0C() override;
+    /* vt 0x08 */ virtual void onBecomeActive() override;
+    /* vt 0x0C */ virtual void onBecomeInactive() override;
     /* vt 0x10 */ virtual bool create() override;
     /* vt 0x14 */ virtual bool remove() override;
     /* vt 0x18 */ virtual bool execute() override;
@@ -24,6 +24,8 @@ public:
     void fn_80093340();
     void fn_80093360();
     void fn_80093380();
+    bool fn_800932E0() const;
+    void fn_800932F0();
 
 private:
     /* 0x2C */ u8 _0x2C[0x40 - 0x2C];

@@ -109,9 +109,9 @@ int dCamera_c::create() {
 
     mpCameras[0]->activate();
 
-    mLetterboxAmount = fn_8019E1F0();
+    mLetterboxAmount = getEventLetterboxAmount();
     field_0x290 = 1.0f;
-    mFlags |= CAM_FLAGS_IN_EVENT;
+    onFlag(CAM_FLAGS_IN_EVENT);
 
     // TODO maybe struct + inline
     mGlobalAlpha = 1.0f;
@@ -140,7 +140,7 @@ int dCamera_c::create() {
     if ((dScGame_c::isCurrentStage("F000") && 26 <= dScGame_c::currentSpawnInfo.layer &&
          dScGame_c::currentSpawnInfo.layer <= 28) ||
         dScGame_c::isInCredits() || dScGame_c::isSeekerStoneStageAndLayer()) {
-        mFlags |= CAM_FLAGS_NO_LETTERBOX_IN_EVENT;
+        onFlag(CAM_FLAGS_NO_LETTERBOX_IN_EVENT);
         dScGame_c::GetInstance()->setTargetingScreenLetterboxAmount(0.0f);
     }
 
@@ -184,7 +184,7 @@ void dCamera_c::setWorldOffset(f32 x, f32 z) {
 int dCamera_c::execute() {
     dAcPy_c *link = dAcPy_c::GetLinkM();
 
-    fn_8019DB80();
+    checkCameraChange();
 
     for (int i = 0; i < CAM_MAX; i++) {
         if (mpCameras[i] != nullptr) {
@@ -203,10 +203,10 @@ int dCamera_c::execute() {
 
     field_0xDCC = false;
     if (mActiveCameraIdx == CAM_EVENT) {
-        mFlags |= CAM_FLAGS_IN_EVENT;
+        onFlag(CAM_FLAGS_IN_EVENT);
     }
 
-    if ((mFlags & (CAM_FLAGS_0x100 | CAM_FLAGS_IN_EVENT)) != 0) {
+    if (checkFlag(CAM_FLAGS_0x100 | CAM_FLAGS_IN_EVENT)) {
         field_0x290 += (1.0f / sHio.field_0x24);
         if (field_0x290 > 1.0f) {
             field_0x290 = 1.0f;
@@ -218,16 +218,16 @@ int dCamera_c::execute() {
         }
     }
 
-    f32 scale = (mFlags & CAM_FLAGS_IN_EVENT) != 0 ? fn_8019E1F0() : sHio.field_0x20;
+    f32 scale = checkFlag(CAM_FLAGS_IN_EVENT) != 0 ? getEventLetterboxAmount() : sHio.field_0x20;
     f32 target = camEaseInOut(field_0x290, 1.0f);
     mLetterboxAmount += (target * scale - mLetterboxAmount) * 0.5f;
 
-    if (mActiveCameraIdx == CAM_EVENT && (mFlags & CAM_FLAGS_NO_LETTERBOX_IN_EVENT) != 0) {
+    if (mActiveCameraIdx == CAM_EVENT && checkFlag(CAM_FLAGS_NO_LETTERBOX_IN_EVENT) != 0) {
         mLetterboxAmount = 0.0f;
     }
 
     dScGame_c::GetInstance()->setTargetingScreenLetterboxAmount(mLetterboxAmount);
-    mFlags &= ~(CAM_FLAGS_0x100 | CAM_FLAGS_IN_EVENT);
+    offFlag(CAM_FLAGS_0x100 | CAM_FLAGS_IN_EVENT);
 
     if (!link->checkActionFlagsCont(0x400000)) {
         field_0x299 = 0;
@@ -256,6 +256,42 @@ int dCamera_c::execute() {
     return SUCCEEDED;
 }
 
+void dCamera_c::checkCameraChange() {
+    offFlag(CAM_FLAGS_0x10);
+    if (checkFlag(CAM_FLAGS_0x4)) {
+        getGameCam1()->onFlag(0x400);
+        offFlag(CAM_FLAGS_0x4);
+    }
+
+    if (checkFlag(CAM_FLAGS_MAP) && mActiveCameraIdx == CAM_MAP && !mMapCam.fn_800932E0()) {
+        offFlag(CAM_FLAGS_MAP);
+        onFlag(CAM_FLAGS_0x4);
+        getGameCam1()->onFlag(0x10000);
+        debugPrintf7("off map");
+    }
+
+    if (EventManager::isInEvent()) {
+        onFlag(CAM_FLAGS_EVENT);
+        offFlag(CAM_FLAGS_MAP);
+    } else {
+        offFlag(CAM_FLAGS_EVENT);
+    }
+
+    if (checkFlag(CAM_FLAGS_EVENT)) {
+        if (mActiveCameraIdx != CAM_EVENT) {
+            setActiveCamera(CAM_EVENT);
+        }
+    } else if (checkFlag(CAM_FLAGS_MAP)) {
+        if (mActiveCameraIdx != CAM_MAP) {
+            setActiveCamera(CAM_MAP);
+        }
+    } else {
+        if (mActiveCameraIdx != CAM_GAME_0) {
+            setActiveCamera(CAM_GAME_0);
+        }
+    }
+}
+
 void dCamera_c::updateView() {
     if (field_0xDCC) {
         mView = mView1;
@@ -277,15 +313,15 @@ int dCamera_c::draw() {
 }
 
 bool dCamera_c::isUnderwater() const {
-    return mFlags & CAM_FLAGS_UNDERWATER;
+    return checkFlag(CAM_FLAGS_UNDERWATER);
 }
 
 void dCamera_c::apply() {
     updateUnderwaterDepth(mView.mPosition);
     if (isUnderwater_()) {
-        mFlags |= CAM_FLAGS_UNDERWATER;
+        onFlag(CAM_FLAGS_UNDERWATER);
     } else {
-        mFlags &= ~CAM_FLAGS_UNDERWATER;
+        offFlag(CAM_FLAGS_UNDERWATER);
     }
 
     if (mScreenShaker.execute()) {
@@ -330,7 +366,10 @@ s32 dCamera_c::setActiveCamera(s32 newCamIdx) {
         mActiveCameraIdx = newCamIdx;
         return newCamIdx;
     }
+}
 
+f32 dCamera_c::getEventLetterboxAmount() {
+    return sHio.field_0x1C;
 }
 
 void dCamera_c::setFrustum(f32 fov, f32 near, f32 far) {
@@ -374,11 +413,37 @@ mAng dCamera_c::getXZAngle() const {
     return mXZAngle;
 }
 
+bool dCamera_c::fn_8019E3C0() const {
+    if (mActiveCameraIdx == CAM_GAME_0) {
+        return mGameCam1.getField_0x078() == true;
+    } else if (mActiveCameraIdx == CAM_GAME_1) {
+        return mGameCam2.getField_0x078() == true;
+    }
+    return false;
+}
+
+void dCamera_c::enterMap() {
+    if (!checkFlag(CAM_FLAGS_MAP)) {
+        onFlag(CAM_FLAGS_MAP);
+    }
+}
+
+void dCamera_c::leaveMap() {
+    if (checkFlag(CAM_FLAGS_MAP)) {
+        mMapCam.fn_800932F0();
+    }
+}
+
 void dCamera_c::applyTilt() {
     EGG::Matrix34f &mtx = mLookAtCamera.getViewMatrix();
     mMtx_c rotMtx;
     rotMtx.ZrotS(mAng::fromDeg(-mView.mTilt));
     MTXConcat(rotMtx, mtx.m, mtx.m);
+}
+
+bool dCamera_c::fn_8019E4D0() const {
+    dAcPy_c *link = dAcPy_c::GetLinkM();
+    return !EventManager::isInEvent() && !(link != nullptr && link->checkActionFlagsCont(0x5d7));
 }
 
 void dCamera_c::updateUnderwaterDepth(const mVec3_c &pos) {
@@ -498,6 +563,12 @@ void dCamera_c::substruct_1::fn_8019E940() {
     }
 }
 
+bool dCamera_c::setEventCamView(const mVec3_c &target, const mVec3_c &pos, f32 fov, f32 tilt) {
+    CamView view(pos, target, fov, tilt);
+    getEventCam()->setView(view);
+    return true;
+}
+
 bool dCamera_c::fn_8019EA70(bool b) {
     CamView view = getEventCam()->getView();
     mVec3_c dest;
@@ -514,4 +585,8 @@ bool dCamera_c::fn_8019EA70(bool b) {
     }
 
     return true;
+}
+
+f32 dCamera_c::fn_8019EB90() {
+    return getGameCam1()->getField_0x0AC();
 }

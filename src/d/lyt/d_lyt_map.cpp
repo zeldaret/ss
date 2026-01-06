@@ -3309,7 +3309,7 @@ void dLytMapMain_c::setupEvent(s32 event, s32 arg1, s32 arg2) {
         dScGame_c::getCamera(0)->getMapCam()->fn_80093360();
         dScGame_c::getCamera(0)->getMapCam()->fn_80093340();
     }
-    dScGame_c::getCamera(0)->fn_8019E410();
+    dScGame_c::getCamera(0)->enterMap();
     dLytMapMain_vt0x10();
     s32 floor = dStage_c::GetInstance()->getMapRelated()->getField_0x1EC();
     mCurrentFloor = floor;
@@ -3377,7 +3377,7 @@ void dLytMapMain_c::close() {
     }
 
     mEventDone = false;
-    dScGame_c::getCamera(0)->fn_8019E430();
+    dScGame_c::getCamera(0)->leaveMap();
 
     dSndPlayerMgr_c::GetInstance()->leaveMap();
     mStateMgr.changeState(StateID_Out);
@@ -5048,7 +5048,7 @@ void dLytMapMain_c::forceOut() {
     dBase_c::s_NextExecuteControlFlags &= ~dBase_c::BASE_PROP_0x10;
     dBase_c::s_DrawControlFlags &= ~dBase_c::BASE_PROP_0x10;
     dScGame_c::getCamera(0)->getMapCam()->fn_80093360();
-    dScGame_c::getCamera(0)->fn_8019E430();
+    dScGame_c::getCamera(0)->leaveMap();
     mStateMgr.changeState(StateID_Invisible);
 }
 

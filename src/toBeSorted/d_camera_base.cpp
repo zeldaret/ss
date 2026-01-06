@@ -22,18 +22,18 @@ bool dCameraBase_c::doCreate(s32 index) {
 }
 
 bool dCameraBase_c::doRemove() {
-    field_0x01 = false;
+    mPrevIsActive = false;
     return remove();
 }
 
 bool dCameraBase_c::doExecute() {
-    if (mIsActie && !field_0x01) {
-        vt_0x08();
-    } else if (!mIsActie && field_0x01) {
-        vt_0x0C();
+    if (mIsActive && !mPrevIsActive) {
+        onBecomeActive();
+    } else if (!mIsActive && mPrevIsActive) {
+        onBecomeInactive();
     }
-    field_0x01 = mIsActie;
-    if (!mIsActie) {
+    mPrevIsActive = mIsActive;
+    if (!mIsActive) {
         return false;
     } else {
         return execute();
@@ -41,7 +41,7 @@ bool dCameraBase_c::doExecute() {
 }
 
 bool dCameraBase_c::doDraw() {
-    if (field_0x01) {
+    if (mPrevIsActive) {
         return draw();
     }
     return false;

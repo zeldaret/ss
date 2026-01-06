@@ -3303,7 +3303,7 @@ void dAcBlastboss_c::executeLightningStrike() {
             f32 fac = val * 3.0f;
             tmp1.y += mAng(val * 0x1C20).cos() * fac;
         }
-        cam->fn_8019EA00(tmp1, field_0x2D04, field_0x2CFC, 0.0f);
+        cam->setEventCamView(tmp1, field_0x2D04, field_0x2CFC, 0.0f);
         if (b2) {
             mtx1.transS(0.5f, 0.5f, 0.0f);
             // REGSWAP
