@@ -436,7 +436,7 @@ bool dLytMeterGanbariGauge_c::execute() {
         }
     }
 
-    mVec3_c diff = dAcPy_c::GetLink()->mPositionCopy3 - dScGame_c::getCamera(0)->getPositionMaybe();
+    mVec3_c diff = dAcPy_c::GetLink()->mPositionCopy3 - dScGame_c::getCamera(0)->getPosition();
     f32 len = diff.mag();
     mVec3_c v;
     d3d::worldToScreen(v, dAcPy_c::GetLink()->mPositionCopy3);

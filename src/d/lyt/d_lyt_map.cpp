@@ -3183,7 +3183,7 @@ void dLytMapMain_c::setupEvent(s32 event, s32 arg1, s32 arg2) {
 
     mMarkers.setLinkRot(link->getRotation());
     // TODO - mAng nonsense?
-    field_0x8D68 = dScGame_c::getCamera(0)->fn_8019E3B0();
+    field_0x8D68 = dScGame_c::getCamera(0)->getXZAngle();
     mpAllPane->SetVisible(false);
     getGlobal()->setField_0x55(field_0x8CAE);
     mDoCameraTransition = false;

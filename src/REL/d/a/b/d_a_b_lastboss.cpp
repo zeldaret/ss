@@ -3315,11 +3315,11 @@ void dAcBlastboss_c::executeLightningStrike() {
     }
 
     if (field_0x114C != 0) {
-        mtx.YrotS(cam->fn_8019E3B0());
+        mtx.YrotS(cam->getXZAngle());
         v.set(0.0f, 10.0f, 10000.0f);
         MTXMultVec(mtx, v, v);
-        v.x += cam->getPositionMaybe().x;
-        v.z += cam->getPositionMaybe().z;
+        v.x += cam->getPosition().x;
+        v.z += cam->getPosition().z;
         mtx.transS(v);
         v.set(0.7f, 0.7f, 0.7f);
         mThunderMdl.setScale(v);

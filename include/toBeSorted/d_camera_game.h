@@ -158,6 +158,14 @@ public:
 
     void fn_80080960(s32, s32, s8, s32);
 
+    void onFlag(u32 flag) {
+        mFlags |= flag;
+    }
+
+    void offFlag(u32 flag) {
+        mFlags &= ~flag;
+    }
+
 private:
     static void cacheIdxes();
 
@@ -169,7 +177,7 @@ private:
 
     /* 0x02C */ dPolar field_0x02C;
     /* 0x038 */ CamView mView2;
-    /* 0x058 */ UNKWORD field_0x058;
+    /* 0x058 */ u32 mFlags;
     /* 0x05C */ UNKWORD field_0x05C;
     /* 0x060 */ CamId field_0x060;
     /* 0x068 */ s32 mCurrentTrendIdx;

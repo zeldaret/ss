@@ -30,8 +30,8 @@ private:
     /* 0x40 */ f32 field_0x40;
     /* 0x44 */ dAcObjBase_c *field_0x44;
     /* 0x48 */ CamView mView1;
-    /* 0x68 */ CamView mView2;
-    /* 0x88 */ CamView mView3;
+    /* 0x68 */ CamView mSourceView;
+    /* 0x88 */ CamView mTargetView;
     /* 0xA8 */ u8 _0xA8[0xAC - 0xA8];
     /* 0xAC */ u8 field_0xAC;
     /* 0xAD */ u8 _0xAD[0xB4 - 0xAD];

@@ -4,16 +4,15 @@
 #include "common.h"
 #include "m/m_vec.h"
 
-// A basic description of a camera perspective, with
-// position, target point, a field of view, and something else.
+// A basic description of a camera perspective, simplified.
 struct CamView {
-    CamView() : field_0x00(0.0f, 0.0f, 0.0f), field_0x0C(0.0f, 0.0f, 1.0f), mFov(50.0f), field_0x1C(0.0f) {}
+    CamView() : mPosition(0.0f, 0.0f, 0.0f), mTarget(0.0f, 0.0f, 1.0f), mFov(50.0f), mTilt(0.0f) {}
     ~CamView() {}
 
-    /* 0x00 */ mVec3_c field_0x00;
-    /* 0x0C */ mVec3_c field_0x0C;
+    /* 0x00 */ mVec3_c mPosition;
+    /* 0x0C */ mVec3_c mTarget;
     /* 0x18 */ f32 mFov;
-    /* 0x1C */ f32 field_0x1C;
+    /* 0x1C */ f32 mTilt;
 };
 
 // Abstract camera base class. The game camera class will hold various subclasses
@@ -22,12 +21,12 @@ class dCameraBase_c {
 protected:
     /* 0x00 */ bool mCreated;
     /* 0x01 */ u8 field_0x01;
-    /* 0x02 */ u8 field_0x02;
+    /* 0x02 */ bool mIsActive;
     /* 0x04 */ s32 mIndex;
     /* 0x08 */ CamView mView;
 
 public:
-    dCameraBase_c() : mCreated(false), field_0x01(0), field_0x02(0), mIndex(-1) {}
+    dCameraBase_c() : mCreated(false), field_0x01(0), mIsActive(false), mIndex(-1) {}
 
     bool doCreate(s32 index);
     bool doRemove();
@@ -54,11 +53,11 @@ public:
         // TODO - const?
         return mView;
     }
-    /* vt 0x28 */ virtual void vt_0x28() {
-        field_0x02 = 1;
+    /* vt 0x28 */ virtual void activate() {
+        mIsActive = true;
     }
-    /* vt 0x2C */ virtual void vt_0x2C() {
-        field_0x02 = 0;
+    /* vt 0x2C */ virtual void deactivate() {
+        mIsActive = false;
     }
     /* vt 0x30 */ virtual void setView(const CamView &view) {
         // TODO - is this actually a base impl?
