@@ -418,6 +418,8 @@ toBeSorted/d_camera_event.cpp:
 	.text       start:0x80083370 end:0x800928F0 align:16
 	.ctors      start:0x804DB6B0 end:0x804DB6B4
 	.data       start:0x8050EA18 end:0x8050F180
+	.sdata2     start:0x80579418 end:0x80579538
+	.bss        start:0x805A1660 end:0x805A2F18
 
 toBeSorted/d_camera_map.cpp:
 	.text       start:0x800928F0 end:0x8009345C align:16

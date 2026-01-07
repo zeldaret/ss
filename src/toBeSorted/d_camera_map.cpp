@@ -6,6 +6,8 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_sc_game.h"
+#include "d/lyt/d_lyt_map.h"
 #include "m/m_vec.h"
 #include "toBeSorted/d_camera_math.h"
 #include "toBeSorted/deg_angle_util.h"
@@ -86,12 +88,67 @@ mVec3_c fn_800929C0(const mVec3_c &p2, const mVec3_c &p3, dAcObjBase_c *obj) {
     return ret;
 }
 
-bool dCameraMap_c::execute() {
-    s16 unk = sHio.field_0x28;
+void dCameraMap_c::onBecomeActive() {
+    mTimer = 0;
+    mSourceView = mView;
+    mTargetView = mView;
+    if (!(sHio.field_0x3C & 0x100)) {
+        mTargetView.mPosition = mTargetView.mTarget;
+    }
+    mTargetView.mPosition.y += sHio.field_0x08;
+    mTargetView.mFov = sHio.field_0x24;
+    mTargetView.mTilt = 0.0f;
+    dLytMap_c::GetInstance()->doFn_8013B350();
+    dPolar polar(mView.mPosition - mView.mTarget);
+    field_0xC4 = polar.V.value;
+    mIsMovingOut = false;
+    mIsActiveOrAnimating = true;
+}
 
-    if ((sHio.field_0x3C & 0x200) && field_0xAC) {
+void dCameraMap_c::onBecomeInactive() {
+    mIsMovingOut = true;
+    dScGame_c::getCamera()->getGameCam1()->setView(mView);
+}
+
+bool dCameraMap_c::create() {
+    dAcPy_c *link = dAcPy_c::GetLinkM();
+    if (link == nullptr) {
+        return false;
+    }
+
+    field_0x44 = link;
+    mView.mTarget = link->mPosition + mVec3_c(0.0f, 100.0f, 0.0f);
+
+    mVec3_c v(0.0f, 200.0f, 500.0f);
+    v.rotY(link->mRotation.y - 0x8000);
+
+    mView.mPosition = mView.mTarget + v;
+    mView.mFov = 55.0f;
+    mView1 = mView;
+
+    field_0x3C = sHio.field_0x04;
+    field_0x40 = 0.0f;
+    field_0x38 = 0.0f;
+
+    field_0x2C = mVec3_c::Zero;
+    mIsActiveOrAnimating = false;
+    mIsMovingOut = true;
+    field_0xB0 = 0;
+    mTimer = 0;
+
+    return true;
+}
+
+bool dCameraMap_c::remove() {
+    return true;
+}
+
+bool dCameraMap_c::execute() {
+    s16 duration = sHio.field_0x28;
+
+    if ((sHio.field_0x3C & 0x200) && mIsMovingOut) {
         // TODO no-op
-        unk = sHio.field_0x28;
+        duration = sHio.field_0x28;
     }
     field_0x40 = 1.0f;
 
@@ -107,28 +164,29 @@ bool dCameraMap_c::execute() {
 
     if (sHio.field_0x3C & 0x10) {
         if (sHio.field_0x3E == 1) {
+            // Reorients the main camera to point to north when opening the map without a transition... unused
             dPolar polar(mSourceView.mPosition - mSourceView.mTarget);
             polar.V.Set(0.0f);
             mSourceView.mPosition = mSourceView.mTarget + polar.toCartesian();
         }
         mTargetView = mSourceView;
-        field_0xB8 = 1;
+        mTimer = 1;
     }
 
-    if (field_0xAC != 0) {
-        if (field_0xB8 > 0) {
-            field_0xB8--;
-            if (field_0xB8 == 0) {
-                field_0xB4 = 0;
+    if (mIsMovingOut) {
+        if (mTimer > 0) {
+            mTimer--;
+            if (mTimer == 0) {
+                mIsActiveOrAnimating = false;
             }
         }
     } else {
-        if (field_0xB8 < unk) {
-            field_0xB8++;
+        if (mTimer < duration) {
+            mTimer++;
         }
     }
 
-    f32 f = (f32)field_0xB8 / (f32)unk;
+    f32 f = (f32)mTimer / (f32)duration;
     f32 f5 = camEaseInOut(f, sHio.field_0x2C);
     f32 f6 = camEaseInOut(f, sHio.field_0x30);
     f32 f8 = f5 * 0.99f;
@@ -144,6 +202,37 @@ bool dCameraMap_c::execute() {
     mView.mTilt = mSourceView.mTilt + (mTargetView.mTilt - mSourceView.mTilt) * tiltFovInterp;
 
     return true;
+}
+
+bool dCameraMap_c::vt_0x34() {
+    return true;
+}
+
+bool dCameraMap_c::draw() {
+    return true;
+}
+
+bool dCameraMap_c::isActiveOrAnimating() const {
+    return mIsActiveOrAnimating;
+}
+
+void dCameraMap_c::startOut() {
+    mIsMovingOut = true;
+    if (sHio.field_0x3C & 0x200) {
+        mTimer = dLytMap_c::GetInstance()->getOutDuration() + 0.1f;
+    }
+}
+
+void dCameraMap_c::fn_80093340() {
+    sHio.field_0x3E = 2;
+}
+
+void dCameraMap_c::setNoCameraTransition() {
+    sHio.field_0x3C |= 0x10 | 0x8;
+}
+
+void dCameraMap_c::setCameraTransition() {
+    sHio.field_0x3C &= ~(0x10 | 0x8);
 }
 
 void dCameraMap_c::setView(const CamView &view) {

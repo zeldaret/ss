@@ -481,7 +481,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/d_camera_base.cpp"),
             Object(NonMatching, "toBeSorted/d_camera_game.cpp"),
             Object(NonMatching, "toBeSorted/d_camera_event.cpp"),
-            Object(NonMatching, "toBeSorted/d_camera_map.cpp"),
+            Object(Matching, "toBeSorted/d_camera_map.cpp"),
             Object(NonMatching, "toBeSorted/d_camera_math.cpp"),
             Object(NonMatching, "toBeSorted/attention.cpp"),
             Object(NonMatching, "toBeSorted/d_t_camera.cpp"),

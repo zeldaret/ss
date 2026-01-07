@@ -72,7 +72,6 @@ dCamera_c::dCamera_c()
       mpScreen(dStageMgr_c::GetInstance()->getScreen(0)),
       mYAngle(0),
       mXZAngle(0),
-      field_0xD94(0.0f),
       field_0x1F8(0),
       field_0x1FC(0),
       mFlags(0) {
@@ -90,10 +89,10 @@ int dCamera_c::create() {
     mFlags = 0;
     mMyCameraIndex = getFromParams(0, 0xF);
     dScGame_c::setCamera(mMyCameraIndex, nullptr);
-    mpCameras[0] = &mGameCam1;
-    mpCameras[1] = &mGameCam2;
-    mpCameras[2] = &mEventCam;
-    mpCameras[3] = &mMapCam;
+    mpCameras[CAM_GAME_0] = &mGameCam1;
+    mpCameras[CAM_GAME_1] = &mGameCam2;
+    mpCameras[CAM_EVENT] = &mEventCam;
+    mpCameras[CAM_MAP] = &mMapCam;
 
     for (int i = 0; i < CAM_MAX; i++) {
         if (mpCameras[i] == nullptr) {
@@ -263,7 +262,7 @@ void dCamera_c::checkCameraChange() {
         offFlag(CAM_FLAGS_0x4);
     }
 
-    if (checkFlag(CAM_FLAGS_MAP) && mActiveCameraIdx == CAM_MAP && !mMapCam.fn_800932E0()) {
+    if (checkFlag(CAM_FLAGS_MAP) && mActiveCameraIdx == CAM_MAP && !mMapCam.isActiveOrAnimating()) {
         offFlag(CAM_FLAGS_MAP);
         onFlag(CAM_FLAGS_0x4);
         getGameCam1()->onFlag(0x10000);
@@ -430,7 +429,7 @@ void dCamera_c::enterMap() {
 
 void dCamera_c::leaveMap() {
     if (checkFlag(CAM_FLAGS_MAP)) {
-        mMapCam.fn_800932F0();
+        mMapCam.startOut();
     }
 }
 

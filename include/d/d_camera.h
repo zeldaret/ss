@@ -195,10 +195,6 @@ private:
     /* 0x728 */ dCameraGame_c mGameCam2;
     /* 0xB9C */ dCameraEvent_c mEventCam;
     /* 0xCD0 */ dCameraMap_c mMapCam;
-
-    /* 0xD8C */ u8 _0xD8C[0xD94 - 0xD8C];
-
-    /* 0xD94 */ f32 field_0xD94;
     /* 0xD98 */ dCameraBase_c *mpCameras[CAM_MAX];
     /* 0xDA8 */ s32 mActiveCameraIdx;
     /* 0xDAC */ screen_shaker mScreenShaker;
