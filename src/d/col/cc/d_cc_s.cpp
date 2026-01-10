@@ -98,11 +98,10 @@ u32 dCcS::ProcAtTgHitmark(cCcD_Obj *, cCcD_Obj *, mVec3_c *, u32, mVec3_c *) {}
 
 void dCcS::SetAtTgObjInf(bool, bool, cCcD_Obj *, cCcD_Obj *, mVec3_c *, bool) {}
 
-bool dCcS::ChkCamera(mVec3_c &, mVec3_c &, dAcObjBase_c *, dAcObjBase_c *, dAcObjBase_c *, f32) {}
+bool dCcS::ChkCamera(mVec3_c &, mVec3_c &, f32, dAcObjBase_c *, dAcObjBase_c *, dAcObjBase_c *) {}
 
-bool dCcS::ChkCameraPoint(
-    const mVec3_c &, const mVec3_c &, mVec3_c &, dAcObjBase_c *, dAcObjBase_c *, dAcObjBase_c *, f32
-) {}
+bool dCcS::
+    ChkCameraPoint(const mVec3_c &, const mVec3_c &, mVec3_c &, f32, dAcObjBase_c *, dAcObjBase_c *, dAcObjBase_c *) {}
 
 bool dCcS::ChkCo(const mVec3_c &, dAcObjBase_c *) {}
 

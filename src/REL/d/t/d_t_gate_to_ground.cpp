@@ -56,7 +56,8 @@ int dTgGateToGround_c::actorExecute() {
             }
         } else {
             if (params_00_00_00_FF != -1) {
-                dScGame_c::getCamera(0)->getGameCam1()->fn_80080960(params_00_00_00_FF, 0, mRoomID, 0);
+                // TODO Cast is maybe fake but I can't get overrideCam to match otherwise
+                dScGame_c::getCamera(0)->getGameCam1()->overrideCam(params_00_00_00_FF, 0, (u16)mRoomID, false);
             }
             delayFrames = 0;
         }

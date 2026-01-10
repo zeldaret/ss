@@ -2,12 +2,21 @@
 
 #include "common.h"
 
-// TODO: Weak function order (CamView dtor needs to appear after a bunch of weak functions)
-// TODO: I'm not sure why all those weak functions even got emitted here, there's nothing
-// that forces the compiler to put anything here so using this as a hack. I really believe the
-// text split is correct, and this file doesn't appear to have any other sections.
-void CreatedCameraBase_cHack() {
-    dCameraBase_c *c = new dCameraBase_c();
+// All of these base functions and the vtable got stripped
+bool dCameraBase_c::create() {
+    return true;
+}
+
+bool dCameraBase_c::remove() {
+    return true;
+}
+
+bool dCameraBase_c::execute() {
+    return true;
+}
+
+bool dCameraBase_c::draw() {
+    return true;
 }
 
 bool dCameraBase_c::doCreate(s32 index) {

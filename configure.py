@@ -484,7 +484,7 @@ config.libs = [
             Object(Matching, "toBeSorted/actor_info.cpp"),
             Object(NonMatching, "toBeSorted/d_sword_swing_effect_mgr.cpp"),
             Object(NonMatching, "toBeSorted/d_enemy_sword_mdl.cpp"),
-            Object(NonMatching, "toBeSorted/d_camera_base.cpp"),
+            Object(Matching, "toBeSorted/d_camera_base.cpp"),
             Object(NonMatching, "toBeSorted/d_camera_game.cpp"),
             Object(NonMatching, "toBeSorted/d_camera_event.cpp"),
             Object(Matching, "toBeSorted/d_camera_map.cpp"),
