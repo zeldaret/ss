@@ -478,7 +478,7 @@ config.libs = [
             Object(Matching, "toBeSorted/actor_info.cpp"),
             Object(NonMatching, "toBeSorted/unk_vec_math.cpp"),
             Object(NonMatching, "toBeSorted/unk_mdl_cc.cpp"),
-            Object(NonMatching, "toBeSorted/d_camera_base.cpp"),
+            Object(Matching, "toBeSorted/d_camera_base.cpp"),
             Object(NonMatching, "toBeSorted/d_camera_game.cpp"),
             Object(NonMatching, "toBeSorted/d_camera_event.cpp"),
             Object(Matching, "toBeSorted/d_camera_map.cpp"),

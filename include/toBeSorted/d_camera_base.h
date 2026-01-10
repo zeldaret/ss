@@ -37,18 +37,10 @@ public:
     // vt at 0x28
     /* vt 0x08 */ virtual void onBecomeActive() {}
     /* vt 0x0C */ virtual void onBecomeInactive() {}
-    /* vt 0x10 */ virtual bool create() {
-        return true;
-    }
-    /* vt 0x14 */ virtual bool remove() {
-        return true;
-    }
-    /* vt 0x18 */ virtual bool execute() {
-        return true;
-    }
-    /* vt 0x1C */ virtual bool draw() {
-        return true;
-    }
+    /* vt 0x10 */ virtual bool create();
+    /* vt 0x14 */ virtual bool remove();
+    /* vt 0x18 */ virtual bool execute();
+    /* vt 0x1C */ virtual bool draw();
     /* vt 0x20 */ virtual ~dCameraBase_c() {}
     /* vt 0x24 */ virtual CamView &getView() {
         // TODO - const?

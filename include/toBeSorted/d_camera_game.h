@@ -10,6 +10,8 @@
 #include "toBeSorted/d_camera_base.h"
 #include "toBeSorted/deg_angle_util.h"
 
+class dCamera_c;
+
 // Size: 0xC
 struct CamParamHeader {
     /* 0x00 */ u32 magic;
@@ -22,8 +24,10 @@ struct CamParamHeader {
 // Size: 0xA
 #pragma pack(push, 2)
 struct CamParamStyle {
-    /* 0x00 */ u32 id;
-    /* 0x04 */ u8 _0x04[6];
+    /* 0x00 */ u8 id[4];
+    /* 0x04 */ u8 _0x04[2];
+    /* 0x06 */ u16 floatParamOffset;
+    /* 0x08 */ u16 flagParamOffset;
 };
 #pragma pack(pop)
 
@@ -91,7 +95,7 @@ struct CamId {
         field_0x04 = 0;
     }
 
-    bool someCheck() const {
+    bool isValid() const {
         if (field_0x04 < 3 && roomId != dAcPy_c::GetLinkM()->mRoomID) {
             return false;
         } else {
@@ -129,6 +133,44 @@ struct UnkCamChecks {
     void fn_8007E1B0(dAcObjBase_c *ac);
 };
 
+class CamStyle {
+public:
+    void loadStyle(u16 styleIdx);
+    f32 getFloat(s32 idx) const;
+    bool getFlag(s32 idx) const;
+
+    // TODO: Probably wrong
+    CamStyle(const UNKWORD &u1, const UNKWORD &u2, f32 *pFloats, s32 numFloats, u16 *pFlags, s32 numFlags)
+        : field_0x08(u1),
+          mpFloats(pFloats),
+          mpParamFloats(pFloats),
+          mNumFloats(numFloats),
+          mpFlags(pFlags),
+          mpParamFlags(pFlags),
+          mNumFlags(numFlags),
+          field_0x18(u1) {
+        mId[0] = '?';
+        // TODO maybe implicitly generated
+        mId[4] = '\0';
+        mId[3] = '\0';
+        mId[2] = '\0';
+        mId[1] = '\0';
+        mStyleIndex = -1;
+    }
+
+private:
+    /* 0x00 */ u8 mId[5];
+    /* 0x06 */ u16 mStyleIndex;
+    /* 0x08 */ UNKWORD field_0x08;
+    /* 0x0C */ f32 *mpFloats;
+    /* 0x10 */ const f32 *mpParamFloats;
+    /* 0x14 */ s32 mNumFloats;
+    /* 0x18 */ UNKWORD field_0x18;
+    /* 0x1C */ u16 *mpFlags;
+    /* 0x20 */ const u16 *mpParamFlags;
+    /* 0x24 */ s32 mNumFlags;
+};
+
 class dCameraGame_c : public dCameraBase_c {
 public:
     static bool initCamParamDat();
@@ -137,6 +179,18 @@ public:
 
     static s32 sTrendIdxes[CAM_TREND_IDX_MAX];
     static s32 sStyleIdxes[CAM_STYLE_IDX_MAX];
+
+    static const CamParamStyle *getStyle(s32 idx) {
+        return &sStyles[idx];
+    }
+
+    static const f32 *getFloats(s32 idx) {
+        return &sFloats[idx];
+    }
+
+    static const u16 *getFlags(s32 idx) {
+        return &sFlags[idx];
+    }
 
     dCameraGame_c();
     /* vt 0x08 */ virtual void onBecomeActive() override;
@@ -155,16 +209,14 @@ public:
     bool getField_0x078() const {
         return field_0x078;
     }
-    
+
     f32 getField_0x0AC() const {
         return field_0x0AC;
     }
 
     void clearCamIds();
-    
-    bool isCurrentTrend(const char *name) const;
 
-    void fn_80080960(s32, s32, s8, s32);
+    bool isCurrentTrend(const char *name) const;
 
     void onFlag(u32 flag) {
         mFlags |= flag;
@@ -174,7 +226,13 @@ public:
         mFlags &= ~flag;
     }
 
+    void overrideCam(s32 camId, s32 priority, s16 roomId, bool unk);
+
 private:
+    CamId getCamId();
+    void setCam(const CamId &id);
+    void setCam(s16 roomCamId, s16 roomId);
+
     static void cacheIdxes();
 
     static CamParamHeader *sHeader;

@@ -74,7 +74,7 @@ mVec3_c fn_800929C0(const mVec3_c &p2, const mVec3_c &p3, dAcObjBase_c *obj) {
 
     for (int i = 0; i < 3; i++) {
         ret = v1;
-        if (!dCcS::GetInstance()->ChkCameraPoint(p2, v2, v1, link, other, controllingActor, 15.0f)) {
+        if (!dCcS::GetInstance()->ChkCameraPoint(p2, v2, v1, 15.0f, link, other, controllingActor)) {
             break;
         }
         if (p2 == v1) {
