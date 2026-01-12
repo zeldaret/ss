@@ -21,6 +21,7 @@ public:
 
     void activate();
     void deactivate();
+    bool isPlayingHarpRelated();
 
     nw4r::snd::SoundHandle &getFiSingHandle() {
         return mFiSingHandle;
@@ -32,7 +33,6 @@ private:
     void resetFloatArr1();
     void resetFloatArr2();
     bool isContinuousStrumming();
-    bool isPlayingHarpRelated();
     bool fn_80381150();
 
     /* 0x010 */ u8 field_0x010;
