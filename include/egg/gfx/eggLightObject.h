@@ -45,7 +45,7 @@ public:
     void Calc();
     void CalcView(nw4r::math::MTX34 const &);
 
-    void fn_804A9C30(const LightTexture *, nw4r::math::VEC3 *, GXColor *) const;
+    void CalcFinalDirColor(const LightTexture &, nw4r::math::VEC3 *, GXColor *) const;
 
     void InitGX(GXLightObj *obj) const;
     void CopyToG3D_World(nw4r::g3d::LightObj &) const;

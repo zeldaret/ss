@@ -12,7 +12,7 @@
 
 namespace EGG {
 
-StateEfb::Buffer StateEfb::spBufferSet[BUFFER_MAX];
+StateEfb::Buffer StateEfb::spBufferSet[BUFFER_TYPE_MAX];
 f32 StateEfb::sWorkSpaceV[6];
 f32 StateEfb::sWorkSpaceHideV[6];
 f32 StateEfb::sShiftViewPort[6];
@@ -49,9 +49,9 @@ TextureBuffer *StateEfb::captureEfb(BufferType type, bool noTransparencyMaybe, u
         bool doCapture = true;
 
         switch (type) {
-            case BUFFER_0:
-            case BUFFER_1: {
-                f32 arg = type == BUFFER_0 ? 0.25f : 0.5f;
+            case BUFFER_TYPE_0:
+            case BUFFER_TYPE_1: {
+                f32 arg = type == BUFFER_TYPE_0 ? 0.25f : 0.5f;
 
                 sWorkSpaceV[2] = efb.vp.x2 * arg;
                 sWorkSpaceV[3] = efb.vp.y2 * arg;
@@ -92,11 +92,11 @@ TextureBuffer *StateEfb::captureEfb(BufferType type, bool noTransparencyMaybe, u
                 break;
             }
 
-            case BUFFER_2:
+            case BUFFER_TYPE_2:
                 spBufferSet[type].buf = TextureBuffer::alloc(efb.vp.x2, efb.vp.y2, GX_TF_RGBA8);
                 spBufferSet[type].buf->setPixModeSync(false);
                 break;
-            case BUFFER_3:
+            case BUFFER_TYPE_3:
                 spBufferSet[type].buf = TextureBuffer::alloc(
                     efb.vp.x2 / 2.0f, efb.vp.y2 / 2.0f, GetUseTfRgb565() ? GX_TF_RGB565 : GX_TF_RGBA8
                 );
@@ -138,16 +138,16 @@ bool StateEfb::releaseEfb(BufferType type, u32 userData) {
     }
 }
 
-void StateEfb::fn_804B4270(BufferType type, u32 userData) {
-    if (type == BUFFER_0) {
-        if (sWorkBuffer == 1) {
-            StateEfb::releaseEfb(BUFFER_0, spBufferSet[0].userData);
+void StateEfb::pushWorkBuffer(WorkBuffer buffer, u32 userData) {
+    if (buffer == WORK_BUFFER_0) {
+        if (sWorkBuffer == WORK_BUFFER_1) {
+            StateEfb::releaseEfb(BUFFER_TYPE_0, spBufferSet[BUFFER_TYPE_0].userData);
         }
-        captureEfb(BUFFER_1, false, userData);
-        sWorkBuffer = 0;
-    } else if (type == BUFFER_1 && sWorkBuffer != 0) {
-        captureEfb(BUFFER_0, false, userData);
-        sWorkBuffer = 1;
+        captureEfb(BUFFER_TYPE_1, false, userData);
+        sWorkBuffer = WORK_BUFFER_0;
+    } else if (buffer == WORK_BUFFER_1 && sWorkBuffer != WORK_BUFFER_0) {
+        captureEfb(BUFFER_TYPE_0, false, userData);
+        sWorkBuffer = WORK_BUFFER_1;
     }
 }
 
@@ -155,9 +155,9 @@ void StateEfb::popWorkBuffer(bool b, u32 userData) {
     if (sWorkBuffer != -1) {
         BufferType i = static_cast<BufferType>(-1);
         if (sWorkBuffer == 0) {
-            i = BUFFER_1;
+            i = BUFFER_TYPE_1;
         } else if (sWorkBuffer == 1) {
-            i = BUFFER_0;
+            i = BUFFER_TYPE_0;
         }
 
         if (spBufferSet[i].userData == userData) {
@@ -195,14 +195,14 @@ void StateEfb::popWorkBuffer(bool b, u32 userData) {
                     DrawGX::DrawDL(DrawGX::DL_16, mtx, DrawGX::WHITE);
                 }
             }
-            releaseEfb((i), spBufferSet[i].userData);
+            releaseEfb(i, spBufferSet[i].userData);
             sWorkBuffer = -1;
             sPushCount += 1;
         }
     }
 }
 
-f32 *StateEfb::fn_804B4550() {
+f32 *StateEfb::shiftWorkSpaceViewportGX() {
     const Screen::DataEfb &efb = GlobalDrawState::getScreen().GetDataEfb();
     sShiftViewPort[0] = sWorkSpaceV[0];
     sShiftViewPort[1] = sWorkSpaceV[1];

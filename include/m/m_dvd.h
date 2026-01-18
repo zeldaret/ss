@@ -15,10 +15,10 @@ namespace mDvd {
 
 extern void *somePtr;
 
-class TUncompressInfo_Base_c {
+class UncompressInfo_c {
 public:
-    TUncompressInfo_Base_c(u8 type, const char *extension) : mType(type), mExtension(extension) {}
-    virtual ~TUncompressInfo_Base_c() {}
+    UncompressInfo_c(u8 type, const char *extension) : mType(type), mExtension(extension) {}
+    virtual ~UncompressInfo_c() {}
     virtual EGG::StreamDecomp *Construct() const {
         return nullptr;
     }
@@ -29,9 +29,9 @@ public:
 };
 
 template <typename T>
-class TUncompressInfo_c : public TUncompressInfo_Base_c {
+class TUncompressInfo_c : public UncompressInfo_c {
 public:
-    TUncompressInfo_c(u8 type, const char *extension) : TUncompressInfo_Base_c(type, extension) {}
+    TUncompressInfo_c(u8 type, const char *extension) : UncompressInfo_c(type, extension) {}
     virtual T *Construct() const {
         return new (somePtr) T();
     }

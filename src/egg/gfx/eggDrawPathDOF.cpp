@@ -61,7 +61,7 @@ DrawPathDOF::~DrawPathDOF() {
     mpMask = nullptr;
 }
 
-void DrawPathDOF::execute() {
+void DrawPathDOF::updateShimmer() {
     field_0x5C += field_0x6C * field_0x7C;
     field_0x60 += field_0x70 * field_0x7C;
 
@@ -115,8 +115,8 @@ void DrawPathDOF::internalResetForDraw() {
 void DrawPathDOF::internalDraw(u16 idx) {
     if (idx == 0) {
         if (StateEfb::CheckFlag0x2() == 0) {
-            StateEfb::fn_804B4270(
-                static_cast<StateEfb::BufferType>((field_0x1C >> 2) & 1), reinterpret_cast<u32>(this)
+            StateEfb::pushWorkBuffer(
+                static_cast<StateEfb::WorkBuffer>((field_0x1C >> 2) & 1), reinterpret_cast<u32>(this)
             );
         }
         StateGX::invalidateTexAllGX();
@@ -130,8 +130,8 @@ void DrawPathDOF::internalDraw(u16 idx) {
 
     switch (idx) {
         case 1:
-            StateEfb::popWorkBuffer(StateEfb::BUFFER_0, reinterpret_cast<u32>(this));
-            StateEfb::releaseEfb(StateEfb::BUFFER_3, reinterpret_cast<u32>(this));
+            StateEfb::popWorkBuffer(false, reinterpret_cast<u32>(this));
+            StateEfb::releaseEfb(StateEfb::BUFFER_TYPE_3, reinterpret_cast<u32>(this));
             break;
         case 2:
             if (mpTextureBuffer != nullptr) {
@@ -148,13 +148,13 @@ void DrawPathDOF::internalDrawLite(u16 idx) {
     const Screen::DataEfb &efb = screen.GetDataEfb();
     switch (idx) {
         case 0: {
-            TextureBuffer *capturedBuf = StateEfb::captureEfb(StateEfb::BUFFER_3, false, reinterpret_cast<u32>(this));
+            TextureBuffer *capturedBuf = StateEfb::captureEfb(StateEfb::BUFFER_TYPE_3, false, reinterpret_cast<u32>(this));
             StateGX::setPixelFormatGX(GX_PF_RGB8_Z24, GX_ZC_LINEAR);
             StateGX::ScopedColor colorGuard(true);
             StateGX::ScopedAlpha alphaGuard(false);
             StateGX::ScopedDither ditherGuard(false);
             PostEffectBase::setProjection(screen);
-            f32 *floats = StateEfb::fn_804B4550();
+            f32 *floats = StateEfb::shiftWorkSpaceViewportGX();
             f32 scale = (field_0x1C & 4) != 0 ? 0.25f : 0.5f;
             f32 width1 = screen.GetWidth() * scale;
             f32 height1 = screen.GetHeight() * scale;
