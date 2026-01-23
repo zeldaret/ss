@@ -9,12 +9,17 @@ namespace EGG {
 class StateEfb {
 public:
     enum BufferType {
-        BUFFER_0,
-        BUFFER_1,
-        BUFFER_2,
-        BUFFER_3,
+        BUFFER_TYPE_0,
+        BUFFER_TYPE_1,
+        BUFFER_TYPE_2,
+        BUFFER_TYPE_3,
 
-        BUFFER_MAX,
+        BUFFER_TYPE_MAX,
+    };
+
+    enum WorkBuffer {
+        WORK_BUFFER_0,
+        WORK_BUFFER_1,
     };
 
     struct Buffer {
@@ -24,7 +29,7 @@ public:
     };
 
 private:
-    static Buffer spBufferSet[BUFFER_MAX];
+    static Buffer spBufferSet[BUFFER_TYPE_MAX];
     static f32 sWorkSpaceV[6];
     static f32 sWorkSpaceHideV[6];
     static f32 sShiftViewPort[6]; // unk name
@@ -43,11 +48,9 @@ public:
     static void Clean();
     static TextureBuffer *captureEfb(BufferType type, bool, u32 userData);
     static bool releaseEfb(BufferType type, u32 userData);
-
-    // Unknown names
-    static void fn_804B4270(BufferType type, u32 userData);
+    static void pushWorkBuffer(WorkBuffer work, u32 userData);
     static void popWorkBuffer(bool b, u32 userData);
-    static f32 *fn_804B4550();
+    static f32 *shiftWorkSpaceViewportGX();
 };
 
 } // namespace EGG

@@ -27,7 +27,7 @@ public:
     virtual void SetBinaryInner(const Bin &, const Bin &, f32) override;
 
 
-    void execute();
+    void updateShimmer();
 
 private:
     void internalDrawStandard(u16);

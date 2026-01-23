@@ -204,7 +204,7 @@ void LightTextureManager::drawAndCaptureTexture(f32 ox, f32 oy, f32 sx, f32 sy) 
 
     u16 x1, y1, x2, y2;
     TextureBuffer *buf = nullptr;
-    LightTexture::getTexDimensions(&x1, &y1, &x2, &y2, mTextureCount);
+    LightTexture::getRequiredPosAndSize(&x1, &y1, &x2, &y2, mTextureCount);
     x2 += x2 & 3;
     y2 += y2 & 3;
 

@@ -89,7 +89,7 @@ public:
         mpByteData2[idx] = val;
     }
 
-    static void getTexDimensions(u16 *, u16 *, u16 *, u16 *, u16);
+    static void getRequiredPosAndSize(u16 *, u16 *, u16 *, u16 *, u16);
 
 private:
     static void fn_804AC0A0(int, int *, int *);

@@ -523,9 +523,9 @@ void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
     }
 }
 
-const u8 sDetailLevels[] = {0x10, 0x20};
-
 void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
+    static const u8 POS_NUM[] = {0x10, 0x20};
+
     u8 ALIGN_DECL(32) tmpDisplayList[16 * 1024];
 
     OSInitFastCast();
@@ -567,7 +567,7 @@ void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
             case DL_4: GXDrawSphere(8, 16); break;
             case DL_5:
             case DL_6: {
-                u16 numSegments = sDetailLevels[i - DL_5] + 1;
+                u16 numSegments = POS_NUM[i - DL_5] + 1;
                 f32 radPerSegment = 2.0f * M_PI / (numSegments - 1);
                 GXBegin(GX_LINESTRIP, GX_VTXFMT0, numSegments);
                 for (int i = 0; i < numSegments; i++) {
@@ -579,7 +579,7 @@ void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
             }
             case DL_9:
             case DL_10: {
-                u16 numSegments = sDetailLevels[i - DL_9] + 1;
+                u16 numSegments = POS_NUM[i - DL_9] + 1;
                 f32 radPerSegment = 2.0f * M_PI / (numSegments - 1);
                 GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, numSegments * 2);
                 for (int i = 0; i < numSegments; i++) {
@@ -592,21 +592,21 @@ void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
                 }
                 nw4r::math::MTX34 mtx;
                 PSMTXTrans(mtx, 0.0f, 0.5f, 0.0f);
-                DrawCircleYPolygonFan(mtx, 0.0f, sDetailLevels[i - DL_9]);
+                DrawCircleYPolygonFan(mtx, 0.0f, POS_NUM[i - DL_9]);
 
                 PSMTXIdentity(mtx);
                 PSMTXRotRad(mtx, M_PI, 0x7A);
                 PSMTXTransApply(mtx, mtx, 0.0f, -0.5f, 0.0f);
-                DrawCircleYPolygonFan(mtx, 0.0f, sDetailLevels[i - DL_9]);
+                DrawCircleYPolygonFan(mtx, 0.0f, POS_NUM[i - DL_9]);
                 break;
             }
             case DL_11:
             case DL_12: {
                 nw4r::math::MTX34 mtx;
                 PSMTXIdentity(mtx);
-                DrawCircleYPolygonFan(mtx, 1.0f, sDetailLevels[i - DL_11]);
+                DrawCircleYPolygonFan(mtx, 1.0f, POS_NUM[i - DL_11]);
                 PSMTXRotRad(mtx, M_PI, 0x7A);
-                DrawCircleYPolygonFan(mtx, 0.0f, sDetailLevels[i - DL_11]);
+                DrawCircleYPolygonFan(mtx, 0.0f, POS_NUM[i - DL_11]);
                 break;
             }
             case DL_7:
@@ -614,7 +614,7 @@ void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
                 nw4r::math::MTX34 mtx;
                 PSMTXIdentity(mtx);
                 PSMTXRotRad(mtx, M_PI / 2.0f, 0x78);
-                DrawCircleYPolygonFan(mtx, 0.0f, sDetailLevels[i - DL_7]);
+                DrawCircleYPolygonFan(mtx, 0.0f, POS_NUM[i - DL_7]);
                 break;
             }
 

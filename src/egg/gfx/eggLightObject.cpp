@@ -130,10 +130,10 @@ void LightObject::CalcView(nw4r::math::MTX34 const &viewMtx) {
     }
 }
 
-void LightObject::fn_804A9C30(const LightTexture *tex, nw4r::math::VEC3 *pVec, GXColor *color) const {
+void LightObject::CalcFinalDirColor(const LightTexture &tex, nw4r::math::VEC3 *pVec, GXColor *color) const {
     *pVec = field_0x94;
     *color = mLightColor;
-    f32 f = tex->getFloat(mIndex);
+    f32 f = tex.getFloat(mIndex);
     if (f < 1.0f) {
         color->r = color->r * f;
         color->g = color->g * f;

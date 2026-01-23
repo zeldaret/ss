@@ -29,7 +29,7 @@ char decompressor_alloc_space[0x9930];
 mDvd_param_c l_param;
 
 // unofficial
-TUncompressInfo_Base_c *decompressorPtrs[1] = {
+UncompressInfo_c *decompressorPtrs[1] = {
     &s_UncompressInfoLZ,
 };
 
@@ -38,18 +38,18 @@ int maxChunkSize = 0x10000;
 
 void *somePtr;
 u32 someNumber;
-TUncompressInfo_Base_c **compressors_ptr;
-TUncompressInfo_Base_c **compressors_last;
 // official
+UncompressInfo_c **s_UncompressInfoTable_begin;
+UncompressInfo_c **s_UncompressInfoTable_end;
 OSThread *l_OSThread;
 mDvd::MyThread_c *l_MyThread;
 EGG::Heap *l_CommandHeap;
 EGG::Heap *l_ArchiveHeap;
 bool l_IsAutoStreamDecomp;
 
-static void unk_setDecompressorPtrs(TUncompressInfo_Base_c **ptr, TUncompressInfo_Base_c **last) {
-    compressors_ptr = ptr;
-    compressors_last = last;
+static void unk_setDecompressorPtrs(UncompressInfo_c **ptr, UncompressInfo_c **last) {
+    s_UncompressInfoTable_begin = ptr;
+    s_UncompressInfoTable_end = last;
 }
 
 void unk_initDecompressors() {
@@ -58,9 +58,9 @@ void unk_initDecompressors() {
     someNumber = 0x24;
 }
 
-static TUncompressInfo_Base_c *findUncompressInfo(u8 type) {
-    TUncompressInfo_Base_c **ptr = compressors_ptr;
-    while (ptr != compressors_last) {
+static UncompressInfo_c *findUncompressInfo(u8 type) {
+    UncompressInfo_c **ptr = s_UncompressInfoTable_begin;
+    while (ptr != s_UncompressInfoTable_end) {
         if ((*ptr)->mType == type) {
             return *ptr;
         }
@@ -70,7 +70,7 @@ static TUncompressInfo_Base_c *findUncompressInfo(u8 type) {
 }
 
 static EGG::StreamDecomp *newUncompressObj(u8 type) {
-    TUncompressInfo_Base_c *factory = findUncompressInfo(type);
+    UncompressInfo_c *factory = findUncompressInfo(type);
     if (factory != nullptr) {
         return factory->Construct();
     } else {
@@ -79,7 +79,7 @@ static EGG::StreamDecomp *newUncompressObj(u8 type) {
 }
 
 static void deleteUncompressObj(u8 type) {
-    TUncompressInfo_Base_c *factory = findUncompressInfo(type);
+    UncompressInfo_c *factory = findUncompressInfo(type);
     if (factory != nullptr) {
         factory->Destruct();
     }
@@ -362,7 +362,7 @@ static int ConvertPathToEntrynumASD_(const char *name, u8 *outType) {
         end = buf + strlen(buf);
         size = sizeof(buf) - (end - buf);
         // Append the compressor extension and try to find a compressed version
-        for (mDvd::TUncompressInfo_Base_c **ptr = mDvd::compressors_ptr; ptr != mDvd::compressors_last; ptr++) {
+        for (mDvd::UncompressInfo_c **ptr = mDvd::s_UncompressInfoTable_begin; ptr != mDvd::s_UncompressInfoTable_end; ptr++) {
             strncpy(end, (*ptr)->mExtension, size);
             num = DVDConvertPathToEntrynum(buf);
             if (num != -1) {
@@ -380,7 +380,7 @@ static int ConvertPathToEntrynumASD_(const char *name, u8 *outType) {
         if (end != nullptr) {
             size = sizeof(buf) - (end - buf);
             // Append the compressor extension and try to find a compressed version
-            for (mDvd::TUncompressInfo_Base_c **ptr = mDvd::compressors_ptr; ptr != mDvd::compressors_last; ptr++) {
+            for (mDvd::UncompressInfo_c **ptr = mDvd::s_UncompressInfoTable_begin; ptr != mDvd::s_UncompressInfoTable_end; ptr++) {
                 strncpy(end, (*ptr)->mExtension, size);
                 num = DVDConvertPathToEntrynum(buf);
                 if (num != -1) {
