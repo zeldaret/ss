@@ -878,7 +878,7 @@ public:
         return mTg.ChkSet();
     }
 
-    
+
     bool ChkAtEffCounter() { return mAt.ChkEffCounter(); }
     bool ChkTgEffCounter() { return mTg.ChkEffCounter(); }
     void ClrAtEffCounter() { mAt.ClrEffCounter(); }
@@ -905,7 +905,7 @@ public:
         return mAt.MskSPrm(0x40);
     }
     u32 ChkCoNoCoHitInfSet() const {
-        return mCo.MskSPrm(0x800); 
+        return mCo.MskSPrm(0x800);
     }
 
     // At

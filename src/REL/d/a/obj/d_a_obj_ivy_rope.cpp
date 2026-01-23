@@ -74,6 +74,8 @@ dCcD_SrcCyl dAcOivyRope_c::sCylSrc = {
     {10.f, 750.f}
 };
 
+const f32 dAcOivyRope_c::lbl_256_rodata_40 = 0.04f;
+
 dAcOivyRope_c::~dAcOivyRope_c() {
     if (mPnts1) {
         delete[] mPnts1;

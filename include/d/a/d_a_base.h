@@ -190,6 +190,10 @@ public:
         return mRoomID;
     }
 
+    bool isRoomID(s8 room) const {
+        return mRoomID == room;
+    }
+
     void unsetActorProperty(u32 property) {
         mActorProperties &= ~property;
     }
@@ -200,8 +204,8 @@ public:
         return mActorProperties & property;
     }
 
-    dAcBase_c* searchNextActor(dAcBase_c* parent) {
-        return static_cast<dAcBase_c*>(fManager_c::searchBaseByGroupType(dAcBase_c::ACTOR, parent));
+    dAcBase_c *searchNextActor(dAcBase_c *parent) {
+        return static_cast<dAcBase_c *>(fManager_c::searchBaseByGroupType(dAcBase_c::ACTOR, parent));
     }
 
 public:
