@@ -2678,7 +2678,7 @@ config.libs = [
         "REL/d/a/obj/d_a_obj_slice_log_parts.cpp",
     ),
     Rel(Matching, "d_a_obj_smoke", "REL/d/a/obj/d_a_obj_smoke.cpp"),
-    Rel(NonMatching, "d_a_obj_soil", "REL/d/a/obj/d_a_obj_soil.cpp"),
+    Rel(Matching, "d_a_obj_soil", "REL/d/a/obj/d_a_obj_soil.cpp"),
     Rel(NonMatching, "d_a_obj_spider_line", "REL/d/a/obj/d_a_obj_spider_line.cpp"),
     Rel(Matching, "d_a_obj_spike", "REL/d/a/obj/d_a_obj_spike.cpp"),
     Rel(Matching, "d_a_obj_stage_cover", "REL/d/a/obj/d_a_obj_stage_cover.cpp"),

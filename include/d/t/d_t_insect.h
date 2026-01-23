@@ -1,6 +1,7 @@
 #ifndef D_T_INSECT_H
 #define D_T_INSECT_H
 
+#include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/t/d_tg.h"
 #include "m/m_vec.h"
@@ -46,6 +47,13 @@ public:
 
     void setKillSignal() {
         mKillSignal = 1;
+    }
+
+    void reveal(mVec3_c* pos) {
+        mRevealed = 1;
+        if (pos != nullptr) {
+            mRevealedSpawnPos = *pos;
+        }
     }
 
     static const f32 SCALE_X;
