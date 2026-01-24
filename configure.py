@@ -194,6 +194,11 @@ config.reconfig_deps = []
 # Can be overridden in libraries or objects
 config.scratch_preset_id = None
 
+# make wchar 16 bits
+config.extra_clang_flags = [
+    "-fshort-wchar",
+]
+
 # Base flags, common to most GC/Wii games.
 # Generally leave untouched, with overrides added below.
 cflags_base = [
