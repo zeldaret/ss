@@ -641,7 +641,7 @@ bool dLytDepositMain_c::execute() {
 
     for (int i = 0; i < DEPOSIT_ANIM_HAVE_OFFSET; i++) {
         if (mAnm[i].isEnabled()) {
-            if (i >= DEPOSIT_ANIM_INPUT_00 && i <= DEPOSIT_ANIM_INPUT_01) {
+            if (i >= DEPOSIT_ANIM_BTN_ON_OFF_00 && i <= DEPOSIT_ANIM_INPUT_01) {
                 if (mAnm[i].isStop()) {
                     mAnm[i].setAnimEnable(false);
                 }
