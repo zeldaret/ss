@@ -45,6 +45,8 @@ public:
     }
 
 private:
+    static const s32 NUM_ICONS_PER_PAGE = 12;
+
     void initIcon();
     void realizeNav();
 

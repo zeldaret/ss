@@ -164,7 +164,7 @@ void dLytDepositBoxCursor_c::init(s32 location, s32 slot, s32 item, bool isSell)
         number = getDepositItemAmount(slot);
         durability = getDepositShieldDurability(slot);
         color = getDepositItemNumberColor(slot);
-        mSlot = slot % 12;
+        mSlot = slot % NUM_ICONS_PER_PAGE;
     }
 
     if (number < 0) {
@@ -195,7 +195,7 @@ void dLytDepositBoxCursor_c::updateSlot(s32 location, s32 slot, s32 item, bool i
     if (mItemLocation == LOC_POUCH) {
         mSlot = slot;
     } else {
-        mSlot = slot % 12;
+        mSlot = slot % NUM_ICONS_PER_PAGE;
     }
 }
 
