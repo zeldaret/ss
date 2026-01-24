@@ -476,7 +476,7 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
         case EVENT_CAMERA_42:              {
             s32 p1 = (params1n2 >> 16) & 0xFFFF;
             s32 p2 = params1n2 & 0xFFFF;
-            dScGame_c::getCamera(0)->doFn_800918E0(p1, p2);
+            dScGame_c::getCamera(0)->getEventCam()->fn_800918E0(p1, p2);
             break;
         }
         case EVENT_LYT_MINI_GAME: {

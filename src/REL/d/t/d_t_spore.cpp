@@ -76,8 +76,8 @@ void dSporeProc_c::execute() {
     mVec3_c camPos;
     mVec3_c camTowards;
 
-    camPos = pCam->getPositionMaybe();
-    camTowards = pCam->getField_0x78() - camPos;
+    camPos = pCam->getPosition();
+    camTowards = pCam->getTarget() - camPos;
 
     if (pCam != nullptr && camTowards.normalizeRS()) {
         mVec3_c v;
@@ -158,9 +158,9 @@ void dSporeProc_c::execute() {
                         mSporesPos[i] += point * (field_0x12D8[i] * 5.f);
                     }
 
-                    f32 camY = pCam->getField_0x2A8();
-                    if (end != camY && mSporesPos[i].y < camY) {
-                        mSporesPos[i].y = camY;
+                    f32 waterHeight = pCam->getWaterHeight();
+                    if (end != waterHeight && mSporesPos[i].y < waterHeight) {
+                        mSporesPos[i].y = waterHeight;
                     }
                 } break;
             }
@@ -212,7 +212,7 @@ void dSporeProc_c::drawXlu() {
     );
 
     dCamera_c *pCam = dScGame_c::getCamera();
-    mVec3_c pos = pCam->getPositionMaybe();
+    mVec3_c pos = pCam->getPosition();
 
     if (dTgSiren_c::isOutOfTime()) {
         color0.r = 0xFF;

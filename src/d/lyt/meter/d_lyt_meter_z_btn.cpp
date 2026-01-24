@@ -186,9 +186,9 @@ bool dLytMeterZBtn_c::execute() {
         return true;
     }
     field_0x1C4 = true;
-    if ((!fn_80081FE0(dScGame_c::getCamera(0)->getField_0xD98(), "mogu") ||
+    if ((!dScGame_c::getCamera(0)->getGameCam1()->isCurrentTrend("mogu") ||
          AttentionManager::GetInstance()->checkLink2()) &&
-        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_Z) == 0x67) {
+        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_Z) == LytDoButtonRelated::ACT_IE_ETC_VIEW_SURFACE) {
         field_0x1C4 = false;
         LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_NONE);
     }

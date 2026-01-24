@@ -436,7 +436,7 @@ bool dLytMeterGanbariGauge_c::execute() {
         }
     }
 
-    mVec3_c diff = dAcPy_c::GetLink()->mPositionCopy3 - dScGame_c::getCamera(0)->getPositionMaybe();
+    mVec3_c diff = dAcPy_c::GetLink()->mPositionCopy3 - dScGame_c::getCamera(0)->getPosition();
     f32 len = diff.mag();
     mVec3_c v;
     d3d::worldToScreen(v, dAcPy_c::GetLink()->mPositionCopy3);
@@ -656,8 +656,8 @@ bool dLytMeterGanbariGauge_c::fn_80104760() const {
 }
 
 bool dLytMeterGanbariGauge_c::fn_801047B0() const {
-    if (fn_80081FE0(dScGame_c::getCamera(0)->getField_0xD98(), "mogu") ||
-        fn_80081FE0(dScGame_c::getCamera(0)->getField_0xD98(), "mogu2")) {
+    if (dScGame_c::getCamera(0)->getGameCam1()->isCurrentTrend("mogu") ||
+        dScGame_c::getCamera(0)->getGameCam1()->isCurrentTrend("mogu2")) {
         return true;
     }
     return false;

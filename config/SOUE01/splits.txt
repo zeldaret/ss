@@ -402,21 +402,35 @@ toBeSorted/unk_vec_math.cpp:
 toBeSorted/unk_mdl_cc.cpp:
 	.text       start:0x8006B3B0 end:0x8006BBD4 align:16
 
-toBeSorted/d_camera.cpp:
-	.text       start:0x8006BBE0 end:0x80083370 align:16
-	.ctors      start:0x804DB6AC end:0x804DB6B0
-	.sbss       start:0x80575290 end:0x80575370
+toBeSorted/d_camera_base.cpp:
+	.text       start:0x8006BBE0 end:0x8006BE20 align:16
 
-toBeSorted/d_event_1.cpp:
+toBeSorted/d_camera_game.cpp:
+	.text       start:0x8006BE20 end:0x80083370 align:16
+	.ctors      start:0x804DB6AC end:0x804DB6B0
+	.data       start:0x8050E090 end:0x8050EA18
+	.sdata      start:0x80571D70 end:0x80571ED8
+	.sbss       start:0x80575290 end:0x80575370
+	.sdata2     start:0x80579238 end:0x80579418
+	.bss        start:0x805A08C8 end:0x805A1660
+
+toBeSorted/d_camera_event.cpp:
 	.text       start:0x80083370 end:0x800928F0 align:16
 	.ctors      start:0x804DB6B0 end:0x804DB6B4
+	.data       start:0x8050EA18 end:0x8050F180
+	.sdata2     start:0x80579418 end:0x80579538
+	.bss        start:0x805A1660 end:0x805A2F18
 
-toBeSorted/unk_map_cam.cpp:
+toBeSorted/d_camera_map.cpp:
 	.text       start:0x800928F0 end:0x8009345C align:16
 	.ctors      start:0x804DB6B4 end:0x804DB6B8
+	.data       start:0x8050F180 end:0x8050F1C8
+	.sdata2     start:0x80579538 end:0x805795A0
+	.bss        start:0x805A2F18 end:0x805A2F58
 
-toBeSorted/unk_vec_math_event.cpp:
+toBeSorted/d_camera_math.cpp:
 	.text       start:0x80093460 end:0x80093A74 align:16
+	.sdata2     start:0x805795A0 end:0x80579600
 
 toBeSorted/attention.cpp:
 	.text       start:0x80093A80 end:0x80096EAC align:16
@@ -1345,7 +1359,10 @@ d/d_camera.cpp:
 	.text       start:0x8019D160 end:0x8019ED0C align:16
 	.ctors      start:0x804DB800 end:0x804DB804
 	.data       start:0x8052C180 end:0x8052C230
+	.sdata      start:0x80572EA0 end:0x80572EB8
 	.sbss       start:0x80575708 end:0x80575710
+	.sdata2     start:0x8057AF50 end:0x8057AFA8
+	.bss        start:0x805B27A0 end:0x805B27D8
 
 d/d_light_obj.cpp:
 	.text       start:0x8019ED10 end:0x801A65C8 align:16

@@ -34,6 +34,10 @@ public:
 
     f32 fn_801BBEC0() const;
 
+    void setLetterboxAmount(f32 v) {
+        mLetterboxAmount = v;
+    }
+
 private:
     /* 0x98 */ f32 mLetterboxAmount;
 };
@@ -152,7 +156,7 @@ public:
     static bool isCurrentStage(const char *stageName);
     static bool isStageSkyloftLayer20();
     static bool isInCredits();
-    static bool isStateLayerWithSeekerStoneHintMenu();
+    static bool isSeekerStoneStageAndLayer();
 
     static SpawnInfo currentSpawnInfo;
     static SpawnInfo nextSpawnInfo;
@@ -217,6 +221,10 @@ public:
 
     bool isFadingIn() const {
         return mFader.isStatus(mFaderBase_c::FADING_IN);
+    }
+
+    void setTargetingScreenLetterboxAmount(f32 amt) {
+        mScreen1.setLetterboxAmount(amt);
     }
 
     f32 targetingScreenFn_801BBEC0() const {
