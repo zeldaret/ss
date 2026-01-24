@@ -10,6 +10,7 @@
 #include "d/flag/itemflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_common_arrow.h"
 #include "d/lyt/d_lyt_common_icon_item_maps.h"
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_pause.h"
@@ -427,8 +428,8 @@ bool dLytPauseDisp00_c::build() {
         }
     }
 
-    mpBoundings[PAUSE_DISP_00_BOUNDING_ARROW_LEFT] = pauseMgr->getArrowBounding(0);
-    mpBoundings[PAUSE_DISP_00_BOUNDING_ARROW_RIGHT] = pauseMgr->getArrowBounding(1);
+    mpBoundings[PAUSE_DISP_00_BOUNDING_ARROW_LEFT] = pauseMgr->getArrowBounding(dLytCommonArrow_c::ARROW_LEFT);
+    mpBoundings[PAUSE_DISP_00_BOUNDING_ARROW_RIGHT] = pauseMgr->getArrowBounding(dLytCommonArrow_c::ARROW_RIGHT);
 
     u8 songLifetreeStatus = getSongLifeTreeStatus();
     if (songLifetreeStatus == SONG_LIFETREE_HAS_SOTH) {
@@ -1252,6 +1253,7 @@ void dLytPauseDisp00_c::setupInventoryWheel() {
         }
 
         u32 item = getPouchItemForSlot(i, true);
+        // TODO why LYT_CMN_PouchPotionHealthPlusPlusHalf
         if (item != LYT_CMN_PouchPotionHealthPlusPlusHalf) {
             if (isPouchBocoburinLocked()) {
                 icon->setBocoburinLocked(true);
@@ -1259,7 +1261,7 @@ void dLytPauseDisp00_c::setupInventoryWheel() {
             }
             haveFrame = 1.0f;
             icon->setItem(item);
-            f32 durability = getShieldDurability(i, true);
+            f32 durability = getPouchShieldDurability(i, true);
             if (durability >= 0.0f) {
                 icon->setShieldDurability(durability);
             }
@@ -1575,6 +1577,7 @@ void dLytPauseDisp00_c::setupRingIcons(s32 tab) {
             s32 offset = PAUSE_DISP_00_BOUNDING_RING_OFFSET;
             for (int i = 0; i < PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
                 bool visible = false;
+                // TODO why LYT_CMN_PouchPotionHealthPlusPlusHalf
                 if (getPouchItemForSlot(i, true) != LYT_CMN_PouchPotionHealthPlusPlusHalf) {
                     visible = true;
                 }
@@ -2008,9 +2011,11 @@ bool dLytPauseDisp00_c::isPointingAtRingIcon() {
     nw4r::math::MTX34 mtx = mLyt.findPane("N_ringIcon_00")->GetGlobalMtx();
     nw4r::math::VEC3 v(0.0f, 0.0f, 0.0f);
     MTXMultVec(mtx, v, v);
-    // TODO I hate vectors
-    mVec2_c pos(v.x, v.y);
-    if (pos.squareDistanceTo(csPos) < radiusSq) {
+    // TODO maybe fake
+    mVec2_c pos2 = mVec2_c(v.x, v.y);
+    mVec2_c dist = pos2;
+    dist -= csPos;
+    if (dist.squaredLength() < radiusSq) {
         ret = true;
     }
 

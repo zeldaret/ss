@@ -339,8 +339,8 @@ void dLytMeterMinusBtn_c::initializeState_MenuSelectingIn() {
                     mItemIcons[i].setItem(field_0x4E98[i]);
                 }
 
-                if (getShieldDurability(i, true) >= 0.0f) {
-                    mItemIcons[i].setShieldDurability(getShieldDurability(i, true));
+                if (getPouchShieldDurability(i, true) >= 0.0f) {
+                    mItemIcons[i].setShieldDurability(getPouchShieldDurability(i, true));
                     if (i == convertFilePouchSlot(FileManager::GetInstance()->getShieldPouchSlot())) {
                         mItemIcons[i].setShieldOnOff(false);
                     } else {
@@ -574,8 +574,8 @@ void dLytMeterMinusBtn_c::initializeState_DemoMove() {
                     mItemIcons[i].setItem(field_0x4E98[i]);
                 }
 
-                if (getShieldDurability(i, true) >= 0.0f) {
-                    mItemIcons[i].setShieldDurability(getShieldDurability(i, true));
+                if (getPouchShieldDurability(i, true) >= 0.0f) {
+                    mItemIcons[i].setShieldDurability(getPouchShieldDurability(i, true));
                     if (i == convertFilePouchSlot(FileManager::GetInstance()->getShieldPouchSlot())) {
                         mItemIcons[i].setShieldOnOff(false);
                     } else {
@@ -1086,7 +1086,7 @@ void dLytMeterMinusBtn_c::setItemText(s32 item) {
 void dLytMeterMinusBtn_c::realizeShieldDurability() {
     for (int i = 0; i < MINUS_BTN_NUM_ITEMS; i++) {
         if (field_0x4EBB[i] != 0) {
-            mItemIcons[i].setShieldDurability(getShieldDurability(i, true));
+            mItemIcons[i].setShieldDurability(getPouchShieldDurability(i, true));
         }
     }
 }

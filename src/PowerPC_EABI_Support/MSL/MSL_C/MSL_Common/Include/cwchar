@@ -4,8 +4,8 @@
 #ifdef __cplusplus
 
 namespace std {
-using ::mbstowcs;
-using ::mbtowc;
+// using ::mbstowcs;
+// using ::mbtowc;
 using ::swprintf;
 using ::vswprintf;
 using ::wcscat;
@@ -14,7 +14,7 @@ using ::wcscmp;
 using ::wcscpy;
 using ::wcslen;
 using ::wcsncpy;
-using ::wcstombs;
+// using ::wcstombs;
 } // namespace std
 
 #endif

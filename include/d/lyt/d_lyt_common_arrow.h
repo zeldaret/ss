@@ -6,6 +6,7 @@
 // vtable order
 #include "d/d_cursor_hit_check.h"
 // clang-format on
+#include "m/m_vec.h"
 #include "nw4r/lyt/lyt_bounding.h"
 #include "s/s_State.hpp"
 
@@ -35,34 +36,38 @@ public:
     bool requestIn();
     bool requestOut();
 
-    void unk() {
-        field_0x6B8 = mPointedAtArrow;
+    s32 getPointedAtArrow() const {
+        return mPointedAtArrow;
     }
 
-    s32 getField_0x6B8() const {
-        return field_0x6B8;
+    bool isChangingState() const {
+        return mIsChangingState;
     }
 
     nw4r::lyt::Bounding *getArrowBounding(s32 idx) const {
         return mpBoundings[idx];
     }
 
-    void setField_0x6B8(s32 v) {
-        field_0x6B8 = v;
+    s32 getActiveArrow() const {
+        return mActiveArrow;
+    }
+
+    void setActiveArrow(s32 v) {
+        mActiveArrow = v;
     }
 
     void setBackwards(bool b) {
         mBackwards = b;
     }
-    bool fn_80168760();
+    bool triggerArrowPress();
+    void setTranslate(const mVec2_c *);
 
 private:
-    void setTranslate(const Vec *);
     void displayElement(s32, f32);
     void unbindAt(s32);
     void tickDown(d2d::AnmGroup_c *);
     void checkPointAtPane();
-    
+
     /* 0x04 */ UI_STATE_MGR_DECLARE(dLytCommonArrow_c);
     /* 0x40 */ d2d::LytBase_c mLytBase;
     d2d::ResAccIf_c mResAcc;
@@ -71,9 +76,9 @@ private:
     /* 0x6A8 */ nw4r::lyt::Bounding *mpBoundings[2];
     /* 0x6B0 */ s32 mType;
     /* 0x6B4 */ s32 mPointedAtArrow;
-    /* 0x6B8 */ s32 field_0x6B8;
-    /* 0x6BC */ s32 field_0x6BC;
-    /* 0x6C0 */ s32 field_0x6C0;
+    /* 0x6B8 */ s32 mActiveArrow;
+    /* 0x6BC */ s32 mLastActiveArrow;
+    /* 0x6C0 */ s32 mTriggeredArrow;
     /* 0x6C4 */ s32 mTimer;
     /* 0x6C8 */ bool mInRequested;
     /* 0x6C9 */ bool mOutRequested;

@@ -26,6 +26,9 @@ public:
     void setVisible(bool val) {
         mVisible = val;
     }
+    bool isVisible() const {
+        return mVisible;
+    }
     void setDrawDirectly(bool val) {
         mDrawDirectly = val;
     }
@@ -36,7 +39,7 @@ public:
         mCalibrationPointCenterEnabled = val;
     }
 
-    dCursorHitCheck_c *getHitCheck() {
+    dCursorHitCheck_c *getHitCheck() const {
         return mCursorIf.getHit();
     }
 
@@ -52,8 +55,24 @@ public:
         mCursorStick.setShouldBeOn(visible);
     }
 
+    void setCursorStickPriority(u8 priority) {
+        mCursorStick.setPriority(priority);
+    }
+
+    void setCursorStickPriority2(u8 priority) {
+        mCursorStick.setPriority2(priority);
+    }
+
+    bool isCursorStickVisible() const {
+        return mCursorStick.getShouldBeOn();
+    }
+
     void setCursorStickTargetPane(const nw4r::lyt::Pane *target) {
         mCursorStick.setTargetPane(target);
+    }
+
+    const nw4r::lyt::Pane *getCursorStickAllPane() const {
+        return mCursorStick.getAllPane();
     }
 
 private:

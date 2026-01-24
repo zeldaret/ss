@@ -1,0 +1,206 @@
+#ifndef D_LYT_DEPOSIT_STOCK_H
+#define D_LYT_DEPOSIT_STOCK_H
+
+#include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_common_arrow.h"
+#include "d/lyt/d_lyt_common_icon_item.h"
+#include "nw4r/lyt/lyt_pane.h"
+#include "s/s_State.hpp"
+
+class dLytDepositStock_c : public d2d::dSubPane {
+public:
+    enum NavMode_e {
+        NAV_ITEM,
+        NAV_SELL,
+        NAV_SORT,
+        NAV_FINISH,
+        NAV_ARROW,
+    };
+
+public:
+    dLytDepositStock_c() : mStateMgr(*this) {}
+    virtual ~dLytDepositStock_c() {}
+
+    /* vt 0x0C */ virtual bool build(d2d::ResAccIf_c *resAcc) override;
+    /* vt 0x10 */ virtual bool remove() override;
+    /* vt 0x14 */ virtual bool execute() override;
+    /* vt 0x18 */ virtual nw4r::lyt::Pane *getPane() override {
+        return mLyt.getLayout()->GetRootPane();
+    }
+    /* vt 0x1C */ virtual d2d::LytBase_c *getLyt() override {
+        return &mLyt;
+    }
+    /* vt 0x20 */ virtual const char *getName() const override {
+        return mLyt.getName();
+    }
+
+    void nextPage(bool preventCancellingSelection);
+    void prevPage(bool preventCancellingSelection);
+    void fn_80156530(bool unk);
+    
+    void navigateToItem();
+    void navigateToSell();
+    void navigateToSort();
+    void navigateToFinish();
+    void saveArrowDirection();
+    void navigateToArrow(s32 arrowDirection);
+    s32 restoreArrowDirection();
+    void handleSpecialNavMode();
+    bool isNavModeItem() const;
+    void navigateOffIcon();
+    void handleNavOrPoint();
+
+    void pickUpOrPlaceItem(s32 slot, bool place);
+    void selectNavTarget(s32 idx);
+    void setItem(s32 idx, s32 item);
+    s32 getCurrentSlot() const;
+    void loadItems(s32 hiddenSlot);
+
+    STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dLytDepositStock_c);
+
+    s32 getCurrentNavTarget() const {
+        return mCurrentNavTarget;
+    }
+
+    bool isModeSort() const {
+        return mIsModeSort;
+    }
+
+    bool isModePouch() const {
+        return mIsModePouch;
+    }
+
+    bool isModeSell() const {
+        return mIsModeSell;
+    }
+
+    bool isModeFinish() const {
+        return mIsModeFinish;
+    }
+
+    void disableModeSort() {
+        mIsModeSort = false;
+    }
+
+    void disableModePouch() {
+        mIsModePouch = false;
+    }
+
+    void disableModeSell() {
+        mIsModeSell = false;
+    }
+
+    void disableModeFinish() {
+        mIsModeFinish = false;
+    }
+
+    void returnToNoneMode() {
+        mIsModeFinish = false;
+        mIsModeSell = false;
+        mIsModeSort = false;
+        mIsModePouch = false;
+        mSavedArrowDirection = dLytCommonArrow_c::ARROW_NONE;
+    }
+
+    void disableSpecialModes() {
+        mIsModeSell = false;
+        mIsModeFinish = false;
+        mIsModeSort = false;
+        mSavedArrowDirection = dLytCommonArrow_c::ARROW_NONE;
+    }
+
+    u8 getItem(s32 idx) const {
+        return mItemIds[idx];
+    }
+
+    u8 getPage() const {
+        return mItemPage;
+    }
+
+    void setPage(u8 page) {
+        mItemPage = page;
+    }
+
+    s32 getActiveItem() const {
+        return mItemIds[mCurrentNavTarget];
+    }
+
+    void setSellBlocked(bool v) {
+        mIsSellBlocked = v;
+    }
+
+    void setSortBlocked(bool v) {
+        mIsSortBlocked = v;
+    }
+
+    s32 getArrowDirection() const {
+        return mArrowDirection;
+    }
+
+    s32 getSavedArrowDirection() const {
+        return mSavedArrowDirection;
+    }
+
+    void setSavedArrowDirection(s32 dir) {
+        mSavedArrowDirection = dir;
+    }
+
+    void setMainStock(bool b) {
+        mIsMainStock = b;
+    }
+    
+    void onDropItem() {
+        mPickedUpItemOnThisPage = false;
+    }
+
+    void setPreventCancellingSelection() {
+        mPreventCancellingSelection = true;
+    }
+
+private:
+    static const s32 NUM_ICONS_PER_PAGE = 12;
+    static const s32 NUM_PAGES = 5;
+
+    void initIcons();
+    void loadIcon(s32 idx);
+    void navigateToPouch();
+    void realizeItem(s32 idx);
+
+    /**
+     * Check if the FS stick is pushed in a direction. Diagonal movements
+     * are adjusted to horizontal and vertical navigations if necessary.
+     * @returns FS stick direction
+     */
+    s32 checkNav();
+
+    STATE_FUNC_DECLARE(dLytDepositStock_c, None);
+
+    /* 0x0008 */ UI_STATE_MGR_DECLARE(dLytDepositStock_c);
+    /* 0x0044 */ d2d::dLytSub mLyt;
+    /* 0x00D8 */ d2d::AnmGroup_c mAnm[25];
+    /* 0x0718 */ dLytCommonIconItem_c mIcons[NUM_ICONS_PER_PAGE];
+    /* 0x6778 */ d2d::SubPaneList mSubpaneList;
+    /* 0x6784 */ d2d::SubPaneListNode mNodes[NUM_ICONS_PER_PAGE];
+    /* 0x6844 */ bool mIsIdle;
+    /* 0x6845 */ bool mIsModePouch;
+    /* 0x6846 */ bool mIsModeSell;
+    /* 0x6847 */ bool mIsModeSort;
+    /* 0x6848 */ bool mIsModeFinish;
+    /* 0x6849 */ bool mIsSellBlocked;
+    /* 0x684A */ bool mIsSortBlocked;
+    /* 0x684B */ bool mPreventCancellingSelection;
+    /* 0x684C */ bool mPrevPointerVisible;
+    /* 0x684D */ bool mIsMainStock;
+    /* 0x684E */ bool mPickedUpItemOnThisPage;
+    /* 0x6850 */ s32 mCurrentNavTarget;
+    /* 0x6854 */ s32 mNumSlots;
+    /* 0x6858 */ s32 mSelectedItemId;
+    /* 0x685C */ s32 mPickedUpIdx;
+    /* 0x6860 */ s32 mArrowDirection;
+    /* 0x6864 */ s32 mSavedArrowDirection;
+    /* 0x6868 */ s32 mNavMode;
+    /* 0x686C */ u8 mItemIds[NUM_ICONS_PER_PAGE];
+    /* 0x6878 */ u8 mItemPage;
+};
+
+#endif

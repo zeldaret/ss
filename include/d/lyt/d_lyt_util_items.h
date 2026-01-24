@@ -18,6 +18,8 @@ enum SongLifeTreeSeedStatus_e {
     SONG_LIFETREE_HAS_SOTH = 2,
 };
 
+s32 convertLytPouchSlot2(s32 fileSlot);
+
 u8 getSongLifeTreeStatus();
 
 /** 0: no sword, 6: TMS */
@@ -74,8 +76,13 @@ u8 getPouchItemForSlot(s32 slot, bool unk);
 bool hasPouchSlot(s32 slot, bool unk);
 s32 getPouchItemAmount(s32 slot, bool unk);
 u8 getPouchItemNumberColor(s32 slot, bool unk);
-f32 getShieldDurability(s32 slot, bool unk);
+f32 getPouchShieldDurability(s32 slot, bool unk);
 u32 getPouchItemIdForIndex(s32 slot, bool unk);
+
+u8 getDepositItemForSlot(s32 slot);
+s32 getDepositItemAmount(s32 slot);
+u8 getDepositItemNumberColor(s32 slot);
+f32 getDepositShieldDurability(s32 slot);
 
 // TODO - rename and make sense of these
 DowsingTarget::DowsingSlot dowsingSlotForIndex(s32 index);
