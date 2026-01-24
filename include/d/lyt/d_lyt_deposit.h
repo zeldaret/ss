@@ -229,9 +229,9 @@ private:
     STATE_MGR_DEFINE_UTIL_ISSTATE(dLytDeposit_c);
     STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytDeposit_c);
 
-    /* 0x08C */ UI_STATE_MGR_DECLARE(dLytDeposit_c);
-    /* 0x0C8 */ d2d::ResAccIf_c mResAcc;
-    /* 0x438 */ dLytDepositMain_c mMain;
+    /* 0x0008C */ UI_STATE_MGR_DECLARE(dLytDeposit_c);
+    /* 0x000C8 */ d2d::ResAccIf_c mResAcc;
+    /* 0x00438 */ dLytDepositMain_c mMain;
     /* 0x19998 */ bool mInRequest;
     /* 0x19999 */ bool mIsMovingOut;
     /* 0x1999A */ bool mScrollViaArrowButton;

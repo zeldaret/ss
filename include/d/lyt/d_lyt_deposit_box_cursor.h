@@ -56,7 +56,7 @@ private:
     /* 0x930 */ d2d::SubPaneList mSubpaneList;
     /* 0x938 */ d2d::SubPaneListNode mNode;
     /* 0x948 */ bool mIsVisible;
-    /* 0x948 */ bool mIsSellMode;
+    /* 0x949 */ bool mIsSellMode;
     /* 0x94C */ s32 mSlot;
     /* 0x950 */ s32 mItem;
     /* 0x954 */ s32 mItemLocation;
