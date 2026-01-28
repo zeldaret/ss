@@ -10,7 +10,7 @@
 
 dCcD_SrcCps sCcSrc = {
     {
-     {0x400, 0x8D, {1, 0, 0}, 1, 0, 0, 0, 0, 0},
+     {AT_TYPE_DAMAGE, 0x8D, {1, 0, 0}, 1, 0, 0, 0, 0, 0},
      {0, 0, {0, 0, 0x407}, 0, 0},
      {0},
      },
@@ -88,7 +88,7 @@ void dEnemySwordMdl_c::calc(const mMtx_c &mtx, const mVec3_c &v1, bool mass) {
         v.normalize();
 
         mVec3_c hi = field_0x098 + v * field_0x0A8;
-        
+
         mCcs[1].Set(mCcs[0].mEnd, hi);
         mCcs[2].Set(mCcs[0].mStart, hi);
         mCcs[0].Set(field_0x08C - v * field_0x0A4, hi);

@@ -246,6 +246,7 @@ public:
     } while (0)
 
 // Actors' createHeap functions often have patterns that can be matched with this macro
+// `bool result;` needs to be defined in scope prior to use
 #define TRY_CREATE2(thing)                                                                                             \
     do {                                                                                                               \
         result = (thing);                                                                                              \

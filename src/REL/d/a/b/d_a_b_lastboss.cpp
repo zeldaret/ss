@@ -1081,7 +1081,7 @@ void dAcBlastboss_c::executeState_Fight() {
             diff = -0x1000;
         }
         field_0x1172 = diff / 2;
-        // TODO what is this constant
+        // approx. 160/65536, but maybe hardcoded?
         sLib::addCalcScaledDiff(&mMdlCallback.field_0x30, diff * (1.0f / 409.59937f), 0.5f, 1.0f);
         if (mLightingStrikeState == LIGHTNING_STRIKE_STATE_NONE && !link->isUsingShield() && link->isUsingSword()) {
             mMtx_c rotMtx;

@@ -80,7 +80,7 @@ bool dSwordSwingEffectProcBase_c::create(s32 num, mAllocator_c *alloc) {
         return false;
     }
 
-    mpEntries = new (alloc->getHeap(), 4) swing_entry[num]();
+    mpEntries = new (alloc->getHeap()) swing_entry[num]();
     if (mpEntries == nullptr) {
         remove();
         return false;
