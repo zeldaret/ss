@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_bomb.h"
+#include "d/d_cc.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 
@@ -16,8 +17,20 @@ struct dAcEnData {
 // non-official name
 class dAcEnBase_c : public dAcObjBase_c {
 public:
+    enum InteractionFlags_e {
+        INTERACT_0x1 = (1 << 0),
+        INTERACT_0x4 = (1 << 2),
+        INTERACT_0x40 = (1 << 6),
+        INTERACT_0x1000 = (1 << 12),
+    };
+
+public:
     dAcEnBase_c();
     virtual ~dAcEnBase_c();
+
+    virtual int preExecute() override;
+    virtual void postExecute(MAIN_STATE_e state) override;
+    virtual int preDraw() override;
 
     virtual void *getObjectListEntry() override {
         return &mEnemyLink;
@@ -36,7 +49,9 @@ public:
     /* 0x33C */ u32 mInteractionFlags;
     /* 0x340 */ u16 field_0x338;
     /* 0x342 */ u16 mHealth;
-    /* 0x344 */ u8 _344[0x374 - 0x344];
+    /* 0x344 */ u8 _344[0x358 - 0x344];
+    /* 0x358 */ mVec3_c mFinalBlowPosition;
+    /* 0x364 */ u8 _364[0x374 - 0x364];
     /* 0x374 */ dAcEnData *mpEnemyData;
 
     bool checkInteractionFlags(u32 mask) {
@@ -61,6 +76,8 @@ public:
     void fn_800306d0();
     void fn_80030700();
     void fn_80030c20(u32 flags, f32, f32, f32, f32);
+
+    s32 someEnemyDamageCollisionStuffMaybe(dColliderLinkedList &list, u16 *pOutFlags);
 
     bool ChkCrossPlayer(f32 height);
 

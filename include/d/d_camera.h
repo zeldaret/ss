@@ -61,9 +61,11 @@ public:
     bool isUnderwater() const;
     f32 getUnderwaterDepth() const;
 
+    void fn_8019EA00(const mVec3_c&, const mVec3_c&, f32, f32);
     void fn_8019E430();
     void fn_8019E410();
     mAng fn_8019E3B0() const;
+    void fn_8019EA70(bool);
 
 private:
     /* 0x068 */ u8 _0x068[0x6C - 0x068];

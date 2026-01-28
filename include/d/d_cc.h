@@ -27,15 +27,14 @@ public:
     /* 0x210 */ LinkedColliderNode mNode;
 };
 
-class dCcD_Linked_Cyl : public dCcD_Cyl {
+class dCcD_Linked_Cps : public dCcD_Cps {
 public:
-    dCcD_Linked_Cyl() : mNode(this) {}
-    virtual ~dCcD_Linked_Cyl() {
+    dCcD_Linked_Cps() : mNode(this) {}
+    virtual ~dCcD_Linked_Cps() {
         mNode.remove();
     }
-    /* 0x150 */ LinkedColliderNode mNode;
+    /* 0x170 */ LinkedColliderNode mNode;
 };
-
 class dCcD_Linked_Sph : public dCcD_Sph {
 public:
     dCcD_Linked_Sph() : mNode(this) {}
@@ -44,14 +43,13 @@ public:
     }
     /* 0x150 */ LinkedColliderNode mNode;
 };
-
-class dCcD_Linked_Cps : public dCcD_Cps {
+class dCcD_Linked_Cyl : public dCcD_Cyl {
 public:
-    dCcD_Linked_Cps() : mNode(this) {}
-    virtual ~dCcD_Linked_Cps() {
+    dCcD_Linked_Cyl() : mNode(this) {}
+    virtual ~dCcD_Linked_Cyl() {
         mNode.remove();
     }
-    /* 0x170 */ LinkedColliderNode mNode;
+    /* 0x150 */ LinkedColliderNode mNode;
 };
 
 class dColliderLinkedList {
@@ -86,7 +84,8 @@ public:
     // a ptmf. It's not immediately clear how this works,
     // does every actor subclass the LinkedCollider___,
     // or are the functions all added here for the other
-    // files to implement?
+    // files to implement? d_a_b_lastboss commits a typing crime here
+    // to make it work...
     typedef bool (cCcD_Obj::*ccPtmf)();
     cCcD_Obj *find(ccPtmf f) const;
 

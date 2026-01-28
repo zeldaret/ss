@@ -174,6 +174,7 @@ DowsingTarget *DowsingTarget::getDowsingInfo(
 
         targetDir.normalize();
 
+        // Same code as in d_sword_swing_effect_mgr...
         f32 dot = dwsDir.dot(targetDir);
         dot = cM::minMaxLimit(dot, -1.0f, 1.0f);
         f32 a = 1.0f - dot * dot <= 0.0f ? 0.0f : nw4r::math::FrSqrt(1.0f - dot * dot) * (1.0f - dot * dot);

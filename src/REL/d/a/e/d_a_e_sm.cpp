@@ -265,7 +265,7 @@ int dAcEsm_c::actorCreate() {
 
     mAnmTexPat.setFrame(anim_frame, 0);
 
-    setInteractionFlags(0x40);
+    setInteractionFlags(INTERACT_0x40);
 
     fn_187_44C0();
 
@@ -369,7 +369,7 @@ int dAcEsm_c::actorExecute() {
 
             if (timeCheck != 0) {
                 if (field_0xBBF == 3) {
-                    if (checkInteractionFlags(4)) {
+                    if (checkInteractionFlags(INTERACT_0x4)) {
                         fn_800306d0();
                     }
                     return SUCCEEDED;
@@ -400,7 +400,7 @@ int dAcEsm_c::actorExecute() {
             }
 
             if (field_0xBBF == 3 && mTimeArea.isNearZero()) {
-                if (checkInteractionFlags(4)) {
+                if (checkInteractionFlags(INTERACT_0x4)) {
                     fn_800306d0();
                 }
                 return SUCCEEDED;
@@ -1430,7 +1430,7 @@ void dAcEsm_c::fn_187_6C20(bool param0) {
 
     mSph.SetAtFlagsUpper(0);
     sTimer = 0;
-    setInteractionFlags(4);
+    setInteractionFlags(INTERACT_0x4);
     fn_187_44C0();
     field_0xBAC = 60;
 

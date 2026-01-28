@@ -414,6 +414,10 @@ public:
         return currentSpf;
     }
 
+    SpfSetting &GetOverrideSpf() {
+        return mOverrideSpfSetting;
+    }
+
     const PaletteEAF_smol_entry &getSmallEAF(s32 idx1, s32 idx2) {
         return field_0x38E4.field_0x00[idx1].field_0x00[idx2];
     }
@@ -428,6 +432,18 @@ public:
 
     f32 getfield_0x2F1C() const {
         return field_0x2F1C;
+    }
+
+    s32 getField_0x38DC() const {
+        return field_0x38DC;
+    }
+
+    void setField_0x38DC(s32 v) {
+        field_0x38DC = v;
+    }
+
+    void setField_0x5D48(f32 val) {
+        field_0x5D48 = val;
     }
 
 private:
@@ -487,7 +503,9 @@ private:
     /* 0x48E4 */ Bpm4 field_0x48E4;
     /* 0x5CE4 */ PaletteDefaultMCF field_0x5CE4;
     /* 0x5D04 */ TwoPaletteDefaultMCF field_0x5D04;
-    /* 0x5D44 */ u8 field_0x5D44[0x5D59 - 0x5D44];
+    /* 0x5D44 */ u8 field_0x5D44[0x5D48 - 0x5D44];
+    /* 0x5D48 */ f32 field_0x5D48;
+    /* 0x5D4C */ u8 field_0x5D4C[0x5D59 - 0x5D4C];
     /* 0x5D59 */ struct { // Anonymous until more is known
         bool mEnabled;
         u8 mValue;

@@ -413,7 +413,7 @@ public:
     /* vt 0x2A8 */ virtual void lookTowardItem() {}
     /* vt 0x2AC */ virtual void vt_0x2AC() {}
     /* vt 0x2B0 */ virtual void vt_0x2B0() {}
-    /* vt 0x2B4 */ virtual void triggerMoveEventMaybe(u32, u32, u32, mVec3_c &, const mAng &, u32, u32) {}
+    /* vt 0x2B4 */ virtual void triggerMoveEventMaybe(u32, u32, u32, const mVec3_c *, const mAng&, u32, u32) {}
     /* vt 0x2B8 */ virtual void setActorRef9() {}
     /* vt 0x2BC */ virtual void unlinkActorRef9() {}
     /* vt 0x2C0 */ virtual bool vt_0x2C0() {
@@ -461,6 +461,19 @@ public:
         ATTACK_SPIN_UP = 9,
         ATTACK_JUMP_SLASH = 10,
         ATTACK_FINAL_BLOW = 11,
+    };
+
+    enum SpecificPlayerAttackDirection_e {
+        /* 0x000 */ ATTACK_DIRECTION_NONE = 0,
+        /* 0x001 */ ATTACK_DIRECTION_DOWN = 1 << 0,
+        /* 0x002 */ ATTACK_DIRECTION_DOWNRIGHT = 1 << 1,
+        /* 0x004 */ ATTACK_DIRECTION_RIGHT = 1 << 2,
+        /* 0x008 */ ATTACK_DIRECTION_UPRIGHT = 1 << 3,
+        /* 0x010 */ ATTACK_DIRECTION_UP = 1 << 4,
+        /* 0x020 */ ATTACK_DIRECTION_UPLEFT = 1 << 5,
+        /* 0x040 */ ATTACK_DIRECTION_LEFT = 1 << 6,
+        /* 0x080 */ ATTACK_DIRECTION_DOWNLEFT = 1 << 7,
+        /* 0x100 */ ATTACK_DIRECTION_STAB = 1 << 8,
     };
 
     enum ModelUpdateFlags_e {
@@ -625,6 +638,14 @@ public:
         return mAttackDirection != ATTACK_NONE;
     }
 
+    bool isAttackingJumpSlash() const {
+        return mAttackDirection == ATTACK_JUMP_SLASH;
+    }
+
+    u16 getSpecificAttackDirection() const {
+        return mSpecificAttackDirection;
+    }
+
     inline bool hasvt_0x1C0() const {
         return vt_0x1C0() != nullptr;
     }
@@ -637,6 +658,9 @@ public:
     bool isAttackingStab() const;
     bool isAttackingSpinHorizontal() const;
     bool isAttackingSpinVertical() const;
+    bool isAttackingSpin() const {
+        return isAttackingSpinHorizontal() || isAttackingSpinVertical();
+    }
     void setBonkRelatedAnimFlag(bool b);
     void setPosYRot(const mVec3_c &pos, mAng rot, bool force = false, UNKWORD = 0, UNKWORD = 0);
     void setTransform(const mMtx_c &mtx, bool force, UNKWORD, UNKWORD);
@@ -668,7 +692,8 @@ protected:
     /* 0x334 */ f32 field_0x334;
     /* 0x338 */ u8 mAttackDirection;
     /* 0x339 */ u8 mRidingActorType;
-    /* 0x33A */ u8 unk_0x33A[0x340 - 0x33A];
+    /* 0x33A */ u16 mSpecificAttackDirection;
+    /* 0x33C */ u8 unk_0x33C[0x340 - 0x33C];
     /* 0x340 */ u32 someFlags_0x340;
     /* 0x344 */ u32 mFaceUpdateFlags;
     /* 0x348 */ u32 mSwordAndMoreStates;

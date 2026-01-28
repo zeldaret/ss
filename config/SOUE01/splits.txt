@@ -91,8 +91,13 @@ toBeSorted/d_shadow.cpp:
 	.sbss       start:0x80575028 end:0x80575038
 	.sdata2     start:0x80576A78 end:0x80576B08
 
-toBeSorted/d_unk_mdl_stuff_1.cpp:
-	.text       start:0x8001BFA0 end:0x8001E444 align:16
+toBeSorted/d_sword_swing_effect.cpp:
+	.text       start:0x8001BFA0 end:0x8001CB9C align:16
+	.data       start:0x80500AF0 end:0x80500B48
+	.sdata2     start:0x80576B08 end:0x80576B28
+
+toBeSorted/d_unk_mdl_stuff_3.cpp:
+	.text       start:0x8001CBA0 end:0x8001E444 align:16
 	.ctors      start:0x804DB654 end:0x804DB658
 	.sbss       start:0x80575038 end:0x80575058
 
@@ -396,11 +401,14 @@ toBeSorted/actor_info.cpp:
 	.rodata     start:0x804E0FA8 end:0x804E3418
 	.sdata2     start:0x805779F8 end:0x80579210
 
-toBeSorted/unk_vec_math.cpp:
-	.text       start:0x8006A8D0 end:0x8006B3A4 align:16
+toBeSorted/d_sword_swing_effect_mgr.cpp:
+	.text       start:0x8006A8D0 end:0x8006B3C0 align:16
+	.sdata2     start:0x80579210 end:0x80579230
 
-toBeSorted/unk_mdl_cc.cpp:
-	.text       start:0x8006B3B0 end:0x8006BBD4 align:16
+toBeSorted/d_enemy_sword_mdl.cpp:
+	.text       start:0x8006B3C0 end:0x8006BBD4 align:16
+	.data       start:0x8050E060 end:0x8050E090
+	.sdata2     start:0x80579230 end:0x80579238
 
 toBeSorted/d_camera.cpp:
 	.text       start:0x8006BBE0 end:0x80083370 align:16
