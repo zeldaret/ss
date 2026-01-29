@@ -567,15 +567,15 @@ bool dLytMeterMain_c::isNotSilentRealmOrLoftwing() {
     return true;
 }
 
-bool dLytMeterMain_c::fn_800C9F70() {
-    if ((fn_800D56B0() && !field_0x13775) || isInModeMap() || isInModePause()) {
+bool dLytMeterMain_c::shouldHideLytClef() {
+    if ((shouldBeHiddenGeneral() && !mIsCollectingTadtoneScroll) || isInModeMap() || isInModePause()) {
         return true;
     }
     return false;
 }
 
 bool dLytMeterMain_c::fn_800C9FE0() {
-    if (fn_800D56B0() || mMode == MODE_MAP_INIT || isInModePause()) {
+    if (shouldBeHiddenGeneral() || mMode == MODE_MAP_INIT || isInModePause()) {
         return true;
     }
     return false;
@@ -857,7 +857,7 @@ bool dLytMeterMain_c::build(d2d::ResAccIf_c *resAcc) {
     mMode = MODE_NONE;
     field_0x13770 = 3;
     mHelpOpen = false;
-    field_0x13775 = 0;
+    mIsCollectingTadtoneScroll = false;
     field_0x13773 = 0;
     mTimerVisible = false;
     mBirdGaugeVisible = false;
@@ -1078,7 +1078,7 @@ bool dLytMeterMain_c::isInModePause() {
     return false;
 }
 
-bool dLytMeterMain_c::fn_800D56B0() {
+bool dLytMeterMain_c::shouldBeHiddenGeneral() {
     if (dLytSaveMgr_c::GetInstance() != nullptr && dLytSaveMgr_c::GetInstance()->isBusy()) {
         return true;
     }
@@ -1179,18 +1179,18 @@ void dLytMeterMain_c::checkPaneVisibility() {
 
         || (MinigameManager::isInMinigameState(MinigameManager::TRIAL_TIME_ATTACK) &&
             LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE) ||
-        (dLytMeter_c::getField_0x13B66() || (fn_800D56B0() && !mItemSelect.fn_800F02F0() && !isDoingSkyKeepPuzzle()) ||
+        (dLytMeter_c::getField_0x13B66() || (shouldBeHiddenGeneral() && !mItemSelect.fn_800F02F0() && !isDoingSkyKeepPuzzle()) ||
          isInModeMap() || isInModePause())) {
         mPanesVisible[METER_ANIM_ITEM_SELECT] = false;
     }
 
-    if ((fn_800D56B0() && !isDoingSkyKeepPuzzle() && !mMinusBtn.fn_800F75E0())
+    if ((shouldBeHiddenGeneral() && !isDoingSkyKeepPuzzle() && !mMinusBtn.fn_800F75E0())
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || mMode == MODE_MAP_INIT || isInModePause())) {
         mPanesVisible[METER_ANIM_MINUS_BTN] = false;
     }
 
-    if ((fn_800D56B0() && !isDoingSkyKeepPuzzle())
+    if ((shouldBeHiddenGeneral() && !isDoingSkyKeepPuzzle())
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || mMode == MODE_MAP_INIT || isInModePause())
 
@@ -1198,7 +1198,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         mPanesVisible[METER_ANIM_PLUS_BTN] = false;
     }
 
-    if ((fn_800D56B0() && !isDoingSkyKeepPuzzle())
+    if ((shouldBeHiddenGeneral() && !isDoingSkyKeepPuzzle())
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || mMode == MODE_MAP_INIT || isInModePause())
 
@@ -1206,7 +1206,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         mPanesVisible[METER_ANIM_CROSS_BTN] = false;
     }
 
-    if ((fn_800D56B0() && !isDoingSkyKeepPuzzle())
+    if ((shouldBeHiddenGeneral() && !isDoingSkyKeepPuzzle())
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || mMode == MODE_MAP_INIT || isInModePause())
 
@@ -1214,7 +1214,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         mPanesVisible[METER_ANIM_1_BTN] = false;
     }
 
-    if ((fn_800D56B0() && !isDoingSkyKeepPuzzle())
+    if ((shouldBeHiddenGeneral() && !isDoingSkyKeepPuzzle())
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || mMode == MODE_MAP_INIT || isInModePause())
 
@@ -1222,7 +1222,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         mPanesVisible[METER_ANIM_2_BTN] = false;
     }
 
-    if ((fn_800D56B0() && !isDoingSkyKeepPuzzle())
+    if ((shouldBeHiddenGeneral() && !isDoingSkyKeepPuzzle())
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || mMode == MODE_MAP_INIT || isInModePause())
 
@@ -1230,7 +1230,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         mPanesVisible[METER_ANIM_A_BTN] = false;
     }
 
-    if ((fn_800D56B0() && !isDoingSkyKeepPuzzle())
+    if ((shouldBeHiddenGeneral() && !isDoingSkyKeepPuzzle())
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || mMode == MODE_MAP_INIT || isInModePause())
 
@@ -1238,7 +1238,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         mPanesVisible[METER_ANIM_REMOCON_BG] = false;
     }
 
-    if ((fn_800D56B0() && !isDoingSkyKeepPuzzle() && !mDowsing.fn_800FE490())
+    if ((shouldBeHiddenGeneral() && !isDoingSkyKeepPuzzle() && !mDowsing.fn_800FE490())
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || mMode == MODE_MAP_INIT || isInModePause())
 
@@ -1246,7 +1246,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         mPanesVisible[METER_ANIM_DOWSING] = false;
     }
 
-    if ((fn_800D56B0() && !isDoingSkyKeepPuzzle())
+    if ((shouldBeHiddenGeneral() && !isDoingSkyKeepPuzzle())
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || mMode == MODE_MAP_INIT || isInModePause())
 
@@ -1254,7 +1254,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         mPanesVisible[METER_ANIM_Z_BTN] = false;
     }
 
-    if ((fn_800D56B0() && !isDoingSkyKeepPuzzle())
+    if ((shouldBeHiddenGeneral() && !isDoingSkyKeepPuzzle())
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || mMode == MODE_MAP_INIT || isInModePause())
 
@@ -1262,7 +1262,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         mPanesVisible[METER_ANIM_NUN_STK] = false;
     }
 
-    if ((fn_800D56B0() && !isDoingSkyKeepPuzzle())
+    if ((shouldBeHiddenGeneral() && !isDoingSkyKeepPuzzle())
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || mMode == MODE_MAP_INIT || isInModePause())
 
@@ -1278,7 +1278,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
          MinigameManager::isInMinigameState(MinigameManager::TRIAL_TIME_ATTACK) ||
          MinigameManager::isInMinigameState(MinigameManager::PUMPKIN_ARCHERY) ||
          MinigameManager::isInMinigameState(MinigameManager::SPIRAL_CHARGE_TUTORIAL) ||
-         MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER) || fn_800D56B0() || mIsInSwordDrawEvent)
+         MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER) || shouldBeHiddenGeneral() || mIsInSwordDrawEvent)
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() ||
             (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->isOutputText()) ||
@@ -1301,7 +1301,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         ||
         (dMessage_c::getInstance()->getField_0x2FC() && mHeart.getField_0x78C() && !dAcPy_c::LINK->isSittingOrUnk0xAE())
 
-        || (fn_800D56B0() &&
+        || (shouldBeHiddenGeneral() &&
             (dMessage_c::getInstance()->getField_0x2FC() == 0 || dMessage_c::getInstance()->getField_0x2FC() == -2)) ||
         mIsInSwordDrawEvent
 
@@ -1326,7 +1326,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
          MinigameManager::isInMinigameState(MinigameManager::SPIRAL_CHARGE_TUTORIAL) ||
          MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER))
 
-        || (fn_800D56B0() && mHeart.getField_0x78C() == 0)
+        || (shouldBeHiddenGeneral() && mHeart.getField_0x78C() == 0)
 
         || (dScGame_c::currentSpawnInfo.stageName == "F406" && dScGame_c::currentSpawnInfo.layer == 13)
 
@@ -1338,7 +1338,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         mPanesVisible[METER_ANIM_HEART] = false;
     }
 
-    if (!isSilentRealm() || (fn_800D56B0() && !fn_800D5590())
+    if (!isSilentRealm() || (shouldBeHiddenGeneral() && !fn_800D5590())
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || mMode == MODE_MAP_INIT || isInModePause())) {
         mTimerVisible = false;
@@ -1353,7 +1353,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
     }
 
     if ((dAcPy_c::GetLink()->hasvt_0x1C0() || dAcPy_c::GetLink()->checkActionFlagsCont(0x10) ||
-         (fn_800D56B0() && !mHelpOpen) || mGanbariGauge.fn_80104760() ||
+         (shouldBeHiddenGeneral() && !mHelpOpen) || mGanbariGauge.fn_80104760() ||
 
          MinigameManager::isInMinigameState(MinigameManager::FUN_FUN_ISLAND) ||
          MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER) ||
@@ -1365,7 +1365,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         mPanesVisible[METER_ANIM_GANBARI_GAUGE] = false;
     }
 
-    if ((dAcPy_c::GetLink()->getRidingActorType() != dAcPy_c::RIDING_LOFTWING || fn_800D56B0()) ||
+    if ((dAcPy_c::GetLink()->getRidingActorType() != dAcPy_c::RIDING_LOFTWING || shouldBeHiddenGeneral()) ||
         (dLytMeter_c::getField_0x13B66() || fn_800D5420() || isInModeMap() || isInModePause())) {
         mSkyGaugeVisible = false;
     } else if (bird != nullptr && mpSkyGauge != nullptr) {
@@ -1382,7 +1382,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
 
     if (dAcPy_c::GetLink()->getRidingActorType() != dAcPy_c::RIDING_LOFTWING || !field_0x13780 ||
 
-        (dLytDobutton_c::getAction() != dLytDobutton_c::ACT_DO_INVALID || fn_800D56B0() ||
+        (dLytDobutton_c::getAction() != dLytDobutton_c::ACT_DO_INVALID || shouldBeHiddenGeneral() ||
          dLytMeter_c::getField_0x13B66() || fn_800D5420() || isInModeMap() || isInModePause())) {
         mBirdGaugeVisible = false;
     }
@@ -1408,7 +1408,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         }
     }
 
-    if (!field_0x13781 || fn_800D56B0() ||
+    if (!field_0x13781 || shouldBeHiddenGeneral() ||
 
         (dLytMeter_c::getField_0x13B66() || fn_800D5420() || isInModeMap() || isInModePause())) {
         mBossGaugeVisible = false;
@@ -1436,7 +1436,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         if (dAcItem_c::getKeyPieceCount() == 0 || dLytAreaCaption_c::getVisible() || fn_800D5380(false) ||
             SceneflagManager::sInstance->checkSceneflagGlobal(4, 0x21) || MinigameManager::isInAnyMinigame()
 
-            || (dLytMeter_c::getField_0x13B66() || fn_800D56B0() || mIsInSwordDrawEvent || fn_800D5420() ||
+            || (dLytMeter_c::getField_0x13B66() || shouldBeHiddenGeneral() || mIsInSwordDrawEvent || fn_800D5420() ||
                 isInModeMap() || isInModePause())) {
             mKakeraKeyVisible = false;
         }
@@ -1454,7 +1454,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
 
             || DungeonflagManager::sInstance->getCounterOrFlag(16, 8) != 0 ||
             dAcPy_c::GetLink()->getCurrentAction() == 0x8C || dLytAreaCaption_c::getVisible() || fn_800D5380(false) ||
-            MinigameManager::isInAnyMinigame() || fn_800D56B0() || mIsInSwordDrawEvent
+            MinigameManager::isInAnyMinigame() || shouldBeHiddenGeneral() || mIsInSwordDrawEvent
 
             || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || isInModeMap() || isInModePause())) {
             mBossKeyVisible = false;
@@ -1471,7 +1471,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
 
     if (mpSmallKey != nullptr) {
         if (dAcItem_c::getSmallKeyCount() == 0 || dLytAreaCaption_c::getVisible() || fn_800D5380(false) ||
-            MinigameManager::isInAnyMinigame() || fn_800D56B0() || mIsInSwordDrawEvent
+            MinigameManager::isInAnyMinigame() || shouldBeHiddenGeneral() || mIsInSwordDrawEvent
 
             || (dLytMeter_c::getField_0x13B66() || fn_800D5420() || isInModeMap() || isInModePause())) {
             mSmallKeyVisible = false;
@@ -1490,7 +1490,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         if (!field_0x137B2 || dLytAreaCaption_c::getVisible() || fn_800D5380(false) ||
             MinigameManager::isInAnyMinigame() || mIsInSwordDrawEvent
 
-            || fn_800D56B0() || dLytMeter_c::getField_0x13B66() || fn_800D5420() || isInModeMap() || isInModePause()) {
+            || shouldBeHiddenGeneral() || dLytMeter_c::getField_0x13B66() || fn_800D5420() || isInModeMap() || isInModePause()) {
             mDrinkVisible = false;
         }
 
@@ -1509,8 +1509,8 @@ void dLytMeterMain_c::checkPaneVisibility() {
 
 bool dLytMeterMain_c::execute() {
     dLytMeter_c *meter = dLytMeter_c::GetInstance();
-    if (field_0x13775 && !EventManager::isInEvent()) {
-        field_0x13775 = 0;
+    if (mIsCollectingTadtoneScroll && !EventManager::isInEvent()) {
+        mIsCollectingTadtoneScroll = false;
     }
 
     if (isSilentRealm()) {

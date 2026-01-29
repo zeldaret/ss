@@ -20,6 +20,10 @@ public:
     f32 getField0x260() const;
     void setFrame(f32);
 
+    bool isStateWait() const {
+        return mStateMgr.isState(StateID_Wait);
+    }
+
 private:
     STATE_FUNC_DECLARE(dLytNote_c, Wait);
     STATE_FUNC_DECLARE(dLytNote_c, In);

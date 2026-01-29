@@ -427,7 +427,7 @@ enum StoryFlags_e {
     /** [Music Scroll for Tadtones (sets before the collecting, unsets when collecting is done)]
      *  Story Flag #82 (0x0052) - JP 805ACD6B 0x08 / US 805A9AEB 0x08
      */
-    STORYFLAG_82,
+    STORYFLAG_HAS_TADTONE_SCROLL,
 
     /** [Ghirahim 1 defeated (Skyview Spring layer 1 / Skyview Boss Room layer 1)]
      *  Story Flag #83 (0x0053) - JP 805ACD69 0x80 / US 805A9AE9 0x80

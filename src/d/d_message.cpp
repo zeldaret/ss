@@ -228,8 +228,8 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
     switch (element->param3) {
         case EVENT_SET_STORYFLAG:
             StoryflagManager::sInstance->setFlag(params1n2);
-            if (params1n2 == 0x52) {
-                dLytMeter_c::GetInstance()->setMeterField_0x13775(true);
+            if (params1n2 == STORYFLAG_HAS_TADTONE_SCROLL) {
+                dLytMeter_c::GetInstance()->setIsCollectingTadtoneScroll(true);
             }
             if (dLytMsgWindow_c::fn_800D7B40() != 50013 && dLytMsgWindow_c::fn_800D7B40() != 20061) {
                 if (params1n2 == 100 || params1n2 == 64 || params1n2 == 271 || params1n2 == 81 || params1n2 == 668 ||
