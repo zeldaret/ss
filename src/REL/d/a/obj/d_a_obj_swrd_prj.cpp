@@ -13,7 +13,7 @@ STATE_DEFINE(dAcOSwrdPrj, SWWaitCross);
 STATE_DEFINE(dAcOSwrdPrj, SWChkTri);
 STATE_DEFINE(dAcOSwrdPrj, SWEnd);
 
-dAcOSwrdPrj::dAcOSwrdPrj() : mStateMgr(*this, sStateID::null) {}
+dAcOSwrdPrj::dAcOSwrdPrj() : mStateMgr(*this) {}
 dAcOSwrdPrj::~dAcOSwrdPrj() {}
 
 void dAcOSwrdPrj::initializeState_WaitHarp() {}

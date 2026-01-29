@@ -320,7 +320,7 @@ STATE_DEFINE(dAcItem_c, WaitTurnOff);
 STATE_DEFINE(dAcItem_c, WaitSacredDewGetEffect);
 
 dAcItem_c::dAcItem_c()
-    : mStateMgr(*this, sStateID::null),
+    : mStateMgr(*this),
       mEff_0x8F4(this),
       mEff_0x928(this),
       mEff_0x95C(this),

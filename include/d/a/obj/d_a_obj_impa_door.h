@@ -8,7 +8,7 @@
 
 class dAcOimpaDoor_c : public dAcObjBase_c {
 public:
-    dAcOimpaDoor_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOimpaDoor_c() : mStateMgr(*this) {}
     virtual ~dAcOimpaDoor_c() {}
 
     STATE_FUNC_DECLARE(dAcOimpaDoor_c, Wait);

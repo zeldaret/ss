@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOdownLava_c : public dAcObjBase_c {
 public:
-    dAcOdownLava_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOdownLava_c() : mStateMgr(*this) {}
     virtual ~dAcOdownLava_c() {}
 
     STATE_FUNC_DECLARE(dAcOdownLava_c, Wait);

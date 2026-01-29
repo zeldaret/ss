@@ -3,11 +3,10 @@
 
 #include "d/a/e/d_a_en_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcEKumiteGira_c : public dAcEnBase_c {
 public:
-    dAcEKumiteGira_c() : mStateMgr(*this, sStateID::null) {}
+    dAcEKumiteGira_c() : mStateMgr(*this) {}
     virtual ~dAcEKumiteGira_c() {}
 
     STATE_FUNC_DECLARE(dAcEKumiteGira_c, Wait);

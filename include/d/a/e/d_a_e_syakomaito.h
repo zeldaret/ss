@@ -3,11 +3,10 @@
 
 #include "d/a/e/d_a_en_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcESyakomaito_c : public dAcEnBase_c {
 public:
-    dAcESyakomaito_c() : mStateMgr(*this, sStateID::null) {}
+    dAcESyakomaito_c() : mStateMgr(*this) {}
     virtual ~dAcESyakomaito_c() {}
 
     STATE_FUNC_DECLARE(dAcESyakomaito_c, Wait);

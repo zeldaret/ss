@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcEnCl_c : public dAcObjBase_c {
 public:
-    dAcEnCl_c() : mStateMgr(*this, sStateID::null) {}
+    dAcEnCl_c() : mStateMgr(*this) {}
     virtual ~dAcEnCl_c() {}
 
     STATE_FUNC_DECLARE(dAcEnCl_c, pathMove);

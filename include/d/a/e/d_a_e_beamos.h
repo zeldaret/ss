@@ -3,11 +3,10 @@
 
 #include "d/a/e/d_a_en_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcEbeamos : public dAcEnBase_c {
 public:
-    dAcEbeamos() : mStateMgr(*this, sStateID::null) {}
+    dAcEbeamos() : mStateMgr(*this) {}
     virtual ~dAcEbeamos() {}
 
     STATE_FUNC_DECLARE(dAcEbeamos, Attack);

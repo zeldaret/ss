@@ -53,7 +53,7 @@ private:
 
 class dLytBirdGauge_c : public d2d::dSubPane {
 public:
-    dLytBirdGauge_c() : mStateMgr(*this, sStateID::null) {}
+    dLytBirdGauge_c() : mStateMgr(*this) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
     virtual bool execute() override;

@@ -3,11 +3,10 @@
 
 #include "d/a/e/d_a_en_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcESiren_c : public dAcEnBase_c {
 public:
-    dAcESiren_c() : mStateMgr(*this, sStateID::null) {}
+    dAcESiren_c() : mStateMgr(*this) {}
     virtual ~dAcESiren_c() {}
 
     STATE_FUNC_DECLARE(dAcESiren_c, Wait);

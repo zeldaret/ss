@@ -15,7 +15,7 @@
 class dAcOChest_c : public dAcObjBase_c {
 public:
     dAcOChest_c()
-        : mStateMgr(*this, sStateID::null), mEvent(*this, nullptr), mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
+        : mStateMgr(*this), mEvent(*this, nullptr), mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
     virtual ~dAcOChest_c() {}
 
     static void changeStateOpenCallback(dAcOChest_c *);

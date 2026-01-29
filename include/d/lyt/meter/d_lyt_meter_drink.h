@@ -29,7 +29,7 @@ class dLytMeterDrinkParts_c {
     };
 
 public:
-    dLytMeterDrinkParts_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterDrinkParts_c() : mStateMgr(*this) {}
     ~dLytMeterDrinkParts_c() {}
 
     void init();
@@ -57,7 +57,7 @@ private:
 
 class dLytMeterDrink_c {
 public:
-    dLytMeterDrink_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterDrink_c() : mStateMgr(*this) {}
     ~dLytMeterDrink_c() {}
 
     virtual d2d::dLytSub *getLyt() {

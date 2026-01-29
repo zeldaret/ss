@@ -3,12 +3,11 @@
 
 #include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/actor_event.h"
 
 class dTgSw_c : public dTg_c {
 public:
-    dTgSw_c() : mStateMgr(*this, sStateID::null), mActorEvent(*this, nullptr) {}
+    dTgSw_c() : mStateMgr(*this), mActorEvent(*this, nullptr) {}
     virtual ~dTgSw_c() {}
 
     virtual int create() override;

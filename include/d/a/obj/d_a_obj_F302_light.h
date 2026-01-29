@@ -7,13 +7,12 @@
 #include "m/m3d/m_smdl.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/time_area_mgr.h"
 
 class dAcOF302Light_c : public dAcObjBase_c {
 public:
-    dAcOF302Light_c() : mEvent(*this, nullptr), mStateMgr(*this, sStateID::null) {}
+    dAcOF302Light_c() : mEvent(*this, nullptr), mStateMgr(*this) {}
     virtual ~dAcOF302Light_c() {}
 
     virtual bool createHeap() override;

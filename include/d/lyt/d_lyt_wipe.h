@@ -43,7 +43,7 @@ private:
 
 class dLytWipe_c {
 public:
-    dLytWipe_c() : mStateMgr(*this, sStateID::null) {}
+    dLytWipe_c() : mStateMgr(*this) {}
 
     bool build();
     bool remove();

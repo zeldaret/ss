@@ -1,13 +1,12 @@
 #ifndef D_T_KS_H
 #define D_T_KS_H
 
-#include "d/a/d_a_base.h"
+#include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
-class dTgKiesuTag_c : public dAcBase_c {
+class dTgKiesuTag_c : public dTg_c {
 public:
-    dTgKiesuTag_c() : mStateMgr(*this, sStateID::null) {}
+    dTgKiesuTag_c() : mStateMgr(*this) {}
     virtual ~dTgKiesuTag_c() {}
 
     STATE_FUNC_DECLARE(dTgKiesuTag_c, CreateChildren);

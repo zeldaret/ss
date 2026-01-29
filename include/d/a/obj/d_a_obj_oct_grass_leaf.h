@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOOctGrassLeaf_c : public dAcObjBase_c {
 public:
-    dAcOOctGrassLeaf_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOOctGrassLeaf_c() : mStateMgr(*this) {}
     virtual ~dAcOOctGrassLeaf_c() {}
 
     STATE_FUNC_DECLARE(dAcOOctGrassLeaf_c, Wait);

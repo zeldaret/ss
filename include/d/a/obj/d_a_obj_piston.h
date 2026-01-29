@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOPiston_c : public dAcObjBase_c {
 public:
-    dAcOPiston_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOPiston_c() : mStateMgr(*this) {}
     virtual ~dAcOPiston_c() {}
 
     STATE_FUNC_DECLARE(dAcOPiston_c, WaitDelay);

@@ -9,7 +9,7 @@
 
 class dAcKnightLeaderBird_c : public dAcBirdBase_c {
 public:
-    dAcKnightLeaderBird_c() : mStateMgr(*this, sStateID::null) {}
+    dAcKnightLeaderBird_c() : mStateMgr(*this) {}
     virtual ~dAcKnightLeaderBird_c() {}
 
     virtual bool createHeap() override;

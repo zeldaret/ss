@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOhimo_c : public dAcObjBase_c {
 public:
-    dAcOhimo_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOhimo_c() : mStateMgr(*this) {}
     virtual ~dAcOhimo_c() {}
 
     STATE_FUNC_DECLARE(dAcOhimo_c, Wait);

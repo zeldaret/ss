@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOBoat_c : public dAcObjBase_c {
 public:
-    dAcOBoat_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOBoat_c() : mStateMgr(*this) {}
     virtual ~dAcOBoat_c() {}
 
     STATE_FUNC_DECLARE(dAcOBoat_c, Wait);

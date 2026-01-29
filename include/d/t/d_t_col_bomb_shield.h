@@ -7,7 +7,7 @@
 
 class dTgColBombShield : public dTg_c {
 public:
-    dTgColBombShield() : mStateMgr(*this, sStateID::null) {}
+    dTgColBombShield() : mStateMgr(*this) {}
     virtual ~dTgColBombShield() {}
 
     virtual bool createHeap() override;

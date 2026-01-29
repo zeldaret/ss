@@ -26,7 +26,7 @@ public:
 
 class dAcBomb_c : public dAcObjBase_c {
 public:
-    dAcBomb_c() : mStateMgr(*this, sStateID::null), mSelfRef(this), mEffect1(this), mEffect2(this) {}
+    dAcBomb_c() : mStateMgr(*this), mSelfRef(this), mEffect1(this), mEffect2(this) {}
     virtual ~dAcBomb_c();
 
     /* vt 0x08  */ virtual int create() override;

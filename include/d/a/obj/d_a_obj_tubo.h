@@ -20,7 +20,7 @@
 
 class dAcOtubo_c : public dAcObjBase_c {
 public:
-    dAcOtubo_c() : mStateMgr(*this, sStateID::null), field_0x8F0(this) {}
+    dAcOtubo_c() : mStateMgr(*this), field_0x8F0(this) {}
     virtual ~dAcOtubo_c() {}
 
     virtual int doDelete() override;

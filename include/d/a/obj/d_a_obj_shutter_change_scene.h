@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_door_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOShutterChangeScene_c : public dAcObjDoor_c {
 public:
-    dAcOShutterChangeScene_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOShutterChangeScene_c() : mStateMgr(*this) {}
     virtual ~dAcOShutterChangeScene_c() {}
 
     virtual bool canOpen() override;

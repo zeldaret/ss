@@ -10,11 +10,10 @@
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOutajimaIsland_c : public dAcObjBase_c {
 public:
-    dAcOutajimaIsland_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOutajimaIsland_c() : mStateMgr(*this) {}
     virtual ~dAcOutajimaIsland_c() {}
 
     virtual bool createHeap() override;

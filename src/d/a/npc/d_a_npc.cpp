@@ -144,7 +144,7 @@ SizedString<128> sNpcStr2;
 SizedString<128> sNpcStr3;
 SizedString<128> sNpcStr4;
 
-dAcNpc_c::dAcNpc_c() : mFlow(this), mStateMgr(*this, sStateID::null), mActorListEntry(this) {}
+dAcNpc_c::dAcNpc_c() : mFlow(this), mStateMgr(*this), mActorListEntry(this) {}
 
 dAcNpc_c::~dAcNpc_c() {
     // TODO

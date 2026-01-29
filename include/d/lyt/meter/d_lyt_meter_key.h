@@ -9,7 +9,7 @@
 
 class dLytMeterKakeraKey_c {
 public:
-    dLytMeterKakeraKey_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterKakeraKey_c() : mStateMgr(*this) {}
     ~dLytMeterKakeraKey_c() {}
 
     bool build(d2d::ResAccIf_c *);
@@ -48,7 +48,7 @@ private:
 
 class dLytMeterBossKey_c {
 public:
-    dLytMeterBossKey_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterBossKey_c() : mStateMgr(*this) {}
     ~dLytMeterBossKey_c() {}
 
     virtual d2d::LytBase_c *getLyt() {
@@ -91,7 +91,7 @@ private:
 
 class dLytMeterSmallKey_c {
 public:
-    dLytMeterSmallKey_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterSmallKey_c() : mStateMgr(*this) {}
     ~dLytMeterSmallKey_c() {}
 
     virtual d2d::LytBase_c *getLyt() {

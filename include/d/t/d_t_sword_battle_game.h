@@ -8,7 +8,7 @@
 
 class dTgSwordBattleGame_c : public dTg_c {
 public:
-    dTgSwordBattleGame_c() : mStateMgr(*this, sStateID::null), mEventRelated(*this, 0) {}
+    dTgSwordBattleGame_c() : mStateMgr(*this), mEventRelated(*this, 0) {}
     virtual ~dTgSwordBattleGame_c() {}
 
     virtual int create() override;

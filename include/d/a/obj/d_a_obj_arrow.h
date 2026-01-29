@@ -13,7 +13,7 @@
 
 class dAcArrow_c : public dAcObjBase_c {
 public:
-    dAcArrow_c() : mPolyInfo(), mStateMgr(*this, sStateID::null) {}
+    dAcArrow_c() : mPolyInfo(), mStateMgr(*this) {}
     virtual ~dAcArrow_c();
 
     virtual bool createHeap() override;

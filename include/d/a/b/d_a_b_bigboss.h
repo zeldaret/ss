@@ -3,11 +3,10 @@
 
 #include "d/a/e/d_a_en_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcBBigBoss_c : public dAcEnBase_c {
 public:
-    dAcBBigBoss_c() : mStateMgr(*this, sStateID::null) {}
+    dAcBBigBoss_c() : mStateMgr(*this) {}
     virtual ~dAcBBigBoss_c() {}
 
     STATE_FUNC_DECLARE(dAcBBigBoss_c, AppearWait);

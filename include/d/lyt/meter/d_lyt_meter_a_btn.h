@@ -6,7 +6,7 @@
 
 class dLytMeterABtn_c : public d2d::dSubPane {
 public:
-    dLytMeterABtn_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterABtn_c() : mStateMgr(*this) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
     virtual bool execute() override;

@@ -7,13 +7,12 @@
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/stage_render_stuff.h"
 #include "toBeSorted/time_area_mgr.h"
 
 class dAcOTimeStageBg_c : public dAcObjBase_c {
 public:
-    dAcOTimeStageBg_c() : mStateMgr(*this, sStateID::null), mSceneCallback(this) {}
+    dAcOTimeStageBg_c() : mStateMgr(*this), mSceneCallback(this) {}
     virtual ~dAcOTimeStageBg_c() {}
 
     virtual bool createHeap() override;

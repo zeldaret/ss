@@ -8,7 +8,7 @@
 
 class dAcOPoolCock_c : public dAcObjBase_c {
 public:
-    dAcOPoolCock_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOPoolCock_c() : mStateMgr(*this) {}
     virtual ~dAcOPoolCock_c() {}
     virtual bool createHeap() override;
     virtual int actorCreate() override;

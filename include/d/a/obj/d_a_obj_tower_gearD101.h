@@ -31,7 +31,7 @@ public:
 class dAcOTowerGearD101_c : public dAcObjBase_c {
 public:
     dAcOTowerGearD101_c()
-        : mStateMgr(*this, sStateID::null),
+        : mStateMgr(*this),
           field_0x3A0(mVec3_c::Zero.x, mVec3_c::Zero.y, mVec3_c::Zero.z),
           field_0x3AC(mVec3_c::Zero.x, mVec3_c::Zero.y, mVec3_c::Zero.z),
           field_0x3B8(mAng3_c::Zero) {}

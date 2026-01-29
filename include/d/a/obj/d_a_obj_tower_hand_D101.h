@@ -11,14 +11,13 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/d_emitter.h"
 
 
 class dAcOTowerHandD101_c : public dAcObjBase_c {
 public:
-    dAcOTowerHandD101_c() : mStateMgr(*this, sStateID::null), mEffects(this), mEvent(*this, nullptr), mFlags(0) {}
+    dAcOTowerHandD101_c() : mStateMgr(*this), mEffects(this), mEvent(*this, nullptr), mFlags(0) {}
     virtual ~dAcOTowerHandD101_c() {}
 
     STATE_FUNC_DECLARE(dAcOTowerHandD101_c, RemainOpen);

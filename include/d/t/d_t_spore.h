@@ -42,7 +42,7 @@ private:
 
 class dSporeTag_c : public dTg_c {
 public:
-    dSporeTag_c() : mStateMgr(*this, sStateID::null) {}
+    dSporeTag_c() : mStateMgr(*this) {}
     virtual ~dSporeTag_c() {}
 
     virtual int create() override;

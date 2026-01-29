@@ -8,7 +8,7 @@
 
 class dLytMapCapture_c {
 public:
-    dLytMapCapture_c() :mStateMgr(*this, sStateID::null), mpPicture(nullptr) {
+    dLytMapCapture_c() :mStateMgr(*this), mpPicture(nullptr) {
         field_0x070 = 0.0f;
         field_0x074 = 0.0f;
         mRenderRequest = false;

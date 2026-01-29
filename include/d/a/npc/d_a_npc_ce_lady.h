@@ -4,11 +4,10 @@
 #include "d/a/npc/d_a_npc.h"
 #include "d/col/c/c_cc_d.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcNpcCeLady_c : public dAcNpc_c {
 public:
-    dAcNpcCeLady_c() : mStateMgr(*this, sStateID::null) {}
+    dAcNpcCeLady_c() : mStateMgr(*this) {}
     virtual ~dAcNpcCeLady_c() {}
 
     bool fn_12_1C20(dAcObjBase_c *);

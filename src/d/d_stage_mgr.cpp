@@ -33,7 +33,7 @@ STATE_DEFINE(dStageMgr_c, SceneChangeSave);
 STATE_DEFINE(dStageMgr_c, RestartSceneWait);
 STATE_DEFINE(dStageMgr_c, RestartScene);
 
-dStageMgr_c::dStageMgr_c() : mStateMgr(*this, sStateID::null), mPhase(this, sCallbacks) {
+dStageMgr_c::dStageMgr_c() : mStateMgr(*this), mPhase(this, sCallbacks) {
     sInstance = this;
 }
 

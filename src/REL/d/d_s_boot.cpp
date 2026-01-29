@@ -415,7 +415,7 @@ void dScBoot_c::strap_c::init() {
     field_0x4F0 = 0;
 }
 
-dScBoot_c::dScBoot_c() : mStateMgr(*this, sStateID::null), mPhases(this, sCallbacks), mpDvdCallback(nullptr) {
+dScBoot_c::dScBoot_c() : mStateMgr(*this), mPhases(this, sCallbacks), mpDvdCallback(nullptr) {
     mObjectDataLoaded = false;
     sInstance = this;
     mStrapScreenVisible = false;

@@ -4,11 +4,10 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/flag/storyflag_manager.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOWarp_c : public dAcObjBase_c {
 public:
-    dAcOWarp_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOWarp_c() : mStateMgr(*this) {}
     virtual ~dAcOWarp_c() {}
 
     STATE_FUNC_DECLARE(dAcOWarp_c, Wait);

@@ -12,7 +12,7 @@
 // At 0x8, [8], size 0x48
 class dLytMeterMinusBtnMenuIcon_c {
 public:
-    dLytMeterMinusBtnMenuIcon_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterMinusBtnMenuIcon_c() : mStateMgr(*this) {}
     virtual ~dLytMeterMinusBtnMenuIcon_c() {}
 
     void init();
@@ -43,7 +43,7 @@ private:
 // At 0x248, standalone
 class dLytMeterMinusBtnBlink_c {
 public:
-    dLytMeterMinusBtnBlink_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterMinusBtnBlink_c() : mStateMgr(*this) {}
     ~dLytMeterMinusBtnBlink_c() {}
 
     void init();
@@ -74,7 +74,7 @@ private:
 // At 0x28C, [2], size 0x44
 class dLytMeterMinusBtnText_c {
 public:
-    dLytMeterMinusBtnText_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterMinusBtnText_c() : mStateMgr(*this) {}
     ~dLytMeterMinusBtnText_c() {}
 
     void init();
@@ -104,7 +104,7 @@ private:
 
 class dLytMeterMinusBtn_c : public d2d::dSubPane {
 public:
-    dLytMeterMinusBtn_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterMinusBtn_c() : mStateMgr(*this) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
     virtual bool execute() override;

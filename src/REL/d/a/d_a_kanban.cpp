@@ -6,7 +6,7 @@ STATE_DEFINE(dAcKanban_c, Wait);
 STATE_DEFINE(dAcKanban_c, Message);
 STATE_DEFINE(dAcKanban_c, PullOut);
 
-dAcKanban_c::dAcKanban_c() : mStateMgr(*this, sStateID::null) {}
+dAcKanban_c::dAcKanban_c() : mStateMgr(*this) {}
 dAcKanban_c::~dAcKanban_c() {}
 
 void dAcKanban_c::initializeState_Wait() {}

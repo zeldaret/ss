@@ -10,7 +10,7 @@ STATE_DEFINE(dAcOClef_c, PathMove);
 STATE_DEFINE(dAcOClef_c, Gravitate);
 STATE_DEFINE(dAcOClef_c, Die);
 
-dAcOClef_c::dAcOClef_c() : mStateMgr(*this, sStateID::null) {}
+dAcOClef_c::dAcOClef_c() : mStateMgr(*this) {}
 dAcOClef_c::~dAcOClef_c() {}
 
 void dAcOClef_c::initializeState_WaitPhantom() {}

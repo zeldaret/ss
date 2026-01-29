@@ -3,11 +3,10 @@
 
 #include "d/a/e/d_a_en_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcELizarufos_c : public dAcEnBase_c {
 public:
-    dAcELizarufos_c() : mStateMgr(*this, sStateID::null) {}
+    dAcELizarufos_c() : mStateMgr(*this) {}
     virtual ~dAcELizarufos_c() {}
 
     STATE_FUNC_DECLARE(dAcELizarufos_c, Demo);

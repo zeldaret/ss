@@ -12,7 +12,7 @@
 
 class dLytMeterItemSelectIcon_c {
 public:
-    dLytMeterItemSelectIcon_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterItemSelectIcon_c() : mStateMgr(*this) {}
     ~dLytMeterItemSelectIcon_c() {}
 
     void init();
@@ -40,7 +40,7 @@ private:
 
 class dLytMeterItemSelectBlink_c {
 public:
-    dLytMeterItemSelectBlink_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterItemSelectBlink_c() : mStateMgr(*this) {}
     ~dLytMeterItemSelectBlink_c() {}
 
     void init();
@@ -68,7 +68,7 @@ private:
 
 class dLytMeterItemSelectText_c {
 public:
-    dLytMeterItemSelectText_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterItemSelectText_c() : mStateMgr(*this) {}
     ~dLytMeterItemSelectText_c() {}
 
     void init();
@@ -96,7 +96,7 @@ private:
 
 class dLytMeterItemSelectBtn_c {
 public:
-    dLytMeterItemSelectBtn_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterItemSelectBtn_c() : mStateMgr(*this) {}
     ~dLytMeterItemSelectBtn_c() {}
 
     void init(s32 i, d2d::dLytSub *lyt, nw4r::lyt::Pane *pane);

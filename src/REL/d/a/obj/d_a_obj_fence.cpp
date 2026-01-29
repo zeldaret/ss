@@ -12,7 +12,7 @@ STATE_DEFINE(dAcOFence_c, WaitClose);
 STATE_DEFINE(dAcOFence_c, Close);
 STATE_DEFINE(dAcOFence_c, RequestConfineEvent);
 
-dAcOFence_c::dAcOFence_c() : mStateMgr(*this, sStateID::null) {}
+dAcOFence_c::dAcOFence_c() : mStateMgr(*this) {}
 dAcOFence_c::~dAcOFence_c() {}
 
 void dAcOFence_c::initializeState_WaitOpen() {}

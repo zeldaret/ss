@@ -1,13 +1,12 @@
 #ifndef D_T_GROUP_SUMMON_H
 #define D_T_GROUP_SUMMON_H
 
-#include "d/a/d_a_base.h"
+#include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
-class dTgGroupSummon_c : public dAcBase_c {
+class dTgGroupSummon_c : public dTg_c {
 public:
-    dTgGroupSummon_c() : mStateMgr(*this, sStateID::null) {}
+    dTgGroupSummon_c() : mStateMgr(*this) {}
     virtual ~dTgGroupSummon_c() {}
 
     STATE_FUNC_DECLARE(dTgGroupSummon_c, Wait);

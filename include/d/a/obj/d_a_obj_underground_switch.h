@@ -10,7 +10,7 @@
 
 class dAcOUgSwitch_c : public dAcObjBase_c {
 public:
-    dAcOUgSwitch_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOUgSwitch_c() : mStateMgr(*this) {}
     virtual ~dAcOUgSwitch_c() {}
 
     virtual bool createHeap() override;

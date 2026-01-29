@@ -8,11 +8,10 @@
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOgrassCoil_c : public dAcObjBase_c {
 public:
-    dAcOgrassCoil_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOgrassCoil_c() : mStateMgr(*this) {}
     virtual ~dAcOgrassCoil_c() {}
 
     virtual bool createHeap() override;

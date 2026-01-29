@@ -1,13 +1,12 @@
 #ifndef D_T_MIST_H
 #define D_T_MIST_H
 
-#include "d/a/d_a_base.h"
+#include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
-class dMistTag_c : public dAcBase_c {
+class dMistTag_c : public dTg_c {
 public:
-    dMistTag_c() : mStateMgr(*this, sStateID::null) {}
+    dMistTag_c() : mStateMgr(*this) {}
     virtual ~dMistTag_c() {}
 
     STATE_FUNC_DECLARE(dMistTag_c, Wait);

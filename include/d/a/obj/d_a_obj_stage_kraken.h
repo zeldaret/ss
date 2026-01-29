@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOstageKraken_c : public dAcObjBase_c {
 public:
-    dAcOstageKraken_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOstageKraken_c() : mStateMgr(*this) {}
     virtual ~dAcOstageKraken_c() {}
 
     STATE_FUNC_DECLARE(dAcOstageKraken_c, Wait);

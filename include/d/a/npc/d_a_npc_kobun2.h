@@ -3,11 +3,10 @@
 
 #include "d/a/npc/d_a_npc.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcNpcKbn2_c : public dAcNpc_c {
 public:
-    dAcNpcKbn2_c() : mStateMgr(*this, sStateID::null) {}
+    dAcNpcKbn2_c() : mStateMgr(*this) {}
     virtual ~dAcNpcKbn2_c() {}
 
     STATE_FUNC_DECLARE(dAcNpcKbn2_c, RaceInit);

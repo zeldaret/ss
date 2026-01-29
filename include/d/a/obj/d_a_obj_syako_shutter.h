@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOSyakoShutter_c : public dAcObjBase_c {
 public:
-    dAcOSyakoShutter_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOSyakoShutter_c() : mStateMgr(*this) {}
     virtual ~dAcOSyakoShutter_c() {}
 
     STATE_FUNC_DECLARE(dAcOSyakoShutter_c, Wait);

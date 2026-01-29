@@ -6,11 +6,10 @@
 #include "m/m3d/m_smdl.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOislandNusi_c : public dAcObjBase_c {
 public:
-    dAcOislandNusi_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOislandNusi_c() : mStateMgr(*this) {}
     virtual ~dAcOislandNusi_c() {}
 
     virtual bool createHeap() override;

@@ -49,7 +49,7 @@ void dLytWipeMain_c::executeState_ModeOut() {
 }
 void dLytWipeMain_c::finalizeState_ModeOut() {}
 
-dLytWipeMain_c::dLytWipeMain_c() : mStateMgr(*this, sStateID::null) {}
+dLytWipeMain_c::dLytWipeMain_c() : mStateMgr(*this) {}
 
 static const d2d::LytBrlanMapping brlanMap[] = {
     {"wipe_00_inOut.brlan", "G_inOut_00"},

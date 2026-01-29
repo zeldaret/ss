@@ -46,7 +46,7 @@ public:
     };
 
 public:
-    dAcEsm_c() : mScnCallback(this), mStateMgr(*this, sStateID::null) {}
+    dAcEsm_c() : mScnCallback(this), mStateMgr(*this) {}
     virtual ~dAcEsm_c() {}
     virtual int doDelete();
     virtual int draw();

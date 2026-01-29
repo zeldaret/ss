@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOHarpHint_c : public dAcObjBase_c {
 public:
-    dAcOHarpHint_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOHarpHint_c() : mStateMgr(*this) {}
     virtual ~dAcOHarpHint_c() {}
 
     STATE_FUNC_DECLARE(dAcOHarpHint_c, Wait);

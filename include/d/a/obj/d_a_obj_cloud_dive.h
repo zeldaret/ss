@@ -9,7 +9,7 @@
 
 class dAcOcloudDive_c : public dAcObjBase_c {
 public:
-    dAcOcloudDive_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOcloudDive_c() : mStateMgr(*this) {}
     virtual ~dAcOcloudDive_c() {}
 
     virtual bool createHeap() override;

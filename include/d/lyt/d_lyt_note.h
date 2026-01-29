@@ -7,7 +7,7 @@
 // size 0x27C
 class dLytNote_c {
 public:
-    dLytNote_c() : mStateMgr(*this, sStateID::null) {}
+    dLytNote_c() : mStateMgr(*this) {}
     virtual ~dLytNote_c() {}
 
     bool build(d2d::ResAccIf_c *);

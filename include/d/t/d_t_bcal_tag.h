@@ -1,13 +1,12 @@
 #ifndef D_T_BCAL_TAG_H
 #define D_T_BCAL_TAG_H
 
-#include "d/a/d_a_base.h"
+#include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
-class dTgBcArL_c : public dAcBase_c {
+class dTgBcArL_c : public dTg_c {
 public:
-    dTgBcArL_c() : mStateMgr(*this, sStateID::null) {}
+    dTgBcArL_c() : mStateMgr(*this) {}
     virtual ~dTgBcArL_c() {}
 
     STATE_FUNC_DECLARE(dTgBcArL_c, Wait);

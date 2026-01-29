@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcNpcRescue_c : public dAcObjBase_c {
 public:
-    dAcNpcRescue_c() : mStateMgr(*this, sStateID::null) {}
+    dAcNpcRescue_c() : mStateMgr(*this) {}
     virtual ~dAcNpcRescue_c() {}
 
     STATE_FUNC_DECLARE(dAcNpcRescue_c, Wait);
