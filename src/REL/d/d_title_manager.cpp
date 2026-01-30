@@ -9,7 +9,7 @@ STATE_DEFINE(dTitleMgr_c, Title);
 STATE_DEFINE(dTitleMgr_c, FileSelect);
 STATE_DEFINE(dTitleMgr_c, Input);
 
-dTitleMgr_c::dTitleMgr_c() : mStateMgr(*this, sStateID::null) {}
+dTitleMgr_c::dTitleMgr_c() : mStateMgr(*this) {}
 dTitleMgr_c::~dTitleMgr_c() {}
 
 void dTitleMgr_c::initializeState_Init() {}

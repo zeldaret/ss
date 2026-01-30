@@ -1,13 +1,12 @@
 #ifndef D_T_ROLL_ATTACK_LOG_H
 #define D_T_ROLL_ATTACK_LOG_H
 
-#include "d/a/d_a_base.h"
+#include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
-class dTgRollAttackLog_c : public dAcBase_c {
+class dTgRollAttackLog_c : public dTg_c {
 public:
-    dTgRollAttackLog_c() : mStateMgr(*this, sStateID::null) {}
+    dTgRollAttackLog_c() : mStateMgr(*this) {}
     virtual ~dTgRollAttackLog_c() {}
 
     STATE_FUNC_DECLARE(dTgRollAttackLog_c, Wait);

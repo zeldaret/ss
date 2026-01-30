@@ -96,7 +96,7 @@ static const char *sPaneNames[] = {
 #define PAUSE_DISP_01_NUM_COMBINED_PANES (PAUSE_DISP_01_NUM_MY_PANES + PAUSE_DISP_01_NUM_SUBPANES)
 #define PAUSE_DISP_01_OFFSET_MY_PANES PAUSE_DISP_01_NUM_SUBPANES
 
-dLytPauseDisp01_c::dLytPauseDisp01_c() : mStateMgr(*this, sStateID::null) {}
+dLytPauseDisp01_c::dLytPauseDisp01_c() : mStateMgr(*this) {}
 
 bool dLytPauseDisp01_c::build() {
     dLytPauseMgr_c *pauseMgr = dLytPauseMgr_c::GetInstance();

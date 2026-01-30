@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcAsuraSword_c : public dAcObjBase_c {
 public:
-    dAcAsuraSword_c() : mStateMgr(*this, sStateID::null) {}
+    dAcAsuraSword_c() : mStateMgr(*this) {}
     virtual ~dAcAsuraSword_c() {}
 
     STATE_FUNC_DECLARE(dAcAsuraSword_c, Carried);

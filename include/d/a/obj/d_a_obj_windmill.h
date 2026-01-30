@@ -16,7 +16,7 @@
 
 class dAcOwindmill_c : public dAcObjBase_c {
 public:
-    dAcOwindmill_c() : mStateMgr(*this, sStateID::null), mCallback(this) {}
+    dAcOwindmill_c() : mStateMgr(*this), mCallback(this) {}
     virtual ~dAcOwindmill_c() {}
 
     virtual bool createHeap() override;

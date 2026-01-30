@@ -9,7 +9,7 @@
 
 class dLytMeterDowsingMenuIcon_c {
 public:
-    dLytMeterDowsingMenuIcon_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterDowsingMenuIcon_c() : mStateMgr(*this) {}
     virtual ~dLytMeterDowsingMenuIcon_c() {}
 
     void init();
@@ -40,7 +40,7 @@ private:
 
 class dLytMeterDowsingBlink_c {
 public:
-    dLytMeterDowsingBlink_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterDowsingBlink_c() : mStateMgr(*this) {}
     ~dLytMeterDowsingBlink_c() {}
 
     void init();
@@ -70,7 +70,7 @@ private:
 
 class dLytMeterDowsingInput_c {
 public:
-    dLytMeterDowsingInput_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterDowsingInput_c() : mStateMgr(*this) {}
     ~dLytMeterDowsingInput_c() {}
 
     void init();
@@ -100,7 +100,7 @@ private:
 
 class dLytMeterDowsingText_c {
 public:
-    dLytMeterDowsingText_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterDowsingText_c() : mStateMgr(*this) {}
     ~dLytMeterDowsingText_c() {}
 
     void init();
@@ -130,7 +130,7 @@ private:
 
 class dLytMeterDowsing_c : public d2d::dSubPane {
 public:
-    dLytMeterDowsing_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterDowsing_c() : mStateMgr(*this) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
     virtual bool execute() override;

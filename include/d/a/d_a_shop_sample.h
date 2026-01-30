@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcShopSample_c : public dAcObjBase_c {
 public:
-    dAcShopSample_c() : mStateMgr(*this, sStateID::null) {}
+    dAcShopSample_c() : mStateMgr(*this) {}
     virtual ~dAcShopSample_c() {}
 
     STATE_FUNC_DECLARE(dAcShopSample_c, Wait);

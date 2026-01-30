@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOSwWhipLever_c : public dAcObjBase_c {
 public:
-    dAcOSwWhipLever_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOSwWhipLever_c() : mStateMgr(*this) {}
     virtual ~dAcOSwWhipLever_c() {}
 
     STATE_FUNC_DECLARE(dAcOSwWhipLever_c, Wait);

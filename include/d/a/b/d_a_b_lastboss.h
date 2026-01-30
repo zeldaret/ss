@@ -273,7 +273,7 @@ class dAcBlastboss_c : public dAcEnBase_c {
     };
 
 public:
-    dAcBlastboss_c() : mStateMgr(*this, sStateID::null), mScnCallback(this) {}
+    dAcBlastboss_c() : mStateMgr(*this), mScnCallback(this) {}
     virtual ~dAcBlastboss_c() {}
 
     virtual bool createHeap() override;

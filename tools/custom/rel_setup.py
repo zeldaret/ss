@@ -368,7 +368,6 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function]):
     includes = [include]
     if uses_state_system:
         includes.append("s/s_State.hpp")
-        includes.append("s/s_StateMgr.hpp")
         state_names = find_state_names(strings)
         state_candidates = find_state_candidates(data_blocks, len(state_names))
         if state_candidates:
@@ -414,7 +413,7 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function]):
         if has_inline_ctor:
             f.write(f"\t{name}()")
             if uses_state_system:
-                f.write(" : mStateMgr(*this, sStateID::null)")
+                f.write(" : mStateMgr(*this)")
             f.write(" {}\n")
             f.write(f"\tvirtual ~{name}() {{}}\n\n")
         else:
@@ -447,7 +446,7 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function]):
         if not has_inline_ctor:
             f.write(f"{name}::{name}()")
             if uses_state_system:
-                f.write(" : mStateMgr(*this, sStateID::null)")
+                f.write(" : mStateMgr(*this)")
             f.write(" {}\n")
             f.write(f"{name}::~{name}() {{}}\n\n")
 

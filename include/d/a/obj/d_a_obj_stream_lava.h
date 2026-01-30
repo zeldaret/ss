@@ -13,7 +13,7 @@
 
 class dAcOstreamLava_c : public dAcObjBase_c {
 public:
-    dAcOstreamLava_c() : mStateMgr(*this, sStateID::null), mEvent(*this, nullptr), mScnCallback(this) {}
+    dAcOstreamLava_c() : mStateMgr(*this), mEvent(*this, nullptr), mScnCallback(this) {}
     virtual int create() override;
     virtual int doDelete() override;
     virtual int draw() override;

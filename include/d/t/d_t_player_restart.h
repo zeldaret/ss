@@ -1,9 +1,9 @@
 #ifndef D_T_PLAYER_RESTART_H
 #define D_T_PLAYER_RESTART_H
 
-#include "d/a/d_a_base.h"
+#include "d/t/d_tg.h"
 
-class dTgPlayerRestart_c : public dAcBase_c {
+class dTgPlayerRestart_c : public dTg_c {
 public:
     dTgPlayerRestart_c() {}
     virtual ~dTgPlayerRestart_c() {}

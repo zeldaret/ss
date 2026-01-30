@@ -194,7 +194,7 @@ public:
     friend class dLytMapPinIconAggregate_c;
 
     dLytMapPinIcon_c()
-        : mStateMgr(*this, sStateID::null),
+        : mStateMgr(*this),
           mpBounding(nullptr),
           field_0x1BC(0),
           mPosition(0.0f, 0.0f, 0.0f),
@@ -253,7 +253,7 @@ class dLytMapPinIconAggregate_c {
     friend class dLytMapMain_c;
 
 public:
-    dLytMapPinIconAggregate_c() : mStateMgr(*this, sStateID::null) {
+    dLytMapPinIconAggregate_c() : mStateMgr(*this) {
         field_0x9A0 = nullptr;
         mLoopFrame = 0;
         mLoopFrameMax = 0;
@@ -296,7 +296,7 @@ class dLytMapFloorBtn_c {
 
 public:
     dLytMapFloorBtn_c()
-        : mStateMgr(*this, sStateID::null),
+        : mStateMgr(*this),
           mpOwnerLyt(nullptr),
           mpAnmGroups(nullptr),
           field_0x44(0),
@@ -338,7 +338,7 @@ class dLytMapFloorBtnMgr_c : public d2d::dSubPane {
 
 public:
     dLytMapFloorBtnMgr_c(dLytMapGlobal_c *global)
-        : mpGlobal(global), mpPane(nullptr), mStateMgr(*this, sStateID::null) {
+        : mpGlobal(global), mpPane(nullptr), mStateMgr(*this) {
         mNumFloors = 1;
         mBaseFloorOffset = 0;
         mSelectedBtnIdx = 0;
@@ -437,7 +437,7 @@ class dLytMapPopupInfo_c {
     friend class dLytMapMain_c;
 
 public:
-    dLytMapPopupInfo_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMapPopupInfo_c() : mStateMgr(*this) {}
 
     STATE_FUNC_DECLARE(dLytMapPopupInfo_c, Invisible);
     STATE_FUNC_DECLARE(dLytMapPopupInfo_c, In);
@@ -461,7 +461,7 @@ class dLytMapSavePopupAction_c {
     friend class dLytMapSavePopup_c;
 
 public:
-    dLytMapSavePopupAction_c() : mStateMgr(*this, sStateID::null), mInOutFrame(0.0f), mInRequest(false) {}
+    dLytMapSavePopupAction_c() : mStateMgr(*this), mInOutFrame(0.0f), mInRequest(false) {}
 
     STATE_FUNC_DECLARE(dLytMapSavePopupAction_c, Invisible);
     STATE_FUNC_DECLARE(dLytMapSavePopupAction_c, In);
@@ -512,7 +512,7 @@ class dLytMapSaveCaption_c {
     friend class dLytMapMain_c;
 
 public:
-    dLytMapSaveCaption_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMapSaveCaption_c() : mStateMgr(*this) {}
 
     STATE_FUNC_DECLARE(dLytMapSaveCaption_c, Invisible);
     STATE_FUNC_DECLARE(dLytMapSaveCaption_c, In);
@@ -539,7 +539,7 @@ class dLytMapSaveObj_c {
 
 public:
     dLytMapSaveObj_c()
-        : mStateMgr(*this, sStateID::null), mSelectRequest(false), mDecideRequest(false), mDecideFinished(false) {}
+        : mStateMgr(*this), mSelectRequest(false), mDecideRequest(false), mDecideFinished(false) {}
     ~dLytMapSaveObj_c() {}
 
     STATE_FUNC_DECLARE(dLytMapSaveObj_c, Wait);

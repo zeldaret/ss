@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOcumulCloud_c : public dAcObjBase_c {
 public:
-    dAcOcumulCloud_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOcumulCloud_c() : mStateMgr(*this) {}
     virtual ~dAcOcumulCloud_c() {}
 
     STATE_FUNC_DECLARE(dAcOcumulCloud_c, Wait);

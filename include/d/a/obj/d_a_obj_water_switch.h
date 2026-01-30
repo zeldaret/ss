@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOwaterSwitch_c : public dAcObjBase_c {
 public:
-    dAcOwaterSwitch_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOwaterSwitch_c() : mStateMgr(*this) {}
     virtual ~dAcOwaterSwitch_c() {}
 
     STATE_FUNC_DECLARE(dAcOwaterSwitch_c, Off);

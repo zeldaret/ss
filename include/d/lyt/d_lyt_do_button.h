@@ -161,7 +161,7 @@ public:
         ACT_DO_INVALID = 94,
     };
 
-    dLytDobutton_c() : mStateMgr(*this, sStateID::null) {
+    dLytDobutton_c() : mStateMgr(*this) {
         sInstance = this;
     }
     virtual ~dLytDobutton_c() {

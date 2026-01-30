@@ -7,7 +7,7 @@
 class dAcOTumbleWeed_c;
 class dTgTumbleWeed_c : public dTg_c {
 public:
-    dTgTumbleWeed_c() : mStateMgr(*this, sStateID::null) {}
+    dTgTumbleWeed_c() : mStateMgr(*this) {}
     virtual ~dTgTumbleWeed_c() {}
     virtual int create() override;
     virtual int actorExecute() override;

@@ -14,7 +14,7 @@
 
 class dAcOFairy_c : public dAcObjBase_c {
 public:
-    dAcOFairy_c() : field_0x330(0), mStateMgr(*this, sStateID::null) {}
+    dAcOFairy_c() : field_0x330(0), mStateMgr(*this) {}
     virtual ~dAcOFairy_c() {}
 
     virtual bool createHeap() override;

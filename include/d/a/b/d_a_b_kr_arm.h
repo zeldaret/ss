@@ -3,11 +3,10 @@
 
 #include "d/a/e/d_a_en_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcBkra_c : public dAcEnBase_c {
 public:
-    dAcBkra_c() : mStateMgr(*this, sStateID::null) {}
+    dAcBkra_c() : mStateMgr(*this) {}
     virtual ~dAcBkra_c() {}
 
     STATE_FUNC_DECLARE(dAcBkra_c, Wait);

@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOrideRock_c : public dAcObjBase_c {
 public:
-    dAcOrideRock_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOrideRock_c() : mStateMgr(*this) {}
     virtual ~dAcOrideRock_c() {}
 
     STATE_FUNC_DECLARE(dAcOrideRock_c, Wait);

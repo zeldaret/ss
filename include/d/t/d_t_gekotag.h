@@ -5,11 +5,10 @@
 #include "d/a/e/d_a_e_geko.h"
 #include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dTgGekoTag : public dTg_c {
 public:
-    dTgGekoTag() : mStateMgr(*this, sStateID::null) {}
+    dTgGekoTag() : mStateMgr(*this) {}
     virtual ~dTgGekoTag() {}
 
     virtual int create() override;

@@ -6,7 +6,7 @@ STATE_DEFINE(dAcObamboo_c, Wait);
 STATE_DEFINE(dAcObamboo_c, Fall);
 STATE_DEFINE(dAcObamboo_c, CutMark);
 
-dAcObamboo_c::dAcObamboo_c() : mStateMgr(*this, sStateID::null) {}
+dAcObamboo_c::dAcObamboo_c() : mStateMgr(*this) {}
 dAcObamboo_c::~dAcObamboo_c() {}
 
 void dAcObamboo_c::initializeState_Wait() {}

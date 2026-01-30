@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOpushBlk_c : public dAcObjBase_c {
 public:
-    dAcOpushBlk_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOpushBlk_c() : mStateMgr(*this) {}
     virtual ~dAcOpushBlk_c() {}
 
     STATE_FUNC_DECLARE(dAcOpushBlk_c, Wait);

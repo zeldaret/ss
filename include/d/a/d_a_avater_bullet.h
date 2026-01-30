@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcAvater_Bullet_c : public dAcObjBase_c {
 public:
-    dAcAvater_Bullet_c() : mStateMgr(*this, sStateID::null) {}
+    dAcAvater_Bullet_c() : mStateMgr(*this) {}
     virtual ~dAcAvater_Bullet_c() {}
 
     STATE_FUNC_DECLARE(dAcAvater_Bullet_c, Move);

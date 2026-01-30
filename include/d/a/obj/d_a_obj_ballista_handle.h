@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOBallistaHandle_c : public dAcObjBase_c {
 public:
-    dAcOBallistaHandle_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOBallistaHandle_c() : mStateMgr(*this) {}
     virtual ~dAcOBallistaHandle_c() {}
 
     STATE_FUNC_DECLARE(dAcOBallistaHandle_c, Wait);

@@ -7,12 +7,11 @@
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/actor_event.h"
 
 class dAcOShed_c : public dAcObjBase_c {
 public:
-    dAcOShed_c() : mEvent(*this, nullptr), mStateMgr(*this, sStateID::null) {}
+    dAcOShed_c() : mEvent(*this, nullptr), mStateMgr(*this) {}
     virtual ~dAcOShed_c() {}
 
     virtual bool createHeap() override;

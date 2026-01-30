@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOgodMark_c : public dAcObjBase_c {
 public:
-    dAcOgodMark_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOgodMark_c() : mStateMgr(*this) {}
     virtual ~dAcOgodMark_c() {}
 
     STATE_FUNC_DECLARE(dAcOgodMark_c, Wait);

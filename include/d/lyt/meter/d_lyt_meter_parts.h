@@ -7,7 +7,7 @@
 
 class dLytMeter1Button_c : public d2d::dSubPane {
 public:
-    dLytMeter1Button_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeter1Button_c() : mStateMgr(*this) {}
     virtual ~dLytMeter1Button_c() {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
@@ -48,7 +48,7 @@ private:
 
 class dLytMeter2Button_c : public d2d::dSubPane {
 public:
-    dLytMeter2Button_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeter2Button_c() : mStateMgr(*this) {}
     virtual ~dLytMeter2Button_c() {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
@@ -89,7 +89,7 @@ private:
 
 class dLytMeterParts_c {
 public:
-    dLytMeterParts_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterParts_c() : mStateMgr(*this) {}
 
     void build(s32 index);
     void execute();

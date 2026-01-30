@@ -79,7 +79,7 @@ class dRoom_c : public dBase_c {
 
 public:
     dRoom_c()
-        : mStateMgr(*this, sStateID::null),
+        : mStateMgr(*this),
           mpFile(nullptr),
           mpScen(nullptr),
           mpPly(nullptr),

@@ -9,7 +9,7 @@
 
 class dAcODecoB_c : public dAcObjBase_c {
 public:
-    dAcODecoB_c() : mStateMgr(*this, sStateID::null) {}
+    dAcODecoB_c() : mStateMgr(*this) {}
     virtual ~dAcODecoB_c() {}
 
     virtual bool createHeap() override;

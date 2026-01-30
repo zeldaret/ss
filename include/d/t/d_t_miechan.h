@@ -1,13 +1,12 @@
 #ifndef D_T_MIECHAN_H
 #define D_T_MIECHAN_H
 
-#include "d/a/d_a_base.h"
+#include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
-class dTgMiechan_c : public dAcBase_c {
+class dTgMiechan_c : public dTg_c {
 public:
-    dTgMiechan_c() : mStateMgr(*this, sStateID::null) {}
+    dTgMiechan_c() : mStateMgr(*this) {}
     virtual ~dTgMiechan_c() {}
 
     STATE_FUNC_DECLARE(dTgMiechan_c, Search);

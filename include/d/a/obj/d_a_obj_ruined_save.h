@@ -6,12 +6,11 @@
 #include "m/m3d/m_smdl.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/actor_event.h"
 
 class dAcOruinedSave_c : public dAcObjBase_c {
 public:
-    dAcOruinedSave_c() : mStateMgr(*this, sStateID::null), mEvent(*this, nullptr) {}
+    dAcOruinedSave_c() : mStateMgr(*this), mEvent(*this, nullptr) {}
     virtual ~dAcOruinedSave_c() {}
 
     virtual bool createHeap() override;

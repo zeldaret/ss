@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcInsectDragonfly_c : public dAcObjBase_c {
 public:
-    dAcInsectDragonfly_c() : mStateMgr(*this, sStateID::null) {}
+    dAcInsectDragonfly_c() : mStateMgr(*this) {}
     virtual ~dAcInsectDragonfly_c() {}
 
     STATE_FUNC_DECLARE(dAcInsectDragonfly_c, Wait);

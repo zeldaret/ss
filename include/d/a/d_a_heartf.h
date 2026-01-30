@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcHeartf_c : public dAcObjBase_c {
 public:
-    dAcHeartf_c() : mStateMgr(*this, sStateID::null) {}
+    dAcHeartf_c() : mStateMgr(*this) {}
     virtual ~dAcHeartf_c() {}
 
     STATE_FUNC_DECLARE(dAcHeartf_c, Wait);

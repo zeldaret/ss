@@ -8,7 +8,7 @@
 
 class dAcInvisible : public dAcObjBase_c {
 public:
-    dAcInvisible() : mStateMgr(*this, sStateID::null) {}
+    dAcInvisible() : mStateMgr(*this) {}
     virtual ~dAcInvisible() {}
 
     virtual int create() override;

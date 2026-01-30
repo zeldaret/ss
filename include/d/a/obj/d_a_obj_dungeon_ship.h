@@ -19,7 +19,7 @@
 class dAcODungeonShip_c : public dAcObjBase_c {
 public:
     dAcODungeonShip_c()
-        : mStateMgr(*this, sStateID::null), mDowsingTarget(this, DowsingTarget::SLOT_NONE), mEvent(*this, nullptr) {}
+        : mStateMgr(*this), mDowsingTarget(this, DowsingTarget::SLOT_NONE), mEvent(*this, nullptr) {}
     virtual ~dAcODungeonShip_c() {}
 
     virtual bool createHeap() override;

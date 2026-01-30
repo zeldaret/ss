@@ -5,7 +5,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_ROULETTE_ISLAND_C, dAcOrouletteIslandC_c, fProfile::OB
 STATE_DEFINE(dAcOrouletteIslandC_c, Wait);
 STATE_DEFINE(dAcOrouletteIslandC_c, Play);
 
-dAcOrouletteIslandC_c::dAcOrouletteIslandC_c() : mStateMgr(*this, sStateID::null) {}
+dAcOrouletteIslandC_c::dAcOrouletteIslandC_c() : mStateMgr(*this) {}
 dAcOrouletteIslandC_c::~dAcOrouletteIslandC_c() {}
 
 void dAcOrouletteIslandC_c::initializeState_Wait() {}

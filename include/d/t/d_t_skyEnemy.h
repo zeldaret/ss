@@ -1,13 +1,12 @@
 #ifndef D_T_SKYENEMY_H
 #define D_T_SKYENEMY_H
 
-#include "d/a/d_a_base.h"
+#include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
-class dTgSkyEnemyTag : public dAcBase_c {
+class dTgSkyEnemyTag : public dTg_c {
 public:
-    dTgSkyEnemyTag() : mStateMgr(*this, sStateID::null) {}
+    dTgSkyEnemyTag() : mStateMgr(*this) {}
     virtual ~dTgSkyEnemyTag() {}
 
     STATE_FUNC_DECLARE(dTgSkyEnemyTag, Wait);

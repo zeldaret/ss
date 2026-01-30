@@ -13,7 +13,7 @@ STATE_DEFINE(dLytSaveMsgWindow_c, In);
 STATE_DEFINE(dLytSaveMsgWindow_c, Wait);
 STATE_DEFINE(dLytSaveMsgWindow_c, Out);
 
-dLytSaveMsgWindow_c::dLytSaveMsgWindow_c() : mStateMgr(*this, sStateID::null) {
+dLytSaveMsgWindow_c::dLytSaveMsgWindow_c() : mStateMgr(*this) {
     resetProperties();
 }
 

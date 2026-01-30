@@ -15,7 +15,7 @@ STATE_DEFINE(dLytSeekerStone_c, MovieFadeOut);
 STATE_DEFINE(dLytSeekerStone_c, MovieFadeIn);
 STATE_DEFINE(dLytSeekerStone_c, Out);
 
-dLytSeekerStone_c::dLytSeekerStone_c() : mStateMgr(*this, sStateID::null) {}
+dLytSeekerStone_c::dLytSeekerStone_c() : mStateMgr(*this) {}
 dLytSeekerStone_c::~dLytSeekerStone_c() {}
 
 void dLytSeekerStone_c::initializeState_None() {}

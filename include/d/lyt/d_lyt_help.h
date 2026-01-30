@@ -51,7 +51,7 @@ private:
 
 class dLytHelp_c : public m2d::Base_c {
 public:
-    dLytHelp_c() : mStateMgr(*this, sStateID::null) {
+    dLytHelp_c() : mStateMgr(*this) {
         sInstance = this;
     }
     virtual ~dLytHelp_c() {

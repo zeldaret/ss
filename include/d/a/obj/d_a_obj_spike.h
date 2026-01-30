@@ -11,7 +11,7 @@
 
 class dAcOspike_c : public dAcObjBase_c {
 public:
-    dAcOspike_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOspike_c() : mStateMgr(*this) {}
     virtual ~dAcOspike_c() {}
     virtual bool createHeap() override;
     virtual int create() override;

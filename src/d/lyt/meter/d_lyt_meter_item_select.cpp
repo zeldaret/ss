@@ -489,7 +489,7 @@ static const char *sWindowNames[] = {
 
 static const char *sGroupName = "G_ref_00";
 
-dLytMeterItemSelect_c::dLytMeterItemSelect_c() : mStateMgr(*this, sStateID::null) {
+dLytMeterItemSelect_c::dLytMeterItemSelect_c() : mStateMgr(*this) {
     field_0x574C = I_INVALID;
     field_0x5750 = I_INVALID;
     field_0x5754 = 0;

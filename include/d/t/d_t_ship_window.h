@@ -7,7 +7,7 @@
 
 class dTgShipWindow_c : public dTg_c {
 public:
-    dTgShipWindow_c() : mStateMgr(*this, sStateID::null), mEvent(*this, nullptr) {}
+    dTgShipWindow_c() : mStateMgr(*this), mEvent(*this, nullptr) {}
     virtual ~dTgShipWindow_c() {}
     virtual int create() override;
     virtual int actorExecute() override;

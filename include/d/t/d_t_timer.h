@@ -1,7 +1,6 @@
 #ifndef D_T_TIMER_H
 #define D_T_TIMER_H
 
-#include "d/a/d_a_base.h"
 #include "d/t/d_tg.h"
 
 class dTgTimer_c : public dTg_c {

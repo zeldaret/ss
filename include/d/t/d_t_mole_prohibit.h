@@ -3,11 +3,10 @@
 
 #include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dTgMoleProhibit_c : public dTg_c {
 public:
-    dTgMoleProhibit_c() : mStateMgr(*this, sStateID::null) {}
+    dTgMoleProhibit_c() : mStateMgr(*this) {}
     virtual ~dTgMoleProhibit_c() {}
     virtual int create() override;
     virtual int actorExecute() override;

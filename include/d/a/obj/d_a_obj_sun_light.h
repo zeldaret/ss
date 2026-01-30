@@ -9,7 +9,7 @@
 
 class dAcOsunLight_c : public dAcObjBase_c {
 public:
-    dAcOsunLight_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOsunLight_c() : mStateMgr(*this) {}
     virtual ~dAcOsunLight_c() {}
     virtual bool createHeap() override;
     virtual int create() override;

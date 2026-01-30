@@ -3,7 +3,6 @@
 
 #include "d/lyt/d2d.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dLytBattery_c {
 public:
@@ -16,7 +15,7 @@ public:
     }
 
 private:
-    dLytBattery_c() : mStateMgr(*this, sStateID::null) {
+    dLytBattery_c() : mStateMgr(*this) {
         sInstance = this;
     }
 

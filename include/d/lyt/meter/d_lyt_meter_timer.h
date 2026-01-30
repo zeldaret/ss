@@ -226,7 +226,7 @@ private:
 class dLytMeterTimer_c {
 public:
     dLytMeterTimer_c()
-        : mStateMgr(*this, sStateID::null),
+        : mStateMgr(*this),
           mpPart1(nullptr),
           mpPart2(nullptr),
           field_0x48(0),

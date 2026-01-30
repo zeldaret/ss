@@ -149,7 +149,7 @@ public:
         class lytBowCsr_c {
         public:
             lytBowCsr_c(d2d::AnmGroups g, d2d::LytBase_c *lyt)
-                : mAnm(g), mpLyt(lyt), mStateMgr(*this, sStateID::null), field_0x50(0.0f), field_0x54(0.0f) {}
+                : mAnm(g), mpLyt(lyt), mStateMgr(*this), field_0x50(0.0f), field_0x54(0.0f) {}
             virtual ~lytBowCsr_c() {}
 
             void init();
@@ -188,7 +188,7 @@ public:
             lytDowsingCsr_c(d2d::AnmGroups g, d2d::LytBase_c *lyt)
                 : mAnm(g),
                   mpLyt(lyt),
-                  mStateMgr(*this, sStateID::null),
+                  mStateMgr(*this),
                   mpRingAllPane(nullptr),
                   mpDowsingPane(nullptr),
                   field_0xC0(0.0f),
@@ -239,7 +239,7 @@ public:
             lytPachinkoCsr_c(d2d::AnmGroups g, d2d::LytBase_c *lyt)
                 : mAnm(g),
                   mpLyt(lyt),
-                  mStateMgr(*this, sStateID::null),
+                  mStateMgr(*this),
                   mIsCharging(false),
                   mDrawProgress(0.0f),
                   mSavedOnProgress(0.0f) {}
@@ -272,7 +272,7 @@ public:
         class lytCrawShotCsr_c {
         public:
             lytCrawShotCsr_c(d2d::AnmGroups g, d2d::LytBase_c *lyt)
-                : mAnm(g), mpLyt(lyt), mStateMgr(*this, sStateID::null), mLocked(false) {}
+                : mAnm(g), mpLyt(lyt), mStateMgr(*this), mLocked(false) {}
             virtual ~lytCrawShotCsr_c() {}
 
             void init();
@@ -303,7 +303,7 @@ public:
         class lytVacuumCsr_c {
         public:
             lytVacuumCsr_c(d2d::AnmGroups g, d2d::LytBase_c *lyt)
-                : mAnm(g), mpLyt(lyt), mStateMgr(*this, sStateID::null), mLocked(false) {}
+                : mAnm(g), mpLyt(lyt), mStateMgr(*this), mLocked(false) {}
             virtual ~lytVacuumCsr_c() {}
 
             void init();
@@ -331,7 +331,7 @@ public:
 
     public:
         lytItemCursor_c()
-            : mStateMgr(*this, sStateID::null),
+            : mStateMgr(*this),
               mAnm(mAnmGroups.tmp.mAnmGroups, 0x17),
               mBow(mAnm, &mLyt),
               mDowsing(mAnm, &mLyt),

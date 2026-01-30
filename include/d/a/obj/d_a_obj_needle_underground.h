@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcONeedleUnderground_c : public dAcObjBase_c {
 public:
-    dAcONeedleUnderground_c() : mStateMgr(*this, sStateID::null) {}
+    dAcONeedleUnderground_c() : mStateMgr(*this) {}
     virtual ~dAcONeedleUnderground_c() {}
 
     STATE_FUNC_DECLARE(dAcONeedleUnderground_c, RemainOpen);

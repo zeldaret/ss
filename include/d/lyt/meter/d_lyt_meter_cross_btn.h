@@ -12,7 +12,7 @@ class dLytMeterCrossBtnParts_c {
     friend class dLytMeterCrossBtn_c;
 
 public:
-    dLytMeterCrossBtnParts_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterCrossBtnParts_c() : mStateMgr(*this) {}
     ~dLytMeterCrossBtnParts_c() {}
 
     void init();
@@ -65,7 +65,7 @@ public:
         CROSS_ICON_NONE = 6, 
     };
 
-    dLytMeterCrossBtn_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterCrossBtn_c() : mStateMgr(*this) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
     virtual bool execute() override;

@@ -8,7 +8,7 @@
 
 class dAcOOctGrass_c : public dAcObjBase_c {
 public:
-    dAcOOctGrass_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOOctGrass_c() : mStateMgr(*this) {}
     virtual ~dAcOOctGrass_c() {}
 
     virtual bool createHeap() override;

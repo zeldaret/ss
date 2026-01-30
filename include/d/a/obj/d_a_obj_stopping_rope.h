@@ -11,7 +11,7 @@
 
 class dAcOStoppingRope_c : public dAcObjBase_c {
 public:
-    dAcOStoppingRope_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOStoppingRope_c() : mStateMgr(*this) {}
     virtual ~dAcOStoppingRope_c() {}
 
     virtual bool createHeap() override;

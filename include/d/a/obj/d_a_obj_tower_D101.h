@@ -6,7 +6,7 @@
 
 class dAcOTowerD101_c : public dAcObjBase_c {
 public:
-    dAcOTowerD101_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOTowerD101_c() : mStateMgr(*this) {}
     virtual ~dAcOTowerD101_c() {}
 
     STATE_FUNC_DECLARE(dAcOTowerD101_c, Wait);

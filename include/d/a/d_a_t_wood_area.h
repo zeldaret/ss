@@ -4,11 +4,10 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "f/f_list_nd.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcTWoodArea_c : public dAcObjBase_c {
 public:
-    dAcTWoodArea_c() : mStateMgr(*this, sStateID::null) {}
+    dAcTWoodArea_c() : mStateMgr(*this) {}
     virtual ~dAcTWoodArea_c() {}
     virtual int actorCreate() override;
     virtual int actorPostCreate() override;

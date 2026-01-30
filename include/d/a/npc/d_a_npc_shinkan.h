@@ -3,11 +3,10 @@
 
 #include "d/a/npc/d_a_npc.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcNpcSkn_c : public dAcNpc_c {
 public:
-    dAcNpcSkn_c() : mStateMgr(*this, sStateID::null) {}
+    dAcNpcSkn_c() : mStateMgr(*this) {}
     virtual ~dAcNpcSkn_c() {}
 
     STATE_FUNC_DECLARE(dAcNpcSkn_c, RaceWatch);
