@@ -548,6 +548,7 @@ void GrassModel::initResForModel(s32 room, nw4r::g3d::ResMat pResMat, nw4r::g3d:
     mpModelData[room].initRes(pResMat, pResShp);
 }
 
+// non matching
 bool GrassModel::spawnSingleGrass(
     int modelSubtype, u16 roomid, mVec3_c *groundHeight, u16 yRotation, s32 specialItemDropId, int affectedByTimeshift,
     int activeInPresent, s32 massObjSubtype, u8 lightingCode
@@ -637,6 +638,7 @@ void GrassModel::draw() {
     }
 }
 
+// non matching
 dTgMassObjTransform *GrassModel::aquireTransform() {
     if (mAvailableTransforms.mCount == 0) {
         return nullptr;
@@ -667,7 +669,6 @@ dTgMassObjTransform::dTgMassObjTransform() {
     }
 }
 
-// matches besides data
 void dTgMassObjTransform::update() {
     mRotXSpeed -= (s16)(mRotX * 0.005f);
     mRotXSpeed = cM::minMaxLimit<s16>(mRotXSpeed, -0x4B, 0x4B);
@@ -716,7 +717,6 @@ void dTgMassObjInstance::getDrawMatrix(mMtx_c *pOut) {
     pOut->scaleM(sure * 0.015f + 1.f, sure * 0.015f + 1.f, sure * 0.015f + 1.f);
 }
 
-// matches besides data
 bool dTgMassObjInstance::checkForHit(GrassModel *param_2, GrassModelData *param_3, u16 roomid) {
     dCcMassS_HitInf massHitInf;
     dAcObjBase_c *actor;
@@ -745,7 +745,6 @@ bool dTgMassObjInstance::checkForHit(GrassModel *param_2, GrassModelData *param_
     }
 }
 
-// matches besides data
 bool dTgMassObjInstance::checkForHit(
     u32 param_2, dCcMassS_HitInf &param_3, dAcObjBase_c *param_4, GrassModel *param_5, GrassModelData *param_6,
     undefined4 roomid
@@ -962,6 +961,7 @@ bool dTgMassObjInstance::checkForHit(
                 if (!local120.normalizeRS()) {
                     local120 = localB4;
                 }
+                // regalloc
             } else if (cM::isZero(local114.getSquareMag())) {
                 local120 = mGroundHeight - hitPosition;
                 if (!local120.normalizeRS()) {
@@ -1174,22 +1174,22 @@ bool dTgMassObjInstance::FUN_80278c70(u32 param_2, dCcMassS_HitInf &param_3, dAc
         iVar11 = param_3.GetCoHitObj()->ChkCo_0x2() ? 1 : 2;
     }
     if (iVar11 != 0) {
-        // TODO here
+        f32 fVar13;
         f32 fVar12_2 = 100.f;
         if (iVar11 == 2) {
             fVar12_2 = 200.f;
             fVar1 = 0.8f;
         }
-        local54 = mGroundHeight - param_4->getPosition();
-        if (param_5->mRadiusSquared < local54.squareMagXZ()) {
+        f32 radSq = param_5->mRadiusSquared;
+        local54 = mGroundHeight - param_4->mPosition;
+        if (local54.squareMagXZ() > radSq) {
             return false;
         }
         f32 distance = mGroundHeight.distance(param_4->getPosition());
-        f32 fVar13;
+        fVar13 = distance;
         if (distance > fVar12_2) {
             fVar13 = fVar12_2;
         } else {
-            fVar13 = distance;
             if (iVar11 == 1) {
                 param_4->getSoundSource()->holdSound(SE_L_GRASS_RUSTLE_LV);
             }
@@ -1205,6 +1205,7 @@ bool dTgMassObjInstance::FUN_80278c70(u32 param_2, dCcMassS_HitInf &param_3, dAc
         mDynamicTransform->mQuat.set(mInitPosTransform->mQuat);
         mDynamicTransform->mMtx.fromQuat(mInitPosTransform->mQuat);
     }
+    // regalloc
     if (cM::isZero(local54.getSquareMag())) {
         local54.set(1.f, 0.5f, 0.f);
     }
@@ -1232,7 +1233,7 @@ bool dTgMassObjInstance::FUN_80278c70(u32 param_2, dCcMassS_HitInf &param_3, dAc
     return true;
 }
 
-// matches besides data
+// non matching
 bool dTgMassObjInstance::handleLinkSpinAttack(GrassModel *param_2) {
     const dAcPy_c *link = dAcPy_c::GetLink();
     if (link == nullptr) {
@@ -1262,6 +1263,7 @@ bool dTgMassObjInstance::handleLinkSpinAttack(GrassModel *param_2) {
         mDynamicTransform->mQuat.set(mInitPosTransform->mQuat);
         mDynamicTransform->mMtx.fromQuat(mInitPosTransform->mQuat);
     }
+    // regalloc
     if (cM::isZero(local3C.getSquareMag())) {
         local3C.set(1.f, 0.5f, 0.f);
     }
@@ -1291,7 +1293,6 @@ bool dTgMassObjInstance::handleLinkSpinAttack(GrassModel *param_2) {
 
 extern "C" bool fn_801BB700(EGG::Quatf *, f32);
 
-// matches besides data
 bool dTgMassObjInstance::isHidden(f32 param2, f32 param3) {
     bool uVar1 = mSpecialItemDropId != 10;
     if (uVar1) {
@@ -1308,7 +1309,6 @@ bool dTgMassObjInstance::isHidden(f32 param2, f32 param3) {
     }
 }
 
-// matches besides data
 bool dTgMassObjInstance::handleTimeshiftZone() {
     bool ret = true;
     f32 fVar2 = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(-1, mGroundHeight, nullptr, 8.f);
@@ -1372,7 +1372,6 @@ void GrassModelData::removeFromRoom(s32 room, dTgMassObjInstance *p3) {
     mLinkedLists[room].remove(p3);
 }
 
-// matches besides data
 void GrassModelData::update(GrassModel *param2) {
     mVec3_c groundHeight(999999.f, 999999.f, 999999.f);
     dLightEnv_c &lightEnv = dLightEnv_c::GetInstance();
@@ -1422,7 +1421,6 @@ extern void LoadMaterial(
     bool bIgnoreMaterial
 );
 
-// matches besides data
 void GrassModelData::draw(f32 param_1, f32 param_2, nw4r::math::MTX34 *pMtx) {
     mVec3_c cameraPosition = dScGame_c::getCamera()->getPositionMaybe();
     bool isInFaronWoods = dScGame_c::isCurrentStage("F100");
