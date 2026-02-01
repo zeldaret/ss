@@ -169,7 +169,7 @@ public:
         return mPosition - other.mPosition;
     }
 
-    void getPostionDifferenceOut(const mVec3_c &other, mVec3_c& result) const {
+    void getPostionDifferenceOut(const mVec3_c &other, mVec3_c &result) const {
         mVec3_c diff = (other - mPosition);
         result = diff;
     }

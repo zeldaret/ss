@@ -44,8 +44,8 @@ struct Quatf {
     Vector3f rotateVector(const Vector3f &);
     Vector3f rotateVectorInv(const Vector3f &); // not in SS
     void slerpTo(const Quatf &, f32, Quatf &out) const;
-    void slerpTo2(f32 fparam,const Quatf & param1, Quatf &out ) const {
-        const Quatf & tmp = param1;
+    void slerpTo2(f32 fparam, const Quatf &param1, Quatf &out) const {
+        const Quatf &tmp = param1;
         slerpTo(tmp, fparam, out);
     }
     void limitSlerpTo(const Quatf &, f32, f32, Quatf &out) const;
@@ -53,13 +53,13 @@ struct Quatf {
     void makeVectorRotation(const Vector3f &, const Vector3f &);
 
     // not sure about the name
-    f32 dot(const Quatf& other) const {
+    f32 dot(const Quatf &other) const {
         f32 ret = v.dot(other.v);
         ret += w * other.w;
         return ret;
     }
 
-    void set(const Quatf& other) {
+    void set(const Quatf &other) {
         v.set(other.v);
         w = other.w;
     }

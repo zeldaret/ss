@@ -8,6 +8,7 @@
 #include "nw4r/math/math_triangular.h"
 
 #include "nw4r/math.h"
+
 #include <cmath>
 
 namespace EGG {

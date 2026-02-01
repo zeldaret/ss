@@ -446,11 +446,11 @@ public:
         return field_0x38C0;
     }
 
-    const mVec3_c& getfield_0x38B4() const {
+    const mVec3_c &getfield_0x38B4() const {
         return field_0x38B4;
     }
 
-    mVec3_c& getfield_0x38C8() {
+    mVec3_c &getfield_0x38C8() {
         return field_0x38C8;
     }
 

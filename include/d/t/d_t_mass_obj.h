@@ -36,17 +36,18 @@ public:
         TG_MASS_UNK2_IS_CUT = 2,
         TG_MASS_UNK2_TIMESHIFT_RELATED = 4,
     };
-    dTgMassObjInstance(){
+    dTgMassObjInstance() {
         reset();
     }
     ~dTgMassObjInstance() {}
     void reset();
     void releaseDynamicTransform(GrassModel *param_2);
-    bool checkForHit(GrassModel *param2,GrassModelData *param3,u16 roomid);
-    bool checkForHit(u32 param_2,dCcMassS_HitInf& param_3,dAcObjBase_c* param_4,
-            GrassModel *param_5,GrassModelData* param_6,undefined4 roomid);
-    bool FUN_80278c70(u32 param_2,dCcMassS_HitInf & param_3,dAcBase_c *param_4,
-            GrassModel *param_5);
+    bool checkForHit(GrassModel *param2, GrassModelData *param3, u16 roomid);
+    bool checkForHit(
+        u32 param_2, dCcMassS_HitInf &param_3, dAcObjBase_c *param_4, GrassModel *param_5, GrassModelData *param_6,
+        undefined4 roomid
+    );
+    bool FUN_80278c70(u32 param_2, dCcMassS_HitInf &param_3, dAcBase_c *param_4, GrassModel *param_5);
     bool handleLinkSpinAttack(GrassModel *param_2);
     bool handleTimeshiftZone();
     void getDrawMatrix(mMtx_c *pOut);
@@ -55,7 +56,7 @@ public:
         return mSpecialItemDropId == 10;
     }
 
-// private:
+    // private:
     /* 0x00 */ TListNode<dTgMassObjInstance> mLink;
     /* 0x08 */ GXColorS10 mTevColor;
     /* 0x10 */ mVec3_c mGroundHeight;
@@ -75,19 +76,18 @@ public:
 // size: 0x50
 class dTgMassObjTransform {
 public:
-
     dTgMassObjTransform();
     ~dTgMassObjTransform() {}
     void update();
-    const mMtx_c& getMtx() const {
+    const mMtx_c &getMtx() const {
         return mMtx;
     }
 
-    void setQuat(const mQuat_c& quat) {
+    void setQuat(const mQuat_c &quat) {
         mQuat.set(quat);
     }
-    
-    void setMtxFromQuat(const mQuat_c& quat) {
+
+    void setMtxFromQuat(const mQuat_c &quat) {
         mMtx.fromQuat(quat);
     }
 
@@ -107,25 +107,25 @@ public:
         destroyLinkedLists();
     }
     void initRes(nw4r::g3d::ResMat pResMat, nw4r::g3d::ResShp pResShp);
-    void addToRoom(s32 room, dTgMassObjInstance* p3);
-    void removeFromRoom(s32 room, dTgMassObjInstance* p3);
-    void update(GrassModel*);
-    bool tryCreateLinkedLists(s32 entrycount, EGG::Heap* heap);
+    void addToRoom(s32 room, dTgMassObjInstance *p3);
+    void removeFromRoom(s32 room, dTgMassObjInstance *p3);
+    void update(GrassModel *);
+    bool tryCreateLinkedLists(s32 entrycount, EGG::Heap *heap);
     void destroyLinkedLists();
-    void unloadRoom(GrassModel *param_2,int roomid);
-    void draw(f32 param_1,f32 param_2,
-                 nw4r::math::MTX34 *param_4);
+    void unloadRoom(GrassModel *param_2, int roomid);
+    void draw(f32 param_1, f32 param_2, nw4r::math::MTX34 *param_4);
+
 private:
     /* 0x04 */ nw4r::g3d::ResMat mResMat;
     /* 0x08 */ nw4r::g3d::ResShp mResShp;
-    /* 0x0C */ dTgMassObjInstanceList* mLinkedLists;
+    /* 0x0C */ dTgMassObjInstanceList *mLinkedLists;
     /* 0x10 */ u16 mLinkedListsCount;
 };
 
 struct GrassModelInfo {
-    /* 0x00 */ char* mArcName;
-    /* 0x04 */ char* mModelName;
-    /* 0x08 */ char* mCutModelName;
+    /* 0x00 */ char *mArcName;
+    /* 0x04 */ char *mModelName;
+    /* 0x08 */ char *mCutModelName;
     /* 0x0C */ u32 field_0x0C;
     /* 0x10 */ u16 mRadius;
     /* 0x12 */ u16 field_0x12;
@@ -136,42 +136,45 @@ struct GrassModelInfo {
     /* 0x1B */ u8 field_0x1B; // might be padding
 };
 
-
 struct GrassModelNames {
-    /* 0x00 */ char* mArcName;
-    /* 0x04 */ char* mModelName;
-    /* 0x08 */ char* mCutModelName;
+    /* 0x00 */ char *mArcName;
+    /* 0x04 */ char *mModelName;
+    /* 0x08 */ char *mCutModelName;
 };
 
 class GrassModel : public m3d::proc_c {
 public:
-    GrassModel() : mpModelData(nullptr), mInstanceList(nullptr), mStaticTransformationList(nullptr), mDynamicTransformationList(nullptr), mCutCounter(0) {}
+    GrassModel()
+        : mpModelData(nullptr),
+          mInstanceList(nullptr),
+          mStaticTransformationList(nullptr),
+          mDynamicTransformationList(nullptr),
+          mCutCounter(0) {}
     /* vt 0x08 */ virtual ~GrassModel() {
         remove();
     }
-    bool
-    setModelInfo(f32 radius,f32 param_2,int param_4,
-            s32 roomCount,u16 instanceListLength,u16 staticTransformationListLength,int dynamicTransformationListLength,
-            undefined1 param_9,s32 opaDrawPrio,u32 xluDrawPrio,mHeapAllocator_c *allocator);
-    bool
-    spawnSingleGrass(int modelSubtype,u16 roomid,mVec3_c *groundHeight,
-            u16 yRotation,s32 specialItemDropId,int affectedByTimeshift,int activeInPresent,
-            s32 massObjSubtype,u8 lightingCode);
+    bool setModelInfo(
+        f32 radius, f32 param_2, int param_4, s32 roomCount, u16 instanceListLength, u16 staticTransformationListLength,
+        int dynamicTransformationListLength, undefined1 param_9, s32 opaDrawPrio, u32 xluDrawPrio,
+        mHeapAllocator_c *allocator
+    );
+    bool spawnSingleGrass(
+        int modelSubtype, u16 roomid, mVec3_c *groundHeight, u16 yRotation, s32 specialItemDropId,
+        int affectedByTimeshift, int activeInPresent, s32 massObjSubtype, u8 lightingCode
+    );
     void addToFreeInstances(dTgMassObjInstance *param_2);
-    bool addToRoom(u32 param2, s32 roomid, dTgMassObjInstance* param4);
+    bool addToRoom(u32 param2, s32 roomid, dTgMassObjInstance *param4);
     void unloadRoom(u16 roomid);
-    void initResForModel(s32 param_2,nw4r::g3d::ResMat pResMat,nw4r::g3d::ResShp pResShp);
-    dTgMassObjTransform* aquireTransform();
+    void initResForModel(s32 param_2, nw4r::g3d::ResMat pResMat, nw4r::g3d::ResShp pResShp);
+    dTgMassObjTransform *aquireTransform();
     void update();
-    void releaseTransform(dTgMassObjTransform*);
-    void setModelInfo(const GrassModelInfo* modelInfo, mHeapAllocator_c * heap) {
+    void releaseTransform(dTgMassObjTransform *);
+    void setModelInfo(const GrassModelInfo *modelInfo, mHeapAllocator_c *heap) {
         setModelInfo(
-                modelInfo->mRadius, modelInfo->field_0x0C,
-                 modelInfo->field_0x12, 0x3F, 
-                 modelInfo->mInstanceCount, modelInfo->mStaticTransformCount, 
-                 modelInfo->mDynamicTransformCount, (f32)modelInfo->field_0x1A, 
-                 0x7F, 0xFFFFFFFF, heap
-            );
+            modelInfo->mRadius, modelInfo->field_0x0C, modelInfo->field_0x12, 0x3F, modelInfo->mInstanceCount,
+            modelInfo->mStaticTransformCount, modelInfo->mDynamicTransformCount, (f32)modelInfo->field_0x1A, 0x7F,
+            0xFFFFFFFF, heap
+        );
     }
 
     void setRadius(f32 r) {
@@ -191,14 +194,14 @@ public:
         return mDynamicTransformationListLength;
     }
 
-    dTgMassObjInstanceList& getFree() {
+    dTgMassObjInstanceList &getFree() {
         return mFreeInstances;
     }
 
     bool testSpecialItemtype(s32 itemtype) {
         return itemtype == 10;
     }
-    
+
     /* vt 0x10 */ virtual void remove() override;
     // /* vt 0x14 */ virtual int entry();
     /* vt 0x18 */ virtual void drawOpa() override {
@@ -210,22 +213,22 @@ public:
     void draw();
 
     void calcCutCounter() {
-        mCutCounter = (mCutCounter != 0) ? mCutCounter-1 : mCutCounter;
+        mCutCounter = (mCutCounter != 0) ? mCutCounter - 1 : mCutCounter;
     }
 
-    dTgMassObjTransformList& GetUnk3Too() {
+    dTgMassObjTransformList &GetUnk3Too() {
         return mAquiredTransforms;
     }
 
-    dTgMassObjTransformList& GetUnk3() {
+    dTgMassObjTransformList &GetUnk3() {
         return mAvailableTransforms;
     }
 
-// private:
-    /* 0x18 */ GrassModelData* mpModelData;
-    /* 0x1C */ dTgMassObjInstance* mInstanceList;
-    /* 0x20 */ dTgMassObjTransform* mStaticTransformationList;
-    /* 0x24 */ dTgMassObjTransform* mDynamicTransformationList;
+    // private:
+    /* 0x18 */ GrassModelData *mpModelData;
+    /* 0x1C */ dTgMassObjInstance *mInstanceList;
+    /* 0x20 */ dTgMassObjTransform *mStaticTransformationList;
+    /* 0x24 */ dTgMassObjTransform *mDynamicTransformationList;
     /* 0x28 */ dTgMassObjInstanceList mFreeInstances;
     /* 0x34 */ dTgMassObjTransformList mAquiredTransforms;
     /* 0x40 */ dTgMassObjTransformList mAvailableTransforms;
@@ -257,13 +260,17 @@ public:
 
     void unloadRoom(u16 roomid);
 
-    int initializeCircle(GrassModel *grassModel, mVec3_c *bbStart, mVec3_c *bbEnd,s32 xzDisplacement,mMtx_c *param_7,s32 specialItemDropId,
-                undefined4 affectedByTimeshift,u8 activeInPresent,int randInt,s32 massObjSubtype,
-                u8 lightingCode, f32 fParam);
+    int initializeCircle(
+        GrassModel *grassModel, mVec3_c *bbStart, mVec3_c *bbEnd, s32 xzDisplacement, mMtx_c *param_7,
+        s32 specialItemDropId, undefined4 affectedByTimeshift, u8 activeInPresent, int randInt, s32 massObjSubtype,
+        u8 lightingCode, f32 fParam
+    );
 
-    int initializeBox(GrassModel *grassModel,mVec3_c *minVec,
-                mVec3_c *maxVec,int xzDisplacement,mMtx_c *boundsMtx,int specialItemDropId,undefined4 affectedByTimeshift,
-                u8 activeInPresent,int randInt,s32 massObjSubtype,u8 lightingCode, f32 fParam);
+    int initializeBox(
+        GrassModel *grassModel, mVec3_c *minVec, mVec3_c *maxVec, int xzDisplacement, mMtx_c *boundsMtx,
+        int specialItemDropId, undefined4 affectedByTimeshift, u8 activeInPresent, int randInt, s32 massObjSubtype,
+        u8 lightingCode, f32 fParam
+    );
 
     virtual int actorExecute() override;
     virtual int actorCreate() override;
@@ -281,7 +288,7 @@ public:
         return mtx2;
     }
 
-    GrassModel* getGrassModel(s32 i) {
+    GrassModel *getGrassModel(s32 i) {
         return sGrassModels[i];
     }
 
