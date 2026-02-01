@@ -3,11 +3,10 @@
 
 #include "d/a/npc/d_a_npc.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcNpcOrdKyui_c : public dAcNpc_c {
 public:
-    dAcNpcOrdKyui_c() : mStateMgr(*this, sStateID::null) {}
+    dAcNpcOrdKyui_c() : mStateMgr(*this) {}
     virtual ~dAcNpcOrdKyui_c() {}
 
     STATE_FUNC_DECLARE(dAcNpcOrdKyui_c, Hide);

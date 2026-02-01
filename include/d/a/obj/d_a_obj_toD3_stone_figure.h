@@ -7,11 +7,10 @@
 #include "m/m3d/m_smdl.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOtoD3StoneFigure_c : public dAcObjBase_c {
 public:
-    dAcOtoD3StoneFigure_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOtoD3StoneFigure_c() : mStateMgr(*this) {}
     virtual ~dAcOtoD3StoneFigure_c() {}
     virtual bool createHeap() override;
     virtual int create() override;

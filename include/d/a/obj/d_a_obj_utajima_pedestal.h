@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOutajimaPedestal_c : public dAcObjBase_c {
 public:
-    dAcOutajimaPedestal_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOutajimaPedestal_c() : mStateMgr(*this) {}
     virtual ~dAcOutajimaPedestal_c() {}
 
     STATE_FUNC_DECLARE(dAcOutajimaPedestal_c, Wait);

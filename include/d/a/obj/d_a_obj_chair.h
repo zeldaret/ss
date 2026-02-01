@@ -26,7 +26,7 @@ public:
         CHAIR_I, // In Front of ET
     };
 
-    dAcOChair_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOChair_c() : mStateMgr(*this) {}
     virtual ~dAcOChair_c() {}
 
     virtual int create() override;

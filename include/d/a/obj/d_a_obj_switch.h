@@ -41,7 +41,7 @@ public:
 
 class dAcOsw_c : public dAcObjBase_c {
 public:
-    dAcOsw_c() : mStateMgr(*this, sStateID::null), field_0x5A0(0.0f) {}
+    dAcOsw_c() : mStateMgr(*this), field_0x5A0(0.0f) {}
     virtual ~dAcOsw_c() {}
 
     virtual int actorCreate() override;

@@ -8,7 +8,7 @@
 
 class dAcOPumpkinLeaf_c : public dAcObjBase_c {
 public:
-    dAcOPumpkinLeaf_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOPumpkinLeaf_c() : mStateMgr(*this) {}
     virtual ~dAcOPumpkinLeaf_c() {}
     virtual bool createHeap() override;
     virtual int create() override;

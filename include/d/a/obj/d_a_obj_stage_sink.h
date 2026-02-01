@@ -6,7 +6,7 @@
 
 class dAcOstageSink_c : public dAcObjBase_c {
 public:
-    dAcOstageSink_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOstageSink_c() : mStateMgr(*this) {}
     virtual ~dAcOstageSink_c() {}
 
     STATE_FUNC_DECLARE(dAcOstageSink_c, Wait);

@@ -3,11 +3,10 @@
 
 #include "d/a/d_a_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcLittleBirdMgr_c : public dAcBase_c {
 public:
-    dAcLittleBirdMgr_c() : mStateMgr(*this, sStateID::null) {}
+    dAcLittleBirdMgr_c() : mStateMgr(*this) {}
     virtual ~dAcLittleBirdMgr_c() {}
 
     STATE_FUNC_DECLARE(dAcLittleBirdMgr_c, Set);

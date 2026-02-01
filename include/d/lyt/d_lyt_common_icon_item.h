@@ -210,7 +210,7 @@ public:
         DOWSING,
     };
 
-    dLytCommonIconItem_c() : mStateMgr(*this, sStateID::null), mPart(3) {}
+    dLytCommonIconItem_c() : mStateMgr(*this), mPart(3) {}
     ~dLytCommonIconItem_c() {}
 
     virtual bool build(d2d::ResAccIf_c *resAcc) override;

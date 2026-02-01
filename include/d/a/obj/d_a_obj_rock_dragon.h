@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcORockDragon_c : public dAcObjBase_c {
 public:
-    dAcORockDragon_c() : mStateMgr(*this, sStateID::null) {}
+    dAcORockDragon_c() : mStateMgr(*this) {}
     virtual ~dAcORockDragon_c() {}
 
     STATE_FUNC_DECLARE(dAcORockDragon_c, Upper_Wait);

@@ -9,7 +9,7 @@
 
 class dAcNpcRivalLOD_c : public dAcNpc_c {
 public:
-    dAcNpcRivalLOD_c() : mStateMgr(*this, sStateID::null) {}
+    dAcNpcRivalLOD_c() : mStateMgr(*this) {}
     virtual ~dAcNpcRivalLOD_c() {}
 
     virtual bool createHeap() override;

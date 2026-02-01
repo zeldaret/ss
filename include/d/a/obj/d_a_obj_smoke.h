@@ -9,7 +9,7 @@
 
 class dAcOsmoke_c : public dAcObjBase_c {
 public:
-    dAcOsmoke_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOsmoke_c() : mStateMgr(*this) {}
     virtual ~dAcOsmoke_c() {}
     virtual bool createHeap() override;
     virtual int create() override;

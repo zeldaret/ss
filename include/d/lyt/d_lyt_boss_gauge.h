@@ -6,7 +6,7 @@
 
 class dLytBossGauge_c {
 public:
-    dLytBossGauge_c() : mStateMgr(*this, sStateID::null) {}
+    dLytBossGauge_c() : mStateMgr(*this) {}
     virtual ~dLytBossGauge_c() {}
 
     bool build();

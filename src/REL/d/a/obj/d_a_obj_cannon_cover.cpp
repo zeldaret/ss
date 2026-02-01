@@ -8,7 +8,7 @@ STATE_DEFINE(dAcOcannonCover_c, Shake);
 STATE_DEFINE(dAcOcannonCover_c, Close);
 STATE_DEFINE(dAcOcannonCover_c, Play);
 
-dAcOcannonCover_c::dAcOcannonCover_c() : mStateMgr(*this, sStateID::null) {}
+dAcOcannonCover_c::dAcOcannonCover_c() : mStateMgr(*this) {}
 dAcOcannonCover_c::~dAcOcannonCover_c() {}
 
 void dAcOcannonCover_c::initializeState_Wait() {}

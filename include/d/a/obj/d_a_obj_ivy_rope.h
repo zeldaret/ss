@@ -17,7 +17,7 @@
 
 class dAcOivyRope_c : public dAcObjBase_c {
 public:
-    dAcOivyRope_c() : field_0x330(0), mStateMgr(*this, sStateID::null), mStts2(this), mEvent(*this, nullptr) {}
+    dAcOivyRope_c() : field_0x330(0), mStateMgr(*this), mStts2(this), mEvent(*this, nullptr) {}
     virtual ~dAcOivyRope_c();
 
     virtual int create() override;

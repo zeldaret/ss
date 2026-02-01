@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcODayNight_c : public dAcObjBase_c {
 public:
-    dAcODayNight_c() : mStateMgr(*this, sStateID::null) {}
+    dAcODayNight_c() : mStateMgr(*this) {}
     virtual ~dAcODayNight_c() {}
 
     STATE_FUNC_DECLARE(dAcODayNight_c, Wait);

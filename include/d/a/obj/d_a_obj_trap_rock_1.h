@@ -6,11 +6,10 @@
 #include "m/m3d/m_smdl.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOtrapRock1_c : public dAcObjBase_c {
 public:
-    dAcOtrapRock1_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOtrapRock1_c() : mStateMgr(*this) {}
     virtual ~dAcOtrapRock1_c() {}
 
     virtual bool createHeap() override;

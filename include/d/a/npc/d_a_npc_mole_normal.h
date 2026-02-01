@@ -3,11 +3,10 @@
 
 #include "d/a/npc/d_a_npc.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class NPC_MOLE_NML_CLASS : public dAcNpc_c {
 public:
-    NPC_MOLE_NML_CLASS() : mStateMgr(*this, sStateID::null) {}
+    NPC_MOLE_NML_CLASS() : mStateMgr(*this) {}
     virtual ~NPC_MOLE_NML_CLASS() {}
 
 private:

@@ -9,7 +9,7 @@
 
 class dLytMeterGanbariGauge_c : public d2d::dSubPane {
 public:
-    dLytMeterGanbariGauge_c() : mStateMgrMain(*this, sStateID::null), mStateMgrWheel(*this, sStateID::null) {}
+    dLytMeterGanbariGauge_c() : mStateMgrMain(*this), mStateMgrWheel(*this) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
     virtual bool execute() override;

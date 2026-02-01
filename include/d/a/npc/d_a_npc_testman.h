@@ -3,11 +3,10 @@
 
 #include "d/a/npc/d_a_npc.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcNpcTmn_c : public dAcNpc_c {
 public:
-    dAcNpcTmn_c() : mStateMgr(*this, sStateID::null) {}
+    dAcNpcTmn_c() : mStateMgr(*this) {}
     virtual ~dAcNpcTmn_c() {}
 
 private:

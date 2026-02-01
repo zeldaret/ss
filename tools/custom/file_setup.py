@@ -521,7 +521,6 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function], sym
     includes = [include]
     if uses_state_system:
         includes.append("s/s_State.hpp")
-        includes.append("s/s_StateMgr.hpp")
         state_names = find_state_names(strings)
         # Since find_state_candidates uses ptmfs for state funcs, a hint may need to be applied.
         # This is done by finding the vtable, since most of the time (?) the funcs appear after the vtable.
@@ -579,7 +578,7 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function], sym
         if has_inline_ctor:
             f.write(f"\t{name}()")
             if uses_state_system:
-                f.write(" : mStateMgr(*this, sStateID::null)")
+                f.write(" : mStateMgr(*this)")
             f.write(" {}\n")
             f.write(f"\tvirtual ~{name}() {{}}\n\n")
         else:
@@ -612,7 +611,7 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function], sym
         if not has_inline_ctor:
             f.write(f"{name}::{name}()")
             if uses_state_system:
-                f.write(" : mStateMgr(*this, sStateID::null)")
+                f.write(" : mStateMgr(*this)")
             f.write(" {}\n")
             f.write(f"{name}::~{name}() {{}}\n\n")
 

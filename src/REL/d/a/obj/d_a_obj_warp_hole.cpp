@@ -86,7 +86,7 @@ int dAcOwarpHole_c::actorExecuteInEvent() {
                 if (EventManager::isCurrentEvent("BeforeLastBossBattleChicken")) {
                     dAcPy_c* player = dAcPy_c::GetLinkM();
                     player->vt_0x2AC();
-                    player->triggerMoveEventMaybe(2, 0, 0, mLinkPos, 0, 0, 0);
+                    player->triggerMoveEventMaybe(2, 0, 0, &mLinkPos, 0, 0, 0);
                 }
             }
             if (dAcPy_c::GetLinkM()->mPosition.absXZTo(mLinkPos) < 10.0f) {

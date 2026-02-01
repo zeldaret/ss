@@ -40,7 +40,7 @@ static const d2d::LytBrlanMapping brlanMap[] = {
 
 #define NUM_ANIMS 9
 
-dLytCommonArrow_c::dLytCommonArrow_c() : mStateMgr(*this, sStateID::null) {}
+dLytCommonArrow_c::dLytCommonArrow_c() : mStateMgr(*this) {}
 
 bool dLytCommonArrow_c::build() {
     void *data = LayoutArcManager::GetInstance()->getLoadedData("CommonArrow");

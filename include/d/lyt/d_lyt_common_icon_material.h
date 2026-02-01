@@ -137,7 +137,7 @@ public:
         TREASURE,
     };
 
-    dLytCommonIconMaterial_c() : mStateMgr(*this, sStateID::null), mPart(2) {}
+    dLytCommonIconMaterial_c() : mStateMgr(*this), mPart(2) {}
     ~dLytCommonIconMaterial_c() {}
 
     virtual bool build(d2d::ResAccIf_c *resAcc) override;

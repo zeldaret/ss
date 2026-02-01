@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcEmagma_c : public dAcObjBase_c {
 public:
-    dAcEmagma_c() : mStateMgr(*this, sStateID::null) {}
+    dAcEmagma_c() : mStateMgr(*this) {}
     virtual ~dAcEmagma_c() {}
 
     STATE_FUNC_DECLARE(dAcEmagma_c, Birth);

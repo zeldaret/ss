@@ -5,7 +5,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_FORTUNE_RING, dAcOfortuneRing_c, fProfile::OBJ_FORTUNE
 STATE_DEFINE(dAcOfortuneRing_c, Wait);
 STATE_DEFINE(dAcOfortuneRing_c, Play);
 
-dAcOfortuneRing_c::dAcOfortuneRing_c() : mStateMgr(*this, sStateID::null) {}
+dAcOfortuneRing_c::dAcOfortuneRing_c() : mStateMgr(*this) {}
 dAcOfortuneRing_c::~dAcOfortuneRing_c() {}
 
 void dAcOfortuneRing_c::initializeState_Wait() {}

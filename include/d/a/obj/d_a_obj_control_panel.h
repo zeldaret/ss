@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOCtrlPnl_c : public dAcObjBase_c {
 public:
-    dAcOCtrlPnl_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOCtrlPnl_c() : mStateMgr(*this) {}
     virtual ~dAcOCtrlPnl_c() {}
 
     STATE_FUNC_DECLARE(dAcOCtrlPnl_c, Wait);

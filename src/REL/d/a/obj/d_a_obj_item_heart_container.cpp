@@ -13,7 +13,7 @@ STATE_DEFINE(dAcOItemHeartContainer_c, Fall);
 STATE_DEFINE(dAcOItemHeartContainer_c, WaitGet);
 STATE_DEFINE(dAcOItemHeartContainer_c, WaitGetQuake);
 
-dAcOItemHeartContainer_c::dAcOItemHeartContainer_c() : mStateMgr(*this, sStateID::null) {}
+dAcOItemHeartContainer_c::dAcOItemHeartContainer_c() : mStateMgr(*this) {}
 dAcOItemHeartContainer_c::~dAcOItemHeartContainer_c() {}
 
 void dAcOItemHeartContainer_c::initializeState_Hide() {}

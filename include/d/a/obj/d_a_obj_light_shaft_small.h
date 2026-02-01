@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOLightShaftSmall_c : public dAcObjBase_c {
 public:
-    dAcOLightShaftSmall_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOLightShaftSmall_c() : mStateMgr(*this) {}
     virtual ~dAcOLightShaftSmall_c() {}
 
     STATE_FUNC_DECLARE(dAcOLightShaftSmall_c, Wait);

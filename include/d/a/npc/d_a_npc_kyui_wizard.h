@@ -3,11 +3,10 @@
 
 #include "d/a/npc/d_a_npc.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcNpcKyuiWizard_c : public dAcNpc_c {
 public:
-    dAcNpcKyuiWizard_c() : mStateMgr(*this, sStateID::null) {}
+    dAcNpcKyuiWizard_c() : mStateMgr(*this) {}
     virtual ~dAcNpcKyuiWizard_c() {}
 
     STATE_FUNC_DECLARE(dAcNpcKyuiWizard_c, SleepFirst);

@@ -1,13 +1,12 @@
 #ifndef D_T_SPARKS_H
 #define D_T_SPARKS_H
 
-#include "d/a/d_a_base.h"
+#include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
-class dTgSparksTag : public dAcBase_c {
+class dTgSparksTag : public dTg_c {
 public:
-    dTgSparksTag() : mStateMgr(*this, sStateID::null) {}
+    dTgSparksTag() : mStateMgr(*this) {}
     virtual ~dTgSparksTag() {}
 
     STATE_FUNC_DECLARE(dTgSparksTag, Wait);

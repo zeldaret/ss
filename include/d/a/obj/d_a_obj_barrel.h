@@ -30,7 +30,7 @@ public:
         Kraken,
     };
 
-    dAcOBarrel_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOBarrel_c() : mStateMgr(*this) {}
     virtual ~dAcOBarrel_c() {}
 
     virtual int doDelete() override;

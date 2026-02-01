@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcHidoryFire_c : public dAcObjBase_c {
 public:
-    dAcHidoryFire_c() : mStateMgr(*this, sStateID::null) {}
+    dAcHidoryFire_c() : mStateMgr(*this) {}
     virtual ~dAcHidoryFire_c() {}
 
     STATE_FUNC_DECLARE(dAcHidoryFire_c, BulletMove);

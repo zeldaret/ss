@@ -59,7 +59,7 @@ void dLytSkyGaugeMain_c::executeState_ModeOut() {
 }
 void dLytSkyGaugeMain_c::finalizeState_ModeOut() {}
 
-dLytSkyGaugeMain_c::dLytSkyGaugeMain_c() : mStateMgr(*this, sStateID::null) {}
+dLytSkyGaugeMain_c::dLytSkyGaugeMain_c() : mStateMgr(*this) {}
 
 bool dLytSkyGaugeMain_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);

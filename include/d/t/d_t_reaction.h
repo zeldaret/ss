@@ -9,7 +9,7 @@
 
 class dTgReaction_c : public dAcObjBase_c {
 public:
-    dTgReaction_c() : mStateMgr(*this, sStateID::null), mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
+    dTgReaction_c() : mStateMgr(*this), mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
     virtual ~dTgReaction_c() {}
     virtual bool createHeap() override;
     virtual int create() override;

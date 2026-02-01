@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOstageCrack_c : public dAcObjBase_c {
 public:
-    dAcOstageCrack_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOstageCrack_c() : mStateMgr(*this) {}
     virtual ~dAcOstageCrack_c() {}
 
     STATE_FUNC_DECLARE(dAcOstageCrack_c, Wait);

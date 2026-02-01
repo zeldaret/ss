@@ -17,7 +17,7 @@
 
 class dAcOTumbleWeed_c : public dAcObjBase_c {
 public:
-    dAcOTumbleWeed_c() : mDowsingTarget(this, DowsingTarget::SLOT_NONE), mStateMgr(*this, sStateID::null) {}
+    dAcOTumbleWeed_c() : mDowsingTarget(this, DowsingTarget::SLOT_NONE), mStateMgr(*this) {}
     virtual ~dAcOTumbleWeed_c() {}
 
     virtual int doDelete() override;

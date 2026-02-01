@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOfirePillar_c : public dAcObjBase_c {
 public:
-    dAcOfirePillar_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOfirePillar_c() : mStateMgr(*this) {}
     virtual ~dAcOfirePillar_c() {}
 
     STATE_FUNC_DECLARE(dAcOfirePillar_c, Wait);

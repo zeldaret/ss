@@ -3,11 +3,10 @@
 
 #include "d/a/npc/d_a_npc.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcNpcDiveGameJudge_c : public dAcNpc_c {
 public:
-    dAcNpcDiveGameJudge_c() : mStateMgr(*this, sStateID::null) {}
+    dAcNpcDiveGameJudge_c() : mStateMgr(*this) {}
     virtual ~dAcNpcDiveGameJudge_c() {}
 
     STATE_FUNC_DECLARE(dAcNpcDiveGameJudge_c, Sad);

@@ -11,7 +11,6 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "rvl/GX/GXTypes.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/dowsing_target.h"
 
 class dAcTbox_c;
@@ -19,7 +18,7 @@ class dTgInsect_c;
 
 class dAcOsoil_c : public dAcObjBase_c {
 public:
-    dAcOsoil_c() : mStateMgr(*this, sStateID::null), mResFile(nullptr), mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
+    dAcOsoil_c() : mStateMgr(*this), mResFile(nullptr), mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
     virtual ~dAcOsoil_c() {}
 
     STATE_FUNC_DECLARE(dAcOsoil_c, Soil);

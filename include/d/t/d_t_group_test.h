@@ -1,13 +1,12 @@
 #ifndef D_T_GROUP_TEST_H
 #define D_T_GROUP_TEST_H
 
-#include "d/a/d_a_base.h"
+#include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
-class dTgGroupTest_c : public dAcBase_c {
+class dTgGroupTest_c : public dTg_c {
 public:
-    dTgGroupTest_c() : mStateMgr(*this, sStateID::null) {}
+    dTgGroupTest_c() : mStateMgr(*this) {}
     virtual ~dTgGroupTest_c() {}
 
     STATE_FUNC_DECLARE(dTgGroupTest_c, Wait);

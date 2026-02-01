@@ -3,7 +3,6 @@
 
 #include "d/d_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dTitleMgr_c : public dBase_c {
 public:

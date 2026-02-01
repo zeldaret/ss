@@ -3,7 +3,6 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOfortuneRing_c : public dAcObjBase_c {
 public:

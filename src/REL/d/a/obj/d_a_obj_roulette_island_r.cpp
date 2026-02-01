@@ -7,7 +7,7 @@ STATE_DEFINE(dAcOrouletteIslandR_c, Move);
 STATE_DEFINE(dAcOrouletteIslandR_c, Reduce);
 STATE_DEFINE(dAcOrouletteIslandR_c, End);
 
-dAcOrouletteIslandR_c::dAcOrouletteIslandR_c() : mStateMgr(*this, sStateID::null) {}
+dAcOrouletteIslandR_c::dAcOrouletteIslandR_c() : mStateMgr(*this) {}
 dAcOrouletteIslandR_c::~dAcOrouletteIslandR_c() {}
 
 void dAcOrouletteIslandR_c::initializeState_Wait() {}

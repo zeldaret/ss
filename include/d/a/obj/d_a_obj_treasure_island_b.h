@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOtreasureIslandB_c : public dAcObjBase_c {
 public:
-    dAcOtreasureIslandB_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOtreasureIslandB_c() : mStateMgr(*this) {}
     virtual ~dAcOtreasureIslandB_c() {}
 
     STATE_FUNC_DECLARE(dAcOtreasureIslandB_c, Wait);

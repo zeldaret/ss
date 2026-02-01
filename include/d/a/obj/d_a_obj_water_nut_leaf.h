@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOWaterNutLeaf_c : public dAcObjBase_c {
 public:
-    dAcOWaterNutLeaf_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOWaterNutLeaf_c() : mStateMgr(*this) {}
     virtual ~dAcOWaterNutLeaf_c() {}
 
     STATE_FUNC_DECLARE(dAcOWaterNutLeaf_c, Wait);

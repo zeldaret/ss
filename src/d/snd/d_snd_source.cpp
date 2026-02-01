@@ -472,8 +472,7 @@ bool dSoundSource_c::startBgHitSound(
     return startBgHitSound(soundLabelToSoundId(label), polyAttr0, polyAttr1, position);
 }
 
-// exact copy of startSoundAtPosition - used only for when the hookshot
-// hits the water level
+// exact copy of startSoundAtPosition
 bool dSoundSource_c::startSoundAtPosition2(u32 soundId, const nw4r::math::VEC3 *position) {
     if (!d_s_vt_0x1AC(soundId)) {
         return false;

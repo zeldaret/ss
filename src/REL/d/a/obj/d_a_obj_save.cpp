@@ -9,7 +9,7 @@ STATE_DEFINE(dAcOSave_c, Query);
 STATE_DEFINE(dAcOSave_c, LightShaft);
 STATE_DEFINE(dAcOSave_c, Escape);
 
-dAcOSave_c::dAcOSave_c() : mStateMgr(*this, sStateID::null) {}
+dAcOSave_c::dAcOSave_c() : mStateMgr(*this) {}
 dAcOSave_c::~dAcOSave_c() {}
 
 void dAcOSave_c::initializeState_Moss() {}

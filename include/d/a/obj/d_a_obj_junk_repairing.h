@@ -11,7 +11,7 @@ class dMyShadowCircle_c : public m3d::mShadowCircle_c {};
 
 class dAcOJunkRep_c : public dAcObjBase_c {
 public:
-    dAcOJunkRep_c() : mStateMgr(*this, sStateID::null), mpModelToUse(nullptr) {}
+    dAcOJunkRep_c() : mStateMgr(*this), mpModelToUse(nullptr) {}
     virtual ~dAcOJunkRep_c() {}
     virtual bool createHeap() override;
     virtual int create() override;

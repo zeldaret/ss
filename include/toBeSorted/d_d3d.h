@@ -203,6 +203,8 @@ public:
         doDraw();
     }
 
+    void fn_800192F0(u8, const mMtx_c&, u8);
+
 private:
     void doRemove();
     void doDraw();

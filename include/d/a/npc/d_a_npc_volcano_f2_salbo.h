@@ -6,7 +6,7 @@
 
 class dAcNpcSlb2_c : public dAcOrdinaryNpc_c {
 public:
-    dAcNpcSlb2_c() : mStateMgr(*this, sStateID::null) {}
+    dAcNpcSlb2_c() : mStateMgr(*this) {}
     virtual ~dAcNpcSlb2_c() {}
 
     void fn_61_58C0(int, int);

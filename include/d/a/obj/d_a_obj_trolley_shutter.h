@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_door_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOTrolleyShutter_c : public dAcObjDoor_c {
 public:
-    dAcOTrolleyShutter_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOTrolleyShutter_c() : mStateMgr(*this) {}
     virtual ~dAcOTrolleyShutter_c() {}
 
     virtual bool canOpen() override;

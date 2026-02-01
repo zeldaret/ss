@@ -14,7 +14,7 @@ class dAcOstageSink_c;
 
 class dTgBarrel_c : public dTg_c {
 public:
-    dTgBarrel_c() : mStateMgr(*this, sStateID::null) {}
+    dTgBarrel_c() : mStateMgr(*this) {}
     virtual ~dTgBarrel_c() {}
 
     virtual int doDelete() override;

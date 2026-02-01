@@ -10,7 +10,7 @@ STATE_DEFINE(dAcOgroundCover_c, AppearClose);
 STATE_DEFINE(dAcOgroundCover_c, Fight);
 STATE_DEFINE(dAcOgroundCover_c, Sealed);
 
-dAcOgroundCover_c::dAcOgroundCover_c() : mStateMgr(*this, sStateID::null) {}
+dAcOgroundCover_c::dAcOgroundCover_c() : mStateMgr(*this) {}
 dAcOgroundCover_c::~dAcOgroundCover_c() {}
 
 void dAcOgroundCover_c::initializeState_Wait() {}

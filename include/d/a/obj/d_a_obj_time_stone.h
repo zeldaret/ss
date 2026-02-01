@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOTimeStone_c : public dAcObjBase_c {
 public:
-    dAcOTimeStone_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOTimeStone_c() : mStateMgr(*this) {}
     virtual ~dAcOTimeStone_c() {}
 
     STATE_FUNC_DECLARE(dAcOTimeStone_c, Wait);

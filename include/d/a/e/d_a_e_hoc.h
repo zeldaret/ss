@@ -3,11 +3,10 @@
 
 #include "d/a/e/d_a_en_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcEhoc_c : public dAcEnBase_c {
 public:
-    dAcEhoc_c() : mStateMgr(*this, sStateID::null) {}
+    dAcEhoc_c() : mStateMgr(*this) {}
     virtual ~dAcEhoc_c() {}
 
     STATE_FUNC_DECLARE(dAcEhoc_c, Fight);

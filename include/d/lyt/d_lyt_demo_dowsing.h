@@ -8,7 +8,7 @@
 
 class dLytDemoDowsing_c : public dBase_c {
 public:
-    dLytDemoDowsing_c() : mStateMgr(*this, sStateID::null) {
+    dLytDemoDowsing_c() : mStateMgr(*this) {
         sInstance = this;
     }
     virtual ~dLytDemoDowsing_c() {

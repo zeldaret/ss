@@ -9,7 +9,7 @@
 /** 2D UI - element outline when selecting with cursor */
 class dLytCursorStick_c {
 public:
-    dLytCursorStick_c() : mStateMgr(*this, sStateID::null) {
+    dLytCursorStick_c() : mStateMgr(*this) {
         sInstance = this;
     }
     ~dLytCursorStick_c() {

@@ -13,7 +13,7 @@
 
 class dAcOappearBridge_c : public dAcObjBase_c {
 public:
-    dAcOappearBridge_c() : mStateMgr(*this, sStateID::null), mActorEvent(*this, nullptr), mSceneCallback(this) {}
+    dAcOappearBridge_c() : mStateMgr(*this), mActorEvent(*this, nullptr), mSceneCallback(this) {}
     virtual ~dAcOappearBridge_c() {}
     virtual bool createHeap() override;
     virtual int create() override;

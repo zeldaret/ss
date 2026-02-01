@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOhitLeverSw_c : public dAcObjBase_c {
 public:
-    dAcOhitLeverSw_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOhitLeverSw_c() : mStateMgr(*this) {}
     virtual ~dAcOhitLeverSw_c() {}
 
     STATE_FUNC_DECLARE(dAcOhitLeverSw_c, Right);

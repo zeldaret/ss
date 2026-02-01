@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOSwBank_c : public dAcObjBase_c {
 public:
-    dAcOSwBank_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOSwBank_c() : mStateMgr(*this) {}
     virtual ~dAcOSwBank_c() {}
 
     STATE_FUNC_DECLARE(dAcOSwBank_c, Wait);

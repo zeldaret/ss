@@ -8,7 +8,7 @@
 
 class dLytMeterEventSkip_c {
 public:
-    dLytMeterEventSkip_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterEventSkip_c() : mStateMgr(*this) {}
     virtual ~dLytMeterEventSkip_c() {}
     bool build(d2d::ResAccIf_c *resAcc);
     bool remove();

@@ -3,11 +3,10 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcCoTest : public dAcObjBase_c {
 public:
-    dAcCoTest() : mStateMgr(*this, sStateID::null) {}
+    dAcCoTest() : mStateMgr(*this) {}
     virtual ~dAcCoTest() {}
 
     STATE_FUNC_DECLARE(dAcCoTest, Wait);

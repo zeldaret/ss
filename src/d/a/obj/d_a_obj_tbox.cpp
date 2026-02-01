@@ -813,7 +813,7 @@ bool dAcTbox_c::isBelowGroundAtPos(f32 height, const mVec3_c &pos) {
 }
 
 dAcTbox_c::dAcTbox_c()
-    : mStateMgr(*this, sStateID::null),
+    : mStateMgr(*this),
       mScnCallback(this),
       mEvent(*this, nullptr),
       mTboxListNode(this),

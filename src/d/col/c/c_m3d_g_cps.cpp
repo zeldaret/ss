@@ -16,7 +16,7 @@ void cM3dGCps::SetR(f32 r) {
         r = 0.0f;
     }
     mRadius = r;
-    field_0x1C = (double)r; // huh
+    field_0x1C = mRadius;
 }
 
 void cM3dGCps::Set_0x1C(f32 f) {

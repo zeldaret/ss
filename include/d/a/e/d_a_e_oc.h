@@ -3,11 +3,10 @@
 
 #include "d/a/e/d_a_en_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcEoc_c : public dAcEnBase_c {
 public:
-    dAcEoc_c() : mStateMgr(*this, sStateID::null) {}
+    dAcEoc_c() : mStateMgr(*this) {}
     virtual ~dAcEoc_c() {}
 
     STATE_FUNC_DECLARE(dAcEoc_c, Wait);

@@ -6,7 +6,7 @@
 
 class dLytAreaCaptionParts_c {
 public:
-    dLytAreaCaptionParts_c() : mStateMgr(*this, sStateID::null) {}
+    dLytAreaCaptionParts_c() : mStateMgr(*this) {}
     ~dLytAreaCaptionParts_c() {}
 
     bool init(int first);

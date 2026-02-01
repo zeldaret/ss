@@ -14,14 +14,13 @@
 #include "nw4r/math/math_types.h"
 #include "rvl/MTX/mtx.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/d_emitter.h"
 
 class dAcOSeatSword_c : public dAcObjBase_c {
 public:
-    dAcOSeatSword_c() : mEvent(*this, nullptr), mStateMgr(*this, sStateID::null) {}
+    dAcOSeatSword_c() : mEvent(*this, nullptr), mStateMgr(*this) {}
     virtual ~dAcOSeatSword_c() {}
 
     virtual int create() override;

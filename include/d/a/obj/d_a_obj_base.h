@@ -197,6 +197,7 @@ public:
     void fn_8002EA60(void *);
     void fn_8002EB30(void *);
     void putInODesert(f32 depth, mVec3_c *position);
+    void fn_8002ECD0(m3d::smdl_c *smdl, UNKWORD);
     // Disabling makes Items and Link Disappear
     void drawModelType1(m3d::smdl_c *smdl);
     // Disabling make Lava and other objects Disappear
@@ -220,11 +221,11 @@ public:
         fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
         u32 roomId
     );
-    
+
     // These may not belong here
-    static dAcBase_c* createInsectActor(
-        dAcBase_c* parent,
-        fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, s32 roomId
+    static dAcBase_c *createInsectActor(
+        dAcBase_c *parent, fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale,
+        u32 params2, s32 roomId
     );
     static dAcBase_c *createActorUnkGroup3(
         fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale,
@@ -243,6 +244,16 @@ public:
         if (!result)                                                                                                   \
             return result;                                                                                             \
     } while (0)
+
+// Actors' createHeap functions often have patterns that can be matched with this macro
+// `bool result;` needs to be defined in scope prior to use
+#define TRY_CREATE2(thing)                                                                                             \
+    do {                                                                                                               \
+        result = (thing);                                                                                              \
+        if (!result)                                                                                                   \
+            return result;                                                                                             \
+    } while (0)
+
 // Use this in actors' create functions
 #define CREATE_ALLOCATOR(className)                                                                                    \
     do {                                                                                                               \

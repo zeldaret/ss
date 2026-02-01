@@ -18,6 +18,7 @@ public:
     virtual cCcD_ShapeAttr *GetShapeAttr() override;
 
     using cM3dGCps::Set;
+    using cM3dGLin::Set;
     void Set(const dCcD_SrcCps &src);
     void unknownCalc();
 };

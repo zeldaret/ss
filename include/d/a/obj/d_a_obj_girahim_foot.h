@@ -10,7 +10,7 @@
 
 class dAcOgirahimFoot_c : public dAcObjBase_c {
 public:
-    dAcOgirahimFoot_c() : mStateMgr(*this, sStateID::null) {}
+    dAcOgirahimFoot_c() : mStateMgr(*this) {}
     virtual ~dAcOgirahimFoot_c() {}
 
     virtual int create() override;
