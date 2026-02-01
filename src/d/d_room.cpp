@@ -3,6 +3,7 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_item.h"
+#include "d/a/d_a_itembase.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_w_base.h"
@@ -287,7 +288,7 @@ void dRoom_c::drawOnMapIfVisible(mMtx_c *mtx, int param) {
     bool drawFully = true;
     if (dStageMgr_c::GetInstance()->isAreaTypeDungeonOrBoss()) {
         drawFully = dStage_c::GetInstance()->hasVisitedRoom(roomid);
-        if (!drawFully && !dAcItem_c::checkFlag(/* DUNGEON_MAP_FI */ 0x32)) {
+        if (!drawFully && !dAcItem_c::checkFlag(ITEM_DUNGEON_MAP_FI)) {
             return;
         }
     } else {

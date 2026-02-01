@@ -139,8 +139,6 @@ private:
     STATE_FUNC_DECLARE(dLytDepositMain_c, ModeArrangementOut);
     STATE_FUNC_DECLARE(dLytDepositMain_c, ModeOut);
 
-    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytDepositMain_c);
-
     /* 0x00004 */ UI_STATE_MGR_DECLARE(dLytDepositMain_c);
     /* 0x00040 */ d2d::LytBase_c mLyt;
     /* 0x000D0 */ d2d::AnmGroup_c mAnm[36];
@@ -227,7 +225,6 @@ private:
     STATE_FUNC_DECLARE(dLytDeposit_c, Out);
 
     STATE_MGR_DEFINE_UTIL_ISSTATE(dLytDeposit_c);
-    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytDeposit_c);
 
     /* 0x0008C */ UI_STATE_MGR_DECLARE(dLytDeposit_c);
     /* 0x000C8 */ d2d::ResAccIf_c mResAcc;

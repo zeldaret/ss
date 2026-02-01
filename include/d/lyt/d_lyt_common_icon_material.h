@@ -132,6 +132,11 @@ private:
 
 class dLytCommonIconMaterial_c : public d2d::dSubPane {
 public:
+    enum Variant_e {
+        BUG,
+        TREASURE,
+    };
+
     dLytCommonIconMaterial_c() : mStateMgr(*this), mPart(2) {}
     ~dLytCommonIconMaterial_c() {}
 

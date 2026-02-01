@@ -63,6 +63,7 @@ void getCaptionItemLabel(s32 itemId, SizedString<32> &buf);
 void getDowsingLabel(s32 itemId, SizedString<32> &buf);
 void getPauseCategoryLabel(s32 itemId, SizedString<32> &buf);
 
+// TODO these could be u16
 const wchar_t *getItemText(s32 itemId);
 const wchar_t *getCaptionItemText(s32 itemId);
 const wchar_t *getDowsingText(s32 itemId);
@@ -76,8 +77,13 @@ u8 getPouchItemForSlot(s32 slot, bool unk);
 bool hasPouchSlot(s32 slot, bool unk);
 s32 getPouchItemAmount(s32 slot, bool unk);
 u8 getPouchItemNumberColor(s32 slot, bool unk);
+// not sure about this one
 f32 getPouchShieldDurability(s32 slot, bool unk);
 u32 getPouchItemIdForIndex(s32 slot, bool unk);
+// not sure about this one
+f32 getPouchShieldDurability2(s32 slot, bool unk);
+// not sure about this one
+s32 getEvenMoreShieldStuff(s32 slot, bool unk);
 
 u8 getDepositItemForSlot(s32 slot);
 s32 getDepositItemAmount(s32 slot);
