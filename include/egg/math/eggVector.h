@@ -135,10 +135,6 @@ struct Vector3f : public nw4r::math::VEC3 {
         return squaredLength() <= Math<f32>::epsilon();
     }
 
-    bool isZero2() const {
-        return fabsf(JMathInlineVEC::C_VECSquareMag(*this)) <= Math<f32>::epsilon();
-    }
-
     void setZero() {
         x = y = z = 0.0f;
     }

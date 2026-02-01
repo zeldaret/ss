@@ -1,18 +1,12 @@
 #ifndef D_T_MASS_OBJ_H
 #define D_T_MASS_OBJ_H
 
-#include "c/c_math.h"
 #include "common.h"
-#include "d/d_heap.h"
 #include "d/t/d_tg.h"
 #include "egg/core/eggHeap.h"
-#include "egg/math/eggMatrix.h"
 #include "egg/math/eggQuat.h"
 #include "m/m3d/m_proc.h"
-#include "m/m3d/m_scnleaf.h"
 #include "m/m_angle.h"
-#include "m/m_color.h"
-#include "m/m_heap.h"
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
@@ -20,7 +14,6 @@
 #include "nw4r/g3d/res/g3d_resshp.h"
 #include "nw4r/math/math_types.h"
 #include "rvl/GX/GXTypes.h"
-#include "s/s_Math.h"
 #include "toBeSorted/tlist.h"
 
 class dTgMassObjInstance;
@@ -49,13 +42,13 @@ public:
     ~dTgMassObjInstance() {}
     void reset();
     void releaseDynamicTransform(GrassModel *param_2);
-    s32 checkForHit(GrassModel *param2,GrassModelData *param3,u16 roomid);
-    undefined4 checkForHit(u32 param_2,dCcMassS_HitInf& param_3,dAcObjBase_c* param_4,
+    bool checkForHit(GrassModel *param2,GrassModelData *param3,u16 roomid);
+    bool checkForHit(u32 param_2,dCcMassS_HitInf& param_3,dAcObjBase_c* param_4,
             GrassModel *param_5,GrassModelData* param_6,undefined4 roomid);
-    undefined4 FUN_80278c70(u32 param_2,dCcMassS_HitInf & param_3,dAcBase_c *param_4,
+    bool FUN_80278c70(u32 param_2,dCcMassS_HitInf & param_3,dAcBase_c *param_4,
             GrassModel *param_5);
-    undefined4 handleLinkSpinAttack(GrassModel *param_2);
-    s32 handleTimeshiftZone();
+    bool handleLinkSpinAttack(GrassModel *param_2);
+    bool handleTimeshiftZone();
     void getDrawMatrix(mMtx_c *pOut);
     bool isHidden(f32 param2, f32 param3);
     bool isItemDrop10() const {
@@ -156,16 +149,16 @@ public:
     /* vt 0x08 */ virtual ~GrassModel() {
         remove();
     }
-    undefined4
+    bool
     setModelInfo(f32 radius,f32 param_2,int param_4,
             s32 roomCount,u16 instanceListLength,u16 staticTransformationListLength,int dynamicTransformationListLength,
             undefined1 param_9,s32 opaDrawPrio,u32 xluDrawPrio,mHeapAllocator_c *allocator);
-    undefined4
+    bool
     spawnSingleGrass(int modelSubtype,u16 roomid,mVec3_c *groundHeight,
             u16 yRotation,s32 specialItemDropId,int affectedByTimeshift,int activeInPresent,
             s32 massObjSubtype,u8 lightingCode);
     void addToFreeInstances(dTgMassObjInstance *param_2);
-    s32 addToRoom(u32 param2, s32 roomid, dTgMassObjInstance* param4);
+    bool addToRoom(u32 param2, s32 roomid, dTgMassObjInstance* param4);
     void unloadRoom(u16 roomid);
     void initResForModel(s32 param_2,nw4r::g3d::ResMat pResMat,nw4r::g3d::ResShp pResShp);
     dTgMassObjTransform* aquireTransform();

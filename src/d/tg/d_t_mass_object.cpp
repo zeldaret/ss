@@ -39,7 +39,6 @@
 #include "nw4r/g3d/res/g3d_resmat.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resshp.h"
-#include "nw4r/math/math_geometry.h"
 #include "nw4r/math/math_types.h"
 #include "rvl/GX/GXTev.h"
 #include "rvl/GX/GXTransform.h"
@@ -49,7 +48,6 @@
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 #include "toBeSorted/time_area_mgr.h"
-#include <cmath>
 
 
 SPECIAL_ACTOR_PROFILE(MASS_OBJ_TAG, dTgMassObj_c, fProfile::MASS_OBJ_TAG, 0x28A, 0, 4);
@@ -183,7 +181,7 @@ static const GrassModelNames GRASS_MODEL_NAMES[5] = {
     },
 };
 
-static const f32 GRASS_VECS[4][3] = {
+static const Vec GRASS_VECS[4] = {
     {
         -0.5f,
         0.5f,
@@ -289,9 +287,9 @@ int dTgMassObj_c::actorPostCreate() {
     mVec3_c minVec(FLOAT_MAX, FLOAT_MAX, FLOAT_MAX);
     mVec3_c maxVec(FLOAT_MIN, FLOAT_MIN, FLOAT_MIN);
 
-    const f32 (*loop)[3] =  &GRASS_VECS[0];
+    const Vec* loop =  &GRASS_VECS[0];
     for (s32 i = 0; i < ARRAY_LENGTH(GRASS_VECS); i++) {
-        mVec3_c mult = mtx.multVec2(mVec3_c(*(loop++)));
+        mVec3_c mult = mtx * *(loop++);
         if (mult.x < minVec.x) {
             minVec.x = mult.x;
         }
@@ -506,39 +504,39 @@ void GrassModel::remove() {
     m3d::scnLeaf_c::remove();
 }
 
-undefined4 GrassModel::setModelInfo(f32 radius,f32 param_2,int param_4,
+bool GrassModel::setModelInfo(f32 radius,f32 param_2,int param_4,
             s32 roomCount,u16 instanceListLength,u16 staticTransformationListLength,int dynamicTransformationListLength,
             undefined1 param_9,s32 opaDrawPrio,u32 xluDrawPrio,mHeapAllocator_c *allocator) {
     if (!create(allocator, nullptr)) {
-        return 0;
+        return false;
     }
     EGG::Heap* heap = allocator->mHeap;
     mpModelData = new (heap, 4) GrassModelData[param_4];
     if (!mpModelData) {
         remove();
-        return 0;
+        return false;
     }
     GrassModelData* modelData = &mpModelData[0];
     for (s32 i = 0; i < param_4; i++) {
         if (!(modelData++)->tryCreateLinkedLists(roomCount, heap)) {
             remove();
-            return 0;
+            return false;
         }
     }
     mInstanceList = new (heap, 4) dTgMassObjInstance[instanceListLength];
     if (!mInstanceList) {
         remove();
-        return 0;
+        return false;
     }
     mStaticTransformationList = new (heap, 4) dTgMassObjTransform[staticTransformationListLength];
     if (!mStaticTransformationList) {
         remove();
-        return 0;
+        return false;
     }
     mDynamicTransformationList = new (heap, 4) dTgMassObjTransform[dynamicTransformationListLength];
     if (!mDynamicTransformationList) {
         remove();
-        return 0;
+        return false;
     }
     field_0x58 = param_4;
     mRoomCount = roomCount;
@@ -576,61 +574,61 @@ undefined4 GrassModel::setModelInfo(f32 radius,f32 param_2,int param_4,
         setPriorityDraw(0, xluDrawPrio);
         setOption(nw4r::g3d::ScnObj::OPTION_DISABLE_DRAW_OPA, 1);
     }
-    return 1;
+    return true;
 }
 
 void GrassModel::initResForModel(s32 room,nw4r::g3d::ResMat pResMat,nw4r::g3d::ResShp pResShp) {
     mpModelData[room].initRes(pResMat, pResShp);
 }
 
-undefined4 GrassModel::spawnSingleGrass(int modelSubtype,u16 roomid,mVec3_c *groundHeight,
+bool GrassModel::spawnSingleGrass(int modelSubtype,u16 roomid,mVec3_c *groundHeight,
             u16 yRotation,s32 specialItemDropId,int affectedByTimeshift,int activeInPresent,
             s32 massObjSubtype,u8 lightingCode) {
     const dLightEnv_c& lightEnv = dLightEnv_c::GetInstance();
     if (mFreeInstances.mCount == 0) {
-        return 0;
+        return false;
     }
     // almost
-    dTgMassObjInstance* first = &*mFreeInstances.GetBeginIter();
-    mFreeInstances.remove(first);
-    first->reset();
-    first->mGroundHeight.set(*groundHeight);
-    first->yRotation = yRotation;
-    first->mSpecialItemDropId = specialItemDropId;
-    first->mDynamicTransform = nullptr;
+    dTgMassObjInstance& first = *mFreeInstances.GetBeginIter();
+    mFreeInstances.remove(&first);
+    first.reset();
+    first.mGroundHeight.set(*groundHeight);
+    first.yRotation = yRotation;
+    first.mSpecialItemDropId = specialItemDropId;
+    first.mDynamicTransform = nullptr;
     s32 chosen = cM::rndInt(mStaticTransformationListLength);
-    first->mInitPosTransform = &mStaticTransformationList[chosen];
-    first->field_0x24 = cM::rndFX(0.2f) + 1.f;
-    first->mMassObjSubtype = massObjSubtype;
-    first->mLightingCode = lightingCode;
-    first->mTevColor = lightEnv.GetCurrentSpf().mActorPalette.field_0x02C;
-    if (first->mLightingCode == 0) {
-        first->mTevColor.r = 0.7f * first->mTevColor.r;
-        first->mTevColor.r &= 0xFF;
-        first->mTevColor.g = 0.6f * first->mTevColor.g;
-        first->mTevColor.g &= 0xFF;
-        first->mTevColor.b = 0.7f * first->mTevColor.b;
-        first->mTevColor.b &= 0xFF;
+    first.mInitPosTransform = &mStaticTransformationList[chosen];
+    first.field_0x24 = cM::rndFX(0.2f) + 1.f;
+    first.mMassObjSubtype = massObjSubtype;
+    first.mLightingCode = lightingCode;
+    first.mTevColor = lightEnv.GetCurrentSpf().mActorPalette.field_0x02C;
+    if (first.mLightingCode == 0) {
+        first.mTevColor.r = 0.7f * first.mTevColor.r;
+        first.mTevColor.r &= 0xFF;
+        first.mTevColor.g = 0.6f * first.mTevColor.g;
+        first.mTevColor.g &= 0xFF;
+        first.mTevColor.b = 0.7f * first.mTevColor.b;
+        first.mTevColor.b &= 0xFF;
     }
     if (affectedByTimeshift) {
-        first->mGrassFlags |= dTgMassObjInstance::TG_MASS_UNK2_TIMESHIFT_RELATED;
+        first.mGrassFlags |= dTgMassObjInstance::TG_MASS_UNK2_TIMESHIFT_RELATED;
         if (activeInPresent) {
-            first->mActiveInPresent = true;
+            first.mActiveInPresent = true;
         } else {
-            first->mScale = 0.f;
+            first.mScale = 0.f;
         }
     }
-    mpModelData[modelSubtype].addToRoom(roomid, first);
-    return 1;
+    mpModelData[modelSubtype].addToRoom(roomid, &first);
+    return true;
 }
 
-s32 GrassModel::addToRoom(u32 modelSubtype, s32 roomid, dTgMassObjInstance* pInstance) {
+bool GrassModel::addToRoom(u32 modelSubtype, s32 roomid, dTgMassObjInstance* pInstance) {
     mpModelData[modelSubtype].addToRoom(roomid, pInstance);
     if (modelSubtype == 1) {
         SpecialItemDropMgr::GetInstance()->giveSpecialDropItem(pInstance->mSpecialItemDropId, roomid, &pInstance->mGroundHeight, 0, 0, -1);
         pInstance->mSpecialItemDropId = 0xFF;
     }
-    return 1;
+    return true;
 }
 
 void GrassModel::addToFreeInstances(dTgMassObjInstance *param_2) {
@@ -674,10 +672,10 @@ dTgMassObjTransform* GrassModel::aquireTransform() {
         return nullptr;
     }
     // not exactly, this produces an additional instruction
-    dTgMassObjTransform * first = &*(mAvailableTransforms.GetBeginIter());
-    mAvailableTransforms.remove(first);
-    mAquiredTransforms.append(first);
-    return first;
+    dTgMassObjTransform& first = *mAvailableTransforms.GetBeginIter();
+    mAvailableTransforms.remove(&first);
+    mAquiredTransforms.append(&first);
+    return &first;
 }
 
 // regalloc, should be equivalent
@@ -686,14 +684,12 @@ void GrassModel::releaseTransform(dTgMassObjTransform* param2) {
     mAvailableTransforms.append(param2);
 }
 
-static s32 lbl_80573AF0 = 0x1000;
-
 dTgMassObjTransform::dTgMassObjTransform() {
     field_0x00 = 0;
     field_0x04 = 0;
     mRotXSpeed = 0;
     mRotY = cM::rndInt(0x10000);
-    mRotX = lbl_80573AF0;
+    mRotX = 0x1000;
     mQuat.setUnit();
     s32 rnd = cM::rndInt(100);
     for (s32 i = 0; i < rnd; i++) {
@@ -701,12 +697,10 @@ dTgMassObjTransform::dTgMassObjTransform() {
     }
 }
 
-#define CLAMP2(low, high, x) ((x) < (low) ? (low) : ((x) > (high) ? (high) : (x)))
-
 // matches besides data
 void dTgMassObjTransform::update() {
     mRotXSpeed -= (s16)(mRotX * 0.005f);
-    mRotXSpeed = CLAMP2(-0x4B, 0x4B, mRotXSpeed);
+    mRotXSpeed = cM::minMaxLimit<s16>(mRotXSpeed, -0x4B, 0x4B);
     mRotX += mRotXSpeed;
     mVec3_c tmp1(0, 1, 0);
     mVec3_c tmp2(0, 1, 0);
@@ -757,15 +751,14 @@ void dTgMassObjInstance::getDrawMatrix(mMtx_c *pOut) {
 }
 
 // matches besides data
-s32 dTgMassObjInstance::checkForHit(GrassModel *param_2,
+bool dTgMassObjInstance::checkForHit(GrassModel *param_2,
             GrassModelData *param_3,u16 roomid) {
     dCcMassS_HitInf massHitInf;
     dAcObjBase_c* actor;
     u32 chk = dCcS::GetInstance()->GetMassMng().Chk(&mGroundHeight, &actor, &massHitInf);
-    s32 iVar5 = checkForHit(chk, massHitInf, actor, param_2, param_3, roomid);
-    if (iVar5 == 0
-        && FUN_80278c70(chk, massHitInf, actor, param_2) == 0
-        && handleLinkSpinAttack(param_2) == 0) {
+    if (!checkForHit(chk, massHitInf, actor, param_2, param_3, roomid)
+        && !FUN_80278c70(chk, massHitInf, actor, param_2)
+        && !handleLinkSpinAttack(param_2)) {
             if (mDynamicTransform != nullptr) {
                 EGG::Quatf& dynQuat = mDynamicTransform->mQuat;
                 f32 fVar2 = (mInitPosTransform->mQuat.dot(dynQuat));
@@ -782,21 +775,21 @@ s32 dTgMassObjInstance::checkForHit(GrassModel *param_2,
                     mDynamicTransform = nullptr;
                 }
             }
-            return 0;
+            return false;
         } else {
-            return 1;
+            return true;
         }
 }
 
 // matches besides data
-undefined4 dTgMassObjInstance::checkForHit(u32 param_2,dCcMassS_HitInf& param_3,dAcObjBase_c* param_4,
+bool dTgMassObjInstance::checkForHit(u32 param_2,dCcMassS_HitInf& param_3,dAcObjBase_c* param_4,
             GrassModel *param_5,GrassModelData* param_6,undefined4 roomid) {
     dAcPy_c * link = dAcPy_c::GetLinkM();
     if (link == nullptr) {
-        return 0;
+        return false;
     }
     if ((param_2 & 1) == 0 || param_4 == nullptr) {
-        return 0;
+        return false;
     }
     f32 impactDistanceFactor;
     f32 impactFactor;
@@ -926,7 +919,7 @@ undefined4 dTgMassObjInstance::checkForHit(u32 param_2,dCcMassS_HitInf& param_3,
                         impactFactor = cM::rndF(0.05f) + 0.5f;
                         isNotCut = 1;
                         if (distance >= fVar20 + 60.f) {
-                            return 1;
+                            return true;
                         }
                     }
                 } else {
@@ -936,10 +929,10 @@ undefined4 dTgMassObjInstance::checkForHit(u32 param_2,dCcMassS_HitInf& param_3,
 
                         distance = mGroundHeight.distance(hitPosition);
                         if (link->getSpecificAttackDirection() != 2 && link->getSpecificAttackDirection() != 0x80) {
-                            return 1;
+                            return true;
                         }
                         if (distance >= fVar21) {
-                            return 1;
+                            return true;
                         }
                     }
                     if (link->isAttackingSpin()) {
@@ -956,7 +949,7 @@ undefined4 dTgMassObjInstance::checkForHit(u32 param_2,dCcMassS_HitInf& param_3,
                         impactFactor = cM::rndF(0.5f) + 0.5f;
                         isNotCut = 1;
                     } else {
-                        return 1;
+                        return true;
                     }
                 }
         } else {
@@ -979,13 +972,13 @@ undefined4 dTgMassObjInstance::checkForHit(u32 param_2,dCcMassS_HitInf& param_3,
             if (mDynamicTransform == nullptr) {
                 mDynamicTransform = param_5->aquireTransform();
                 if (mDynamicTransform == nullptr) {
-                    return 0;
+                    return false;
                 }
                 mDynamicTransform->mQuat.set(mInitPosTransform->mQuat);
                 mDynamicTransform->mMtx.fromQuat(mInitPosTransform->mQuat);
             }
             if (param_4 == nullptr) {
-                return 0;
+                return false;
             }
             mVec3_c local108 = mGroundHeight - hitPosition;
             local108.rotY(0x4000);
@@ -1003,7 +996,7 @@ undefined4 dTgMassObjInstance::checkForHit(u32 param_2,dCcMassS_HitInf& param_3,
                 if (!local120.normalizeRS()) {
                     local120 = localB4;
                 }
-            } else if (local114.isZero2()) {
+            } else if (cM::isZero(local114.getSquareMag())) {
                 local120 = mGroundHeight - hitPosition;
                 if (!local120.normalizeRS()) {
                     local120.x = 1.f;
@@ -1046,13 +1039,13 @@ undefined4 dTgMassObjInstance::checkForHit(u32 param_2,dCcMassS_HitInf& param_3,
             if (mDynamicTransform == nullptr) {
                 mDynamicTransform = param_5->aquireTransform();
                 if (mDynamicTransform == nullptr) {
-                    return 0;
+                    return false;
                 }
                 mDynamicTransform->mQuat.set(mInitPosTransform->mQuat);
                 mDynamicTransform->mMtx.fromQuat(mInitPosTransform->mQuat);
             }
             if (param_4 == nullptr) {
-                return 0;
+                return false;
             }
             mVec3_c local150 = mGroundHeight - param_4->mPosition;
             mQuat_c local160;
@@ -1133,23 +1126,23 @@ undefined4 dTgMassObjInstance::checkForHit(u32 param_2,dCcMassS_HitInf& param_3,
                     case 7:
                         ret = dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_838_, local16C, nullptr, nullptr, &local17C, nullptr, 0, 0);
                         if (ret != nullptr) {
-                            ret->bindShpEmitter(0x24, true);
+                            ret->bindShpEmitter(dJEffManager_c::FlowerA00F, true);
                         }
                         ret = dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_839_, local16C, nullptr, nullptr, &local17C, nullptr, 0, 0);
                         if (ret != nullptr) {
-                            ret->bindShpEmitter(0x25, true);
+                            ret->bindShpEmitter(dJEffManager_c::FlowerA00L, true);
                         }
                         break;
                     case 8:
                         ret = dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_840_, local16C, nullptr, nullptr, &local17C, nullptr, 0, 0);
                         if (ret != nullptr) {
-                            ret->bindShpEmitter(0x26, true);
+                            ret->bindShpEmitter(dJEffManager_c::FlowerB00, true);
                         }
                         break;
                     case 9:
                         ret = dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_841_, local16C, nullptr, nullptr, &local17C, nullptr, 0, 0);
                         if (ret != nullptr) {
-                            ret->bindShpEmitter(0x27, true);
+                            ret->bindShpEmitter(dJEffManager_c::FlowerB01, true);
                         }
                         break;
                 }
@@ -1157,18 +1150,18 @@ undefined4 dTgMassObjInstance::checkForHit(u32 param_2,dCcMassS_HitInf& param_3,
             }
         }
     }
-    return 1;
+    return true;
 }
 
 // non matching
-undefined4 dTgMassObjInstance::FUN_80278c70(u32 param_2,dCcMassS_HitInf &param_3, dAcBase_c *param_4,
+bool dTgMassObjInstance::FUN_80278c70(u32 param_2,dCcMassS_HitInf &param_3, dAcBase_c *param_4,
             GrassModel *param_5) {
     mVec3_c local54 = mGroundHeight;
     f32 fVar12 = 1000.f;
     s32 iVar11 = 0;
     f32 fVar1 = 0.55f;
     if ((param_2 & 2) == 0) {
-        return 0;
+        return false;
     }
     if (param_4 == nullptr) {
         param_4 = dAcPy_c::GetLinkM();
@@ -1202,7 +1195,7 @@ undefined4 dTgMassObjInstance::FUN_80278c70(u32 param_2,dCcMassS_HitInf &param_3
         }
         local54 = mGroundHeight - param_4->getPosition();
         if (param_5->mRadiusSquared < local54.squareMagXZ()) {
-            return 0;
+            return false;
         }
         f32 distance = mGroundHeight.distance(param_4->getPosition());
         f32 fVar13;
@@ -1220,12 +1213,12 @@ undefined4 dTgMassObjInstance::FUN_80278c70(u32 param_2,dCcMassS_HitInf &param_3
     if (mDynamicTransform == nullptr) {
         mDynamicTransform = param_5->aquireTransform();
         if (mDynamicTransform == nullptr) {
-            return 0;
+            return false;
         }
         mDynamicTransform->mQuat.set(mInitPosTransform->mQuat);
         mDynamicTransform->mMtx.fromQuat(mInitPosTransform->mQuat);
     }
-    if (local54.isZero2()) {
+    if (cM::isZero(local54.getSquareMag())) {
         local54.set(1.f, 0.5f, 0.f);
     }
     mQuat_c local88;
@@ -1249,65 +1242,64 @@ undefined4 dTgMassObjInstance::FUN_80278c70(u32 param_2,dCcMassS_HitInf &param_3
     localA8.makeWPositive();
     mDynamicTransform->setQuat(local88);
     mDynamicTransform->setMtxFromQuat(localA8);
-    return 1;
+    return true;
 }
 
 // matches besides data
-undefined4 dTgMassObjInstance::handleLinkSpinAttack(GrassModel *param_2) {
+bool dTgMassObjInstance::handleLinkSpinAttack(GrassModel *param_2) {
     const dAcPy_c* link = dAcPy_c::GetLink();
     if (link == nullptr) {
-        return 0;
+        return false;
     }
     if (!link->isAttackingSpin()) {
-        return 0;
-    } else {
-        mVec3_c local3C;
-        dAcPy_c::GetLink()->getPostionDifferenceOut(mGroundHeight, local3C);
-        f32 dist = mGroundHeight.distance(dAcPy_c::GetLinkM()->getPosition());
-        f32 comparison = 350.f;
-        if (link->isAttackingDown()) {
-            comparison = 150.f;
-        } else if (link->checkSwordAndMoreStates(daPlayerActBase_c::SKYWARD_STRIKE_ACTIVE)) {
-            comparison = 450.f;
-        }
-        if (dist > comparison) {
-            return 0;
-        }
-        mVec3_c local48(0.f, 1.f, 0.f);
-        if (mDynamicTransform == nullptr) {
-            mDynamicTransform = param_2->aquireTransform();
-            if (mDynamicTransform == nullptr) {
-                return 0;
-            }
-            mDynamicTransform->mQuat.set(mInitPosTransform->mQuat);
-            mDynamicTransform->mMtx.fromQuat(mInitPosTransform->mQuat);
-        }
-        if (local3C.isZero2()) {
-            local3C.set(1.f, 0.5f, 0.f);
-        }
-        mQuat_c local58;
-        mVec3_c local68 = local3C;
-        if (!local68.normalizeRS()) {
-            local68.x = 1.f;
-            local68.z = 0.f;
-        }
-        local68.y = 0.5f;
-        if (!local68.normalizeRS()) {
-            local68 = local48;
-        }
-        local58.makeVectorRotation(local48, local68);
-        local58.slerpTo2(cM::rndF(0.5f), mInitPosTransform->mQuat, local58);
-        local58.normalise();
-        local58.makeWPositive();
-        mQuat_c local78;
-        mDynamicTransform->mMtx.toQuat(local78);
-        local78.slerpTo(local58, cM::rndF(0.3f) + 0.5f, local78);
-        local78.normalise();
-        local78.makeWPositive();
-        mDynamicTransform->mQuat.set(local58);
-        mDynamicTransform->setMtxFromQuat(local78);
-        return 1;
+        return false;
     }
+    mVec3_c local3C;
+    dAcPy_c::GetLink()->getPostionDifferenceOut(mGroundHeight, local3C);
+    f32 dist = mGroundHeight.distance(dAcPy_c::GetLinkM()->getPosition());
+    f32 comparison = 350.f;
+    if (link->isAttackingDown()) {
+        comparison = 150.f;
+    } else if (link->checkSwordAndMoreStates(daPlayerActBase_c::SKYWARD_STRIKE_ACTIVE)) {
+        comparison = 450.f;
+    }
+    if (dist > comparison) {
+        return false;
+    }
+    mVec3_c local48(0.f, 1.f, 0.f);
+    if (mDynamicTransform == nullptr) {
+        mDynamicTransform = param_2->aquireTransform();
+        if (mDynamicTransform == nullptr) {
+            return false;
+        }
+        mDynamicTransform->mQuat.set(mInitPosTransform->mQuat);
+        mDynamicTransform->mMtx.fromQuat(mInitPosTransform->mQuat);
+    }
+    if (cM::isZero(local3C.getSquareMag())) {
+        local3C.set(1.f, 0.5f, 0.f);
+    }
+    mQuat_c local58;
+    mVec3_c local68 = local3C;
+    if (!local68.normalizeRS()) {
+        local68.x = 1.f;
+        local68.z = 0.f;
+    }
+    local68.y = 0.5f;
+    if (!local68.normalizeRS()) {
+        local68 = local48;
+    }
+    local58.makeVectorRotation(local48, local68);
+    local58.slerpTo2(cM::rndF(0.5f), mInitPosTransform->mQuat, local58);
+    local58.normalise();
+    local58.makeWPositive();
+    mQuat_c local78;
+    mDynamicTransform->mMtx.toQuat(local78);
+    local78.slerpTo(local58, cM::rndF(0.3f) + 0.5f, local78);
+    local78.normalise();
+    local78.makeWPositive();
+    mDynamicTransform->mQuat.set(local58);
+    mDynamicTransform->setMtxFromQuat(local78);
+    return true;
 }
 
 extern "C" bool fn_801BB700(EGG::Quatf*,f32);
@@ -1330,21 +1322,21 @@ bool dTgMassObjInstance::isHidden(f32 param2, f32 param3) {
 }
 
 // matches besides data
-s32 dTgMassObjInstance::handleTimeshiftZone() {
-    s32 uVar1 = 1;
+bool dTgMassObjInstance::handleTimeshiftZone() {
+    bool ret = true;
     f32 fVar2 = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(-1, mGroundHeight, nullptr, 8.f);
     if (mActiveInPresent == false) {
         sLib::addCalc(&mScale, fVar2, 0.5f, 0.2f, 0.01f);
         if (mScale <= 0) {
-            uVar1 = 0;
+            ret = false;
         }
     } else if (mActiveInPresent == true) {
         sLib::addCalc(&mScale, 1.f - fVar2, 0.5f, 0.2f, 0.01f);
         if (mScale <= 0) {
-            uVar1 = 0;
+            ret = false;
         }
     }
-    return uVar1;
+    return ret;
 }
 
 bool GrassModelData::tryCreateLinkedLists(s32 entrycount, EGG::Heap* heap) {
@@ -1369,11 +1361,11 @@ void GrassModelData::unloadRoom(GrassModel *param_2,int roomid) {
     dTgMassObjInstanceList& gll = mLinkedLists[roomid];
     dTgMassObjInstanceList::Iterator it = gll.GetBeginIter();
     while (it != gll.GetEndIter()) {
-        dTgMassObjInstance* lst = (&*(it));
+        dTgMassObjInstance& lst = *it;
         ++it;
-        lst->releaseDynamicTransform(param_2);
-        gll.remove(lst);
-        param_2->addToFreeInstances(lst);
+        lst.releaseDynamicTransform(param_2);
+        gll.remove(&lst);
+        param_2->addToFreeInstances(&lst);
     }
 }
 
@@ -1450,14 +1442,14 @@ void GrassModelData::draw(f32 param_1,f32 param_2,
     LoadMaterial(mResMat, 0, nullptr, nullptr, false);
     nw4r::g3d::G3DState::LoadResShpPrePrimitive(mResShp);
     const static u32 fifoMtx[8] = {
-        0x3C,
-        0x3C,
-        0x3C,
-        0x3C,
-        0x3C,
-        0x3C,
-        0x3C,
-        0x3C,
+        GX_IDENTITY,
+        GX_IDENTITY,
+        GX_IDENTITY,
+        GX_IDENTITY,
+        GX_IDENTITY,
+        GX_IDENTITY,
+        GX_IDENTITY,
+        GX_IDENTITY,
     };
     nw4r::g3d::fifo::GDSetCurrentMtx(fifoMtx);
     GXSetCurrentMtx(0);
@@ -1468,11 +1460,11 @@ void GrassModelData::draw(f32 param_1,f32 param_2,
         }
         dTgMassObjInstanceList::Iterator it = grassList->GetBeginIter();
         for (;it != grassList->GetEndIter();++it) {
-            dTgMassObjInstance* lst = (&*it);
-            if (!lst->isHidden(param_1, param_2)) {
+            dTgMassObjInstance& lst = *it;
+            if (!lst.isHidden(param_1, param_2)) {
                 mMtx_c local160;
-                lst->getDrawMatrix(&local160);
-                f32 cameraDist = lst->mGroundHeight.distance(cameraPosition);
+                lst.getDrawMatrix(&local160);
+                f32 cameraDist = lst.mGroundHeight.distance(cameraPosition);
                 f32 fVar6 = param_2 * 0.6f;
                 if (cameraDist > fVar6) {
                     f32 fVar7 = (cameraDist - fVar6) / (param_2 - fVar6);
@@ -1488,20 +1480,20 @@ void GrassModelData::draw(f32 param_1,f32 param_2,
                     }
                 }
                 if (isInFaronWoods
-                    && lst->mGroundHeight.x <= -5200.f
-                    && lst->mGroundHeight.x >= -5500.f
-                    && lst->mGroundHeight.z <= -5900.f
-                    && lst->mGroundHeight.z >= -6100.f) {
+                    && lst.mGroundHeight.x <= -5200.f
+                    && lst.mGroundHeight.x >= -5500.f
+                    && lst.mGroundHeight.z <= -5900.f
+                    && lst.mGroundHeight.z >= -6100.f) {
                     local160.scaleM(1.f, 1.5f, 1.f);
                 }
-                f32 fVar7 = ((s32)(lst->mGroundHeight.x + lst->mGroundHeight.z) & 0x1F) / 31.f;
+                f32 fVar7 = ((s32)(lst.mGroundHeight.x + lst.mGroundHeight.z) & 0x1F) / 31.f;
                 f32 scale = fVar7 * 0.1f + 1.f;
                 local160.scaleM(scale, scale, scale);
                 local160.YrotM(fVar7 * 65535.f);
                 MTXConcat(*pMtx, local160, local160);
                 GXLoadPosMtxImm(local160, 0);
                 GXLoadNrmMtxImm(local160, 0);
-                GXSetTevColorS10(GX_TEVREG1, lst->mTevColor);
+                GXSetTevColorS10(GX_TEVREG1, lst.mTevColor);
                 mResShp.CallPrimitiveDisplayList(false);
             }
         }
