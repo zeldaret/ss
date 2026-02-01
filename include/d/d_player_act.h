@@ -642,7 +642,7 @@ public:
         return mAttackDirection == ATTACK_JUMP_SLASH;
     }
 
-    s32 getSpecificAttackDirection() const {
+    u16 getSpecificAttackDirection() const {
         return mSpecificAttackDirection;
     }
 
