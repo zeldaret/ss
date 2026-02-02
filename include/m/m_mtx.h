@@ -87,6 +87,11 @@ public:
     void inverse() {
         MTXInverse(*this, *this);
     }
+    mMtx_c copyInverse() {
+        mMtx_c ret = *this;
+        ret.inverse();
+        return ret;
+    }
     void multVecZero(nw4r::math::VEC3 &out) const; ///< Converts the matrix to a vector.
     void zero();                                   ///< Zeroes out the matrix.
 

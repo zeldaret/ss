@@ -158,12 +158,20 @@ public:
     mVec3_c &getPosition() {
         return mPosition;
     }
+    mVec3_c const &getPosition() const {
+        return mPosition;
+    }
     mAng3_c &getRotation() {
         return mRotation;
     }
 
     mVec3_c getPostionDifference(const dAcBase_c &other) const {
         return mPosition - other.mPosition;
+    }
+
+    void getPostionDifferenceOut(const mVec3_c &other, mVec3_c &result) const {
+        mVec3_c diff = (other - mPosition);
+        result = diff;
     }
 
     f32 getHeightDifference(const dAcBase_c &b) const {
@@ -192,6 +200,10 @@ public:
 
     bool isRoomID(s8 room) const {
         return mRoomID == room;
+    }
+
+    void setRoomId(u32 room) {
+        mRoomID = room;
     }
 
     void unsetActorProperty(u32 property) {

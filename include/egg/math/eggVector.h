@@ -1,11 +1,15 @@
 #ifndef EGG_VECTOR_H
 #define EGG_VECTOR_H
 
+#include "JSystem/JMath/JMath.h"
 #include "common.h"
 #include "egg/math/eggMath.h"
+#include "nw4r/math/math_arithmetic.h"
 #include "nw4r/math/math_triangular.h"
 
 #include "nw4r/math.h"
+
+#include <cmath>
 
 namespace EGG {
 
