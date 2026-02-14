@@ -751,6 +751,13 @@ public:
 
     const mVec3_c &GetAtHitPos() const;
     mVec3_c &GetAtHitPos();
+    const mVec3_c &GetAtHitPosInline() const {
+        return mAt.mHitPos;
+    }
+
+    mVec3_c &GetAtHitPosInline() {
+        return mAt.mHitPos;
+    }
     bool GetAtFlag0x2() const;
     bool GetAtFlag0x4() const;
     bool GetAtFlag0x8() const;
@@ -773,6 +780,9 @@ public:
 
     bool ChkTgAtHitType(u32) const;
     u32 GetTgAtHitType() const;
+    bool ChkAtType(u32 mask) const {
+        return mAt.MskType(mask);
+    }
     bool ChkTgBit14() const;
     u8 GetTgDamage() const;
     u16 GetTgDamageFlags() const;
@@ -1050,6 +1060,12 @@ public:
     }
     u32 ChkCo_0x40000000() {
         return mCo.MskSPrm(0x40000000);
+    }
+    u32 ChkCo_0x10() {
+        return mCo.MskSPrm(0x10);
+    }
+    u32 ChkCo_0x2() {
+        return mCo.MskSPrm(0x2);
     }
 
     /**

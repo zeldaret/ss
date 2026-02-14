@@ -63,6 +63,9 @@ public:
     cCcD_Obj *GetAtHitObj() const {
         return mpAtObj;
     }
+    cCcD_Obj *GetCoHitObj() const {
+        return mpCoObj;
+    }
 };
 
 class dCcMassS_Mng {

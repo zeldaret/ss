@@ -61,8 +61,8 @@ public:
     /* vt 0x0C0 */ virtual bool isUsingWhip() const {
         return false;
     }
-    /* vt 0x0C4 */ virtual bool anotherThingWithWhip() {
-        return false;
+    /* vt 0x0C4 */ virtual const mVec3_c *anotherThingWithWhip() {
+        return nullptr;
     }
     /* vt 0x0C8 */ virtual bool somethingWithWHip() {
         return false;
@@ -648,6 +648,10 @@ public:
 
     inline bool hasvt_0x1C0() const {
         return vt_0x1C0() != nullptr;
+    }
+
+    static s32 getCurrentSwordTypeInline() {
+        return sCurrentSword;
     }
 
     static bool isInEvent();
