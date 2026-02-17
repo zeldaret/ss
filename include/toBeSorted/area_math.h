@@ -6,6 +6,7 @@
 #include "m/m_vec.h"
 
 void matrixCreateFromPosRotYScale(mMtx_c &, const mVec3_c &, const mAng, const mVec3_c &, mMtx_c *, f32);
-bool checkIfVec3fInMatrix(const mMtx_c &, const mVec3_c &);
+bool checkAreaBox(const mMtx_c &, const mVec3_c &);
+bool checkAreaCyl(const mMtx_c &, const mVec3_c &);
 
 #endif

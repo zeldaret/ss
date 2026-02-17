@@ -27,5 +27,5 @@ bool dTgTimeDoorBeam_c::checkPlayerPosInMtx() {
         return false;
     }
 
-    return checkIfVec3fInMatrix(matrix, dAcPy_c::LINK->mPosition);
+    return checkAreaBox(matrix, dAcPy_c::LINK->mPosition);
 }

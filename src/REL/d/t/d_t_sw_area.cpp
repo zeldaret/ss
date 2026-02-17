@@ -32,7 +32,7 @@ bool isValidStoryFlag(u16 storyflag) {
 }
 
 int dTgSwArea_c::actorExecute() {
-    if (checkIfVec3fInMatrix(area, dAcPy_c::LINK->mPosition)) {
+    if (checkAreaBox(area, dAcPy_c::LINK->mPosition)) {
         SceneflagManager::sInstance->setFlag(mRoomID, setSceneflag);
         SceneflagManager::sInstance->unsetFlag(mRoomID, unsetSceneflag);
 
