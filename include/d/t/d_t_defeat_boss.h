@@ -12,7 +12,7 @@ public:
     u16 fn_494_360();
     u16 getStoryflag();
     u16 fn_494_380();
-    void fn_494_C0();
+    static void getDungeonFlagIndex(u32 &outFlagIdx);
     bool fn_494_D0();
     bool init();
 
