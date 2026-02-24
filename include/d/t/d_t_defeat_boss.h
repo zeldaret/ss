@@ -13,14 +13,19 @@ public:
     u16 getStoryflag();
     u16 fn_494_380();
     static void getDungeonFlagIndex(u32 &outFlagIdx);
-    bool fn_494_D0();
-    bool init();
+    bool checkDungeonFlag();
+    virtual int create() override;
+    virtual int actorExecute() override;
 
-    /* 0xFC */ u8 var8_1;//area?
-    /* 0xFD */ u8 var8_2;//scene flag? I assume this is only 2 byte
+    u16 getSceneflag();
+    s32 getSceneflagPolarity();
+    u32 getStoryflag();
+    s32 getStoryflagPolarity();
 
 
 private:
+    /* 0xFC */ s8 mSceneflagPolarity;
+    /* 0xFD */ s8 mStoryflagPolarity;
 };
 
 
