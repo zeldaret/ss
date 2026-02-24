@@ -7,10 +7,7 @@
 
 SPECIAL_ACTOR_PROFILE(TAG_DEFEAT_BOSS, dTgDefeatBoss_c, fProfile::TAG_DEFEAT_BOSS, 0x29E, 0, 0);
 
-void dTgDefeatBoss_c::fn_494_C0() {
 
-    mID = (fBaseID_e)0x3;
-    return;
 void dTgDefeatBoss_c::getDungeonFlagIndex(u32 &outFlagIdx) {
     outFlagIdx = 0x3;
 }
@@ -43,27 +40,7 @@ int dTgDefeatBoss_c::create() {
     return SUCCEEDED;
 }
 
-int dTgDefeatBoss_c::update() {
 
-    StoryflagManager* pSVar1;
-    bool bVar4;
-    u16 uVar2;
-    /*StoryFlags*/int SVar3;
-
-    bVar4 = fn_494_D0();
-    if (bVar4) {
-        switch (var8_1) {
-        case 0x0:
-            uVar2 = getSceneflag();
-            SceneflagManager::sInstance->unsetFlag
-            (/*SceneflagManager::sInstance,*/ (u16)/*(param_1->base).members.roomid*/(mRoomID & 0xffff),
-                (u16)(uVar2 & 0xffff));
-            break;
-        case 0x1:
-            uVar2 = getSceneflag();
-            SceneflagManager::sInstance->setFlag
-            (/*SceneflagManager::sInstance,*/ (u16)/*(param_1->base).members.roomid*/mRoomID & 0xffff,
-                (u16)uVar2 & 0xffff);
 int dTgDefeatBoss_c::actorExecute() {
     if (checkDungeonFlag()) {
         switch (mSceneflagPolarity) {
@@ -93,7 +70,7 @@ u16 dTgDefeatBoss_c::getSceneflag() {
     return mParams & 0xff;
 }
 
-u16 dTgDefeatBoss_c::fn_494_360() {
+
 s32 dTgDefeatBoss_c::getSceneflagPolarity() {
     return mParams >> 0x8 & 0x1;
 
@@ -103,7 +80,7 @@ u32 dTgDefeatBoss_c::getStoryflag() {
     return mParams >> 9 & 0xffff;
 }
 
-u16 dTgDefeatBoss_c::fn_494_380() {
+s32 dTgDefeatBoss_c::getStoryflagPolarity() {
 
     return (mParams >> 0x19) & 0x1;
 
