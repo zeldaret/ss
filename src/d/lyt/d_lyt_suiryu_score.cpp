@@ -8,6 +8,8 @@
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_force_line.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "m/m_vec.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/misc_actor.h"
@@ -373,7 +375,57 @@ bool dLytMeterSuiryuScoreBase_c::draw() {
     return true;
 }
 
-void dLytMeterSuiryuScoreBase_c::initAnm() {}
+void dLytMeterSuiryuScoreBase_c::initAnm() {
+    mAnm[SUIRYU_SCORE_BASE_ANIM_OUT].setForwardOnce();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_OUT].setToStart();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_OUT].setAnimEnable(false);
+
+    for (int i = 0; i < SUIRYU_SCORE_BASE_NUM_NOTE_ANIMS; i++) {
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_N_OFFSET].setForwardOnce();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_N_OFFSET].setToStart();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_N_OFFSET].setAnimEnable(false);
+
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_P_OFFSET].setForwardOnce();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_P_OFFSET].setToStart();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_P_OFFSET].setAnimEnable(false);
+
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_N_LOOP_OFFSET].setForwardOnce();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_N_LOOP_OFFSET].setToStart();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_N_LOOP_OFFSET].setAnimEnable(false);
+
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_LOST_LOOP_OFFSET].setForwardOnce();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_LOST_LOOP_OFFSET].setToStart();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_LOST_LOOP_OFFSET].setAnimEnable(false);
+
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_OFFSET].setForwardOnce();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_OFFSET].setToStart();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_OFFSET].setAnimEnable(true);
+        mLyt.calc();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_FIX_OFFSET].setAnimEnable(false);
+
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_LOOP_OFFSET].setForwardOnce();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_LOOP_OFFSET].setToStart();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_LOOP_OFFSET].setAnimEnable(true);
+        mLyt.calc();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_LOOP_OFFSET].setAnimEnable(false);
+        setColor0(i);
+    }
+
+    mAnm[SUIRYU_SCORE_BASE_ANIM_IN].setForwardOnce();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_IN].setToStart();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_IN].setAnimEnable(true);
+    mLyt.calc();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_IN].setAnimEnable(false);
+
+    fn_80297C80();
+    fn_80297EA0();
+
+    for (int i = 0; i < SUIRYU_SCORE_BASE_NUM_NOTE_ANIMS; i++) {
+        field_0x2251[i] = 0;
+    }
+
+    field_0x2262 = 0;
+}
 
 void dLytMeterSuiryuScoreBase_c::startIn() {
     if (field_0x2264 == 0) {
@@ -404,7 +456,7 @@ void dLytMeterSuiryuScoreBase_c::startOut() {
     }
 }
 
-void dLytMeterSuiryuScoreBase_c::setColor0(s32 idx) {
+void dLytMeterSuiryuScoreBase_c::setColor0(u8 idx) {
     s32 actualIdx = idx + SUIRYU_SCORE_BASE_ANIM_FIX_COLOR_OFFSET;
     mAnm[actualIdx].setFrame(0.0f);
     mAnm[actualIdx].setAnimEnable(true);
@@ -412,12 +464,96 @@ void dLytMeterSuiryuScoreBase_c::setColor0(s32 idx) {
     mAnm[actualIdx].setAnimEnable(false);
 }
 
-void dLytMeterSuiryuScoreBase_c::setColor1(s32 idx) {
+void dLytMeterSuiryuScoreBase_c::setColor1(u8 idx) {
     s32 actualIdx = idx + SUIRYU_SCORE_BASE_ANIM_FIX_COLOR_OFFSET;
     mAnm[actualIdx].setFrame(1.0f);
     mAnm[actualIdx].setAnimEnable(true);
     mLyt.calc();
     mAnm[actualIdx].setAnimEnable(false);
+}
+
+void dLytMeterSuiryuScoreBase_c::fn_802978F0(s32 idx) {
+    s32 i1 = idx + SUIRYU_SCORE_BASE_ANIM_LOST_LOOP_OFFSET;
+    s32 i2 = idx + SUIRYU_SCORE_BASE_ANIM_FIX_OFFSET;
+    s32 i3 = idx + SUIRYU_SCORE_BASE_ANIM_LOOP_OFFSET;
+    s32 i4 = idx + SUIRYU_SCORE_BASE_ANIM_FIX_N_OFFSET;
+    s32 i5 = idx + SUIRYU_SCORE_BASE_ANIM_FIX_P_OFFSET;
+    s32 i6 = idx + SUIRYU_SCORE_BASE_ANIM_FIX_N_LOOP_OFFSET;
+
+    mAnm[i1].setToEnd2();
+    mAnm[i2].setToEnd2();
+    mAnm[i3].setToEnd2();
+
+    mAnm[i1].setAnimEnable(true);
+    mAnm[i2].setAnimEnable(true);
+    mAnm[i3].setAnimEnable(true);
+
+    mAnm[i4].setToEnd2();
+    mAnm[i5].setToEnd2();
+    mAnm[i6].setToEnd2();
+
+    mAnm[i4].setAnimEnable(true);
+    mAnm[i5].setAnimEnable(true);
+    mAnm[i6].setAnimEnable(true);
+
+    mLyt.calc();
+
+    mAnm[i4].setAnimEnable(false);
+    mAnm[i5].setAnimEnable(false);
+    mAnm[i6].setAnimEnable(false);
+
+    mAnm[i1].setAnimEnable(false);
+    mAnm[i2].setAnimEnable(false);
+    mAnm[i3].setAnimEnable(false);
+
+    field_0x2251[idx] = 3;
+}
+
+void dLytMeterSuiryuScoreBase_c::fn_80297AE0() {
+    alphaBackwards(0, 1.0f);
+    alphaBackwards(1, 1.0f);
+    alphaBackwards(2, 1.0f);
+}
+
+void dLytMeterSuiryuScoreBase_c::fn_80297B40() {
+    alphaForwards(0, 1.0f);
+    alphaForwards(1, 1.0f);
+    alphaForwards(2, 1.0f);
+}
+
+void dLytMeterSuiryuScoreBase_c::fn_80297BA0() {
+    switch (field_0x2250) {
+        case 0: {
+            alphaBackwards(0, 1.0f);
+            alphaForwards(1, 1.0f);
+            alphaForwards(2, 1.0f);
+            break;
+        }
+        case 1: {
+            alphaForwards(0, 1.0f);
+            alphaBackwards(1, 1.0f);
+            alphaForwards(2, 1.0f);
+            break;
+        }
+        case 2: {
+            alphaForwards(0, 1.0f);
+            alphaForwards(1, 1.0f);
+            alphaBackwards(2, 1.0f);
+            break;
+        }
+    }
+}
+
+void dLytMeterSuiryuScoreBase_c::fn_80297C80() {
+    for (int i = 0; i < 3; i++) {
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_ALPHA_OFFSET].setBackwardsOnce();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_ALPHA_OFFSET].setToEnd2();
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_ALPHA_OFFSET].setAnimEnable(true);
+    }
+    mLyt.calc();
+    for (int i = 0; i < 3; i++) {
+        mAnm[i + SUIRYU_SCORE_BASE_ANIM_ALPHA_OFFSET].setAnimEnable(false);
+    }
 }
 
 void dLytMeterSuiryuScoreBase_c::alphaBackwards(s32 idx, f32 rate) {
@@ -434,12 +570,414 @@ void dLytMeterSuiryuScoreBase_c::alphaForwards(s32 idx, f32 rate) {
     mAnm[actualIdx].setAnimEnable(true);
 }
 
+bool dLytMeterSuiryuScoreBase_c::fn_80297E10(u8 arg) const {
+    if (field_0x2250 == 0) {
+        if (arg == 1) {
+            return true;
+        }
+        if (arg == 2) {
+            return true;
+        }
+    } else if (field_0x2250 == 1) {
+        if (arg == 0) {
+            return true;
+        }
+        if (arg == 2) {
+            return true;
+        }
+    } else if (field_0x2250 == 2) {
+        if (arg == 0) {
+            return true;
+        }
+        if (arg == 1) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void dLytMeterSuiryuScoreBase_c::fn_80297EA0() {
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setForwardOnce();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setToStart();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setAnimEnable(false);
+
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setForwardOnce();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setToStart();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setAnimEnable(false);
+
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setForwardOnce();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setToStart();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setAnimEnable(false);
+
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setForwardOnce();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setToStart();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setAnimEnable(false);
+
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setForwardOnce();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setToEnd2();
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setAnimEnable(true);
+
+    mLyt.calc();
+
+    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setAnimEnable(false);
+
+    field_0x2250 = 4;
+}
+
+void dLytMeterSuiryuScoreBase_c::fn_80297FE0(u8 arg) {
+    if (field_0x2250 == 4) {
+        if (arg == 0) {
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setToEnd2();
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setAnimEnable(false);
+            }
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setBackwardsOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setToStart();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setAnimEnable(true);
+        } else if (arg == 1) {
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setToEnd2();
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setAnimEnable(false);
+            }
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setBackwardsOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setToStart();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setAnimEnable(true);
+        } else if (arg == 2) {
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setToEnd2();
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setAnimEnable(false);
+            }
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setBackwardsOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setToStart();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setAnimEnable(true);
+        } else if (arg == 3) {
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setBackwardsOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setAnimEnable(true);
+        }
+        field_0x2263 = 0;
+    } else if (field_0x2250 == 3) {
+        if (arg == 0) {
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setToEnd2();
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setAnimEnable(false);
+            }
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setToEnd2();
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setAnimEnable(false);
+            }
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setToEnd2();
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setAnimEnable(false);
+            }
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setForwardOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setAnimEnable(true);
+        } else if (arg == 1) {
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setToEnd2();
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setAnimEnable(false);
+            }
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setToEnd2();
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setAnimEnable(false);
+            }
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setToEnd2();
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setAnimEnable(false);
+            }
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setForwardOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setAnimEnable(true);
+        } else if (arg == 2) {
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setToEnd2();
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setAnimEnable(false);
+            }
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setToEnd2();
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setAnimEnable(false);
+            }
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setToEnd2();
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setAnimEnable(false);
+            }
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setForwardOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setAnimEnable(true);
+        } else if (arg == 4) {
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setForwardOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setAnimEnable(true);
+        }
+        field_0x2263 = 0;
+    } else if (field_0x2250 == 0) {
+        if (arg == 1) {
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setForwardOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(0.0f);
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setAnimEnable(true);
+            field_0x2263 = 1;
+        } else if (arg == 2) {
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setBackwardsOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setToStart();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setAnimEnable(true);
+            field_0x2263 = 1;
+        } else if (arg == 3) {
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setBackwardsOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setAnimEnable(true);
+            field_0x2263 = 0;
+        }
+    } else if (field_0x2250 == 1) {
+        if (arg == 0) {
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setBackwardsOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(10.0f);
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setAnimEnable(true);
+            field_0x2263 = 1;
+        } else if (arg == 2) {
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setForwardOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(10.0f);
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setAnimEnable(true);
+            field_0x2263 = 1;
+        } else if (arg == 3) {
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setBackwardsOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setAnimEnable(true);
+            field_0x2263 = 0;
+        }
+    } else if (field_0x2250 == 2) {
+        if (arg == 0) {
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setForwardOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(20.0f);
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setAnimEnable(true);
+            field_0x2263 = 1;
+        } else if (arg == 1) {
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setBackwardsOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(20.0f);
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setAnimEnable(true);
+            field_0x2263 = 1;
+        } else if (arg == 3) {
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setBackwardsOnce();
+            mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setAnimEnable(true);
+            field_0x2263 = 0;
+        }
+    }
+
+    field_0x2250 = arg;
+}
+
+bool dLytMeterSuiryuScoreBase_c::fn_80298600() {
+    switch (field_0x2250) {
+        case 0: {
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].isPlayingForwardsOnce() &&
+                10.0f <= mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].getFrame() &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(0.0f);
+                return true;
+            }
+
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].isPlayingBackwardsOnce() &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].getFrame() <= 10.0f &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(0.0f);
+                return true;
+            }
+
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingBackwardsOnce() &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isStop2() && mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setFrame(10.0f);
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setFrame(0.0f);
+                return true;
+            }
+
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingForwardsOnce() &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isStop2() && mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setFrame(10.0f);
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setFrame(0.0f);
+                return true;
+            }
+            break;
+        }
+
+        case 1: {
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].isPlayingForwardsOnce() &&
+                10.0f <= mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].getFrame() &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(10.0f);
+                return true;
+            }
+
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].isPlayingBackwardsOnce() &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].getFrame() <= 10.0f &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(10.0f);
+                return true;
+            }
+
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingForwardsOnce() &&
+                10.0f <= mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].getFrame() &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setFrame(10.0f);
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setFrame(0.0f);
+                return true;
+            }
+
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingBackwardsOnce() &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].getFrame() <= 10.0f &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setFrame(10.0f);
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setFrame(0.0f);
+                return true;
+            }
+            break;
+        }
+
+        case 2: {
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].isPlayingForwardsOnce() &&
+                10.0f <= mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].getFrame() &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(20.0f);
+                return true;
+            }
+
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].isPlayingBackwardsOnce() &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].getFrame() <= 20.0f &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(10.0f);
+                return true;
+            }
+
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingBackwardsOnce() &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].getFrame() <= 20.0f &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setFrame(10.0f);
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setFrame(0.0f);
+                return true;
+            }
+
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingForwardsOnce() &&
+                20.0f <= mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].getFrame() &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setFrame(10.0f);
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setFrame(0.0f);
+                return true;
+            }
+            break;
+        }
+
+        case 3: {
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].isStop2() && mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].isEnabled()) {
+                return true;
+            }
+
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].isStop2() && mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setFrame(0.0f);
+                return true;
+            }
+
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].isStop2() && mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setFrame(0.0f);
+                return true;
+            }
+
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].isStop2() && mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].isEnabled()) {
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setFrame(0.0f);
+                return true;
+            }
+            break;
+        }
+
+        case 4: {
+            if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].isStop2() && mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].isEnabled()) {
+                return true;
+            }
+            break;
+        }
+    }
+
+    return false;
+}
+
 void dLytMeterSuiryuScoreBase_c::stopMove() {
     mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].setAnimEnable(false);
     mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].setAnimEnable(false);
     mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].setAnimEnable(false);
     mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setAnimEnable(false);
     mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_ALL].setAnimEnable(false);
+}
+
+bool dLytMeterSuiryuScoreBase_c::fn_80298B80() {
+    switch (field_0x2250) {
+        case 0: {
+            if (field_0x2263 == 1) {
+                if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingBackwardsOnce() &&
+                    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isStop2()) {
+                    return true;
+                }
+
+                if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingForwardsOnce() &&
+                    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isStop2()) {
+                    return true;
+                }
+            } else {
+                if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].isPlayingForwardsOnce() &&
+                    10.0f <= mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].getFrame()) {
+                    return true;
+                }
+
+                if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].isPlayingBackwardsOnce() &&
+                    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_1].getFrame() <= 10.0f) {
+                    return true;
+                }
+            }
+            break;
+        }
+
+        case 1: {
+            if (field_0x2263 == 1) {
+                if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingForwardsOnce() &&
+                    10.0f <= mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].getFrame()) {
+                    return true;
+                }
+
+                if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingBackwardsOnce() &&
+                    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].getFrame() <= 10.0f) {
+                    return true;
+                }
+            } else {
+                if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].isPlayingForwardsOnce() &&
+                    10.0f <= mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].getFrame()) {
+                    return true;
+                }
+
+                if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].isPlayingBackwardsOnce() &&
+                    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_2].getFrame() <= 10.0f) {
+                    return true;
+                }
+            }
+            break;
+        }
+
+        case 2: {
+            if (field_0x2263 == 1) {
+                if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingBackwardsOnce() &&
+                    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].getFrame() <= 10.0f) {
+                    return true;
+                }
+
+                if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingForwardsOnce() &&
+                    10.0f <= mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].getFrame()) {
+                    return true;
+                }
+            } else {
+                if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].isPlayingForwardsOnce() &&
+                    10.0f <= mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].getFrame()) {
+                    return true;
+                }
+
+                if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].isPlayingBackwardsOnce() &&
+                    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].getFrame() <= 10.0f) {
+                    return true;
+                }
+            }
+            break;
+        }
+    }
+
+    return false;
 }
 
 STATE_DEFINE(dLytMeterClefMain_c, None);
@@ -459,6 +997,8 @@ void dLytMeterClefMain_c::finalizeState_In() {}
 
 void dLytMeterClefMain_c::initializeState_Wait() {}
 void dLytMeterClefMain_c::executeState_Wait() {
+    // TODO - Nonmatching but maybe equivalent. Function suffers from register pressure,
+    // so regalloc might have an effect on codegen patterns too...
     fn_8029A200();
     fn_8029A2C0();
     fn_8029A260();
@@ -474,11 +1014,279 @@ void dLytMeterClefMain_c::executeState_Wait() {
         b = true;
     }
 
+    bool b2 = false;
+
+    s32 acc = 0;
     for (int i = 0; i < NUM_TADTONE_GROUPS; i++) {
         if (field_0x5E81[i] != 0) {
-            field_0x5E81[i]--;
-            // TODO - ...
+            for (int j = field_0x5E81[i] - 1; j >= 0; j--) {
+                s32 noteIdx = field_0x5EE8[acc + j];
+                if (noteIdx != NUM_TOTAL_TADTONES && mNotes[noteIdx].mNote.isStateWait()) {
+                    if (mNotes[noteIdx].field_0x278 == 5) {
+                        field_0x5E81[i] -= 1;
+                    }
+                    mNotes[noteIdx].field_0x278 = 7;
+                    field_0x5EE8[acc + j] = NUM_TOTAL_TADTONES;
+                }
+            }
         }
+        acc += field_0x5E4E[i];
+    }
+
+    acc = 0;
+    for (int i = 0; i < NUM_TADTONE_GROUPS; i++) {
+        if (field_0x5E5F[i] != 0) {
+            for (int j = field_0x5E5F[i] - 1; j >= 0; j--) {
+                s32 noteIdx = field_0x5EE8[acc + j];
+                if (noteIdx != NUM_TOTAL_TADTONES && !mNotes[noteIdx].mNote.isStateWait()) {
+                    b2 = true;
+                }
+            }
+        }
+
+        if (field_0x5E81[i] != 0) {
+            for (int j = field_0x5E81[i] - 1; j >= 0; j--) {
+                s32 noteIdx = field_0x5EE8[acc + j];
+                if (noteIdx != NUM_TOTAL_TADTONES && !mNotes[noteIdx].mNote.isStateWait()) {
+                    b2 = true;
+                }
+            }
+        }
+
+        if (field_0x5EA4[i] == 0) {
+            b2 = true;
+        }
+
+        acc += field_0x5E4E[i];
+    }
+
+    if (!b && !b2) {
+        if (field_0x5F40 <= 0) {
+            mBase.fn_80297AE0();
+            field_0x5F35 = NUM_TADTONE_GROUPS + 1; // TODO ???
+            field_0x5F36 = NUM_TADTONE_GROUPS + 1;
+        } else {
+            field_0x5F40--;
+        }
+    } else {
+        field_0x5F40 = 45;
+    }
+
+    acc = 0;
+    for (int j = 0; j < NUM_TADTONE_GROUPS; j++) {
+        if (field_0x5F36 == j) {
+            break;
+        }
+        acc += field_0x5E4E[j];
+    }
+
+    // TODO: actual length?
+    static const u8 sUnk1[] = {
+        0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 4, 0,
+    };
+
+    if (mBase.getField_0x2251(field_0x5F36) == 2 && mBase.fn_80297E10(sUnk1[field_0x5F35])) {
+        for (int j = 0; j < field_0x5E4E[field_0x5F36]; j++) {
+            s32 noteIdx = field_0x5EE8[acc + j];
+            if (noteIdx != NUM_TOTAL_TADTONES) {
+                mNotes[noteIdx].mNote.forceOut();
+            }
+        }
+    }
+
+    if (field_0x5F40 > 0) {
+        if (b2 == true) {
+            mBase.fn_80297BA0();
+        } else {
+            mBase.fn_80297B40();
+            field_0x5F35 = NUM_TADTONE_GROUPS;
+            field_0x5F36 = NUM_TADTONE_GROUPS;
+        }
+    }
+
+    mBase.fn_80297FE0(sUnk1[field_0x5F35]);
+
+    // TODO new local?
+    acc = 0;
+
+    for (int i = 0; i < NUM_TADTONE_GROUPS; i++) {
+        if (field_0x5E81[i] != 0) {
+            switch (field_0x5EA4[i]) {
+                case 1: {
+                    for (int j = field_0x5E5F[i]; j < field_0x5E70[i]; j++) {
+                        s32 noteIdx = field_0x5EE8[acc + j];
+                        if (noteIdx != NUM_TOTAL_TADTONES && mNotes[noteIdx].field_0x278 != 5) {
+                            mNotes[noteIdx].field_0x278 = 5;
+                            mNotes[noteIdx].mNote.lose();
+                        }
+                    }
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_Clef_GROUP_DROP_OUT);
+                    field_0x5EA4[i] = 3;
+                    break;
+                }
+                case 2: {
+                    for (int j = 0; j < field_0x5E70[i]; j++) {
+                        s32 noteIdx = field_0x5EE8[acc + j];
+                        if (noteIdx != NUM_TOTAL_TADTONES && mNotes[noteIdx].field_0x278 != 5) {
+                            mNotes[noteIdx].field_0x278 = 5;
+                            mNotes[noteIdx].mNote.lose();
+                        }
+                    }
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_Clef_GROUP_DROP_OUT);
+                    field_0x5EA4[i] = 4;
+                    break;
+                }
+            }
+        }
+
+        for (int j = 0; j < field_0x5E81[i]; j++) {
+            s32 noteIdx = field_0x5EE8[acc + j];
+            if (noteIdx != NUM_TOTAL_TADTONES) {
+                f32 f = mNotes[noteIdx].mNote.getField0x260();
+                if (mNotes[noteIdx].field_0x278 == 2 || mNotes[noteIdx].field_0x278 == 4) {
+                    mNotes[noteIdx].mNote.setFrame(f);
+                }
+            }
+        }
+
+        if (field_0x5E81[i] != field_0x5E4E[i]) {
+            field_0x5F3C = 60;
+            if (field_0x5E92[i] < field_0x5F3C && field_0x5E92[i] != 0) {
+                mBase.setField_0x2251(i, 1);
+
+                for (int j = 0; j < field_0x5E81[i]; j++) {
+                    s32 noteIdx = field_0x5EE8[acc + j];
+                    if (noteIdx != NUM_TOTAL_TADTONES && mNotes[noteIdx].field_0x278 == 3) {
+                        if (j != 0) {
+                            s32 otherNoteIdx = field_0x5EE8[acc + j - 1];
+                            f32 f = mNotes[otherNoteIdx].mNote.getField0x260();
+                            if (0.0f <= f - 2.0f) {
+                                mNotes[noteIdx].field_0x278 = 4;
+                                mNotes[noteIdx].mNote.setFrame(f - 2.0f);
+                            } else {
+                                mNotes[noteIdx].mNote.setFrame(0.0f);
+                            }
+                        } else {
+                            f32 f = mNotes[noteIdx].mNote.getField0x260();
+                            if (0.0f <= f) {
+                                mNotes[noteIdx].field_0x278 = 4;
+                                mNotes[noteIdx].mNote.setFrame(f);
+                            }
+                        }
+                    }
+                    if (mNotes[noteIdx].field_0x278 >= 1 && mNotes[noteIdx].field_0x278 <= 2) {
+                        mNotes[noteIdx].field_0x278 = 3;
+                        mNotes[noteIdx].mNote.startLose();
+                    }
+                }
+            } else {
+                mBase.setField_0x2251(i, 0);
+
+                for (int j = 0; j < field_0x5E81[i]; j++) {
+                    s32 noteIdx = field_0x5EE8[acc + j];
+                    if (noteIdx != NUM_TOTAL_TADTONES && mNotes[noteIdx].field_0x278 == 1) {
+                        if (j != 0) {
+                            s32 otherNoteIdx = field_0x5EE8[acc + j - 1];
+                            f32 f = mNotes[otherNoteIdx].mNote.getField0x260();
+                            if (0.0f <= f - 2.0f) {
+                                mNotes[noteIdx].field_0x278 = 2;
+                                mNotes[noteIdx].mNote.setFrame(f - 2.0f);
+                            } else {
+                                mNotes[noteIdx].mNote.setFrame(0.0f);
+                            }
+                        } else {
+                            f32 f = mNotes[noteIdx].mNote.getField0x260();
+                            if (0.0f <= f) {
+                                mNotes[noteIdx].field_0x278 = 2;
+                                mNotes[noteIdx].mNote.setFrame(f);
+                            }
+                        }
+                    }
+                    if (mNotes[noteIdx].field_0x278 >= 3 && mNotes[noteIdx].field_0x278 <= 4) {
+                        mNotes[noteIdx].field_0x278 = 1;
+                        mNotes[noteIdx].mNote.stopLose();
+                    }
+                }
+            }
+        }
+
+        acc += field_0x5E4E[i];
+    }
+
+    static const u8 sTadtoneGroupColors[NUM_TADTONE_GROUPS] = {0, 1, 2, 3, 4, 5, 2, 3, 4, 5, 0, 1, 3, 5, 0, 1, 2};
+
+    if (mBase.fn_80298B80()) {
+        // TODO new local?
+        acc = 0;
+        for (int i = 0; i < NUM_TADTONE_GROUPS; i++) {
+            switch (field_0x5EA4[i]) {
+                case 0: {
+                    for (int j = 0; j < field_0x5E5F[i]; j++) {
+                        if (field_0x5EE8[acc + j] == NUM_TOTAL_TADTONES) {
+                            if (dLytForceLine_c::isDone(j)) {
+                                for (int k = 0; k < 24; k++) {
+                                    if (mNotes[k].field_0x278 == 7) {
+                                        mNotes[k].field_0x278 = 0;
+                                        mNotes[k].mNote.setColor(sTadtoneGroupColors[i]);
+                                        mNotes[k].mNote.setTransform(*mBase.getNotePane(acc + j));
+                                        mNotes[k].mNote.setMove();
+                                        field_0x5EE8[acc + j] = k;
+                                        break;
+                                    }
+                                }
+                            }
+                        } else if (mNotes[field_0x5EE8[acc + j]].field_0x278 == 5) {
+                            break;
+                        }
+                    }
+
+                    for (int j = 0; j < field_0x5E5F[i]; j++) {
+                        s32 noteIdx = field_0x5EE8[acc + j];
+                        if (noteIdx != NUM_TOTAL_TADTONES && mNotes[noteIdx].mNote.isMove() &&
+                            mNotes[noteIdx].field_0x278 == 0) {
+                            if (j != 0) {
+                                s32 otherNoteIdx = field_0x5EE8[acc + j - 1];
+                                f32 f = mNotes[otherNoteIdx].mNote.getField0x260();
+                                if (0.0f <= f - 2.0f) {
+                                    mNotes[noteIdx].field_0x278 = 2;
+                                    mNotes[noteIdx].mNote.setFrame(f - 2.0f);
+                                    field_0x5E81[i]++;
+                                } else {
+                                    mNotes[noteIdx].mNote.setFrame(0.0f);
+                                }
+                            } else {
+                                f32 f = mNotes[noteIdx].mNote.getField0x260();
+                                if (0.0f <= f) {
+                                    mNotes[noteIdx].field_0x278 = 2;
+                                    mNotes[noteIdx].mNote.setFrame(f);
+                                    field_0x5E81[i]++;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+                case 5: {
+                    for (int j = 0; j < field_0x5E4E[i]; j++) {
+                        s32 noteIdx = field_0x5EE8[acc + j];
+                        if (noteIdx != NUM_TOTAL_TADTONES) {
+                            mNotes[noteIdx].field_0x278 = 6;
+                            mNotes[noteIdx].mNote.collect();
+                        }
+                    }
+                    mBase.setColor1(i);
+                    mBase.setField_0x2251_(i, 2);
+                    field_0x5EA4[i] = 7;
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_Clef_GROUP_FIX);
+                    break;
+                }
+            }
+
+            acc += field_0x5E4E[i];
+        }
+
+        fn_8029A3B0();
+        field_0x5F36 = field_0x5F35;
     }
 }
 void dLytMeterClefMain_c::finalizeState_Wait() {}
@@ -583,12 +1391,12 @@ void dLytMeterClefMain_c::fn_80299E30() {
         mNotes[i].field_0x278 = 7;
     }
 
-    for (int i = 0; i < 77; i++) {
-        field_0x5EE8[i] = 77;
+    for (int i = 0; i < NUM_TOTAL_TADTONES; i++) {
+        field_0x5EE8[i] = NUM_TOTAL_TADTONES;
     }
 
-    field_0x5F35 = 18;
-    field_0x5F36 = 18;
+    field_0x5F35 = NUM_TADTONE_GROUPS + 1; // TODO ???
+    field_0x5F36 = NUM_TADTONE_GROUPS + 1;
     field_0x5E4D = 0;
 
     field_0x5F3C = 60;
@@ -608,7 +1416,7 @@ void dLytMeterClefMain_c::fn_8029A050() {
         if (field_0x5E5F[i] == field_0x5E4E[i]) {
             field_0x5EA4[i] = 8;
             field_0x5E81[i] = field_0x5E4E[i];
-            mBase.fn_802978F0(i);
+            mBase.setColor0(i);
         }
     }
 }
@@ -656,8 +1464,8 @@ void dLytMeterClefMain_c::fn_8029A440() {
             }
             bool b = true;
             for (int j = 0; j < field_0x5E4E[i]; j++) {
-                // TODO cast
-                if ((s32)field_0x5EE8[acc + j] != 77 && !mNotes[field_0x5EE8[acc + j]].mNote.isStateWait()) {
+                s32 noteIdx = field_0x5EE8[acc + j];
+                if (noteIdx != NUM_TOTAL_TADTONES && !mNotes[noteIdx].mNote.isStateWait()) {
                     b = false;
                 }
             }

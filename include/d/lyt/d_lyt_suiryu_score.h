@@ -26,16 +26,42 @@ public:
 
     void startIn();
     void startOut();
-    void setColor0(s32 idx);
-    void setColor1(s32 idx);
+    void setColor0(u8 idx);
+    void setColor1(u8 idx);
     void alphaForwards(s32 idx, f32 rate);
     void alphaBackwards(s32 idx, f32 rate);
     void stopMove();
 
-    void fn_802978F0(u8);
+    void fn_802978F0(s32 idx);
+    void fn_80297AE0();
+    void fn_80297B40();
+    void fn_80297BA0();
+    void fn_80297C80();
+    bool fn_80297E10(u8) const;
+    void fn_80297EA0();
+    void fn_80297FE0(u8);
+    bool fn_80298B80();
 
     nw4r::lyt::Pane *getInOutAllPane() const {
         return mLyt.findPane("N_inOutAll_00");
+    }
+
+    nw4r::lyt::Pane *getNotePane(s32 idx) const {
+        return mpPanes[idx];
+    }
+
+    u8 getField_0x2251(s32 idx) const {
+        return field_0x2251[idx];
+    }
+
+    void setField_0x2251(u8 idx, u8 val) {
+        if (field_0x2251[idx] != val) {
+            field_0x2251[idx] = val;
+        }
+    }
+
+    void setField_0x2251_(u8 idx, u8 val) {
+        field_0x2251[idx] = val;
     }
 
 private:
@@ -66,6 +92,7 @@ private:
 class dLytMeterClefMain_c {
 private:
     static const s32 NUM_TADTONE_GROUPS = 17;
+    static const s32 NUM_TOTAL_TADTONES = 77;
 
 public:
     dLytMeterClefMain_c()
@@ -115,7 +142,7 @@ private:
     /* 0x5E81 */ u8 field_0x5E81[NUM_TADTONE_GROUPS];
     /* 0x5E92 */ u8 field_0x5E92[NUM_TADTONE_GROUPS];
     /* 0x5EA4 */ UNKWORD field_0x5EA4[NUM_TADTONE_GROUPS];
-    /* 0x5EE8 */ u8 field_0x5EE8[77];
+    /* 0x5EE8 */ u8 field_0x5EE8[NUM_TOTAL_TADTONES];
 
     /* 0x5F35 */ u8 field_0x5F35;
     /* 0x5F36 */ u8 field_0x5F36;

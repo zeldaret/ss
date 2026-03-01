@@ -28,11 +28,11 @@ static const d2d::LytBrlanMapping brlanMap[] = {
 #define NOTE_ANIM_INVALID 6
 
 void dLytNote_c::initializeState_Wait() {
-    field_0x273 = 0;
+    mIsMove = false;
 }
 
 void dLytNote_c::executeState_Wait() {
-    if (field_0x270 != 0) {
+    if (mShouldMove) {
         mStateMgr.changeState(StateID_In);
     }
 }
@@ -40,14 +40,14 @@ void dLytNote_c::executeState_Wait() {
 void dLytNote_c::finalizeState_Wait() {}
 
 void dLytNote_c::initializeState_In() {
-    field_0x274 = 0;
+    mForceOut = false;
     mpPane->SetVisible(true);
     mAnmGroups[NOTE_ANIM_GET].setAnimEnable(true);
     mAnmGroups[NOTE_ANIM_GET].setFrame(0.0f);
 }
 
 void dLytNote_c::executeState_In() {
-    if (field_0x270 == 0) {
+    if (!mShouldMove) {
         mAnmGroups[NOTE_ANIM_GET].setToEnd();
         mAnmGroups[NOTE_ANIM_GET].setAnimEnable(false);
         mStateMgr.changeState(StateID_Out);
@@ -68,14 +68,14 @@ void dLytNote_c::executeState_In() {
 void dLytNote_c::finalizeState_In() {}
 
 void dLytNote_c::initializeState_Move() {
-    field_0x273 = 1;
+    mIsMove = true;
 }
 
 void dLytNote_c::executeState_Move() {
-    if (field_0x270 == 0) {
+    if (!mShouldMove) {
         mAnmGroups[mInAnim].setAnimEnable(false);
         mStateMgr.changeState(StateID_Out);
-    } else if (field_0x272 != 0 && mInAnim == NOTE_ANIM_GET_LOOP) {
+    } else if (mIsAboutToLose && mInAnim == NOTE_ANIM_GET_LOOP) {
         mAnmGroups[mInAnim].setAnimEnable(false);
         field_0x260 = 0.0f;
         mInAnim = NOTE_ANIM_LOST_LOOP;
@@ -88,7 +88,7 @@ void dLytNote_c::executeState_Move() {
         mAnmGroups[mInAnim].setFrame(field_0x260);
         mAnmGroups[mInAnim].setAnimEnable(true);
     } else {
-        if (field_0x272 == 0 && mInAnim == NOTE_ANIM_LOST_LOOP) {
+        if (!mIsAboutToLose && mInAnim == NOTE_ANIM_LOST_LOOP) {
             mAnmGroups[mInAnim].setAnimEnable(false);
             field_0x260 = 0.0f;
             mInAnim = NOTE_ANIM_GET_LOOP;
@@ -108,8 +108,8 @@ void dLytNote_c::finalizeState_Move() {}
 
 void dLytNote_c::initializeState_Out() {
     mInAnim = NOTE_ANIM_INVALID;
-    field_0x273 = 0;
-    if (field_0x271) {
+    mIsMove = false;
+    if (mIsCollected) {
         mOutAnim = NOTE_ANIM_FIX;
     } else {
         mOutAnim = NOTE_ANIM_LOST;
@@ -119,7 +119,7 @@ void dLytNote_c::initializeState_Out() {
 }
 
 void dLytNote_c::executeState_Out() {
-    if (field_0x274 != 0) {
+    if (mForceOut) {
         mAnmGroups[mOutAnim].setToEnd();
     }
 
@@ -155,12 +155,12 @@ bool dLytNote_c::build(d2d::ResAccIf_c *resAcc) {
     mInAnim = NOTE_ANIM_INVALID;
     mOutAnim = NOTE_ANIM_FIX;
     field_0x260 = 0.0f;
-    field_0x270 = 0;
-    field_0x271 = 0;
-    field_0x272 = 0;
-    field_0x273 = 0;
-    field_0x274 = 0;
-    field_0x26C = 0;
+    mShouldMove = false;
+    mIsCollected = false;
+    mIsAboutToLose = false;
+    mIsMove = false;
+    mForceOut = false;
+    mColor = 0;
     mStateMgr.changeState(StateID_Wait);
     return true;
 }
@@ -177,7 +177,7 @@ void dLytNote_c::execute(u8 alpha) {
     mStateMgr.executeState();
     if (*mStateMgr.getStateID() != StateID_Wait) {
         mpPane->SetTranslate(mTranslate);
-        mAnmGroups[NOTE_ANIM_COLOR].setFrame(field_0x26C);
+        mAnmGroups[NOTE_ANIM_COLOR].setFrame(mColor);
         mpPane->SetAlpha(alpha);
         mLyt.calc();
     }
