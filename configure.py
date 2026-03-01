@@ -644,7 +644,7 @@ config.libs = [
             Object(Matching, "d/tg/d_t_switch.cpp"),
             Object(NonMatching, "d/tg/d_t_mass_object.cpp"),
             Object(NonMatching, "d/tg/d_t_camera.cpp"),
-            Object(NonMatching, "d/tg/d_t_event.cpp"),
+            Object(Matching, "d/tg/d_t_event.cpp"),
             Object(NonMatching, "d/tg/d_t_event_f.cpp"),
             Object(NonMatching, "d/tg/d_tk_event.cpp"),
             Object(NonMatching, "toBeSorted/d_a_npc_inv.cpp"),
