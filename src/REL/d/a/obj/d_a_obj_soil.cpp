@@ -570,7 +570,7 @@ void dAcOsoil_c::handleModelsOpacities() {
     if (dAcPy_c::LINK->mPosition.squareDistance(mPosition) < 1000000.f) {
         dCamera_c* camera = dScGame_c::getCamera();
         if (camera != nullptr) {
-            f32 dist = (camera->getPositionMaybe() - mPosition).y * (1.f / 80.f);
+            f32 dist = (camera->getPosition() - mPosition).y * (1.f / 80.f);
             if (dist < 0.1f) {
                 dist = 0.f;
             } else if (dist > 1) {

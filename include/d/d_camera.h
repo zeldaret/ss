@@ -127,7 +127,7 @@ public:
     bool isUnderwater() const;
     f32 getUnderwaterDepth() const;
 
-    void fn_8019EA70(bool);
+    bool fn_8019EA70(bool);
     bool setEventCamView(const mVec3_c &, const mVec3_c &, f32, f32);
     mAng getYAngle() const;
     mAng getXZAngle() const;

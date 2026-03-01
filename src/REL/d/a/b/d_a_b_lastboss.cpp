@@ -3095,12 +3095,12 @@ void dAcBlastboss_c::executeLightningStrike() {
                 field_0x2CFC = 60.0f;
                 mLightingStrikeState = LIGHTNING_STRIKE_DEMO;
                 // huh
-                field_0x2D10.x = cam->getField_0x78().x;
-                field_0x2D10.y = cam->getField_0x78().y;
-                field_0x2D10.z = cam->getField_0x78().z;
-                field_0x2D04.x = cam->getPositionMaybe().x;
-                field_0x2D04.y = cam->getPositionMaybe().y;
-                field_0x2D04.z = cam->getPositionMaybe().z;
+                field_0x2D10.x = cam->getTarget().x;
+                field_0x2D10.y = cam->getTarget().y;
+                field_0x2D10.z = cam->getTarget().z;
+                field_0x2D04.x = cam->getPosition().x;
+                field_0x2D04.y = cam->getPosition().y;
+                field_0x2D04.z = cam->getPosition().z;
                 mIsPhaseTwo = -1;
                 // fall-through
             } else {
