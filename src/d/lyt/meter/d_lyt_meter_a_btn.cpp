@@ -268,9 +268,9 @@ bool dLytMeterABtn_c::execute() {
     field_0x1BC = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_A);
     field_0x1C0 = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_A);
 
-    if (field_0x1BC == 0x76) {
+    if (field_0x1BC == LytDoButtonRelated::ACT_IE_ETC_REMOVE_BEACON) {
         state = true;
-    } else if (field_0x1BC == 0x57) {
+    } else if (field_0x1BC == LytDoButtonRelated::ACT_IE_INFO_GRAB_3) {
         state = false;
     }
 

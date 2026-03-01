@@ -1436,7 +1436,7 @@ void dAcEsm_c::fn_187_6C20(bool param0) {
 
     if (!param0) {
         dCamera_c *cam = dScGame_c::getCamera(0);
-        mAngle.y = cLib::targetAngleY(cam->getPositionMaybe(), cam->getField_0x78());
+        mAngle.y = cLib::targetAngleY(cam->getPosition(), cam->getTarget());
         mAngle.y += cM::rndFX(16384.f);
     }
 

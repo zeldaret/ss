@@ -1056,12 +1056,12 @@ bool dTgMassObjInstance::checkForHit(
                 param_5->mCutCounter++;
                 mVec3_c local16C(mGroundHeight.x, mGroundHeight.y, mGroundHeight.z);
                 mColor local17C = 0xFFFFFFFF;
-                f32 camField2A8 = dScGame_c::getCamera()->getField_0x2A8();
+                f32 waterHeight = dScGame_c::getCamera()->getWaterHeight();
                 local17C.r = mTevColor.r;
                 local17C.g = mTevColor.g;
                 local17C.b = mTevColor.b;
                 local17C.a = mTevColor.a;
-                if (local16C.y + 100.f < camField2A8 && mMassObjSubtype <= 5) {
+                if (local16C.y + 100.f < waterHeight && mMassObjSubtype <= 5) {
                     if (dScGame_c::isCurrentStage("D100")) {
                         mMassObjSubtype = 6;
                     } else {
@@ -1424,7 +1424,7 @@ extern void LoadMaterial(
 );
 
 void GrassModelData::draw(f32 param_1, f32 param_2, nw4r::math::MTX34 *pMtx) {
-    mVec3_c cameraPosition = dScGame_c::getCamera()->getPositionMaybe();
+    mVec3_c cameraPosition = dScGame_c::getCamera()->getPosition();
     bool isInFaronWoods = dScGame_c::isCurrentStage("F100");
     nw4r::g3d::ResMatMisc miscData(mResMat.GetResMatMisc());
     miscData.SetLightSetIdx(1);

@@ -132,6 +132,10 @@ public:
         mpFile = file;
     }
 
+    const bzsFILE *getFile() const {
+        return mpFile;
+    }
+
     void setScen(const SCEN *scen, u16 count) {
         mScenCount = count;
         mpScen = scen;
