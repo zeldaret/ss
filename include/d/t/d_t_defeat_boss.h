@@ -7,8 +7,23 @@ class dTgDefeatBoss_c : public dTg_c {
 public:
     dTgDefeatBoss_c() {}
     virtual ~dTgDefeatBoss_c() {}
+    u16 getSceneflag();
+    s32 getSceneflagPolarity();
+    u32 getStoryflag();
+    s32 getStoryflagPolarity();
+    static void getDungeonFlagIndex(u32 &outFlagIdx);
+    bool checkDungeonFlag();
+    virtual int create() override;
+    virtual int actorExecute() override;
+
+    
+
 
 private:
+    /* 0xFC */ s8 mSceneflagPolarity;
+    /* 0xFD */ s8 mStoryflagPolarity;
 };
+
+
 
 #endif
