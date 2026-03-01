@@ -3,7 +3,6 @@
 #include "c/c_lib.h"
 #include "common.h"
 #include "d/a/d_a_player.h"
-#include "d/a/npc/d_a_npc_salbage_robot.h"
 #include "d/a/npc/d_a_npc_volcano_f2_salbo.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
@@ -13,7 +12,10 @@
 #include "m/m_vec.h"
 #include "toBeSorted/area_math.h"
 #include "toBeSorted/d_path.h"
+#include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
+
+const char *ScrapperStopEvent = "HailToPlayerToStop";
 
 SPECIAL_ACTOR_PROFILE(SC_CHANGE_TAG, dTgSceneChange_c, fProfile::SC_CHANGE_TAG, 0x21, 0, 4);
 
@@ -57,12 +59,15 @@ int dTgSceneChange_c::actorExecute() {
         return SUCCEEDED;
     }
 
-    if (mEnableStoryflag == 0 || mEnableStoryflag >= 0x7FF || !StoryflagManager::sInstance->getFlag(mEnableStoryflag)) {
-        return SUCCEEDED;
+    if (mEnableStoryflag != 0 && mEnableStoryflag < 0x7FF) {
+        if (!StoryflagManager::sInstance->getFlag(mEnableStoryflag)) {
+            return SUCCEEDED;
+        }
     }
-
-    if (mEnableSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEnableSceneflag)) {
-        return SUCCEEDED;
+    if (mEnableSceneflag < 0xFF) {
+        if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEnableSceneflag)) {
+            return SUCCEEDED;
+        }
     }
 
     dAcPy_c *pPlayer = dAcPy_c::GetLinkM();
@@ -83,36 +88,33 @@ int dTgSceneChange_c::actorExecute() {
 extern "C" dAcOrdinaryNpc_c *SCRAPPER_PTR;
 
 bool dTgSceneChange_c::checkScrapper() {
-    if (SCRAPPER_PTR == nullptr) {
-        return false;
-    }
+    if (SCRAPPER_PTR != nullptr && SCRAPPER_PTR->mProfileName == fProfile::NPC_SLB2) {
+        dAcNpcSlb2_c *pScrapper = static_cast<dAcNpcSlb2_c *>(SCRAPPER_PTR);
 
-    if (SCRAPPER_PTR->mProfileName != fProfile::NPC_SLB2) {
-        return false;
-    }
+        if (!pScrapper->fn_61_6A10()) {
+            return false;
+        }
+        dPath_c path;
+        if (path.initWithPathIndex(mPathId, mRoomID, 0) && (u32)path.getNumPoints() >= 2) {
+            if (EventManager::isInEvent(pScrapper, ScrapperStopEvent)) {
+                mVec3_c p0, p1;
+                p0.copyFrom(path.getPoint(0));
+                p1.copyFrom(path.getPoint(1));
+                mAng a = cLib::targetAngleY(p0, p1);
+                pScrapper->fn_61_56C0(field_0x138, &mPosition, &a);
 
-    if (!static_cast<dAcNpcSlb2_c*>(SCRAPPER_PTR)->fn_61_6A10()) {
-        return false;
-    }
-
-    dPath_c path;
-    if (path.initWithPathIndex(mPathId, mRoomID, 0) && path.getNumPoints() > 1) {
-        if (EventManager::isInEvent(SCRAPPER_PTR, "HailToPlayerToStop")) {
-            mVec3_c p0, p1;
-            p0.copyFrom(path.getPoint(0));
-            p1.copyFrom(path.getPoint(1));
-            mAng a = cLib::targetAngleY(p0, p1);
-
-            
-
-
+                return true;
+            } else {
+                void *zev = pScrapper->getOarcZev("DesertRobot");
+                u32 flag1 = 0x100000;
+                Event e(ScrapperStopEvent, zev, 100, flag1 + 1, 0, 0);
+                EventManager::alsoSetAsCurrentEvent(pScrapper, &e, nullptr);
+                return true;
+            }
         }
     }
-    
     return false;
-
-
-} 
+}
 
 void dTgSceneChange_c::savePlayerPosition() {
     if (SCRAPPER_PTR == nullptr) {
