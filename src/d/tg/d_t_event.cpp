@@ -42,7 +42,7 @@ int dTgEvent_c::actorExecute() {
     if (!isValidFlag(mTrigSceneflag) || checkUncommittedFlag(mTrigSceneflag)) {
         if ((mSubtype != 0 && !(isValidFlag(mSetSceneflag) && checkUncommittedFlag(mSetSceneflag))) ||
             (mSubtype == 0 && (isValidFlag(mSetSceneflag) && checkUncommittedFlag(mSetSceneflag)))) {
-            if (checkIfVec3fInMatrix(mMatrix, dAcPy_c::LINK->mPosition)) {
+            if (checkAreaBox(mMatrix, dAcPy_c::LINK->mPosition)) {
                 Event EStack_48 = Event(mEventId, mRoomID, fun(mUnkParamFlag, 0x1), 0, 0);
                 mActorEvent.scheduleEvent(EStack_48, 0);
             }
