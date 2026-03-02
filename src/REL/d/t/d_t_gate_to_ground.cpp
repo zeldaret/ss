@@ -46,7 +46,7 @@ int dTgGateToGround_c::actorExecute() {
 
     player = dAcPy_c::LINK;
 
-    if (checkIfVec3fInMatrix(matrix, player->mPosition)) {
+    if (checkAreaBox(matrix, player->mPosition)) {
         if (player->getRidingActorType() != dAcPy_c::RIDING_LOFTWING) {
             if (delayFrames > 15) {
                 Event e("CloudHole", 100, 0, nullptr, nullptr);

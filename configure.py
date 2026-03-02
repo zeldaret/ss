@@ -2944,7 +2944,7 @@ config.libs = [
     Rel(
         NonMatching, "d_t_ro_at_target_manager", "REL/d/t/d_t_ro_at_target_manager.cpp"
     ),
-    Rel(NonMatching, "d_t_scene_change", "REL/d/t/d_t_scene_change.cpp"),
+    Rel(Matching, "d_t_scene_change", "REL/d/t/d_t_scene_change.cpp"),
     Rel(NonMatching, "d_t_ship_flood", "REL/d/t/d_t_ship_flood.cpp"),
     Rel(NonMatching, "d_t_ship_slope", "REL/d/t/d_t_ship_slope.cpp"),
     Rel(Matching, "d_t_ship_window", "REL/d/t/d_t_ship_window.cpp"),
