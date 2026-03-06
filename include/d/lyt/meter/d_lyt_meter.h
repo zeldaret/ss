@@ -91,7 +91,7 @@ public:
 
     bool isNotSilentRealmOrLoftwing();
 
-    bool fn_800C9F70();
+    bool shouldHideLytClef();
     bool fn_800C9FE0();
     bool isPopupOpen();
 
@@ -102,7 +102,7 @@ public:
     void fn_800D5630();
     bool isInModeMap();
     bool isInModePause();
-    bool fn_800D56B0();
+    bool shouldBeHiddenGeneral();
     void checkPaneVisibility();
     bool execute();
 
@@ -198,7 +198,7 @@ private:
     /* 0x13772 */ bool field_0x13772;
     /* 0x13773 */ bool field_0x13773;
     /* 0x13774 */ bool mHelpOpen;
-    /* 0x13775 */ bool field_0x13775;
+    /* 0x13775 */ bool mIsCollectingTadtoneScroll;
     /* 0x13776 */ bool mTimerVisible;
     /* 0x13777 */ bool mBirdGaugeVisible;
     /* 0x13778 */ bool mSkyGaugeVisible;
@@ -310,8 +310,8 @@ public:
         mMain.mHelpOpen = val;
     }
 
-    void setMeterField_0x13775(bool val) {
-        mMain.field_0x13775 = val;
+    void setIsCollectingTadtoneScroll(bool val) {
+        mMain.mIsCollectingTadtoneScroll = val;
     }
 
     bool getMeterField_0x1377F() const {
@@ -332,6 +332,12 @@ public:
 
     void resetFlags() {
         mFlags = 0xFFFFFFFF;
+    }
+
+    static void setGanbariClefRelated(bool arg) {
+        if (sInstance != nullptr) {
+            sInstance->mMain.mGanbariGauge.setClefRelated(arg);
+        }
     }
 
     static dLytMeterCrossBtn_c::CrossIcon_e getCrossIconDown() {
@@ -452,9 +458,9 @@ public:
         }
     }
 
-    static bool getfn_800C9F70() {
+    static bool shouldHideLytClef() {
         if (sInstance != nullptr) {
-            return sInstance->mMain.fn_800C9F70();
+            return sInstance->mMain.shouldHideLytClef();
         } else {
             return false;
         }

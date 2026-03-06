@@ -658,7 +658,7 @@ config.libs = [
             Object(Matching, "d/lyt/d_lyt_force_line.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_enemy_icon.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_mini_game.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_meter_suiryu_score.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_suiryu_score.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_meter_suiryu_score_comp.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_boss_caption.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_demo_dowsing.cpp"),
