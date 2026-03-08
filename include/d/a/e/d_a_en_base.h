@@ -5,6 +5,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_bomb.h"
 #include "d/d_cc.h"
+#include "m/m3d/m_mdl.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 
@@ -22,6 +23,7 @@ public:
         INTERACT_0x4 = (1 << 2),
         INTERACT_0x40 = (1 << 6),
         INTERACT_0x1000 = (1 << 12),
+        INTERACT_0x2000 = (1 << 13),
     };
 
 public:
@@ -71,8 +73,8 @@ public:
     int fn_8002fde0(cCcD_Obj &mCc, u16 *pTgOut);
 
     // Returns 0-3 based on collision
-    // 2
     int fn_800301b0(const mVec3_c &pos, mAng ang, bool, f32);
+    void fn_80030400(m3d::mdl_c &, u8, bool, u8);
     void fn_800306d0();
     void fn_80030700();
     void fn_80030c20(u32 flags, f32, f32, f32, f32);

@@ -1,6 +1,8 @@
 #ifndef D_A_PLAYER_ACT_H
 #define D_A_PLAYER_ACT_H
 
+#include "d/a/d_a_base.h"
+#include "d/a/obj/d_a_obj_bomb.h"
 #include "d/d_player_base.h"
 #include "m/m_vec.h"
 
@@ -413,7 +415,7 @@ public:
     /* vt 0x2A8 */ virtual void lookTowardItem() {}
     /* vt 0x2AC */ virtual void vt_0x2AC() {}
     /* vt 0x2B0 */ virtual void vt_0x2B0() {}
-    /* vt 0x2B4 */ virtual void triggerMoveEventMaybe(u32, u32, u32, const mVec3_c *, const mAng&, u32, u32) {}
+    /* vt 0x2B4 */ virtual void triggerMoveEventMaybe(u32, u32, u32, const mVec3_c *, const mAng &, u32, u32) {}
     /* vt 0x2B8 */ virtual void setActorRef9() {}
     /* vt 0x2BC */ virtual void unlinkActorRef9() {}
     /* vt 0x2C0 */ virtual bool vt_0x2C0() {
@@ -653,6 +655,9 @@ public:
     static s32 getCurrentSwordTypeInline() {
         return sCurrentSword;
     }
+
+    // Checks through beetle actor references and
+    static dAcBomb_c *getBombWithinRadius(dAcBase_c *, const mVec3_c &, f32);
 
     static bool isInEvent();
     bool isAttackingLeft() const;

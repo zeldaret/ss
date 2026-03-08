@@ -207,7 +207,7 @@ private:
     }
 
 public:
-    dWaterEffect_c() : mIsInWater(1), mIsSmall(false) {}
+    dWaterEffect_c() : mIsInWater(true), mIsSmall(false) {}
     virtual ~dWaterEffect_c() {}
 
     void init(dAcObjBase_c *, f32 height, f32 scale, f32 depth);
