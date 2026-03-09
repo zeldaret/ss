@@ -1571,7 +1571,6 @@ d/tg/d_t_event.cpp:
 d/tg/d_t_event_f.cpp:
 	.text       start:0x8027A740 end:0x8027AB30 align:16
 	.data       start:0x805367A0 end:0x80536828
-	.sdata2     start:0x8057C650 end:0x8057C658
 
 d/tg/d_tk_event.cpp:
 	.text       start:0x8027AB30 end:0x8027B408 align:16
