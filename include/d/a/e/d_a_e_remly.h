@@ -16,7 +16,7 @@
 #include "toBeSorted/d_emitter.h"
 
 class dAcBomb_c;
-
+class dAcNpcSkn2_c;
 class dAcEremly_c : public dAcEnBase_c {
 public:
     class callback_c : public m3d::callback_c {
@@ -24,7 +24,6 @@ public:
         virtual ~callback_c() {}
         virtual void timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) override;
 
-    private:
         /* 0x04 */ mAng3_c mAng;
         /* 0x0C */ UNKWORD field_0x0C; // Guess
     };
@@ -51,9 +50,6 @@ public:
         STATE_18 = 18,
         STATE_19 = 19,
         STATE_20 = 20,
-
-        //
-        FAKE_STATE_30 = 30,
     };
 
 public:
@@ -107,6 +103,11 @@ private:
      *   true -> compares to player */
     bool fn_177_7650(bool comparePlayer);
 
+    // Set Scary Face
+    void fn_177_78D0();
+
+    bool fn_177_79D0(bool);
+
     bool fn_177_7B10();
 
     void fn_177_8520(bool);
@@ -128,10 +129,11 @@ private:
 
     /* 0x9C4 */ dEmitter_c mEmitters[2];
 
-    /* 0xA2C */ dAcRef_c<dAcBase_c> mRef1; // Temporary until type known
+    /* 0xA2C */ dAcRef_c<dAcNpcSkn2_c> mRef1; // Temporary until type known
     /* 0xA38 */ dAcRef_c<dAcBomb_c> mNearbyBombRef;
 
-    /* 0xA44 */ u8 _A44[0xA5C - 0xA44];
+    /* 0xA44 */ mVec3_c field_0xA44;
+    /* 0xA50 */ mVec3_c field_0xA50;
 
     /* 0xA5C */ dWaterEffect_c mWaterEffect;
 
@@ -141,7 +143,9 @@ private:
 
     /* 0xAF8 */ mVec3_c field_0xAF8;
 
-    /* 0xB04 */ u8 _B04[0xB10 - 0xB04];
+    /* 0xB04 */ f32 field_0xB04;
+    /* 0xB08 */ f32 field_0xB08;
+    /* 0xB0C */ f32 field_0xB0C;
     /* 0xB10 */ f32 field_0xB10;
     /* 0xB14 */ u8 _B14[0xB1E - 0xB14];
     /* 0xB1E */ mAng3_c field_0xB1E;
@@ -163,7 +167,7 @@ private:
     /*       */ u8 _B56[0xB60 - 0xB5A];
     /* 0xB60 */ u8 field_0xB60; // Some State representation
     /* 0xB61 */ u8 field_0xB61;
-    /*       */ u8 _B62;
+    /* 0xB62 */ u8 mSleepDemoPlayedSceneflag;
     /*       */ u8 _B63;
     /* 0xB64 */ u8 field_0xB64;
     /*       */ u8 _B65;

@@ -1,16 +1,23 @@
 #include "d/a/e/d_a_e_remly.h"
 
 #include "c/c_counter.h"
+#include "c/c_lib.h"
 #include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_player.h"
+#include "d/a/npc/d_a_npc_shinkan2.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_bomb.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_linkage.h"
+#include "d/d_sc_game.h"
+#include "d/flag/sceneflag_manager.h"
 #include "f/f_base.h"
+#include "f/f_manager.h"
+#include "f/f_profile_name.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_mtx.h"
@@ -25,6 +32,29 @@
 #include "toBeSorted/event_manager.h"
 
 SPECIAL_ACTOR_PROFILE(E_REMLY, dAcEremly_c, fProfile::E_REMLY, 0xE1, 0, 3);
+
+static dCcD_SrcSph sSphSrc = {
+    {{
+         AT_TYPE_DAMAGE,
+         0xD,
+         {0, 0, 0},
+         2,
+         0,
+         0,
+         0,
+         0,
+     }, {
+         ~AT_TYPE_COMMON0,
+         0x303,
+         {0, 0, 0x407},
+         8,
+         0,
+     }, {
+         0x28,
+     }},
+    {
+     50.f, },
+};
 
 STATE_DEFINE(dAcEremly_c, Wait);
 STATE_DEFINE(dAcEremly_c, Walk);
@@ -51,14 +81,144 @@ STATE_DEFINE(dAcEremly_c, NightRet);
 STATE_DEFINE(dAcEremly_c, NightJumpAttack);
 STATE_DEFINE(dAcEremly_c, BirthWait);
 
-void dAcEremly_c::callback_c::timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) {}
+void dAcEremly_c::callback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip *result, nw4r::g3d::ResMdl) {}
 
 bool dAcEremly_c::createHeap() {
     nw4r::g3d::ResFile res(getOarcResFile("Remly"));
 }
 
-int dAcEremly_c::actorCreate() {}
-int dAcEremly_c::actorPostCreate() {}
+int dAcEremly_c::actorCreate() {
+    CREATE_ALLOCATOR(dAcEremly_c);
+
+    u8 p = getFromParams(0, 0xF);
+    field_0xB61 = p != 15 ? p : 0;
+    mSleepDemoPlayedSceneflag = getFromParams(4, 0xFF);
+
+    s32 f = getFromParams(12, 0xFF);
+    field_0xB08 = f != 0xFF ? f * 100.f : 1000.f;
+
+    mAcch.Set(this, 1, &mAcchCir);
+
+    mBoundingBox.Set(mVec3_c(-150.f, -700.f, -150.f), mVec3_c(150.f, 150.f, 150.f));
+
+    mAcceleration = -3.f;
+    mMaxSpeed = -60.f;
+    mScale.set(1.f, 1.f, 1.f);
+
+    field_0xB10 = 1.f;
+    field_0xB1E.clear();
+    mStts.SetRank(5);
+    mSph.Set(sSphSrc);
+    mSph.SetStts(mStts);
+
+    mMdlCallback.mAng.clear();
+
+    mMdl.getModel().setScale(mScale);
+    mMdl.play();
+
+    updateMatrix();
+    mMdl.getModel().setLocalMtx(mWorldMtx);
+    mMdl.getModel().calc(false);
+
+    mSph.ClrAtSet();
+    mLinkage.set(0, 0.f, 0.f, 0.f, nullptr);
+
+    mStartingPos.set(mPosition.x, mPosition.y, mPosition.z);
+    field_0xA44.set(mPosition.x, mPosition.y, mPosition.z);
+    field_0xB38 = mPosition.y;
+    mStartingRot = mRotation;
+
+    mRef1.unlink();
+    mNearbyBombRef.unlink();
+
+    field_0xB64 = 1;
+    mSph.ClrAtSet(); // Duplicated clear
+
+    mEmitters[0].init(this);
+    mEmitters[1].init(this);
+
+    mWaterEffect.init(this, 100.f, mScale.x * 0.7f, 0.f);
+    mWaterEffect.setIsSmall(true);
+
+    field_0xA50.x = mPosition.x;
+    field_0xA50.y = mPosition.y;
+    field_0xA50.z = mPosition.z;
+    mAcchCir.SetWall(field_0xB10 * 10.f, field_0xB10 * 60.f);
+
+    mAcch.SetField_0xD4(100.f + mAng(0));
+    field_0xB04 = 60.f;
+
+    if (field_0xB61 == 0) {
+        mAcch.SetGndThinCellingOff();
+        if (dScGame_c::currentSpawnInfo.isNight()) {
+            mTargetFiTextID = 1;
+        } else {
+            mTargetFiTextID = 0;
+        }
+
+        if (!fn_177_7330()) {
+            setBattleBgmRelated(0);
+            mStateMgr.changeState(StateID_Sleep);
+            mMdl.setAnm("RemlySleep", m3d::PLAY_MODE_4, 0.f);
+            mAcchCir.SetWall(30.f, 50.f);
+            return SUCCEEDED;
+        }
+
+        mScale.set(1.3f, 1.3f, 1.3f);
+
+        field_0xB10 = 1.3f;
+        field_0xB40 = 1.3f;
+
+        field_0xB64 = 2;
+
+        (void)mMdl.getModel().getResMdl();
+        fn_177_78D0();
+
+        field_0xB48 = 24.f + cM::rndF(24.f);
+        if (mSleepDemoPlayedSceneflag == 0xFF ||
+            SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSleepDemoPlayedSceneflag)) {
+            mStateMgr.changeState(StateID_NightWait);
+        } else {
+            mStateMgr.changeState(StateID_NightSleepDemo);
+        }
+    } else if (field_0xB61 == 1) {
+        setBattleBgmRelated(0);
+        mStateMgr.changeState(StateID_Sleep);
+    } else {
+        mStateMgr.changeState(StateID_Run);
+    }
+    return SUCCEEDED;
+}
+
+int dAcEremly_c::actorPostCreate() {
+    if (field_0xB61 == 1) {
+        fBase_c *pActor = fManager_c::searchBaseByProfName(fProfile::NPC_SKN2);
+        if (pActor != nullptr) {
+            dAcNpcSkn2_c *pSkn2 = static_cast<dAcNpcSkn2_c *>(pActor);
+            mRef1.link(pSkn2);
+
+            mAcch.ClrRoofNone();
+            if (fn_177_75E0()) {
+                fn_177_79D0(false);
+
+                mRotation.y = mAngle.y = cLib::targetAngleY(mPosition, mStartingPos);
+
+                updateMatrix();
+                mMdl.getModel().setLocalMtx(mWorldMtx);
+                mMdl.getModel().calc(false);
+                mStateMgr.changeState(StateID_Wait);
+                return SUCCEEDED;
+            }
+
+            mStateMgr.changeState(StateID_Sleep);
+            return SUCCEEDED;
+        }
+
+        mRef1.unlink();
+        field_0xB61 = 0;
+    }
+    return SUCCEEDED;
+}
 
 int dAcEremly_c::doDelete() {
     return SUCCEEDED;
