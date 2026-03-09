@@ -77,6 +77,9 @@ public:
     void fn_80030400(m3d::mdl_c &, u8, bool, u8);
     void fn_800306d0();
     void fn_80030700();
+
+    static void fn_80030980(m3d::mdl_c &, s32, bool markDirty);
+
     void fn_80030c20(u32 flags, f32, f32, f32, f32);
 
     s32 someEnemyDamageCollisionStuffMaybe(dColliderLinkedList &list, u16 *pOutFlags);

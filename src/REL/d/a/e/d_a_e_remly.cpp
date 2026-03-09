@@ -23,6 +23,7 @@
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
+#include "nw4r/g3d/res/g3d_resanmtexpat.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resnode.h"
@@ -81,10 +82,32 @@ STATE_DEFINE(dAcEremly_c, NightRet);
 STATE_DEFINE(dAcEremly_c, NightJumpAttack);
 STATE_DEFINE(dAcEremly_c, BirthWait);
 
-void dAcEremly_c::callback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip *result, nw4r::g3d::ResMdl) {}
+void dAcEremly_c::callback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip *result, nw4r::g3d::ResMdl resMdl) {
+    static u32 headNode = resMdl.GetResNode("head").GetID();
+
+    if (nodeId == headNode) {
+        mMtx_c m;
+        result->GetMtx(m);
+        m.ZXYrotM(mAng);
+        result->SetMtx(m);
+    }
+}
 
 bool dAcEremly_c::createHeap() {
-    nw4r::g3d::ResFile res(getOarcResFile("Remly"));
+    TRY_CREATE(mMdl.create(*this, getOarcResFile("Remly"), "Remly", "RemlyWalk", 0x133));
+    fn_80030980(mMdl.getModel(), 1, false);
+
+    mMdl.getModel().setCallback(&mMdlCallback);
+
+    nw4r::g3d::ResFile res = mMdl.getMdlFile();
+    nw4r::g3d::ResMdl resMdl = mMdl.getModel().getResMdl();
+    nw4r::g3d::ResAnmTexPat resTexPat = res.GetResAnmTexPat("RemlyWink");
+
+    bool result;
+    TRY_CREATE2(mTexPat.create(resMdl, resTexPat, &mAllocator, nullptr, 1));
+    mMdl.getModel().setAnm(mTexPat);
+
+    return true;
 }
 
 int dAcEremly_c::actorCreate() {
