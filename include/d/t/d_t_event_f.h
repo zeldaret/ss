@@ -26,8 +26,8 @@ private:
     /* 0x0FC */ ActorEventRelated mActorEvent;
     /* 0x14C */ mMtx_c mMatrix;
     /* 0x17C */ u32 mEventId;
-    /* 0x180 */ u32 p1_s8_0x7FF;
-    /* 0x184 */ u32 p1_s19_0x7FF;
-    /* 0x188 */ u32 p1_s30_0x3;
+    /* 0x180 */ u32 mSetStoryflag;
+    /* 0x184 */ u32 mTrigStoryflag;
+    /* 0x188 */ u32 mSubtype;
 };
 #endif
