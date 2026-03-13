@@ -5,7 +5,7 @@
 #include "f/f_base.h"
 #include "toBeSorted/area_math.h"
 
-SPECIAL_ACTOR_PROFILE(EVENTF_TAG, dTgEventF_c, fProfile::EVENTF_TAG, 0X14, 0, 0);
+SPECIAL_ACTOR_PROFILE(EVENTF_TAG, dTgEventF_c, fProfile::EVENTF_TAG, 0x14, 0, 0);
 
 int dTgEventF_c::create() {
     matrixCreateFromPosRotYScale(mMatrix, mPosition, mRotation.y, mScale, 0x0, 0.0f);
@@ -36,12 +36,10 @@ bool dTgEventF_c::checkUncommitedStoryFlagValue(u32 flag) {
 
 void dTgEventF_c::setStoryFlag(StoryFlags_e flag) {
     StoryflagManager::sInstance->setFlag(flag);
-    return;
 }
 
 void dTgEventF_c::unsetStoryFlag(StoryFlags_e flag) {
     StoryflagManager::sInstance->unsetFlag(flag);
-    return;
 }
 
 int dTgEventF_c::actorExecute() {
@@ -57,9 +55,6 @@ int dTgEventF_c::actorExecute() {
     return SUCCEEDED;
 }
 int dTgEventF_c::actorExecuteInEvent() {
-    int iVar1;
-
-    // iVar1 = mActorEvent.isThisActorInEvent();
     if (mActorEvent.isThisActorInEvent()) {
         mActorEvent.advanceNext();
         if (!(mSubtype == 0 || !checkStoryflagValid(mSetStoryflag) || checkUncommitedStoryFlagValue(mSetStoryflag))) {
