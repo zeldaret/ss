@@ -85,6 +85,10 @@ public:
         return mCurrFrame >= actualEnd;
     }
 
+    inline bool isStartReached() const {
+        return std::fabsf(mCurrFrame) <= EGG::Math<f32>::epsilon();
+    }
+
     inline void setToEnd() {
         setFrame(mEndFrame - 1.0f);
     }
