@@ -256,6 +256,7 @@ d/d_lang.cpp:
 d/d_main.cpp:
 	.text       start:0x80054F90 end:0x80055170 align:16
 	.sbss       start:0x805751D0 end:0x805751E0
+	.bss        start:0x80597758 end:0x80597A70
 
 d/d_pad.cpp:
 	.text       start:0x80055170 end:0x8005961C align:16
