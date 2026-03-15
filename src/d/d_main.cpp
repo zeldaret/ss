@@ -6,10 +6,6 @@
 
 #include "rvl/OS.h"
 
-OSThread MAIN_THREAD;
-
-#define STACK_SIZE 0xF000
-
 void dMain::Create() {
     dSys_c::create();
     dSys_c::setBlack(false);
@@ -27,7 +23,11 @@ void *dMain::main01(void *arg) {
     return nullptr;
 }
 
+#define STACK_SIZE 0xF000
+
 void main(int argc, char **argv) {
+    static OSThread MAIN_THREAD;
+
     u8 pStackBase[STACK_SIZE] __attribute__((aligned(32)));
 
     fn_80006C20();
