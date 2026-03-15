@@ -4,10 +4,12 @@
 #include "rvl/OS.h"
 
 namespace dMain {
-    void Create();
-    void Execute();
-    void *main01(void *arg);
-    OSTime g_InitialTime;
-};
+
+void Create();
+void Execute();
+void *main01(void *arg);
+OSTime g_InitialTime;
+
+}; // namespace dMain
 
 #endif // D_MAIN_H

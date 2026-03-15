@@ -1,9 +1,10 @@
 #include "d/d_main.h"
 
 #include "d/d_sys.h"
-#include "rvl/OS.h"
 #include "toBeSorted/d_lib.h"
 #include "toBeSorted/mpls.h"
+
+#include "rvl/OS.h"
 
 OSThread MAIN_THREAD;
 
@@ -28,7 +29,7 @@ void *dMain::main01(void *arg) {
 
 void main(int argc, char **argv) {
     u8 pStackBase[STACK_SIZE] __attribute__((aligned(32)));
-    
+
     fn_80006C20();
     dMain::g_InitialTime = OSGetTime();
     dSystem::fixHeaps();
@@ -38,15 +39,7 @@ void main(int argc, char **argv) {
     OSThread *curThread = OSGetCurrentThread();
     OSPriority curPrio = OSGetThreadPriority(curThread);
 
-    OSCreateThread(
-        &MAIN_THREAD,
-        dMain::main01,
-        nullptr,
-        &pStackBase[STACK_SIZE],
-        STACK_SIZE,
-        curPrio,
-        0
-    );
+    OSCreateThread(&MAIN_THREAD, dMain::main01, nullptr, &pStackBase[STACK_SIZE], STACK_SIZE, curPrio, 0);
 
     OSResumeThread(&MAIN_THREAD);
     OSSetThreadPriority(curThread, 31);
