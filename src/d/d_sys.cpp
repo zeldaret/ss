@@ -17,10 +17,12 @@
 #include "d/lyt/d_lyt_battery.h"
 #include "d/lyt/d_lyt_system_window.h"
 #include "d/snd/d_snd_mgr.h"
-#include "egg/core/eggExpHeap.h"
 #include "egg/core/eggAssertHeap.h"
+#include "egg/core/eggDisplay.h"
+#include "egg/core/eggExpHeap.h"
 #include "egg/core/eggSystem.h"
 #include "egg/core/eggVideo.h"
+#include "egg/gfx/eggStateGX.h"
 #include "f/f_manager.h"
 #include "m/m_dvd.h"
 #include "m/m_heap.h"
@@ -38,22 +40,70 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 
+#include "rvl/GX.h"
 #include "rvl/OS.h"
 
-EGG::TSystem<EGG::Video, EGG::Display, EGG::XfbManager, EGG::SimpleAudioMgr, EGG::SceneManager, EGG::PerformanceView> SysConfig;
+System SysConfig;
 
-void dSys_c::setBlack(bool on) {
-
-    EGG::Video *video = EGG::BaseSystem::sSystem->getVideo();
-
-    if (video->mFlag.onBit(0) != on) {
-        create();
-    }
-}
+System *dSys_c::ms_configuration_p;
+EGG::Heap *dSys_c::ms_RootHeapMem1;
+EGG::Heap *dSys_c::ms_RootHeapMem2;
 
 char *dummy = "オーディオヒープ"; // "Audio heap"
 extern u32 lbl_80574FA0;
 extern u32 lbl_80574FA4;
+
+void dSys_c::beginRender() {
+    m3d::calcMaterial();
+    ms_configuration_p->mDisplay->beginRender();
+}
+
+void dSys_c::endRender() {
+    ms_configuration_p->mDisplay->endRender();
+}
+
+void dSys_c::beginFrame() {
+    EGG::Display *pDisplay = ms_configuration_p->mDisplay;
+
+    pDisplay->beginFrame();
+    GXSetCopyClear(pDisplay->mClearColor, pDisplay->mClearZ);
+    ms_configuration_p->onBeginFrame();
+}
+
+void dSys_c::endFrame() {
+    ms_configuration_p->mDisplay->endFrame();
+    ms_configuration_p->onEndFrame();
+}
+
+bool dSys_c::setBlack(bool on) {
+    EGG::Display *pDisplay = ms_configuration_p->mDisplay;
+
+    EGG::Video *pVideo = EGG::BaseSystem::sSystem->getVideo();
+
+    if (pVideo->mFlag.onBit(0) != on && pDisplay->mScreenStateFlag.offBit(0)) {
+        pDisplay->mScreenStateFlag.setBit(0);
+        return true;
+    }
+
+    return false;
+}
+
+void dSys_c::setFrameRate(u8 maxRetraces) {
+    ms_configuration_p->mDisplay->mMaxRetraces = maxRetraces;
+}
+
+u8 dSys_c::getFrameRate() {
+    return ms_configuration_p->mDisplay->mMaxRetraces;
+}
+
+void dSys_c::setClearColor(nw4r::ut::Color clr) {
+    ms_configuration_p->mDisplay->setClearColor(clr);
+    EGG::StateGX::s_clearEfb = clr;
+}
+
+nw4r::ut::Color dSys_c::getClearColor() {
+    return ms_configuration_p->mDisplay->getClearColor();
+}
 
 void dSys_c::create() {
     EGG::Heap *pRootHeapMem1;
@@ -248,7 +298,9 @@ void dSys_c::execute() {
     }
 
     dHbm::Manage_c::GetInstance()->DrawIcon();
+
     endRender();
+
     dState::fn_80062EB0();
     dState::fn_80062E40();
     dState::fn_80062E50();

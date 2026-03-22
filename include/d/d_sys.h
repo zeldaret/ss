@@ -6,6 +6,8 @@
 #include "egg/core/eggSystem.h"
 #include "nw4r/ut/ut_Color.h"
 
+typedef EGG::TSystem<EGG::Video, EGG::Display, EGG::XfbManager, EGG::SimpleAudioMgr, EGG::SceneManager, EGG::PerformanceView> System;
+
 class dSndMgr_c;
 
 class dSys_c {
@@ -17,17 +19,19 @@ public:
     static void beginFrame();
     static void endFrame();
 
-    static void setBlack(bool);
+    static bool setBlack(bool);
     /* Frame rate values: 1 - 60fps, 2 - 30fps */
     static void setFrameRate(u8);
     static u8 getFrameRate();
 
     static void setClearColor(nw4r::ut::Color clr);
+    static nw4r::ut::Color getClearColor();
 
     static void create();
     static void execute();
 
-    static EGG::BaseSystem *ms_configuration_p;
+private:
+    static System *ms_configuration_p;
     static EGG::Heap *ms_RootHeapMem1;
     static EGG::Heap *ms_RootHeapMem2;
 };
