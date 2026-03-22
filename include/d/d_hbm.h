@@ -12,7 +12,7 @@ public:
 
     typedef void (*MenuInitCallback)();
 
-    static void CreateInstance();
+    static void CreateInstance(EGG::Heap *);
     static Manage_c *GetInstance();
 
     Manage_c(EGG::Heap *);

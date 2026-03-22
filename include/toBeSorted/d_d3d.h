@@ -25,6 +25,10 @@ bool isOnScreen(const mVec3_c &worldPos);
 void screenToWorld(mVec3_c &result, const mVec3_c &screenPos);
 void createLightTextures();
 
+void fn_80016860();
+void clearList();
+void fn_80017500();
+
 class AnmMdlWrapper : public m3d::mdlAnmChr {
 public:
     AnmMdlWrapper();

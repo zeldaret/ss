@@ -40,8 +40,8 @@ void main(int argc, char **argv) {
     OSPriority curPrio = OSGetThreadPriority(curThread);
 
     OSCreateThread(&MAIN_THREAD, dMain::main01, nullptr, &pStackBase[STACK_SIZE], STACK_SIZE, curPrio, 0);
-
     OSResumeThread(&MAIN_THREAD);
+
     OSSetThreadPriority(curThread, 31);
     OSSuspendThread(curThread);
 }

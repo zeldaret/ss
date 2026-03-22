@@ -1,3 +1,5 @@
+#include "toBeSorted/arc_callback_handler.h"
+
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_w_kcol.h"
 #include "d/d_rawarchive.h"
@@ -17,8 +19,8 @@ ArcCallbackHandler ArcCallbackHandler::sInstance;
 #define NAME_OARC 'oarc'
 #define NAME_RARC 'rarc'
 
-u32 ArcCallbackHandlerCreate(u32) {
-    return 0;
+void *ArcCallbackHandlerCreate(u32) {
+    return nullptr;
 }
 
 void BindSystemModelsAndLighting(nw4r::g3d::ResFile file) {

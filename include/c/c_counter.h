@@ -9,8 +9,19 @@ public:
         return m_gameFrame;
     }
 
+    static void IncrementGameFrame() {
+        m_gameFrame++;
+    }
+
+    static void IncrementUnkCounter() {
+        m_unkCounter++;
+    }
+
+    static void clear();
+
 private:
     static s32 m_gameFrame;
+    static s32 m_unkCounter;
 };
 
 #endif
