@@ -93,9 +93,13 @@ public:
 
 private:
     void fn_177_6A40();
+    bool fn_177_6B10(bool, mAng);
+    void fn_177_6EA0(bool);
 
     // Checks if Batreaux is Human
     bool fn_177_7330();
+
+    bool fn_177_73C0();
 
     bool fn_177_75E0();
 
@@ -111,8 +115,11 @@ private:
     bool fn_177_7B10();
 
     void fn_177_8520(bool);
+    bool fn_177_86C0();
     bool fn_177_8980(f32);
     bool fn_177_8AC0();
+    bool fn_177_8C20(mAng);
+    bool fn_177_8F90();
 
 private:
     /* 0x378 */ STATE_MGR_DECLARE(dAcEremly_c);
@@ -147,7 +154,8 @@ private:
     /* 0xB08 */ f32 field_0xB08;
     /* 0xB0C */ f32 field_0xB0C;
     /* 0xB10 */ f32 field_0xB10;
-    /* 0xB14 */ u8 _B14[0xB1E - 0xB14];
+    /* 0xB14 */ u32 field_0xB14;
+    /* 0xB18 */ u8 _B14[0xB1E - 0xB18];
     /* 0xB1E */ mAng3_c field_0xB1E;
     /* 0xB24 */ s16 field_0xB24;
     /* 0xB26 */ s16 field_0xB26;
@@ -155,11 +163,12 @@ private:
     /* 0xB38 */ f32 field_0xB38;
     /* 0xB3C */ f32 field_0xB3C;
     /* 0xB40 */ f32 field_0xB40;
-    /*       */ u8 _B44[0xB48 - 0xB44];
+    /* 0xB44 */ u16 field_0xB44;
+    /* 0xB46 */ u16 field_0xB46;
     /* 0xB48 */ u16 field_0xB48;
     /*       */ u8 _B4A[0xB4E - 0xB4A];
     /* 0xB4E */ u16 field_0xB4E;
-    /*       */ u8 _B50[0xB52 - 0xB50];
+    /* 0xB50 */ u16 field_0xB50;
     /* 0xB52 */ u16 field_0xB52;
     /* 0xB54 */ u16 field_0xB54;
     /* 0xB56 */ u16 field_0xB56;
@@ -172,12 +181,14 @@ private:
     /* 0xB64 */ u8 field_0xB64;
     /*       */ u8 _B65;
     /* 0xB66 */ u8 field_0xB66;
-    /*       */ u8 _B67;
+    /* 0xB67 */ u8 field_0xB67;
     /* 0xB68 */ u8 field_0xB68;
     /* 0xB69 */ u8 field_0xB69;
     /* 0xB6A */ u8 field_0xB6A;
     /* 0xB6B */ u8 field_0xB6B;
     /* 0xB6C */ u8 field_0xB6C;
+    /* 0xB6D */ u8 field_0xB6D;
+    /* 0xB6E */ u8 field_0xB6E;
 };
 
 #endif

@@ -539,9 +539,125 @@ int dAcEremly_c::draw() {
     return SUCCEEDED;
 }
 
-void dAcEremly_c::initializeState_Wait() {}
-void dAcEremly_c::executeState_Wait() {}
+void dAcEremly_c::initializeState_Wait() {
+    field_0xB14 = 0;
+    mAcceleration = -3.f;
+
+    fn_177_8520(true);
+
+    if (field_0xB66 || field_0xB6A) {
+        mMdl.setAnm("RemlyWaitStand", m3d::PLAY_MODE_4, 4.f);
+        field_0xB60 = 0;
+
+        field_0xB48 = cM::rndF(48.f) + 48.f;
+    } else {
+        mMdl.setAnm("RemlyWaitSit", m3d::PLAY_MODE_4, 4.f);
+        field_0xB60 = 1;
+
+        field_0xB44 = cM::rndF(128.f) + 128.f;
+    }
+}
+void dAcEremly_c::executeState_Wait() {
+    const dAcPy_c *pPlayer = dAcPy_c::GetLink();
+    if (field_0xB6A == 0) {
+        fn_177_6EA0(false);
+    }
+    sLib::addCalcScaled(&mSpeed, 0.7f, 5.f);
+
+    if (fn_177_7330()) {
+        mStateMgr.changeState(StateID_EscapeDash);
+        return;
+    }
+
+    if (fn_177_86C0()) {
+        return;
+    }
+
+    if (field_0xB60 == 2) {
+        if (mMdl.getAnm().isStop()) {
+            mMdl.setAnm("RemlytWaitSit", m3d::PLAY_MODE_4, 10.f);
+            field_0xB60 = 1;
+        }
+        return;
+    }
+
+    if (fn_177_73C0()) {
+        if (field_0xB6E == 0) {
+            if (fn_800301b0(mPositionCopy2, mRotation.y + 0x8000, true, 140.f) != 0 /* TODO: Enum?*/) {
+                field_0xB6E = 1;
+            } else if (isWithinPlayerRadius(600.f) || mNearbyBombRef.isLinked()) {
+                mStateMgr.changeState(StateID_Escape);
+                field_0xB6A = 1;
+            } else {
+                fn_177_6B10(false, 0);
+                field_0xB48 = 48.f + cM::rndF(48.f);
+                field_0xB44 = 0x80;
+                if (isWithinPlayerRadius(250.f)) {
+                    mStateMgr.changeState(StateID_Scared);
+                }
+            }
+        } else if (fn_177_6B10(0, 0)) {
+            mStateMgr.changeState(StateID_Escape);
+            field_0xB6A = 1;
+            field_0xB48 = 20;
+            field_0xB44 = 128;
+        } else if (isWithinPlayerRadius(250.f)) {
+            mStateMgr.changeState(StateID_Scared);
+        }
+        return;
+    }
+
+    field_0xB6E = 0;
+    fn_177_6B10(0, 0);
+    if (field_0xB56 != 0 || fn_177_8F90()) {
+        return;
+    }
+
+    if (0 == sLib::calcTimer(&field_0xB48) && field_0xB66 != 0) {
+        field_0xB66 = 0;
+        field_0xB6A = 0;
+        field_0xB6E = 0;
+        field_0xB44 = 128.f + cM::rndF(128.f);
+
+        mStateMgr.changeState(StateID_Wait);
+        return;
+    }
+
+    if (field_0xB61 == 1) {
+        return;
+    }
+    if (sLib::calcTimer(&field_0xB44)) {
+        return;
+    }
+
+    // Maybe Inline
+    bool coPlayer = false;
+    if (mSph.ChkCoHit()) {
+        coPlayer = true;
+        if (mSph.GetCoActor()->isActorPlayer()) {
+            coPlayer = false;
+        }
+    }
+
+    if (field_0xB50 == 0 && !coPlayer && !fn_177_8C20(getXZAngleToPlayer())) {
+        mAng a = (pPlayer->mRotation.y + 0x8000);
+        if (mAng::abs(getXZAngleToPlayer() - a) > 0x2000) {
+            field_0xB69 = 1;
+            field_0xB67 = 0;
+
+            mStateMgr.changeState(StateID_Walk);
+            return;
+        }
+    }
+
+    if (field_0xB60 == 1) {
+        mMdl.setAnm("RemlytWaitSitCry", m3d::PLAY_MODE_4, 10.f);
+        field_0xB60 = 2;
+    }
+    field_0xB44 = 128.f + cM::rndF(128.f);
+}
 void dAcEremly_c::finalizeState_Wait() {}
+
 void dAcEremly_c::initializeState_Walk() {}
 void dAcEremly_c::executeState_Walk() {}
 void dAcEremly_c::finalizeState_Walk() {}
@@ -611,3 +727,23 @@ void dAcEremly_c::finalizeState_NightJumpAttack() {}
 void dAcEremly_c::initializeState_BirthWait() {}
 void dAcEremly_c::executeState_BirthWait() {}
 void dAcEremly_c::finalizeState_BirthWait() {}
+
+bool dAcEremly_c::fn_177_73C0() {
+    if (isState(StateID_Sleep) || fn_177_7330() || field_0xB68) {
+        return false;
+    }
+
+    dAcPy_c *pPlayer = dAcPy_c::GetLinkM();
+    if (pPlayer->isUsingSword() || pPlayer->checkActionFlagsCont(0x2) || pPlayer->checkActionFlagsCont(0x80) ||
+        pPlayer->isCarryingBomb() || pPlayer->isUsingWhip() || pPlayer->checkActionFlagsCont(0x4) ||
+        pPlayer->checkActionFlagsCont(0x100) || pPlayer->checkActionFlagsCont(0x10)) {
+        return true;
+    }
+
+    if (mNearbyBombRef.isLinked()) {
+        return true;
+    }
+
+    field_0xB6C = 0;
+    return false;
+}
