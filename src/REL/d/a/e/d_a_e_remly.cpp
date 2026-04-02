@@ -759,12 +759,41 @@ void dAcEremly_c::executeState_Walk() {
         return;
     }
 }
-
 void dAcEremly_c::finalizeState_Walk() {}
 
-void dAcEremly_c::initializeState_Run() {}
-void dAcEremly_c::executeState_Run() {}
+void dAcEremly_c::initializeState_Run() {
+    mMdl.setAnm("RemlyRun", m3d::PLAY_MODE_4, 2.f);
+    field_0xB60 = 5;
+    mMdl.setRate(1.5f);
+    field_0xB66 = 1;
+}
+void dAcEremly_c::executeState_Run() {
+    fn_177_6FC0(true);
+    fn_177_6B10(false, 0);
+    if (fn_177_86C0()) {
+        return;
+    }
+    if (fn_177_73C0()) {
+        if (isWithinPlayerRadius(600.f)) {
+            changeState(StateID_Escape);
+            field_0xB6A = 1;
+        } else {
+            changeState(StateID_Walk);
+        }
+        return;
+    }
+    if (fn_177_75E0()) {
+        field_0xA44.set(mNearbyBombRef.get()->mPosition);
+        fn_177_7040(2, 5.f);
+    } else {
+        fn_177_7040(0, 5.f);
+    }
+    if (fn_177_8F90()) {
+        return;
+    }
+}
 void dAcEremly_c::finalizeState_Run() {}
+
 void dAcEremly_c::initializeState_Escape() {}
 void dAcEremly_c::executeState_Escape() {}
 void dAcEremly_c::finalizeState_Escape() {}
