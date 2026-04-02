@@ -90,11 +90,15 @@ public:
 
     STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dAcEremly_c);
     STATE_MGR_DEFINE_UTIL_ISSTATE(dAcEremly_c);
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dAcEremly_c);
 
 private:
     void fn_177_6A40();
     bool fn_177_6B10(bool, mAng);
     void fn_177_6EA0(bool);
+    void fn_177_6FC0(bool);
+
+    bool fn_177_7040(s32, f32);
 
     // Checks if Batreaux is Human
     bool fn_177_7330();
@@ -106,6 +110,8 @@ private:
     /** false -> comapres to camera
      *   true -> compares to player */
     bool fn_177_7650(bool comparePlayer);
+
+    void fn_177_77C0();
 
     // Set Scary Face
     void fn_177_78D0();
@@ -159,7 +165,9 @@ private:
     /* 0xB1E */ mAng3_c field_0xB1E;
     /* 0xB24 */ s16 field_0xB24;
     /* 0xB26 */ s16 field_0xB26;
-    /* 0xB28 */ u8 _B28[0xB38 - 0xB28];
+    /* 0xB28 */ u8 _B28[0xB32 - 0xB28];
+    /* 0xB32 */ mAng field_0xB32;
+    /* 0xB34 */ mAng field_0xB34;
     /* 0xB38 */ f32 field_0xB38;
     /* 0xB3C */ f32 field_0xB3C;
     /* 0xB40 */ f32 field_0xB40;
