@@ -48,7 +48,7 @@ void dTgTouchTag::executeState_Wait() {
     dAcBase_c *actor = static_cast<dAcBase_c *>(fManager_c::searchBaseByProfName(ACTIVATORS[mActivatorIndex], nullptr));
 
     while (actor != nullptr) {
-        if (actor->mRoomID == mRoomID && checkIfVec3fInMatrix(mAreaOfEffect, actor->mPosition)) {
+        if (actor->mRoomID == mRoomID && checkAreaBox(mAreaOfEffect, actor->mPosition)) {
             mFlagTimer = 5;
             if (mZoneFlag != 0xFF) {
                 SceneflagManager::sInstance->setFlag(mRoomID, mZoneFlag);

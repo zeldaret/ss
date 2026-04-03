@@ -21,11 +21,11 @@ int dTgHeatResist_c::actorExecute() {
     dAcPy_c *player = dAcPy_c::LINK;
 
     if (mInverted == 1) {
-        if (!checkIfVec3fInMatrix(matrix, player->mPosition)) {
+        if (!checkAreaBox(matrix, player->mPosition)) {
             player->onForceOrPreventActionFlags(0x8000000);
         }
     } else {
-        if (checkIfVec3fInMatrix(matrix, player->mPosition)) {
+        if (checkAreaBox(matrix, player->mPosition)) {
             player->onForceOrPreventActionFlags(0x8000000);
         }
     }

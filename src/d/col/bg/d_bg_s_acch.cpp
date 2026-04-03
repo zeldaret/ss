@@ -401,7 +401,7 @@ void dBgS_Acch::LineCheck(dBgS &bgs) {
     } while (i < GetTblSize());
 }
 
-extern "C" void *fn_80359C80(dBgS_SphChk *, cBgD_Vtx_t *, int, int, int, cM3dGPla *, void *);
+extern "C" void fn_80359C80(dBgS_SphChk *, cBgD_Vtx_t *, int, int, int, cM3dGPla *, void *);
 
 void dBgS_Acch::SphCheck() {
     f32 height = field_0x1D0;

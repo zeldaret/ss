@@ -9,6 +9,7 @@
 class ActorEventRelated {
 public:
     ActorEventRelated(dAcBase_c &owner, void *);
+    ActorEventRelated(UNKWORD, void *);
     ~ActorEventRelated();
 
     bool isThisActorInEvent();

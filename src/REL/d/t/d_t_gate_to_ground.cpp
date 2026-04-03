@@ -39,7 +39,6 @@ int dTgGateToGround_c::doDelete() {
 
 int dTgGateToGround_c::actorExecute() {
     dAcPy_c *player;
-    dCamera_c *cam;
 
     if (params_FF_FF_00_00 != -1 && StoryflagManager::sInstance->getCounterOrFlag(params_FF_FF_00_00) == 0) {
         return SUCCEEDED;
@@ -47,7 +46,7 @@ int dTgGateToGround_c::actorExecute() {
 
     player = dAcPy_c::LINK;
 
-    if (checkIfVec3fInMatrix(matrix, player->mPosition)) {
+    if (checkAreaBox(matrix, player->mPosition)) {
         if (player->getRidingActorType() != dAcPy_c::RIDING_LOFTWING) {
             if (delayFrames > 15) {
                 Event e("CloudHole", 100, 0, nullptr, nullptr);
@@ -57,8 +56,8 @@ int dTgGateToGround_c::actorExecute() {
             }
         } else {
             if (params_00_00_00_FF != -1) {
-                cam = dScGame_c::getCamera(0);
-                fn_80080960(cam->getField_0xD98(), params_00_00_00_FF, 0, mRoomID, 0);
+                // TODO Cast is maybe fake but I can't get overrideCam to match otherwise
+                dScGame_c::getCamera(0)->getGameCam1()->overrideCam(params_00_00_00_FF, 0, (u16)mRoomID, false);
             }
             delayFrames = 0;
         }

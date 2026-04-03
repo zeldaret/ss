@@ -3095,12 +3095,12 @@ void dAcBlastboss_c::executeLightningStrike() {
                 field_0x2CFC = 60.0f;
                 mLightingStrikeState = LIGHTNING_STRIKE_DEMO;
                 // huh
-                field_0x2D10.x = cam->getField_0x78().x;
-                field_0x2D10.y = cam->getField_0x78().y;
-                field_0x2D10.z = cam->getField_0x78().z;
-                field_0x2D04.x = cam->getPositionMaybe().x;
-                field_0x2D04.y = cam->getPositionMaybe().y;
-                field_0x2D04.z = cam->getPositionMaybe().z;
+                field_0x2D10.x = cam->getTarget().x;
+                field_0x2D10.y = cam->getTarget().y;
+                field_0x2D10.z = cam->getTarget().z;
+                field_0x2D04.x = cam->getPosition().x;
+                field_0x2D04.y = cam->getPosition().y;
+                field_0x2D04.z = cam->getPosition().z;
                 mIsPhaseTwo = -1;
                 // fall-through
             } else {
@@ -3303,7 +3303,7 @@ void dAcBlastboss_c::executeLightningStrike() {
             f32 fac = val * 3.0f;
             tmp1.y += mAng(val * 0x1C20).cos() * fac;
         }
-        cam->fn_8019EA00(tmp1, field_0x2D04, field_0x2CFC, 0.0f);
+        cam->setEventCamView(tmp1, field_0x2D04, field_0x2CFC, 0.0f);
         if (b2) {
             mtx1.transS(0.5f, 0.5f, 0.0f);
             // REGSWAP
@@ -3315,11 +3315,11 @@ void dAcBlastboss_c::executeLightningStrike() {
     }
 
     if (field_0x114C != 0) {
-        mtx.YrotS(cam->fn_8019E3B0());
+        mtx.YrotS(cam->getXZAngle());
         v.set(0.0f, 10.0f, 10000.0f);
         MTXMultVec(mtx, v, v);
-        v.x += cam->getPositionMaybe().x;
-        v.z += cam->getPositionMaybe().z;
+        v.x += cam->getPosition().x;
+        v.z += cam->getPosition().z;
         mtx.transS(v);
         v.set(0.7f, 0.7f, 0.7f);
         mThunderMdl.setScale(v);

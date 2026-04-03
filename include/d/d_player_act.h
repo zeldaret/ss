@@ -372,7 +372,7 @@ public:
     /* vt 0x26C */ virtual bool doesGameOver() {
         return true;
     }
-    /* vt 0x270 */ virtual void triggerExitRelated() {}
+    /* vt 0x270 */ virtual void triggerExitRelated(UNKWORD sceneLink, UNKWORD pathIdx, UNKWORD sceneType) {}
     /* vt 0x274 */ virtual mAng vt_0x274() {
         return mRotation.y;
     }

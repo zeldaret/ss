@@ -587,6 +587,7 @@ public:
     void queueMapEvent(s32 mapEvent, s32 surfaceProvince, s32 c);
     void startMapEvent(s32 mapEvent, s32 surfaceProvince, s32 c);
     bool isVisibleNoIntro() const;
+    void fn_8013B350();
 
     const dMapSaveObjDefinition *getSaveObjDefinition(s32 province, s32 statueIdx) const;
 
@@ -836,7 +837,7 @@ private:
     /* 0x8C84 */ u8 field_0x8C84;
 
     /* 0x8C88 */ f32 field_0x8C88;
-    /* 0x8C8C */ f32 field_0x8C8C;
+    /* 0x8C8C */ f32 mOutDuration;
     /* 0x8C90 */ bool mMapUpDirection;
     /* 0x8C91 */ bool mNextMapUpDirection;
     /* 0x8C92 */ bool mMapUpDirectionAfterZoomToDetail;
@@ -850,7 +851,7 @@ private:
     /* 0x8CA8 */ s32 mNextMapMode;
 
     /* 0x8CAC */ u8 field_0x8CAC;
-    /* 0x8CAD */ bool mDoCameraTransition;
+    /* 0x8CAD */ bool mCameraTransitionPossible;
     /* 0x8CAE */ bool field_0x8CAE;
 
     /* 0x8CB0 */ u32 mEventTimer;
@@ -956,6 +957,14 @@ public:
 
     bool isVisibleNoIntro() const {
         return mMapMain.isVisibleNoIntro();
+    }
+
+    void doFn_8013B350() {
+        mMapMain.fn_8013B350();
+    }
+
+    f32 getOutDuration() const {
+        return mMapMain.mOutDuration;
     }
 
     bool build();

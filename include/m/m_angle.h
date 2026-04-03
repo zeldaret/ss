@@ -124,6 +124,9 @@ public:
     static f32 s2r_c(f32 ang) {
         return ang * sAngToRad;
     }
+    static f32 s2n_c(f32 ang) {
+        return ang * sAngToNorm;
+    }
     static f32 r2s_c(f32 ang) {
         return ang * sRadToAng;
     }
