@@ -64,7 +64,7 @@ int dTgBeetle_c::actorExecute()  {
 		dAcBoomerang_c* beetlePtr= (dAcBoomerang_c * )dAcPy_c::GetLink()->vt_0x1C0();//boomerang pointer cast required because function currently returns void*
 		
 		if (mZoneShape == RectangularPrismShape) {//rectangular prism
-			if (beetlePtr && checkIfVec3fInMatrix(matrix1, beetlePtr->mPosition)) {
+			if (beetlePtr && checkAreaBox(matrix1, beetlePtr->mPosition)) {
 				updateBeetle(*beetlePtr);
 			}
 		}
