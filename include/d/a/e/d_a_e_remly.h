@@ -105,6 +105,8 @@ private:
 
     bool fn_177_73C0();
 
+    bool fn_177_7510(f32);
+
     bool fn_177_75E0();
 
     /** false -> comapres to camera
@@ -161,7 +163,8 @@ private:
     /* 0xB0C */ f32 field_0xB0C;
     /* 0xB10 */ f32 field_0xB10;
     /* 0xB14 */ u32 field_0xB14;
-    /* 0xB18 */ u8 _B14[0xB1E - 0xB18];
+    /* 0xB18 */ u32 field_0xB18;
+    /* 0xB1C */ u8 _B1C[0xB1E - 0xB1C];
     /* 0xB1E */ mAng3_c field_0xB1E;
     /* 0xB24 */ s16 field_0xB24;
     /* 0xB26 */ s16 field_0xB26;

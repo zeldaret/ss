@@ -794,9 +794,48 @@ void dAcEremly_c::executeState_Run() {
 }
 void dAcEremly_c::finalizeState_Run() {}
 
-void dAcEremly_c::initializeState_Escape() {}
-void dAcEremly_c::executeState_Escape() {}
+void dAcEremly_c::initializeState_Escape() {
+    field_0xB6E = 0;
+    mAcceleration = -3.f;
+    mMdl.setAnm("RemlyRun", m3d::PLAY_MODE_4, 4.f);
+    field_0xB60 = 5;
+    mMdl.setRate(2.f);
+    field_0xB66 = 1;
+    field_0xB6A = 0;
+    field_0xB69 = 0;
+    field_0xB48 = 0;
+    field_0xB18 = 0;
+}
+void dAcEremly_c::executeState_Escape() {
+    fn_177_6FC0(false);
+    if (0 == sLib::calcTimer(&field_0xB48)) {
+        fn_177_7040(1, 20.f);
+    } else {
+        sLib::addCalcScaledDiff(&mSpeed, 20.f, 0.7f, 3.f);
+    }
+
+    if (fn_177_8C20(mRotation.y) || fn_177_8980(140.f)) {
+        field_0xB6E = 1;
+        if (field_0xB64 == 0) {
+            changeState(StateID_Scared);
+        } else {
+            field_0xB69 = 0;
+            changeState(StateID_Walk);
+        }
+        return;
+    }
+
+    if (field_0xB6A != 0) {
+        f32 f = mAng(0) + 400.f;
+        field_0xB6C = 1;
+        if (!fn_177_7510(f + 600.f) && !mNearbyBombRef.isLinked()) {
+            field_0xB69 = 0;
+            changeState(StateID_Walk);
+        }
+    }
+}
 void dAcEremly_c::finalizeState_Escape() {}
+
 void dAcEremly_c::initializeState_EscapeDash() {}
 void dAcEremly_c::executeState_EscapeDash() {}
 void dAcEremly_c::finalizeState_EscapeDash() {}
