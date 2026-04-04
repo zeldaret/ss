@@ -920,12 +920,124 @@ void dAcEremly_c::executeState_Wind() {
 }
 void dAcEremly_c::finalizeState_Wind() {}
 
-void dAcEremly_c::initializeState_Hold() {}
-void dAcEremly_c::executeState_Hold() {}
+void dAcEremly_c::initializeState_Hold() {
+    mMdl.setAnm("RemlyHold", m3d::PLAY_MODE_4, 4.f);
+
+    field_0xB60 = 11;
+    mSph.ClrCoSet();
+    field_0xB3C = 0.f;
+    field_0xB38 = mPosition.y;
+
+    field_0xB6A = 0;
+    field_0xB6C = 0;
+    field_0xB56 = 0;
+    field_0xB6E = 0;
+
+    mStts.SetRank(5);
+    field_0xB1E.clear();
+    field_0xB26 = 0;
+    field_0xB24 = 0;
+    if (fn_177_7330() || field_0xB68) {
+        mMdl.setAnm("RemlyHoldBata", m3d::PLAY_MODE_4, 4.f);
+        field_0xB60 = 13;
+    }
+
+    if (fn_177_7330()) {
+        field_0xB64 = 2;
+        field_0xB68 = 0;
+    }
+
+    mLinkage.field_0x90 = 13.f + mAng(0);
+    mLinkage.field_0x8C = 13.f + mAng(0);
+    if (field_0xB61 == 1) {
+        mLinkage.field_0x90 = 26.f + mAng(0);
+        mLinkage.field_0x8C = 13.f + mAng(0);
+    }
+
+    mAcceleration = -1.75f + mAng(0);
+    field_0xB48 = 64.f + cM::rndF(64.f);
+    field_0xB4E = 90;
+}
+void dAcEremly_c::executeState_Hold() {
+    fn_177_6FC0(false);
+    field_0xB4E = 90;
+
+    mRotation.y = mAngle.y = getXZAngleToPlayer();
+
+    if (field_0xB60 == 12 && mMdl.getAnm().isStop()) {
+        mMdl.setAnm("RemlyHold", m3d::PLAY_MODE_4, 4.f);
+        field_0xB60 = 11;
+    }
+
+    if (0 == sLib::calcTimer(&field_0xB48)) {
+        if (field_0xB60 == 11) {
+            mMdl.setAnm("RemlyHoldMozo", m3d::PLAY_MODE_4, 4.f);
+            field_0xB60 = 12;
+        }
+        field_0xB48 = 64.f + cM::rndF(64.f);
+    }
+
+    if (mLinkage.checkConnection(dLinkage_c::CONNECTION_1)) {
+        return;
+    }
+
+    if (mLinkage.checkState(dLinkage_c::STATE_2)) {
+        mAngle.y = getXZAngleToPlayer();
+        mAngle.y += 0x8000;
+        changeState(StateID_Jump);
+        return;
+    }
+
+    if (fn_177_7330()) {
+        mAcceleration = -3.f;
+        changeState(StateID_NightFoo);
+    } else if (field_0xB68 == 0) {
+        mAcceleration = -3.f;
+        field_0xB48 = 0;
+        changeState(StateID_Wait);
+    } else {
+        mAcceleration = -3.f;
+        changeState(StateID_EscapeDash);
+    }
+}
 void dAcEremly_c::finalizeState_Hold() {}
 
-void dAcEremly_c::initializeState_Jump() {}
-void dAcEremly_c::executeState_Jump() {}
+void dAcEremly_c::initializeState_Jump() {
+    field_0xB14 = 0;
+    unsetActorProperty(AC_PROP_0x1);
+    field_0xB50 = 90;
+    mMdl.setAnm("RemlyHoldJumpStart", m3d::PLAY_MODE_4, 0.f);
+    field_0xB60 = 14;
+    field_0xB4E = 90;
+}
+void dAcEremly_c::executeState_Jump() {
+    field_0xB4E = 90;
+    if (field_0xB60 == 14 && !fn_177_8980(100.f) && (mAcch.ChkGndHit() || mVelocity.y < 0.f)) {
+        mMdl.setAnm("RemlyHoldJumpEnd", m3d::PLAY_MODE_4, 0.f + mAng(0));
+        field_0xB60 = 15;
+        return;
+    }
+
+    sLib::addCalcScaled(&mSpeed, 0.3f, 0.2f);
+    if (mSpeed && mAcch.ChkGndHit()) {
+        fn_177_8600();
+        mSpeed = 0.f;
+    }
+
+    if (mAcch.ChkGndHit() && mMdl.getAnm().isStop()) {
+        mAngle.y = mRotation.y;
+        setActorProperty(AC_PROP_0x1);
+        mAcceleration = -3.f;
+
+        if (fn_177_7330()) {
+            changeState(StateID_NightFoo);
+        } else if (field_0xB68 == 0) {
+            changeState(StateID_Wait);
+        } else {
+            changeState(StateID_EscapeDash);
+        }
+    }
+}
 void dAcEremly_c::finalizeState_Jump() {}
 
 void dAcEremly_c::initializeState_Fly() {}

@@ -123,6 +123,7 @@ private:
     bool fn_177_7B10();
 
     void fn_177_8520(bool);
+    void fn_177_8600();
     bool fn_177_86C0();
     bool fn_177_8980(f32);
     bool fn_177_8AC0();
