@@ -128,6 +128,7 @@ private:
     bool fn_177_8AC0();
     bool fn_177_8C20(mAng);
     bool fn_177_8F90();
+    bool fn_177_9370(f32);
 
 private:
     /* 0x378 */ STATE_MGR_DECLARE(dAcEremly_c);

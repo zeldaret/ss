@@ -836,63 +836,158 @@ void dAcEremly_c::executeState_Escape() {
 }
 void dAcEremly_c::finalizeState_Escape() {}
 
-void dAcEremly_c::initializeState_EscapeDash() {}
-void dAcEremly_c::executeState_EscapeDash() {}
+void dAcEremly_c::initializeState_EscapeDash() {
+    mMdl.setAnm("RemlyRun", m3d::PLAY_MODE_4, 4.f);
+    field_0xB60 = 5;
+    mMdl.setRate(2.f);
+    field_0xB66 = 1;
+    field_0xB6A = 0;
+    field_0xB6B = 0;
+    field_0xB18 = 0;
+}
+void dAcEremly_c::executeState_EscapeDash() {
+    fn_177_6FC0(false);
+
+    // Idk
+    s32 a = getXZAngleToPlayer() + 0x8000;
+    if (field_0xB6B == 0) {
+        mAng compare = a;
+        if (mAng::abs(compare - mAngle.y) > 0x1000) {
+            sLib::addCalcAngle(mAngle.y.ref(), a, 1, 0x1000);
+        } else {
+            field_0xB6B = 1;
+            mAngle.y = a;
+        }
+    }
+
+    if (field_0xB6B != 0) {
+        mVec3_c v = mPosition;
+        sLib::addCalcScaledDiff(&mSpeed, 30.f, 0.7f, 3.f);
+
+        if (fn_177_8C20(mRotation.y)) {
+            changeState(StateID_Scared);
+        } else if (fn_177_8980(200.f)) {
+            changeState(StateID_Scared);
+        }
+    }
+}
 void dAcEremly_c::finalizeState_EscapeDash() {}
-void dAcEremly_c::initializeState_Wind() {}
-void dAcEremly_c::executeState_Wind() {}
+
+void dAcEremly_c::initializeState_Wind() {
+    if (field_0xB60 != 10 && field_0xB60 != 9) {
+        if (field_0xB60 == 21 || mAng::abs(getXZAngleToPlayer() - mAng(mRotation.y + 0x8000)) < 0x6000) {
+            mMdl.setAnm("RemlyWindBack", m3d::PLAY_MODE_4, 4.f);
+            field_0xB60 = 10;
+        } else {
+            mMdl.setAnm("RemlyWind", m3d::PLAY_MODE_4, 4.f);
+            field_0xB60 = 9;
+        }
+        field_0xB4E = 11;
+    }
+    field_0xB48 = 11;
+}
+void dAcEremly_c::executeState_Wind() {
+    fn_177_6FC0(false);
+    sLib::addCalcScaled(&mSpeed, 0.7f, 5.f);
+    if (field_0xB60 == 9) {
+        fn_177_7040(0, 0.f);
+        sLib::addCalcAngle(mRotation.y.ref(), mAngle.y, 2, 0x800);
+    }
+
+    if (0 != sLib::calcTimer(&field_0xB48)) {
+        return;
+    }
+
+    if (field_0xB64 == 0) {
+        changeState(StateID_EscapeDash);
+        return;
+    }
+
+    if (!fn_177_7330()) {
+        field_0xB66 = 1;
+        changeState(StateID_Wait);
+
+        mMdl.setAnm("RemlyWaitStand", m3d::PLAY_MODE_4, 10.f);
+        field_0xB60 = 0;
+        return;
+    }
+
+    if (fn_177_9370(100.f)) {
+        changeState(StateID_NightRun);
+    } else {
+        changeState(StateID_NightRet);
+    }
+}
 void dAcEremly_c::finalizeState_Wind() {}
+
 void dAcEremly_c::initializeState_Hold() {}
 void dAcEremly_c::executeState_Hold() {}
 void dAcEremly_c::finalizeState_Hold() {}
+
 void dAcEremly_c::initializeState_Jump() {}
 void dAcEremly_c::executeState_Jump() {}
 void dAcEremly_c::finalizeState_Jump() {}
+
 void dAcEremly_c::initializeState_Fly() {}
 void dAcEremly_c::executeState_Fly() {}
 void dAcEremly_c::finalizeState_Fly() {}
+
 void dAcEremly_c::initializeState_Damage() {}
 void dAcEremly_c::executeState_Damage() {}
 void dAcEremly_c::finalizeState_Damage() {}
+
 void dAcEremly_c::initializeState_Sleep() {}
 void dAcEremly_c::executeState_Sleep() {}
 void dAcEremly_c::finalizeState_Sleep() {}
+
 void dAcEremly_c::initializeState_Scared() {}
 void dAcEremly_c::executeState_Scared() {}
 void dAcEremly_c::finalizeState_Scared() {}
+
 void dAcEremly_c::initializeState_Stun() {}
 void dAcEremly_c::executeState_Stun() {}
 void dAcEremly_c::finalizeState_Stun() {}
+
 void dAcEremly_c::initializeState_Water() {}
 void dAcEremly_c::executeState_Water() {}
 void dAcEremly_c::finalizeState_Water() {}
+
 void dAcEremly_c::initializeState_Hear() {}
 void dAcEremly_c::executeState_Hear() {}
 void dAcEremly_c::finalizeState_Hear() {}
+
 void dAcEremly_c::initializeState_NightSleepDemo() {}
 void dAcEremly_c::executeState_NightSleepDemo() {}
 void dAcEremly_c::finalizeState_NightSleepDemo() {}
+
 void dAcEremly_c::initializeState_NightFoo() {}
 void dAcEremly_c::executeState_NightFoo() {}
 void dAcEremly_c::finalizeState_NightFoo() {}
+
 void dAcEremly_c::initializeState_NightReflectionFoo() {}
 void dAcEremly_c::executeState_NightReflectionFoo() {}
 void dAcEremly_c::finalizeState_NightReflectionFoo() {}
+
 void dAcEremly_c::initializeState_NightWait() {}
 void dAcEremly_c::executeState_NightWait() {}
 void dAcEremly_c::finalizeState_NightWait() {}
+
 void dAcEremly_c::initializeState_NightWalk() {}
 void dAcEremly_c::executeState_NightWalk() {}
 void dAcEremly_c::finalizeState_NightWalk() {}
+
 void dAcEremly_c::initializeState_NightRun() {}
 void dAcEremly_c::executeState_NightRun() {}
 void dAcEremly_c::finalizeState_NightRun() {}
+
 void dAcEremly_c::initializeState_NightRet() {}
 void dAcEremly_c::executeState_NightRet() {}
 void dAcEremly_c::finalizeState_NightRet() {}
+
 void dAcEremly_c::initializeState_NightJumpAttack() {}
 void dAcEremly_c::executeState_NightJumpAttack() {}
 void dAcEremly_c::finalizeState_NightJumpAttack() {}
+
 void dAcEremly_c::initializeState_BirthWait() {}
 void dAcEremly_c::executeState_BirthWait() {}
 void dAcEremly_c::finalizeState_BirthWait() {}
