@@ -164,7 +164,7 @@ private:
     /* 0xB08 */ f32 field_0xB08;
     /* 0xB0C */ f32 field_0xB0C;
     /* 0xB10 */ f32 field_0xB10;
-    /* 0xB14 */ u32 field_0xB14;
+    /* 0xB14 */ s32 field_0xB14;
     /* 0xB18 */ u32 field_0xB18;
     /* 0xB1C */ u8 _B1C[0xB1E - 0xB1C];
     /* 0xB1E */ mAng3_c field_0xB1E;
@@ -186,13 +186,15 @@ private:
     /* 0xB54 */ u16 field_0xB54;
     /* 0xB56 */ u16 field_0xB56;
     /* 0xB58 */ u16 field_0xB58;
-    /*       */ u8 _B56[0xB60 - 0xB5A];
+    /* 0xB5A */ u16 field_0xB5A;
+    /* 0xB5C */ u16 field_0xB5C;
+    /* 0xB5E */ u16 field_0xB5E;
     /* 0xB60 */ u8 field_0xB60; // Some State representation
     /* 0xB61 */ u8 field_0xB61;
     /* 0xB62 */ u8 mSleepDemoPlayedSceneflag;
     /*       */ u8 _B63;
     /* 0xB64 */ u8 field_0xB64;
-    /*       */ u8 _B65;
+    /* 0xB65 */ u8 field_0xB65;
     /* 0xB66 */ u8 field_0xB66;
     /* 0xB67 */ u8 field_0xB67;
     /* 0xB68 */ u8 field_0xB68;
