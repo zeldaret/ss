@@ -30,7 +30,7 @@ public:
     static void create();
     static void execute();
 
-private:
+public:
     static System *ms_configuration_p;
     static EGG::Heap *ms_RootHeapMem1;
     static EGG::Heap *ms_RootHeapMem2;

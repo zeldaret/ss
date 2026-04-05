@@ -3,20 +3,20 @@
 
 #include "egg/core/eggExpHeap.h"
 
-class dHeap : public EGG::Heap {
+class dHeap {
 public:
     EGG::ExpHeap *heap;
 
 public:
-    static dHeap *work1Heap;
-    static dHeap *work2Heap;
-    static dHeap *workExHeap;
-    static dHeap *layoutHeap;
-    static dHeap *layoutExHeap;
-    static dHeap *layoutEx2Heap;
-    static dHeap *layoutResHeap;
-    static dHeap *fontHeap;
-    static dHeap *HBMHeap;
+    static dHeap work1Heap;
+    static dHeap work2Heap;
+    static dHeap workExHeap;
+    static dHeap layoutHeap;
+    static dHeap layoutExHeap;
+    static dHeap layoutEx2Heap;
+    static dHeap layoutResHeap;
+    static dHeap fontHeap;
+    static dHeap HBMHeap;
 
 public:
     EGG::ExpHeap *init(const char *name, size_t size, EGG::Heap *parent);

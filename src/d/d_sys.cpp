@@ -203,7 +203,7 @@ void dSys_c::create() {
     dReset::Manage_c::CreateInstance(heapMem2);
 
     dHeap::createHBMHeap(0x180000, heapMem2);
-    dHbm::Manage_c::CreateInstance(dHeap::HBMHeap);
+    dHbm::Manage_c::CreateInstance(dHeap::HBMHeap.heap);
 
     initAudioMgr(heapMem1);
 
@@ -343,4 +343,12 @@ void dSys_c::execute() {
     }
 
     endFrame();
+}
+
+namespace dSystem {
+
+void fixHeaps() {
+
+}
+
 }
