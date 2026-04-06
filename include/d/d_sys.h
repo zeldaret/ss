@@ -2,11 +2,21 @@
 #define D_SYS_H
 
 #include "common.h"
+#include "egg/core/eggAsyncDisplay.h"
 #include "egg/core/eggHeap.h"
 #include "egg/core/eggSystem.h"
 #include "nw4r/ut/ut_Color.h"
 
-typedef EGG::TSystem<EGG::Video, EGG::Display, EGG::XfbManager, EGG::SimpleAudioMgr, EGG::SceneManager, EGG::PerformanceView> System;
+#define ROUND_UP_4KB(x) (((u32)(x) + 4096 - 1) & ~(4096 - 1))
+
+typedef EGG::TSystem<
+    EGG::Video,
+    EGG::AsyncDisplay,
+    EGG::XfbManager,
+    EGG::SimpleAudioMgr,
+    EGG::SceneManager,
+    EGG::PerformanceView
+> System;
 
 class dSndMgr_c;
 
@@ -37,6 +47,11 @@ public:
 };
 
 namespace dSystem {
+
+void *s_OrgMEM1ArenaLo;
+void *s_NewMEM1ArenaLo;
+void *s_OrgMEM1ArenaHi;
+void *s_NewMEM1ArenaHi;
 
 void fixHeaps();
 

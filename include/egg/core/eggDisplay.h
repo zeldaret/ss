@@ -58,6 +58,10 @@ public:
         mClearColor = color;
     }
 
+    u32 getClearZ() {
+        return mClearZ;
+    }
+
 public:
     static u32 sTickPeriod;
 };

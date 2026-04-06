@@ -49,9 +49,32 @@ System *dSys_c::ms_configuration_p;
 EGG::Heap *dSys_c::ms_RootHeapMem1;
 EGG::Heap *dSys_c::ms_RootHeapMem2;
 
-char *dummy = "オーディオヒープ"; // "Audio heap"
 extern u32 lbl_80574FA0;
 extern u32 lbl_80574FA4;
+
+dSndMgr_c *dSys_c::initAudioMgr(EGG::Heap *heap) {
+    dSndMgr_c *audioMgr;
+
+    EGG::FrmHeap *frmHeap = mHeap::createFrmHeap(
+        0x69400,
+        heap,
+        "オーディオヒープ",  // "Audio heap"
+        32,
+        mHeap::OPT_NONE
+    );
+
+    {
+        mHeap temp(frmHeap);
+
+        audioMgr = new dSndMgr_c();
+        ms_configuration_p->mAudioMgr = audioMgr;
+
+        frmHeap->adjust();
+        frmHeap->mFlag.setBit(0);
+    }
+
+    return audioMgr;
+}
 
 void dSys_c::beginRender() {
     m3d::calcMaterial();
@@ -66,7 +89,7 @@ void dSys_c::beginFrame() {
     EGG::Display *pDisplay = ms_configuration_p->mDisplay;
 
     pDisplay->beginFrame();
-    GXSetCopyClear(pDisplay->mClearColor, pDisplay->mClearZ);
+    GXSetCopyClear(pDisplay->getClearColor(), pDisplay->getClearZ());
     ms_configuration_p->onBeginFrame();
 }
 
@@ -78,7 +101,7 @@ void dSys_c::endFrame() {
 bool dSys_c::setBlack(bool on) {
     EGG::Display *pDisplay = ms_configuration_p->mDisplay;
 
-    EGG::Video *pVideo = EGG::BaseSystem::sSystem->getVideo();
+    EGG::Video *pVideo = EGG::BaseSystem::getVideo();
 
     if (pVideo->mFlag.onBit(0) != on && pDisplay->mScreenStateFlag.offBit(0)) {
         pDisplay->mScreenStateFlag.setBit(0);
@@ -97,7 +120,8 @@ u8 dSys_c::getFrameRate() {
 }
 
 void dSys_c::setClearColor(nw4r::ut::Color clr) {
-    ms_configuration_p->mDisplay->setClearColor(clr);
+    EGG::Display *display = ms_configuration_p->mDisplay;
+    display->setClearColor(clr);
     EGG::StateGX::s_clearEfb = clr;
 }
 
@@ -114,15 +138,15 @@ void dSys_c::create() {
     dHeapAllocator::initCallbacks();
 
     ms_configuration_p = &SysConfig;
-    EGG::BaseSystem::sSystem = &SysConfig;
+    EGG::BaseSystem::mConfigData = &SysConfig;
 
     ms_configuration_p->initialize();
 
-    pRootHeapMem1 = EGG::BaseSystem::sSystem->mRootHeapMem1;
+    pRootHeapMem1 = EGG::BaseSystem::mConfigData->mRootHeapMem1;
     ms_RootHeapMem1 = mHeap::createExpHeap(-1, pRootHeapMem1, "dSys_c::RootHeapMEM1", 32, mHeap::OPT_4);
     pRootHeapMem1->mFlag.setBit(0);
 
-    pRootHeapMem2 = EGG::BaseSystem::sSystem->mRootHeapMem2;
+    pRootHeapMem2 = EGG::BaseSystem::mConfigData->mRootHeapMem2;
     ms_RootHeapMem2 = mHeap::createExpHeap(-1, pRootHeapMem2, "dSys_c::RootHeapMEM2", 32, mHeap::OPT_4);
     pRootHeapMem2->mFlag.setBit(0);
 
@@ -221,8 +245,7 @@ void dSys_c::create() {
     LayoutArcManager::create(pExpHeap);
 
     setFrameRate(1);
-    nw4r::ut::Color clearColor(nw4r::ut::Color::BLACK);
-    setClearColor(clearColor);
+    setClearColor(nw4r::ut::Color::BLACK);
 
     SaveTimeRelated::fn_80190780(pExpHeap);
 
@@ -345,10 +368,29 @@ void dSys_c::execute() {
     endFrame();
 }
 
-namespace dSystem {
+void dSystem::fixHeaps() {
+    s_OrgMEM1ArenaLo = OSGetMEM1ArenaLo();
 
-void fixHeaps() {
+    void *stack_addr = (void *)OSRoundUp32B(_stack_addr);
+    void *arena_lo = (void *)OSRoundUp32B(__ArenaLo);
+    
+    if (s_OrgMEM1ArenaLo < (void *)0x80700000) {
+        s_NewMEM1ArenaLo = (void *)0x80700000;
+    }
+    else {
+        s_NewMEM1ArenaLo = (void *)ROUND_UP_4KB(arena_lo);
 
-}
+        if (s_OrgMEM1ArenaLo != stack_addr && s_OrgMEM1ArenaLo != arena_lo) {
+            OSPanic("d_system.cpp", 1883, "Arena Error!\n");
+        }
+    }
 
+    OSSetMEM1ArenaLo(s_NewMEM1ArenaLo);
+
+    s_OrgMEM1ArenaHi = OSGetMEM1ArenaHi();
+    s_NewMEM1ArenaHi = (void *)0x817E0000;
+
+    if (s_OrgMEM1ArenaHi > s_NewMEM1ArenaHi) {
+        OSSetMEM1ArenaHi(s_NewMEM1ArenaHi);
+    }
 }

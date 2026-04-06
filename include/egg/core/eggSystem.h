@@ -2,31 +2,336 @@
 #define EGG_SYSTEM_H
 
 #include "common.h"
+#include "egg/core/eggController.h"
+#include "egg/core/eggDisplay.h"
+#include "egg/core/eggDvdFile.h"
 #include "egg/core/eggGraphicsFifo.h"
 #include "egg/core/eggHeap.h"
+#include "egg/core/eggVideo.h"
+#include "egg/core/eggXfbManager.h"
+#include "rvl/WPAD.h"
+#include "toBeSorted/d_exception.h"
 
-#include "rvl/SC.h"
+namespace {
 
-// Ported from https://github.com/snailspeed3/mkw/blob/master/lib/egg/core/eggSystem.hpp
+// TODO Determine better names (+ location?) for this render mode set
+
+const GXRenderModeObj gRMO_Unk1 = {
+    0, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    25, // viXOrigin
+    12, // viYOrigin
+    670, // viWidth
+    456, // viHeight
+    1, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Unk2 = {
+    2, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    25, // viXOrigin
+    12, // viYOrigin
+    670, // viWidth
+    456, // viHeight
+    0, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Unk3 = {
+    4, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    542, // xfbHeight
+    27, // viXOrigin
+    16, // viYOrigin
+    666, // viWidth
+    542, // viHeight
+    1, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Unk4 = {
+    20, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    25, // viXOrigin
+    12, // viYOrigin
+    670, // viWidth
+    456, // viHeight
+    1, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}      // vFilter
+};
+
+const GXRenderModeObj gRMO_Unk5 = {
+    22, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    25, // viXOrigin
+    12, // viYOrigin
+    670, // viWidth
+    456, // viHeight
+    0, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Unk6 = {
+    0, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    17, // viXOrigin
+    12, // viYOrigin
+    686, // viWidth
+    456, // viHeight
+    1, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Unk7 = {
+    2, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    17, // viXOrigin
+    12, // viYOrigin
+    686, // viWidth
+    456, // viHeight
+    0, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Unk8 = {
+    4, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    542, // xfbHeight
+    19, // viXOrigin
+    16, // viYOrigin
+    682, // viWidth
+    542, // viHeight
+    1, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Unk9 = {
+    20, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    17, // viXOrigin
+    12, // viYOrigin
+    686, // viWidth
+    456, // viHeight
+    1, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Unk10 = {
+    22, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    17, // viXOrigin
+    12, // viYOrigin
+    686, // viWidth
+    456, // viHeight
+    0, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const EGG::Video::RenderModeObjSet gUnkRenderModeObjSet = {
+    {&gRMO_Unk1, &gRMO_Unk2, &gRMO_Unk3,
+     &gRMO_Unk4, &gRMO_Unk5, &gRMO_Unk6,
+     &gRMO_Unk7, &gRMO_Unk8, &gRMO_Unk9,
+     &gRMO_Unk10}
+};
+
+}
 
 namespace EGG {
 
-class Display;
-class Heap;
-class PerformanceView;
+// TODO Proper definition of PerformanceView
+class PerformanceView {
+public:
+    u8 placeholder[0x4c];
+    /* 0x4c */ u32 _4c;
+};
+
 class SceneManager;
 class SimpleAudioMgr;
-class Thread;
-class Video;
-class XfbManager;
 
-class BaseSystem {
+class ConfigurationData {
 public:
-    static BaseSystem *sSystem;
+    inline ConfigurationData() : mSystemHeapSize(0x89000) {}
 
-public:
-    inline BaseSystem() : mSysHeapSize(0x97000), mGraphicsFifoSize(0x80000), mRenderMode(nullptr) {}
-
+    // vtable at 0x0
     /* vt 0x08 */ virtual Video *getVideo() = 0;
     /* vt 0x0C */ virtual Heap *getSysHeap() = 0;
     /* vt 0x10 */ virtual Display *getDisplay() = 0;
@@ -42,34 +347,51 @@ public:
     /* vt 0x38 */ virtual void initialize() = 0;
 
 public:
-    /* 0x04 */ void *mMEM1ArenaLo;
-    /* 0x08 */ void *mMEM1ArenaHi;
-    /* 0x0C */ void *mMEM2ArenaLo;
-    /* 0x10 */ void *mMEM2ArenaHi;
-    /* 0x14 */ u32 mMemorySize;
+    /* 0x04 */ u32 mRoot1HeapStart;
+    /* 0x08 */ u32 mRoot1HeapEnd;
+    /* 0x0C */ u32 mRoot2HeapStart;
+    /* 0x10 */ u32 mRoot2HeapEnd;
+    /* 0x14 */ u32 mMemSize;
     /* 0x18 */ Heap *mRootHeapMem1;
     /* 0x1C */ Heap *mRootHeapMem2;
     /* 0x20 */ Heap *mRootHeapDebug;
-    /* 0x24 */ Heap *mSysHeap;
-    /* 0x28 */ Thread *mThread;
-    /* 0x2C */ void *_2c;
-    /* 0x30 */ void *_30;
-    /* 0x34 */ u32 mSysHeapSize;
-    /* 0x38 */ u32 mGraphicsFifoSize;
-    /* 0x3C */ GXRenderModeObj *mRenderMode;
+    /* 0x24 */ Heap *mSystemHeap;
+    /* 0x28 */ Thread *mSystemThread;
+    /* 0x2C */ u32 field_0x2C;
+    /* 0x30 */ u32 mSystemHeapStart;
+    /* 0x34 */ u32 mSystemHeapSize;
+};
+class BaseSystem {
+public:
+    static ConfigurationData *mConfigData;
+    
+    static XfbManager *getXfbMgr() {
+        return mConfigData->getXfbMgr();
+    }
+    static Display *getDisplay() {
+        return mConfigData->getDisplay();
+    }
+    static Video *getVideo() {
+        return mConfigData->getVideo();
+    }
 };
 
-template <class tVideo, class tDisplay, class tXfbMgr, class tAudioMgr, class tSceneMgr, class tPerfView>
-class TSystem : public BaseSystem {
+template <class TVideo, class TDisplay, class TXfbManager, class TAudioManager, class TSceneManager, class TPerfView>
+class TSystem : public ConfigurationData {
 public:
-    inline TSystem() : BaseSystem() {}
+    inline TSystem() : mGraphicsFifoSize(0x80000), mRenderMode() {}
+
+    void onBeginFrame() override {}
+    void onEndFrame() override {}
+
+    void initRenderMode() override {}
 
     Video *getVideo() override {
         return static_cast<Video *>(mVideo);
     }
 
     Heap *getSysHeap() override {
-        return mSysHeap;
+        return mSystemHeap;
     }
 
     Display *getDisplay() override {
@@ -81,7 +403,10 @@ public:
     }
 
     PerformanceView *getPerfView() override {
-        return static_cast<PerformanceView *>(mPerfView);
+        if (!mPerfView)
+            return mPerfView;
+        // TODO remove cast hack if/when more is known about PerformanceView
+        return static_cast<PerformanceView *>((void *)&mPerfView->_4c);
     }
 
     SceneManager *getSceneMgr() override {
@@ -92,55 +417,52 @@ public:
         return static_cast<SimpleAudioMgr *>(mAudioMgr);
     }
 
-    void onBeginFrame() override {}
-    void onEndFrame() override {}
-
-    void initRenderMode() override {}
-
     void initialize() override {
-        // DVDInit();
-        // SCInit();
+        DVDInit();
+        SCInit();
 
-        // initMemory();
-        // initRenderMode();
+        initMemory();
 
-        // GraphicsFifo::create(mGraphicsFifoSize, nullptr);
+        Heap *heap = Heap::sCurrentHeap;
 
-        // mVideo = new tVideo(mRenderMode, nullptr);
+        GraphicsFifo::create(mGraphicsFifoSize, heap);
+        mHeap::createAssertHeap(mRootHeapMem1);
 
-        // mXfbMgr = new tXfbMgr(nullptr);
-        // for (int i = 0; i < 2; ++i) {
-        //     mXfbMgr->attach(new Xfb(mRootHeapMem2));
-        // }
+        mVideo = new (heap) TVideo(&gUnkRenderModeObjSet);
 
-        // mDisplay = new tDisplay(1);
+        mXfbMgr = new (heap) TXfbManager();
+        for (int i = 0; i < 2; ++i) {
+            mXfbMgr->attach(new (heap) Xfb(mRootHeapMem2));
+        }
 
-        // Thread::initialize();
-        // mThread = new Thread(OSGetCurrentThread(), 4);
+        mDisplay = new (heap) TDisplay(1);
+        mDisplay->setClearColor(nw4r::ut::Color::BLACK);
+        mDisplay->clearEFB();
 
-        // mPerfView = new tPerfView(true);
+        Thread::initialize();
+        mSystemThread = new (heap) Thread(OSGetCurrentThread(), 4);
 
-        // DvdFile::initialize();
+        DvdFile::initialize();
 
-        // CoreControllerMgr::createStaticInstance();
-        // GCControllerMgr::createStaticInstance();
+        CoreControllerMgr::setWPADWorkSize(WPADGetWorkMemorySize() + 228);
+        CoreControllerMgr::createInstance();
 
-        // Exception_create(0x40, 0x20, 4, nullptr, 1);
+        exceptionCreate(heap);
 
-        // mSceneMgr = new tSceneMgr(nullptr);
+        BaseSystem::mConfigData->getSysHeap()->mFlag.setBit(0);
 
-        // mRootHeapMem1->becomeCurrentHeap();
-
-        // mAudioMgr = new tAudioMgr();
+        mHeap::setCurrentHeap(mHeap::g_assertHeap);
     }
 
 public:
-    /* 0x40 */ tAudioMgr *mAudioMgr;
-    /* 0x44 */ tVideo *mVideo;
-    /* 0x48 */ tXfbMgr *mXfbMgr;
-    /* 0x4c */ tDisplay *mDisplay;
-    /* 0x50 */ tPerfView *mPerfView;
-    /* 0x54 */ tSceneMgr *mSceneMgr;
+    /* 0x38 */ u32 mGraphicsFifoSize;
+    /* 0x3C */ GXRenderModeObj *mRenderMode;
+    /* 0x40 */ TAudioManager *mAudioMgr;
+    /* 0x44 */ TVideo *mVideo;
+    /* 0x48 */ TXfbManager *mXfbMgr;
+    /* 0x4c */ TDisplay *mDisplay;
+    /* 0x50 */ TPerfView *mPerfView;
+    /* 0x54 */ TSceneManager *mSceneMgr;
 };
 
 } // namespace EGG
