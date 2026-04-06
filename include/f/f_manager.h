@@ -35,6 +35,7 @@ public:
         PROC_FLAG_DELETE = GET_PROC_FLAG(DELETE),
         PROC_FLAG_DRAW = GET_PROC_FLAG(DRAW)
     };
+
     fManager_c(fBase_c *owner) : connect_node(owner), execute_node(owner), draw_node(owner), search_node(owner) {}
     ~fManager_c() {}
     int getSearchTableNum();
@@ -42,6 +43,14 @@ public:
     static fBase_c *searchBaseByProfName(ProfileName profID, const fBase_c *parent = nullptr);
     static fBase_c *searchBaseByGroupType(u8 groupType, const fBase_c *parent = nullptr);
     static void mainLoop();
+
+    static void setStopProcFlags(u32 flags) {
+        m_StopProcInf |= flags;
+    }
+
+    static void keepStopProcFlags(u32 flags) {
+        m_StopProcInf &= flags;
+    }
 
 private:
     fTrNdBa_c connect_node;   ///< The node in ::m_connectManage.
