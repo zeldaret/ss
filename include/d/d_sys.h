@@ -48,10 +48,10 @@ public:
 
 namespace dSystem {
 
-void *s_OrgMEM1ArenaLo;
-void *s_NewMEM1ArenaLo;
-void *s_OrgMEM1ArenaHi;
-void *s_NewMEM1ArenaHi;
+extern void *s_OrgMEM1ArenaLo;
+extern void *s_NewMEM1ArenaLo;
+extern void *s_OrgMEM1ArenaHi;
+extern void *s_NewMEM1ArenaHi;
 
 void fixHeaps();
 

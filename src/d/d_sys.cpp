@@ -43,12 +43,22 @@
 #include "rvl/GX.h"
 #include "rvl/OS.h"
 
+namespace dSystem {
+
+void *s_OrgMEM1ArenaLo;
+void *s_NewMEM1ArenaLo;
+void *s_OrgMEM1ArenaHi;
+void *s_NewMEM1ArenaHi;
+
+}
+
 System SysConfig;
 
 System *dSys_c::ms_configuration_p;
 EGG::Heap *dSys_c::ms_RootHeapMem1;
 EGG::Heap *dSys_c::ms_RootHeapMem2;
 
+// TODO Replace with proper import + names
 extern u32 lbl_80574FA0;
 extern u32 lbl_80574FA4;
 
