@@ -15,6 +15,7 @@
 #include "d/d_linkage.h"
 #include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
@@ -1320,16 +1321,141 @@ void dAcEremly_c::executeState_Damage() {
 }
 void dAcEremly_c::finalizeState_Damage() {}
 
-void dAcEremly_c::initializeState_Sleep() {}
-void dAcEremly_c::executeState_Sleep() {}
+void dAcEremly_c::initializeState_Sleep() {
+    mMdl.setAnm("RemlySleep", m3d::PLAY_MODE_4, 4.f);
+    field_0xB60 = 19;
+    mTexPat.setFrame(2.f, 0);
+    mMdlCallback.mAng.clear();
+}
+void dAcEremly_c::executeState_Sleep() {
+    if (field_0xB60 == 20) {
+        if (mMdl.getAnm().isStop()) {
+            changeState(StateID_Wait);
+        }
+    } else if (fn_177_86C0() || fn_177_8F90() || mSph.ChkCoHit()) {
+        if (field_0xB60 != 20) {
+            mMdl.setAnm("RemlyWakeUp", m3d::PLAY_MODE_4, 4.f);
+            field_0xB60 = 20;
+        }
+    }
+}
 void dAcEremly_c::finalizeState_Sleep() {}
 
-void dAcEremly_c::initializeState_Scared() {}
-void dAcEremly_c::executeState_Scared() {}
+void dAcEremly_c::initializeState_Scared() {
+    mMdl.setAnm("RemlyScared", m3d::PLAY_MODE_4, 4.f);
+    field_0xB60 = 21;
+    field_0xB66 = 1;
+    mSpeed = 0.f;
+    field_0xB14 = 0;
+    mStts.SetRank(11);
+}
+void dAcEremly_c::executeState_Scared() {
+    if (fn_177_7330()) {
+        return;
+    }
+
+    fn_177_86C0();
+    if (mMdl.getAnm().getRate()) {
+        fn_177_6FC0(false);
+    } else if (field_0xB64) {
+        sLib::addCalcAngle(mMdlCallback.mAng.z.ref(), 8000, 20, 0x100);
+        if (field_0xB14 > 80 && !fn_177_73C0()) {
+            field_0xB68 = 0;
+            field_0xB66 = 1;
+            changeState(StateID_Wait);
+        }
+    }
+
+    sLib::addCalcScaled(&mSpeed, 0.7f, 3.f);
+
+    if (!field_0xB64) {
+        return;
+    }
+
+    if (!fn_177_73C0()) {
+        if (++field_0xB14 > 30) {
+            mMdl.setRate(0.f);
+        }
+    } else {
+        field_0xB14 = 0;
+        mMdl.setRate(1.f);
+    }
+}
 void dAcEremly_c::finalizeState_Scared() {}
 
-void dAcEremly_c::initializeState_Stun() {}
-void dAcEremly_c::executeState_Stun() {}
+void dAcEremly_c::initializeState_Stun() {
+    field_0xB6B = 0;
+    mAcceleration = -3.f;
+    if (field_0xB60 != 22 && field_0xB60 != 23) {
+        mMdl.setAnm("RemlyPiyol", m3d::PLAY_MODE_4, 4.f);
+        field_0xB60 = 22;
+    } else {
+        mMdl.setAnm("RemlyPiyol", m3d::PLAY_MODE_4, 4.f);
+        field_0xB60 = 22;
+        mMdl.setFrame(11.f);
+        field_0xB6B = 1;
+    }
+
+    if (!fn_177_7330()) {
+        field_0xB64 = 0;
+    }
+
+    mStts.SetRank(11);
+    fn_177_8520(true);
+    field_0xB6A = 0;
+    mSph.ClrAtSet();
+    field_0xB68 = 1;
+}
+void dAcEremly_c::executeState_Stun() {
+    switch (field_0xB60) {
+        default: {
+            if (mMdl.getAnm().isStop()) {
+                mMdl.setAnm("RemlyPiyo2", m3d::PLAY_MODE_4, 4.f);
+                field_0xB60 = 23;
+                field_0xB48 = 300;
+                fn_177_8520(true);
+            }
+        } break;
+        case 23: {
+            if (sLib::calcTimer(&field_0xB48)) {
+                field_0xB6B = 1;
+            } else {
+                mMdl.setAnm("RemlyPiyo3", m3d::PLAY_MODE_4, 4.f);
+                field_0xB60 = 24;
+            }
+        } break;
+        case 24: {
+            if (mMdl.getAnm().checkFrame(36.f)) {
+                mSpeed = 15.f;
+            }
+            if (mMdl.getAnm().isStop()) {
+                mStts.SetRank(5);
+                if (fn_177_7330()) {
+                    if (fn_177_9370(100.f)) {
+                        changeState(StateID_NightRun);
+                    } else {
+                        changeState(StateID_NightRet);
+                    }
+                } else {
+                    changeState(StateID_Escape);
+                }
+            }
+        } break;
+    }
+    if (field_0xB60 != 23 && field_0xB60 != 24) {}
+
+    sLib::addCalcScaled(&mSpeed, 0.5f, 1.f);
+    if (field_0xB6B) {
+        mVec3_c pos, scale;
+        pos.set(mPosition);
+        pos.y += 50.f;
+
+        scale.set(mScale);
+        scale *= 0.5f;
+        mEmitters[0].holdEffect(PARTICLE_RESOURCE_ID_MAPPING_309_, pos, &mRotation, &scale, nullptr, nullptr);
+        holdSound(SE_E_PIYORI_LV);
+    }
+}
 void dAcEremly_c::finalizeState_Stun() {}
 
 void dAcEremly_c::initializeState_Water() {}
