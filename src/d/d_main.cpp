@@ -58,11 +58,12 @@ static OSThread MAIN_THREAD;
 void main(int argc, char **argv) {
     u8 pStackBase[STACK_SIZE] __attribute__((aligned(32)));
 
-    fn_80006C20();
+    dLib::unknownStub();
     dMain::g_InitialTime = OSGetTime();
     dSystem::fixHeaps();
-    fn_80006CE0(argc, argv);
-    fn_80006D60();
+
+    Mpls::initialize(argc, argv);
+    Mpls::tryLaunchMovie();
 
     OSThread *curThread = OSGetCurrentThread();
     OSPriority curPrio = OSGetThreadPriority(curThread);

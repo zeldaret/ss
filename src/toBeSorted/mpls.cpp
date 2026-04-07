@@ -7,31 +7,31 @@
 
 #include <cstring>
 
-bool lbl_80574FA8;
-bool lbl_80574FA9;
-bool lbl_80574FAA;
+bool sMplsInitialized;
+bool sSkipMplsMovie;
+bool sIsNormalMode;
 
-void fn_80006CE0(int argc, char **argv) {
+void Mpls::initialize(int argc, char **argv) {
     if (argc == 2) {
         if (strcmp("MPLS_FIRST", argv[1]) == 0) {
-            lbl_80574FA9 = true;
+            sSkipMplsMovie = true;
         } else if (strcmp("MPLS_NORMAL", argv[1]) == 0) {
-            lbl_80574FA9 = true;
-            lbl_80574FAA = true;
+            sSkipMplsMovie = true;
+            sIsNormalMode = true;
         }
     }
 
-    lbl_80574FA8 = true;
+    sMplsInitialized = true;
 }
 
-void fn_80006D60() {
-    if (!lbl_80574FA9 && !SCGetMplsMoviePlay()) {
+void Mpls::tryLaunchMovie() {
+    if (!sSkipMplsMovie && !SCGetMplsMoviePlay()) {
         OSExecl("/sys/mpls_movie/player.dol", "", "", "ASPECT_RATIO_AUTO", "DEFAULT", nullptr);
         sAssert::assert();
     }
 }
 
-void fn_80006DC0() {
+void Mpls::forceLaunchMovie() {
     OSExecl("/sys/mpls_movie/player.dol", "", "", "ASPECT_RATIO_AUTO", "FORCE_MENU", nullptr);
     sAssert::assert();
 }
