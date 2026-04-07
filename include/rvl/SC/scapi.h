@@ -74,6 +74,7 @@ u32 SCGetCounterBias(void);
 void SCGetBtDeviceInfoArray(SCBtDeviceInfoArray *info);
 void SCSetBtDeviceInfoArray(const SCBtDeviceInfoArray *info);
 u32 SCGetBtDpdSensibility(void);
+BOOL SCGetMplsMoviePlay(void);
 u8 SCGetWpadMotorMode(void);
 void SCSetWpadMotorMode(u8 mode);
 u8 SCGetWpadSensorBarPosition(void);
