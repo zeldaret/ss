@@ -16,6 +16,7 @@
 #include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
+#include "d/t/d_t_stream.h"
 #include "f/f_base.h"
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
@@ -49,13 +50,13 @@ static dCcD_SrcSph sSphSrc = {
          0,
          0,
      }, {
-         ~AT_TYPE_COMMON0,
+         ~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x8000 | AT_TYPE_WIND),
          0x303,
-         {0, 0, 0x407},
+         {0, 0, 0x40F},
          8,
          0,
      }, {
-         0x28,
+         0xE5,
      }},
     {
      50.f, },
@@ -308,12 +309,12 @@ int dAcEremly_c::actorExecute() {
 
         if (mMdl.getAnm().isStop()) {
             mMdl.setAnm("RemlyWaitStand", m3d::PLAY_MODE_4, 4.f);
+            field_0xB60 = 0;
+            field_0xB66 = 1;
+            field_0xB48 = 48.f + cM::rndF(48.f);
+            field_0xB6A = 1;
+            changeState(StateID_Wait);
         }
-        field_0xB60 = 0;
-        field_0xB66 = 1;
-        field_0xB48 = 48.f + cM::rndF(48.f);
-        field_0xB6A = 1;
-        changeState(StateID_Wait);
     }
 
     if (!isState(StateID_Hold)) {
@@ -353,6 +354,7 @@ int dAcEremly_c::actorExecute() {
                 } else {
                     if (field_0xB60 == 6) {
                         mMdl.setAnm("RemlySwimDamage", m3d::PLAY_MODE_4, 4.f);
+                        field_0xB4E = 90;
                         field_0xB60 = 8;
                     } else {
                         mSph.ClrAtSet();
@@ -361,8 +363,8 @@ int dAcEremly_c::actorExecute() {
                 }
             } break;
             case 12: {
-                if (!isState(StateID_Fly) && field_0xB60 != 6 && field_0xB60 != 11) {
-                    if (mSph.ChkCoHit() && mSph.ChkTgAtHitType(AT_TYPE_0x80000 | AT_TYPE_SLINGSHOT)) {
+                if (!isState(StateID_Fly) && field_0xB60 != 6 && field_0xB60 != 8) {
+                    if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_0x80000 | AT_TYPE_SLINGSHOT)) {
                         mAngle.y = getXZAngleToPlayer();
                         mSpeed = -15.f;
                         changeState(StateID_Stun);
@@ -410,7 +412,7 @@ int dAcEremly_c::actorExecute() {
     }
 
     if (!isState(StateID_Hold)) {
-        field_0xAA4 = mPosition;
+        field_0xAA4.set(mPosition);
         calcVelocity();
         mPosition += mVelocity;
         mPosition += mStts.GetCcMove();
@@ -465,9 +467,7 @@ int dAcEremly_c::actorExecute() {
                     mAngle.y = mStartingRot.y;
                     changeState(StateID_Sleep);
                 }
-                field_0xB58++;
-                // Why cast?
-                if ((s32)field_0xB58 > 30) {
+                if ((s32)++field_0xB58 > 30) {
                     changeState(StateID_Fly);
                 }
             }
@@ -535,7 +535,7 @@ int dAcEremly_c::actorExecute() {
     }
 
     if (field_0xB60 == 7) {
-        mMdl.getModel().getNodeWorldMtx(resMdl.GetResNode("backbone3").GetID(), m);
+        mMdl.getModel().getNodeWorldMtx(resMdl.GetResNode("backbone02").GetID(), m);
         m.getTranslation(center);
 
         mEmitters[1].holdEffect(PARTICLE_RESOURCE_ID_MAPPING_859_, center, nullptr, nullptr, nullptr, nullptr);
@@ -1387,10 +1387,10 @@ void dAcEremly_c::initializeState_Stun() {
     field_0xB6B = 0;
     mAcceleration = -3.f;
     if (field_0xB60 != 22 && field_0xB60 != 23) {
-        mMdl.setAnm("RemlyPiyol", m3d::PLAY_MODE_4, 4.f);
+        mMdl.setAnm("RemlyPiyo1", m3d::PLAY_MODE_4, 4.f);
         field_0xB60 = 22;
     } else {
-        mMdl.setAnm("RemlyPiyol", m3d::PLAY_MODE_4, 4.f);
+        mMdl.setAnm("RemlyPiyo1", m3d::PLAY_MODE_4, 4.f);
         field_0xB60 = 22;
         mMdl.setFrame(11.f);
         field_0xB6B = 1;
@@ -1458,11 +1458,110 @@ void dAcEremly_c::executeState_Stun() {
 }
 void dAcEremly_c::finalizeState_Stun() {}
 
-void dAcEremly_c::initializeState_Water() {}
-void dAcEremly_c::executeState_Water() {}
+void dAcEremly_c::initializeState_Water() {
+    mMdl.setAnm("RemlySwim", m3d::PLAY_MODE_4, 4.f);
+    field_0xB60 = 6;
+    field_0xB6B = 0;
+    mAcceleration = 0.f;
+    mSpeed = 0.f;
+    mSph.ClrAtSet();
+    field_0xB68 = 0;
+
+    if (!fn_177_7330()) {
+        field_0xB64 = 1;
+    } else {
+        field_0xB64 = 2;
+    }
+
+    mStts.SetRank(11);
+    field_0xB6E = 0;
+    field_0xB6A = 0;
+    startSound(SE_ERemly_DIVE_WATER);
+    field_0xB6F = 0;
+    field_0xB66 = 1;
+}
+void dAcEremly_c::executeState_Water() {
+    s32 _weird_zero = 0;
+
+    fn_177_6FC0(false);
+    if (field_0xB6B) {
+        mVec3_c out(mVec3_c::Zero);
+        mVec3_c pos;
+        pos.set(mPosition);
+        pos.y = field_0xB0C;
+        if (dTgStream_c::getForce(pos, out)) {
+            mAngle.y = out.atan2sX_Z();
+            sLib::addCalcScaledDiff(&mSpeed, out.absXZ(), 0.2f, 0.2f);
+            field_0xB6F = 1;
+        } else if (field_0xB6F) {
+            mStts.SetRank(5);
+            mAcceleration = -3.f;
+
+            if ((s32)++field_0xB58 > 30) {
+                changeState(StateID_Fly);
+            }
+        } else {
+            mSpeed = 0.f;
+            mAcceleration = -3.f;
+            mStts.SetRank(5);
+
+            if (field_0xB60 != 8 && field_0xB60 != 7) {
+                mMdl.setAnm("RemlyWater", m3d::PLAY_MODE_4, 4.f);
+                field_0xB60 = 7;
+
+            } else if (field_0xB60 == 8 || mMdl.getAnm().isStop()) {
+                if (fn_177_7330()) {
+                    field_0xB6E = 1;
+                    changeState(StateID_Fly);
+                } else {
+                    changeState(StateID_Walk);
+                }
+            }
+        }
+    } else {
+        if (field_0xB60 == 8 && mMdl.getAnm().isStop()) {
+            mMdl.setAnm("RemlySwim", m3d::PLAY_MODE_4, 10.f);
+            field_0xB60 = 6;
+        }
+        field_0xB5A++;
+        f32 yOffset = -35.f + _weird_zero;
+        if (field_0xB4E != 0) {
+            yOffset -= 10.f + _weird_zero;
+        }
+        fn_177_7040(0, 0.8f);
+        (void)dAcPy_c::GetLink()->mPosition.absXZTo(mPosition);
+        if (fn_177_7510(220.f)) {
+            mSpeed = 0.f;
+        }
+        f32 yTarget = field_0xB0C + yOffset + mAng(field_0xB5A * 2000).sin() * 3.f;
+        sLib::addCalcScaledDiff(&mPosition.y, yTarget, 0.7f, 3.f);
+        sLib::addCalcScaled(&mVelocity.y, 0.8f, 10.f);
+    }
+}
 void dAcEremly_c::finalizeState_Water() {}
 
-void dAcEremly_c::initializeState_Hear() {}
+void dAcEremly_c::initializeState_Hear() {
+    field_0xB14 = 0;
+    field_0xB65 = 0;
+    switch (field_0xB60) {
+        default: {
+            mMdl.setAnm("RemlyWaitSit", m3d::PLAY_MODE_4, 4.f);
+            field_0xB60 = 1;
+            field_0xB66 = 0;
+        } // fallthrough
+        case 1: {
+            field_0xB65 = 1;
+        } break;
+        case 3:
+        case 4:
+        case 5: {
+            mMdl.setAnm("RemlyWaitStand", m3d::PLAY_MODE_4, 4.f);
+            field_0xB60 = 0;
+            field_0xB66 = 1;
+            field_0xB48 = 24.f + cM::rndF(24.f);
+        }
+    }
+}
 void dAcEremly_c::executeState_Hear() {}
 void dAcEremly_c::finalizeState_Hear() {}
 

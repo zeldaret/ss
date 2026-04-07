@@ -204,6 +204,7 @@ private:
     /* 0xB6C */ u8 field_0xB6C;
     /* 0xB6D */ u8 field_0xB6D;
     /* 0xB6E */ u8 field_0xB6E;
+    /* 0xB6F */ u8 field_0xB6F;
 };
 
 #endif
