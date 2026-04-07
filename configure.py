@@ -465,7 +465,7 @@ config.libs = [
             Object(Matching, "d/d_scene.cpp"),
             Object(NonMatching, "d/d_state.cpp"),
             Object(Matching, "d/d_stage_parse.cpp"),
-            Object(NonMatching, "d/d_sys.cpp"),
+            Object(Matching, "d/d_sys.cpp"),
             Object(NonMatching, "d/d_sys_init.cpp"),
             Object(Matching, "toBeSorted/arc_callback_handler.cpp"),
             Object(NonMatching, "d/d_video.cpp"),

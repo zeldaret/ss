@@ -492,7 +492,7 @@ void dSys_c::create() {
     ms_configuration_p = &SysConfig;
     EGG::BaseSystem::mConfigData = &SysConfig;
 
-    ms_configuration_p->initialize();
+    ms_configuration_p->doInitialize();
 
     pRootHeapMem1 = EGG::BaseSystem::mConfigData->mRootHeapMem1;
     ms_RootHeapMem1 = mHeap::createExpHeap(-1, pRootHeapMem1, "dSys_c::RootHeapMEM1", 32, mHeap::OPT_4);

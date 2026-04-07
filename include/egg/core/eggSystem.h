@@ -103,6 +103,12 @@ public:
         return static_cast<SimpleAudioMgr *>(mAudioMgr);
     }
 
+    // Trick to fix weak function order in d_sys.cpp
+    // https://github.com/zeldaret/ss/pull/305#issuecomment-4201728492
+    void doInitialize() {
+        initialize();
+    }
+
 public:
     /* 0x38 */ u32 mGraphicsFifoSize;
     /* 0x3C */ GXRenderModeObj *mRenderMode;
