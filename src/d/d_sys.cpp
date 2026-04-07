@@ -1,3 +1,5 @@
+#include "d/d_sys.h"
+
 #include "c/c_counter.h"
 #include "c/c_math.h"
 #include "d/d_cursor_hit_check.h"
@@ -11,7 +13,6 @@
 #include "d/d_reset.h"
 #include "d/d_scene.h"
 #include "d/d_state.h"
-#include "d/d_sys.h"
 #include "d/d_sys_init.h"
 #include "d/flag/flag_managers.h"
 #include "d/lyt/d_lyt_battery.h"
@@ -29,22 +30,22 @@
 #include "egg/core/eggXfbManager.h"
 #include "egg/gfx/eggStateGX.h"
 #include "f/f_manager.h"
+#include "m/m3d/m3d.h"
 #include "m/m_dvd.h"
 #include "m/m_heap.h"
 #include "m/m_pad.h"
 #include "m/m_video.h"
-#include "m/m3d/m3d.h"
 #include "nw4r/ut/ut_Color.h"
 #include "toBeSorted/arc_callback_handler.h"
+#include "toBeSorted/arc_managers/current_stage_arc_manager.h"
+#include "toBeSorted/arc_managers/layout_arc_manager.h"
+#include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/d_exception.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/nand_request_thread.h"
 #include "toBeSorted/save_manager.h"
 #include "toBeSorted/unk_save_time.h"
-#include "toBeSorted/arc_managers/current_stage_arc_manager.h"
-#include "toBeSorted/arc_managers/layout_arc_manager.h"
-#include "toBeSorted/arc_managers/oarc_manager.h"
 
 #include "rvl/GX.h"
 #include "rvl/OS.h"
@@ -67,7 +68,7 @@ void *s_NewMEM1ArenaLo;
 void *s_OrgMEM1ArenaHi;
 void *s_NewMEM1ArenaHi;
 
-}
+} // namespace dSystem
 
 const GXRenderModeObj gRMO_Pal60_608x456Prog_16x9 = {
     0, // tvInfo
@@ -182,7 +183,7 @@ const GXRenderModeObj gRMO_Ntsc_608x456Prog_16x9 = {
             {6, 6},
             {6, 6},
             }, // sample_pattern
-    {0, 0, 21, 22, 21, 0, 0}      // vFilter
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
 };
 
 const GXRenderModeObj gRMO_Ntsc_608x456IntDf_16x9 = {
@@ -408,11 +409,9 @@ dSndMgr_c *dSys_c::initAudioMgr(EGG::Heap *heap) {
     dSndMgr_c *audioMgr;
 
     EGG::FrmHeap *frmHeap = mHeap::createFrmHeap(
-        0x69400,
-        heap,
-        "オーディオヒープ",  // "Audio heap"
-        32,
-        mHeap::OPT_NONE
+        0x69400, heap,
+        "オーディオヒープ", // "Audio heap"
+        32, mHeap::OPT_NONE
     );
 
     {
@@ -569,12 +568,8 @@ void dSys_c::create() {
     void *p_buf = mHeap::g_gameHeaps[0]->alloc(0x4000, 32);
     pCmdHeap = mHeap::g_commandHeap;
     NandRequestThread::create(
-        OSGetThreadPriority(OSGetCurrentThread()) - 2,
-        pCmdHeap,
-        p_buf,
-        0x4000,
-        ArcCallbackHandlerCreate(2),
-        pExpHeap);
+        OSGetThreadPriority(OSGetCurrentThread()) - 2, pCmdHeap, p_buf, 0x4000, ArcCallbackHandlerCreate(2), pExpHeap
+    );
 
     dReset::Manage_c::CreateInstance(heapMem2);
 
@@ -638,16 +633,14 @@ void dSys_c::execute() {
         dDvdUnk::FontUnk::GetInstance()->drawDriveError();
         dReset::Manage_c::GetInstance()->Draw();
         dHbm::Manage_c::GetInstance()->DrawMenu(0);
-    }
-    else {
+    } else {
         dHbm::Manage_c::GetInstance()->DrawMenu(1);
 
         if (dHbm::Manage_c::GetInstance()->getState() == dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
             if (dState::fn_80062EC0()) {
                 dHbm::Manage_c::GetInstance()->Calculate();
             }
-        }
-        else {
+        } else {
             dGfx_c::GetInstance()->drawBefore();
             m3d::drawDone(0);
             dScene_c::getFader()->draw();
@@ -680,16 +673,14 @@ void dSys_c::execute() {
     dState::fn_80062E40();
     dState::fn_80062E50();
 
-    if (!isAnyError && 
-        dHbm::Manage_c::GetInstance()->getState() != dHbm::Manage_c::HBM_MANAGE_ACTIVE)
-    {
+    if (!isAnyError && dHbm::Manage_c::GetInstance()->getState() != dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
         if (dSystem::myDylinkInitPhase.callMethod(nullptr) == 2) {
             if (dState::fn_80062EC0()) {
                 dScene_c::staticExecute();
             }
             fManager_c::mainLoop();
         }
-        
+
         if (dState::fn_80062EC0()) {
             dScene_c::getFader()->calc();
         }
@@ -725,11 +716,10 @@ void dSystem::fixHeaps() {
 
     void *stack_addr = (void *)OSRoundUp32B(_stack_addr);
     void *arena_lo = (void *)OSRoundUp32B(__ArenaLo);
-    
+
     if (s_OrgMEM1ArenaLo < (void *)0x80700000) {
         s_NewMEM1ArenaLo = (void *)0x80700000;
-    }
-    else {
+    } else {
         s_NewMEM1ArenaLo = (void *)ROUND_UP_4KB(arena_lo);
 
         if (s_OrgMEM1ArenaLo != stack_addr && s_OrgMEM1ArenaLo != arena_lo) {

@@ -59,7 +59,7 @@ public:
 class BaseSystem {
 public:
     static ConfigurationData *mConfigData;
-    
+
     static XfbManager *getXfbMgr() {
         return mConfigData->getXfbMgr();
     }
@@ -81,7 +81,7 @@ public:
 
     void initRenderMode() override {}
     void initialize() override {}
-    
+
     Video *getVideo() override {
         return static_cast<Video *>(mVideo);
     }
@@ -99,8 +99,9 @@ public:
     }
 
     PerformanceView *getPerfView() override {
-        if (!mPerfView)
+        if (!mPerfView) {
             return mPerfView;
+        }
         // TODO remove cast hack if/when more is known about PerformanceView
         return static_cast<PerformanceView *>((void *)&mPerfView->_4c);
     }

@@ -9,13 +9,8 @@
 #define ROUND_UP_4KB(x) (((u32)(x) + 4096 - 1) & ~(4096 - 1))
 
 typedef EGG::TSystem<
-    EGG::Video,
-    EGG::AsyncDisplay,
-    EGG::XfbManager,
-    EGG::SimpleAudioMgr,
-    EGG::SceneManager,
-    EGG::PerformanceView
-> System;
+    EGG::Video, EGG::AsyncDisplay, EGG::XfbManager, EGG::SimpleAudioMgr, EGG::SceneManager, EGG::PerformanceView>
+    System;
 
 class dSndMgr_c;
 
@@ -54,6 +49,6 @@ extern void *s_NewMEM1ArenaHi;
 
 void fixHeaps();
 
-};
+}; // namespace dSystem
 
 #endif

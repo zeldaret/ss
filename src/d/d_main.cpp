@@ -18,10 +18,8 @@ void fn_80054FB0(u32 val) {
 
     if (!flags) {
         fManager_c::setStopProcFlags(
-            fManager_c::PROC_FLAG_CONNECT
-            | fManager_c::PROC_FLAG_CREATE
-            | fManager_c::PROC_FLAG_EXECUTE
-            | fManager_c::PROC_FLAG_DELETE
+            fManager_c::PROC_FLAG_CONNECT | fManager_c::PROC_FLAG_CREATE | fManager_c::PROC_FLAG_EXECUTE |
+            fManager_c::PROC_FLAG_DELETE
         );
     }
 
