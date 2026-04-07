@@ -50,6 +50,16 @@
 #include "rvl/OS.h"
 #include "rvl/WPAD.h"
 
+// TODO Replace with proper import + names
+extern u32 lbl_80574FA0;
+extern u32 lbl_80574FA4;
+
+System SysConfig;
+
+System *dSys_c::ms_configuration_p;
+EGG::Heap *dSys_c::ms_RootHeapMem1;
+EGG::Heap *dSys_c::ms_RootHeapMem2;
+
 namespace dSystem {
 
 void *s_OrgMEM1ArenaLo;
@@ -393,16 +403,6 @@ void System::initialize() {
 
     mHeap::setCurrentHeap(mHeap::g_assertHeap);
 }
-
-System SysConfig;
-
-System *dSys_c::ms_configuration_p;
-EGG::Heap *dSys_c::ms_RootHeapMem1;
-EGG::Heap *dSys_c::ms_RootHeapMem2;
-
-// TODO Replace with proper import + names
-extern u32 lbl_80574FA0;
-extern u32 lbl_80574FA4;
 
 dSndMgr_c *dSys_c::initAudioMgr(EGG::Heap *heap) {
     dSndMgr_c *audioMgr;
