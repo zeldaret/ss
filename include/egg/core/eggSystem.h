@@ -6,13 +6,6 @@
 
 namespace EGG {
 
-// TODO Proper definition of PerformanceView
-class PerformanceView {
-public:
-    u8 placeholder[0x4c];
-    /* 0x4c */ u32 _4c;
-};
-
 class Display;
 class Heap;
 class PerformanceView;
@@ -99,11 +92,7 @@ public:
     }
 
     PerformanceView *getPerfView() override {
-        if (!mPerfView) {
-            return mPerfView;
-        }
-        // TODO remove cast hack if/when more is known about PerformanceView
-        return static_cast<PerformanceView *>((void *)&mPerfView->_4c);
+        return static_cast<PerformanceView *>(mPerfView);
     }
 
     SceneManager *getSceneMgr() override {

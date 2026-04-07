@@ -3,13 +3,14 @@
 
 #include "common.h"
 #include "egg/core/eggHeap.h"
+#include "egg/core/eggProcessMeter.h"
 #include "egg/core/eggSystem.h"
 #include "nw4r/ut/ut_Color.h"
 
 #define ROUND_UP_4KB(x) (((u32)(x) + 4096 - 1) & ~(4096 - 1))
 
 typedef EGG::TSystem<
-    EGG::Video, EGG::AsyncDisplay, EGG::XfbManager, EGG::SimpleAudioMgr, EGG::SceneManager, EGG::PerformanceView>
+    EGG::Video, EGG::AsyncDisplay, EGG::XfbManager, EGG::SimpleAudioMgr, EGG::SceneManager, EGG::ProcessMeter>
     System;
 
 class dSndMgr_c;
