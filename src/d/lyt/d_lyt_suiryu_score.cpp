@@ -122,7 +122,7 @@ void dLytMeterSuiryuScoreBase_c::executeState_Wait() {
     }
 
     for (int i = 0; i < SUIRYU_SCORE_BASE_NUM_NOTE_ANIMS; i++) {
-        if (mAnm[field_0x2262 + SUIRYU_SCORE_BASE_ANIM_LOOP_OFFSET].isStartReached() == true) {
+        if (cM::isZero(mAnm[field_0x2262 + SUIRYU_SCORE_BASE_ANIM_LOOP_OFFSET].getFrame()) == true) {
             if (field_0x2251[i] == 0 && !mAnm[i + SUIRYU_SCORE_BASE_ANIM_LOOP_OFFSET].isEnabled()) {
                 mAnm[i + SUIRYU_SCORE_BASE_ANIM_LOOP_OFFSET].setAnimEnable(true);
             }
@@ -347,7 +347,7 @@ bool dLytMeterSuiryuScoreBase_c::remove() {
 
 bool dLytMeterSuiryuScoreBase_c::execute() {
     if (fn_80298600()) {
-        fn_80298B10();
+        stopMove();
     }
 
     if (dScGame_c::isCurrentStage("F103") && dScGame_c::currentSpawnInfo.layer == 13) {
@@ -834,9 +834,9 @@ bool dLytMeterSuiryuScoreBase_c::fn_80298600() {
             }
 
             if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].isPlayingBackwardsOnce() &&
-                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].getFrame() <= 20.0f &&
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].getFrame() <= 10.0f &&
                 mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_3].isEnabled()) {
-                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(10.0f);
+                mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].setFrame(20.0f);
                 return true;
             }
 
@@ -954,12 +954,12 @@ bool dLytMeterSuiryuScoreBase_c::fn_80298B80() {
         case 2: {
             if (field_0x2263 == 1) {
                 if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingBackwardsOnce() &&
-                    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].getFrame() <= 10.0f) {
+                    mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].getFrame() <= 20.0f) {
                     return true;
                 }
 
                 if (mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].isPlayingForwardsOnce() &&
-                    10.0f <= mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].getFrame()) {
+                    20.0f <= mAnm[SUIRYU_SCORE_BASE_ANIM_MOVE_123].getFrame()) {
                     return true;
                 }
             } else {
@@ -1080,9 +1080,9 @@ void dLytMeterClefMain_c::executeState_Wait() {
         acc += field_0x5E4E[j];
     }
 
-    // TODO: actual length?
-    static const u8 sUnk1[] = {
-        0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 4, 0,
+    // TODO ???
+    static const u8 sUnk1[NUM_TADTONE_GROUPS + 2] = {
+        0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 4
     };
 
     if (mBase.getField_0x2251(field_0x5F36) == 2 && mBase.fn_80297E10(sUnk1[field_0x5F35])) {
@@ -1416,7 +1416,7 @@ void dLytMeterClefMain_c::fn_8029A050() {
         if (field_0x5E5F[i] == field_0x5E4E[i]) {
             field_0x5EA4[i] = 8;
             field_0x5E81[i] = field_0x5E4E[i];
-            mBase.setColor0(i);
+            mBase.fn_802978F0((u8)i);
         }
     }
 }

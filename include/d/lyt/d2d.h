@@ -245,10 +245,6 @@ struct AnmGroupBase_c {
         return mpFrameCtrl->isEndReached();
     }
 
-    inline bool isStartReached() const {
-        return mpFrameCtrl->isStartReached();
-    }
-
     inline void setRate(f32 rate) {
         mpFrameCtrl->setRate(rate);
     }

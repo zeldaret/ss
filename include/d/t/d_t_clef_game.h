@@ -23,9 +23,11 @@ public:
 private:
     static dTgClefGame_c *sInstance;
 
+    static const s32 NUM_TADTONE_GROUPS = 17;
+
     /* 0x0FC */ u8 _0x0FC[0x14C - 0x0FC];
-    /* 0x14C */ u8 field_0x14C[17];
-    /* 0x15D */ u8 field_0x15D[17];
+    /* 0x14C */ u8 field_0x14C[NUM_TADTONE_GROUPS];
+    /* 0x15D */ u8 field_0x15D[NUM_TADTONE_GROUPS];
 };
 
 #endif

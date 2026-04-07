@@ -1,6 +1,7 @@
 #ifndef M_M2D_H
 #define M_M2D_H
 
+#include "c/c_math.h"
 #include "m/m_allocator.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_arcResourceAccessor.h"
@@ -83,10 +84,6 @@ public:
     inline bool isEndReached() const {
         f32 actualEnd = mEndFrame - 1.0f;
         return mCurrFrame >= actualEnd;
-    }
-
-    inline bool isStartReached() const {
-        return std::fabsf(mCurrFrame) <= EGG::Math<f32>::epsilon();
     }
 
     inline void setToEnd() {

@@ -72,7 +72,6 @@ private:
 
     void initAnm();
     bool fn_80298600();
-    void fn_80298B10();
 
     /* 0x0004 */ UI_STATE_MGR_DECLARE(dLytMeterSuiryuScoreBase_c);
     /* 0x0040 */ d2d::LytBase_c mLyt;
