@@ -8,6 +8,7 @@
 #include "rvl/OS.h"
 
 u32 lbl_805751D0;
+OSTime g_InitialTime;
 
 bool fn_80054F90(u32 val) {
     return lbl_805751D0 & val;
@@ -59,7 +60,7 @@ void main(int argc, char **argv) {
     u8 pStackBase[STACK_SIZE] __attribute__((aligned(32)));
 
     unknownStub();
-    dMain::g_InitialTime = OSGetTime();
+    g_InitialTime = OSGetTime();
     dSystem::fixHeaps();
 
     Mpls::initialize(argc, argv);

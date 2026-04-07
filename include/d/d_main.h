@@ -5,8 +5,6 @@
 
 namespace dMain {
 
-OSTime g_InitialTime;
-
 void Create();
 void Execute();
 void *main01(void *arg);

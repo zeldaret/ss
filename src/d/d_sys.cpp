@@ -395,6 +395,7 @@ void System::initialize() {
 
     DvdFile::initialize();
 
+    // TODO Determine significance of the constant
     CoreControllerMgr::setWPADWorkSize(WPADGetWorkMemorySize() + 228);
     CoreControllerMgr::createInstance();
 
