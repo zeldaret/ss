@@ -59,6 +59,303 @@ void *s_NewMEM1ArenaHi;
 
 }
 
+const GXRenderModeObj gRMO_Pal60_608x456Prog_16x9 = {
+    0, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    25, // viXOrigin
+    12, // viYOrigin
+    670, // viWidth
+    456, // viHeight
+    1, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Pal60_608x456IntDf_16x9 = {
+    2, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    25, // viXOrigin
+    12, // viYOrigin
+    670, // viWidth
+    456, // viHeight
+    0, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Pal50_608x456IntDf_16x9 = {
+    4, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    542, // xfbHeight
+    27, // viXOrigin
+    16, // viYOrigin
+    666, // viWidth
+    542, // viHeight
+    1, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Ntsc_608x456Prog_16x9 = {
+    20, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    25, // viXOrigin
+    12, // viYOrigin
+    670, // viWidth
+    456, // viHeight
+    1, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}      // vFilter
+};
+
+const GXRenderModeObj gRMO_Ntsc_608x456IntDf_16x9 = {
+    22, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    25, // viXOrigin
+    12, // viYOrigin
+    670, // viWidth
+    456, // viHeight
+    0, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Pal60_608x456Prog_4x3 = {
+    0, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    17, // viXOrigin
+    12, // viYOrigin
+    686, // viWidth
+    456, // viHeight
+    1, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Pal60_608x456IntDf_4x3 = {
+    2, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    17, // viXOrigin
+    12, // viYOrigin
+    686, // viWidth
+    456, // viHeight
+    0, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Pal50_608x456IntDf_4x3 = {
+    4, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    542, // xfbHeight
+    19, // viXOrigin
+    16, // viYOrigin
+    682, // viWidth
+    542, // viHeight
+    1, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Ntsc_608x456Prog_4x3 = {
+    20, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    17, // viXOrigin
+    12, // viYOrigin
+    686, // viWidth
+    456, // viHeight
+    1, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const GXRenderModeObj gRMO_Ntsc_608x456IntDf_4x3 = {
+    22, // tvInfo
+    608, // fbWidth
+    456, // efbHeight
+    456, // xfbHeight
+    17, // viXOrigin
+    12, // viYOrigin
+    686, // viWidth
+    456, // viHeight
+    0, // xfbMode
+    0, // field_rendering
+    0, // aa
+    {
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            {6, 6},
+            }, // sample_pattern
+    {0, 0, 21, 22, 21, 0, 0}  // vFilter
+};
+
+const EGG::Video::RenderModeObjSet gSysRenderModeObjSet = {
+    {&gRMO_Pal60_608x456Prog_16x9, &gRMO_Pal60_608x456IntDf_16x9, &gRMO_Pal50_608x456IntDf_16x9,
+     &gRMO_Ntsc_608x456Prog_16x9, &gRMO_Ntsc_608x456IntDf_16x9, &gRMO_Pal60_608x456Prog_4x3,
+     &gRMO_Pal60_608x456IntDf_4x3, &gRMO_Pal50_608x456IntDf_4x3, &gRMO_Ntsc_608x456Prog_4x3,
+     &gRMO_Ntsc_608x456IntDf_4x3}
+};
+
 template <>
 void System::initialize() {
     DVDInit();
@@ -71,7 +368,7 @@ void System::initialize() {
     GraphicsFifo::create(mGraphicsFifoSize, heap);
     mHeap::createAssertHeap(mRootHeapMem1);
 
-    mVideo = new (heap) EGG::Video(&gUnkRenderModeObjSet);
+    mVideo = new (heap) EGG::Video(&gSysRenderModeObjSet);
 
     mXfbMgr = new (heap) EGG::XfbManager();
     for (int i = 0; i < 2; ++i) {
