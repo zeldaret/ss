@@ -2,15 +2,7 @@
 #define EGG_SYSTEM_H
 
 #include "common.h"
-#include "egg/core/eggController.h"
-#include "egg/core/eggDisplay.h"
-#include "egg/core/eggDvdFile.h"
-#include "egg/core/eggGraphicsFifo.h"
-#include "egg/core/eggHeap.h"
 #include "egg/core/eggVideo.h"
-#include "egg/core/eggXfbManager.h"
-#include "rvl/WPAD.h"
-#include "toBeSorted/d_exception.h"
 
 namespace {
 
@@ -324,8 +316,14 @@ public:
     /* 0x4c */ u32 _4c;
 };
 
+class Display;
+class Heap;
+class PerformanceView;
 class SceneManager;
 class SimpleAudioMgr;
+class Thread;
+class Video;
+class XfbManager;
 
 class ConfigurationData {
 public:
@@ -385,13 +383,14 @@ public:
     void onEndFrame() override {}
 
     void initRenderMode() override {}
-
+    void initialize() override {}
+    
     Video *getVideo() override {
         return static_cast<Video *>(mVideo);
     }
 
     Heap *getSystemHeap() override {
-        return mSystemHeap;
+        return static_cast<Heap *>(mSystemHeap);
     }
 
     Display *getDisplay() override {
@@ -415,43 +414,6 @@ public:
 
     SimpleAudioMgr *getAudioMgr() override {
         return static_cast<SimpleAudioMgr *>(mAudioMgr);
-    }
-
-    void initialize() override {
-        DVDInit();
-        SCInit();
-
-        initMemory();
-
-        Heap *heap = Heap::sCurrentHeap;
-
-        GraphicsFifo::create(mGraphicsFifoSize, heap);
-        mHeap::createAssertHeap(mRootHeapMem1);
-
-        mVideo = new (heap) TVideo(&gUnkRenderModeObjSet);
-
-        mXfbMgr = new (heap) TXfbManager();
-        for (int i = 0; i < 2; ++i) {
-            mXfbMgr->attach(new (heap) Xfb(mRootHeapMem2));
-        }
-
-        mDisplay = new (heap) TDisplay(1);
-        mDisplay->setClearColor(nw4r::ut::Color::BLACK);
-        mDisplay->clearEFB();
-
-        Thread::initialize();
-        mSystemThread = new (heap) Thread(OSGetCurrentThread(), 4);
-
-        DvdFile::initialize();
-
-        CoreControllerMgr::setWPADWorkSize(WPADGetWorkMemorySize() + 228);
-        CoreControllerMgr::createInstance();
-
-        exceptionCreate(heap);
-
-        BaseSystem::mConfigData->getSystemHeap()->mFlag.setBit(0);
-
-        mHeap::setCurrentHeap(mHeap::g_assertHeap);
     }
 
 public:

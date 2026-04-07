@@ -18,10 +18,15 @@
 #include "d/lyt/d_lyt_system_window.h"
 #include "d/snd/d_snd_mgr.h"
 #include "egg/core/eggAssertHeap.h"
+#include "egg/core/eggAsyncDisplay.h"
+#include "egg/core/eggController.h"
 #include "egg/core/eggDisplay.h"
+#include "egg/core/eggDvdFile.h"
 #include "egg/core/eggExpHeap.h"
+#include "egg/core/eggGraphicsFifo.h"
 #include "egg/core/eggSystem.h"
 #include "egg/core/eggVideo.h"
+#include "egg/core/eggXfbManager.h"
 #include "egg/gfx/eggStateGX.h"
 #include "f/f_manager.h"
 #include "m/m_dvd.h"
@@ -32,6 +37,7 @@
 #include "nw4r/ut/ut_Color.h"
 #include "toBeSorted/arc_callback_handler.h"
 #include "toBeSorted/d_d3d.h"
+#include "toBeSorted/d_exception.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/nand_request_thread.h"
 #include "toBeSorted/save_manager.h"
@@ -42,6 +48,7 @@
 
 #include "rvl/GX.h"
 #include "rvl/OS.h"
+#include "rvl/WPAD.h"
 
 namespace dSystem {
 
@@ -50,6 +57,44 @@ void *s_NewMEM1ArenaLo;
 void *s_OrgMEM1ArenaHi;
 void *s_NewMEM1ArenaHi;
 
+}
+
+template <>
+void System::initialize() {
+    DVDInit();
+    SCInit();
+
+    initMemory();
+
+    Heap *heap = Heap::sCurrentHeap;
+
+    GraphicsFifo::create(mGraphicsFifoSize, heap);
+    mHeap::createAssertHeap(mRootHeapMem1);
+
+    mVideo = new (heap) EGG::Video(&gUnkRenderModeObjSet);
+
+    mXfbMgr = new (heap) EGG::XfbManager();
+    for (int i = 0; i < 2; ++i) {
+        mXfbMgr->attach(new (heap) Xfb(mRootHeapMem2));
+    }
+
+    mDisplay = new (heap) EGG::AsyncDisplay(1);
+    mDisplay->setClearColor(nw4r::ut::Color::BLACK);
+    mDisplay->clearEFB();
+
+    Thread::initialize();
+    mSystemThread = new (heap) Thread(OSGetCurrentThread(), 4);
+
+    DvdFile::initialize();
+
+    CoreControllerMgr::setWPADWorkSize(WPADGetWorkMemorySize() + 228);
+    CoreControllerMgr::createInstance();
+
+    exceptionCreate(heap);
+
+    BaseSystem::mConfigData->getSystemHeap()->mFlag.setBit(0);
+
+    mHeap::setCurrentHeap(mHeap::g_assertHeap);
 }
 
 System SysConfig;
