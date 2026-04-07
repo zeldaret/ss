@@ -2,6 +2,7 @@
 #define UNK_SAVE_TIME_H
 
 #include "common.h"
+#include "egg/core/eggHeap.h"
 
 class SaveTimeRelated {
 public:

@@ -289,7 +289,7 @@ void dSys_c::execute() {
         dDvdUnk::FontUnk::GetInstance()->drawNonDriveError();
 
         if (dLytSystemWindow_c::GetInstance()) {
-            dLytSystemWindow_c::GetInstance()->fn_80125EF0();
+            dLytSystemWindow_c::GetInstance()->fn_80152EF0();
         }
 
         SaveMgr::GetInstance()->draw();
@@ -314,7 +314,7 @@ void dSys_c::execute() {
             dDvdUnk::FontUnk::GetInstance()->execute();
 
             if (dLytSystemWindow_c::GetInstance()) {
-                dLytSystemWindow_c::GetInstance()->fn_80125EF0();
+                dLytSystemWindow_c::GetInstance()->fn_80152EF0();
             }
 
             SaveMgr::GetInstance()->draw();
@@ -356,7 +356,7 @@ void dSys_c::execute() {
     SaveMgr::GetInstance()->execute();
 
     if (dLytSystemWindow_c::GetInstance()) {
-        dLytSystemWindow_c::GetInstance()->fn_80125E20();
+        dLytSystemWindow_c::GetInstance()->fn_80152E20();
     }
 
     dSndMgr_c::GetInstance()->calc();

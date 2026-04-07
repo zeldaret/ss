@@ -48,7 +48,7 @@ public:
         m_StopProcInf |= flags;
     }
 
-    static void keepStopProcFlags(u32 flags) {
+    static void maskStopProcFlags(u32 flags) {
         m_StopProcInf &= flags;
     }
 

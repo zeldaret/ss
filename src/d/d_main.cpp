@@ -28,11 +28,11 @@ void fn_80054FB0(u32 val) {
     lbl_805751D0 = flags | val;
 }
 
-void fn_80054EF0(u32 val) {
+void fn_80054FE0(u32 val) {
     lbl_805751D0 &= ~val;
 
     if (!lbl_805751D0) {
-        fManager_c::keepStopProcFlags(fManager_c::PROC_FLAG_DRAW);
+        fManager_c::maskStopProcFlags(fManager_c::PROC_FLAG_DRAW);
     }
 }
 

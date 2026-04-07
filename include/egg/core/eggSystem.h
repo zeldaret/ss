@@ -333,7 +333,7 @@ public:
 
     // vtable at 0x0
     /* vt 0x08 */ virtual Video *getVideo() = 0;
-    /* vt 0x0C */ virtual Heap *getSysHeap() = 0;
+    /* vt 0x0C */ virtual Heap *getSystemHeap() = 0;
     /* vt 0x10 */ virtual Display *getDisplay() = 0;
     /* vt 0x14 */ virtual XfbManager *getXfbMgr() = 0;
     /* vt 0x18 */ virtual PerformanceView *getPerfView() = 0;
@@ -390,7 +390,7 @@ public:
         return static_cast<Video *>(mVideo);
     }
 
-    Heap *getSysHeap() override {
+    Heap *getSystemHeap() override {
         return mSystemHeap;
     }
 
@@ -449,7 +449,7 @@ public:
 
         exceptionCreate(heap);
 
-        BaseSystem::mConfigData->getSysHeap()->mFlag.setBit(0);
+        BaseSystem::mConfigData->getSystemHeap()->mFlag.setBit(0);
 
         mHeap::setCurrentHeap(mHeap::g_assertHeap);
     }
