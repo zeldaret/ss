@@ -412,7 +412,7 @@ config.libs = [
         "objects": [
             Object(NonMatching, "toBeSorted/d_lib.cpp"),
             Object(NonMatching, "toBeSorted/unk_sorajima_list.cpp"),
-            Object(NonMatching, "toBeSorted/mpls.cpp"),
+            Object(Matching, "toBeSorted/mpls.cpp"),
             Object(NonMatching, "toBeSorted/mdl_base.cpp"),
             Object(Matching, "toBeSorted/d_exception.cpp"),
             Object(NonMatching, "toBeSorted/d_jstudio.cpp"),
