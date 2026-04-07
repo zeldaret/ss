@@ -2,9 +2,12 @@
 
 #include <cstring>
 
-void dLib::unknownStub() {}
+u32 lbl_80574FA0;
+u32 lbl_80574FA4;
 
-bool dLib::strequals(const char *lhs, const char *rhs) {
+void unknownStub() {}
+
+bool strequals(const char *lhs, const char *rhs) {
     if (!rhs) {
         return false;
     }

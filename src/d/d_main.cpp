@@ -58,7 +58,7 @@ static OSThread MAIN_THREAD;
 void main(int argc, char **argv) {
     u8 pStackBase[STACK_SIZE] __attribute__((aligned(32)));
 
-    dLib::unknownStub();
+    unknownStub();
     dMain::g_InitialTime = OSGetTime();
     dSystem::fixHeaps();
 

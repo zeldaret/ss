@@ -410,7 +410,7 @@ config.libs = [
         "scratch_preset_id": 169,
         "progress_category": "game",
         "objects": [
-            Object(NonMatching, "toBeSorted/d_lib.cpp"),
+            Object(Matching, "toBeSorted/d_lib.cpp"),
             Object(NonMatching, "toBeSorted/unk_sorajima_list.cpp"),
             Object(Matching, "toBeSorted/mpls.cpp"),
             Object(NonMatching, "toBeSorted/mdl_base.cpp"),
