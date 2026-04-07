@@ -63,6 +63,10 @@ public:
     s32 absDiff(const mAng &other) const {
         return sLib::absDiff(mVal, other.mVal);
     }
+    template <typename T>
+    static s32 absDiff2(T a, T b) {
+        return abs(a - b);
+    }
     f32 sin() const {
         return nw4r::math::SinIdx(*this);
     }

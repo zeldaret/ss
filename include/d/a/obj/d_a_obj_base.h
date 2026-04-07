@@ -95,6 +95,9 @@ public:
     mVec3_c &getOldPosition() {
         return mOldPosition;
     }
+    mVec3_c &getStartingPosition() {
+        return mStartingPos;
+    }
     mVec3_c &getVelocity() {
         return mVelocity;
     }

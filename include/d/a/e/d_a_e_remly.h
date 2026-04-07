@@ -121,6 +121,7 @@ private:
     bool fn_177_79D0(bool);
 
     bool fn_177_7B10();
+    void nightSleepDemoImpl();
 
     void fn_177_8520(bool);
     void fn_177_8600();
@@ -179,7 +180,8 @@ private:
     /* 0xB44 */ u16 field_0xB44;
     /* 0xB46 */ u16 field_0xB46;
     /* 0xB48 */ u16 field_0xB48;
-    /*       */ u8 _B4A[0xB4E - 0xB4A];
+    /* 0xB4A */ u16 field_0xB4A;
+    /* 0xB4C */ u16 field_0xB4C;
     /* 0xB4E */ u16 field_0xB4E;
     /* 0xB50 */ u16 field_0xB50;
     /* 0xB52 */ u16 field_0xB52;

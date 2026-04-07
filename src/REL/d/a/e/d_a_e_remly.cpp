@@ -12,6 +12,7 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_camera.h"
 #include "d/d_linkage.h"
 #include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
@@ -689,8 +690,7 @@ void dAcEremly_c::executeState_Wait() {
     }
 
     if (field_0xB50 == 0 && !coPlayer && !fn_177_8C20(getXZAngleToPlayer())) {
-        mAng a = (pPlayer->mRotation.y + 0x8000);
-        if (mAng::abs(getXZAngleToPlayer() - a) > 0x2000) {
+        if (mAng::absDiff2(getXZAngleToPlayer(), mAng(pPlayer->mRotation.y + 0x8000)) > 0x2000) {
             field_0xB69 = 1;
             field_0xB67 = 0;
 
@@ -729,6 +729,7 @@ void dAcEremly_c::initializeState_Walk() {
 void dAcEremly_c::executeState_Walk() {
     s32 _weird_zero = 0;
 
+    bool b0 = false;
     const dAcPy_c *pPlayer = dAcPy_c::GetLink();
 
     fn_177_6FC0(true);
@@ -737,7 +738,8 @@ void dAcEremly_c::executeState_Walk() {
         return;
     }
 
-    if (!field_0xB6A && mAng::abs(getXZAngleToPlayer() - mRotation.y) < 0x4000 && fn_177_73C0() && field_0xB6E == 0) {
+    if (!field_0xB6A && mAng::absDiff2(getXZAngleToPlayer(), mRotation.y) < 0x4000 && fn_177_73C0() &&
+        field_0xB6E == 0) {
         changeState(StateID_Escape);
         field_0xB6A = 1;
         return;
@@ -754,18 +756,18 @@ void dAcEremly_c::executeState_Walk() {
         if (fn_177_7040(2, 0.8f)) {
             field_0xB32 += field_0xB34;
         }
-        bool b0 = false;
         if (mSph.ChkCoHit()) {
             b0 = true;
             if (mSph.GetCoActor()->isActorPlayer() &&
-                mAng::abs(getXZAngleToPlayer() - mAng(pPlayer->mRotation.y + 0x8000)) >
+                mAng::absDiff2<mAng>(getXZAngleToPlayer(), pPlayer->mRotation.y + 0x8000) >
                     mAng(1024.f + cM::rndF(1024.f))) {
                 b0 = false;
             }
         }
 
         if (b0 ||
-            mAng::abs(getXZAngleToPlayer() - mAng(pPlayer->mRotation.y + 0x8000)) < mAng(1024.f + cM::rndF(1024.f)) ||
+            mAng::absDiff2<mAng>(getXZAngleToPlayer(), pPlayer->mRotation.y + 0x8000) <
+                mAng(1024.f + cM::rndF(1024.f)) ||
             fn_177_8C20(mRotation.y)) {
             field_0xB69 = 0;
             changeState(StateID_Wait);
@@ -783,7 +785,7 @@ void dAcEremly_c::executeState_Walk() {
     } else {
         sLib::addCalcScaled(&mSpeed, 0.7f, 3.f + _weird_zero);
         fn_177_7040(0, 0.f);
-        if (mAng::abs(getXZAngleToPlayer() - mRotation.y) < 0x400 && !fn_177_6B10(false, -1000)) {
+        if (mAng::absDiff2<mAng>(getXZAngleToPlayer(), mRotation.y) < 0x400 && !fn_177_6B10(false, -1000)) {
             changeState(StateID_Wait);
             mMdl.setAnm("RemlyWaitSitCry", m3d::PLAY_MODE_4, 4.f);
             field_0xB60 = 2;
@@ -895,8 +897,7 @@ void dAcEremly_c::executeState_EscapeDash() {
     // Idk
     s32 a = getXZAngleToPlayer() + 0x8000;
     if (field_0xB6B == 0) {
-        mAng compare = a;
-        if (mAng::abs(compare - mAngle.y) > 0x1000) {
+        if (mAng::absDiff2<mAng>(a, mAngle.y) > 0x1000) {
             sLib::addCalcAngle(mAngle.y.ref(), a, 1, 0x1000);
         } else {
             field_0xB6B = 1;
@@ -919,7 +920,7 @@ void dAcEremly_c::finalizeState_EscapeDash() {}
 
 void dAcEremly_c::initializeState_Wind() {
     if (field_0xB60 != 10 && field_0xB60 != 9) {
-        if (field_0xB60 == 21 || mAng::abs(getXZAngleToPlayer() - mAng(mRotation.y + 0x8000)) < 0x6000) {
+        if (field_0xB60 == 21 || mAng::absDiff2<mAng>(getXZAngleToPlayer(), mRotation.y + 0x8000) < 0x6000) {
             mMdl.setAnm("RemlyWindBack", m3d::PLAY_MODE_4, 4.f);
             field_0xB60 = 10;
         } else {
@@ -1294,7 +1295,7 @@ void dAcEremly_c::executeState_Damage() {
     if (field_0xB14 != 0) {
         field_0xB4E = 8;
         s32 targetAngle = getXZAngleToPlayer() + 0x8000;
-        if (mAng::abs(mAng(targetAngle) - mAngle.y) > 0x1000) {
+        if (mAng::absDiff2<mAng>(targetAngle, mAngle.y) > 0x1000) {
             sLib::addCalcAngle(mRotation.y.ref(), targetAngle, 1, 0x1000);
         } else {
             mRotation.y = targetAngle;
@@ -1562,43 +1563,415 @@ void dAcEremly_c::initializeState_Hear() {
         }
     }
 }
-void dAcEremly_c::executeState_Hear() {}
+void dAcEremly_c::executeState_Hear() {
+    sLib::addCalcScaled(&mSpeed, 0.7f, 5.f);
+    switch (field_0xB65) {
+        case 0: {
+            if (mSpeed < 0.2f && 0 == sLib::calcTimer(&field_0xB48)) {
+                mMdl.setAnm("RemlyWaitSit", m3d::PLAY_MODE_4, 10.f);
+                field_0xB60 = 1;
+                field_0xB66 = 0;
+                field_0xB65++;
+            }
+        } break;
+        case 1: {
+            if (!fn_177_6B10(false, 0) && fn_177_86C0()) {
+                if (field_0xB60 == 2 && mMdl.getAnm().isStop()) {
+                    mMdl.setAnm("RemlyWaitSit", m3d::PLAY_MODE_4, 20.f);
+                    field_0xB60 = 1;
+                } else {
+                    if (field_0xB4C > 50) {
+                        field_0xB4C = 50;
+                        if (field_0xB60 == 1) {
+                            mMdl.setAnm("RemlyWaitSitCry", m3d::PLAY_MODE_4, 10.f);
+                            field_0xB60 = 2;
+                        }
+                    }
+                    fn_177_6EA0(false);
+                }
+            } else if (fn_177_73C0()) {
+                changeState(StateID_Escape);
+                field_0xB6A = 1;
+            } else {
+                if (field_0xB60 != 1) {
+                    mMdl.setAnm("RemlyWaitSit", m3d::PLAY_MODE_4, 10.f);
+                    field_0xB60 = 1;
+                }
+                fn_177_8F90();
+                fn_177_6FC0(true);
+            }
+        } break;
+    }
+}
 void dAcEremly_c::finalizeState_Hear() {}
 
-void dAcEremly_c::initializeState_NightSleepDemo() {}
-void dAcEremly_c::executeState_NightSleepDemo() {}
+void dAcEremly_c::initializeState_NightSleepDemo() {
+    mMdl.setAnm("RemlySleep", m3d::PLAY_MODE_4, 4.f);
+    field_0xB60 = 25;
+    mSph.ClrAtSet();
+    mSph.ClrTgSet();
+    mSph.ClrCoSet();
+}
+void dAcEremly_c::executeState_NightSleepDemo() {
+    nightSleepDemoImpl();
+}
 void dAcEremly_c::finalizeState_NightSleepDemo() {}
 
-void dAcEremly_c::initializeState_NightFoo() {}
-void dAcEremly_c::executeState_NightFoo() {}
+void dAcEremly_c::initializeState_NightFoo() {
+    mMdl.setAnm("RemlyFoo", m3d::PLAY_MODE_4, 4.f);
+    field_0xB60 = 28;
+    field_0xB48 = 12.f + cM::rndF(12.f);
+    field_0xB6D = 0;
+    field_0xB6E = 0;
+    field_0xB6B = 0;
+    mSph.ClrAtSet();
+}
+void dAcEremly_c::executeState_NightFoo() {
+    const dAcPy_c *pPlayer = dAcPy_c::GetLink();
+
+    fn_177_6FC0(false);
+    sLib::addCalcScaled(&mSpeed, 0.7f, 5.f);
+    sLib::addCalcAngle(mAngle.y.ref(), getXZAngleToPlayer(), 2, 0x1000);
+    sLib::addCalcAngle(mRotation.y.ref(), mAngle.y, 2, 0x1000);
+    if (field_0xB6D == 0) {
+        if (0 != sLib::calcTimer(&field_0xB48)) {
+            return;
+        }
+        if (mAng::absDiff2<s32>(getXZAngleToPlayer(), mRotation.y) > 0x400) {
+            return;
+        }
+    } else {
+        if (!mNearbyBombRef.isLinked()) {
+            changeState(StateID_NightWait);
+            return;
+        }
+        if (pPlayer->getPosition().absXZTo(mPosition) > mNearbyBombRef.get()->mPosition.absXZTo(mPosition)) {
+            sLib::addCalcAngle(
+                mAngle.y.ref(), cLib::targetAngleY(mPosition, mNearbyBombRef.get()->mPosition), 2, 0x800
+            );
+            return;
+        }
+    }
+    if (field_0xB6E != 0) {
+        changeState(StateID_Fly);
+        return;
+    }
+
+    if (field_0xB6B != 0 || pPlayer->mPosition.absXZTo(mStartingPos) > field_0xB08 + 500.f) {
+        changeState(StateID_NightRet);
+        return;
+    }
+
+    if (mAng::absDiff2<s32>(getXZAngleToPlayer(), mRotation.y) < 0x1000) {
+        changeState(StateID_NightJumpAttack);
+        if (!mAcch.ChkWallHit(nullptr) && fn_800301b0(mPositionCopy2, mRotation.y, true, 120.f) == 0) {
+            return;
+        }
+        field_0xB6E = 1;
+    }
+}
 void dAcEremly_c::finalizeState_NightFoo() {}
 
-void dAcEremly_c::initializeState_NightReflectionFoo() {}
-void dAcEremly_c::executeState_NightReflectionFoo() {}
+void dAcEremly_c::initializeState_NightReflectionFoo() {
+    mMdl.setAnm("RemlyFoo", m3d::PLAY_MODE_4, 4.f);
+    field_0xB60 = 28;
+    mMdl.setRate(0.f);
+    mSpeed *= -1.f;
+    field_0xB48 = 24.f + cM::rndF(24.f);
+    field_0xB6B = 0;
+    if (mAcch.ChkGndHit()) {
+        field_0xB6B = 1;
+    }
+    mSph.ClrAtSet();
+}
+void dAcEremly_c::executeState_NightReflectionFoo() {
+    const dAcPy_c *pPlayer = dAcPy_c::GetLink();
+    fn_177_6FC0(false);
+    if (mAcch.ChkGndHit()) {
+        sLib::addCalcScaled(&mSpeed, 0.5f, 2.f);
+        if (field_0xB6B == 0) {
+            fn_177_8600();
+            field_0xB6B = 1;
+        }
+    }
+
+    if (!mMdl.getAnm().getRate()) {
+        if (mSpeed < 0.1f) {
+            mMdl.setRate(1.f);
+        }
+        return;
+    }
+
+    if (pPlayer->isRecovering() || sLib::calcTimer(&field_0xB48)) {
+        return;
+    }
+
+    if (pPlayer->mPosition.absXZTo(mStartingPos) > field_0xB08 + 500.f || !fn_177_9370(100.f)) {
+        changeState(StateID_NightRet);
+    } else {
+        changeState(StateID_NightRun);
+        field_0xB48 = 24.f + cM::rndF(24.f);
+    }
+}
 void dAcEremly_c::finalizeState_NightReflectionFoo() {}
 
-void dAcEremly_c::initializeState_NightWait() {}
-void dAcEremly_c::executeState_NightWait() {}
+void dAcEremly_c::initializeState_NightWait() {
+    fn_177_8520(true);
+    mMdl.setAnm("RemlyWaitStandNight", m3d::PLAY_MODE_4, 4.f);
+    field_0xB48 = 24.f + cM::rndF(24.f);
+    mSph.ClrAtSet();
+}
+void dAcEremly_c::executeState_NightWait() {
+    if (mNearbyBombRef.isLinked()) {
+        changeState(StateID_NightRet);
+        return;
+    }
+
+    if (fn_177_9370(0.f)) {
+        changeState(StateID_NightRun);
+        return;
+    }
+
+    if (fn_177_86C0()) {
+        changeState(StateID_NightFoo);
+        field_0xB6D = 1;
+        return;
+    }
+
+    if (0 == sLib::calcTimer(&field_0xB48)) {
+        changeState(StateID_NightWalk);
+        return;
+    }
+
+    sLib::addCalcScaled(&mSpeed, 0.5f, 5.f);
+}
 void dAcEremly_c::finalizeState_NightWait() {}
 
-void dAcEremly_c::initializeState_NightWalk() {}
-void dAcEremly_c::executeState_NightWalk() {}
+// ???
+inline bool compareDistance(const mVec3_c &v0, const mVec3_c &v1, f32 f) {
+    return v0.squareDistanceToXZ(v1) > f * f;
+}
+void dAcEremly_c::initializeState_NightWalk() {
+    mMdl.setAnm("RemlyWalkNight", m3d::PLAY_MODE_4, 4.f);
+    field_0xB60 = 29;
+
+    field_0xA44.set(mStartingPos);
+
+    // odd
+    if (!compareDistance(mPosition, mStartingPos, field_0xB08)) {
+        field_0xA44.x += cM::rndFX(field_0xB08 * 0.5f);
+        field_0xA44.z += cM::rndFX(field_0xB08 * 0.5f);
+    }
+}
+void dAcEremly_c::executeState_NightWalk() {
+    fn_177_6B10(true, 0);
+    if (mNearbyBombRef.isLinked()) {
+        changeState(StateID_NightRet);
+        return;
+    }
+
+    s32 idk = fn_800301b0(mPositionCopy2, mRotation.y, true, 120.f);
+    if (idk != 0) {
+        field_0xA44.set(getStartingPosition());
+        if (idk == 1) {
+            mAng a = cLib::targetAngleY(mPosition, getStartingPosition());
+            if (mAng::absDiff2<mAng>(mRotation.y, a) < 0x400) {
+                field_0xB6E = 1;
+                changeState(StateID_Fly);
+                return;
+            }
+        }
+    }
+
+    if (fn_177_7040(2, 0.8f)) {
+        field_0xA44.set(mStartingPos);
+        if (idk == 0) {
+            field_0xA44.x += cM::rndFX(field_0xB08 * 0.5f);
+            field_0xA44.z += cM::rndFX(field_0xB08 * 0.5f);
+        }
+    }
+
+    if (fn_177_9370(0.f)) {
+        changeState(StateID_NightRun);
+    } else if (fn_177_86C0()) {
+        changeState(StateID_NightFoo);
+        field_0xB6D = 1;
+    }
+}
 void dAcEremly_c::finalizeState_NightWalk() {}
 
-void dAcEremly_c::initializeState_NightRun() {}
-void dAcEremly_c::executeState_NightRun() {}
+void dAcEremly_c::initializeState_NightRun() {
+    mMdl.setAnm("RemlyRunFast", m3d::PLAY_MODE_4, 4.f);
+    field_0xB60 = 30;
+    field_0xB18 = 0;
+    field_0xB6B = 0;
+    mSph.ClrAtSet();
+    mAcceleration = -3.f;
+    mMdl.setRate(1.5f);
+    field_0xB48 = 0;
+    fn_177_77C0();
+}
+void dAcEremly_c::executeState_NightRun() {
+    const dAcPy_c *pPlayer = dAcPy_c::GetLink();
+    fn_177_6B10(false, 0);
+
+    mMtx_c m;
+    mVec3_c in, out;
+    mVec3_c stuffs0, stuffs1;
+
+    if (field_0xB6B == 0) {
+        // What...
+        const mVec3_c &target = dScGame_c::getCamera()->getTarget();
+        f32 z = target.z;
+        f32 y = target.y;
+        f32 x = target.x;
+        stuffs0.x = x;
+        stuffs0.y = y;
+        stuffs1.z = z;
+
+        if (fn_177_7040(2, 10.f)) {
+            field_0xB32 += field_0xB34;
+        }
+
+        if (fn_177_8C20(mRotation.y)) {
+            changeState(StateID_NightFoo);
+            return;
+        }
+
+        m.YrotS(field_0xB32);
+        in.set(0.f, 0.f, 320.f);
+        m.multVec(in, out);
+        out += pPlayer->mPosition;
+        field_0xA44.set(out);
+    }
+
+    if (mNearbyBombRef.isLinked()) {
+        changeState(StateID_NightRet);
+        return;
+    }
+
+    if (!fn_177_9370(100.f)) {
+        changeState(StateID_NightFoo);
+        field_0xB6B = 1;
+        return;
+    }
+
+    if (0 == sLib::calcTimer(&field_0xB48) && isWithinPlayerRadius(400.f) && d3d::isOnScreen(mPosition)) {
+        field_0xB6B = 1;
+    }
+
+    if (field_0xB6B) {
+        fn_177_7040(0, 5.0f);
+        if (field_0xB48 == 0) {
+            if (mAng::absDiff2<mAng>(getXZAngleToPlayer(), mRotation.y) < mAng(4608.f + cM::rndF(4096.f))) {
+                changeState(StateID_NightFoo);
+            }
+        }
+    }
+}
 void dAcEremly_c::finalizeState_NightRun() {}
 
-void dAcEremly_c::initializeState_NightRet() {}
-void dAcEremly_c::executeState_NightRet() {}
+void dAcEremly_c::initializeState_NightRet() {
+    mMdl.setAnm("RemlyRunFast", m3d::PLAY_MODE_4, 4.f);
+    field_0xB60 = 30;
+    field_0xA44.set(mStartingPos);
+    field_0xB6B = 0;
+    field_0xB18 = 0;
+}
+void dAcEremly_c::executeState_NightRet() {
+    fn_177_6FC0(true);
+    if (mNearbyBombRef.isLinked()) {
+        mSpeed = 10.f;
+        f32 radius = 500.f;
+        mAngle.y = cLib::targetAngleY(mNearbyBombRef.get()->mPosition, mPosition);
+        sLib::addCalcAngle(mRotation.y.ref(), mAngle.y, 2, 0x800);
+
+        if (mNearbyBombRef.get()->mPosition.squareDistanceToXZ(mPosition) > radius * radius) {
+            changeState(StateID_NightFoo);
+            field_0xB6D = 1;
+        }
+        return;
+    }
+
+    if (fn_177_8C20(mRotation.y)) {
+        changeState(StateID_NightFoo);
+        field_0xB6E = 1;
+        return;
+    }
+
+    if (fn_177_7040(2, 10.f)) {
+        changeState(StateID_NightWait);
+    }
+}
 void dAcEremly_c::finalizeState_NightRet() {}
 
-void dAcEremly_c::initializeState_NightJumpAttack() {}
-void dAcEremly_c::executeState_NightJumpAttack() {}
+void dAcEremly_c::initializeState_NightJumpAttack() {
+    mSpeed = 20.f;
+    mVelocity.y = 27.f + cM::rndF(3.f);
+    mSph.OnAtSet();
+    mMdl.setAnm("RemlyJump", m3d::PLAY_MODE_4, 0.f);
+    field_0xB60 = 31;
+    field_0xB6E = 0;
+    field_0xB32 = 0;
+    field_0xB6B = 0;
+}
+void dAcEremly_c::executeState_NightJumpAttack() {
+    fn_177_6FC0(false);
+    if (mSph.ChkAtHit()) {
+        if (mSph.GetAtFlag0x8()) {
+            setBattleBgmRelated(0);
+            mSpeed = -20.f;
+            changeState(StateID_Stun);
+            return;
+        }
+
+        if (mSph.GetAtFlag0x2()) {
+            changeState(StateID_NightReflectionFoo);
+            return;
+        }
+    }
+
+    if (mAcch.ChkGndHit()) {
+        fn_177_8600();
+        if (field_0xB6E != 0 &&
+            (mAcch.ChkWallHit(nullptr) || fn_800301b0(mPositionCopy2, mRotation.y, true, 120.f) != 0)) {
+            changeState(StateID_NightFoo);
+            field_0xB6B = 1;
+            return;
+        }
+        changeState(StateID_NightRun);
+        field_0xB48 = 24.f + cM::rndF(24.f);
+    }
+}
 void dAcEremly_c::finalizeState_NightJumpAttack() {}
 
-void dAcEremly_c::initializeState_BirthWait() {}
-void dAcEremly_c::executeState_BirthWait() {}
+void dAcEremly_c::initializeState_BirthWait() {
+    field_0xB48 = 300;
+    unsetActorProperty(AC_PROP_0x1);
+    field_0xB64 = 2;
+    field_0xB68 = 0;
+    mMdl.setAnm("RemlyWaitStand", m3d::PLAY_MODE_4, 4.f);
+    field_0xB60 = 0;
+}
+void dAcEremly_c::executeState_BirthWait() {
+    if (!sLib::calcTimer(&field_0xB48) && fn_177_7650(true)) {
+        mPosition.set(mStartingPos.x, mStartingPos.y, mStartingPos.z);
+        mOldPosition.set(mStartingPos.x, mStartingPos.y, mStartingPos.z);
+        mPosition.y += 10.f;
+        mVelocity.set(0.f, 0.f, 0.f);
+        mSpeed = 0.f;
+        mAcceleration = -3.f;
+        setActorProperty(AC_PROP_0x1);
+
+        if (fn_177_7330()) {
+            changeState(StateID_NightWait);
+        } else if (field_0xB61 == 1 && fn_177_75E0()) {
+            changeState(StateID_Wait);
+        } else {
+            changeState(StateID_Sleep);
+        }
+    }
+}
 void dAcEremly_c::finalizeState_BirthWait() {}
 
 bool dAcEremly_c::fn_177_73C0() {
