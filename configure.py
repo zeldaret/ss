@@ -878,7 +878,7 @@ config.libs = [
             Object(NonMatching, "m/m3d/m_shadow.cpp"),
             Object(Matching, "m/m3d/m_scnleaf.cpp"),
             Object(Matching, "m/m3d/m_smdl.cpp"),
-            Object(NonMatching, "m/m3d/m_state.cpp"),
+            Object(Matching, "m/m3d/m_state.cpp"),
             Object(Matching, "m/m2d.cpp"),
             Object(Matching, "m/m_allocator.cpp"),
             Object(Matching, "m/m_angle.cpp"),
