@@ -463,7 +463,7 @@ config.libs = [
             Object(Matching, "d/d_player_guide_colors.cpp"),
             Object(Matching, "d/d_rawarchive.cpp"),
             Object(Matching, "d/d_scene.cpp"),
-            Object(NonMatching, "d/d_state.cpp"),
+            Object(Matching, "d/d_state.cpp"),
             Object(Matching, "d/d_stage_parse.cpp"),
             Object(Matching, "d/d_sys.cpp"),
             Object(NonMatching, "d/d_sys_init.cpp"),

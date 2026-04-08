@@ -10,11 +10,11 @@
 u32 lbl_805751D0;
 OSTime g_InitialTime;
 
-bool fn_80054F90(u32 val) {
+bool dMain::fn_80054F90(u32 val) {
     return lbl_805751D0 & val;
 }
 
-void fn_80054FB0(u32 val) {
+void dMain::fn_80054FB0(u32 val) {
     u32 flags = lbl_805751D0;
 
     if (!flags) {
@@ -27,7 +27,7 @@ void fn_80054FB0(u32 val) {
     lbl_805751D0 = flags | val;
 }
 
-void fn_80054FE0(u32 val) {
+void dMain::fn_80054FE0(u32 val) {
     lbl_805751D0 &= ~val;
 
     if (!lbl_805751D0) {
