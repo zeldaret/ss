@@ -7,15 +7,14 @@
 
 #include "rvl/OS.h"
 
-u32 lbl_805751D0;
-OSTime g_InitialTime;
+u32 sStopFlags;
 
-bool dMain::fn_80054F90(u32 val) {
-    return lbl_805751D0 & val;
+bool dMain::isStopFlagSet(u32 val) {
+    return sStopFlags & val;
 }
 
-void dMain::fn_80054FB0(u32 val) {
-    u32 flags = lbl_805751D0;
+void dMain::setStopFlag(u32 val) {
+    u32 flags = sStopFlags;
 
     if (!flags) {
         fManager_c::setStopProcFlags(
@@ -24,13 +23,13 @@ void dMain::fn_80054FB0(u32 val) {
         );
     }
 
-    lbl_805751D0 = flags | val;
+    sStopFlags = flags | val;
 }
 
-void dMain::fn_80054FE0(u32 val) {
-    lbl_805751D0 &= ~val;
+void dMain::clearStopFlag(u32 val) {
+    sStopFlags &= ~val;
 
-    if (!lbl_805751D0) {
+    if (!sStopFlags) {
         fManager_c::maskStopProcFlags(fManager_c::PROC_FLAG_DRAW);
     }
 }
@@ -54,7 +53,8 @@ void *dMain::main01(void *arg) {
 
 #define STACK_SIZE 0xF000
 
-static OSThread MAIN_THREAD;
+OSTime g_InitialTime;
+OSThread MAIN_THREAD;
 
 void main(int argc, char **argv) {
     u8 pStackBase[STACK_SIZE] __attribute__((aligned(32)));

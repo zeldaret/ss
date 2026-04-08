@@ -5,9 +5,9 @@
 
 namespace dMain {
 
-bool fn_80054F90(u32 val);
-void fn_80054FB0(u32 val);
-void fn_80054FE0(u32 val);
+bool isStopFlagSet(u32 val);
+void setStopFlag(u32 val);
+void clearStopFlag(u32 val);
 
 void Create();
 void Execute();

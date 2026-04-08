@@ -10,13 +10,13 @@ void dState::fn_80062E50() {
     m3d::mState::fn_802EE0B0();
 
     if (m3d::mState::fn_802EE0D0()) {
-        if (dMain::fn_80054F90(1)) {
-            dMain::fn_80054FE0(1);
+        if (dMain::isStopFlagSet(1)) {
+            dMain::clearStopFlag(1);
         }
     }
     else {
-        if (!dMain::fn_80054F90(1)) {
-            dMain::fn_80054FB0(1);
+        if (!dMain::isStopFlagSet(1)) {
+            dMain::setStopFlag(1);
         }
     }
 }
