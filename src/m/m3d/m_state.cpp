@@ -2,13 +2,13 @@
 
 namespace m3d {
 
-void mState::fn_802EE0A0() {}
+void mState::unkStub1() {}
 
-void mState::fn_802EE0B0() {}
+void mState::unkStub2() {}
 
-void mState::fn_802EE0C0() {}
+void mState::unkStub3() {}
 
-bool mState::fn_802EE0D0() {
+bool mState::unkAlwaysTrue() {
     return true;
 }
 

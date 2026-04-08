@@ -5,10 +5,10 @@ namespace m3d {
 
 namespace mState {
 
-void fn_802EE0A0();
-void fn_802EE0B0();
-void fn_802EE0C0();
-bool fn_802EE0D0();
+void unkStub1();
+void unkStub2();
+void unkStub3();
+bool unkAlwaysTrue();
 
 } // namespace mState
 
