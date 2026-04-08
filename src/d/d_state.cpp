@@ -1,5 +1,6 @@
-#include "d/d_main.h"
 #include "d/d_state.h"
+
+#include "d/d_main.h"
 #include "m/m3d/m_state.h"
 
 void dState::fn_80062E40() {
@@ -13,8 +14,7 @@ void dState::fn_80062E50() {
         if (dMain::isStopFlagSet(1)) {
             dMain::clearStopFlag(1);
         }
-    }
-    else {
+    } else {
         if (!dMain::isStopFlagSet(1)) {
             dMain::setStopFlag(1);
         }
