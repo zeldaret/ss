@@ -571,6 +571,7 @@ BOOL WPADStopSimpleSync(void);
 BOOL WPADCancelSyncDevice(void);
 WPADSimpleSyncCallback *WPADSetSimpleSyncCallback(WPADSimpleSyncCallback *cb);
 void WPADRegisterAllocator(WPADAllocFunc *alloc, WPADFreeFunc *free);
+u32 WPADGetWorkMemorySize(void);
 WPADLibStatus WPADGetStatus(void);
 u8 WPADGetRadioSensitivity(WPADChannel chan);
 void WPADGetAddress(WPADChannel chan, BD_ADDR_PTR addr);

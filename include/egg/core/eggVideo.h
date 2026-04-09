@@ -20,7 +20,9 @@ public:
     /* 0x08 */ u32 mConfiguredTime;
 
 public:
-    Video() : pRenderMode(0), mFlag(), mConfiguredTime(){};
+    Video() : pRenderMode(0), mFlag(0), mConfiguredTime() {};
+    Video(const RenderModeObjSet *set) : pRenderMode(0), mFlag(0), mConfiguredTime() { initialize(nullptr, set); };
+
     void initialize(GXRenderModeObj *, const RenderModeObjSet *);
     GXRenderModeObj *configure(GXRenderModeObj *, const RenderModeObjSet *);
     static u32 getTickPerVRetrace(u32 tvFormat);

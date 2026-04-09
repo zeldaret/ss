@@ -2,6 +2,7 @@
 #define UNK_SAVE_TIME_H
 
 #include "common.h"
+#include "egg/core/eggHeap.h"
 
 class SaveTimeRelated {
 public:
@@ -17,6 +18,8 @@ public:
         return field_0x30;
     }
 
+    static void fn_80190780(EGG::Heap *heap);
+    void fn_801907C0();
     s64 fn_801907D0();
     void fn_801907F0();
     void fn_801909A0();

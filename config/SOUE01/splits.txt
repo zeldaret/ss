@@ -23,6 +23,7 @@ toBeSorted/unk_sorajima_list.cpp:
 toBeSorted/mpls.cpp:
 	.text       start:0x80006CE0 end:0x80006E08 align:16
 	.data       start:0x804FD060 end:0x804FD0B8
+	.sdata      start:0x80571440 end:0x80571450
 	.sbss       start:0x80574FA8 end:0x80574FB0
 
 toBeSorted/mdl_base.cpp:
@@ -256,6 +257,7 @@ d/d_lang.cpp:
 d/d_main.cpp:
 	.text       start:0x80054F90 end:0x80055170 align:16
 	.sbss       start:0x805751D0 end:0x805751E0
+	.bss        start:0x80597758 end:0x80597A70
 
 d/d_pad.cpp:
 	.text       start:0x80055170 end:0x8005961C align:16
@@ -322,7 +324,11 @@ d/d_stage_parse.cpp:
 d/d_sys.cpp:
 	.text       start:0x80064250 end:0x80064F28 align:16
 	.ctors      start:0x804DB694 end:0x804DB698
+	.rodata     start:0x804E0C98 end:0x804E0F18
+	.data       start:0x8050DE58 end:0x8050DF10
 	.sbss       start:0x80575228 end:0x80575248
+	.sdata2     start:0x80577928 end:0x80577930
+	.bss        start:0x805A0720 end:0x805A0778
 
 d/d_sys_init.cpp:
 	.text       start:0x80064F30 end:0x80065034 align:16

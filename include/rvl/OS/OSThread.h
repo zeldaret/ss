@@ -12,6 +12,8 @@ extern "C" {
 
 #define OS_THREAD_STACK_MAGIC 0xDEADBABE
 
+typedef s32 OSPriority;
+
 typedef enum {
     OS_THREAD_STATE_EXITED = 0,
     OS_THREAD_STATE_READY = 1,
@@ -97,6 +99,7 @@ s32 OSSuspendThread(OSThread *thread);
 void OSSleepThread(OSThreadQueue *queue);
 void OSWakeupThread(OSThreadQueue *queue);
 BOOL OSSetThreadPriority(OSThread *thread, s32 prio);
+OSPriority OSGetThreadPriority(OSThread *thread);
 void OSClearStack(u8 val);
 void OSSleepTicks(s64 ticks);
 

@@ -9,9 +9,10 @@
 
 // Note: names are taken from NSMBW where available but a lot are made up
 
-void unk_initDecompressors();
-
 namespace mDvd {
+
+void unk_initDecompressors();
+void setAutoStreamDecomp(bool arg);
 
 extern void *somePtr;
 

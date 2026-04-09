@@ -15,6 +15,7 @@ public:
     /* 0xC */ u8 mNumXfbs;      // Total number of Xfbs ever attached
     /* 0xD */ u8 mNumXfbs_Copy; // Unsure of purpose yet, but showing wont proceed until its under 3
 public:
+    XfbManager() : mNextXfb(), mToCopyXfb(), mToShowXfb(), mNumXfbs(), mNumXfbs_Copy() {}
     bool isRegisterd(Xfb &xfb) const; // yes. this is correct spelling
     bool attach(Xfb *xfb);
     void copyEFB(bool);

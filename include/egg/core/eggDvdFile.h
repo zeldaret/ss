@@ -39,7 +39,7 @@ public:
     /* vt 0x24 */ virtual bool open(const char *path, void *);
 
 public:
-    void initialize();
+    static void initialize();
     DvdFile();
     void initiate();
     s32 sync();

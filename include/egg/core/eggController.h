@@ -346,6 +346,10 @@ public:
         sConnectCallback = cb;
     }
 
+    static void setWPADWorkSize(u32 size) {
+        sWPADWorkSize = size;
+    }
+
 private:
     CoreControllerMgr();
 
