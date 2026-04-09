@@ -95,7 +95,7 @@ public:
         // unused; overridden by daPlayerModelBase_c
         return mVec3_c::Zero;
     }
-    /* vt 0x0EC */ virtual const mVec3_c &vt_0x0EC() const {
+    /* vt 0x0EC */ virtual const mVec3_c &getHeadTranslation() const {
         // unused; overridden by daPlayerModelBase_c
         return mVec3_c::Zero;
     }

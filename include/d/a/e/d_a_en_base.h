@@ -71,7 +71,7 @@ public:
     // Deals with dealing damage to Enemy
     // Returns a value 0-13 (similar to mStts rank?)
     int fn_8002fde0(cCcD_Obj &mCc, u16 *pTgOut);
-
+    void fn_80030030(const mVec3_c &pos, s16 &, s16 &, f32);
     // Returns 0-3 based on collision
     int fn_800301b0(const mVec3_c &pos, mAng ang, bool, f32);
     void fn_80030400(m3d::mdl_c &, u8, bool, u8);

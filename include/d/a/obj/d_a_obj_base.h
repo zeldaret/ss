@@ -95,14 +95,24 @@ public:
     mVec3_c &getOldPosition() {
         return mOldPosition;
     }
+    void setOldPosition(const mVec3_c &v) {
+        mOldPosition = v;
+    }
     mVec3_c &getStartingPosition() {
         return mStartingPos;
+    }
+    void setStartingPosition(const mVec3_c &v) {
+        mStartingPos = v;
     }
     mVec3_c &getVelocity() {
         return mVelocity;
     }
     mAng3_c &getAngle() {
         return mAngle;
+    }
+
+    void setStartingRotation(const mAng3_c &v) {
+        mStartingRot = v;
     }
 
     f32 getVelocityMag() const {

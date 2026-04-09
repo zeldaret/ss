@@ -824,7 +824,7 @@ public:
     /* vt 0x0E8 */ virtual const mVec3_c &vt_0x0E8() const override {
         return field_0x12F4;
     }
-    /* vt 0x0EC */ virtual const mVec3_c &vt_0x0EC() const override {
+    /* vt 0x0EC */ virtual const mVec3_c &getHeadTranslation() const override {
         return mHeadTranslation;
     }
     /* vt 0x0F0 */ virtual const mVec3_c &vt_0x0F0() const override {

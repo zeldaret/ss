@@ -53,6 +53,11 @@ public:
         return *this;
     }
 
+    template <typename T>
+    bool operator==(const T other) {
+        return mVal == other;
+    }
+
 public:
     static s32 abs(const mAng b) {
         return labs(b);

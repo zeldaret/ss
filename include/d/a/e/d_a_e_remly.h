@@ -24,7 +24,7 @@ public:
         virtual ~callback_c() {}
         virtual void timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) override;
 
-        /* 0x04 */ mAng3_c mAng;
+        /* 0x04 */ mAng3_c mHeadRotation;
         /* 0x0C */ UNKWORD field_0x0C; // Guess
     };
 
@@ -50,6 +50,18 @@ public:
         STATE_18 = 18,
         STATE_19 = 19,
         STATE_20 = 20,
+        STATE_21 = 21,
+        STATE_22 = 22,
+        STATE_23 = 23,
+        STATE_24 = 24,
+        STATE_25 = 25,
+        STATE_26 = 26,
+        STATE_27 = 27,
+        STATE_28 = 28,
+        STATE_29 = 29,
+        STATE_30 = 30,
+        STATE_31 = 31,
+        STATE_32 = 32,
     };
 
 public:
@@ -93,17 +105,16 @@ public:
     STATE_MGR_DEFINE_UTIL_CHANGESTATE(dAcEremly_c);
 
 private:
-    void fn_177_6A40();
-    bool fn_177_6B10(bool, mAng);
+    void playWink();
+    bool fn_177_6B10(bool lookAtTarget, const mAng &);
     void fn_177_6EA0(bool);
-    void fn_177_6FC0(bool);
+    void adjustHeadRotation(bool);
 
-    bool fn_177_7040(s32, f32);
+    bool fn_177_7040(u32, f32);
 
-    // Checks if Batreaux is Human
-    bool fn_177_7330();
+    bool isScary();
 
-    bool fn_177_73C0();
+    bool shouldBeScared();
 
     bool fn_177_7510(f32);
 
@@ -111,14 +122,14 @@ private:
 
     /** false -> comapres to camera
      *   true -> compares to player */
-    bool fn_177_7650(bool comparePlayer);
+    bool fn_177_7650(bool comparePlayer) const;
 
     void fn_177_77C0();
 
     // Set Scary Face
     void fn_177_78D0();
 
-    bool fn_177_79D0(bool);
+    void fn_177_79D0(bool);
 
     bool fn_177_7B10();
     void nightSleepDemoImpl();
@@ -150,7 +161,7 @@ private:
     /* 0xA2C */ dAcRef_c<dAcNpcSkn2_c> mRef1; // Temporary until type known
     /* 0xA38 */ dAcRef_c<dAcBomb_c> mNearbyBombRef;
 
-    /* 0xA44 */ mVec3_c field_0xA44;
+    /* 0xA44 */ mVec3_c mTargetPosition;
     /* 0xA50 */ mVec3_c field_0xA50;
 
     /* 0xA5C */ dWaterEffect_c mWaterEffect;
@@ -171,7 +182,9 @@ private:
     /* 0xB1E */ mAng3_c field_0xB1E;
     /* 0xB24 */ s16 field_0xB24;
     /* 0xB26 */ s16 field_0xB26;
-    /* 0xB28 */ u8 _B28[0xB32 - 0xB28];
+    /* 0xB26 */ u32 field_0xB28;
+    /* 0xB2C */ s32 field_0xB2C;
+    /* 0xB30 */ mAng field_0xB30;
     /* 0xB32 */ mAng field_0xB32;
     /* 0xB34 */ mAng field_0xB34;
     /* 0xB38 */ f32 field_0xB38;
@@ -180,7 +193,7 @@ private:
     /* 0xB44 */ u16 field_0xB44;
     /* 0xB46 */ u16 field_0xB46;
     /* 0xB48 */ u16 field_0xB48;
-    /* 0xB4A */ u16 field_0xB4A;
+    /* 0xB4A */ u16 mWinkTimer;
     /* 0xB4C */ u16 field_0xB4C;
     /* 0xB4E */ u16 field_0xB4E;
     /* 0xB50 */ u16 field_0xB50;
