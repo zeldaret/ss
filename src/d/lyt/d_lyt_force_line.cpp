@@ -101,7 +101,7 @@ void dLytForceLineParts_c::initializeState_Move() {
 void dLytForceLineParts_c::executeState_Move() {
     bool isDone = false;
 
-    if (dLytMeter_c::getfn_800C9F70()) {
+    if (dLytMeter_c::shouldHideLytClef()) {
         mStateMgr.changeState(StateID_Wait);
         mMoveRequest = false;
         mIsDone = true;

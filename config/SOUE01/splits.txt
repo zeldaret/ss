@@ -1657,19 +1657,21 @@ d/lyt/d_lyt_mini_game.cpp:
 	.sbss       start:0x80575970 end:0x80575990
 	.sdata2     start:0x8057C700 end:0x8057C760
 
-d/lyt/d_lyt_meter_suiryu_score.cpp:
+d/lyt/d_lyt_suiryu_score.cpp:
 	.text       start:0x802969E0 end:0x8029C2C8 align:16
 	.ctors      start:0x804DB874 end:0x804DB878
 	.rodata     start:0x804EEB68 end:0x804EEF98
-	.data       start:0x80539B68 end:0x8053AAC8
+	.data       start:0x80539B68 end:0x8053AAD8
+	.sdata      start:0x80573BB0 end:0x80573BC8
 	.sbss       start:0x80575990 end:0x80575998
+	.sdata2     start:0x8057C760 end:0x8057C788
 	.bss        start:0x805B61C0 end:0x805B63C0
 
 d/lyt/d_lyt_meter_suiryu_score_comp.cpp:
 	.text       start:0x8029C2D0 end:0x8029F278 align:16
 	.ctors      start:0x804DB878 end:0x804DB87C
 	.rodata     start:0x804EEF98 end:0x804EF100
-	.data       start:0x8053AAC8 end:0x8053B968
+	.data       start:0x8053AAD8 end:0x8053B968
 	.sbss       start:0x80575998 end:0x805759A0
 	.bss        start:0x805B63C0 end:0x805B6640
 

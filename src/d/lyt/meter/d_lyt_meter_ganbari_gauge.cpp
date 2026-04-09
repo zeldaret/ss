@@ -332,7 +332,7 @@ bool dLytMeterGanbariGauge_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x548 = dLytMeter_HIO_c::sInstance->field_0x1C8;
 
     field_0x558 = 0;
-    field_0x559 = 0;
+    mClefRelated = false;
     field_0x55B = 0;
     mpOwnerPane = nullptr;
     field_0x55A = 0;
@@ -483,7 +483,7 @@ bool dLytMeterGanbariGauge_c::execute() {
         angle = 3;
         v2.set(-95.0f, -50.0f);
         scale = 0.9f;
-    } else if (field_0x559 && swimmingRelated()) {
+    } else if (mClefRelated && swimmingRelated()) {
         angle = 1;
         v2.set(-65.0f, 0.0f);
         scale = 1.0f;
