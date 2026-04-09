@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "egg/core/eggHeap.h"
-#include "egg/core/eggProcessMeter.h"
+#include "egg/core/eggPerformanceView.h"
 #include "egg/core/eggSystem.h"
 #include "nw4r/ut/ut_Color.h"
 
