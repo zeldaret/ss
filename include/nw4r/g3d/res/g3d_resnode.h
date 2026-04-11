@@ -141,7 +141,7 @@ public:
     }
 
     const math::VEC3 &GetTranslate() const {
-        return ref().translate;
+        return *(const math::VEC3 *)&ref().translate;
     }
 
     // not in the dwarf
