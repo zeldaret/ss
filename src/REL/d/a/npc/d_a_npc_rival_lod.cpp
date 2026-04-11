@@ -14,9 +14,7 @@ bool dAcNpcRivalLOD_c::createHeap() {
     return true;
 }
 int dAcNpcRivalLOD_c::create() {
-    if (!initAllocatorWork1Heap(-1, "dAcNpcRivalLOD_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR(dAcNpcRivalLOD_c);
     0.0f; // float order, cool
     mAcceleration = -1.0f;
     mMaxSpeed = -40.0f;

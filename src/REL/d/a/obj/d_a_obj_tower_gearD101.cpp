@@ -34,9 +34,7 @@ bool dAcOTowerGearD101_c::createHeap() {
 }
 
 int dAcOTowerGearD101_c::actorCreate() {
-    if (!initAllocatorWork1Heap(0x1000, "dAcOTowerGearD101_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR_SIZE(dAcOTowerGearD101_c, 0x1000);
     nw4r::g3d::ResMdl mdl = mMdl.getResMdl();
     mMdlCallback.init(mdl.GetResNode("model0").GetID());
     mMdl.setCallback(&mMdlCallback);
@@ -128,7 +126,5 @@ void dAcOTowerGearD101_c::initTransform() {
 }
 
 void dAcOTowerGearD101_c::playVisualEffect() {
-    mEffects.holdEffect(
-        PARTICLE_RESOURCE_ID_MAPPING_572_, field_0x3F4, &mRotation, nullptr, nullptr, nullptr
-    );
+    mEffects.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_572_, field_0x3F4, &mRotation, nullptr, nullptr, nullptr);
 }

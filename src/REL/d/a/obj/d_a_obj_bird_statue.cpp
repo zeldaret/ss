@@ -1,5 +1,7 @@
 #include "d/a/obj/d_a_obj_bird_statue.h"
 
+#include "d/a/obj/d_a_obj_base.h"
+
 SPECIAL_ACTOR_PROFILE(OBJ_BIRD_STATUE, dAcOBirdStatue_c, fProfile::OBJ_BIRD_STATUE, 0x285, 0, 3);
 
 bool dAcOBirdStatue_c::createHeap() {
@@ -22,9 +24,7 @@ bool dAcOBirdStatue_c::createHeap() {
 }
 
 int dAcOBirdStatue_c::create() {
-    if (!initAllocatorWork1Heap(0xffffffff, "dAcOBirdStatue_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR(dAcOBirdStatue_c);
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     mVec3_c min, max;

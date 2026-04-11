@@ -1,6 +1,7 @@
 #include "d/a/obj/d_a_obj_triforce.h"
 
 #include "c/c_math.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/col/cc/d_cc_s.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
@@ -32,9 +33,7 @@ bool dAcOtriforce_c::createHeap() {
 }
 
 int dAcOtriforce_c::create() {
-    if (!initAllocatorWork1Heap(-1, "dAcOtriforce_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR(dAcOtriforce_c);
 
     mStts.SetDefaultRank();
     mCollision.Set(sCcSrc);

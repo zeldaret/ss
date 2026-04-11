@@ -254,13 +254,16 @@ public:
             return result;                                                                                             \
     } while (0)
 
-// Use this in actors' create functions
-#define CREATE_ALLOCATOR(className)                                                                                    \
+#define CREATE_ALLOCATOR_SIZE(className, size)                                                                         \
     do {                                                                                                               \
-        if (!initAllocatorWork1Heap(-1, #className "::m_allocator", 0x20)) {                                           \
+        if (!initAllocatorWork1Heap(size, #className "::m_allocator", 0x20)) {                                         \
             return FAILED;                                                                                             \
         }                                                                                                              \
     } while (0)
+
+// Use this in actors' create functions
+#define CREATE_ALLOCATOR(className) CREATE_ALLOCATOR_SIZE(className, -1)
+#define CREATE_ALLOCATOR_UNCHECKED(className) initAllocatorWork1Heap(-1, #className "::m_allocator", 0x20)
 
 class dAcObjRef_unk {
 public:
