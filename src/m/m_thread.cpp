@@ -1,6 +1,6 @@
 #include "m/m_thread.h"
 
-#include "egg/core/eggUnk.h"
+#include "egg/core/eggThreadMonitor.h"
 #include "rvl/OS/OSThread.h"
 
 void mThread::registerThread(OSThread *thread, void *threadArg) {
