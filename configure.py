@@ -893,7 +893,7 @@ config.libs = [
             Object(Matching, "m/m_pad.cpp"),
             # probably two files due to sdata2 float duplication and gap
             Object(NonMatching, "m/m_quat.cpp"),
-            Object(NonMatching, "m/m_thread.cpp"),
+            Object(Matching, "m/m_thread.cpp"),
             Object(NonMatching, "m/m_vec.cpp"),
             Object(NonMatching, "m/m_video.cpp"),
         ],
@@ -1232,7 +1232,7 @@ config.libs = [
             Object(Matching, "egg/core/eggAssertHeap.cpp"),
             Object(Matching, "egg/core/eggDisposer.cpp"),
             Object(Matching, "egg/core/eggThread.cpp"),
-            Object(NonMatching, "egg/core/eggUnk.cpp"),
+            Object(Matching, "egg/core/eggUnk.cpp"),
             Object(Matching, "egg/core/eggSystem.cpp"),
             Object(Matching, "egg/core/eggDisplay.cpp"),
             Object(Matching, "egg/core/eggColorFader.cpp"),
