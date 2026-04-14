@@ -56,7 +56,7 @@ void ConfigurationData::initMemory() {
     } else {
         debugHeapSize = 0;
     }
-    void *debugHeapPtr = (void *)((u32)root2HeapPtr + root2HeapSize);
+    void *debugHeapPtr = (u8 *)root2HeapPtr + root2HeapSize;
 
     mRootHeapMem1 = ExpHeap::create(root1HeapPtr, root1HeapSize, 0);
     mRootHeapMem1->setName("EGGRootMEM1");
