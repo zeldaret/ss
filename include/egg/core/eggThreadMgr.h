@@ -30,11 +30,11 @@ struct ThreadInfo {
 };
 
 // This is a complete guess
-class ThreadMonitor {
+class ThreadMgr {
 public:
     void registerThread(OSThread *thread, UnknownStruct);
 
-    static ThreadMonitor *getInstance() {
+    static ThreadMgr *getInstance() {
         return sInstance;
     }
 
@@ -57,7 +57,7 @@ private:
     /* 0xF8 */ bool mSortEnabled;
     // size unsure, but this is the limit seen
 
-    static ThreadMonitor *sInstance;
+    static ThreadMgr *sInstance;
 };
 
 } // namespace EGG

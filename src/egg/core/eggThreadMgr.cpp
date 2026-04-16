@@ -1,12 +1,12 @@
-#include "egg/core/eggThreadMonitor.h"
+#include "egg/core/eggThreadMgr.h"
 
 #include "rvl/OS.h"
 
 namespace EGG {
 
-ThreadMonitor *ThreadMonitor::sInstance; // Never initialized
+ThreadMgr *ThreadMgr::sInstance; // Never initialized
 
-s32 ThreadMonitor::getThreadIndex(OSThread *thread) {
+s32 ThreadMgr::getThreadIndex(OSThread *thread) {
     for (s32 i = 0; i < mThreadCount; i++) {
         if (mThreadList[i].mThread == thread) {
             return i;
@@ -15,7 +15,7 @@ s32 ThreadMonitor::getThreadIndex(OSThread *thread) {
     return -1;
 }
 
-s32 ThreadMonitor::doRegisterThread(OSThread *thread) {
+s32 ThreadMgr::doRegisterThread(OSThread *thread) {
     if (mThreadCount != mMaxThreads) {
         s32 i = mThreadCount;
 
@@ -37,7 +37,7 @@ s32 ThreadMonitor::doRegisterThread(OSThread *thread) {
     return -1;
 }
 
-void ThreadMonitor::sortByPriority() {
+void ThreadMgr::sortByPriority() {
     // Selection sort on thread priority
     for (s32 i = 0; i < mThreadCount - 1; i++) {
         OSPriority minPrio = 31;
@@ -59,7 +59,7 @@ void ThreadMonitor::sortByPriority() {
     }
 }
 
-void ThreadMonitor::registerThread(OSThread *thread, UnknownStruct arg) {
+void ThreadMgr::registerThread(OSThread *thread, UnknownStruct arg) {
     s32 i = getThreadIndex(thread);
     if (i == -1) {
         i = doRegisterThread(thread);

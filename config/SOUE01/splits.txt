@@ -4891,7 +4891,7 @@ egg/core/eggThread.cpp:
 	.sbss       start:0x80576770 end:0x80576778
 	.bss        start:0x80673B10 end:0x80673B20
 
-egg/core/eggThreadMonitor.cpp:
+egg/core/eggThreadMgr.cpp:
 	.text       start:0x80496DE0 end:0x8049716C align:16
 	.sbss       start:0x80576778 end:0x80576780
 
