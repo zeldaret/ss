@@ -5,7 +5,7 @@
 #include "egg/core/eggDisplay.h"
 #include "egg/core/eggExpHeap.h"
 #include "egg/core/eggHeap.h"
-#include "egg/core/eggPerformanceView.h"
+#include "egg/core/eggPerf.h"
 #include "egg/core/eggSceneManager.h"
 
 #include "rvl/OS.h"

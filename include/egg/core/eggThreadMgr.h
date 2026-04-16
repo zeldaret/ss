@@ -1,5 +1,5 @@
-#ifndef EGG_UNK_H
-#define EGG_UNK_H
+#ifndef EGG_THREAD_MGR_H
+#define EGG_THREAD_MGR_H
 
 #include "common.h"
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace EGG
 
-#endif
+#endif // EGG_THREAD_MGR_H

@@ -1,5 +1,5 @@
-#ifndef EGG_PROCESS_METER_H
-#define EGG_PROCESS_METER_H
+#ifndef EGG_PERF_H
+#define EGG_PERF_H
 
 #include "egg/core/eggThread.h"
 
@@ -19,8 +19,6 @@ public:
     /* 0x28 */ virtual bool isVisible() = 0;
 };
 
-class ProcessMeter : public Thread, public PerformanceView {};
-
 }; // namespace EGG
 
-#endif // EGG_PROCESS_METER_H
+#endif // EGG_PERF_H
