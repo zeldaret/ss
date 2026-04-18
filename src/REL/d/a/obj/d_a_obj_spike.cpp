@@ -1,5 +1,6 @@
 #include "d/a/obj/d_a_obj_spike.h"
 
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/col/cc/d_cc_s.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SPIKE, dAcOspike_c, fProfile::OBJ_SPIKE, 0x1D9, 0, 2);
@@ -25,9 +26,7 @@ bool dAcOspike_c::createHeap() {
 }
 
 int dAcOspike_c::create() {
-    if (!initAllocatorWork1Heap(-1, "dAcOspike_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR(dAcOspike_c);
 
     mStts.SetDefaultRank();
     mCollision.Set(sCcSrc);

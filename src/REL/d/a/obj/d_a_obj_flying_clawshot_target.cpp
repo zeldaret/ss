@@ -46,7 +46,7 @@ const cCcD_SrcGObj dAcOFlyingClawshotTarget_c::sColSrc = {
 // clang-format on
 
 int dAcOFlyingClawshotTarget_c::actorCreate() {
-    initAllocatorWork1Heap(-1, "dAcOFlyingClawshotTarget_c::m_allocator", 0x20);
+    CREATE_ALLOCATOR_UNCHECKED(dAcOFlyingClawshotTarget_c);
 
     mMdl.setPriorityDraw(0x7F, 0x7F);
     mWorldMtx.transS(mVec3_c::Zero);

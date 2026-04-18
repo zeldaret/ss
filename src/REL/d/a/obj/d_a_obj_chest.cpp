@@ -109,9 +109,7 @@ bool dAcOChest_c::createHeap() {
 }
 
 int dAcOChest_c::create() {
-    if (!initAllocatorWork1Heap(0x4000, "dAcOChest_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR_SIZE(dAcOChest_c, 0x4000);
     mBgW.Lock();
     dBgS::GetInstance()->Regist(&mBgW, this);
     dBgS::GetInstance()->RegistBg(&mBgW, this);

@@ -3383,7 +3383,7 @@ enum StoryFlags_e {
     /** [Goddess Statue Opened]
      *  Story Flag #672 (0x02A0) - JP 805ACDA0 0x02 / US 805A9B20 0x02
      */
-    STORYFLAG_672,
+    STORYFLAG_GODDESS_STATUE_ACCESS,
 
     /** [Set when Scrapper picks up Oolo]
      *  Story Flag #673 (0x02A1) - JP 805ACDA0 0x04 / US 805A9B20 0x04

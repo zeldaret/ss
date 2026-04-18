@@ -1,6 +1,7 @@
 #include "d/a/obj/d_a_obj_toD3_stone_figure.h"
 
 #include "d/a/d_a_item.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_sc_game.h"
 #include "d/flag/storyflag_manager.h"
@@ -39,9 +40,8 @@ int dAcOtoD3StoneFigure_c::create() {
     mIsSkyKeepAlreadyOpen = isStoneOfTrialsPlaced();
     mExitId = mParams & 0xFF;
     updateMatrix();
-    if (!initAllocatorWork1Heap(-1, "dAcOtoD3StoneFigure_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+
+    CREATE_ALLOCATOR(dAcOtoD3StoneFigure_c);
 
     mMdl.setLocalMtx(mWorldMtx);
     mStts.SetDefaultRank();

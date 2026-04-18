@@ -4,6 +4,7 @@
 #include "c/c_math.h"
 #include "d/a/d_a_item.h"
 #include "d/a/d_a_player.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_pouch.h"
@@ -33,9 +34,7 @@ bool dTgReaction_c::createHeap() {
 
 int dTgReaction_c::create() {
     // Note the double _c here
-    if (!initAllocatorWork1Heap(0x1000, "dTgReaction_c_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR_SIZE(dTgReaction_c_c, 0x1000);
 
     if (getReactType() != REACT_UNDERWATER) {
         if (getSceneFlag() >= 0xFF) {

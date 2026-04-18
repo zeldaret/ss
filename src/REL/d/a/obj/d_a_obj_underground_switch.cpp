@@ -40,9 +40,7 @@ int dAcOUgSwitch_c::create() {
     mActiveSceneFlag = mParams & 0xFF;
     field_0x3BD = (mParams >> 8) & 0xFF;
     setVariant((mParams >> 16) & 0xF);
-    if (!initAllocatorWork1Heap(0x1000, "dAcOUgSwitch_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR_SIZE(dAcOUgSwitch_c, 0x1000);
 
     mOnEventTimer = 0;
     updateMatrix();

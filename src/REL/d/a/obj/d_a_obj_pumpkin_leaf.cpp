@@ -1,5 +1,6 @@
 #include "d/a/obj/d_a_obj_pumpkin_leaf.h"
 
+#include "d/a/obj/d_a_obj_base.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_Math.h"
 
@@ -15,9 +16,7 @@ bool dAcOPumpkinLeaf_c::createHeap() {
 }
 
 int dAcOPumpkinLeaf_c::create() {
-    if (!initAllocatorWork1Heap(0x1000, "dAcOPumpkinLeaf_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR_SIZE(dAcOPumpkinLeaf_c, 0x1000);
 
     mAcceleration = -1.0f;
     mMaxSpeed = -40.0f;
