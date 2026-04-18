@@ -4,6 +4,7 @@
 #include "egg/core/eggAssertHeap.h" // IWYU pragma: export
 #include "egg/core/eggThread.h"
 #include "m/m_heap.h"
+#include "m/m_thread.h"
 #include "rvl/NAND/NANDCheck.h"
 #include "rvl/NAND/NANDCore.h"
 #include "rvl/NAND/nand.h"
@@ -12,8 +13,6 @@
 #include "rvl/OS/OSThread.h"
 
 #include <cstring>
-
-extern "C" void fn_802F2920(OSThread *, size_t);
 
 NandRequestThread::NandRequestThread(
     int priority, EGG::Heap *commandHeap, void *bufFromGameHeap, size_t bufSize, void *mThreadArg, EGG::Heap *heap
@@ -27,7 +26,7 @@ NandRequestThread::NandRequestThread(
     mBufSize = bufSize;
 
     setThreadCurrentHeap(mHeap::g_assertHeap);
-    fn_802F2920(mOSThread, bufSize);
+    mThread::registerThread(mOSThread, mThreadArg);
     OSInitMessageQueue(&mMessageQueue, &mMessageBuffer, 1);
     OSInitMutex(&mMutex);
     OSResumeThread(mOSThread);

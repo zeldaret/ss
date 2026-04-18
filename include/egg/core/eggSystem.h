@@ -4,6 +4,8 @@
 #include "common.h"
 #include "egg/core/eggVideo.h"
 
+struct OSBootInfo;
+
 namespace EGG {
 
 class Display;
@@ -35,18 +37,18 @@ public:
     /* vt 0x38 */ virtual void initialize() = 0;
 
 public:
-    /* 0x04 */ u32 mRoot1HeapStart;
-    /* 0x08 */ u32 mRoot1HeapEnd;
-    /* 0x0C */ u32 mRoot2HeapStart;
-    /* 0x10 */ u32 mRoot2HeapEnd;
+    /* 0x04 */ void *mRoot1HeapStart;
+    /* 0x08 */ void *mRoot1HeapEnd;
+    /* 0x0C */ void *mRoot2HeapStart;
+    /* 0x10 */ void *mRoot2HeapEnd;
     /* 0x14 */ u32 mMemSize;
     /* 0x18 */ Heap *mRootHeapMem1;
     /* 0x1C */ Heap *mRootHeapMem2;
     /* 0x20 */ Heap *mRootHeapDebug;
     /* 0x24 */ Heap *mSystemHeap;
     /* 0x28 */ Thread *mSystemThread;
-    /* 0x2C */ u32 field_0x2C;
-    /* 0x30 */ u32 mSystemHeapStart;
+    /* 0x2C */ OSBootInfo *mBootInfo;
+    /* 0x30 */ void *mSystemHeapStart;
     /* 0x34 */ u32 mSystemHeapSize;
 };
 class BaseSystem {

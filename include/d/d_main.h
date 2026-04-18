@@ -5,6 +5,10 @@
 
 namespace dMain {
 
+bool isStopFlagSet(u32 val);
+void setStopFlag(u32 val);
+void clearStopFlag(u32 val);
+
 void Create();
 void Execute();
 void *main01(void *arg);
