@@ -17,7 +17,10 @@
 #include "d/d_camera.h"
 #include "d/d_light_env.h"
 #include "d/d_linkage.h"
+#include "d/d_rumble.h"
 #include "d/d_sc_game.h"
+#include "d/d_stage_mgr.h"
+#include "d/d_vec.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
@@ -42,6 +45,7 @@
 #include "toBeSorted/attention.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/d_emitter.h"
+#include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
 
 SPECIAL_ACTOR_PROFILE(E_REMLY, dAcEremly_c, fProfile::E_REMLY, 0xE1, 0, 3);
@@ -348,7 +352,7 @@ int dAcEremly_c::actorExecute() {
     }
 
     if (0 == sLib::calcTimer(&field_0xB4E)) {
-        s32 damageTypeMaybe = fn_8002fde0(mSph, nullptr);
+        s32 damageTypeMaybe = fn_8002FDE0(mSph, nullptr);
         switch (damageTypeMaybe) {
             case 7: {
                 if (isState(StateID_Fly) && field_0xB60 != 20) {
@@ -569,6 +573,11 @@ int dAcEremly_c::actorExecute() {
     return SUCCEEDED;
 }
 
+/// Ugh
+inline f32 getValue0() {
+    s32 _weird_zero = 0;
+    return _weird_zero + 70.f;
+}
 int dAcEremly_c::draw() {
     s32 _weird_zero = 0;
 
@@ -588,7 +597,7 @@ int dAcEremly_c::draw() {
     drawModelType1(&mdl);
 
     // elp
-    static mQuat_c shadow(0.f, 70.f + _weird_zero, 0.f, 290.f + _weird_zero);
+    static mQuat_c shadow(0.f, getValue0(), 0.f, _weird_zero + 290.f);
     fn_8002edb0(mShadow, mdl, &shadow, -1, -1, mPosition.y - mAcch.GetGroundH());
 
     return SUCCEEDED;
@@ -911,8 +920,8 @@ void dAcEremly_c::executeState_EscapeDash() {
     }
 
     if (field_0xB6B != 0) {
-        mVec3_c v(getPosition());
-        sLib::addCalcScaledDiff(&mSpeed, 30.f, 0.7f, 3.f);
+        mVec3_c v;
+        sLib::addCalcScaledDiff(&mSpeed, (v = mPosition, 30.f), 0.7f, 3.f);
 
         if (fn_177_8C20(mRotation.y)) {
             changeState(StateID_Scared);
@@ -2233,7 +2242,7 @@ bool dAcEremly_c::fn_177_7650(bool comparePlayer) const {
 // NONMATCHING
 void dAcEremly_c::fn_177_77C0() {
     const dAcPy_c *pPlayer = dAcPy_c::GetLink();
-    mAng a0 = getXZAngleToPlayer() + -0x7800;
+    s32 a0 = getXZAngleToPlayer().mVal + -(s32)(0x7800);
     mAng a1 = getXZAngleToPlayer() + 0x7800;
 
     field_0xB32 = getXZAngleToPlayer() + 0x8000;
@@ -2304,7 +2313,174 @@ bool dAcEremly_c::fn_177_7B10() {
     return false;
 }
 
-void dAcEremly_c::nightSleepDemoImpl() {}
+void dAcEremly_c::nightSleepDemoImpl() {
+    s32 _weird_zero = 0;
+
+    if (mSleepDemoPlayedSceneflag == 0xFF ||
+        SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSleepDemoPlayedSceneflag)) {
+        return;
+    }
+
+    dAcPy_c *pPlayer = dAcPy_c::GetLinkM();
+    dCamera_c *pCamera = dScGame_c::getCamera();
+
+    f32 x, y, z;
+    mVec3_c v, v2;
+    mMtx_c m, m2;
+    mAng a = mAngle.y - 0x4000;
+
+    switch (field_0xB63) {
+        case 0: {
+            if (!isWithinPlayerRadius(1500.f)) {
+                break;
+            }
+            field_0xB63++;
+        } // fallthrough
+        case 1: {
+            {
+                Event e("dAcEremly_c_nightRemly", 100, Event::makeEventFlag(1, 0x100001), nullptr, nullptr);
+                EventManager::alsoSetAsCurrentEvent(this, &e, nullptr);
+            }
+            if (!EventManager::isInEvent(this, "dAcEremly_c_nightRemly")) {
+                break;
+            }
+            mStartingRot = mRotation;
+            EventManager::fn_8009FA10(this, EventManager::getSkipOnlyEvent(), nullptr);
+            pPlayer->vt_0x2AC();
+            field_0xB63++;
+        } // fallthrough
+        case 2: {
+            mMdl.setAnm("RemlyDemo", m3d::PLAY_MODE_4, 0.f);
+            field_0xB60 = 26;
+
+            z = _weird_zero + -160.f;
+            y = _weird_zero + 80.f;
+            x = _weird_zero + 410.f;
+            v.set(x, y, z);
+            m.YrotS(a + 0x8000);
+            m.multVec(v, field_0xAB0);
+
+            field_0xAB0 += mStartingPos;
+            field_0xAC8 = field_0xAB0;
+            field_0xAE0 = field_0xAB0;
+
+            x = _weird_zero + 30.f;
+            y = _weird_zero + 30.f;
+            z = _weird_zero + 30.f;
+            v.set(z, y, x);
+
+            m.YrotS(a);
+            m.multVec(v, field_0xABC);
+
+            field_0xABC += mStartingPos;
+            field_0xAD4 = field_0xABC;
+            field_0xAEC = field_0xABC;
+
+            x = _weird_zero + -370.f;
+            y = 0.f;
+            z = 250.f;
+            v.set(x, y, z);
+
+            m.YrotS(a);
+            m.multVec(v, v2);
+            v2 += mStartingPos;
+
+            mAng3_c rot(0, getXZAngleToPlayer() + 0x8000, 0);
+            dAcPy_c::GetLinkM()->setPosRot(&v2, &rot, true, 0, 0);
+            dAcPy_c::GetLinkM()->triggerMoveEventMaybe(13, 1, 0, 0, 0, 0, 0);
+            field_0xB63++;
+        } // fallthrough
+        case 3: {
+            if (sLib::calcTimer(&field_0xB48)) {
+                break;
+            }
+            field_0xB48 = 60;
+            field_0xB63++;
+        } // fallthrough
+        case 4: {
+            if (sLib::calcTimer(&field_0xB48)) {
+                if (field_0xB48 == 58) {
+                    z = _weird_zero + 170.f;
+                    x = _weird_zero + -120.f;
+                    v.set(x, 0.f, z);
+                    m.YrotS(a);
+                    m.multVec(v, v2);
+                    v2 += mStartingPos;
+                    dAcPy_c::GetLinkM()->triggerMoveEventMaybe(2, 0, 0, &v2, 0, 0, 0);
+                }
+                break;
+            }
+            field_0xB48 = 100;
+            field_0xB63++;
+        } // fallthrough
+        case 5: {
+            a = cLib::targetAngleY(field_0xAD4, field_0xAC8);
+            m.YrotS(a);
+            z = _weird_zero + -330.f;
+            y = _weird_zero;
+            x = _weird_zero;
+            v.set(x, y, z);
+            m.multVec(v, field_0xAE0);
+            field_0xAE0 += field_0xAC8;
+            if (sLib::calcTimer(&field_0xB48)) {
+                break;
+            }
+            field_0xB63++;
+        } // fallthrough
+        case 6: {
+            if (mMdl.getAnm().checkFrame(320.f)) {
+                mMtx_c m3, m4;
+                s32 scale = 95;
+                m2.transS(0.5f, 0.5f, 0.f);
+                y = scale / 100.f;
+                x = scale / 100.f;
+                m3.scaleS(x, y, 0.f);
+                m2 += m3;
+                m4.transS(-0.5f, -0.5f, 0.f);
+                m2 += m4;
+                dStageMgr_c::GetInstance()->procfn_800192F0(150, m2, 100);
+                dRumble_c::start(dRumble_c::sRumblePreset1, 1);
+            }
+            if (mMdl.getAnm().isStop()) {
+                mMdl.setRate(0.f);
+                field_0xB63 = 10;
+            }
+            break;
+        }
+        case 10: {
+            mSph.OnTgSet();
+            mSph.OnCoSet();
+            EventManager::finishEvent(this, nullptr);
+            dScGame_c::getCamera()->fn_8019EA70(true);
+            field_0xB48 = 3;
+            field_0xB63 = 11;
+            break;
+        }
+        case 11: {
+            if (0 == sLib::calcTimer(&field_0xB48)) {
+                changeState(StateID_NightWait);
+                mMdl.setAnm("RemlyWaitStandNight", m3d::PLAY_MODE_4, 0.f);
+                mAngle.y = mStartingRot.y + -30000;
+                mRotation.y = mAngle.y;
+                if (mSleepDemoPlayedSceneflag != 0xFF) {
+                    SceneflagManager::sInstance->setFlag(mRoomID, mSleepDemoPlayedSceneflag);
+                }
+            }
+        }
+    }
+
+    if (field_0xB63 == 5) {
+        cLib::addCalcPos2(&field_0xAB0, field_0xAE0, 0.3f, 10.f);
+    }
+    if (field_0xB63 == 2 || field_0xB63 == 3 || field_0xB63 == 4 || field_0xB63 == 5 || field_0xB63 == 6 ||
+        field_0xB63 == 7 || field_0xB63 == 8 || field_0xB63 == 9) {
+        pCamera->setEventCamView(field_0xABC, field_0xAB0, 50.f, 0.f);
+        if (EventManager::fn_800A0B80()) {
+            mMdl.setRate(0.f);
+            field_0xB63 = 10;
+        }
+    }
+}
 
 void dAcEremly_c::fn_177_8520(bool b) {
     s32 _weird_zero = 0;
@@ -2371,21 +2547,15 @@ bool dAcEremly_c::fn_177_86C0() {
     return false;
 }
 
-// TODO - Have its own location
-inline void offsetWithAngle(mVec3_c &v, const mAng &a, f32 f) {
-    v.x += f * a.sin();
-    v.z += f * a.cos();
-}
-
 bool dAcEremly_c::fn_177_8980(f32 f) {
     dBgS_ObjGndChk gndChk;
     mVec3_c v(mPosition);
 
     v.y += 100.f;
 
-    offsetWithAngle(v, mRotation.y, f);
+    getXZCirclePoint(v, mRotation.y, f);
 
-    gndChk.SetPos(v);
+    gndChk.SetPos(&v);
 
     f32 cross = dBgS::GetInstance()->GroundCross(&gndChk);
     if (cross < mPosition.y - 1000.f || cross == -1e9f || dBgS::GetInstance()->GetGroundCode(gndChk) == 4) {
@@ -2396,14 +2566,14 @@ bool dAcEremly_c::fn_177_8980(f32 f) {
 
 // NONMATCHING
 bool dAcEremly_c::fn_177_8AC0() {
-    if ((field_0xB60 != STATE_16) && (field_0xB60 != STATE_17) && (field_0xB60 != STATE_13) &&
-        (field_0xB60 != STATE_14) && (field_0xB60 != STATE_15) && (field_0xB60 != STATE_5) &&
-        (field_0xB60 != STATE_21) && (field_0xB60 != STATE_6) && (field_0xB60 != STATE_8) && (field_0xB60 != STATE_7) &&
-        (field_0xB60 != STATE_10) && (field_0xB60 != STATE_22) && (field_0xB60 != STATE_23) &&
-        (field_0xB60 != STATE_24)) {
-        return false;
-    } else {
+    bool b = (isState(STATE_16)) || (isState(STATE_17)) || (isState(STATE_13)) || (isState(STATE_14)) ||
+             (isState(STATE_15)) || (isState(STATE_5)) || (isState(STATE_21)) || (isState(STATE_6)) ||
+             (isState(STATE_8)) || (isState(STATE_7)) || (isState(STATE_10)) || (isState(STATE_22)) ||
+             (isState(STATE_23)) || (isState(STATE_24));
+    if (b) {
         return true;
+    } else {
+        return false;
     }
 }
 
@@ -2420,7 +2590,7 @@ bool dAcEremly_c::fn_177_8C20(mAng a) {
     if (field_0xB6C || field_0xB6A || isState(StateID_Escape) || isState(StateID_EscapeDash)) {
         mVec3_c v(mPosition);
         f32 f = 150.f + _weird_zero;
-        offsetWithAngle(v, mAngle.y, f);
+        getXZCirclePoint(v, mAngle.y, f);
         if (dBgS_WtrChk::CheckPos(&v, true, 600.f + _weird_zero, -100.f + _weird_zero)) {
             if (mPosition.y < dBgS_WtrChk::GetWaterHeight() && mAcch.GetGroundH() < dBgS_WtrChk::GetWaterHeight()) {
                 return true;
@@ -2510,7 +2680,7 @@ bool dAcEremly_c::fn_177_9370(f32 f) {
     const dAcPy_c *pPlayer = dAcPy_c::GetLink();
 
     if (!pPlayer->isRecovering() && pPlayer->mPosition.absXZTo(mStartingPos) < field_0xB08 &&
-        std::abs(mPosition.y - pPlayer->mPosition.y) < f + 2000.f) {
+        std::abs(mPosition.y - pPlayer->mPosition.y) < f + 200.f) {
         return true;
     }
 

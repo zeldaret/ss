@@ -100,6 +100,10 @@ public:
     STATE_FUNC_DECLARE(dAcEremly_c, NightJumpAttack);
     STATE_FUNC_DECLARE(dAcEremly_c, BirthWait);
 
+    bool isState(State_e state) {
+        return field_0xB60 == (u32)state;
+    }
+
     STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dAcEremly_c);
     STATE_MGR_DEFINE_UTIL_ISSTATE(dAcEremly_c);
     STATE_MGR_DEFINE_UTIL_CHANGESTATE(dAcEremly_c);
@@ -167,9 +171,12 @@ private:
     /* 0xA5C */ dWaterEffect_c mWaterEffect;
 
     /* 0xAA4 */ mVec3_c field_0xAA4;
-
-    /* 0xAB0 */ u8 _AB0[0xAF8 - 0xAB0];
-
+    /* 0xAB0 */ mVec3_c field_0xAB0;
+    /* 0xABC */ mVec3_c field_0xABC;
+    /* 0xAC8 */ mVec3_c field_0xAC8;
+    /* 0xAD4 */ mVec3_c field_0xAD4;
+    /* 0xAE0 */ mVec3_c field_0xAE0;
+    /* 0xAEC */ mVec3_c field_0xAEC;
     /* 0xAF8 */ mVec3_c field_0xAF8;
 
     /* 0xB04 */ f32 field_0xB04;
@@ -207,7 +214,7 @@ private:
     /* 0xB60 */ u8 field_0xB60; // Some State representation
     /* 0xB61 */ u8 field_0xB61;
     /* 0xB62 */ u8 mSleepDemoPlayedSceneflag;
-    /*       */ u8 _B63;
+    /* 0xB63 */ u8 field_0xB63;
     /* 0xB64 */ u8 field_0xB64;
     /* 0xB65 */ u8 field_0xB65;
     /* 0xB66 */ u8 field_0xB66;

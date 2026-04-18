@@ -20,6 +20,9 @@ public:
     static bool canSkipCurrentEvent();
     static dAcBase_c *getMainActorInEvent();
 
+    static Event *getSkipOnlyEvent();
+    static bool fn_800A0B80();
+    static void fn_8009FA10(dAcBase_c *actor, Event *event, void *unknown);
     static void execute();
 
     static EventManager *sInstance;
