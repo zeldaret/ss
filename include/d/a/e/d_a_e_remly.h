@@ -28,40 +28,40 @@ public:
         /* 0x0C */ UNKWORD field_0x0C; // Guess
     };
 
-    enum State_e {
-        STATE_0 = 0,
-        STATE_1 = 1,
-        STATE_2 = 2,
-        STATE_3 = 3,
-        STATE_4 = 4,
-        STATE_5 = 5,
-        STATE_6 = 6,
-        STATE_7 = 7,
-        STATE_8 = 8,
-        STATE_9 = 9,
-        STATE_10 = 10,
-        STATE_11 = 11,
-        STATE_12 = 12,
-        STATE_13 = 13,
-        STATE_14 = 14,
-        STATE_15 = 15,
-        STATE_16 = 16,
-        STATE_17 = 17,
-        STATE_18 = 18,
-        STATE_19 = 19,
-        STATE_20 = 20,
-        STATE_21 = 21,
-        STATE_22 = 22,
-        STATE_23 = 23,
-        STATE_24 = 24,
-        STATE_25 = 25,
-        STATE_26 = 26,
-        STATE_27 = 27,
-        STATE_28 = 28,
-        STATE_29 = 29,
-        STATE_30 = 30,
-        STATE_31 = 31,
-        STATE_32 = 32,
+    enum Animation_e {
+        ANM_WaitStand = 0,
+        ANM_WaitSit = 1,
+        ANM_WaitSitCry = 2,
+        ANM_CryWalk = 3,
+        ANM_RemlyWalk = 4,
+        ANM_Run = 5,
+        ANM_Swim = 6,
+        ANM_Water = 7,
+        ANM_SwimDamage = 8,
+        ANM_Wind = 9,
+        ANM_WindBack = 10,
+        ANM_Hold = 11,
+        ANM_HoldMozo = 12,
+        ANM_HoldBata = 13,
+        ANM_HoldJumpStart = 14,
+        ANM_HoldJumpEnd = 15,
+        ANM_Fly = 16,
+        ANM_FlyDamage = 17,
+        ANM_Damage = 18,
+        ANM_Sleep = 19,
+        ANM_WakeUp = 20,
+        ANM_Scared = 21,
+        ANM_Piyo1 = 22,
+        ANM_Piyo2 = 23,
+        ANM_Piyo3 = 24,
+        ANM_SleepNight = 25,
+        ANM_Demo = 26,
+        ANM_27 = 27, // UNUSED
+        ANM_Foo = 28,
+        ANM_WalkNight = 29,
+        ANM_RunFast = 30,
+        ANM_Jump = 31,
+        ANM_Sound = 32,
     };
 
 public:
@@ -100,8 +100,8 @@ public:
     STATE_FUNC_DECLARE(dAcEremly_c, NightJumpAttack);
     STATE_FUNC_DECLARE(dAcEremly_c, BirthWait);
 
-    bool isState(State_e state) {
-        return field_0xB60 == (u32)state;
+    bool isAnimation(Animation_e state) {
+        return mAnimation == (u32)state;
     }
 
     STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dAcEremly_c);
@@ -111,8 +111,8 @@ public:
 private:
     void playWink();
     bool fn_177_6B10(bool lookAtTarget, const mAng &);
-    void fn_177_6EA0(bool);
-    void adjustHeadRotation(bool);
+    void calcHeadRotation(bool);
+    void resetHeadRotation(bool);
 
     bool fn_177_7040(u32, f32);
 
@@ -124,22 +124,22 @@ private:
 
     bool fn_177_75E0();
 
-    /** false -> comapres to camera
+    /** false -> compares to camera
      *   true -> compares to player */
     bool fn_177_7650(bool comparePlayer) const;
 
     void fn_177_77C0();
 
     // Set Scary Face
-    void fn_177_78D0();
+    void applyScaryMat();
 
     void fn_177_79D0(bool);
 
     bool fn_177_7B10();
     void nightSleepDemoImpl();
 
-    void fn_177_8520(bool);
-    void fn_177_8600();
+    void checkSlope(bool);
+    void spawnGroundEffect();
     bool fn_177_86C0();
     bool fn_177_8980(f32);
     bool fn_177_8AC0();
@@ -180,49 +180,49 @@ private:
     /* 0xAF8 */ mVec3_c field_0xAF8;
 
     /* 0xB04 */ f32 field_0xB04;
-    /* 0xB08 */ f32 field_0xB08;
-    /* 0xB0C */ f32 field_0xB0C;
-    /* 0xB10 */ f32 field_0xB10;
-    /* 0xB14 */ s32 field_0xB14;
-    /* 0xB18 */ u32 field_0xB18;
+    /* 0xB08 */ f32 mPatrolAreaSize;
+    /* 0xB0C */ f32 mWaterHeight;
+    /* 0xB10 */ f32 mScaleF;
+    /* 0xB14 */ s32 mSomeCounter;
+    /* 0xB18 */ u32 mSomeCounter2;
     /* 0xB1C */ u8 _B1C[0xB1E - 0xB1C];
-    /* 0xB1E */ mAng3_c field_0xB1E;
-    /* 0xB24 */ s16 field_0xB24;
-    /* 0xB26 */ s16 field_0xB26;
-    /* 0xB26 */ u32 field_0xB28;
-    /* 0xB2C */ s32 field_0xB2C;
-    /* 0xB30 */ mAng field_0xB30;
+    /* 0xB1E */ mAng3_c mSlope;
+    /* 0xB24 */ s16 mSlopeXTarget;
+    /* 0xB26 */ s16 mSlopeZTarget;
+    /* 0xB26 */ u32 mSlopeCheckCounter;
+    /* 0xB2C */ s32 mHarpCounter;
+    /* 0xB30 */ mAng mHeadTiltTarget;
     /* 0xB32 */ mAng field_0xB32;
     /* 0xB34 */ mAng field_0xB34;
-    /* 0xB38 */ f32 field_0xB38;
-    /* 0xB3C */ f32 field_0xB3C;
-    /* 0xB40 */ f32 field_0xB40;
+    /* 0xB38 */ f32 mYPosition;
+    /* 0xB3C */ f32 mYOffset;
+    /* 0xB40 */ f32 mScaleFTarget;
     /* 0xB44 */ u16 field_0xB44;
     /* 0xB46 */ u16 field_0xB46;
-    /* 0xB48 */ u16 field_0xB48;
+    /* 0xB48 */ u16 mAnimTimer;
     /* 0xB4A */ u16 mWinkTimer;
-    /* 0xB4C */ u16 field_0xB4C;
-    /* 0xB4E */ u16 field_0xB4E;
+    /* 0xB4C */ u16 mHeadTiltTimer;
+    /* 0xB4E */ u16 mAnimSafeTimer;
     /* 0xB50 */ u16 field_0xB50;
     /* 0xB52 */ u16 field_0xB52;
-    /* 0xB54 */ u16 field_0xB54;
+    /* 0xB54 */ u16 mScaleFTimer;
     /* 0xB56 */ u16 field_0xB56;
-    /* 0xB58 */ u16 field_0xB58;
-    /* 0xB5A */ u16 field_0xB5A;
-    /* 0xB5C */ u16 field_0xB5C;
-    /* 0xB5E */ u16 field_0xB5E;
-    /* 0xB60 */ u8 field_0xB60; // Some State representation
+    /* 0xB58 */ u16 mNoGroundCounter;
+    /* 0xB5A */ u16 mSwimPosYCounter;
+    /* 0xB5C */ u16 mFlySpeedCounter;
+    /* 0xB5E */ u16 mFlyAngleCounter;
+    /* 0xB60 */ u8 mAnimation;
     /* 0xB61 */ u8 field_0xB61;
     /* 0xB62 */ u8 mSleepDemoPlayedSceneflag;
-    /* 0xB63 */ u8 field_0xB63;
+    /* 0xB63 */ u8 mNightSleepDemoStep;
     /* 0xB64 */ u8 field_0xB64;
-    /* 0xB65 */ u8 field_0xB65;
-    /* 0xB66 */ u8 field_0xB66;
+    /* 0xB65 */ u8 mAnmStep;
+    /* 0xB66 */ bool field_0xB66;
     /* 0xB67 */ u8 field_0xB67;
     /* 0xB68 */ u8 field_0xB68;
     /* 0xB69 */ u8 field_0xB69;
     /* 0xB6A */ u8 field_0xB6A;
-    /* 0xB6B */ u8 field_0xB6B;
+    /* 0xB6B */ bool field_0xB6B;
     /* 0xB6C */ u8 field_0xB6C;
     /* 0xB6D */ u8 field_0xB6D;
     /* 0xB6E */ u8 field_0xB6E;
