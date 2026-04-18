@@ -5,6 +5,7 @@
 #include "f/f_list_mg.h"
 #include "f/f_list_nd.h"
 #include "m/m_mtx.h"
+#include "m/m_vec.h"
 
 class dTgStream_c : public dTg_c {
 public:
@@ -20,6 +21,8 @@ public:
     static fLiMgBa_c sSandStreamList;
 
     void addToList(fLiMgBa_c &list);
+
+    static bool getForce(const mVec3_c &position, mVec3_c &force, const fLiMgBa_c &list = sStreamList);
 
 private:
     /* 0x0FC */ u8 mSceneflag; ///< Sceneflag to indicate when to flow

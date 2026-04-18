@@ -53,6 +53,11 @@ public:
         return *this;
     }
 
+    template <typename T>
+    bool operator==(const T other) {
+        return mVal == other;
+    }
+
 public:
     static s32 abs(const mAng b) {
         return labs(b);
@@ -62,6 +67,12 @@ public:
     }
     s32 absDiff(const mAng &other) const {
         return sLib::absDiff(mVal, other.mVal);
+    }
+    // NOTE: Try not to use this one...
+    //       May need a better home in future.
+    template <typename T>
+    static s32 absDiff2(T a, T b) {
+        return abs(a - b);
     }
     f32 sin() const {
         return nw4r::math::SinIdx(*this);

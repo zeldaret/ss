@@ -512,7 +512,7 @@ int dAcEsm_c::actorExecute() {
     mHitPos.set(0.f, 0.f, 0.f);
 
     if (0 == sLib::calcTimer(&mDamageTimer)) {
-        field_0xB94 = fn_8002fde0(mSph, nullptr);
+        field_0xB94 = fn_8002FDE0(mSph, nullptr);
         if (field_0xB94 != 0) {
             if (mSph.ChkTgHit()) {
                 if (field_0xB94 == 7) {
