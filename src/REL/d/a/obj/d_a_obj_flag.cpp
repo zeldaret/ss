@@ -2,9 +2,16 @@
 
 #include "c/c_math.h"
 #include "common.h"
+#include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/a/obj/d_a_obj_desert_ago.h"
 #include "d/col/cc/d_cc_d.h"
+#include "d/d_sc_game.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
+#include "f/f_manager.h"
+#include "f/f_profile_name.h"
+#include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resanmtexsrt.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
@@ -135,6 +142,75 @@ int dAcOFlag_c::actorCreate() {
             mMdl.setPriorityDraw(0x1C, -1);
         }
     }
+    return SUCCEEDED;
+}
+
+int dAcOFlag_c::actorPostCreate() {
+    if (isSail()) {
+        if (dScGame_c::isCurrentStage("F301_6")) {
+            if ((s32)getFromParams(0, 0xF) == 4) {
+                dAcODesertAgo_c *pDesertAgo =
+                    static_cast<dAcODesertAgo_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_DESERT_AGO));
+                if (!pDesertAgo) {
+                    return FAILED;
+                }
+                mDesertAgoRef.link(pDesertAgo);
+                unsetActorProperty(AC_PROP_0x1 | AC_PROP_0x2);
+                field_0x530 = 8995;
+                field_0x564 = 249;
+                field_0x561 = 0;
+            } else {
+                f32 s = 1.f / mScale.x;
+                mBoundingBox.Set(
+                    mVec3_c(s * -4000.f, s * -2000.f, s * -6000.f), mVec3_c(s * 4000.f, s * 1500.f, s * 4000.f)
+                );
+            }
+            setActorProperty(AC_PROP_0x4);
+        } else {
+            f32 s = 1.f / mScale.x;
+            mBoundingBox.Set(
+                mVec3_c(s * -3000.f, s * -4000.f, s * -3000.f), mVec3_c(s * 3000.f, s * 2000.f, s * 3000.f)
+            );
+        }
+        field_0x558 = 0;
+        field_0x55C = 91;
+    }
+    createPlacement();
+    return SUCCEEDED;
+}
+
+int dAcOFlag_c::doDelete() {
+    return SUCCEEDED;
+}
+
+int dAcOFlag_c::actorExecute() {
+    field_0x530++;
+    mStateMgr.executeState();
+
+    if (isSail()) {
+        setCollider();
+    }
+
+    if ((s32)getFromParams(0, 0xF) == 4) {
+        mVec3_c v = mVec3_c::Zero;
+        if (mDesertAgoRef.isLinked()) {
+            // TODO: Fix for field at 0x86C. Probably translation from matrix
+            mMtx_c m = mDesertAgoRef.get()->mWorldMtx;
+            m.getTranslation(v);
+        } else {
+            v = mPosition;
+        }
+        mWorldMtx.transS(v);
+    } else {
+        mWorldMtx.transS(mPosition);
+    }
+    mMdl.setLocalMtx(mWorldMtx);
+    holdSound(SE_Flag_FLUTTER_LV);
+    return SUCCEEDED;
+}
+
+int dAcOFlag_c::draw() {
+    drawModelType1(&mMdl);
     return SUCCEEDED;
 }
 
