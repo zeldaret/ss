@@ -78,10 +78,18 @@ public:
     static u32 getKeyPieceCount();
     static u32 getSmallKeyCount();
 
+    static bool isJellyBlob(ITEM_ID item);
+    static bool isStarryFirefly(ITEM_ID item);
+
     static bool isRupee(ITEM_ID item);
     static bool isKeyPiece(ITEM_ID item);
     static bool isTreasure(ITEM_ID item);
+    static bool isTear(ITEM_ID item);
+
+    bool isSingleArrow() const;
     bool isTriforce() const;
+
+    u32 getParams2Lower_shift1_0x7() const;
 
     static bool getItemGetEventName(u16 item, const char **outName);
     static void itemGetEventStart(dAcBase_c *);
@@ -100,6 +108,16 @@ public:
     };
 
     static Trial_e getCurrentTrial();
+
+    enum Tear_e {
+        TEAR_0,
+        TEAR_1,
+        TEAR_2,
+        TEAR_3,
+        TEAR_MAX
+    };
+
+    static Tear_e getTearSubtype(ITEM_ID item);
 
     static void healLink(u32 amount, bool); // move to dAcPy_c
 

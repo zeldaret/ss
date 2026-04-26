@@ -1220,10 +1220,34 @@ toBeSorted/counters/extra_wallet_counter.cpp:
 	.data       start:0x805280B0 end:0x805280D0
 	.sbss       start:0x80575640 end:0x80575648
 
-toBeSorted/item_mdl.cpp:
-	.text       start:0x8016E2A0 end:0x80171AA8 align:16
-	.rodata     start:0x804E91D0 end:0x804E9A80
-	.data       start:0x805280D0 end:0x80528B20
+toBeSorted/item_mdl_misc.cpp:
+	.text       start:0x8016E2A0 end:0x8016F9DC align:16
+	.rodata     start:0x804E91D0 end:0x804E9650
+	.data       start:0x805280D0 end:0x80528490
+	.sdata      start:0x80572A10 end:0x80572A28
+	.sdata2     start:0x8057A1D8 end:0x8057A1E0
+
+toBeSorted/item_mdl_item.cpp:
+	.text       start:0x8016F9E0 end:0x8016FE20 align:16
+	.rodata     start:0x804E9650 end:0x804E9A48
+	.data       start:0x80528490 end:0x80528A68
+	.sdata      start:0x80572A28 end:0x80572AA0
+
+toBeSorted/item_mdl_rupee.cpp:
+	.text       start:0x8016FE20 end:0x80170414 align:16
+	.rodata     start:0x804E9A48 end:0x804E9A80
+	.data       start:0x80528A68 end:0x80528AB0
+
+toBeSorted/item_mdl_light_fruit.cpp:
+	.text       start:0x80170420 end:0x801708E4 align:16
+	.data       start:0x80528AB0 end:0x80528AE0
+
+toBeSorted/item_mdl_stamina_fruit.cpp:
+	.text       start:0x801708F0 end:0x80170DA4 align:16
+	.data       start:0x80528AE0 end:0x80528B20
+
+toBeSorted/item_spawn.cpp:
+	.text       start:0x80170DB0 end:0x80171AA8 align:16
 
 toBeSorted/unk_screen_effect.cpp:
 	.text       start:0x80171AB0 end:0x801749D8 align:16
