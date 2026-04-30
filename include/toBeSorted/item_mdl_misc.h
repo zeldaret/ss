@@ -25,20 +25,6 @@ public:
     static bool isMdlForItemId(u16 itemId);
 
 private:
-    enum MdlIdx {
-        MDL_PUT_ARROW,
-        MDL_PUT_ARROW_BUNDLE,
-        MDL_PUT_HEART,
-        MDL_PUT_KEY_SMALL,
-        MDL_PUT_BOMB_SET,
-        MDL_PUT_SEED,
-        MDL_PUT_HEART_UTUWA,
-        MDL_PUT_HEART_KAKERA,
-        MDL_PUT_TRI_FORCE,
-        MDL_PUT_GARAGARA,
-        MDL_PUT_MAX,
-    };
-
     struct MdlConfig {
         const char *putResFile;
         const char *putResMdl;
@@ -67,19 +53,6 @@ public:
     static bool isMdlForItemId(u16 itemId);
 
 private:
-    enum ShieldIdx {
-        MDL_SHIELD_WOOD_0,
-        MDL_SHIELD_WOOD_1,
-        MDL_SHIELD_WOOD_2,
-        MDL_SHIELD_IRON_0,
-        MDL_SHIELD_IRON_1,
-        MDL_SHIELD_IRON_2,
-        MDL_SHIELD_HOLY_0,
-        MDL_SHIELD_HOLY_1,
-        MDL_SHIELD_HOLY_2,
-        MDL_SHIELD_MAX
-    };
-
     struct MdlConfig {
         f32 frame;
         const char *resFile;
@@ -112,18 +85,6 @@ public:
     static bool isMdlForItemId(u16 itemId);
 
 private:
-    enum BottleIdx {
-        MDL_BOTTLE_WATER,
-        MDL_BOTTLE_FAIRY,
-        MDL_BOTTLE_HOLY,
-        MDL_BOTTLE_KUSURI,
-        MDL_BOTTLE_KUSURI_S,
-        MDL_BOTTLE_B_FAIRY,
-        MDL_BOTTLE_SOZAI_I,
-        MDL_BOTTLE_PUMPKIN,
-        MDL_BOTTLE_MAX
-    };
-
     struct MdlConfig {
         const char *resFile;
         const char *mdlName;
@@ -202,14 +163,6 @@ public:
     static bool isMdlForItemId(u16 itemId);
 
 private:
-    enum PotionIdx {
-        MDL_POTION_MUTEKI,
-        MDL_POTION_GUTS,
-        MDL_POTION_AIR,
-        MDL_POTION_GENKI,
-        MDL_POTION_MAX,
-    };
-
     struct MdlConfig {
         const char *resFile;
         const char *mdlName;

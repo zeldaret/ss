@@ -22,7 +22,7 @@ static const u16 ITEM_TO_MODEL_INDEX[512] = {
     ITEMMDL_SPIRIT_VESSEL,                 /* ITEM_SPIRIT_VESSEL */
     ITEMMDL_MAX,                           /* ITEM_UNK_18 */
     ITEMMDL_BOW,                           /* ITEM_BOW */
-    ITEMMDL_CLAWSHOWS,                     /* ITEM_CLAWSHOTS */
+    ITEMMDL_CLAWSHOTS,                     /* ITEM_CLAWSHOTS */
     ITEMMDL_BIRD_STATUETTE,                /* ITEM_BIRD_STATUETTE */
     ITEMMDL_MAX,                           /* ITEM_COMMON_BUG */
     ITEMMDL_MAX,                           /* ITEM_UNCOMMON_BUG */

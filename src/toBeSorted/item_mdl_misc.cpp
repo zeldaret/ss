@@ -12,6 +12,20 @@
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/item_mdl_name.h"
 
+enum MdlIdx {
+    MDL_PUT_ARROW,
+    MDL_PUT_ARROW_BUNDLE,
+    MDL_PUT_HEART,
+    MDL_PUT_KEY_SMALL,
+    MDL_PUT_BOMB_SET,
+    MDL_PUT_SEED,
+    MDL_PUT_HEART_UTUWA,
+    MDL_PUT_HEART_KAKERA,
+    MDL_PUT_TRI_FORCE,
+    MDL_PUT_GARAGARA,
+    MDL_PUT_MAX,
+};
+
 const u8 dItemMdlPut_c::sMdlIdx[] = {
     MDL_PUT_KEY_SMALL,    /* ITEMMDL_SMALL_KEY */
     MDL_PUT_MAX,          /* ITEMMDL_GREEN_RUPEE */
@@ -31,7 +45,7 @@ const u8 dItemMdlPut_c::sMdlIdx[] = {
     MDL_PUT_MAX,          /* ITEMMDL_GODDESS_HARP */
     MDL_PUT_MAX,          /* ITEMMDL_SPIRIT_VESSEL */
     MDL_PUT_MAX,          /* ITEMMDL_BOW */
-    MDL_PUT_MAX,          /* ITEMMDL_CLAWSHOWS */
+    MDL_PUT_MAX,          /* ITEMMDL_CLAWSHOTS */
     MDL_PUT_MAX,          /* ITEMMDL_BIRD_STATUETTE */
     MDL_PUT_MAX,          /* ITEMMDL_AC_BK */
     MDL_PUT_MAX,          /* ITEMMDL_FS_BK */
@@ -289,6 +303,19 @@ void dItemMdlPut_c::unsetPriorityDraw() {
     mPutMdl.setPriorityDraw(0x7F, 0x7F);
 }
 
+enum ShieldIdx {
+    MDL_SHIELD_WOOD_0,
+    MDL_SHIELD_WOOD_1,
+    MDL_SHIELD_WOOD_2,
+    MDL_SHIELD_IRON_0,
+    MDL_SHIELD_IRON_1,
+    MDL_SHIELD_IRON_2,
+    MDL_SHIELD_HOLY_0,
+    MDL_SHIELD_HOLY_1,
+    MDL_SHIELD_HOLY_2,
+    MDL_SHIELD_MAX
+};
+
 const u8 dItemMdlShield_c::sMdlIdx[] = {
     MDL_SHIELD_MAX,    /* ITEMMDL_SMALL_KEY */
     MDL_SHIELD_MAX,    /* ITEMMDL_GREEN_RUPEE */
@@ -308,7 +335,7 @@ const u8 dItemMdlShield_c::sMdlIdx[] = {
     MDL_SHIELD_MAX,    /* ITEMMDL_GODDESS_HARP */
     MDL_SHIELD_MAX,    /* ITEMMDL_SPIRIT_VESSEL */
     MDL_SHIELD_MAX,    /* ITEMMDL_BOW */
-    MDL_SHIELD_MAX,    /* ITEMMDL_CLAWSHOWS */
+    MDL_SHIELD_MAX,    /* ITEMMDL_CLAWSHOTS */
     MDL_SHIELD_MAX,    /* ITEMMDL_BIRD_STATUETTE */
     MDL_SHIELD_MAX,    /* ITEMMDL_AC_BK */
     MDL_SHIELD_MAX,    /* ITEMMDL_FS_BK */
@@ -551,6 +578,18 @@ void dItemMdlShield_c::unsetPriorityDraw() {
     mMdl.setPriorityDraw(0x7F, 0x7F);
 }
 
+enum BottleIdx {
+    MDL_BOTTLE_WATER,
+    MDL_BOTTLE_FAIRY,
+    MDL_BOTTLE_HOLY,
+    MDL_BOTTLE_KUSURI,
+    MDL_BOTTLE_KUSURI_S,
+    MDL_BOTTLE_B_FAIRY,
+    MDL_BOTTLE_SOZAI_I,
+    MDL_BOTTLE_PUMPKIN,
+    MDL_BOTTLE_MAX
+};
+
 const u8 dItemMdlBottle_c::sMdlIdx[] = {
     MDL_BOTTLE_MAX,      /* ITEMMDL_SMALL_KEY */
     MDL_BOTTLE_MAX,      /* ITEMMDL_GREEN_RUPEE */
@@ -570,7 +609,7 @@ const u8 dItemMdlBottle_c::sMdlIdx[] = {
     MDL_BOTTLE_MAX,      /* ITEMMDL_GODDESS_HARP */
     MDL_BOTTLE_MAX,      /* ITEMMDL_SPIRIT_VESSEL */
     MDL_BOTTLE_MAX,      /* ITEMMDL_BOW */
-    MDL_BOTTLE_MAX,      /* ITEMMDL_CLAWSHOWS */
+    MDL_BOTTLE_MAX,      /* ITEMMDL_CLAWSHOTS */
     MDL_BOTTLE_MAX,      /* ITEMMDL_BIRD_STATUETTE */
     MDL_BOTTLE_MAX,      /* ITEMMDL_AC_BK */
     MDL_BOTTLE_MAX,      /* ITEMMDL_FS_BK */
@@ -1021,6 +1060,14 @@ m3d::smdl_c *dItemMdlFirefly_c::getMdl() {
     return &mMdl;
 }
 
+enum PotionIdx {
+    MDL_POTION_MUTEKI,
+    MDL_POTION_GUTS,
+    MDL_POTION_AIR,
+    MDL_POTION_GENKI,
+    MDL_POTION_MAX,
+};
+
 const u8 dItemMdlPotion_c::sMdlIdx[] = {
     MDL_POTION_MAX,    /* ITEMMDL_SMALL_KEY */
     MDL_POTION_MAX,    /* ITEMMDL_GREEN_RUPEE */
@@ -1040,7 +1087,7 @@ const u8 dItemMdlPotion_c::sMdlIdx[] = {
     MDL_POTION_MAX,    /* ITEMMDL_GODDESS_HARP */
     MDL_POTION_MAX,    /* ITEMMDL_SPIRIT_VESSEL */
     MDL_POTION_MAX,    /* ITEMMDL_BOW */
-    MDL_POTION_MAX,    /* ITEMMDL_CLAWSHOWS */
+    MDL_POTION_MAX,    /* ITEMMDL_CLAWSHOTS */
     MDL_POTION_MAX,    /* ITEMMDL_BIRD_STATUETTE */
     MDL_POTION_MAX,    /* ITEMMDL_AC_BK */
     MDL_POTION_MAX,    /* ITEMMDL_FS_BK */

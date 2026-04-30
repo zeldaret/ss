@@ -75,12 +75,13 @@ public:
     static u32 getHeartContainerHealthCount();
     static u32 getGratitudeCrystalCount();
 
+    static u32 getTotalRequiredKeyPieceCount();
     static u32 getKeyPieceCount();
     static u32 getSmallKeyCount();
 
     static bool isJellyBlob(ITEM_ID item);
     static bool isStarryFirefly(ITEM_ID item);
-
+    static bool isSlingshot(ITEM_ID item);
     static bool isRupee(ITEM_ID item);
     static bool isKeyPiece(ITEM_ID item);
     static bool isTreasure(ITEM_ID item);
