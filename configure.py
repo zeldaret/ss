@@ -595,7 +595,7 @@ config.libs = [
             Object(Matching, "toBeSorted/counters/extra_wallet_counter.cpp"),
             Object(Matching, "toBeSorted/item_mdl_misc.cpp"),
             Object(Matching, "toBeSorted/item_mdl_item.cpp"),
-            Object(Matching, "toBeSorted/item_mdl_rupee.cpp"),  # non-deterministic codegen
+            Object(NonMatching, "toBeSorted/item_mdl_rupee.cpp"),  # should be Matching but non-deterministic codegen
             Object(Matching, "toBeSorted/item_mdl_light_fruit.cpp"),
             Object(Matching, "toBeSorted/item_mdl_stamina_fruit.cpp"),
             Object(NonMatching, "toBeSorted/item_spawn.cpp"),  # probably multiple files, see sdata2
