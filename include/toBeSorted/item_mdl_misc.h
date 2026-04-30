@@ -6,7 +6,6 @@
 #include "m/m3d/m_anmmdl.h"
 #include "m/m3d/m_anmtexpat.h"
 #include "m/m3d/m_anmtexsrt.h"
-#include "m/m3d/m_mdl.h"
 #include "m/m3d/m_smdl.h"
 #include "m/types_m.h"
 #include "toBeSorted/item_mdl.h"
@@ -19,7 +18,7 @@ public:
     /* 0x14 */ virtual void setScale(const mVec3_c &scale) override;
     /* 0x18 */ virtual void setLocalMtx(const mMtx_c &mtx) override;
     /* 0x1C */ virtual void draw() override;
-    /* 0x20 */ virtual void vt_0x20() override;
+    /* 0x20 */ virtual void vt_0x20(u16 itemId) override;
     /* 0x24 */ virtual void setPriorityDraw() override;
     /* 0x28 */ virtual void unsetPriorityDraw() override;
 
@@ -61,7 +60,7 @@ public:
     /* 0x14 */ virtual void setScale(const mVec3_c &scale) override;
     /* 0x18 */ virtual void setLocalMtx(const mMtx_c &mtx) override;
     /* 0x1C */ virtual void draw() override;
-    /* 0x20 */ virtual void vt_0x20() override;
+    /* 0x20 */ virtual void vt_0x20(u16 itemId) override;
     /* 0x24 */ virtual void setPriorityDraw() override;
     /* 0x28 */ virtual void unsetPriorityDraw() override;
 
@@ -103,7 +102,7 @@ public:
     /* 0x14 */ virtual void setScale(const mVec3_c &scale) override;
     /* 0x18 */ virtual void setLocalMtx(const mMtx_c &mtx) override;
     /* 0x1C */ virtual void draw() override;
-    /* 0x20 */ virtual void vt_0x20() override;
+    /* 0x20 */ virtual void vt_0x20(u16 itemId) override;
     /* 0x24 */ virtual void setPriorityDraw() override;
     /* 0x28 */ virtual void unsetPriorityDraw() override;
     /* 0x2C */ virtual m3d::smdl_c *getMdl() override {
@@ -145,7 +144,7 @@ public:
     /* 0x14 */ virtual void setScale(const mVec3_c &scale) override;
     /* 0x18 */ virtual void setLocalMtx(const mMtx_c &mtx) override;
     /* 0x1C */ virtual void draw() override;
-    /* 0x20 */ virtual void vt_0x20() override;
+    /* 0x20 */ virtual void vt_0x20(u16 itemId) override;
     /* 0x24 */ virtual void setPriorityDraw() override;
     /* 0x28 */ virtual void unsetPriorityDraw() override;
 
@@ -174,7 +173,7 @@ public:
     /* 0x14 */ virtual void setScale(const mVec3_c &scale) override;
     /* 0x18 */ virtual void setLocalMtx(const mMtx_c &mtx) override;
     /* 0x1C */ virtual void draw() override;
-    /* 0x20 */ virtual void vt_0x20() override;
+    /* 0x20 */ virtual void vt_0x20(u16 itemId) override;
     /* 0x24 */ virtual void setPriorityDraw() override;
     /* 0x28 */ virtual void unsetPriorityDraw() override;
     /* 0x2C */ virtual m3d::smdl_c *getMdl() override;
@@ -195,7 +194,7 @@ public:
     /* 0x14 */ virtual void setScale(const mVec3_c &scale) override;
     /* 0x18 */ virtual void setLocalMtx(const mMtx_c &mtx) override;
     /* 0x1C */ virtual void draw() override;
-    /* 0x20 */ virtual void vt_0x20() override;
+    /* 0x20 */ virtual void vt_0x20(u16 itemId) override;
     /* 0x24 */ virtual void setPriorityDraw() override;
     /* 0x28 */ virtual void unsetPriorityDraw() override;
     /* 0x2C */ virtual m3d::smdl_c *getMdl() override;

@@ -1,7 +1,6 @@
 #ifndef TOBESORTED_ITEM_MDL_H
 #define TOBESORTED_ITEM_MDL_H
 
-#include "m/m3d/m_mdl.h"
 #include "m/m_allocator.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
@@ -21,7 +20,7 @@ public:
     /* 0x14 */ virtual void setScale(const mVec3_c &scale) = 0;
     /* 0x18 */ virtual void setLocalMtx(const mMtx_c &mtx) = 0;
     /* 0x1C */ virtual void draw() = 0;
-    /* 0x20 */ virtual void vt_0x20() = 0;
+    /* 0x20 */ virtual void vt_0x20(u16 itemId) = 0;
     /* 0x24 */ virtual void setPriorityDraw() = 0;
     /* 0x28 */ virtual void unsetPriorityDraw() = 0;
     /* 0x2C */ virtual m3d::smdl_c *getMdl() {

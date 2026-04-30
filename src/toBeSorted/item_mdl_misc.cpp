@@ -275,7 +275,7 @@ void dItemMdlPut_c::draw() {
     }
 }
 
-void dItemMdlPut_c::vt_0x20() {
+void dItemMdlPut_c::vt_0x20(u16 itemId) {
     // no-op
 }
 
@@ -539,7 +539,7 @@ void dItemMdlShield_c::draw() {
     }
 }
 
-void dItemMdlShield_c::vt_0x20() {
+void dItemMdlShield_c::vt_0x20(u16 itemId) {
     // no-op
 }
 
@@ -795,7 +795,7 @@ void dItemMdlBottle_c::draw() {
     }
 }
 
-void dItemMdlBottle_c::vt_0x20() {
+void dItemMdlBottle_c::vt_0x20(u16 itemId) {
     // no-op
 }
 
@@ -937,7 +937,7 @@ void dItemMdlTear_c::draw() {
     }
 }
 
-void dItemMdlTear_c::vt_0x20() {
+void dItemMdlTear_c::vt_0x20(u16 itemId) {
     // no-op
 }
 
@@ -1005,7 +1005,7 @@ void dItemMdlFirefly_c::draw() {
     mAnmMatClr.play();
 }
 
-void dItemMdlFirefly_c::vt_0x20() {
+void dItemMdlFirefly_c::vt_0x20(u16 itemId) {
     // no-op
 }
 
@@ -1272,7 +1272,7 @@ void dItemMdlPotion_c::draw() {
     }
 }
 
-void dItemMdlPotion_c::vt_0x20() {
+void dItemMdlPotion_c::vt_0x20(u16 itemId) {
     // no-op
 }
 

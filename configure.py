@@ -595,7 +595,7 @@ config.libs = [
             Object(Matching, "toBeSorted/counters/extra_wallet_counter.cpp"),
             Object(Matching, "toBeSorted/item_mdl_misc.cpp"),
             Object(NonMatching, "toBeSorted/item_mdl_item.cpp"),
-            Object(NonMatching, "toBeSorted/item_mdl_rupee.cpp"),
+            Object(Matching, "toBeSorted/item_mdl_rupee.cpp"),
             Object(NonMatching, "toBeSorted/item_mdl_light_fruit.cpp"),
             Object(NonMatching, "toBeSorted/item_mdl_stamina_fruit.cpp"),
             Object(NonMatching, "toBeSorted/item_spawn.cpp"),  # probably multiple files, see sdata2

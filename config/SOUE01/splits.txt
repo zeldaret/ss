@@ -1231,20 +1231,23 @@ toBeSorted/item_mdl_item.cpp:
 	.text       start:0x8016F9E0 end:0x8016FE20 align:16
 	.rodata     start:0x804E9650 end:0x804E9A48
 	.data       start:0x80528490 end:0x80528A68
-	.sdata      start:0x80572A28 end:0x80572AA0
+	.sdata      start:0x80572A28 end:0x80572A70
 
 toBeSorted/item_mdl_rupee.cpp:
 	.text       start:0x8016FE20 end:0x80170414 align:16
 	.rodata     start:0x804E9A48 end:0x804E9A80
 	.data       start:0x80528A68 end:0x80528AB0
+	.sdata      start:0x80572A70 end:0x80572A78
 
 toBeSorted/item_mdl_light_fruit.cpp:
 	.text       start:0x80170420 end:0x801708E4 align:16
 	.data       start:0x80528AB0 end:0x80528AE0
+	.sdata      start:0x80572A78 end:0x80572A90
 
 toBeSorted/item_mdl_stamina_fruit.cpp:
 	.text       start:0x801708F0 end:0x80170DA4 align:16
 	.data       start:0x80528AE0 end:0x80528B20
+	.sdata      start:0x80572A90 end:0x80572AA0
 
 toBeSorted/item_spawn.cpp:
 	.text       start:0x80170DB0 end:0x80171AA8 align:16
