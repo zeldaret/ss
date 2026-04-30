@@ -131,7 +131,6 @@ void dItemMdlRupee_c::draw() {
 }
 
 void dItemMdlRupee_c::vt_0x20(u16 itemId) {
-    // no-op
     int i = 0;
     bool found = false;
     while (!found && i < ARRAY_LENGTH(sMdlConfig)) {
