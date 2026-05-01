@@ -6,7 +6,9 @@
 #include "m/m_allocator.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmat.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resshp.h"
 
 /** a process for drawing shapes directly */
@@ -59,6 +61,9 @@ public:
     }
 
     bool create(nw4r::g3d::ResMat mat, nw4r::g3d::ResShp shp, s32 count, mHeapAllocator_c *alloc, bool xlu, u32 *pSize);
+    bool create(s32 count, nw4r::g3d::ResMdl mdl, mHeapAllocator_c *alloc, bool xlu, u32 *pSize) {
+        return create(mdl.GetResMat(0), mdl.GetResShp(0), count, alloc, xlu, pSize);
+    }
     void draw();
 
     void setTransform(s32 idx, const mMtx_c &transform) {
