@@ -69,6 +69,7 @@ private:
 // Maybe a bad name because fairies etc. are also supported
 class dItemMdlBottle_c : public dItemMdl_c {
 public:
+    dItemMdlBottle_c() : mFlags(0) {}
     /* 0x08 */ virtual ~dItemMdlBottle_c() {}
     /* 0x0C */ virtual bool init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) override;
     /* 0x10 */ virtual void vt_0x10(u8) override;

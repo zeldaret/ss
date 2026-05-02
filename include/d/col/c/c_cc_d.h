@@ -461,6 +461,10 @@ public:
     void OffRPrm(u32 m) {
         mRPrm = (mRPrm & ~m) | m;
     }
+
+    void SetCallback(cCcD_HitCallback cb) {
+        mHit_cb = cb;
+    }
 };
 
 class cCcD_ObjAt : public cCcD_GAtTgCoCommonBase {
@@ -489,10 +493,6 @@ public:
     }
     u32 ChkSet() {
         return MskSPrm(1);
-    }
-
-    void SetCallback(cCcD_HitCallback cb) {
-        mHit_cb = cb;
     }
 
     u32 MskType(u32 mask) const {
@@ -657,12 +657,20 @@ public:
         field_0x4B = val;
     }
 
+    void SetSrcField_0x0C(u16 val) {
+        mSrc.field_0x0C = val;
+    }
+
     void SetInfo_0x1(u8 val) {
         mSrc.mInfo.field_0x1 = val;
     }
 
     void SetInfo_0x2(u16 val) {
         mSrc.mInfo.field_0x2 = val;
+    }
+
+    void OnInfo_0x2(u16 val) {
+        mSrc.mInfo.field_0x2 |= val;
     }
 
 public:
@@ -858,6 +866,10 @@ public:
         mTg.SetFlag_0xA(flag);
     }
 
+    void SetTgSrcField_0x0C(u16 val) {
+        mTg.SetSrcField_0x0C(val);
+    }
+
     bool ChkTgHit() {
         return mTg.MskRPrm(1) != 0 && mTg.GetActor() != nullptr;
     }
@@ -915,6 +927,10 @@ public:
 
     void SetAtCallback(cCcD_HitCallback cb) {
         mAt.SetCallback(cb);
+    }
+
+    void SetCoCallback(cCcD_HitCallback cb) {
+        mCo.SetCallback(cb);
     }
 
     u32 ChkTgNoAtHitInfSet() const {
@@ -997,6 +1013,12 @@ public:
     void OnTgElectric() {
         return mTg.OnSPrm(0x40000);
     }
+    void OnTg_0x800000() {
+        return mTg.OnSPrm(0x800000);
+    }
+    void OnTg_0x1000000() {
+        return mTg.OnSPrm(0x1000000);
+    }
     void OnTg_0x8000000() {
         return mTg.OnSPrm(0x8000000);
     }
@@ -1005,6 +1027,9 @@ public:
     }
     void ClrTg_0x10000() {
         return mTg.OffSPrm(0x10000);
+    }
+    void ClrTg_0x800000() {
+        return mTg.OffSPrm(0x800000);
     }
     void ClrTg_0x8000000() {
         return mTg.OffSPrm(0x8000000);
@@ -1016,6 +1041,9 @@ public:
     void OnTg_0x200000() {
         mTg.OnSPrm(0x200000);
     }
+    void ClrTg_0x200000() {
+        mTg.OffSPrm(0x200000);
+    }
 
     void SetTg_0x4B(u8 val) {
         mTg.Set_0x4B(val);
@@ -1025,6 +1053,9 @@ public:
     }
     void SetTgInfo_0x2(u16 val) {
         mTg.SetInfo_0x2(val);
+    }
+    void OnTgInfo_0x2(u16 val) {
+        mTg.OnInfo_0x2(val);
     }
     void SetTg_0x40000000() {
         mTg.OnSPrm(0x40000000);

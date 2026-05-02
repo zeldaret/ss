@@ -8,6 +8,7 @@
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
+#include "sized_string.h"
 #include "toBeSorted/actor_info.h"
 #include "toBeSorted/raii_ptr.h"
 #include "toBeSorted/sound_info.h"
@@ -109,8 +110,7 @@ public:
     /* 0xEE */ u8 mPolyAttr0;
     /* 0xEF */ u8 mPolyAttr1;
     /* 0xF0 */ u32 mJStudioActor;
-    /* 0xF4 */ char someStr[4];
-    /* 0xF8 */ char field_0xf8[0xfc - 0xf8];
+    /* 0xF4 */ SizedString<8> mSomeStr;
 
 public:
     /* vt 0x08 */ virtual int create();
@@ -240,6 +240,7 @@ public:
     void setParams2UpperByte(u32 val);
     static u32 buildParams2(u32 lower, u32 upper);
     u32 getParams2Lower() const;
+    u32 getFirstBitParams2() const;
     static dAcBase_c *findActor(char *objName, dAcBase_c *parent);
     static dAcBase_c *searchActor(dAcBase_c *parent);
     // Kinda performs the code of the first param on every actor (second param is optional parent)

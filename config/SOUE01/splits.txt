@@ -1501,6 +1501,7 @@ d/a/d_a_item.cpp:
 	.ctors      start:0x804DB828 end:0x804DB82C
 	.rodata     start:0x804EBBB0 end:0x804ED340
 	.data       start:0x80533268 end:0x80534490
+	.sdata      start:0x80573968 end:0x805739B0
 	.sbss       start:0x805758B8 end:0x805758E0
 	.sdata2     start:0x8057BD88 end:0x8057BF80
 	.bss        start:0x805B4490 end:0x805B48A8
@@ -1510,6 +1511,7 @@ d/a/obj/d_a_obj_bomb.cpp:
 	.ctors      start:0x804DB82C end:0x804DB830
 	.rodata     start:0x804ED340 end:0x804ED350
 	.data       start:0x80534490 end:0x805347A8
+	.sdata      start:0x805739B0 end:0x805739C8
 	.sbss       start:0x805758E0 end:0x805758F0
 
 d/a/obj/d_a_obj_arrow.cpp:
@@ -1517,6 +1519,7 @@ d/a/obj/d_a_obj_arrow.cpp:
 	.ctors      start:0x804DB830 end:0x804DB834
 	.rodata     start:0x804ED350 end:0x804ED380
 	.data       start:0x805347A8 end:0x80534AD0
+	.sdata      start:0x805739C8 end:0x805739D8
 	.sbss       start:0x805758F0 end:0x80575900
 
 d/a/obj/d_a_obj_boomerang.cpp:

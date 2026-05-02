@@ -51,7 +51,7 @@ int dAcOTumbleWeed_c::actorCreate() {
 
     mObjAcch.Set(this, 1, &mAcchCir);
     mAcchCir.SetWall(20.f, 60.f);
-    mObjAcch.OffClrSpeedY();
+    mObjAcch.SetClrSpeedY();
     mObjAcch.SetGndThinCellingOff();
 
     mStts.SetRank(3);

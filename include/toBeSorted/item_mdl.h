@@ -14,6 +14,7 @@ class dAcItem_c;
 // vtable at 80533eb0
 class dItemMdl_c : public dMdl_c {
 public:
+    dItemMdl_c() : field_0x14(ITEM_MDL_UNK0x14_0) {}
     /* 0x08 */ virtual ~dItemMdl_c() {}
     /* 0x0C */ virtual bool init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) = 0;
     /* 0x10 */ virtual void vt_0x10(u8) = 0;

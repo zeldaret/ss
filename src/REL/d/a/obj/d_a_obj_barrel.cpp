@@ -185,7 +185,7 @@ int dAcOBarrel_c::actorCreate() {
     }
     mSph.Set(sSrcSph);
     mSph.SetStts(mStts);
-    mObjAcch.OffClrSpeedY();
+    mObjAcch.SetClrSpeedY();
 
     mAcceleration = -4.f;
     mMaxSpeed = -40.f;
