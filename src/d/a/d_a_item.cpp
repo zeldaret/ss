@@ -487,7 +487,6 @@ bool dAcItem_c::createHeap() {
     return true;
 }
 
-// TODO this function pools .data but doesn't pool .bss for some reason
 int dAcItem_c::create() {
     u32 flag = getFromParams(0xA, 0xFF);
     if (flag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag)) {
@@ -705,7 +704,6 @@ int dAcItem_c::create() {
         fn_802567D0();
     }
 
-    // These need to not pool...
     switch (getSubtypeFromParam(mParams)) {
         default:
             mStateMgr.changeState(StateID_Wait);
@@ -984,8 +982,6 @@ int dAcItem_c::create() {
     }
 
     if (mId == ITEM_STAMINA_FRUIT && unk) {
-        // ((getFirstBitParams2__9dAcBase_cCFv((dAcBase_c *) this) << 8) & 0x100 & ~1) | (((u32) this->unk4 >> 0x13U) & 1)
-        
         u32 p1 = (getFirstBitParams2() & 0x1) << 8;
         u32 parms = ((mParams >> 0x13) & 0x1) | (p1 & ~0x1);
         dAcObjBase_c *leaves = dAcObjBase_c::create(fProfile::OBJ_FRUIT_GUTS_LEAF, mRoomID, parms, &mPosition, &mRotation, &mScale, -1);
