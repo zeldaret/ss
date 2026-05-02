@@ -100,6 +100,8 @@ public:
 
     virtual u16 getItemIdFromParams() override;
     virtual void setItemId(u16 id);
+    virtual bool shouldDespawn();
+    virtual bool isItemSmallKeyOrHeartPieceOrStaminaFruit();
 
     STATE_FUNC_DECLARE(dAcItem_c, Wait);
     STATE_FUNC_DECLARE(dAcItem_c, Carry);
@@ -242,6 +244,9 @@ private:
     typedef bool (dAcItem_c::*sStaticPtmf)();
     static const sStaticPtmf sStaticPtmfs[];
 
+    static dAcRef_c<dAcObjBase_c> sItemListHead;
+    static dAcRef_c<dAcObjBase_c> sItemListTail;
+
     static const ItemInitStruct *getItemInitStructForId(u16 itemId);
     const ItemInitStruct *getItemInitStruct() const;
     bool isItemDropFromEnemy() const;
@@ -261,6 +266,23 @@ private:
     s32 getTearIdx();
     void setFreestandingYOffset(f32);
     void fn_8024DF30(u32 flags);
+
+    bool fn_80255CF0();
+    bool fn_802574A0();
+    void addToGetQueue();
+    static bool fn_8024A230();
+    void unsetHaveNoGravity();
+    void fn_80252A80();
+    void tickDespawnTimer();
+    void fn_80253D50();
+    bool fn_802577A0();
+    void fn_80256F20();
+    bool fn_80256E80();
+    bool fn_80255C50(u32 specialCode);
+    bool fn_80255CA0(u32 specialCode);
+    void getCurrentModelScale(f32 *scale);
+    void makeLinkLookTowardItem();
+    void fn_80254CA0();
 
     // static PTMF callbacks
     bool fn_80248020();
@@ -548,8 +570,8 @@ private:
     /* 0xD40 */ mAng mMdlRotY;
     /* 0xD42 */ s16 field_0xD42;
     /* 0xD44 */ u16 mRealItemId;
-    /* 0xD46 */ s16 mDespawnTimer;
-    /* 0xD48 */ u16 field_0xD48;
+    /* 0xD46 */ u16 mDespawnTimer;
+    /* 0xD48 */ mAng field_0xD48;
     /* 0xD4A */ u8 field_0xD4A;
     /* 0xD4B */ u8 field_0xD4B;
     /* 0xD4C */ u8 field_0xD4C;

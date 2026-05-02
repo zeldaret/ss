@@ -833,6 +833,11 @@ public:
         mCo.OnSPrm(f);
     }
 
+    void OffTgCoFlag(u32 f) {
+        mTg.OffSPrm(f);
+        mCo.OffSPrm(f);
+    }
+
     void SetAtType(u32 type) {
         mAt.SetType(type);
     }

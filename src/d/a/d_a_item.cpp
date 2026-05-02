@@ -3,8 +3,14 @@
 #include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_itembase.h"
+#include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/col/bg/d_bg_s_gnd_chk.h"
+#include "d/col/bg/d_bg_s_roof_chk.h"
 #include "d/col/cc/d_cc_d.h"
+#include "d/col/cc/d_cc_s.h"
+#include "d/d_camera.h"
+#include "d/d_linkage.h"
 #include "d/d_pouch.h"
 #include "d/d_sc_game.h"
 #include "d/flag/dungeonflag_manager.h"
@@ -16,8 +22,11 @@
 #include "f/f_list_mg.h"
 #include "f/f_profile_name.h"
 #include "m/m_vec.h"
+#include "s/s_Math.h"
+#include "toBeSorted/d_emitter.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
+#include "toBeSorted/file_manager.h"
 #include "toBeSorted/item_mdl_item.h"
 #include "toBeSorted/item_mdl_light_fruit.h"
 #include "toBeSorted/item_mdl_misc.h"
@@ -235,13 +244,21 @@ const u32 dAcItemBase_c::sItemTypeFlags[MAX_ITEM_ID - 1] = {
     0xFFFF, 0x0,    0x0,    0x0,    0x0,    0x0,
 };
 
+struct GlitteringSporeRupeeChance {
+    s32 itemId;
+    s32 weight;
+};
+
+static const GlitteringSporeRupeeChance sSporeRupeeChances[] = {
+    {ITEM_GREEN_RUPEE, 4},
+    { ITEM_BLUE_RUPEE, 5},
+    {  ITEM_RED_RUPEE, 1},
+    {     ITEM_RUPOOR, 1},
+};
+
 static const dCcD_SrcCyl sSrcCyl = {
     {{0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     {~(AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND),
-      0x111,
-      {0, 0x08, 0x407},
-      0,
-      0},
+     {~(AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 0x08, 0x407}, 0, 0},
      {0xE9}},
     {40.0f, 60.0f}
 };
@@ -262,14 +279,13 @@ struct TearIdIdx {
 
 /* static */ extern "C" TearIdIdx sTearIdxes[] = {
     {0, ITEM_FARORE_TEAR},
-    {1, ITEM_DIN_TEAR},
-    {2, ITEM_NAYRU_TEAR},
+    {1,    ITEM_DIN_TEAR},
+    {2,  ITEM_NAYRU_TEAR},
     {3, ITEM_SACRED_TEAR},
 };
 
 /* static */ extern const char *const sGetFairyBody = "GetFairy_body";
 /* static */ extern const char *const sBottleFairy_body = "BottleFairy_body";
-
 
 bool dAcItemBase_c::isValidItemTypeIdx(int itemId) {
     return itemId < ARRAY_LENGTH(sItemTypeFlags);
@@ -361,18 +377,12 @@ SPECIAL_ACTOR_PROFILE(ITEM, dAcItem_c, fProfile::ITEM, 0x2B, 0, 2);
 const mVec3_c dAcItem_c::sFreestandingDowsingOffset(0.0f, 25.0f, 0.0f);
 
 const dAcItem_c::sStaticPtmf dAcItem_c::sStaticPtmfs[] = {
-    &dAcItem_c::fn_80248020,
-    nullptr,
-    &dAcItem_c::fn_80248010,
-    nullptr,
-    &dAcItem_c::fn_80255B30,
-    &dAcItem_c::fn_80255BA0,
-    &dAcItem_c::fn_80248040,
-    nullptr,
-    &dAcItem_c::fn_80248030,
-    nullptr,
-    &dAcItem_c::fn_80255BD0,
-    &dAcItem_c::fn_80255C40,
+    &dAcItem_c::fn_80248020, nullptr,
+    &dAcItem_c::fn_80248010, nullptr,
+    &dAcItem_c::fn_80255B30, &dAcItem_c::fn_80255BA0,
+    &dAcItem_c::fn_80248040, nullptr,
+    &dAcItem_c::fn_80248030, nullptr,
+    &dAcItem_c::fn_80255BD0, &dAcItem_c::fn_80255C40,
 };
 
 dAcItem_c::dAcItem_c()
@@ -503,9 +513,10 @@ int dAcItem_c::create() {
     } else {
         mId = paramId;
     }
-    
+
     if (isGratitudeCrystal()) {
-        if (!StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_GRATITUDE_QUEST_STARTED) || !dScGame_c::currentSpawnInfo.isNight()) {
+        if (!StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_GRATITUDE_QUEST_STARTED) ||
+            !dScGame_c::currentSpawnInfo.isNight()) {
             return FAILED;
         }
     } else if (isHeart()) {
@@ -523,14 +534,9 @@ int dAcItem_c::create() {
     setItemId(getItemId2());
 
     switch (getItemInitStruct()->_0x00[9]) {
-        case 0:
-            mFn_0xC90 = &dAcItem_c::fn_80254DE0;
-            break;
-        case 1:
-            mFn_0xC90 = &dAcItem_c::fn_80254DF0;
-            break;
-        default:
-            return FAILED;
+        case 0:  mFn_0xC90 = &dAcItem_c::fn_80254DE0; break;
+        case 1:  mFn_0xC90 = &dAcItem_c::fn_80254DF0; break;
+        default: return FAILED;
     }
 
     if (isSmallKey()) {
@@ -572,17 +578,10 @@ int dAcItem_c::create() {
     mFnCallGetFreestandingScale = &dAcItem_c::callGetFreestandingModelScale;
 
     switch (getItemInitStruct()->_0x00[10]) {
-        case 0:
-            mFnAction = &dAcItem_c::moveNormal0;
-            break;
-        case 1:
-            mFnAction = &dAcItem_c::moveNormal1;
-            break;
-        case 2:
-            mFnAction = &dAcItem_c::moveSpecial;
-            break;
-        default:
-            return FAILED;
+        case 0:  mFnAction = &dAcItem_c::moveNormal0; break;
+        case 1:  mFnAction = &dAcItem_c::moveNormal1; break;
+        case 2:  mFnAction = &dAcItem_c::moveSpecial; break;
+        default: return FAILED;
     }
 
     if (isHeart2()) {
@@ -622,7 +621,7 @@ int dAcItem_c::create() {
     }
 
     mSubtype = mId;
-    
+
     CREATE_ALLOCATOR(dAcItem_c);
 
     if (!getFromParams(0x13, 0x1)) {
@@ -681,7 +680,9 @@ int dAcItem_c::create() {
     }
 
     mCyl.SetCoCallback(hitCallback);
-    mAcchCir.SetWall(getItemFlagStruct(getItemId())->field_0x01 * 0.5f, getItemFlagStruct(getItemId())->field_0x00 * 0.6f);
+    mAcchCir.SetWall(
+        getItemFlagStruct(getItemId())->field_0x01 * 0.5f, getItemFlagStruct(getItemId())->field_0x00 * 0.6f
+    );
     mObjAcch.Set(this, 1, &mAcchCir);
     mObjAcch.field_0x0D4 = 50.0f;
     mObjAcch.SetClrSpeedY();
@@ -705,30 +706,14 @@ int dAcItem_c::create() {
     }
 
     switch (getSubtypeFromParam(mParams)) {
-        default:
-            mStateMgr.changeState(StateID_Wait);
-            break;
-        case 1:
-            mStateMgr.changeState(StateID_Wait);
-            break;
-        case 2:
-            mStateMgr.changeState(StateID_Wait);
-            break;
-        case 3:
-            onTouchLink();
-            break;
-        case 4:
-            mStateMgr.changeState(StateID_Get);
-            break;
-        case 5:
-            mStateMgr.changeState(StateID_WaitForcedGetDemo);
-            break;
-        case 6:
-            mStateMgr.changeState(StateID_GetBeetle);
-            break;
-        case 7:
-            mStateMgr.changeState(StateID_WaitTBoxGetDemo);
-            break;
+        default: mStateMgr.changeState(StateID_Wait); break;
+        case 1:  mStateMgr.changeState(StateID_Wait); break;
+        case 2:  mStateMgr.changeState(StateID_Wait); break;
+        case 3:  onTouchLink(); break;
+        case 4:  mStateMgr.changeState(StateID_Get); break;
+        case 5:  mStateMgr.changeState(StateID_WaitForcedGetDemo); break;
+        case 6:  mStateMgr.changeState(StateID_GetBeetle); break;
+        case 7:  mStateMgr.changeState(StateID_WaitTBoxGetDemo); break;
     }
 
     fn_80255DF0();
@@ -776,13 +761,13 @@ int dAcItem_c::create() {
     }
 
     switch (mId) {
-        case ITEM_GREEN_RUPEE:   mFnGetRupeeGravity = &dAcItem_c::getGreenRupeeGravity3; break;
-        case ITEM_BLUE_RUPEE:    mFnGetRupeeGravity = &dAcItem_c::getBlueRupeeGravity3; break;
-        case ITEM_RED_RUPEE:     mFnGetRupeeGravity = &dAcItem_c::getRedRupeeGravity3; break;
-        case ITEM_SILVER_RUPEE:  mFnGetRupeeGravity = &dAcItem_c::getSilverRupeeGravity3; break;
-        case ITEM_GOLD_RUPEE:    mFnGetRupeeGravity = &dAcItem_c::getGoldRupeeGravity3; break;
-        case ITEM_RUPOOR:        mFnGetRupeeGravity = &dAcItem_c::getRupoorGravity3; break;
-        default:                 mFnGetRupeeGravity = nullptr; break;
+        case ITEM_GREEN_RUPEE:  mFnGetRupeeGravity = &dAcItem_c::getGreenRupeeGravity3; break;
+        case ITEM_BLUE_RUPEE:   mFnGetRupeeGravity = &dAcItem_c::getBlueRupeeGravity3; break;
+        case ITEM_RED_RUPEE:    mFnGetRupeeGravity = &dAcItem_c::getRedRupeeGravity3; break;
+        case ITEM_SILVER_RUPEE: mFnGetRupeeGravity = &dAcItem_c::getSilverRupeeGravity3; break;
+        case ITEM_GOLD_RUPEE:   mFnGetRupeeGravity = &dAcItem_c::getGoldRupeeGravity3; break;
+        case ITEM_RUPOOR:       mFnGetRupeeGravity = &dAcItem_c::getRupoorGravity3; break;
+        default:                mFnGetRupeeGravity = nullptr; break;
     }
 
     switch (mId) {
@@ -822,7 +807,6 @@ int dAcItem_c::create() {
         case ITEM_RUPOOR:       mFnGetDirHitKnockbackRand = &dAcItem_c::getRupoorDirHitKnockbackRand; break;
         default:                mFnGetDirHitKnockbackRand = nullptr; break;
     }
-
 
     switch (mId) {
         case ITEM_GREEN_RUPEE:  mFnGetHitKnockback = &dAcItem_c::getGreenRupeeHitKnockback; break;
@@ -968,14 +952,18 @@ int dAcItem_c::create() {
         if (type == TEAR_MAX) {
             type = TEAR_0;
         }
-        dAcObjBase_c *forceSign = dAcObjBase_c::create(this, fProfile::OBJ_FORCE_SIGN, type & 0xFF, nullptr, nullptr, nullptr, nullptr, 0x3F);
+        dAcObjBase_c *forceSign =
+            dAcObjBase_c::create(this, fProfile::OBJ_FORCE_SIGN, type & 0xFF, nullptr, nullptr, nullptr, nullptr, 0x3F);
         if (forceSign != nullptr) {
             mForceSignRef.link(forceSign);
         }
     }
 
     if (isAnyTear()) {
-        dAcBase_c *forceGetFlag = dAcBase_c::createActorStage(fProfile::TAG_FORCE_GET_FLAG, dTgForceGetFlag_c::tearIdxToParam(getTearIdx()), &mPosition, &mRotation, &mScale, 0, mRoomID, this);
+        dAcBase_c *forceGetFlag = dAcBase_c::createActorStage(
+            fProfile::TAG_FORCE_GET_FLAG, dTgForceGetFlag_c::tearIdxToParam(getTearIdx()), &mPosition, &mRotation,
+            &mScale, 0, mRoomID, this
+        );
         if (forceGetFlag == nullptr) {
             return FAILED;
         }
@@ -984,7 +972,8 @@ int dAcItem_c::create() {
     if (mId == ITEM_STAMINA_FRUIT && unk) {
         u32 p1 = (getFirstBitParams2() & 0x1) << 8;
         u32 parms = ((mParams >> 0x13) & 0x1) | (p1 & ~0x1);
-        dAcObjBase_c *leaves = dAcObjBase_c::create(fProfile::OBJ_FRUIT_GUTS_LEAF, mRoomID, parms, &mPosition, &mRotation, &mScale, -1);
+        dAcObjBase_c *leaves =
+            dAcObjBase_c::create(fProfile::OBJ_FRUIT_GUTS_LEAF, mRoomID, parms, &mPosition, &mRotation, &mScale, -1);
         if (leaves == nullptr) {
             return FAILED;
         }
@@ -1042,21 +1031,360 @@ int dAcItem_c::create() {
     return SUCCEEDED;
 }
 
-STATE_DEFINE(dAcItem_c, Wait);
-STATE_DEFINE(dAcItem_c, Carry);
-STATE_DEFINE(dAcItem_c, GetBeetle);
-STATE_DEFINE(dAcItem_c, WaitGet);
-STATE_DEFINE(dAcItem_c, Get);
-STATE_DEFINE(dAcItem_c, WaitGetDemo);
-STATE_DEFINE(dAcItem_c, WaitForcedGetDemo);
-STATE_DEFINE(dAcItem_c, GetDemo);
-STATE_DEFINE(dAcItem_c, WaitTBoxGetDemo);
-STATE_DEFINE(dAcItem_c, ResurgeWait);
-STATE_DEFINE(dAcItem_c, WaitTurnOff);
-STATE_DEFINE(dAcItem_c, WaitSacredDewGetEffect);
-
 void dAcItem_c::initializeState_Wait() {}
-void dAcItem_c::executeState_Wait() {}
+void dAcItem_c::executeState_Wait() {
+    bool isFixedPosition;
+    
+    bool tmp = false;
+    mVec3_c topPos = getPosition() + mVec3_c::Ey * mCyl.GetH();
+    bool chk = dBgS_ObjRoofChk::CheckPos(&getPosition());
+    if (chk) {
+        tmp = dBgS_ObjRoofChk::GetRoofHeight() < topPos.y;
+    }
+    if (tmp) {
+        isFixedPosition = false;
+    } else {
+        f32 f = chk ? dBgS_ObjRoofChk::GetRoofHeight() : 500.0f;
+        mVec3_c chkPos = getPosition() + mVec3_c::Ey * f;
+        if (dBgS_ObjGndChk::CheckPos(chkPos)) {
+            if (topPos.y < dBgS_ObjGndChk::GetGroundHeight()) {
+                const dAcObjBase_c *obj = dBgS::GetInstance()->GetActorPointer(dBgS_ObjGndChk::GetInstance());
+                if (obj == nullptr) {
+                    isFixedPosition = false;
+                } else {
+                    isFixedPosition = obj->mProfileName == fProfile::OBJ_DESERT;
+                }
+            } else {
+                isFixedPosition = false;
+            }
+        } else {
+            isFixedPosition = false;
+        }
+    }
+
+    if (isBabyRattle() && !isFixedPosition) {
+        isFixedPosition = mCoveredSand.isLinked();
+    }
+
+    if (fn_80255CF0() && field_0xD4C > 16 && (!mbNoGravity || !isFixedPosition)) {
+        mCyl.OnTgCoFlag(0x1);
+    } else {
+        mCyl.OffTgCoFlag(0x1);
+    }
+
+    if ((mItemFlags & 0x80) != 0) {
+        if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, 0x1D)) {
+            mCyl.OnTgType(0x2);
+        } else {
+            mCyl.OffTgType(0x2);
+        }
+    }
+
+    dAcPy_c *link = dAcPy_c::GetLinkM();
+    bool tgHit = mCyl.ChkTgHit();
+    bool tgBit1;
+    if (tgHit) {
+        tgBit1 = mCyl.ChkTgBit1();
+    } else {
+        tgBit1 = false;
+    }
+    if (!link->checkFlags0x340(0x10)) {
+        if (field_0xD65 || (tgHit && (mCyl.ChkTgAtHitType(AT_TYPE_SWORD) || mCyl.ChkTgAtHitType(AT_TYPE_BUGNET)))) {
+            onTouchLink();
+            return;
+        }
+
+        if (fn_802574A0() && !tgBit1) {
+            // TODO weird double load of link
+            link = dAcPy_c::GetLinkM();
+            if (!link->vt_0x1C0()) {
+                addToGetQueue();
+
+                if ((link->ifHasHealthAndSomethingElse() && this == sItemListHead.get() &&
+                     FileManager::GetInstance()->getCurrentHealth() != 0)) {
+                    if (isSmallKey() || isBabyRattle()) {
+                        mStateMgr.changeState(StateID_WaitForcedGetDemo);
+                    } else {
+                        mStateMgr.changeState(StateID_Get);
+                    }
+                } else {
+                    mStateMgr.changeState(StateID_Get);
+                }
+            } else {
+                mStateMgr.changeState(StateID_GetBeetle);
+            }
+
+            return;
+        }
+    }
+
+    u32 fruitParam = getParams2Lower_shift1_0x7();
+    if (tgHit) {
+        if (mId == ITEM_STAMINA_FRUIT) {
+            dJEffManager_c::spawnEffect(
+                PARTICLE_RESOURCE_ID_MAPPING_373_, mPosition, &mRotation, &mScale, nullptr, nullptr, 0, 0
+            );
+            startSound(SE_O_REFRESH_FRUIT_BREAK);
+            if (!fruitParam) {
+                deleteRequest();
+            } else {
+                mStateMgr.changeState(StateID_ResurgeWait);
+            }
+            return;
+        } else if (isLightFruit()) {
+            mStateMgr.changeState(StateID_ResurgeWait);
+            return;
+        }
+
+        // Glittering Spores?
+        if (mCyl.ChkTgAtHitType(AT_TYPE_0x80000)) {
+            if (isHeart()) {
+                if (fn_8024A230()) {
+                    mVec3_c spawnPos(mPosition.x, mPosition.y + 30.0f, mPosition.z);
+                    dAcObjBase_c::create(fProfile::OBJ_FAIRY, mRoomID, 0x3F, &spawnPos, nullptr, nullptr, -1);
+                    dJEffManager_c::spawnEffect(
+                        PARTICLE_RESOURCE_ID_MAPPING_375_, spawnPos, nullptr, nullptr, nullptr, nullptr, 0, 0
+                    );
+                    deleteRequest();
+                    return;
+                }
+            } else {
+                s32 accWeight = 0;
+                for (int i = 0; i <= (int)ARRAY_LENGTH(sSporeRupeeChances) - 1; i++) {
+                    if (getItemId() != sSporeRupeeChances[i].itemId) {
+                        accWeight += sSporeRupeeChances[i].weight;
+                    }
+                }
+                s32 roll = cM::rndInt(accWeight);
+                s32 acc = 0;
+                bool found = false;
+                int i = 0;
+                while (!found && i <= (int)ARRAY_LENGTH(sSporeRupeeChances) - 1) {
+                    if (getItemId() == sSporeRupeeChances[i].itemId) {
+                        i++;
+                    } else {
+                        acc += sSporeRupeeChances[i].weight;
+                        if (roll < acc) {
+                            found = true;
+                        } else {
+                            i++;
+                        }
+                    }
+                }
+                setItemId(sSporeRupeeChances[i].itemId);
+                mpMdl->vt_0x20(sSporeRupeeChances[i].itemId);
+                unsetHaveNoGravity();
+                mVelocity.y = 10.0f;
+                fn_80252A80();
+            }
+        }
+    }
+
+    tickDespawnTimer();
+    if (mDespawnTimer == 0) {
+        return;
+    }
+
+    if (mLinkage.checkState(dLinkage_c::STATE_ACTIVE)) {
+        mStateMgr.changeState(StateID_Carry);
+        return;
+    }
+
+    fn_80253D50();
+
+    if (mId == ITEM_STAMINA_FRUIT) {
+        if (isFirstBitParams2NotSet() && !fn_802577A0()) {
+            sLib::chase(&field_0xCD8, 1.0f, 0.05f);
+        } else {
+            sLib::chase(&field_0xCD8, 0.0f, 0.05f);
+        }
+    } else if (isLightFruit()) {
+        if ((this->*mFnAction4)()) {
+            sLib::chase(&field_0xCD8, 1.0f, 0.05f);
+        } else {
+            field_0xCD8 = 0.0f;
+        }
+    }
+
+    bool tgHitArrow = tgHit && mCyl.ChkTgAtHitType(AT_TYPE_ARROW);
+    bool tgHitClawshot = tgHit && mCyl.ChkTgAtHitType(AT_TYPE_CLAWSHOT);
+    if (mbNoGravity && tgHit &&
+        ((isAnyRupee() && tgHitArrow) || (isHeart2() && mCyl.ChkTgAtHitType(AT_TYPE_BELLOWS)) ||
+         ((isAnyRupee() || isHeart2()) &&
+          (mCyl.ChkTgAtHitType(AT_TYPE_SLINGSHOT) || mCyl.ChkTgAtHitType(AT_TYPE_CLAWSHOT))) ||
+         mCyl.ChkTgAtHitType(AT_TYPE_BOMB) || mCyl.ChkTgAtHitType(AT_TYPE_0x800000))) {
+        unsetHaveNoGravity();
+    }
+
+    if (mbNoGravity && mCyl.ChkCoHit()) {
+        unsetHaveNoGravity();
+    }
+
+    if (!mbNoGravity) {
+        unsetActorProperty(AC_PROP_0x1);
+    }
+
+    if (mbNoGravity) {
+        mObjAcch.SetMoveBGOnly();
+    } else {
+        mObjAcch.ClrMoveBGOnly();
+    }
+
+    if (tgHitArrow) {
+        field_0xD62 = true;
+    } else if (tgHit || (!mObjAcch.ChkGroundLanding() && mObjAcch.ChkGndHit())) {
+        field_0xD62 = false;
+    }
+    if (tgHitClawshot) {
+        field_0xD63 = true;
+    } else if (tgHit || (!mObjAcch.ChkGroundLanding() && mObjAcch.ChkGndHit())) {
+        field_0xD63 = false;
+    }
+
+    if (!mbNoGravity) {
+        if (!field_0xD51) {
+            if (isAnyRupee()) {
+                s32 which;
+                if (field_0xD62 || field_0xD63) {
+                    which = 1;
+                } else {
+                    which = 2;
+                }
+                if (which == 1 && mFnGetRupeeGravity == nullptr) {
+                    which = 2;
+                }
+                if (which == 2 && mFnGetGravity1 == nullptr) {
+                    which = 0;
+                }
+
+                switch (which) {
+                    case 1: mAcceleration = (this->*mFnGetRupeeGravity)(); break;
+                    case 2: mAcceleration = (this->*mFnGetGravity1)(); break;
+                }
+            } else if (isHeart2()) {
+                if (field_0xD52) {
+                    if (mFnGetHeartGravity != nullptr) {
+                        mAcceleration = (this->*mFnGetHeartGravity)();
+                    }
+                } else {
+                    if (mFnGetGravity1 != nullptr) {
+                        mAcceleration = (this->*mFnGetGravity1)();
+                    }
+                }
+            } else {
+                if (mFnGetRupeeGravity == nullptr || !field_0xD62) {
+                    if (mFnGetGravity1 != nullptr) {
+                        mAcceleration = (this->*mFnGetGravity1)();
+                    }
+                } else {
+                    if (mFnGetRupeeGravity != nullptr) {
+                        mAcceleration = (this->*mFnGetRupeeGravity)();
+                    }
+                }
+            }
+
+            if (mFnGetGravity4 != nullptr) {
+                mMaxSpeed = (this->*mFnGetGravity4)();
+            }
+
+            fn_80256F20();
+            (this->*mFnAction)();
+            calcVelocity();
+            mPosition += mVelocity;
+            mPosition += mStts.GetCcMove();
+        }
+
+        if ((mId == ITEM_STAMINA_FRUIT && fruitParam) || isLightFruit()) {
+            /* nothing */
+        } else {
+            if (!mbNoGravity && !field_0xD51 && 0.0f < mVelocity.y) {
+                mObjAcch.ClrRoofNone();
+                mObjAcch.Clr_0x2000000();
+            } else {
+                mObjAcch.SetRoofNone();
+                mObjAcch.Set_0x2000000();
+            }
+
+            fn_80256E80();
+
+            if (mObjAcch.ChkGndHit() && mVelocity.y <= 0.0f) {
+                u32 specialCode = dBgS::GetInstance()->GetSpecialCode(mObjAcch.GetGnd());
+                if (fn_80255C50(specialCode)) {
+                    if (sLib::chase(&field_0xD00, -100.0f, (this->*mFn_0xCB4)())) {
+                        deleteRequest();
+                    }
+                } else if (fn_80255CA0(specialCode)) {
+                    sLib::chase(&field_0xD00, -30.0f, (this->*mFn_0xCB4)());
+                } else {
+                    sLib::chase(&field_0xD00, 0.0f, 6.0f);
+                }
+            } else {
+                field_0xD00 = 0.0f;
+            }
+
+            mYOffset = field_0xD00;
+            if (isAnyTear() && mObjAcch.ChkGroundLanding()) {
+                startSoundWithFloatParam(SE_Item_A43_FALL, mVelocity.y);
+            }
+        }
+    }
+
+    /* This Function keeps Triforce postion locked 8024edbc */
+    if (isTriforce()) {
+        // TODO
+        f32 factor = field_0xD48.sin();
+        mPosition = mPositionCopy + mVec3_c::Ey * (factor * 16.0f);
+        field_0xD48.mVal += 182;
+    }
+
+    if ((mItemFlags & 0x4) != 0 &&  3000.0f < mPositionCopy.y - mPosition.y) {
+        mItemFlags |= 0x8;
+    }
+
+    if ((mItemFlags & 0x8) == 0) {
+        (this->*mFnAction3)();
+        if (isAnyRupee() && field_0xD38.y > 0) {
+            holdSoundWithIntParam(SE_O_RUPEE_ROULETTE, field_0xD38.y);
+        }
+
+        if (!field_0xD51) {
+            mCyl.SetC(mPosition);
+            dCcS::GetInstance()->Set(&mCyl);
+        }
+
+        if (isSmallKey()) {
+            if (dScGame_c::isCurrentStage("F302")) {
+                f32 fScale;
+                getCurrentModelScale(&fScale);
+                mVec3_c scale(fScale, fScale, fScale);
+                mEff_0x8F4.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_820_, mPosition, nullptr, &scale, nullptr, nullptr);
+            }
+        } else if (isTriforce()) {
+            f32 fScale;
+            getCurrentModelScale(&fScale);
+            mVec3_c scale(fScale, fScale, fScale);
+            mVec3_c offsetPos(mPosition.x, fScale * 20.0f + mPosition.y, mPosition.z);
+            dCamera_c *cam = dScGame_c::getCamera();
+            mVec3_c dir = offsetPos - cam->getPosition();
+            if (!dir.normalizeRS()) {
+                dir = cam->getTarget() - cam->getPosition();
+                if (!dir.normalizeRS()) {
+                    dir.set(mVec3_c::Ez);
+                    dir.rotX(cam->getYAngle());
+                    dir.rotY(cam->getXZAngle());
+                }
+            }
+            dir *= -40.0f;
+            // TODO - for some reason the argument vector is at an entirely wrong stack position...
+            // Fixing this wil probably fix the rest of the stack position issues in this function.
+            mEff_0x928.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_821_, offsetPos + dir, nullptr, &scale, nullptr, nullptr);
+        }
+        makeLinkLookTowardItem();
+        if (!mbNoDespawn && !isItemSmallKeyOrHeartPieceOrStaminaFruit()) {
+            fn_80254CA0();
+        }
+    }
+}
 void dAcItem_c::finalizeState_Wait() {}
 
 void dAcItem_c::initializeState_Carry() {}
@@ -1102,3 +1430,16 @@ void dAcItem_c::finalizeState_WaitTurnOff() {}
 void dAcItem_c::initializeState_WaitSacredDewGetEffect() {}
 void dAcItem_c::executeState_WaitSacredDewGetEffect() {}
 void dAcItem_c::finalizeState_WaitSacredDewGetEffect() {}
+
+STATE_DEFINE(dAcItem_c, Wait);
+STATE_DEFINE(dAcItem_c, Carry);
+STATE_DEFINE(dAcItem_c, GetBeetle);
+STATE_DEFINE(dAcItem_c, WaitGet);
+STATE_DEFINE(dAcItem_c, Get);
+STATE_DEFINE(dAcItem_c, WaitGetDemo);
+STATE_DEFINE(dAcItem_c, WaitForcedGetDemo);
+STATE_DEFINE(dAcItem_c, GetDemo);
+STATE_DEFINE(dAcItem_c, WaitTBoxGetDemo);
+STATE_DEFINE(dAcItem_c, ResurgeWait);
+STATE_DEFINE(dAcItem_c, WaitTurnOff);
+STATE_DEFINE(dAcItem_c, WaitSacredDewGetEffect);

@@ -238,6 +238,7 @@ public:
     void setParams2Upper_ignoreLower(u32 val);
     int getParams2UpperByte();
     void setParams2UpperByte(u32 val);
+    bool isFirstBitParams2NotSet();
     static u32 buildParams2(u32 lower, u32 upper);
     u32 getParams2Lower() const;
     u32 getFirstBitParams2() const;

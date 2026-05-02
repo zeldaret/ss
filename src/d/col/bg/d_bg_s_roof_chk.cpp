@@ -31,6 +31,7 @@ void dBgS_ObjRoofChk::ClearInstance() {
     sInstance.ClearPi();
 }
 
+// TODO: const reference?
 bool dBgS_ObjRoofChk::CheckPos(const mVec3_c *pPos) {
     sInstance.SetPos(pPos);
     sRoofHeight = dBgS::GetInstance()->RoofChk(&sInstance);
