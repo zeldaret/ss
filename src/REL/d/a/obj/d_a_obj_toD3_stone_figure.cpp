@@ -19,7 +19,7 @@ f32 dAcOtoD3StoneFigure_c::sHeight = 290.0f;
 
 dCcD_SrcCyl dAcOtoD3StoneFigure_c::sCcSrc = {
     {{0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND),
+     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND),
       0x1000111,
       {0, 0x06, 0x407},
       0,

@@ -23,7 +23,7 @@ dCcD_SrcSph dAcOpinwheel_c::sSphSrc = {
     /* mObjInf */
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
      /* mObjTg */
-     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 6, 0x8}, 8, 0},
+     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 6, 0x8}, 8, 0},
      /* mObjCo */ {0xE9}},
     /* mSphInf */
     {50.f},

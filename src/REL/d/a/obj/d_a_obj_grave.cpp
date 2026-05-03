@@ -29,7 +29,7 @@ STATE_DEFINE(dAcOGrave_c, Move);
 dCcD_SrcUnk dAcOGrave_c::sUnkSrc = {
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
      /* mObjTg */
-     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 6, 0x407}, 0, 0},
+     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 6, 0x407}, 0, 0},
      /* mObjCo */ {0}},
     {-65.0f, 0.0f, -25.0f, 65.0f, 156.0f, 25.0f},
 };

@@ -260,7 +260,7 @@ static const GlitteringSporeRupeeChance sSporeRupeeChances[] = {
 
 static const dCcD_SrcCyl sSrcCyl = {
     {{0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     {~(AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 0x08, 0x407}, 0, 0},
+     {~(AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 0x08, 0x407}, 0, 0},
      {0xE9}},
     {40.0f, 60.0f}
 };
@@ -988,7 +988,7 @@ int dAcItem_c::create() {
     if (isAnyTear()) {
         s32 type = getTearSubtype((ITEM_ID)mId);
         if (type == TEAR_MAX) {
-            type = TEAR_0;
+            type = TEAR_FARON;
         }
         dAcObjBase_c *forceSign =
             dAcObjBase_c::create(this, fProfile::OBJ_FORCE_SIGN, type & 0xFF, nullptr, nullptr, nullptr, nullptr, 0x3F);
@@ -1299,7 +1299,7 @@ void dAcItem_c::initializeState_Wait() {
         mSpeed = 0.0f;
         mVelocity.y = 0.0f;
     }
-    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_1);
+    mpMdl->setDrawMode(dItemMdl_c::DrawMode_Put);
     field_0xD5B = 0;
     field_0xD38 = field_0xD3A = field_0xD3C = 0;
     fn_80253E20();
@@ -1415,8 +1415,7 @@ void dAcItem_c::executeState_Wait() {
             return;
         }
 
-        // Glittering Spores?
-        if (mCyl.ChkTgAtHitType(AT_TYPE_0x80000)) {
+        if (mCyl.ChkTgAtHitType(AT_TYPE_GLITTERING_SPORES)) {
             if (isHeart()) {
                 if (fn_8024A230()) {
                     mVec3_c spawnPos(mPosition.x, mPosition.y + 30.0f, mPosition.z);
@@ -1451,7 +1450,7 @@ void dAcItem_c::executeState_Wait() {
                     }
                 }
                 setItemId(sSporeRupeeChances[i].itemId);
-                mpMdl->vt_0x20(sSporeRupeeChances[i].itemId);
+                mpMdl->changeItemId(sSporeRupeeChances[i].itemId);
                 unsetHaveNoGravity();
                 mVelocity.y = 10.0f;
                 fn_80252A80();
@@ -1653,10 +1652,9 @@ void dAcItem_c::executeState_Wait() {
                 }
             }
             dir *= -40.0f;
-            // TODO - for some reason the argument vector is at an entirely wrong stack position...
-            // Fixing this wil probably fix the rest of the stack position issues in this function.
+            mVec3_c efPos = offsetPos + dir;
             mEff_0x928.holdEffect(
-                PARTICLE_RESOURCE_ID_MAPPING_821_, offsetPos + dir, nullptr, &scale, nullptr, nullptr
+                PARTICLE_RESOURCE_ID_MAPPING_821_, efPos, nullptr, &scale, nullptr, nullptr
             );
         }
         makeLinkLookTowardItem();
@@ -1678,7 +1676,7 @@ void dAcItem_c::finalizeState_Wait() {
 }
 
 void dAcItem_c::initializeState_Carry() {
-    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_1);
+    mpMdl->setDrawMode(dItemMdl_c::DrawMode_Put);
     mSpeed = 0.0f;
     mVelocity.y = 0.0f;
     unsetHaveNoGravity();
@@ -1738,7 +1736,7 @@ void dAcItem_c::finalizeState_Carry() {
 }
 
 void dAcItem_c::initializeState_GetBeetle() {
-    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_1);
+    mpMdl->setDrawMode(dItemMdl_c::DrawMode_Put);
     setNotWaiting();
     field_0xD38 = field_0xD3A = field_0xD3C = 0;
     field_0xD0C = 0.0f;
@@ -1821,7 +1819,7 @@ void dAcItem_c::finalizeState_WaitGet() {
 }
 
 void dAcItem_c::initializeState_Get() {
-    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_1);
+    mpMdl->setDrawMode(dItemMdl_c::DrawMode_Put);
     performCollection();
     if (isAnyTear()) {
         mVec3_c tmp;
@@ -1856,7 +1854,7 @@ void dAcItem_c::finalizeState_Get() {
 }
 
 void dAcItem_c::initializeState_WaitGetDemo() {
-    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_2);
+    mpMdl->setDrawMode(dItemMdl_c::DrawMode_Get);
     setObjectProperty(OBJ_PROP_0x200);
     setNotWaiting();
     field_0xD38 = field_0xD3A = field_0xD3C = 0;
@@ -1892,7 +1890,7 @@ void dAcItem_c::executeState_WaitGetDemo() {
 void dAcItem_c::finalizeState_WaitGetDemo() {}
 
 void dAcItem_c::initializeState_WaitForcedGetDemo() {
-    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_2);
+    mpMdl->setDrawMode(dItemMdl_c::DrawMode_Get);
     setObjectProperty(OBJ_PROP_0x200);
     setNotWaiting();
     field_0xD38 = field_0xD3A = field_0xD3C = 0;
@@ -1913,7 +1911,7 @@ void dAcItem_c::executeState_WaitForcedGetDemo() {
 void dAcItem_c::finalizeState_WaitForcedGetDemo() {}
 
 void dAcItem_c::initializeState_GetDemo() {
-    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_2);
+    mpMdl->setDrawMode(dItemMdl_c::DrawMode_Get);
     switch (getItemId()) {
         case ITEM_FARON_GRASSHOPPER:     sCollectionCurrentCount = getFaronGrasshooperCounter(); break;
         case ITEM_WOODLAND_RHINO_BEETLE: sCollectionCurrentCount = getWoodlandRhinoBeetleCounter(); break;
@@ -2034,7 +2032,7 @@ void dAcItem_c::finalizeState_GetDemo() {
 }
 
 void dAcItem_c::initializeState_WaitTBoxGetDemo() {
-    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_2);
+    mpMdl->setDrawMode(dItemMdl_c::DrawMode_Get);
     setNotWaiting();
     field_0xD38 = field_0xD3A = field_0xD3C = 0;
     setObjectProperty(OBJ_PROP_0x200);
@@ -2052,7 +2050,7 @@ void dAcItem_c::executeState_WaitTBoxGetDemo() {
 void dAcItem_c::finalizeState_WaitTBoxGetDemo() {}
 
 void dAcItem_c::initializeState_ResurgeWait() {
-    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_1);
+    mpMdl->setDrawMode(dItemMdl_c::DrawMode_Put);
     // TODO FPR swap
     mPosition = mPositionCopy;
     mRotation = mRotationCopy;

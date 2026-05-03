@@ -23,7 +23,7 @@ bool dItemMdlStaminaFruit_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *all
     if (!mdl1.IsValid()) {
         return false;
     }
-    if (!mMdl1.create(mdl1, allocator, 0x324)) {
+    if (!mPutMdl.create(mdl1, allocator, 0x324)) {
         return false;
     }
 
@@ -40,7 +40,7 @@ bool dItemMdlStaminaFruit_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *all
     if (!mdl2.IsValid()) {
         return false;
     }
-    if (!mMdl2.create(mdl2, allocator, 0x324)) {
+    if (!mGetMdl.create(mdl2, allocator, 0x324)) {
         return false;
     }
 
@@ -48,62 +48,62 @@ bool dItemMdlStaminaFruit_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *all
     if (!anmTexSrt1.IsValid()) {
         return false;
     }
-    TRY_CREATE(mAnmTexSrt1.create(mdl1, anmTexSrt1, allocator, nullptr, 1));
-    mMdl1.setAnm(mAnmTexSrt1);
+    TRY_CREATE(mPutAnmTexSrt.create(mdl1, anmTexSrt1, allocator, nullptr, 1));
+    mPutMdl.setAnm(mPutAnmTexSrt);
 
     nw4r::g3d::ResAnmTexSrt anmTexSrt2 = res2.GetResAnmTexSrt("GutsLight");
     if (!anmTexSrt2.IsValid()) {
         return false;
     }
-    TRY_CREATE(mAnmTexSrt2.create(mdl2, anmTexSrt2, allocator, nullptr, 1));
-    mMdl2.setAnm(mAnmTexSrt2);
+    TRY_CREATE(mGetAnmTexSrt.create(mdl2, anmTexSrt2, allocator, nullptr, 1));
+    mGetMdl.setAnm(mGetAnmTexSrt);
 
     mpItem = item;
 
     return true;
 }
 
-void dItemMdlStaminaFruit_c::vt_0x10(u8 arg) {
-    if (arg == ITEM_MDL_UNK0x14_3) {
-        field_0x14 = ITEM_MDL_UNK0x14_1;
+void dItemMdlStaminaFruit_c::setDrawMode(u8 arg) {
+    if (arg == DrawMode_Max) {
+        mDrawMode = DrawMode_Put;
     } else {
-        field_0x14 = arg;
+        mDrawMode = arg;
     }
 }
 
 void dItemMdlStaminaFruit_c::setScale(const mVec3_c &scale) {
-    mMdl1.setScale(scale);
-    mMdl2.setScale(scale);
+    mPutMdl.setScale(scale);
+    mGetMdl.setScale(scale);
 }
 
 void dItemMdlStaminaFruit_c::setLocalMtx(const mMtx_c &mtx) {
-    mMdl1.setLocalMtx(mtx);
-    mMdl2.setLocalMtx(mtx);
+    mPutMdl.setLocalMtx(mtx);
+    mGetMdl.setLocalMtx(mtx);
 }
 
 void dItemMdlStaminaFruit_c::draw() {
-    switch (field_0x14) {
-        case ITEM_MDL_UNK0x14_1:
-            mAnmTexSrt1.play();
-            mpItem->fn_8002ECD0(&mMdl1, 7);
+    switch (mDrawMode) {
+        case DrawMode_Put:
+            mPutAnmTexSrt.play();
+            mpItem->fn_8002ECD0(&mPutMdl, 7);
             break;
-        case ITEM_MDL_UNK0x14_2:
-            mAnmTexSrt2.play();
-            mpItem->fn_8002ECD0(&mMdl2, 6);
+        case DrawMode_Get:
+            mGetAnmTexSrt.play();
+            mpItem->fn_8002ECD0(&mGetMdl, 6);
             break;
     }
 }
 
-void dItemMdlStaminaFruit_c::vt_0x20(u16 itemId) {
+void dItemMdlStaminaFruit_c::changeItemId(u16 itemId) {
     // no-op
 }
 
 void dItemMdlStaminaFruit_c::setPriorityDraw() {
-    mMdl1.setPriorityDraw(0x82, 0x7F);
-    mMdl2.setPriorityDraw(0x82, 0x7F);
+    mPutMdl.setPriorityDraw(0x82, 0x7F);
+    mGetMdl.setPriorityDraw(0x82, 0x7F);
 }
 
 void dItemMdlStaminaFruit_c::unsetPriorityDraw() {
-    mMdl1.setPriorityDraw(0x7F, 0x7F);
-    mMdl2.setPriorityDraw(0x7F, 0x7F);
+    mPutMdl.setPriorityDraw(0x7F, 0x7F);
+    mGetMdl.setPriorityDraw(0x7F, 0x7F);
 }

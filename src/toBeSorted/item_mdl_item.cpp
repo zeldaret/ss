@@ -445,8 +445,8 @@ bool dItemMdlItem_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) 
     return true;
 }
 
-void dItemMdlItem_c::vt_0x10(u8 arg) {
-    field_0x14 = arg;
+void dItemMdlItem_c::setDrawMode(u8 arg) {
+    mDrawMode = arg;
 }
 
 void dItemMdlItem_c::setScale(const mVec3_c &scale) {
@@ -458,15 +458,14 @@ void dItemMdlItem_c::setLocalMtx(const mMtx_c &mtx) {
 }
 
 void dItemMdlItem_c::draw() {
-    if (field_0x14 == ITEM_MDL_UNK0x14_2) {
+    if (mDrawMode == DrawMode_Get) {
         mpItem->fn_8002ECD0(&mMdl, 6);
     } else {
-    ITEM_MDL_UNK0x14_1:
         mpItem->fn_8002ECD0(&mMdl, 7);
     }
 }
 
-void dItemMdlItem_c::vt_0x20(u16 itemId) {
+void dItemMdlItem_c::changeItemId(u16 itemId) {
     // no-op
 }
 

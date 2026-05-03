@@ -35,7 +35,7 @@ static dCcD_SrcCyl sChairColData = {
     /* mObjInf */
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
      /* mObjTg */
-     {~(AT_TYPE_BUGNET | AT_TYPE_0x80000 | AT_TYPE_BEETLE | AT_TYPE_WIND | AT_TYPE_0x8000),
+     {~(AT_TYPE_BUGNET | AT_TYPE_GLITTERING_SPORES | AT_TYPE_BEETLE | AT_TYPE_WIND | AT_TYPE_0x8000),
       0x111,
       {0, 0x7, 0x407},
       0x0,

@@ -351,7 +351,7 @@ enum dCcD_ObjAtType {
     /* 0x 0001 0000 */ AT_TYPE_BELLOWS = (1 << 16),
     /* 0x 0002 0000 */ AT_TYPE_0x20000 = (1 << 17),
     /* 0x 0004 0000 */ AT_TYPE_0x40000 = (1 << 18),
-    /* 0x 0008 0000 */ AT_TYPE_0x80000 = (1 << 19),
+    /* 0x 0008 0000 */ AT_TYPE_GLITTERING_SPORES = (1 << 19),
     /* 0x 0010 0000 */ AT_TYPE_BUBBLE = (1 << 20),
     /* 0x 0020 0000 */ AT_TYPE_0x200000 = (1 << 21),
     /* 0x 0040 0000 */ AT_TYPE_BEETLE = (1 << 22),
@@ -361,7 +361,7 @@ enum dCcD_ObjAtType {
     /* 0x 0400 0000 */ AT_TYPE_KOLOKTOS_SWORD = (1 << 26),
     /* 0x 0800 0000 */ AT_TYPE_0x8000000 = (1 << 27),
     /* 0x 0148 8200 */ AT_TYPE_COMMON0 =
-        AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND,
+        AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND,
 };
 
 enum cCcD_AtModifiers_e {

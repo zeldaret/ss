@@ -237,7 +237,7 @@ bool dItemMdlPut_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) {
         return false;
     }
 
-    if (!mGetMdl.create(mdl0, allocator, 0x120)) {
+    if (!mPutMdl.create(mdl0, allocator, 0x120)) {
         return false;
     }
 
@@ -256,7 +256,7 @@ bool dItemMdlPut_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) {
         return false;
     }
 
-    if (!mPutMdl.create(mdl1, allocator, 0x120)) {
+    if (!mGetMdl.create(mdl1, allocator, 0x120)) {
         return false;
     }
 
@@ -264,43 +264,43 @@ bool dItemMdlPut_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) {
     return true;
 }
 
-void dItemMdlPut_c::vt_0x10(u8 arg) {
-    if (arg == ITEM_MDL_UNK0x14_3) {
-        field_0x14 = ITEM_MDL_UNK0x14_1;
+void dItemMdlPut_c::setDrawMode(u8 arg) {
+    if (arg == DrawMode_Max) {
+        mDrawMode = DrawMode_Put;
     } else {
-        field_0x14 = arg;
+        mDrawMode = arg;
     }
 }
 
 void dItemMdlPut_c::setScale(const mVec3_c &scale) {
-    mGetMdl.setScale(scale);
     mPutMdl.setScale(scale);
+    mGetMdl.setScale(scale);
 }
 
 void dItemMdlPut_c::setLocalMtx(const mMtx_c &mtx) {
-    mGetMdl.setLocalMtx(mtx);
     mPutMdl.setLocalMtx(mtx);
+    mGetMdl.setLocalMtx(mtx);
 }
 
 void dItemMdlPut_c::draw() {
-    switch (field_0x14) {
-        case ITEM_MDL_UNK0x14_1: mpItem->fn_8002ECD0(&mGetMdl, 7); break;
-        case ITEM_MDL_UNK0x14_2: mpItem->fn_8002ECD0(&mPutMdl, 6); break;
+    switch (mDrawMode) {
+        case DrawMode_Put: mpItem->fn_8002ECD0(&mPutMdl, 7); break;
+        case DrawMode_Get: mpItem->fn_8002ECD0(&mGetMdl, 6); break;
     }
 }
 
-void dItemMdlPut_c::vt_0x20(u16 itemId) {
+void dItemMdlPut_c::changeItemId(u16 itemId) {
     // no-op
 }
 
 void dItemMdlPut_c::setPriorityDraw() {
-    mGetMdl.setPriorityDraw(0x82, 0x7F);
     mPutMdl.setPriorityDraw(0x82, 0x7F);
+    mGetMdl.setPriorityDraw(0x82, 0x7F);
 }
 
 void dItemMdlPut_c::unsetPriorityDraw() {
-    mGetMdl.setPriorityDraw(0x7F, 0x7F);
     mPutMdl.setPriorityDraw(0x7F, 0x7F);
+    mGetMdl.setPriorityDraw(0x7F, 0x7F);
 }
 
 enum ShieldIdx {
@@ -546,8 +546,8 @@ bool dItemMdlShield_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator
     return true;
 }
 
-void dItemMdlShield_c::vt_0x10(u8 arg) {
-    field_0x14 = arg;
+void dItemMdlShield_c::setDrawMode(u8 arg) {
+    mDrawMode = arg;
 }
 
 void dItemMdlShield_c::setScale(const mVec3_c &scale) {
@@ -559,14 +559,14 @@ void dItemMdlShield_c::setLocalMtx(const mMtx_c &mtx) {
 }
 
 void dItemMdlShield_c::draw() {
-    if (field_0x14 == ITEM_MDL_UNK0x14_2) {
+    if (mDrawMode == DrawMode_Get) {
         mpItem->fn_8002ECD0(&mMdl, 6);
     } else {
         mpItem->fn_8002ECD0(&mMdl, 7);
     }
 }
 
-void dItemMdlShield_c::vt_0x20(u16 itemId) {
+void dItemMdlShield_c::changeItemId(u16 itemId) {
     // no-op
 }
 
@@ -806,8 +806,8 @@ bool dItemMdlBottle_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator
     return true;
 }
 
-void dItemMdlBottle_c::vt_0x10(u8 arg) {
-    field_0x14 = arg;
+void dItemMdlBottle_c::setDrawMode(u8 arg) {
+    mDrawMode = arg;
 }
 
 void dItemMdlBottle_c::setScale(const mVec3_c &scale) {
@@ -823,18 +823,18 @@ void dItemMdlBottle_c::draw() {
         return;
     }
 
-    if (field_0x14 != ITEM_MDL_UNK0x14_1 || (mFlags & 0x1) == 0) {
+    if (mDrawMode != DrawMode_Put || (mFlags & 0x1) == 0) {
         mMdl.play();
     }
 
-    if (field_0x14 == ITEM_MDL_UNK0x14_2) {
+    if (mDrawMode == DrawMode_Get) {
         mpItem->fn_8002ECD0(&mMdl.getModel(), 6);
     } else {
         mpItem->fn_8002ECD0(&mMdl.getModel(), 7);
     }
 }
 
-void dItemMdlBottle_c::vt_0x20(u16 itemId) {
+void dItemMdlBottle_c::changeItemId(u16 itemId) {
     // no-op
 }
 
@@ -882,7 +882,7 @@ bool dItemMdlTear_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) 
         if (!mdl1.IsValid()) {
             return false;
         }
-        if (!mMdl1.create(mdl1, allocator, 0x327)) {
+        if (!mPutMdl.create(mdl1, allocator, 0x327)) {
             return false;
         }
 
@@ -890,18 +890,18 @@ bool dItemMdlTear_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) 
         if (!anmTexSrt1.IsValid()) {
             return false;
         }
-        TRY_CREATE(mAnmTexSrt1.create(mdl1, anmTexSrt1, allocator, nullptr, 1));
-        TRY_CREATE(mMdl1.setAnm(mAnmTexSrt1));
+        TRY_CREATE(mPutAnmTexSrt.create(mdl1, anmTexSrt1, allocator, nullptr, 1));
+        TRY_CREATE(mPutMdl.setAnm(mPutAnmTexSrt));
 
         nw4r::g3d::ResAnmTexPat anmTexPat1 = res1.GetResAnmTexPat("Shizuku");
         if (!anmTexPat1.IsValid()) {
             return false;
         }
-        if (!mAnmTexPat1.create(mdl1, anmTexPat1, allocator, nullptr, 1)) {
+        if (!mPutAnmTexPat.create(mdl1, anmTexPat1, allocator, nullptr, 1)) {
             return false;
         }
-        TRY_CREATE(mMdl1.setAnm(mAnmTexPat1));
-        mAnmTexPat1.setFrame(frame, 0);
+        TRY_CREATE(mPutMdl.setAnm(mPutAnmTexPat));
+        mPutAnmTexPat.setFrame(frame, 0);
     }
 
     {
@@ -918,7 +918,7 @@ bool dItemMdlTear_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) 
         if (!mdl2.IsValid()) {
             return false;
         }
-        if (!mMdl2.create(mdl2, allocator, 0x327)) {
+        if (!mGetMdl.create(mdl2, allocator, 0x327)) {
             return false;
         }
 
@@ -926,18 +926,18 @@ bool dItemMdlTear_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) 
         if (!anmTexSrt2.IsValid()) {
             return false;
         }
-        TRY_CREATE(mAnmTexSrt2.create(mdl2, anmTexSrt2, allocator, nullptr, 1));
-        TRY_CREATE(mMdl2.setAnm(mAnmTexSrt2));
+        TRY_CREATE(mGetAnmTexSrt.create(mdl2, anmTexSrt2, allocator, nullptr, 1));
+        TRY_CREATE(mGetMdl.setAnm(mGetAnmTexSrt));
 
         nw4r::g3d::ResAnmTexPat anmTexPat2 = res2.GetResAnmTexPat("Shizuku");
         if (!anmTexPat2.IsValid()) {
             return false;
         }
-        if (!mAnmTexPat2.create(mdl2, anmTexPat2, allocator, nullptr, 1)) {
+        if (!mGetAnmTexPat.create(mdl2, anmTexPat2, allocator, nullptr, 1)) {
             return false;
         }
-        TRY_CREATE(mMdl2.setAnm(mAnmTexPat2));
-        mAnmTexPat2.setFrame(frame, 0);
+        TRY_CREATE(mGetMdl.setAnm(mGetAnmTexPat));
+        mGetAnmTexPat.setFrame(frame, 0);
     }
 
     mpItem = item;
@@ -945,49 +945,49 @@ bool dItemMdlTear_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) 
     return true;
 }
 
-void dItemMdlTear_c::vt_0x10(u8 arg) {
-    if (arg == ITEM_MDL_UNK0x14_3) {
-        field_0x14 = ITEM_MDL_UNK0x14_1;
+void dItemMdlTear_c::setDrawMode(u8 arg) {
+    if (arg == DrawMode_Max) {
+        mDrawMode = DrawMode_Put;
     } else {
-        field_0x14 = arg;
+        mDrawMode = arg;
     }
 }
 
 void dItemMdlTear_c::setScale(const mVec3_c &scale) {
-    mMdl1.setScale(scale);
-    mMdl2.setScale(scale);
+    mPutMdl.setScale(scale);
+    mGetMdl.setScale(scale);
 }
 
 void dItemMdlTear_c::setLocalMtx(const mMtx_c &mtx) {
-    mMdl1.setLocalMtx(mtx);
-    mMdl2.setLocalMtx(mtx);
+    mPutMdl.setLocalMtx(mtx);
+    mGetMdl.setLocalMtx(mtx);
 }
 
 void dItemMdlTear_c::draw() {
-    switch (field_0x14) {
-        case ITEM_MDL_UNK0x14_1:
-            mAnmTexSrt1.play();
-            mpItem->fn_8002ECD0(&mMdl1, 7);
+    switch (mDrawMode) {
+        case DrawMode_Put:
+            mPutAnmTexSrt.play();
+            mpItem->fn_8002ECD0(&mPutMdl, 7);
             break;
-        case ITEM_MDL_UNK0x14_2:
-            mAnmTexSrt2.play();
-            mpItem->fn_8002ECD0(&mMdl2, 6);
+        case DrawMode_Get:
+            mGetAnmTexSrt.play();
+            mpItem->fn_8002ECD0(&mGetMdl, 6);
             break;
     }
 }
 
-void dItemMdlTear_c::vt_0x20(u16 itemId) {
+void dItemMdlTear_c::changeItemId(u16 itemId) {
     // no-op
 }
 
 void dItemMdlTear_c::setPriorityDraw() {
-    mMdl1.setPriorityDraw(0x82, 0x7F);
-    mMdl2.setPriorityDraw(0x82, 0x7F);
+    mPutMdl.setPriorityDraw(0x82, 0x7F);
+    mGetMdl.setPriorityDraw(0x82, 0x7F);
 }
 
 void dItemMdlTear_c::unsetPriorityDraw() {
-    mMdl1.setPriorityDraw(0x7F, 0x7F);
-    mMdl2.setPriorityDraw(0x7F, 0x7F);
+    mPutMdl.setPriorityDraw(0x7F, 0x7F);
+    mGetMdl.setPriorityDraw(0x7F, 0x7F);
 }
 
 bool dItemMdlFirefly_c::isMdlForItemId(u16 itemId) {
@@ -1024,8 +1024,8 @@ bool dItemMdlFirefly_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocato
     return true;
 }
 
-void dItemMdlFirefly_c::vt_0x10(u8 arg) {
-    field_0x14 = arg;
+void dItemMdlFirefly_c::setDrawMode(u8 arg) {
+    mDrawMode = arg;
 }
 
 void dItemMdlFirefly_c::setScale(const mVec3_c &scale) {
@@ -1037,14 +1037,14 @@ void dItemMdlFirefly_c::setLocalMtx(const mMtx_c &mtx) {
 }
 
 void dItemMdlFirefly_c::draw() {
-    switch (field_0x14) {
-        case ITEM_MDL_UNK0x14_1: mpItem->fn_8002ECD0(&mMdl, 7); break;
-        case ITEM_MDL_UNK0x14_2: mpItem->fn_8002ECD0(&mMdl, 6); break;
+    switch (mDrawMode) {
+        case DrawMode_Put: mpItem->fn_8002ECD0(&mMdl, 7); break;
+        case DrawMode_Get: mpItem->fn_8002ECD0(&mMdl, 6); break;
     }
     mAnmMatClr.play();
 }
 
-void dItemMdlFirefly_c::vt_0x20(u16 itemId) {
+void dItemMdlFirefly_c::changeItemId(u16 itemId) {
     // no-op
 }
 
@@ -1298,8 +1298,8 @@ bool dItemMdlPotion_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator
     return true;
 }
 
-void dItemMdlPotion_c::vt_0x10(u8 arg) {
-    field_0x14 = arg;
+void dItemMdlPotion_c::setDrawMode(u8 arg) {
+    mDrawMode = arg;
 }
 
 void dItemMdlPotion_c::setScale(const mVec3_c &scale) {
@@ -1313,13 +1313,13 @@ void dItemMdlPotion_c::setLocalMtx(const mMtx_c &mtx) {
 void dItemMdlPotion_c::draw() {
     mAnmChr.play();
     mAnmTexSrt.play();
-    switch (field_0x14) {
-        case ITEM_MDL_UNK0x14_1: mpItem->fn_8002ECD0(&mMdl, 7); break;
-        case ITEM_MDL_UNK0x14_2: mpItem->fn_8002ECD0(&mMdl, 6); break;
+    switch (mDrawMode) {
+        case DrawMode_Put: mpItem->fn_8002ECD0(&mMdl, 7); break;
+        case DrawMode_Get: mpItem->fn_8002ECD0(&mMdl, 6); break;
     }
 }
 
-void dItemMdlPotion_c::vt_0x20(u16 itemId) {
+void dItemMdlPotion_c::changeItemId(u16 itemId) {
     // no-op
 }
 

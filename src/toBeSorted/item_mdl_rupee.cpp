@@ -55,7 +55,7 @@ bool dItemMdlRupee_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator)
         if (!mdl1.IsValid()) {
             return false;
         }
-        if (!mMdl1.create(mdl1, allocator, 0x123)) {
+        if (!mPutMdl.create(mdl1, allocator, 0x123)) {
             return false;
         }
 
@@ -63,11 +63,11 @@ bool dItemMdlRupee_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator)
         if (!anmTexPat1.IsValid()) {
             return false;
         }
-        if (!mAnmTexPat1.create(mdl1, anmTexPat1, allocator, nullptr, 1)) {
+        if (!mPutAnmTexPat.create(mdl1, anmTexPat1, allocator, nullptr, 1)) {
             return false;
         }
-        mMdl1.setAnm(mAnmTexPat1);
-        mAnmTexPat1.setFrame(sMdlConfig[i].texPatFrame, 0);
+        mPutMdl.setAnm(mPutAnmTexPat);
+        mPutAnmTexPat.setFrame(sMdlConfig[i].texPatFrame, 0);
     }
 
     {
@@ -84,7 +84,7 @@ bool dItemMdlRupee_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator)
         if (!mdl2.IsValid()) {
             return false;
         }
-        if (!mMdl2.create(mdl2, allocator, 0x123)) {
+        if (!mGetMdl.create(mdl2, allocator, 0x123)) {
             return false;
         }
 
@@ -93,11 +93,11 @@ bool dItemMdlRupee_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator)
             return false;
         }
         anmTexPat2.Bind(res2);
-        if (!mAnmTexPat2.create(mdl2, anmTexPat2, allocator, nullptr, 1)) {
+        if (!mGetAnmTexPat.create(mdl2, anmTexPat2, allocator, nullptr, 1)) {
             return false;
         }
-        mMdl2.setAnm(mAnmTexPat2);
-        mAnmTexPat2.setFrame(sMdlConfig[i].texPatFrame, 0);
+        mGetMdl.setAnm(mGetAnmTexPat);
+        mGetAnmTexPat.setFrame(sMdlConfig[i].texPatFrame, 0);
     }
     
 
@@ -105,32 +105,32 @@ bool dItemMdlRupee_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator)
     return true;
 }
 
-void dItemMdlRupee_c::vt_0x10(u8 arg) {
-    if (arg == ITEM_MDL_UNK0x14_3) {
-        field_0x14 = ITEM_MDL_UNK0x14_1;
+void dItemMdlRupee_c::setDrawMode(u8 arg) {
+    if (arg == DrawMode_Max) {
+        mDrawMode = DrawMode_Put;
     } else {
-        field_0x14 = arg;
+        mDrawMode = arg;
     }
 }
 
 void dItemMdlRupee_c::setScale(const mVec3_c &scale) {
-    mMdl1.setScale(scale);
-    mMdl2.setScale(scale);
+    mPutMdl.setScale(scale);
+    mGetMdl.setScale(scale);
 }
 
 void dItemMdlRupee_c::setLocalMtx(const mMtx_c &mtx) {
-    mMdl1.setLocalMtx(mtx);
-    mMdl2.setLocalMtx(mtx);
+    mPutMdl.setLocalMtx(mtx);
+    mGetMdl.setLocalMtx(mtx);
 }
 
 void dItemMdlRupee_c::draw() {
-    switch (field_0x14) {
-        case ITEM_MDL_UNK0x14_1: mpItem->fn_8002ECD0(&mMdl1, 7); break;
-        case ITEM_MDL_UNK0x14_2: mpItem->fn_8002ECD0(&mMdl2, 6); break;
+    switch (mDrawMode) {
+        case DrawMode_Put: mpItem->fn_8002ECD0(&mPutMdl, 7); break;
+        case DrawMode_Get: mpItem->fn_8002ECD0(&mGetMdl, 6); break;
     }
 }
 
-void dItemMdlRupee_c::vt_0x20(u16 itemId) {
+void dItemMdlRupee_c::changeItemId(u16 itemId) {
     int i = 0;
     bool found = false;
     while (!found && i < ARRAY_LENGTH(sMdlConfig)) {
@@ -142,17 +142,17 @@ void dItemMdlRupee_c::vt_0x20(u16 itemId) {
     }
 
     if (found) {
-        mAnmTexPat1.setFrame(sMdlConfig[i].texPatFrame, 0);
-        mAnmTexPat2.setFrame(sMdlConfig[i].texPatFrame, 0);
+        mPutAnmTexPat.setFrame(sMdlConfig[i].texPatFrame, 0);
+        mGetAnmTexPat.setFrame(sMdlConfig[i].texPatFrame, 0);
     }
 }
 
 void dItemMdlRupee_c::setPriorityDraw() {
-    mMdl1.setPriorityDraw(0x82, 0x7F);
-    mMdl2.setPriorityDraw(0x82, 0x7F);
+    mPutMdl.setPriorityDraw(0x82, 0x7F);
+    mGetMdl.setPriorityDraw(0x82, 0x7F);
 }
 
 void dItemMdlRupee_c::unsetPriorityDraw() {
-    mMdl1.setPriorityDraw(0x7F, 0x7F);
-    mMdl2.setPriorityDraw(0x7F, 0x7F);
+    mPutMdl.setPriorityDraw(0x7F, 0x7F);
+    mGetMdl.setPriorityDraw(0x7F, 0x7F);
 }

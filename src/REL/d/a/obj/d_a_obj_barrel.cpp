@@ -91,7 +91,7 @@ static dCcD_SrcCyl sSrcCyl = {
     {
      /* mObjAt */ {AT_TYPE_PHYSICS, 0x10013, {0, 0, 0}, 4, 0, 0, 0, 0, 0},
      /* mObjTg */
-        {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000), 0x2000111, {0, 0xF, 0x407}, 0, 0},
+        {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000), 0x2000111, {0, 0xF, 0x407}, 0, 0},
      /* mObjCo*/ {0xE9},
      },
     {
@@ -102,7 +102,7 @@ static dCcD_SrcSph sSrcSph = {
     {
      /* mObjAt */ {AT_TYPE_PHYSICS, 0x10003, {0, 0, 0}, 4, 0, 0, 0, 0, 0},
      /* mObjTg */
-        {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND),
+        {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND),
          0x2000111,
          {0, 0xF, 0x407},
          0,

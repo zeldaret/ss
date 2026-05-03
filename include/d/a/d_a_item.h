@@ -241,10 +241,10 @@ public:
     static Trial_e getCurrentTrial();
 
     enum Tear_e {
-        TEAR_0,
-        TEAR_1,
-        TEAR_2,
-        TEAR_3,
+        TEAR_FARON,
+        TEAR_ELDIN,
+        TEAR_LANAYRU,
+        TEAR_GODDESS,
         TEAR_MAX
     };
 
