@@ -18,7 +18,9 @@
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/dowsing_target.h"
-#include "toBeSorted/item_mdl.h"
+
+class dItemMdl_c;
+class dAcItem_c;
 
 class dAcItem_0xB34 {
 public:
@@ -51,6 +53,12 @@ public:
     virtual void vt_0x10() = 0;
     virtual void vt_0x14() = 0;
     virtual void vt_0x18() = 0;
+
+    void fn_802579D0();
+    bool fn_80257A10(dAcItem_c*);
+    bool fn_80257A80();
+    void fn_80257AC0();
+    bool fn_80257B10();
 
 protected:
     /* 0x04 */ u8 _0x04[0x08 - 0x04];
@@ -95,8 +103,11 @@ public:
     dAcItem_c();
     virtual ~dAcItem_c();
 
-    virtual int create() override;
     virtual bool createHeap() override;
+    virtual int create() override;
+    virtual int doDelete() override;
+    virtual int actorExecute() override;
+    virtual int draw() override;
 
     virtual u16 getItemIdFromParams() override;
     virtual void setItemId(u16 id);
@@ -136,11 +147,15 @@ public:
 
     static s32 getTotalBombCount();
     static s32 getTotalArrowCount();
+    static s32 getBowArrowCount();
     static s32 getTotalSeedCount();
+    static s32 getSlingshotSeedCount();
 
     static s32 getTotalBombCapacity();
-    static s32 getTotalSeedCapacity();
+    static s32 getBowArrowCapacity();
     static s32 getTotalArrowCapacity();
+    static s32 getTotalSeedCapacity();
+    static s32 getSlingshotSeedCapacity();
 
     static s32 getRupeeCounter();
     static u32 getCurrentWalletCapacity();
@@ -161,10 +176,13 @@ public:
     static bool isTreasure2(ITEM_ID item);
     static bool isTreasure(ITEM_ID item);
     static bool isTear(ITEM_ID item);
+    static bool isAnyPouchItem(ITEM_ID item);
+    static bool isUpgradedPotion(ITEM_ID item);
 
     bool isLightFruit() const;
     bool isSingleArrow() const;
     bool isArrowBundle() const;
+    bool isAnyArrow() const;
     bool isTriforce() const;
     bool isGratitudeCrystal() const;
     bool is5GratitudeCrystals() const;
@@ -183,18 +201,32 @@ public:
     bool isHeartPiece() const;
     bool isTreasure3() const;
     bool isInsect() const;
-    bool isHeart2() const;
     bool isAnyRupee() const;
     bool isAnyTear() const;
     bool isBabyRattle() const;
+    bool is10DekuSeeds() const;
+    bool isAnyBombs() const;
+    bool isLifeTreeFruit() const;
+    bool isBirdStatuette() const;
+
+    // These go through the vtable to retrieve the item id. Can't think of a better name for now
+    bool isKeyPieceV() const;
+    bool isHeartV() const;
+    bool isTreasureV() const;
+    bool isGratitudeCrystalV() const;
+    bool is5GratitudeCrystalsV() const;
+    bool isFairyV() const;
+    bool isBottleFairyV() const;
+    bool isStarryFireflyV() const;
+    bool isAnyRupeeV() const;
+
+    static void increaseRupeeCounter(s32 by);
 
     u32 getParams2Lower_shift1_0x7() const;
 
     static bool getItemGetEventName(u16 item, const char **outName);
     static void itemGetEventStart(dAcBase_c *);
     static void itemGetEventEnd(dAcBase_c *);
-
-    static void addRupees(s32 amount);
 
     static bool hasAnyFairy();
 
@@ -240,6 +272,8 @@ private:
     static s32 sGetItemQuantity;
 
     static const mVec3_c sFreestandingDowsingOffset;
+    static const mVec3_c sScale1Maybe;
+    static const mVec3_c sScale2Maybe;
 
     typedef bool (dAcItem_c::*sStaticPtmf)();
     static const sStaticPtmf sStaticPtmfs[];
@@ -249,10 +283,103 @@ private:
 
     static const ItemInitStruct *getItemInitStructForId(u16 itemId);
     const ItemInitStruct *getItemInitStruct() const;
+
+    static void setTreasureTempCollect(u16 id);
+    static void setSpawnQuantity(s32 quantity);
+    static void unsetSpawnQuantity();
+
+    void setObtainedItemId(u32, bool);
+    bool checkItemFlagV() const;
+    void setItemFlagV();
+    bool checkFlagV() const;
+    void setFlagV();
+    void setSceneFlag();
+    void setDungeonFlag();
+
+    static void increaseKeyPieceCounter(s32 by);
+    static void increaseHeartPieceCounter(s32 by);
+    static void increaseTotalHeartPieceCounter(s32 by);
+    static void increaseFaronGrasshopperCounter(s32 by);
+    static s32 getFaronGrasshooperCounter();
+    static void increaseWoodlandRhinoBeetleCounter(s32 by);
+    static s32 getWoodlandRhinoBeetleCounter();
+    static void increaseDekuHornetCounter(s32 by);
+    static s32 getDekuHornetCounter();
+    static void increaseSkyloftMantisCounter(s32 by);
+    static s32 getSkyloftMantisCounter();
+    static void increaseVolcanicLadybugCounter(s32 by);
+    static s32 getVolcanicLadybugCounter();
+    static void increaseBlessedButterflyCounter(s32 by);
+    static s32 getBlessedButterflyCounter();
+    static void increaseLanayruAntCounter(s32 by);
+    static s32 getLanayruAntCounter();
+    static void increaseSandCicadaCounter(s32 by);
+    static s32 getSandCicadaCounter();
+    static void increaseGerudoDragonflyCounter(s32 by);
+    static s32 getGerudoDragonflyCounter();
+    static void increaseEldinRollerCounter(s32 by);
+    static s32 getEldinRollerCounter();
+    static void increaseSkyStagBeetleCounter(s32 by);
+    static s32 getSkyStagBeetleCounter();
+    static void increaseStarryFireflyCounter(s32 by);
+    static s32 getStarryFireflyCounter();
+    static void increaseHornetLarvaeCounter(s32 by);
+    static s32 getHornetLarvaeCounter();
+    static void increaseBirdFeatherCounter(s32 by);
+    static s32 getBirdFeatherCounter();
+    static void increaseTumbleWeedCounter(s32 by);
+    static s32 getTumbleWeedCounter();
+    static void increaseLizardTailCounter(s32 by);
+    static s32 getLizardTailCounter();
+    static void increaseEldinOreCounter(s32 by);
+    static s32 getEldinOreCounter();
+    static void increaseAncientFlowerCounter(s32 by);
+    static s32 getAncientFlowerCounter();
+    static void increaseAmberRelicCounter(s32 by);
+    static s32 getAmberRelicCounter();
+    static void increaseDuskRelicCounter(s32 by);
+    static s32 getDuskRelicCounter();
+    static void increaseJellyBlobCounter(s32 by);
+    static s32 getJellyBlobCounter();
+    static void increaseMonsterClawCounter(s32 by);
+    static s32 getMonsterClawCounter();
+    static void increaseMonsterHornCounter(s32 by);
+    static s32 getMonsterHornCounter();
+    static void increaseSkullCounter(s32 by);
+    static s32 getSkullCounter();
+    static void increaseEvilCrystalCounter(s32 by);
+    static s32 getEvilCrystalCounter();
+    static void increaseBlueBirdFeatherCounter(s32 by);
+    static s32 getBlueBirdFeatherCounter();
+    static void increaseGoldenSkullCounter(s32 by);
+    static s32 getGoldenSkullCounter();
+    static void increaseGoddessPlumeCounter(s32 by);
+    static s32 getGoddessPlumeCounter();
+    static void increaseGratitudeCrystalCounter(s32 by);
+    static s32 getGratitudeCrystalCounter();
+    static void increaseExtraWalletCounter(s32 by);
+    static s32 getExtraWalletCounter();
+    static void increaseSmallKeyCounter(s32 by);
+    static void increaseArrowCounter(s32 by);
+    static void increaseDekuSeedCounter(s32 by);
+    static void increaseArrowAndPouchCounter(s32 by);
+    static void increaseBombAndPouchCounter(s32 by);
+    static void increaseDekuSeedAndPouchCounter(s32 by);
+    static void increaseExtraPouchCounter(s32 by);
+
+    static void increaseHealthCapacity(s32 by);
+    static void setLifeTreeSeedlingFlag(s32 by);
+
+    static s32 getLightFruitTime();
+    static s32 getNumRemainingHeartPiecesForNextHeart();
+    static void doFullHeal();
+    static void restoreStamina();
+
     bool isItemDropFromEnemy() const;
     static u16 determineActualItemIdFromItem(u16);
     u16 getItemId2() const;
     static s32 getSubtypeFromParam(u32 params);
+    bool isFirstBitParams2NotSet();
     void setupUnkColliderFlags2();
     static bool hitCallback(dAcObjBase_c *i_actorA, cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB);
     void fn_80253F90(bool);
@@ -265,11 +392,15 @@ private:
     void applyBoundingBox();
     s32 getTearIdx();
     void setFreestandingYOffset(f32);
-    void fn_8024DF30(u32 flags);
+    void setFramesInAir(u32 numFrames);
+    void unsetFramesInAir();
+    void incrementFramesInAir();
+    void setItemFlags(u32 flags);
 
     bool fn_80255CF0();
     bool fn_802574A0();
     void addToGetQueue();
+    void removeFromGetQueue();
     static bool fn_8024A230();
     void unsetHaveNoGravity();
     void fn_80252A80();
@@ -281,8 +412,55 @@ private:
     bool fn_80255C50(u32 specialCode);
     bool fn_80255CA0(u32 specialCode);
     void getCurrentModelScale(f32 *scale);
+    f32 getCurrentScale();
+    void fn_802518C0(mVec3_c *out);
     void makeLinkLookTowardItem();
     void fn_80254CA0();
+
+    void fn_802546A0();
+    void fn_80254710();
+    void fn_80254790();
+
+    bool checkAbovePosition();
+
+    bool isMdlHidden() const;
+    static bool isBlinkBeforeDespawnShown(s32 timer);
+
+    void performCollection();
+    void performCollectionPart1();
+    void performCollectionPart2();
+
+    void fn_80254BC0();
+    void fn_80255B10();
+    void updateLightingMaybe();
+
+    void fn_80253E20();
+    void fn_80254BA0();
+
+    void setNotWaiting();
+    void fn_802548A0();
+    void decideOnGetOrForcedGet();
+
+    void fn_80256710(mVec3_c &);
+    void fn_80257560(const mVec3_c &);
+    void fn_80254D10();
+    bool fn_80254D70();
+    void fn_802542E0();
+
+    static bool fn_80247BB0();
+    bool checkShouldDemo();
+    bool fn_80254EC0();
+    void addGetEvent();
+    void fn_80254590(mVec3_c &);
+    void fn_80254680();
+    void fn_80254810();
+    static s16 getItemRotateAngle();
+
+    static void getItemGetEventName(u16 id, char *const *name);
+
+    // Could also return vector
+    static void fn_80247540(mVec3_c &);
+    void fn_80247560(const mVec3_c &);
 
     // static PTMF callbacks
     bool fn_80248020();
@@ -314,7 +492,7 @@ private:
     f32 getTreasure3Scale();
     f32 getInsectScale();
     f32 getDefaultScale();
-    
+
     f32 getHighValueRupeePickupScale();
     f32 getDefaultPickupScale();
 
@@ -487,6 +665,9 @@ private:
     f32 fn_802577C0();
     f32 fn_802577D0();
 
+    void fn_80255E80();
+    void fn_80255F40();
+
     /* 0x334 */ dItemMdl_c *mpMdl;
     /* 0x338 */ dShadowCircle_c mShdw;
     /* 0x340 */ mVec3_c field_0x340;
@@ -542,7 +723,7 @@ private:
     /* 0xC78 */ f32 (dAcItem_c::*mFnGetHitKnockback3)();
     /* 0xC84 */ f32 (dAcItem_c::*mFnGetHitKnockbackRand3)();
     /* 0xC90 */ f32 (dAcItem_c::*mFn_0xC90)();
-    /* 0xC9C */ UNKTYPE (dAcItem_c::*mFunc_0xC9C)(UNKTYPE);
+    /* 0xC9C */ void (dAcItem_c::*mFn_0xC9C)();
     /* 0xCA8 */ void (dAcItem_c::*mFnSetBoundingBox)();
     /* 0xCB4 */ f32 (dAcItem_c::*mFn_0xCB4)(void);
     /* 0xCC0 */ dAcRef_c<dAcItem_c> mItemQueuePrev;
@@ -556,18 +737,22 @@ private:
     /* 0xCF0 */ u8 _CF0[0xD00 - 0xCF0];
     /* 0xD00 */ f32 field_0xD00;
     /* 0xD04 */ f32 field_0xD04;
-    /* 0xD08 */ u8 _D08[0xD14 - 0xD08];
+    /* 0xD08 */ u8 _D08[0xD0C - 0xD08];
+    /* 0xD0C */ f32 field_0xD0C;
+    /* 0xD10 */ u8 _D10[0xD14 - 0xD10];
     /* 0xD14 */ f32 mFreestandingOffsetH;
     /* 0xD18 */ f32 field_0xD18;
     /* 0xD1C */ s32 mGetItemPouchSlot;
     /* 0xD20 */ s32 field_0xD20;
     /* 0xD24 */ u8 _D24[0xD2C - 0xD24];
     /* 0xD2C */ u32 mFramesInAir;
-    /* 0xD30 */ s32 mItemQuantity;
+    /* 0xD30 */ u32 mItemQuantity;
     /* 0xD34 */ u32 mItemFlags;
-    /* 0xD38 */ mAng3_c field_0xD38;
+    /* 0xD38 */ s16 field_0xD38;
+    /* 0xD3A */ s16 field_0xD3A;
+    /* 0xD3C */ s16 field_0xD3C;
     /* 0xD3E */ u16 field_0xD3E;
-    /* 0xD40 */ mAng mMdlRotY;
+    /* 0xD40 */ s16 mMdlRotY;
     /* 0xD42 */ s16 field_0xD42;
     /* 0xD44 */ u16 mRealItemId;
     /* 0xD46 */ u16 mDespawnTimer;

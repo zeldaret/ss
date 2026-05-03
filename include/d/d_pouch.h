@@ -29,4 +29,7 @@ void sortStock();
 
 u16 itemCheckFindItemSlot(ITEM_ID item);
 
+void collectPouchItem(u16 id);
+void collectPouchItemIntoSlot(s32 slot, u16 id, u32, bool);
+
 #endif

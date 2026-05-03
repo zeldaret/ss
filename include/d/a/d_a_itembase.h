@@ -243,7 +243,7 @@ class dAcItemBase_c : public dAcObjBase_c {
 public:
     dAcItemBase_c() {}
     virtual ~dAcItemBase_c() {}
-    virtual u16 getItemId();
+    virtual u16 getItemId() const;
     virtual u16 getItemIdFromParams() = 0;
 
     static bool isValidItemTypeIdx(int itemId);

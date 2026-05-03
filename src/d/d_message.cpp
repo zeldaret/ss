@@ -335,7 +335,7 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
             if (dMessage_c::getInstance()->getField_0x2FC() != -1) {
                 dMessage_c::getInstance()->setField_0x2FC(0x3C);
             }
-            dAcItem_c::addRupees(params1n2);
+            dAcItem_c::increaseRupeeCounter(params1n2);
             if ((s32)params1n2 > 0) {
                 dLytMeter_c::setRupyField_0x8AD(1);
             }

@@ -4,34 +4,36 @@
 #include "common.h"
 #include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
+#include "d/a/npc/d_a_npc_talk_kensei.h"
+#include "d/a/obj/d_a_obj_boomerang.h"
+#include "d/a/obj/d_a_obj_warp.h"
 #include "d/col/bg/d_bg_s.h"
-#include "d/col/bg/d_bg_s_gnd_chk.h"
-#include "d/col/bg/d_bg_s_roof_chk.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_camera.h"
 #include "d/d_linkage.h"
+#include "d/d_player.h"
 #include "d/d_pouch.h"
 #include "d/d_sc_game.h"
 #include "d/flag/dungeonflag_manager.h"
+#include "d/flag/itemflag_manager.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "d/t/d_t_force_get_flag.h"
-#include "f/f_list_mg.h"
-#include "f/f_profile_name.h"
+#include "d/t/d_t_minigame_insect_capture.h"
+#include "d/t/d_t_siren.h"
 #include "m/m_vec.h"
-#include "s/s_Math.h"
-#include "toBeSorted/d_emitter.h"
-#include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
+#include "toBeSorted/item_mdl.h"
 #include "toBeSorted/item_mdl_item.h"
 #include "toBeSorted/item_mdl_light_fruit.h"
 #include "toBeSorted/item_mdl_misc.h"
 #include "toBeSorted/item_mdl_rupee.h"
 #include "toBeSorted/item_mdl_stamina_fruit.h"
+#include "toBeSorted/minigame_mgr.h"
 
 const ItemFlagStruct dAcItemBase_c::sDefaultFlagStruct = {0x28, 0x3C, 0x1E, 0xFF, 0x0000, 0x02, 0x01};
 const ItemFlagStruct dAcItemBase_c::sItemFlagStructs[167] = {
@@ -263,30 +265,6 @@ static const dCcD_SrcCyl sSrcCyl = {
     {40.0f, 60.0f}
 };
 
-static const char *const sResNodeName = "Set";
-/* static */ extern const char *const sDefaultGetItem = "DefaultGetItem";
-/* static */ extern const char *const sItemGetGorgeous = "ItemGetGorgeous";
-/* static */ extern const char *const sItemGetDefaultTbox = "ItemGetDefaultTBox";
-/* static */ extern const char *const sItemGetGorgeousTbox = "ItemGetGorgeousTBox";
-/* static */ extern const char *const sItemGetBird = "ItemGetBird";
-
-struct TearIdIdx {
-    s32 idx;
-    u16 itemId;
-    u32 _0x04;
-    u32 _0x08;
-};
-
-/* static */ extern "C" TearIdIdx sTearIdxes[] = {
-    {0, ITEM_FARORE_TEAR},
-    {1,    ITEM_DIN_TEAR},
-    {2,  ITEM_NAYRU_TEAR},
-    {3, ITEM_SACRED_TEAR},
-};
-
-/* static */ extern const char *const sGetFairyBody = "GetFairy_body";
-/* static */ extern const char *const sBottleFairy_body = "BottleFairy_body";
-
 bool dAcItemBase_c::isValidItemTypeIdx(int itemId) {
     return itemId < ARRAY_LENGTH(sItemTypeFlags);
 }
@@ -347,7 +325,16 @@ bool dAcItemBase_c::setDungeonFlagForTear(int tearNum) {
     return true;
 }
 
-u16 dAcItemBase_c::getItemId() {
+// This might be a cM::calcTimer thing...
+bool increment(u32 *value) {
+    if (*value < UINT32_MAX) {
+        (*value)++;
+        return true;
+    }
+    return false;
+}
+
+u16 dAcItemBase_c::getItemId() const {
     return mId;
 }
 
@@ -370,11 +357,58 @@ u16 getIndex(u16 itemId) {
 //     }
 // }
 
-fLiMgBa_c dAcItem_c::sItemList;
-
-SPECIAL_ACTOR_PROFILE(ITEM, dAcItem_c, fProfile::ITEM, 0x2B, 0, 2);
+static const char *const sResNodeName = "Set";
+/* static */ extern const char *const sDefaultGetItem = "DefaultGetItem";
+/* static */ extern const char *const sItemGetGorgeous = "ItemGetGorgeous";
+/* static */ extern const char *const sItemGetDefaultTbox = "ItemGetDefaultTBox";
+/* static */ extern const char *const sItemGetGorgeousTbox = "ItemGetGorgeousTBox";
+/* static */ extern const char *const sItemGetBird = "ItemGetBird";
 
 const mVec3_c dAcItem_c::sFreestandingDowsingOffset(0.0f, 25.0f, 0.0f);
+const mVec3_c dAcItem_c::sScale1Maybe(1.0f, 1.0f, 1.0f);
+const mVec3_c dAcItem_c::sScale2Maybe(1.75f, 1.75f, 1.75f);
+
+struct TearIdIdx {
+    s32 idx;
+    u16 itemId;
+    mColor color1;
+    mColor color2;
+};
+
+/* static */ extern "C" TearIdIdx sTearIdxes[] = {
+    {0, ITEM_FARORE_TEAR, mColor(0x00, 0x80, 0x30, 0xFF), mColor(0xFF, 0xFF, 0xFF, 0xFF)},
+    {1,    ITEM_DIN_TEAR, mColor(0xFF, 0x64, 0x80, 0xFF), mColor(0xFF, 0xFF, 0xFF, 0xFF)},
+    {2,  ITEM_NAYRU_TEAR, mColor(0x80, 0x80, 0x00, 0xFF), mColor(0xFF, 0xFF, 0xFF, 0xFF)},
+    {3, ITEM_SACRED_TEAR, mColor(0x00, 0x64, 0xC8, 0xFF), mColor(0xFF, 0xFF, 0xFF, 0xFF)},
+};
+
+struct TearEffectColorThing {
+    mColor color1;
+    mColor color2;
+    mColor color3;
+    mColor color4;
+    mColor color5;
+    mColor color6;
+};
+
+extern "C" TearEffectColorThing sTearEffectColors[] = {
+    {mColor(0x80, 0xFF, 0x80, 0xFF), mColor(0x00, 0xFF, 0x40, 0xFF), mColor(0xC8, 0xFF, 0xC8, 0xFF),
+     mColor(0x40, 0xFF, 0x40, 0xFF), mColor(0x40, 0xFF, 0x60, 0xFF), mColor(0x00, 0xFF, 0x40, 0xFF)},
+
+    {mColor(0xFF, 0x80, 0xA0, 0xFF), mColor(0xFF, 0x40, 0x80, 0xFF), mColor(0xFF, 0xC8, 0xC8, 0xFF),
+     mColor(0xFF, 0x40, 0x80, 0xFF), mColor(0xFF, 0x60, 0x80, 0xFF), mColor(0xFF, 0x00, 0x40, 0xFF)},
+
+    {mColor(0xFF, 0xFF, 0x80, 0xFF), mColor(0xFF, 0xFF, 0x00, 0xFF), mColor(0xFF, 0xFF, 0xC8, 0xFF),
+     mColor(0xFF, 0xFF, 0x40, 0xFF), mColor(0xFF, 0xFF, 0xFF, 0xFF), mColor(0xFF, 0xFF, 0xFF, 0xFF)},
+
+    {mColor(0x80, 0xFF, 0xFF, 0xFF), mColor(0x00, 0x80, 0xFF, 0xFF), mColor(0xC8, 0xC8, 0xFF, 0xFF),
+     mColor(0x40, 0xA0, 0xFF, 0xFF), mColor(0xFF, 0xFF, 0xFF, 0xFF), mColor(0xFF, 0xFF, 0xFF, 0xFF)},
+};
+
+/* static */ extern const char *const sGetFairyBody = "GetFairy_body";
+/* static */ extern const char *const sBottleFairy_body = "BottleFairy_body";
+
+SPECIAL_ACTOR_PROFILE(ITEM, dAcItem_c, fProfile::ITEM, 0x2B, 0, 2);
 
 const dAcItem_c::sStaticPtmf dAcItem_c::sStaticPtmfs[] = {
     &dAcItem_c::fn_80248020, nullptr,
@@ -384,6 +418,10 @@ const dAcItem_c::sStaticPtmf dAcItem_c::sStaticPtmfs[] = {
     &dAcItem_c::fn_80248030, nullptr,
     &dAcItem_c::fn_80255BD0, &dAcItem_c::fn_80255C40,
 };
+
+fLiMgBa_c dAcItem_c::sItemList;
+dAcRef_c<dAcObjBase_c> dAcItem_c::sItemListHead;
+dAcRef_c<dAcObjBase_c> dAcItem_c::sItemListTail;
 
 dAcItem_c::dAcItem_c()
     : mStateMgr(*this),
@@ -584,7 +622,7 @@ int dAcItem_c::create() {
         default: return FAILED;
     }
 
-    if (isHeart2()) {
+    if (isHeartV()) {
         mFunc_0xB58 = &dAcItem_c::fn_802555F0;
     } else {
         mFunc_0xB58 = &dAcItem_c::fn_802555D0;
@@ -592,7 +630,7 @@ int dAcItem_c::create() {
 
     if (isAnyRupee()) {
         mFnBounce = &dAcItem_c::bounceRupee;
-    } else if (isHeart2()) {
+    } else if (isHeartV()) {
         mFnBounce = &dAcItem_c::bounceNone;
     } else {
         mFnBounce = &dAcItem_c::bounceNormal;
@@ -661,7 +699,7 @@ int dAcItem_c::create() {
         mCyl.SetTg_0x4C(0x6CC0);
     } else if (isBabyRattle()) {
         mCyl.SetTg_0x4C(0x6480);
-    } else if (!isAnyRupee() && !isHeart2() && mId != ITEM_STAMINA_FRUIT) {
+    } else if (!isAnyRupee() && !isHeartV() && mId != ITEM_STAMINA_FRUIT) {
         mCyl.SetTg_0x4C(0x6480);
     }
 
@@ -669,7 +707,7 @@ int dAcItem_c::create() {
         mCyl.SetTgInfo_0x1(0x13);
     } else if (isHeartPiece()) {
         mCyl.SetTgInfo_0x1(0x15);
-    } else if (!isAnyRupee() && !isHeart2() && mId != ITEM_STAMINA_FRUIT) {
+    } else if (!isAnyRupee() && !isHeartV() && mId != ITEM_STAMINA_FRUIT) {
         mCyl.SetTgInfo_0x1(0x13);
     }
 
@@ -927,7 +965,7 @@ int dAcItem_c::create() {
         default:                mFnGetHitKnockbackRand3 = nullptr; break;
     }
 
-    if (isHeart2()) {
+    if (isHeartV()) {
         mFn_0xCB4 = &dAcItem_c::fn_802577C0;
     } else {
         mFn_0xCB4 = &dAcItem_c::fn_802577D0;
@@ -935,11 +973,11 @@ int dAcItem_c::create() {
 
     if (mbNoDespawn) {
         dBgS::GetInstance()->SetLightingCode(this, 10.0f);
-    } else if (isHeart2()) {
+    } else if (isHeartV()) {
         mLinkage.bushTpFunc(mObjAcch);
     }
 
-    if (isHeart2()) {
+    if (isHeartV()) {
         field_0xD20 = 6;
     }
 
@@ -1006,7 +1044,7 @@ int dAcItem_c::create() {
     }
 
     if (EventManager::isInEvent() && EventManager::isCurrentEvent("GetGenkiItem")) {
-        fn_8024DF30(mItemFlags | 0x20);
+        setItemFlags(mItemFlags | 0x20);
     }
 
     // okay
@@ -1019,7 +1057,7 @@ int dAcItem_c::create() {
     }
     if (is) {
         // Skyview Temple - Heart Piece behind bars in main room
-        fn_8024DF30(mItemFlags | 0x80);
+        setItemFlags(mItemFlags | 0x80);
     }
 
     field_0xD48 = cM::rndInt(0x10000);
@@ -1031,10 +1069,251 @@ int dAcItem_c::create() {
     return SUCCEEDED;
 }
 
-void dAcItem_c::initializeState_Wait() {}
+int dAcItem_c::doDelete() {
+    sItemList.remove(&this->mNode);
+    dAcItem_c *prev = mItemQueuePrev.get();
+    dAcItem_c *next = mItemQueueNext.get();
+
+    if (prev == nullptr) {
+        if (next == nullptr) {
+            if (this == sItemListHead.get()) {
+                sItemListHead.unlink();
+            }
+            if (this == sItemListTail.get()) {
+                sItemListTail.unlink();
+            }
+        } else {
+            sItemListHead.link(next);
+            next->mItemQueuePrev.unlink();
+        }
+    } else if (next == nullptr) {
+        sItemListTail.link(prev);
+        prev->mItemQueueNext.unlink();
+    } else {
+        prev->mItemQueueNext.link(next);
+        next->mItemQueuePrev.link(prev);
+    }
+
+    return SUCCEEDED;
+}
+
+int dAcItem_c::actorExecute() {
+    if (!checkActorProperty(AC_PROP_0x10000000)) {
+        if (mId == ITEM_STAMINA_FRUIT) {
+            if (isFirstBitParams2NotSet() && !fn_802577A0()) {
+                field_0xCD8 = 0.0f;
+            } else {
+                field_0xCD8 = 1.0f;
+            }
+        } else if (isLightFruit()) {
+            if ((this->*mFnAction4)()) {
+                field_0xCD8 = 1.0f;
+            } else {
+                field_0xCD8 = 0.0f;
+            }
+        }
+
+        dAcOScatterSand *ac =
+            static_cast<dAcOScatterSand *>(fManager_c::searchBaseByProfName(fProfile::OBJ_VSD, nullptr));
+        bool keepGoing = true;
+        while (keepGoing && ac != nullptr) {
+            if (mPosition.squareDistance(ac->mPosition) < 90000.0f) {
+                mCoveredSand.link(ac);
+                keepGoing = false;
+            } else {
+                ac = static_cast<dAcOScatterSand *>(fManager_c::searchBaseByProfName(fProfile::OBJ_VSD, ac));
+            }
+        }
+    }
+
+    if (field_0xD4C < 0xFF) {
+        field_0xD4C++;
+    }
+
+    fn_80254BC0();
+    fn_80255B10();
+
+    field_0xD5C = 0;
+    field_0xD66 = 0;
+
+    mStateMgr.executeState();
+
+    updateLightingMaybe();
+    if (mDespawnTimer == 0) {
+        deleteRequest();
+        return SUCCEEDED;
+    }
+
+    if ((mItemFlags & 0x8) != 0) {
+        deleteRequest();
+        return SUCCEEDED;
+    }
+
+    mRotation.y += field_0xD38;
+    f32 scaleF = getCurrentScale();
+    mScale.set(scaleF, scaleF, scaleF);
+    mVec3_c tmp1;
+    fn_802518C0(&tmp1);
+    mPositionCopy2.set(tmp1);
+    mVec3_c tmp2;
+    fn_802518C0(&tmp2);
+    mPositionCopy3.set(tmp2);
+
+    mLinkage.fn_800511E0(this);
+
+    if (!checkObjectProperty(OBJ_PROP_0x200)) {
+        mMtx_c mtx = mWorldMtx;
+        mtx.YrotM(mMdlRotY);
+        mtx.ZrotM(field_0xD42);
+
+        if (isGratitudeCrystal() || isUnkTreasureGroup1()) {
+            if (mStateMgr.isState(StateID_Wait) || mStateMgr.isState(StateID_Carry)) {
+                f32 off = mFreestandingOffsetH;
+                f32 sc = getCurrentScale();
+                mtx.m[1][3] += sc * off;
+            }
+        } else if (isInsect()) {
+            if (mStateMgr.isState(StateID_Get)) {
+                mtx.YrotM(-0x2000);
+            }
+        }
+
+        mpMdl->setLocalMtx(mtx);
+        mpMdl->setScale(mScale);
+
+        if (isFairyV() || isBottleFairyV()) {
+            m3d::smdl_c *mdl = mpMdl->getMdl();
+            if (mdl != nullptr) {
+                mdl->calc(false);
+            }
+        }
+    }
+
+    field_0xD51 = 0;
+    mCyl.ClrTgHit();
+    mCyl.ClrCoHit();
+    field_0xD65 = 0;
+    if ((isAnyRupeeV() || mId == ITEM_STAMINA_FRUIT) && field_0xD66 && mObjAcch.ChkGroundLanding()) {
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 0.7f, field_0x1B0);
+    }
+
+    if (isStarryFireflyV() && !checkObjectProperty(OBJ_PROP_0x200)) {
+        fn_802546A0();
+    }
+
+    if (isFairyV() && !checkObjectProperty(OBJ_PROP_0x200)) {
+        fn_80254710();
+    }
+
+    if (isBottleFairyV() && !checkObjectProperty(OBJ_PROP_0x200)) {
+        fn_80254790();
+    }
+
+    if (checkAbovePosition()) {
+        mItemFlags |= 0x10;
+        f32 f = mPosition.y - dBgS_ObjGndChk::GetGroundHeight();
+        field_0xD18 = f < 0.0f ? 0.0f : f;
+    } else {
+        mItemFlags &= ~0x10;
+    }
+
+    applyBoundingBox();
+
+    bool tmp = 0.0f < field_0xD04;
+    if (tmp || mStateMgr.isState(StateID_WaitGetDemo) || mStateMgr.isState(StateID_Get) ||
+        mStateMgr.isState(StateID_GetBeetle)) {
+        setActorProperty(AC_PROP_0x4);
+    } else {
+        unsetActorProperty(AC_PROP_0x4);
+    }
+
+    return SUCCEEDED;
+}
+
+int dAcItem_c::draw() {
+    if (mMdlScaleType == 2 || 0.0f < field_0xCD8) {
+        bool shouldDraw = true;
+        if (isMdlHidden()) {
+            shouldDraw = false;
+        } else if ((mStateMgr.isState(StateID_Wait) || mStateMgr.isState(StateID_Carry)) && mbIsWaiting) {
+            shouldDraw = isBlinkBeforeDespawnShown(mDespawnTimer);
+        }
+        if (shouldDraw) {
+            mpMdl->draw();
+        }
+
+        if (mLinkage.checkConnection(dLinkage_c::CONNECTION_9) ||
+            (mId == ITEM_STAMINA_FRUIT && getParams2Lower_shift1_0x7()) || isLightFruit() || (mItemFlags & 0x10) == 0) {
+            /* nothing */
+        } else if (mMdlScaleType == 2) {
+            mQuat_c v(mVec3_c(0.0f, 0.0f, 0.0f), getItemFlagStruct(getItemId())->field_0x02);
+            drawShadow(mShdw, nullptr, mWorldMtx, &v, -1, -1, -1, -1, -1, field_0xD18);
+        } else {
+            mQuat_c v(
+                mVec3_c(0.0f, field_0xCD8 * 0.5f * getItemFlagStruct(getItemId())->field_0x01, 0.0f),
+                field_0xCD8 * getItemFlagStruct(getItemId())->field_0x02
+            );
+            drawShadow(mShdw, nullptr, mWorldMtx, &v, -1, -1, -1, -1, -1, field_0xD18);
+        }
+    }
+    return SUCCEEDED;
+}
+
+void dAcItem_c::setSpawnQuantity(s32 quantity) {
+    sGetItemQuantity = quantity;
+}
+
+void dAcItem_c::setFreestandingYOffset(f32 off) {
+    mFreestandingOffsetH = off;
+}
+
+void dAcItem_c::setFramesInAir(u32 numFrames) {
+    mFramesInAir = numFrames;
+}
+
+void dAcItem_c::setItemFlags(u32 flags) {
+    mItemFlags = flags;
+}
+
+bool dAcItem_c::isItemDropFromEnemy() const {
+    return mObjID != 0xFFFF;
+}
+
+void dAcItem_c::unsetSpawnQuantity() {
+    sGetItemQuantity = 0;
+}
+
+void dAcItem_c::unsetFramesInAir() {
+    setFramesInAir(0);
+}
+
+void dAcItem_c::incrementFramesInAir() {
+    u32 v = mFramesInAir;
+    increment(&v);
+    setFramesInAir(v);
+}
+
+void dAcItem_c::initializeState_Wait() {
+    if (mbNoGravity) {
+        setActorProperty(AC_PROP_0x1);
+        mSpeed = 0.0f;
+        mVelocity.y = 0.0f;
+    }
+    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_1);
+    field_0xD5B = 0;
+    field_0xD38 = field_0xD3A = field_0xD3C = 0;
+    fn_80253E20();
+    if (mbNoGravity) {
+        mObjAcch.SetMoveBGOnly();
+    }
+    mMdlScaleType = 0;
+    field_0xD00 = 0.0f;
+    mYOffset = 0.0f;
+}
+
 void dAcItem_c::executeState_Wait() {
     bool isFixedPosition;
-    
+
     bool tmp = false;
     mVec3_c topPos = getPosition() + mVec3_c::Ey * mCyl.GetH();
     bool chk = dBgS_ObjRoofChk::CheckPos(&getPosition());
@@ -1194,9 +1473,9 @@ void dAcItem_c::executeState_Wait() {
 
     if (mId == ITEM_STAMINA_FRUIT) {
         if (isFirstBitParams2NotSet() && !fn_802577A0()) {
-            sLib::chase(&field_0xCD8, 1.0f, 0.05f);
-        } else {
             sLib::chase(&field_0xCD8, 0.0f, 0.05f);
+        } else {
+            sLib::chase(&field_0xCD8, 1.0f, 0.05f);
         }
     } else if (isLightFruit()) {
         if ((this->*mFnAction4)()) {
@@ -1209,8 +1488,8 @@ void dAcItem_c::executeState_Wait() {
     bool tgHitArrow = tgHit && mCyl.ChkTgAtHitType(AT_TYPE_ARROW);
     bool tgHitClawshot = tgHit && mCyl.ChkTgAtHitType(AT_TYPE_CLAWSHOT);
     if (mbNoGravity && tgHit &&
-        ((isAnyRupee() && tgHitArrow) || (isHeart2() && mCyl.ChkTgAtHitType(AT_TYPE_BELLOWS)) ||
-         ((isAnyRupee() || isHeart2()) &&
+        ((isAnyRupee() && tgHitArrow) || (isHeartV() && mCyl.ChkTgAtHitType(AT_TYPE_BELLOWS)) ||
+         ((isAnyRupee() || isHeartV()) &&
           (mCyl.ChkTgAtHitType(AT_TYPE_SLINGSHOT) || mCyl.ChkTgAtHitType(AT_TYPE_CLAWSHOT))) ||
          mCyl.ChkTgAtHitType(AT_TYPE_BOMB) || mCyl.ChkTgAtHitType(AT_TYPE_0x800000))) {
         unsetHaveNoGravity();
@@ -1261,7 +1540,7 @@ void dAcItem_c::executeState_Wait() {
                     case 1: mAcceleration = (this->*mFnGetRupeeGravity)(); break;
                     case 2: mAcceleration = (this->*mFnGetGravity1)(); break;
                 }
-            } else if (isHeart2()) {
+            } else if (isHeartV()) {
                 if (field_0xD52) {
                     if (mFnGetHeartGravity != nullptr) {
                         mAcceleration = (this->*mFnGetHeartGravity)();
@@ -1331,20 +1610,19 @@ void dAcItem_c::executeState_Wait() {
 
     /* This Function keeps Triforce postion locked 8024edbc */
     if (isTriforce()) {
-        // TODO
         f32 factor = field_0xD48.sin();
         mPosition = mPositionCopy + mVec3_c::Ey * (factor * 16.0f);
         field_0xD48.mVal += 182;
     }
 
-    if ((mItemFlags & 0x4) != 0 &&  3000.0f < mPositionCopy.y - mPosition.y) {
+    if ((mItemFlags & 0x4) != 0 && 3000.0f < mPositionCopy.y - mPosition.y) {
         mItemFlags |= 0x8;
     }
 
     if ((mItemFlags & 0x8) == 0) {
         (this->*mFnAction3)();
-        if (isAnyRupee() && field_0xD38.y > 0) {
-            holdSoundWithIntParam(SE_O_RUPEE_ROULETTE, field_0xD38.y);
+        if (isAnyRupee() && field_0xD3A > 0) {
+            holdSoundWithIntParam(SE_O_RUPEE_ROULETTE, field_0xD3A);
         }
 
         if (!field_0xD51) {
@@ -1377,7 +1655,9 @@ void dAcItem_c::executeState_Wait() {
             dir *= -40.0f;
             // TODO - for some reason the argument vector is at an entirely wrong stack position...
             // Fixing this wil probably fix the rest of the stack position issues in this function.
-            mEff_0x928.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_821_, offsetPos + dir, nullptr, &scale, nullptr, nullptr);
+            mEff_0x928.holdEffect(
+                PARTICLE_RESOURCE_ID_MAPPING_821_, offsetPos + dir, nullptr, &scale, nullptr, nullptr
+            );
         }
         makeLinkLookTowardItem();
         if (!mbNoDespawn && !isItemSmallKeyOrHeartPieceOrStaminaFruit()) {
@@ -1385,50 +1665,459 @@ void dAcItem_c::executeState_Wait() {
         }
     }
 }
-void dAcItem_c::finalizeState_Wait() {}
 
-void dAcItem_c::initializeState_Carry() {}
-void dAcItem_c::executeState_Carry() {}
-void dAcItem_c::finalizeState_Carry() {}
+void dAcItem_c::finalizeState_Wait() {
+    unsetActorProperty(AC_PROP_0x1);
+    mObjAcch.SetRoofNone();
+    mObjAcch.Clr_0x2000000();
+    field_0xD00 = 0.0f;
+    mYOffset = 0.0f;
+    if (isTriforce() && mEff_0x928.hasEmitters()) {
+        mEff_0x928.remove(true);
+    }
+}
 
-void dAcItem_c::initializeState_GetBeetle() {}
-void dAcItem_c::executeState_GetBeetle() {}
+void dAcItem_c::initializeState_Carry() {
+    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_1);
+    mSpeed = 0.0f;
+    mVelocity.y = 0.0f;
+    unsetHaveNoGravity();
+    field_0xD38 = field_0xD3A = field_0xD3C = 0;
+    mCyl.OnTgSet();
+    mCyl.ClrCoSet();
+    fn_80254BA0();
+    field_0xD4A = 0;
+    mMdlScaleType = 0;
+}
+
+void dAcItem_c::executeState_Carry() {
+    if (!mbNoDespawn && !isItemSmallKeyOrHeartPieceOrStaminaFruit() && !mbIsWaiting &&
+        mLinkage.checkConnection(dLinkage_c::CONNECTION_8)) {
+        fn_80254CA0();
+    }
+    tickDespawnTimer();
+    if (mDespawnTimer == 0) {
+        return;
+    }
+
+    if (fn_802574A0()) {
+        // TODO weird double load
+        dAcPy_c *link = dAcPy_c::GetLinkM();
+        if (!link->vt_0x1C0()) {
+            addToGetQueue();
+            if (link->ifHasHealthAndSomethingElse() && this == sItemListHead.get() &&
+                FileManager::sInstance->getCurrentHealth() != 0) {
+                mStateMgr.changeState(StateID_Get);
+            } else {
+                mStateMgr.changeState(StateID_WaitGet);
+            }
+        } else {
+            mStateMgr.changeState(StateID_GetBeetle);
+        }
+    } else if (!mLinkage.checkState(dLinkage_c::STATE_ACTIVE)) {
+        mStateMgr.changeState(StateID_Wait);
+    } else if (mLinkage.checkConnection(dLinkage_c::CONNECTION_9) && mCyl.ChkTgHit() &&
+               !mCyl.ChkTgAtHitType(AT_TYPE_WHIP)) {
+        mLinkage.fn_80050EA0(this);
+        mStateMgr.changeState(StateID_Wait);
+    } else {
+        fn_80256E80();
+        if (mLinkage.checkConnection(dLinkage_c::CONNECTION_9) || mLinkage.checkConnection(dLinkage_c::CONNECTION_8)) {
+            mCyl.SetC(mPosition);
+            dCcS::GetInstance()->Set(&mCyl);
+        }
+
+        if (mLinkage.checkConnection(dLinkage_c::CONNECTION_7)) {
+            makeLinkLookTowardItem();
+        }
+    }
+}
+
+void dAcItem_c::finalizeState_Carry() {
+    setupUnkColliderFlags2();
+}
+
+void dAcItem_c::initializeState_GetBeetle() {
+    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_1);
+    setNotWaiting();
+    field_0xD38 = field_0xD3A = field_0xD3C = 0;
+    field_0xD0C = 0.0f;
+    if (isAnyRupee()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_BE_GET_RUPEE);
+    } else if (isHeartV()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_BE_GET_HART);
+    } else if (isSmallKey()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_BE_GET_KEY);
+    } else if (mId == ITEM_STAMINA_FRUIT) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_BE_GET_REFRESH_FRUIT);
+    } else if (isUnkTreasureGroup1()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_BE_GET_MATERIAL);
+    } else {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_BE_GET_CONSUMP_ITEM);
+    }
+
+    addToGetQueue();
+    mMdlScaleType = 3;
+    fn_802548A0();
+}
+
+void dAcItem_c::executeState_GetBeetle() {
+    // TODO weird double load
+    dAcPy_c *link = dAcPy_c::GetLinkM();
+    if (link == nullptr) {
+        return;
+    }
+    dAcBoomerang_c *beetlePtr = (dAcBoomerang_c *)link->vt_0x1C0();
+    if (beetlePtr == nullptr) {
+        if (link->ifHasHealthAndSomethingElse() && this == sItemListHead.get() &&
+            FileManager::sInstance->getCurrentHealth() != 0) {
+            decideOnGetOrForcedGet();
+        } else {
+            mStateMgr.changeState(StateID_WaitGet);
+        }
+    } else if (37.6f - field_0xD0C < 1.6f) {
+        // TODO what are these numbers
+        mStateMgr.changeState(StateID_WaitGet);
+    } else {
+        mVec3_c v(0.0f, 5.0f, 0.0f);
+        // This + is weird... inline?
+        v.rotY(+beetlePtr->mRotation.y);
+        mPosition = beetlePtr->mPosition + v;
+        mPosition.y += field_0xD0C;
+        fn_80255E80();
+        sLib::addCalcScaledDiff(&field_0xD0C, 37.6f, 0.1f, 10000.0f);
+    }
+}
+
 void dAcItem_c::finalizeState_GetBeetle() {}
 
-void dAcItem_c::initializeState_WaitGet() {}
-void dAcItem_c::executeState_WaitGet() {}
-void dAcItem_c::finalizeState_WaitGet() {}
+void dAcItem_c::initializeState_WaitGet() {
+    field_0xD64 = 0;
+    setObjectProperty(OBJ_PROP_0x200);
+    // TODO double load
+    dAcPy_c *link = dAcPy_c::GetLinkM();
+    if (link != nullptr) {
+        mPosition.set(link->getPosition());
+    }
+    mMdlScaleType = 1;
+    fn_802548A0();
+}
 
-void dAcItem_c::initializeState_Get() {}
-void dAcItem_c::executeState_Get() {}
-void dAcItem_c::finalizeState_Get() {}
+void dAcItem_c::executeState_WaitGet() {
+    // TODO double load
+    dAcPy_c *link = dAcPy_c::GetLinkM();
+    if (link != nullptr) {
+        if (link->ifHasHealthAndSomethingElse()) {
+            field_0xD64 = true;
+        }
+        if (field_0xD64 && this == sItemListHead.get() && FileManager::GetInstance()->getCurrentHealth() != 0) {
+            decideOnGetOrForcedGet();
+        }
+    }
+}
 
-void dAcItem_c::initializeState_WaitGetDemo() {}
-void dAcItem_c::executeState_WaitGetDemo() {}
+void dAcItem_c::finalizeState_WaitGet() {
+    unsetObjectProperty(OBJ_PROP_0x200);
+}
+
+void dAcItem_c::initializeState_Get() {
+    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_1);
+    performCollection();
+    if (isAnyTear()) {
+        mVec3_c tmp;
+        fn_80256710(tmp);
+        fn_80257560(tmp);
+    }
+    fn_80254D10();
+    fn_80254D70();
+    setNotWaiting();
+    field_0xD38 = field_0xD3A = field_0xD3C = 0;
+    field_0xD4D = false;
+    mMdlScaleType = 1;
+    fn_802548A0();
+}
+
+void dAcItem_c::executeState_Get() {
+    if (!fn_80254D70()) {
+        fn_802542E0();
+    } else {
+        // @bug always true
+        if (field_0xD4D < 0xFFFF) {
+            field_0xD4D++;
+        }
+        if (field_0xD4D > 12) {
+            removeFromGetQueue();
+        }
+    }
+}
+
+void dAcItem_c::finalizeState_Get() {
+    removeFromGetQueue();
+}
+
+void dAcItem_c::initializeState_WaitGetDemo() {
+    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_2);
+    setObjectProperty(OBJ_PROP_0x200);
+    setNotWaiting();
+    field_0xD38 = field_0xD3A = field_0xD3C = 0;
+    mMdlScaleType = 2;
+    fn_802548A0();
+    unsetFramesInAir();
+}
+
+void dAcItem_c::executeState_WaitGetDemo() {
+    s32 which = 0;
+    if (EventManager::isInEvent()) {
+        which = 2;
+    } else if (fn_80247BB0()) {
+        which = 2;
+    } else if ((isInsect() || isTreasure3()) && checkTreasureTempCollect(getItemId())) {
+        which = 2;
+    } else if (checkShouldDemo() && fn_80254EC0()) {
+        which = 1;
+    } else if (mFramesInAir > 10) {
+        which = 2;
+    }
+
+    switch (which) {
+        case 1: addGetEvent(); break;
+        case 2:
+            unsetObjectProperty(OBJ_PROP_0x200);
+            mStateMgr.changeState(StateID_Get);
+            break;
+    }
+    unsetFramesInAir();
+}
+
 void dAcItem_c::finalizeState_WaitGetDemo() {}
 
-void dAcItem_c::initializeState_WaitForcedGetDemo() {}
-void dAcItem_c::executeState_WaitForcedGetDemo() {}
+void dAcItem_c::initializeState_WaitForcedGetDemo() {
+    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_2);
+    setObjectProperty(OBJ_PROP_0x200);
+    setNotWaiting();
+    field_0xD38 = field_0xD3A = field_0xD3C = 0;
+    mMdlScaleType = 2;
+    fn_802548A0();
+}
+
+void dAcItem_c::executeState_WaitForcedGetDemo() {
+    if (isAnyTear() && mFramesInAir < 10) {
+        incrementFramesInAir();
+        if (mFramesInAir == 10) {
+            fn_80257560(mPosition);
+        }
+    }
+    addGetEvent();
+}
+
 void dAcItem_c::finalizeState_WaitForcedGetDemo() {}
 
-void dAcItem_c::initializeState_GetDemo() {}
-void dAcItem_c::executeState_GetDemo() {}
-void dAcItem_c::finalizeState_GetDemo() {}
+void dAcItem_c::initializeState_GetDemo() {
+    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_2);
+    switch (getItemId()) {
+        case ITEM_FARON_GRASSHOPPER:     sCollectionCurrentCount = getFaronGrasshooperCounter(); break;
+        case ITEM_WOODLAND_RHINO_BEETLE: sCollectionCurrentCount = getWoodlandRhinoBeetleCounter(); break;
+        case ITEM_DEKU_HORNET:           sCollectionCurrentCount = getDekuHornetCounter(); break;
+        case ITEM_SKYLOFT_MANTIS:        sCollectionCurrentCount = getSkyloftMantisCounter(); break;
+        case ITEM_VOLCANIC_LADYBUG:      sCollectionCurrentCount = getVolcanicLadybugCounter(); break;
+        case ITEM_BLESSED_BUTTERFLY:     sCollectionCurrentCount = getBlessedButterflyCounter(); break;
+        case ITEM_LANAYRU_ANT:           sCollectionCurrentCount = getLanayruAntCounter(); break;
+        case ITEM_SAND_CICADA:           sCollectionCurrentCount = getSandCicadaCounter(); break;
+        case ITEM_GERUDO_DRAGONFLY:      sCollectionCurrentCount = getGerudoDragonflyCounter(); break;
+        case ITEM_ELDIN_ROLLER:          sCollectionCurrentCount = getEldinRollerCounter(); break;
+        case ITEM_SKY_STAG_BEETLE:       sCollectionCurrentCount = getSkyStagBeetleCounter(); break;
+        case ITEM_STARRY_FIREFLY:        sCollectionCurrentCount = getStarryFireflyCounter(); break;
+        case ITEM_HORNET_LARVAE:         sCollectionCurrentCount = getHornetLarvaeCounter(); break;
+        case ITEM_BIRD_FEATHER:          sCollectionCurrentCount = getBirdFeatherCounter(); break;
+        case ITEM_TUMBLE_WEED:           sCollectionCurrentCount = getTumbleWeedCounter(); break;
+        case ITEM_LIZARD_TAIL:           sCollectionCurrentCount = getLizardTailCounter(); break;
+        case ITEM_ELDIN_ORE:             sCollectionCurrentCount = getEldinOreCounter(); break;
+        case ITEM_ANCIENT_FLOWER:        sCollectionCurrentCount = getAncientFlowerCounter(); break;
+        case ITEM_AMBER_RELIC:           sCollectionCurrentCount = getAmberRelicCounter(); break;
+        case ITEM_DUSK_RELIC:            sCollectionCurrentCount = getDuskRelicCounter(); break;
+        case ITEM_JELLY_BLOB:            sCollectionCurrentCount = getJellyBlobCounter(); break;
+        case ITEM_MONSTER_CLAW:          sCollectionCurrentCount = getMonsterClawCounter(); break;
+        case ITEM_MONSTER_HORN:          sCollectionCurrentCount = getMonsterHornCounter(); break;
+        case ITEM_ORNAMENTAL_SKULL:      sCollectionCurrentCount = getSkullCounter(); break;
+        case ITEM_EVIL_CRYSTAL:          sCollectionCurrentCount = getEvilCrystalCounter(); break;
+        case ITEM_BLUE_BIRD_FEATHER:     sCollectionCurrentCount = getBlueBirdFeatherCounter(); break;
+        case ITEM_GOLDEN_SKULL:          sCollectionCurrentCount = getGoldenSkullCounter(); break;
+        case ITEM_GODDESS_PLUME:         sCollectionCurrentCount = getGoddessPlumeCounter(); break;
+    }
 
-void dAcItem_c::initializeState_WaitTBoxGetDemo() {}
-void dAcItem_c::executeState_WaitTBoxGetDemo() {}
+    performCollectionPart1();
+    if (checkItemFlagV()) {
+        if (isAnyTear()) {
+            dAcOWarp_c *warp = static_cast<dAcOWarp_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_WARP));
+            if (warp != nullptr) {
+                warp->onCollectFirstTear();
+            }
+        }
+    } else {
+        bool doCollect = true;
+        if (ITEM_FARON_GRASSHOPPER <= mId && mId <= ITEM_STARRY_FIREFLY &&
+            MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+            doCollect = false;
+        }
+        if (doCollect) {
+            setItemFlagV();
+        }
+    }
+
+    setTreasureTempCollect(getItemId());
+    setNotWaiting();
+    field_0xD38 = field_0xD3A = field_0xD3C = 0;
+    mMdlRotY = 0;
+    setObjectProperty(OBJ_PROP_0x200);
+    mMdlScaleType = 2;
+    if (isBirdStatuette()) {
+        mFn_0xC9C = &dAcItem_c::fn_80255F40;
+    } else {
+        mFn_0xC9C = &dAcItem_c::fn_80255E80;
+    }
+}
+
+void dAcItem_c::executeState_GetDemo() {
+    switch (mEventRelated.getCurrentEventCommand()) {
+        case 'act0': mEventRelated.advanceNext(); break;
+        case 'wait': mEventRelated.advanceNext(); break;
+        case 'halo': {
+            mVec3_c efPos;
+            fn_80254590(efPos);
+            mVec3_c diff = dScGame_c::getCamera()->getPosition() - mPosition;
+            // TODO close but an extsh is missing
+            mAng3_c rot((s32)-diff.atan2sY_XZ(), (s32)diff.atan2sX_Z(), 0);
+            u32 alpha = 0xFF;
+            if (dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL) {
+                alpha = 0x80;
+            }
+            mEff_0x95C.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_82_, efPos, &rot, nullptr, nullptr, nullptr);
+            mEff_0x95C.setGlobalAlpha(alpha);
+            mEventRelated.advanceNext();
+            break;
+        }
+        case '????': break;
+        default:     mEventRelated.advanceNext(); break;
+    }
+
+    if (!checkObjectProperty(OBJ_PROP_0x200)) {
+        mPosition = getLinkPtr()->vt_0x1A4();
+        if (isUpgradedPotion((ITEM_ID)getItemId())) {
+            fn_80254680();
+        } else if (isAnyTear()) {
+            fn_80254810();
+        }
+        mbShowItemLighting = true;
+        field_0x340 = mPosition;
+        (this->*mFn_0xC9C)();
+        if (!isGratitudeCrystal() && !is5GratitudeCrystals()) {
+            mMdlRotY += getItemRotateAngle();
+        }
+        field_0xD42 = mAng::d2s_c(0.0f);
+
+        // TODO - ...
+    }
+    makeLinkLookTowardItem();
+}
+
+void dAcItem_c::finalizeState_GetDemo() {
+    mMdlRotY = 0;
+    field_0xD42 = 0;
+    performCollectionPart2();
+    mbShowItemLighting = false;
+    if (mEff_0x95C.hasEmitters()) {
+        mEff_0x95C.remove(true);
+    }
+    if (isAnyTear() && mEff_0xA60.hasEmitters()) {
+        mEff_0xA60.remove(true);
+    }
+}
+
+void dAcItem_c::initializeState_WaitTBoxGetDemo() {
+    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_2);
+    setNotWaiting();
+    field_0xD38 = field_0xD3A = field_0xD3C = 0;
+    setObjectProperty(OBJ_PROP_0x200);
+    mMdlScaleType = 2;
+    fn_802548A0();
+}
+
+void dAcItem_c::executeState_WaitTBoxGetDemo() {
+    const char *name;
+    getItemGetEventName(getItemId(), &name);
+    Event ev(name, 1, 0x100001, (void *)itemGetEventStart, (void *)itemGetEventEnd);
+    EventManager::alsoSetAsCurrentEvent(this, &ev, nullptr);
+}
+
 void dAcItem_c::finalizeState_WaitTBoxGetDemo() {}
 
-void dAcItem_c::initializeState_ResurgeWait() {}
-void dAcItem_c::executeState_ResurgeWait() {}
+void dAcItem_c::initializeState_ResurgeWait() {
+    mpMdl->vt_0x10(dItemMdl_c::ITEM_MDL_UNK0x14_1);
+    // TODO FPR swap
+    mPosition = mPositionCopy;
+    mRotation = mRotationCopy;
+    field_0xB3C->fn_802579D0();
+    setNotWaiting();
+    // TODO ???
+    mbNoGravity = mbNoDespawn;
+    field_0xD38 = field_0xD3A = field_0xD3C = 0;
+    mMdlScaleType = 0;
+    field_0xCD8 = 0.0f;
+}
+
+void dAcItem_c::executeState_ResurgeWait() {
+    if (field_0xB3C->fn_80257A10(this)) {
+        if (!field_0xB3C->fn_80257B10()) {
+            field_0xB3C->fn_80257AC0();
+            if (field_0xB3C->fn_80257B10()) {
+                if (mId == ITEM_STAMINA_FRUIT) {
+                    startSound(SE_O_REFRESH_FRUIT_SPROUT);
+                }
+                mStateMgr.changeState(StateID_Wait);
+            }
+        }
+    } else {
+        field_0xB3C->fn_80257A80();
+    }
+}
+
 void dAcItem_c::finalizeState_ResurgeWait() {}
 
-void dAcItem_c::initializeState_WaitTurnOff() {}
-void dAcItem_c::executeState_WaitTurnOff() {}
+void dAcItem_c::initializeState_WaitTurnOff() {
+    setNotWaiting();
+    setObjectProperty(OBJ_PROP_0x200);
+    mSpeed = 0.0f;
+    mVelocity.set(0.0f, 0.0f, 0.0f);
+    field_0xD38 = field_0xD3A = field_0xD3C = 0;
+    mMdlScaleType = 2;
+}
+
+void dAcItem_c::executeState_WaitTurnOff() {
+    if (field_0xD04 <= 0.0f) {
+        deleteRequest();
+    }
+}
+
 void dAcItem_c::finalizeState_WaitTurnOff() {}
 
-void dAcItem_c::initializeState_WaitSacredDewGetEffect() {}
-void dAcItem_c::executeState_WaitSacredDewGetEffect() {}
+void dAcItem_c::initializeState_WaitSacredDewGetEffect() {
+    setNotWaiting();
+    setObjectProperty(OBJ_PROP_0x200);
+    mSpeed = 0.0f;
+    mVelocity.set(0.0f, 0.0f, 0.0f);
+    field_0xD38 = field_0xD3A = field_0xD3C = 0;
+    mMdlScaleType = 2;
+}
+
+void dAcItem_c::executeState_WaitSacredDewGetEffect() {
+    if (!EventManager::isInEvent()) {
+        mVec3_c tmp;
+        fn_80247540(tmp);
+        fn_80247560(tmp);
+        mStateMgr.changeState(StateID_WaitTurnOff);
+    }
+}
+
 void dAcItem_c::finalizeState_WaitSacredDewGetEffect() {}
 
 STATE_DEFINE(dAcItem_c, Wait);
@@ -1443,3 +2132,276 @@ STATE_DEFINE(dAcItem_c, WaitTBoxGetDemo);
 STATE_DEFINE(dAcItem_c, ResurgeWait);
 STATE_DEFINE(dAcItem_c, WaitTurnOff);
 STATE_DEFINE(dAcItem_c, WaitSacredDewGetEffect);
+
+void dAcItem_c::itemGetEventStart(dAcBase_c *arg) {
+    // TODO
+    dAcItem_c *item = static_cast<dAcItem_c*>(arg);
+    item->mStateMgr.changeState(StateID_GetDemo);
+    item->setObtainedItemId(item->getItemId(), true);
+    if (item->mId == ITEM_DUNGEON_MAP_FI && ItemflagManager::sInstance->getItemCounterOrFlag(0x32) == 0) {
+        Event ev("fays_map_guide", 100, 0x100001, nullptr, nullptr);
+        EventManager::changeOwnEvent(item, dAcNpcTalkKensei_c::GetInstance(), &ev, 0);
+    }
+}
+
+void dAcItem_c::applyBoundingBox() {
+    (this->*mFnSetBoundingBox)();
+}
+
+void dAcItem_c::performCollection() {
+    performCollectionPart1();
+    performCollectionPart2();
+}
+
+void dAcItem_c::performCollectionPart1() {
+    u16 id = getItemId();
+    if (isKeyPieceV()) {
+        increaseKeyPieceCounter(1);
+    } else if (isLightFruit()) {
+        dTgSiren_c::setLightFruitTime(getLightFruitTime());
+    } else if (isHeartPiece()) {
+        increaseHeartPieceCounter(1);
+        increaseTotalHeartPieceCounter(1);
+    } else {
+        f32 count;
+        switch (id) {
+            case ITEM_FARON_GRASSHOPPER:
+                if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                    increaseFaronGrasshopperCounter(mItemQuantity != 0 ? mItemQuantity : 1);
+                }
+                break;
+            case ITEM_WOODLAND_RHINO_BEETLE:
+                if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                    increaseWoodlandRhinoBeetleCounter(mItemQuantity != 0 ? mItemQuantity : 1);
+                }
+                break;
+            case ITEM_DEKU_HORNET:
+                if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                    increaseDekuHornetCounter(mItemQuantity != 0 ? mItemQuantity : 1);
+                }
+                break;
+            case ITEM_SKYLOFT_MANTIS:
+                if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                    increaseSkyloftMantisCounter(mItemQuantity != 0 ? mItemQuantity : 1);
+                }
+                break;
+            case ITEM_VOLCANIC_LADYBUG:
+                if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                    increaseVolcanicLadybugCounter(mItemQuantity != 0 ? mItemQuantity : 1);
+                }
+                break;
+            case ITEM_BLESSED_BUTTERFLY:
+                if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                    increaseBlessedButterflyCounter(mItemQuantity != 0 ? mItemQuantity : 1);
+                }
+                break;
+            case ITEM_LANAYRU_ANT:
+                if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                    increaseLanayruAntCounter(mItemQuantity != 0 ? mItemQuantity : 1);
+                }
+                break;
+            case ITEM_SAND_CICADA:
+                if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                    increaseSandCicadaCounter(mItemQuantity != 0 ? mItemQuantity : 1);
+                }
+                break;
+            case ITEM_GERUDO_DRAGONFLY:
+                if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                    increaseGerudoDragonflyCounter(mItemQuantity != 0 ? mItemQuantity : 1);
+                }
+                break;
+            case ITEM_ELDIN_ROLLER:
+                if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                    increaseEldinRollerCounter(mItemQuantity != 0 ? mItemQuantity : 1);
+                }
+                break;
+            case ITEM_SKY_STAG_BEETLE:
+                if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                    increaseSkyStagBeetleCounter(mItemQuantity != 0 ? mItemQuantity : 1);
+                }
+                break;
+            case ITEM_STARRY_FIREFLY:
+                if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                    increaseStarryFireflyCounter(mItemQuantity != 0 ? mItemQuantity : 1);
+                }
+                break;
+            case ITEM_HORNET_LARVAE: increaseHornetLarvaeCounter(1); break;
+            case ITEM_BIRD_FEATHER:
+                // ???
+                count = mItemQuantity != 0 ? mItemQuantity : 1;
+                increaseBirdFeatherCounter(0.0f < count ? count : 1.0f);
+                break;
+            case ITEM_TUMBLE_WEED:      increaseTumbleWeedCounter(1); break;
+            case ITEM_LIZARD_TAIL:      increaseLizardTailCounter(1); break;
+            case ITEM_ELDIN_ORE:        increaseEldinOreCounter(1); break;
+            case ITEM_ANCIENT_FLOWER:   increaseAncientFlowerCounter(1); break;
+            case ITEM_AMBER_RELIC:      increaseAmberRelicCounter(1); break;
+            case ITEM_DUSK_RELIC:       increaseDuskRelicCounter(1); break;
+            case ITEM_JELLY_BLOB:       increaseJellyBlobCounter(1); break;
+            case ITEM_MONSTER_CLAW:     increaseMonsterClawCounter(1); break;
+            case ITEM_MONSTER_HORN:     increaseMonsterHornCounter(1); break;
+            case ITEM_ORNAMENTAL_SKULL: increaseSkullCounter(1); break;
+            case ITEM_EVIL_CRYSTAL:     increaseEvilCrystalCounter(1); break;
+            case ITEM_BLUE_BIRD_FEATHER:
+                // ???
+                count = mItemQuantity != 0 ? mItemQuantity : 1;
+                increaseBlueBirdFeatherCounter(0.0f < count ? count : 1.0f);
+                break;
+            case ITEM_GOLDEN_SKULL:  increaseGoldenSkullCounter(1); break;
+            case ITEM_GODDESS_PLUME: increaseGoddessPlumeCounter(1); break;
+            default:                 {
+                if (isTriforce()) {
+                    doFullHeal();
+                } else if (isGratitudeCrystal()) {
+                    increaseGratitudeCrystalCounter(1);
+                } else if (is5GratitudeCrystals()) {
+                    increaseGratitudeCrystalCounter(5);
+                } else if (id == ITEM_EXTRA_WALLET) {
+                    increaseExtraWalletCounter(1);
+                }
+                break;
+            }
+        }
+    }
+
+    if (mStateMgr.isState(StateID_GetDemo)) {
+        sIsPerformingInitialCollection = !checkFlagV();
+    }
+
+    bool doCollect = true;
+    if (ITEM_FARON_GRASSHOPPER <= mId && mId <= ITEM_STARRY_FIREFLY &&
+        MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+        doCollect = false;
+    }
+    if (doCollect) {
+        setFlagV();
+    }
+    setSceneFlag();
+    setDungeonFlag();
+
+    if (getSubtypeFromParam(mParams) == 7) {
+        return;
+    }
+
+    if (isGreenRupee()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_RUPEE_GREEN);
+    } else if (isBlueRupee()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_RUPEE_BLUE);
+    } else if (isRedRupee()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_RUPEE_RED);
+    } else if (isSilverRupee()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_RUPEE_SILVER);
+    } else if (isGoldRupee()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_RUPEE_BLUE);
+    } else if (isRupoor()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_RUPEE_BABA);
+    } else if (isHeartV()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_HEART_PIECE_GET);
+    } else if (isAnyTear()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SIREN_GET_SHINE_DEW);
+    } else if (mId == ITEM_STAMINA_FRUIT) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_REFRESH_FRUIT);
+    } else if (isLightFruit()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SIREN_GET_HOLY_FRUIT);
+    } else if (mId == ITEM_5_DEKU_SEEDS || is10DekuSeeds()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_CONSUMP_ITEM_GET);
+    } else if (isAnyArrow()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_CONSUMP_ITEM_GET);
+    } else if (isAnyBombs()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_CONSUMP_ITEM_GET);
+    } else if (isInsect()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_MATERIAL);
+    } else if (isTreasureV()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_MATERIAL);
+    } else if (is5GratitudeCrystals() || isGratitudeCrystal()) {
+        if ((mItemFlags & 0x20) == 0) {
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_SOURCE_OUTWELL);
+        }
+    } else if (isBabyRattle()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_GARAGARA);
+    } else if (isLifeTreeFruit()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_LIFE_FRUIT);
+    } else if (mId == ITEM_HEART_CONTAINER) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_HEART_CONTAINER);
+    } else if (isTriforce()) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_TRIFORCE);
+    }
+}
+
+void dAcItem_c::performCollectionPart2() {
+    u16 id = getItemId();
+    if (id == ITEM_SMALL_KEY) {
+        increaseSmallKeyCounter(1);
+    } else if (id == ITEM_GREEN_RUPEE) {
+        if (!MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER)) {
+            increaseRupeeCounter(1);
+        }
+    } else if (id == ITEM_BLUE_RUPEE) {
+        if (!MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER)) {
+            increaseRupeeCounter(5);
+        }
+    } else if (id == ITEM_RED_RUPEE) {
+        if (!MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER)) {
+            increaseRupeeCounter(20);
+        }
+    } else if (isHeartV()) {
+        healLink(4, true);
+    } else if (id == ITEM_SINGLE_ARROW) {
+        increaseArrowAndPouchCounter(1);
+    } else if (id == ITEM_BUNDLE_ARROWS) {
+        increaseArrowAndPouchCounter(10);
+    } else if (id == ITEM_SILVER_RUPEE) {
+        if (!MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER)) {
+            increaseRupeeCounter(100);
+        }
+    } else if (id == ITEM_GOLD_RUPEE) {
+        if (!MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER)) {
+            increaseRupeeCounter(300);
+        }
+    } else if (id == ITEM_RUPOOR) {
+        if (!MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER)) {
+            increaseRupeeCounter(-10);
+        }
+    } else if (id == ITEM_5_BOMBS) {
+        increaseBombAndPouchCounter(5);
+    } else if (id == ITEM_10_BOMBS) {
+        increaseBombAndPouchCounter(10);
+    } else if (mId == ITEM_STAMINA_FRUIT) {
+        restoreStamina();
+    } else if (id == ITEM_5_DEKU_SEEDS) {
+        increaseDekuSeedAndPouchCounter(5);
+    } else if (is10DekuSeeds()) {
+        increaseDekuSeedAndPouchCounter(10);
+    } else if (id == ITEM_POUCH_EXPANSION) {
+        increaseExtraPouchCounter(1);
+    } else if (id == ITEM_HEART_CONTAINER) {
+        increaseHealthCapacity(getHeartContainerHeartIncrease());
+        doFullHeal();
+    } else if (isHeartPiece()) {
+        if (getNumRemainingHeartPiecesForNextHeart() == 0) {
+            increaseHealthCapacity(getCompletedHeartPieceHeartIncrease());
+        }
+        doFullHeal();
+    } else if (id == ITEM_LIFE_TREE_SEED) {
+        setLifeTreeSeedlingFlag(1);
+    } else if (id == ITEM_BOW || id == ITEM_IRON_BOW || id == ITEM_SACRED_BOW) {
+        if (!checkFlagV()) {
+            increaseArrowCounter(getBowArrowCapacity() - getBowArrowCount());
+        }
+    } else if (id == ITEM_SLINGSHOT || id == ITEM_MIGHTY_SCATTERSHOT) {
+        if (!checkFlagV()) {
+            increaseDekuSeedCounter(getSlingshotSeedCapacity() - getSlingshotSeedCount());
+        }
+    } else if (isAnyPouchItem((ITEM_ID)id)) {
+        if (mGetItemPouchSlot == -1) {
+            collectPouchItem(id);
+        } else {
+            collectPouchItemIntoSlot(mGetItemPouchSlot, id, -1, false);
+        }
+    }
+
+    if (MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE) &&
+        dTgMinigameInsectCapture_c::GetInstance() != nullptr) {
+        dTgMinigameInsectCapture_c::GetInstance()->recordCollectedInsect(mId, mItemQuantity != 0 ? mItemQuantity : 1);
+    }
+}
