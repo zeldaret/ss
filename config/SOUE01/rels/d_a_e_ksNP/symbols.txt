@@ -12,12 +12,12 @@ __dt__76sStateMgr_c<8dAcEKs_c,20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDCh
 __dt__46sFStateMgr_c<8dAcEKs_c,20sStateMethodUsr_FI_c>Fv = .text:0x00000490; // type:function size:0xA4
 fn_155_540 = .text:0x00000540; // type:function size:0x5C
 fn_155_5A0 = .text:0x000005A0; // type:function size:0x4
-fn_155_5B0 = .text:0x000005B0; // type:function size:0x134
-fn_155_6F0 = .text:0x000006F0; // type:function size:0x8
-fn_155_700 = .text:0x00000700; // type:function size:0x1A8
+restorePosRotFromCopy__8dAcEKs_cFv = .text:0x000005B0; // type:function size:0x134
+linkKiesuTag__8dAcEKs_cFP13dTgKiesuTag_c = .text:0x000006F0; // type:function size:0x8
+setStartingState__8dAcEKs_cFv = .text:0x00000700; // type:function size:0x1A8
 changeState__76sStateMgr_c<8dAcEKs_c,20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>FRC12sStateIDIf_c = .text:0x000008B0; // type:function size:0x10
-AcEKs__idleBasedOnSubtypeMaybe = .text:0x000008C0; // type:function size:0xCC
-fn_155_990 = .text:0x00000990; // type:function size:0xD0
+setIdleState__8dAcEKs_cFv = .text:0x000008C0; // type:function size:0xCC
+getLineCrossYRange__8dAcEKs_cFRC7mVec3_cf = .text:0x00000990; // type:function size:0xD0
 fn_155_A60 = .text:0x00000A60; // type:function size:0x6B0
 getStateID__76sStateMgr_c<8dAcEKs_c,20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>CFv = .text:0x00001110; // type:function size:0x10
 fn_155_1120 = .text:0x00001120; // type:function size:0x1C

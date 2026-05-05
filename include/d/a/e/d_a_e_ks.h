@@ -1,13 +1,33 @@
 #ifndef D_A_E_KS_H
 #define D_A_E_KS_H
 
+#include "common.h"
+#include "d/a/d_a_base.h"
 #include "d/a/e/d_a_en_base.h"
+#include "d/a/obj/d_a_obj_base.h"
+#include "d/col/bg/d_bg_s_acch.h"
+#include "d/col/cc/d_cc_d.h"
+#include "m/m3d/m_anmtexpat.h"
+#include "m/m_color.h"
+#include "m/m_vec.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
+#include "toBeSorted/d_emitter.h"
+#include "toBeSorted/d_path.h"
 
+class dTgKiesuTag_c;
 class dAcEKs_c : public dAcEnBase_c {
 public:
-    dAcEKs_c() : mStateMgr(*this) {}
+    dAcEKs_c() : mStateMgr(*this), field_0xAA8(0.f), field_0xAB0(0) {}
     virtual ~dAcEKs_c() {}
+
+    virtual int doDelete() override;
+    virtual int draw() override;
+    virtual bool createHeap() override;
+    virtual int actorCreate() override;
+    virtual int actorPostCreate() override;
+    virtual int actorExecute() override;
+    virtual bool restorePosRotFromCopy() override;
 
     STATE_FUNC_DECLARE(dAcEKs_c, Wait);
     STATE_FUNC_DECLARE(dAcEKs_c, WakeUp);
@@ -24,8 +44,52 @@ public:
     STATE_FUNC_DECLARE(dAcEKs_c, WindBlow);
     STATE_FUNC_DECLARE(dAcEKs_c, PathMove);
 
+public:
+    void linkKiesuTag(dTgKiesuTag_c *pTgKs);
+    void setStartingState();
+    void setIdleState();
+
+    f32 getLineCrossYRange(const mVec3_c &pos, f32 range);
+
 private:
-    /* 0x??? */ STATE_MGR_DECLARE(dAcEKs_c);
+    /* 0x378 */ dAcRef_c<dTgKiesuTag_c> mTgRef;
+    /* 0x384 */ nw4r::g3d::ResFile mRres;
+    /* 0x388 */ d3d::AnmMdlWrapper mMdl;
+    /* 0x3F8 */ m3d::anmTexPat_c mAnmTexPat;
+    /* 0x324 */ dShadowCircle_c mShadow;
+    /* 0x42C */ dBgS_AcchCir mAcchCir;
+    /* 0x488 */ dBgS_ObjAcch mAcch;
+    /* 0x838 */ dCcD_Sph mSph;
+    /* 0x988 */ STATE_MGR_DECLARE(dAcEKs_c);
+    /* 0x9C4 */ dEmitter_c mEmitter1;
+    /* 0x9F8 */ dEmitter_c mEmitter2;
+    /* 0xA2C */ dWaterEffect_c mWaterEmitter;
+    /* 0xA74 */ ActorOnRail_Ext mRail;
+    /* 0xAA8 */ f32 field_0xAA8;
+    /* 0xAAC */ UNKWORD field_0xAAC;
+    /* 0xAA8 */ u8 field_0xAB0;
+    /* 0xAB1 */ u8 _0xAB1[0xB14 - 0xAB1];
+    /* 0xB14 */ mVec3_c mPnts[10];
+    /* 0xB8C */ u8 _0xB8C[0xD20 - 0xB8C];
+    /* 0xD20 */ f32 field_0xD20;
+    /* 0xD24 */ u8 _0xD24[0xD32 - 0xD24];
+    /* 0xD32 */ s16 mTimer;
+    /* 0xD34 */ u8 _0xD34[0xDB1 - 0xD34];
+    /* 0xDB1 */ u8 field_0xDB1;
+    /* 0xDB2 */ u8 _0xDB2[0xDBC - 0xDB2];
+    /* 0xDBC */ u8 mType;
+    /* 0xDBD */ u8 _0xDBD[0xDC2 - 0xDBD];
+    /* 0xDC2 */ u8 mCurrentState;
+    /* 0xDC3 */ u8 mNextState;
+    /* 0xDC4 */ u8 _0xDC4[0xDC7 - 0xDC4];
+    /* 0xDC7 */ u8 mStartingState;
+    /* 0xDC8 */ u8 _0xDC8[0xDCF - 0xDB8];
+    /* 0xDCF */ u8 field_0xDCF;
+    /* 0xDD0 */ u8 _0xDD0[0xDD4 - 0xDD0];
+    /* 0xDD4 */ mVec3_c mHomePos;
+    /* 0xDE0 */ mColor mColor;
+    /* 0xDE4 */ f32 field_0xDE4;
+    /* 0xDE8 */ u8 _0xDE8[0xDF0 - 0xDE8];
 };
 
 #endif
