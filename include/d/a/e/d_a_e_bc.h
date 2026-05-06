@@ -45,8 +45,14 @@ public:
     STATE_FUNC_DECLARE(dAcEbc_c, AAttack);
     STATE_FUNC_DECLARE(dAcEbc_c, ADamage);
 
+    u8 getField_0x130D() const {
+        return field_0x130D;
+    }
+
 private:
     /* 0x??? */ STATE_MGR_DECLARE(dAcEbc_c);
+    /* 0x??? */ u8 field_unk[0xF59];
+    /* 0x130D */ u8 field_0x130D;
 };
 
 #endif
