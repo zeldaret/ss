@@ -146,6 +146,43 @@ f32 dAcEKs_c::getLineCrossYRange(const mVec3_c &pos, f32 range) {
 
 // idk.
 
+bool dAcEKs_c::fn_155_2D60(bool b, s32 p1) {
+    f32 f0 = field_0xC40 + 1500.f;
+    f32 f1 = field_0xC3C + 700.f;
+    dAcObjBase_c *pObj = attackPlayerOrScrapper(0.f);
+    field_0xBF8.set(pObj->mPosition);
+    if (field_0xBF8.squareDistanceToXZ(mPosition) < f1 * f1) {
+        f32 f2 = field_0xBF8.y - mPosition.y;
+        if (f2 <= 0.f && f2 > -f0) {
+            if (b) {
+                if (!fn_155_29D0(p1)) {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool dAcEKs_c::fn_155_2EA0() {
+    f32 f0 = field_0xC40 + 1500.f;
+    f32 f1 = field_0xC3C + 700.f;
+    dAcObjBase_c *pObj = dAcPy_c::GetLink()->getBeetleInFlight();
+    if (pObj) {
+        field_0xC28.set(pObj->mPosition);
+        field_0xD1C = field_0xC28.squareDistanceToXZ(mPosition);
+        if (field_0xD1C < f1 * f1) {
+            f32 f2 = field_0xC28.y - mPosition.y;
+            if (f2 <= 0.f && f2 > -f0) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 bool dAcEKs_c::isOutsideRange() {
     return attackPlayerOrScrapper(0.f)->mPosition.squareDistanceToXZ(mPosition) > 360000.f;
 }

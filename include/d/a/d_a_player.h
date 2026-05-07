@@ -91,10 +91,6 @@ public:
         return mHeldResFile;
     }
 
-    inline bool hasvt_0x1C0() const {
-        return vt_0x1C0() != nullptr;
-    }
-
     inline bool isAffectedByStaminaPotion() const {
         return FileManager::GetInstance()->hasStaminaPotionNormal() && getRidingActorType() != RIDING_BOAT;
     }

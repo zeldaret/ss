@@ -53,6 +53,9 @@ public:
     /* 0 -> blink_1, 1 -> blink_2, 2 -> blink_3*/
     void setBlink(u8 blink);
     void setBlinkChecked(u8 blink);
+    bool fn_155_29D0(s32 p1);
+    bool fn_155_2D60(bool b, s32 p1);
+    bool fn_155_2EA0();
     bool isOutsideRange();
     bool isNotWaitingNorDamage();
     bool isTargeted();
@@ -101,10 +104,17 @@ private:
     /* 0xB8C */ u8 _0xB8C[0xBB0 - 0xB8C];
     /* 0xBB0 */ mVec3_c field_0xBB0;
     /* 0xBBC */ mVec3_c field_0xBBC;
-    /* 0xBC8 */ u8 _0xBC8[0xC34 - 0xBC8];
-    /* 0xD32 */ mAng mPitch_0xC34;
-    /* 0xD32 */ mAng mYaw_0xC36;
-    /* 0xC38 */ u8 _0xC38[0xD20 - 0xC38];
+    /* 0xBC8 */ u8 _0xBC8[0xBF8 - 0xBC8];
+    /* 0xBF8 */ mVec3_c field_0xBF8;
+    /* 0xC04 */ u8 _0xC04[0xC28 - 0xC04];
+    /* 0xC28 */ mVec3_c field_0xC28;
+    /* 0xC34 */ mAng mPitch_0xC34;
+    /* 0xC36 */ mAng mYaw_0xC36;
+    /* 0xC38 */ u8 _0xC38[0xC3C - 0xC38];
+    /* 0xC3C */ f32 field_0xC3C;
+    /* 0xC40 */ f32 field_0xC40;
+    /* 0xC44 */ u8 _0xC44[0xD1C - 0xC44];
+    /* 0xD1C */ f32 field_0xD1C;
     /* 0xD20 */ f32 field_0xD20;
     /* 0xD24 */ u8 _0xD24[0xD32 - 0xD24];
     /* 0xD32 */ s16 mTimer;
