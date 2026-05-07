@@ -860,7 +860,7 @@ bool dItemMdlTear_c::isMdlForItemId(u16 itemId) {
 bool dItemMdlTear_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) {
     // TODO - why is TRY_CREATE used so inconsistently here?
 
-    dAcItem_c::Tear_e tear = dAcItem_c::getTearSubtype((ITEM_ID)itemId);
+    dAcItem_c::Tear_e tear = dAcItem_c::getTearSubtype(itemId);
     if (tear == dAcItem_c::TEAR_MAX) {
         return false;
     }

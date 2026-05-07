@@ -1962,7 +1962,7 @@ void dAcTbox_c::initializeState_Open() {
     if (item != nullptr) {
         mItemRef.link(item);
         const char *evName;
-        if (dAcItem_c::getItemGetEventName(itemId, &evName)) {
+        if (dAcItem_c::getItemGetTboxEventName(itemId, &evName)) {
             Event ev(evName, 300, 4, (void *)dAcItem_c::itemGetEventStart, (void *)dAcItem_c::itemGetEventEnd);
             EventManager::changeOwnEvent(this, item, &ev, 0);
         }

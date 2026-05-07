@@ -1,14 +1,16 @@
 #ifndef D_A_ITEM_H
 #define D_A_ITEM_H
 
+// clang-format off
+// vtable order
 #include "common.h"
+#include "d/d_shadow.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_itembase.h"
 #include "d/a/obj/d_a_obj_scattersand.h"
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_d.h"
-#include "d/d_shadow.h"
 #include "f/f_list_mg.h"
 #include "f/f_list_nd.h"
 #include "m/m_angle.h"
@@ -18,84 +20,100 @@
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/dowsing_target.h"
+// clang-format on
 
 class dItemMdl_c;
 class dAcItem_c;
 
+/** Positions picked up items for a bit. */
 class dAcItem_0xB34 {
 public:
     virtual ~dAcItem_0xB34() {}
     virtual void vt_0x0C() = 0;
-    virtual void vt_0x10() = 0;
+    virtual bool vt_0x10(dAcItem_c *item) = 0;
 };
 
+/** No-op impl that immediately hides the item */
 class dAcItem_0xB34_1 : public dAcItem_0xB34 {
 public:
     virtual ~dAcItem_0xB34_1() {}
     virtual void vt_0x0C() override;
-    virtual void vt_0x10() override;
+    virtual bool vt_0x10(dAcItem_c *item) override;
 };
 
+/** Impl that positions picked up items above Link's head */
 class dAcItem_0xB34_2 : public dAcItem_0xB34 {
 public:
     virtual ~dAcItem_0xB34_2() {}
     virtual void vt_0x0C() override;
-    virtual void vt_0x10() override;
+    virtual bool vt_0x10(dAcItem_c *item) override;
 
 private:
-    /* 0x04 */ u8 _0x04[0x0C - 0x04];
+    /* 0x04 */ f32 mHighestRelativeHeadHeight;
+    /* 0x08 */ u8 mNumFrames;
 };
 
+/** Respawns certain items. */
 class dAcItem_0xB3C {
 public:
     virtual ~dAcItem_0xB3C() {}
     virtual void vt_0x0C(u16) = 0;
     virtual void vt_0x10() = 0;
-    virtual void vt_0x14() = 0;
-    virtual void vt_0x18() = 0;
+    virtual bool vt_0x14(dAcItem_c *) = 0;
+    virtual UNKWORD vt_0x18() = 0;
 
     void fn_802579D0();
-    bool fn_80257A10(dAcItem_c*);
-    bool fn_80257A80();
+    bool fn_80257A10(dAcItem_c *);
+    void fn_80257A80();
     void fn_80257AC0();
-    bool fn_80257B10();
+    bool fn_80257B10() const;
 
 protected:
-    /* 0x04 */ u8 _0x04[0x08 - 0x04];
+    /* 0x04 */ UNKWORD field_0x04;
 };
 
+/** No-op impl that doesn't respawn items */
 class dAcItem_0xB3C_1 : public dAcItem_0xB3C {
 public:
     dAcItem_0xB3C_1(u16, u16) {}
-    virtual ~dAcItem_0xB3C_1();
+    virtual ~dAcItem_0xB3C_1() {}
     virtual void vt_0x0C(u16) override;
     virtual void vt_0x10() override;
-    virtual void vt_0x14() override;
-    virtual void vt_0x18() override;
+    virtual bool vt_0x14(dAcItem_c *) override;
+    virtual UNKWORD vt_0x18() override;
 };
 
+/** Impl that respawns items */
 class dAcItem_0xB3C_2 : public dAcItem_0xB3C {
 public:
     dAcItem_0xB3C_2(u16 a1, u16 a2) {
         mCb1 = sCb1s[a1];
         mCb2 = sCb2s[a2];
     }
-    virtual ~dAcItem_0xB3C_2();
+    virtual ~dAcItem_0xB3C_2() {}
     virtual void vt_0x0C(u16) override;
     virtual void vt_0x10() override;
-    virtual void vt_0x14() override;
-    virtual void vt_0x18() override;
+    virtual bool vt_0x14(dAcItem_c *) override;
+    virtual UNKWORD vt_0x18() override;
 
 public:
     typedef void (dAcItem_0xB3C_2::*Callback1)();
+    // May or may not take a dAcItem_c* argument...
     typedef bool (dAcItem_0xB3C_2::*Callback2)();
 
     static Callback1 sCb1s[2];
     static Callback2 sCb2s[3];
 
+    void Cb1_1();
+    void Cb1_2();
+
+    bool Cb2_1();
+    bool Cb2_2();
+    bool Cb2_3();
+
     /* 0x08 */ Callback1 mCb1;
     /* 0x14 */ Callback2 mCb2;
-    /* 0x20 */ u8 _0x20[0x24 - 0x20];
+    /* 0x20 */ UNKWORD field_0x20;
 };
 
 class dAcItem_c : public dAcItemBase_c {
@@ -110,9 +128,16 @@ public:
     virtual int draw() override;
 
     virtual u16 getItemIdFromParams() override;
-    virtual void setItemId(u16 id);
+    virtual void setItemId(u16 id) override;
     virtual bool shouldDespawn();
     virtual bool isItemSmallKeyOrHeartPieceOrStaminaFruit();
+
+    enum ItemGetAnim_e {
+        ANIM_DEFAULT,
+        ANIM_GORGEOUS,
+        ANIM_FROWN,
+        ANIM_SMALL,
+    };
 
     STATE_FUNC_DECLARE(dAcItem_c, Wait);
     STATE_FUNC_DECLARE(dAcItem_c, Carry);
@@ -141,9 +166,11 @@ public:
     static void setFlag(s32 id);
     static bool checkTreasureTempCollect(u16 itemId);
 
-    void setItemPosition(const mVec3_c &);
     void getItemFromBWheelItem();
-    bool isStateWait();
+    void setItemPosition(const mVec3_c &);
+    void setItemVelocity(f32 f);
+    bool isStateWait() const;
+    void stopCarryAndGet();
 
     static s32 getTotalBombCount();
     static s32 getTotalArrowCount();
@@ -224,7 +251,10 @@ public:
 
     u32 getParams2Lower_shift1_0x7() const;
 
+    static bool getEventNameForAnim(u32 anim, const char **outName);
+    static bool getTboxEventNameForAnim(u32 anim, const char **outName);
     static bool getItemGetEventName(u16 item, const char **outName);
+    static bool getItemGetTboxEventName(u16 item, const char **outName);
     static void itemGetEventStart(dAcBase_c *);
     static void itemGetEventEnd(dAcBase_c *);
 
@@ -248,7 +278,7 @@ public:
         TEAR_MAX
     };
 
-    static Tear_e getTearSubtype(ITEM_ID item);
+    static Tear_e getTearSubtype(u32 item);
 
     static void healLink(u32 amount, bool); // move to dAcPy_c
 
@@ -265,6 +295,10 @@ public:
     }
 
 private:
+    bool isField_0xD04GtZero() const {
+        return 0.0f < field_0xD04;
+    }
+
     static bool sIsPerformingInitialCollection;
     static s32 sCollectionCurrentCount;
 
@@ -275,8 +309,17 @@ private:
     static const mVec3_c sScale1Maybe;
     static const mVec3_c sScale2Maybe;
 
+    static const mVec3_c sUnkOffset1;
+    static const mVec3_c sUnkOffset2;
+    static const mVec3_c sUnkOffset3;
+    static const mVec3_c sUnkOffset4;
+    static const mVec3_c sUnkOffset5;
+    static const mVec3_c sUnkOffset6;
+    static const mVec2_c sUnkVec2;
+
     typedef bool (dAcItem_c::*sStaticPtmf)();
-    static const sStaticPtmf sStaticPtmfs[];
+    static const sStaticPtmf sStaticPtmfs1[];
+    static const sStaticPtmf sStaticPtmfs2[];
 
     static dAcRef_c<dAcObjBase_c> sItemListHead;
     static dAcRef_c<dAcObjBase_c> sItemListTail;
@@ -397,6 +440,11 @@ private:
     void incrementFramesInAir();
     void setItemFlags(u32 flags);
 
+    /** Checks if the ground's specialCode should allow the item to sink, deleting the item when fully submerged */
+    bool isItemDeleteGround(s32 specialCode) const;
+    /** Checks if the ground's specialCode should allow the item to "dip" into the ground */
+    bool isItemSwimGround(s32 specialCode) const;
+
     bool fn_80255CF0();
     bool fn_802574A0();
     void addToGetQueue();
@@ -409,8 +457,6 @@ private:
     bool fn_802577A0();
     void fn_80256F20();
     bool fn_80256E80();
-    bool fn_80255C50(u32 specialCode);
-    bool fn_80255CA0(u32 specialCode);
     void getCurrentModelScale(f32 *scale);
     f32 getCurrentScale();
     void fn_802518C0(mVec3_c *out);
@@ -456,7 +502,10 @@ private:
     void fn_80254810();
     static s16 getItemRotateAngle();
 
-    static void getItemGetEventName(u16 id, char *const *name);
+    bool playHeartStemCutSound();
+
+    void getOffsetPosition(mVec3_c &position) const;
+    f32 scaleBy(f32 f) const;
 
     // Could also return vector
     static void fn_80247540(mVec3_c &);
@@ -662,12 +711,14 @@ private:
     f32 getRupoorHitKnockbackRand3();
     f32 getHeartHitKnockbackRand3();
 
-    f32 fn_802577C0();
-    f32 fn_802577D0();
+    f32 getSinkSpeedHeart();
+    f32 getSinkSpeedDefault();
 
-    void fn_80255E80();
-    void fn_80255F40();
+public:
+    void rotateTowardsCamera();
+    void rotateFixedBirdStatuette();
 
+private:
     /* 0x334 */ dItemMdl_c *mpMdl;
     /* 0x338 */ dShadowCircle_c mShdw;
     /* 0x340 */ mVec3_c field_0x340;
@@ -688,7 +739,7 @@ private:
     /* 0xA60 */ dEmitter_c mEff_0xA60;
     /* 0xA94 */ dAcRef_c<dAcOScatterSand> mCoveredSand;
     /* 0xAA0 */ dAcRef_c<dAcObjBase_c> mForceSignRef;
-    /* 0xAAC */ mVec3_c posCopy;
+    /* 0xAAC */ mVec3_c mItemPosCopy;
     /* 0xAB8 */ fLiNdBa_c mNode;
     /* 0xAC4 */ ActorEventRelated mEventRelated;
     /* 0xB14 */ DowsingTarget mDowsingTarget;
@@ -725,7 +776,7 @@ private:
     /* 0xC90 */ f32 (dAcItem_c::*mFn_0xC90)();
     /* 0xC9C */ void (dAcItem_c::*mFn_0xC9C)();
     /* 0xCA8 */ void (dAcItem_c::*mFnSetBoundingBox)();
-    /* 0xCB4 */ f32 (dAcItem_c::*mFn_0xCB4)(void);
+    /* 0xCB4 */ f32 (dAcItem_c::*mFnGetSinkSpeed)(void);
     /* 0xCC0 */ dAcRef_c<dAcItem_c> mItemQueuePrev;
     /* 0xCCC */ dAcRef_c<dAcItem_c> mItemQueueNext;
     /* 0xCD8 */ f32 field_0xCD8;
@@ -735,9 +786,9 @@ private:
     /* 0xCE8 */ f32 field_0xCE8;
     /* 0xCEC */ f32 field_0xCEC;
     /* 0xCF0 */ u8 _CF0[0xD00 - 0xCF0];
-    /* 0xD00 */ f32 field_0xD00;
+    /* 0xD00 */ f32 mSinkOffset;
     /* 0xD04 */ f32 field_0xD04;
-    /* 0xD08 */ u8 _D08[0xD0C - 0xD08];
+    /* 0xD08 */ f32 field_0xD08;
     /* 0xD0C */ f32 field_0xD0C;
     /* 0xD10 */ u8 _D10[0xD14 - 0xD10];
     /* 0xD14 */ f32 mFreestandingOffsetH;
@@ -790,6 +841,7 @@ private:
 
 public:
     static fLiMgBa_c sItemList;
+    static fLiMgBa_c sUnusedList;
 };
 
 #endif

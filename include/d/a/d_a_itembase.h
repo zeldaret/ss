@@ -245,6 +245,7 @@ public:
     virtual ~dAcItemBase_c() {}
     virtual u16 getItemId() const;
     virtual u16 getItemIdFromParams() = 0;
+    virtual void setItemId(u16 id);
 
     static bool isValidItemTypeIdx(int itemId);
     static bool getItemTypeFromId(u16 itemID, u32 *pOutType);
