@@ -680,6 +680,10 @@ public:
         mSrc.mInfo.field_0x2 |= val;
     }
 
+    void Set_0x50(u32 val) {
+        field_0x50 = val;
+    }
+
 public:
     /* 0x1C */ cCcD_SrcGObjTg mSrc;
     /* 0x2C */ mVec3_c mAtHitDir;
@@ -1082,6 +1086,9 @@ public:
     void OnTgInfo_0x2(u16 val) {
         mTg.OnInfo_0x2(val);
     }
+    void SetTg_0x50(u16 val) {
+        mTg.Set_0x50(val);
+    }
     void SetTg_0x40000000() {
         mTg.OnSPrm(0x40000000);
     }
@@ -1107,6 +1114,12 @@ public:
     }
     void ClrCo_0x400() {
         mCo.OffSPrm(0x400);
+    }
+    void OnCo_0x8000() {
+        mCo.OnSPrm(0x8000);
+    }
+    void ClrCo_0x8000() {
+        mCo.OffSPrm(0x8000);
     }
     void SetCo_0x400() {
         mCo.OnSPrm(0x400);
