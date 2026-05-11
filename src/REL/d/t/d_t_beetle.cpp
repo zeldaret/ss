@@ -125,5 +125,5 @@ void dTgBeetle_c::updateBeetle(dAcBoomerang_c &boomerang) { // fn_302_620 update
 }
 
 int dTgBeetle_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }
