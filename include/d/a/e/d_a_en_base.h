@@ -68,6 +68,9 @@ public:
 
     dAcBomb_c *getBombWithinRadius(f32 radius); // fn_8002f700
 
+    void playDeathEffect0(const mVec3_c &pos, const mVec3_c *pScale, bool skipKill);
+    void playDeathEffect1(const mVec3_c &pos, const mVec3_c *pScale, bool skipKill);
+
     // Deals with dealing damage to Enemy
     // Returns a value 0-13 (similar to mStts rank?)
     int fn_8002FDE0(cCcD_Obj &mCc, u16 *pTgOut);
@@ -75,9 +78,9 @@ public:
     // Returns 0-3 based on collision
     int fn_800301b0(const mVec3_c &pos, mAng ang, bool, f32);
     void fn_80030400(m3d::mdl_c &, u8, bool, u8);
-    void fn_800306d0();
+    void fn_800306D0();
     void fn_80030700();
-    dAcObjBase_c *attackPlayerOrScrapper(f32 biasToScrapper);
+    dAcObjBase_c *targetPlayerOrScrapper(f32 biasToScrapper);
     static void fn_80030980(m3d::mdl_c &, s32, bool markDirty);
 
     void fn_80030c20(u32 flags, f32, f32, f32, f32);

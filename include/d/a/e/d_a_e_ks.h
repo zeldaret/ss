@@ -43,25 +43,46 @@ public:
     STATE_FUNC_DECLARE(dAcEKs_c, WindBlow);
     STATE_FUNC_DECLARE(dAcEKs_c, PathMove);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dAcEKs_c);
+    STATE_MGR_DEFINE_UTIL_ISSTATE(dAcEKs_c);
+
 public:
     void linkKiesuTag(dTgKiesuTag_c *pTgKs);
     void setStartingState();
     void setIdleState();
 
+    void fn_155_A60();
+
     f32 getLineCrossYRange(const mVec3_c &pos, f32 range);
+
+    void kill(bool dropItem);
+    void chaseTargetY(f32, f32);
+    void playBlinkAnm();
+    void soundSqueak();
+    void soundStun();
+    void fn_155_1430();
+
+    void fn_155_1470();
+
+    // Move impl?
+    void fn_155_1C80();
 
     /* 0 -> blink_1, 1 -> blink_2, 2 -> blink_3*/
     void setBlink(u8 blink);
     void setBlinkChecked(u8 blink);
+
+    void fn_155_2270();
+    /* p1 = 0 -> just LineCross return check,  1 ->  increment field_0xDCB till 10 then return check*/
     bool fn_155_29D0(s32 p1);
+    bool fn_155_2B80(bool b, s32 p1);
     bool fn_155_2D60(bool b, s32 p1);
     bool fn_155_2EA0();
     bool isOutsideRange();
     bool isNotWaitingNorDamage();
     bool isTargeted();
-    bool ChkWall();
-    void ChkGnd();
-    void ChkRoof();
+    bool checkWallCross();
+    void adjustTargetGnd();
+    void adjustTargetRoof();
     bool ChkHit();
     void fn_155_3460();
     void fn_155_3480();
@@ -79,8 +100,16 @@ public:
     void setPitchYawToPoint(const mVec3_c &pnt);
     void fn_155_3BD0(const mVec3_c &);
     void fn_155_3BE0(const mVec3_c &);
+    void clampRotationX();
+    bool checkPathPntParam(u32 param);
+    void fn_155_3E30();
     void fn_155_3E90();
     void fn_155_3EC0();
+
+    /* Some Timestone Check */
+    bool fn_155_3EF0();
+
+    void fn_155_3F50();
 
 private:
     /* 0x378 */ dAcRef_c<dTgKiesuTag_c> mTgRef;
@@ -101,44 +130,112 @@ private:
     /* 0xAA8 */ u8 field_0xAB0;
     /* 0xAB1 */ u8 _0xAB1[0xB14 - 0xAB1];
     /* 0xB14 */ mVec3_c mPnts[10];
-    /* 0xB8C */ u8 _0xB8C[0xBB0 - 0xB8C];
-    /* 0xBB0 */ mVec3_c field_0xBB0;
+    /* 0xB8C */ mVec3_c field_0xB8C;
+    /* 0xB98 */ u8 _0xB98[0xBB0 - 0xB98];
+    /* 0xBB0 */ mVec3_c mTargetPos;
     /* 0xBBC */ mVec3_c field_0xBBC;
-    /* 0xBC8 */ u8 _0xBC8[0xBF8 - 0xBC8];
+    /* 0xBC8 */ mVec3_c field_0xBC8;
+    /* 0xBD4 */ mVec3_c field_0xBD4;
+    /* 0xBE0 */ mVec3_c field_0xBE0;
+    /* 0xBEC */ mVec3_c field_0xBEC;
     /* 0xBF8 */ mVec3_c field_0xBF8;
-    /* 0xC04 */ u8 _0xC04[0xC28 - 0xC04];
+    /* 0xC04 */ mVec3_c field_0xC04;
+    /* 0xC10 */ mVec3_c field_0xC10;
+    /* 0xC1C */ mVec3_c field_0xC1C;
     /* 0xC28 */ mVec3_c field_0xC28;
     /* 0xC34 */ mAng mPitch_0xC34;
     /* 0xC36 */ mAng mYaw_0xC36;
     /* 0xC38 */ u8 _0xC38[0xC3C - 0xC38];
     /* 0xC3C */ f32 field_0xC3C;
     /* 0xC40 */ f32 field_0xC40;
-    /* 0xC44 */ u8 _0xC44[0xD1C - 0xC44];
+    /* 0xC44 */ f32 field_0xC44;
+    /* 0xC48 */ f32 field_0xC48;
+    /* 0xC4C */ u8 _0xC4C[0xC70 - 0xC4C];
+    /* 0xC70 */ f32 field_0xC70;
+    /* 0xC74 */ u8 _0xC74[0xD00 - 0xC74];
+    /* 0xD00 */ f32 field_0xD00;
+    /* 0xD04 */ f32 field_0xD04;
+    /* 0xD08 */ f32 field_0xD08;
+    /* 0xD0C */ f32 field_0xD0C;
+    /* 0xD10 */ f32 field_0xD10;
+    /* 0xD14 */ f32 field_0xD14;
+    /* 0xD18 */ f32 field_0xD18;
     /* 0xD1C */ f32 field_0xD1C;
     /* 0xD20 */ f32 field_0xD20;
     /* 0xD24 */ u8 _0xD24[0xD32 - 0xD24];
     /* 0xD32 */ s16 mTimer;
-    /* 0xD34 */ u8 _0xD34[0xD60 - 0xD34];
+    /* 0xD34 */ u8 _0xD34[0xD52 - 0xD34];
+    /* 0xD52 */ s16 field_0xD52;
+    /* 0xD54 */ s16 field_0xD54;
+    /* 0xD56 */ u8 _0xD56[0xD5E - 0xD56];
+    /* 0xD5E */ s16 field_0xD5E;
     /* 0xD60 */ s16 field_0xD60;
-    /* 0xD62 */ u8 _0xD62[0xDA6 - 0xD62];
+    /* 0xD62 */ u8 _0xD62[0xD6A - 0xD62];
+    /* 0xD6A */ s16 field_0xD6A;
+    /* 0xD6C */ s16 field_0xD6C;
+    /* 0xD6E */ s16 field_0xD6E;
+    /* 0xD70 */ s16 field_0xD70;
+    /* 0xD72 */ s16 field_0xD72;
+    /* 0xD74 */ s16 field_0xD74;
+    /* 0xD76 */ s16 field_0xD76;
+    /* 0xD78 */ s16 mBlinkTimer;
+    /* 0xD7A */ s16 field_0xD7A;
+    /* 0xD7C */ s16 field_0xD7C;
+    /* 0xD7E */ s16 mSqueakSoundTimer;
+    /* 0xD80 */ s16 mStunSoundTimer;
+    /* 0xD82 */ s16 field_0xD82;
+    /* 0xD84 */ s16 field_0xD84;
+    /* 0xD86 */ s16 field_0xD86;
+    /* 0xD88 */ s16 field_0xD88;
+    /* 0xD8A */ s16 field_0xD8A;
+    /* 0xD8C */ s16 field_0xD8C;
+    /* 0xD8E */ s16 field_0xD8E;
+    /* 0xD90 */ s16 field_0xD90;
+    /* 0xD92 */ s16 field_0xD92;
+    /* 0xD94 */ s16 field_0xD94;
+    /* 0xD96 */ s16 field_0xD96;
+    /* 0xD98 */ s16 field_0xD98;
+    /* 0xD9A */ s16 field_0xD9A;
+    /* 0xD9C */ s16 field_0xD9C;
+    /* 0xD9E */ s16 field_0xD9E;
+    /* 0xDA0 */ s16 field_0xDA0;
+    /* 0xDA2 */ u8 _0xDA2[0xDA5 - 0xDA2];
+    /* 0xDA5 */ u8 field_0xDA5;
     /* 0xDA6 */ u8 field_0xDA6;
     /* 0xDA7 */ u8 field_0xDA7;
     /* 0xDA8 */ u8 field_0xDA8;
     /* 0xDA9 */ u8 field_0xDA9;
-    /* 0xDAA */ u8 _0xDAA[0xDB1 - 0xDAA];
+    /* 0xDAA */ u8 _0xDAA[0xDAF - 0xDAA];
+    /* 0xDAF */ u8 field_0xDAF;
+    /* 0xDB0 */ u8 field_0xDB0;
     /* 0xDB1 */ u8 field_0xDB1;
     /* 0xDB2 */ u8 field_0xDB2;
-    /* 0xDB3 */ u8 _0xDB3[0xDBB - 0xDB3];
+    /* 0xDB3 */ u8 field_0xDB3;
+    /* 0xDB4 */ u8 field_0xDB4;
+    /* 0xDB5 */ u8 field_0xDB5;
+    /* 0xDB6 */ u8 field_0xDB6;
+    /* 0xDB7 */ u8 field_0xDB7;
+    /* 0xDB8 */ u8 field_0xDB8;
+    /* 0xDB9 */ u8 field_0xDB9;
+    /* 0xDBA */ u8 field_0xDBA;
     /* 0xDBB */ u8 field_0xDBB;
     /* 0xDBC */ u8 mType;
-    /* 0xDBD */ u8 _0xDBD[0xDC0 - 0xDBD];
-    /* 0xDC2 */ u8 mCurrentAnmTexPat; // blink
+    /* 0xDBD */ u8 field_0xDBD;
+    /* 0xDBE */ u8 field_0xDBE;
+    /* 0xDBF */ u8 field_0xDBF;
+    /* 0xDC0 */ u8 mCurrentAnmTexPat; // blink
     /* 0xDC1 */ u8 field_0xDC1;
     /* 0xDC2 */ u8 mCurrentState;
     /* 0xDC3 */ u8 mNextState;
-    /* 0xDC4 */ u8 _0xDC4[0xDC7 - 0xDC4];
+    /* 0xDC4 */ u8 field_0xDC4;
+    /* 0xDC5 */ u8 field_0xDC5;
+    /* 0xDC6 */ u8 field_0xDC6;
     /* 0xDC7 */ u8 mStartingState;
-    /* 0xDC8 */ u8 _0xDC8[0xDCF - 0xDB8];
+    /* 0xDC8 */ u8 field_0xDC8;
+    /* 0xDC9 */ u8 field_0xDC9;
+    /* 0xDCA */ u8 field_0xDCA;
+    /* 0xDCB */ u8 field_0xDCB;
+    /* 0xDCC */ u8 _0xDCC[0xDCF - 0xDCC];
     /* 0xDCF */ u8 field_0xDCF;
     /* 0xDD0 */ u8 _0xDD0[0xDD4 - 0xDD0];
     /* 0xDD4 */ mVec3_c mHomePos;

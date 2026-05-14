@@ -486,7 +486,7 @@ bool cCcD_Obj::ChkTgBit25() const {
     return mTg.MskAtHitSPrm(0x2000000);
 }
 
-u16 cCcD_Obj::GetTgSoundID() const {
+s32 cCcD_Obj::GetTgSoundID() const {
     return mTg.mAtHitSrc.field_0x10;
 }
 

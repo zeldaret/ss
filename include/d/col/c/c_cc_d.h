@@ -813,7 +813,7 @@ public:
     bool ChkTgBit23() const;
     bool ChkTgBit24() const;
     bool ChkTgBit25() const;
-    u16 GetTgSoundID() const;
+    s32 GetTgSoundID() const;
     s16 GetTg_0x6A() const;
     bool ChkTgBit8() const;
     u8 GetTg_0x4A() const;

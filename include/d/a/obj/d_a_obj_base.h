@@ -101,6 +101,9 @@ public:
     mVec3_c &getStartingPosition() {
         return mStartingPos;
     }
+    const mVec3_c &getStartingPos() const {
+        return mStartingPos;
+    }
     void setStartingPosition(const mVec3_c &v) {
         mStartingPos = v;
     }
