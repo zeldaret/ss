@@ -505,9 +505,9 @@ dAcItem_c::dAcItem_c()
 }
 
 dAcItem_c::~dAcItem_c() {
-    delete field_0xB3C;
+    delete mpResurgeCtl;
     for (int i = 0; i < 2; i++) {
-        delete field_0xB34[i];
+        delete mpPickupPositionCtl[i];
     }
     delete mpMdl;
     mDowsingTarget.doUnregister();
@@ -563,28 +563,27 @@ bool dAcItem_c::createHeap() {
         return false;
     }
 
-    field_0xB34[0] = new dAcItem_0xB34_1();
-    if (field_0xB34[0] == nullptr) {
+    mpPickupPositionCtl[0] = new dAcItemPickupPositionOn_c();
+    if (mpPickupPositionCtl[0] == nullptr) {
         return false;
     }
-    field_0xB34[1] = new dAcItem_0xB34_2();
-    if (field_0xB34[1] == nullptr) {
+    mpPickupPositionCtl[1] = new dAcItemPickupPositionOff_c();
+    if (mpPickupPositionCtl[1] == nullptr) {
         return false;
     }
 
     if (getItemInitStruct()->_0x00[6] != 0) {
-        field_0xB3C = new dAcItem_0xB3C_2(getItemInitStruct()->_0x00[4], getItemInitStruct()->_0x00[5]);
+        mpResurgeCtl = new dAcItemResurgeOn_c(getItemInitStruct()->_0x00[4], getItemInitStruct()->_0x00[5]);
         if (mId == ITEM_STAMINA_FRUIT) {
-            // TODO ...
-            field_0xB3C->vt_0x0C(150 /* 0x96 */);
+            mpResurgeCtl->setTimerInitVal(150);
         } else if (isLightFruit()) {
-            field_0xB3C->vt_0x0C(0 /* 0x0 */);
+            mpResurgeCtl->setTimerInitVal(0);
         }
     } else {
-        field_0xB3C = new dAcItem_0xB3C_1(getItemInitStruct()->_0x00[4], getItemInitStruct()->_0x00[5]);
+        mpResurgeCtl = new dAcItemResurgeOff_c(getItemInitStruct()->_0x00[4], getItemInitStruct()->_0x00[5]);
     }
 
-    if (field_0xB3C == nullptr) {
+    if (mpResurgeCtl == nullptr) {
         return false;
     }
 
@@ -2109,7 +2108,7 @@ void dAcItem_c::initializeState_ResurgeWait() {
     // TODO FPR swap
     mPosition = mPositionCopy;
     mRotation = mRotationCopy;
-    field_0xB3C->fn_802579D0();
+    mpResurgeCtl->startResurgeTimer();
     setNotWaiting();
     // TODO ???
     mbNoGravity = mbNoDespawn;
@@ -2119,10 +2118,10 @@ void dAcItem_c::initializeState_ResurgeWait() {
 }
 
 void dAcItem_c::executeState_ResurgeWait() {
-    if (field_0xB3C->fn_80257A10(this)) {
-        if (!field_0xB3C->fn_80257B10()) {
-            field_0xB3C->fn_80257AC0();
-            if (field_0xB3C->fn_80257B10()) {
+    if (mpResurgeCtl->canResurge(this)) {
+        if (!mpResurgeCtl->isTimerExpired()) {
+            mpResurgeCtl->execute();
+            if (mpResurgeCtl->isTimerExpired()) {
                 if (mId == ITEM_STAMINA_FRUIT) {
                     startSound(SE_O_REFRESH_FRUIT_SPROUT);
                 }
@@ -2130,7 +2129,7 @@ void dAcItem_c::executeState_ResurgeWait() {
             }
         }
     } else {
-        field_0xB3C->fn_80257A80();
+        mpResurgeCtl->resetTimer();
     }
 }
 
@@ -2594,15 +2593,15 @@ void dAcItem_c::rotateFixedBirdStatuette() {
     mRotation.z.mVal = 0;
 }
 
-void dAcItem_0xB34_1::vt_0x0C() {
+void dAcItemPickupPositionOff_c::init() {
     // no-op
 }
 
-bool dAcItem_0xB34_1::vt_0x10(dAcItem_c *item) {
+bool dAcItemPickupPositionOff_c::execute(dAcItem_c *item) {
     return false;
 }
 
-void dAcItem_0xB34_2::vt_0x0C() {
+void dAcItemPickupPositionOn_c::init() {
     // TODO weird double load
     dAcPy_c *link = dAcPy_c::GetLinkM();
     if (link != nullptr) {
@@ -2611,7 +2610,7 @@ void dAcItem_0xB34_2::vt_0x0C() {
     mNumFrames = 0;
 }
 
-bool dAcItem_0xB34_2::vt_0x10(dAcItem_c *item) {
+bool dAcItemPickupPositionOn_c::execute(dAcItem_c *item) {
     if (mNumFrames >= 22) {
         return false;
     }
@@ -2641,63 +2640,63 @@ bool dAcItem_0xB34_2::vt_0x10(dAcItem_c *item) {
     return true;
 }
 
-void dAcItem_0xB3C::fn_802579D0() {
-    fn_80257A80();
-    vt_0x10();
+void dAcItemResurgeIf_c::startResurgeTimer() {
+    resetTimer();
+    postReset();
 }
 
-bool dAcItem_0xB3C::fn_80257A10(dAcItem_c *item) {
+bool dAcItemResurgeIf_c::canResurge(dAcItem_c *item) {
     if (item->getSquareDistToPlayer() < 40000.0f) {
         return false;
     }
-    return vt_0x14(item);
+    return isResurgeAllowed(item);
 }
 
-void dAcItem_0xB3C::fn_80257A80() {
-    field_0x04 = vt_0x18();
+void dAcItemResurgeIf_c::resetTimer() {
+    mTimer = getTimerInitVal();
 }
 
-void dAcItem_0xB3C::fn_80257AC0() {
-    if (field_0x04 == 0) {
+void dAcItemResurgeIf_c::execute() {
+    if (mTimer == 0) {
         return;
     }
     if (!EventManager::isInEvent()) {
-        field_0x04--;
+        mTimer--;
     }
 }
 
-bool dAcItem_0xB3C::fn_80257B10() const {
-    return field_0x04 == 0;
+bool dAcItemResurgeIf_c::isTimerExpired() const {
+    return mTimer == 0;
 }
 
-void dAcItem_0xB3C_1::vt_0x0C(u16 arg) {
+void dAcItemResurgeOff_c::setTimerInitVal(u16 arg) {
     // no-op
 }
 
-void dAcItem_0xB3C_1::vt_0x10() {
+void dAcItemResurgeOff_c::postReset() {
     // no-op
 }
 
-bool dAcItem_0xB3C_1::vt_0x14(dAcItem_c *) {
+bool dAcItemResurgeOff_c::isResurgeAllowed(dAcItem_c *) {
     return false;
 }
 
-UNKWORD dAcItem_0xB3C_1::vt_0x18() {
+s32 dAcItemResurgeOff_c::getTimerInitVal() {
     return 0;
 }
 
-void dAcItem_0xB3C_2::vt_0x0C(u16 arg) {
-    field_0x20 = arg;
+void dAcItemResurgeOn_c::setTimerInitVal(u16 arg) {
+    mInitVal = arg;
 }
 
-void dAcItem_0xB3C_2::vt_0x10() {
+void dAcItemResurgeOn_c::postReset() {
     // no-op
 }
 
-bool dAcItem_0xB3C_2::vt_0x14(dAcItem_c *) {
+bool dAcItemResurgeOn_c::isResurgeAllowed(dAcItem_c *) {
     return (this->*mCb2)();
 }
 
-UNKWORD dAcItem_0xB3C_2::vt_0x18() {
-    return field_0x20;
+s32 dAcItemResurgeOn_c::getTimerInitVal() {
+    return mInitVal;
 }

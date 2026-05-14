@@ -26,27 +26,27 @@ class dItemMdl_c;
 class dAcItem_c;
 
 /** Positions picked up items for a bit. */
-class dAcItem_0xB34 {
+class dAcItemPickupPositionIf_c {
 public:
-    virtual ~dAcItem_0xB34() {}
-    virtual void vt_0x0C() = 0;
-    virtual bool vt_0x10(dAcItem_c *item) = 0;
+    virtual ~dAcItemPickupPositionIf_c() {}
+    virtual void init() = 0;
+    virtual bool execute(dAcItem_c *item) = 0;
 };
 
 /** No-op impl that immediately hides the item */
-class dAcItem_0xB34_1 : public dAcItem_0xB34 {
+class dAcItemPickupPositionOff_c : public dAcItemPickupPositionIf_c {
 public:
-    virtual ~dAcItem_0xB34_1() {}
-    virtual void vt_0x0C() override;
-    virtual bool vt_0x10(dAcItem_c *item) override;
+    virtual ~dAcItemPickupPositionOff_c() {}
+    virtual void init() override;
+    virtual bool execute(dAcItem_c *item) override;
 };
 
 /** Impl that positions picked up items above Link's head */
-class dAcItem_0xB34_2 : public dAcItem_0xB34 {
+class dAcItemPickupPositionOn_c : public dAcItemPickupPositionIf_c {
 public:
-    virtual ~dAcItem_0xB34_2() {}
-    virtual void vt_0x0C() override;
-    virtual bool vt_0x10(dAcItem_c *item) override;
+    virtual ~dAcItemPickupPositionOn_c() {}
+    virtual void init() override;
+    virtual bool execute(dAcItem_c *item) override;
 
 private:
     /* 0x04 */ f32 mHighestRelativeHeadHeight;
@@ -54,52 +54,52 @@ private:
 };
 
 /** Respawns certain items. */
-class dAcItem_0xB3C {
+class dAcItemResurgeIf_c {
 public:
-    virtual ~dAcItem_0xB3C() {}
-    virtual void vt_0x0C(u16) = 0;
-    virtual void vt_0x10() = 0;
-    virtual bool vt_0x14(dAcItem_c *) = 0;
-    virtual UNKWORD vt_0x18() = 0;
+    virtual ~dAcItemResurgeIf_c() {}
+    virtual void setTimerInitVal(u16) = 0;
+    virtual void postReset() = 0;
+    virtual bool isResurgeAllowed(dAcItem_c *) = 0;
+    virtual s32 getTimerInitVal() = 0;
 
-    void fn_802579D0();
-    bool fn_80257A10(dAcItem_c *);
-    void fn_80257A80();
-    void fn_80257AC0();
-    bool fn_80257B10() const;
+    void startResurgeTimer();
+    bool canResurge(dAcItem_c *);
+    void resetTimer();
+    void execute();
+    bool isTimerExpired() const;
 
 protected:
-    /* 0x04 */ UNKWORD field_0x04;
+    /* 0x04 */ s32 mTimer;
 };
 
 /** No-op impl that doesn't respawn items */
-class dAcItem_0xB3C_1 : public dAcItem_0xB3C {
+class dAcItemResurgeOff_c : public dAcItemResurgeIf_c {
 public:
-    dAcItem_0xB3C_1(u16, u16) {}
-    virtual ~dAcItem_0xB3C_1() {}
-    virtual void vt_0x0C(u16) override;
-    virtual void vt_0x10() override;
-    virtual bool vt_0x14(dAcItem_c *) override;
-    virtual UNKWORD vt_0x18() override;
+    dAcItemResurgeOff_c(u16, u16) {}
+    virtual ~dAcItemResurgeOff_c() {}
+    virtual void setTimerInitVal(u16) override;
+    virtual void postReset() override;
+    virtual bool isResurgeAllowed(dAcItem_c *) override;
+    virtual s32 getTimerInitVal() override;
 };
 
 /** Impl that respawns items */
-class dAcItem_0xB3C_2 : public dAcItem_0xB3C {
+class dAcItemResurgeOn_c : public dAcItemResurgeIf_c {
 public:
-    dAcItem_0xB3C_2(u16 a1, u16 a2) {
+    dAcItemResurgeOn_c(u16 a1, u16 a2) {
         mCb1 = sCb1s[a1];
         mCb2 = sCb2s[a2];
     }
-    virtual ~dAcItem_0xB3C_2() {}
-    virtual void vt_0x0C(u16) override;
-    virtual void vt_0x10() override;
-    virtual bool vt_0x14(dAcItem_c *) override;
-    virtual UNKWORD vt_0x18() override;
+    virtual ~dAcItemResurgeOn_c() {}
+    virtual void setTimerInitVal(u16) override;
+    virtual void postReset() override;
+    virtual bool isResurgeAllowed(dAcItem_c *) override;
+    virtual s32 getTimerInitVal() override;
 
 public:
-    typedef void (dAcItem_0xB3C_2::*Callback1)();
+    typedef void (dAcItemResurgeOn_c::*Callback1)();
     // May or may not take a dAcItem_c* argument...
-    typedef bool (dAcItem_0xB3C_2::*Callback2)();
+    typedef bool (dAcItemResurgeOn_c::*Callback2)();
 
     static Callback1 sCb1s[2];
     static Callback2 sCb2s[3];
@@ -113,7 +113,7 @@ public:
 
     /* 0x08 */ Callback1 mCb1;
     /* 0x14 */ Callback2 mCb2;
-    /* 0x20 */ UNKWORD field_0x20;
+    /* 0x20 */ s32 mInitVal;
 };
 
 class dAcItem_c : public dAcItemBase_c {
@@ -743,8 +743,8 @@ private:
     /* 0xAB8 */ fLiNdBa_c mNode;
     /* 0xAC4 */ ActorEventRelated mEventRelated;
     /* 0xB14 */ DowsingTarget mDowsingTarget;
-    /* 0xB34 */ dAcItem_0xB34 *field_0xB34[2];
-    /* 0xB34 */ dAcItem_0xB3C *field_0xB3C;
+    /* 0xB34 */ dAcItemPickupPositionIf_c *mpPickupPositionCtl[2];
+    /* 0xB34 */ dAcItemResurgeIf_c *mpResurgeCtl;
     /* 0xB40 */ void (dAcItem_c::*mFnAction)();
     /* 0xB4C */ void (dAcItem_c::*mFnBounce)();
     /* 0xB58 */ void (dAcItem_c::*mFunc_0xB58)();
