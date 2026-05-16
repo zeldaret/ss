@@ -31,6 +31,10 @@ public:
         field_0x456++;
     }
 
+    void setField_0x47A() {
+        field_0x47A = true;
+    }
+
 private:
     /* 0x0FC */ STATE_MGR_DECLARE(dTgKiesuTag_c);
     /* 0x138 */ dAcRef_c<dAcEKs_c> mKsRefs[16];
@@ -90,6 +94,7 @@ private:
     /* 0x44A */ s16 mNumKsControl;
 
     /* 0x474 */ bool field_0x474;
+    /* 0x47A */ bool field_0x47A;
     /* 0x47E */ bool mbAllKsActive;
 
     /* 0x48A */ u8 field_0x48A; // Related to getting spawnPos/ Type?

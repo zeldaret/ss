@@ -6,18 +6,20 @@
 #include "d/a/e/d_a_en_base.h"
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/cc/d_cc_d.h"
+#include "d/d_light_env.h"
 #include "m/m3d/m_anmtexpat.h"
-#include "m/m_color.h"
+#include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/d_path.h"
+#include "toBeSorted/time_area_mgr.h"
 
 class dTgKiesuTag_c;
 class dAcEKs_c : public dAcEnBase_c {
 public:
-    dAcEKs_c() : mStateMgr(*this), field_0xAA8(0.f), field_0xAB0(0) {}
+    dAcEKs_c() : mStateMgr(*this) {}
     virtual ~dAcEKs_c() {}
 
     virtual int doDelete() override;
@@ -45,6 +47,38 @@ public:
 
     STATE_MGR_DEFINE_UTIL_CHANGESTATE(dAcEKs_c);
     STATE_MGR_DEFINE_UTIL_ISSTATE(dAcEKs_c);
+
+    enum Type_e {
+        EKS_NORMAL,
+        EKS_FIRE,
+        EKS_ELECTRIC,
+        EKS_CURSED,
+    };
+    enum StartingStateParam_e {
+        EKS_STARTSTATE_Move = 0,
+        EKS_STARTSTATE_Wait = 1,
+        EKS_STARTSTATE_PathMove = 2,
+    };
+    enum State_e {
+        EKS_STATE_Move = 0,
+        EKS_STATE_Wait = 1,
+        EKS_STATE_PathMove = 2,
+        EKS_STATE_WakeUp = 4,
+        EKS_STATE_ReturnToWait = 5,
+        EKS_STATE_Chase = 6,
+        EKS_STATE_ChaseAttack = 7,
+        EKS_STATE_Fighting = 8,
+        EKS_STATE_AttackReady = 9,
+        EKS_STATE_Attack = 10,
+        EKS_STATE_Damage = 11,
+        EKS_STATE_Stun = 12,
+        EKS_STATE_WindBlow = 13,
+    };
+    enum AnmTexPat_e {
+        EKS_TEXPAT_BLINK1,
+        EKS_TEXPAT_BLINK2,
+        EKS_TEXPAT_BLINK3,
+    };
 
 public:
     void linkKiesuTag(dTgKiesuTag_c *pTgKs);
@@ -125,13 +159,13 @@ private:
     /* 0x9F8 */ dEmitter_c mEmitter2;
     /* 0xA2C */ dWaterEffect_c mWaterEmitter;
     /* 0xA74 */ ActorOnRail_Ext mRail;
-    /* 0xAA8 */ f32 field_0xAA8;
-    /* 0xAAC */ UNKWORD field_0xAAC;
-    /* 0xAA8 */ u8 field_0xAB0;
-    /* 0xAB1 */ u8 _0xAB1[0xB14 - 0xAB1];
+    /* 0xAA8 */ TimeAreaStruct mTimeArea;
+    /* 0xAB4 */ mMtx_c mCenterWorldMtx;
+    /* 0xAE4 */ mMtx_c field_0xAE4;
     /* 0xB14 */ mVec3_c mPnts[10];
     /* 0xB8C */ mVec3_c field_0xB8C;
-    /* 0xB98 */ u8 _0xB98[0xBB0 - 0xB98];
+    /* 0xB98 */ mVec3_c field_0xB98;
+    /* 0xBA4 */ mVec3_c field_0xBA4;
     /* 0xBB0 */ mVec3_c mTargetPos;
     /* 0xBBC */ mVec3_c field_0xBBC;
     /* 0xBC8 */ mVec3_c field_0xBC8;
@@ -152,7 +186,9 @@ private:
     /* 0xC48 */ f32 field_0xC48;
     /* 0xC4C */ u8 _0xC4C[0xC70 - 0xC4C];
     /* 0xC70 */ f32 field_0xC70;
-    /* 0xC74 */ u8 _0xC74[0xD00 - 0xC74];
+    /* 0xC74 */ u8 _0xC74[0xCE4 - 0xC74];
+    /* 0xCE4 */ f32 field_0xCE4;
+    /* 0xCE8 */ u8 _0xCE8[0xD00 - 0xCE8];
     /* 0xD00 */ f32 field_0xD00;
     /* 0xD04 */ f32 field_0xD04;
     /* 0xD08 */ f32 field_0xD08;
@@ -162,15 +198,22 @@ private:
     /* 0xD18 */ f32 field_0xD18;
     /* 0xD1C */ f32 field_0xD1C;
     /* 0xD20 */ f32 field_0xD20;
-    /* 0xD24 */ u8 _0xD24[0xD32 - 0xD24];
-    /* 0xD32 */ s16 mTimer;
+    /* 0xD24 */ f32 field_0xD24;
+    /* 0xD28 */ f32 field_0xD28;
+    /* 0xD2C */ u32 mCenterNode;
+    /* 0xD30 */ u8 field_0xD30;
+    /* 0xD31 */ u8 field_0xD31;
+    /* 0xD32 */ u16 mTimer;
     /* 0xD34 */ u8 _0xD34[0xD52 - 0xD34];
     /* 0xD52 */ s16 field_0xD52;
     /* 0xD54 */ s16 field_0xD54;
     /* 0xD56 */ u8 _0xD56[0xD5E - 0xD56];
     /* 0xD5E */ s16 field_0xD5E;
     /* 0xD60 */ s16 field_0xD60;
-    /* 0xD62 */ u8 _0xD62[0xD6A - 0xD62];
+    /* 0xD62 */ s16 field_0xD62;
+    /* 0xD64 */ s16 field_0xD64;
+    /* 0xD66 */ s16 field_0xD66;
+    /* 0xD68 */ s16 field_0xD68;
     /* 0xD6A */ s16 field_0xD6A;
     /* 0xD6C */ s16 field_0xD6C;
     /* 0xD6E */ s16 field_0xD6E;
@@ -199,13 +242,18 @@ private:
     /* 0xD9C */ s16 field_0xD9C;
     /* 0xD9E */ s16 field_0xD9E;
     /* 0xDA0 */ s16 field_0xDA0;
-    /* 0xDA2 */ u8 _0xDA2[0xDA5 - 0xDA2];
+    /* 0xDA2 */ u8 _0xDA2[0xDA4 - 0xDA2];
+    /* 0xDA4 */ u8 field_0xDA4;
     /* 0xDA5 */ u8 field_0xDA5;
     /* 0xDA6 */ u8 field_0xDA6;
     /* 0xDA7 */ u8 field_0xDA7;
     /* 0xDA8 */ u8 field_0xDA8;
     /* 0xDA9 */ u8 field_0xDA9;
-    /* 0xDAA */ u8 _0xDAA[0xDAF - 0xDAA];
+    /* 0xDAA */ u8 field_0xDAA;
+    /* 0xDAB */ u8 field_0xDAB;
+    /* 0xDAC */ u8 field_0xDAC;
+    /* 0xDAD */ u8 field_0xDAD;
+    /* 0xDAE */ u8 field_0xDAE;
     /* 0xDAF */ u8 field_0xDAF;
     /* 0xDB0 */ u8 field_0xDB0;
     /* 0xDB1 */ u8 field_0xDB1;
@@ -237,11 +285,8 @@ private:
     /* 0xDCB */ u8 field_0xDCB;
     /* 0xDCC */ u8 _0xDCC[0xDCF - 0xDCC];
     /* 0xDCF */ u8 field_0xDCF;
-    /* 0xDD0 */ u8 _0xDD0[0xDD4 - 0xDD0];
-    /* 0xDD4 */ mVec3_c mHomePos;
-    /* 0xDE0 */ mColor mColor;
-    /* 0xDE4 */ f32 field_0xDE4;
-    /* 0xDE8 */ u8 _0xDE8[0xDF0 - 0xDE8];
+    /* 0xDD0 */ u8 field_0xDD0;
+    /* 0xDD4 */ LIGHT_INFLUENCE mLightInfluence;
 
     // Controlled by dTgKiesuTag_c
     static bool lbl_155_bss_388;

@@ -1124,6 +1124,9 @@ public:
     void SetCo_0x400() {
         mCo.OnSPrm(0x400);
     }
+    void SetCo_0x8000() {
+        mCo.OnSPrm(0x8000);
+    }
     void SetCo_0x40000000() {
         mCo.OnSPrm(0x40000000);
     }

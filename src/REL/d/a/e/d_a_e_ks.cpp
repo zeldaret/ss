@@ -13,15 +13,27 @@
 #include "d/col/bg/d_bg_s_roof_chk.h"
 #include "d/col/bg/d_bg_s_wtr_chk.h"
 #include "d/col/c/c_cc_d.h"
+#include "d/col/cc/d_cc_d.h"
+#include "d/col/cc/d_cc_s.h"
+#include "d/d_camera.h"
 #include "d/d_light_env.h"
 #include "d/d_pouch.h"
+#include "d/d_sc_game.h"
+#include "d/d_stage_mgr.h"
+#include "d/flag/storyflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "d/t/d_t_ks.h"
+#include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m_angle.h"
+#include "m/m_color.h"
+#include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resanmtexpat.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resnode.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/d_emitter.h"
@@ -84,12 +96,16 @@ struct dAcEKs_HIO_c {
     f32 _0xB0; // 3.0
     s16 _0xB4; // 3h
     s16 _0xB6; // 1h
-    f32 _0xB8; // 0.0099999998
+    f32 _0xB8; // 0.01
     f32 _0xBC; // 100.0
     s16 _0xC0; // AABh
     s16 _0xC2; // 0h
     f32 _0xC4; // -0.5
 
+    const s32 getZero() const {
+        s32 _weird_zero = 0;
+        return _0x04;
+    }
     static const dAcEKs_HIO_c sInstance;
 };
 const dAcEKs_HIO_c dAcEKs_HIO_c::sInstance = {
@@ -100,6 +116,8 @@ const dAcEKs_HIO_c dAcEKs_HIO_c::sInstance = {
 };
 
 SPECIAL_ACTOR_PROFILE(E_KS, dAcEKs_c, fProfile::E_KS, 0xFE, 0, 4099);
+
+static dCcD_SrcSph sSrcSph = {{0x400}};
 
 STATE_DEFINE(dAcEKs_c, Wait);
 STATE_DEFINE(dAcEKs_c, WakeUp);
@@ -122,25 +140,25 @@ bool dAcEKs_c::lbl_155_bss_389;
 bool dAcEKs_c::restorePosRotFromCopy() {
     if (field_0xDCF == 0) {
         if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, mPosition) != 0) {
-            field_0xAA8 = 0.f;
+            mTimeArea.setField0x00(0);
             mSph.ClrCoSet();
             mSph.ClrTgSet();
             mSph.ClrAtSet();
             fn_800306D0();
-            if (mType == 1 || mType == 2) {
+            if (mType == EKS_FIRE || mType == EKS_ELECTRIC) {
                 field_0xD20 = 0.f;
-                field_0xDE4 = 0.f;
+                mLightInfluence.SetScale(0);
                 if (mEmitter1.hasEmitters()) {
                     mEmitter1.remove(true);
                 }
             }
         } else {
-            field_0xAA8 = 1.f;
+            mTimeArea.setField0x00(1);
             fn_80030700();
             mSph.OnCoSet();
             mSph.OnTgSet();
         }
-        mMdl.getModel().setScale(mScale * field_0xAA8);
+        mMdl.getModel().setScale(mScale * mTimeArea.getDistMaybe());
     }
     return true;
 }
@@ -152,7 +170,7 @@ void dAcEKs_c::linkKiesuTag(dTgKiesuTag_c *pTgKs) {
 void dAcEKs_c::setStartingState() {
     mTimer = cM::rndInt(1000);
     switch (mStartingState) {
-        case 0: {
+        case EKS_STARTSTATE_Move: {
             changeState(StateID_Move);
             mCurrentState = mStartingState;
             mAcch.ClrRoofNone();
@@ -160,7 +178,7 @@ void dAcEKs_c::setStartingState() {
             mAcch.SetGroundUpY(30.f);
             mAcchCir.SetWall(20.f, 60.f);
         } break;
-        case 1: {
+        case EKS_STARTSTATE_Wait: {
             changeState(StateID_Wait);
             mCurrentState = mStartingState;
             if ((s32)getFromParams(30, 0x3) == 1) {
@@ -172,7 +190,7 @@ void dAcEKs_c::setStartingState() {
             mAcchCir.SetWall(0.f, 5.f);
 
         } break;
-        case 2: {
+        case EKS_STARTSTATE_PathMove: {
             mCurrentState = mStartingState;
             mAcch.ClrRoofNone();
             mAcch.SetField_0xD4(55.f);
@@ -191,21 +209,21 @@ void dAcEKs_c::setStartingState() {
 
 void dAcEKs_c::setIdleState() {
     switch (mStartingState) {
-        case 0: {
+        case EKS_STARTSTATE_Move: {
             changeState(StateID_Move);
-            mCurrentState = 0;
+            mCurrentState = EKS_STATE_Move;
         } break;
-        case 1: {
+        case EKS_STARTSTATE_Wait: {
             changeState(StateID_ReturnToWait);
-            mCurrentState = 5;
+            mCurrentState = EKS_STATE_ReturnToWait;
         } break;
-        case 2: {
+        case EKS_STARTSTATE_PathMove: {
             changeState(StateID_PathMove);
-            mCurrentState = 2;
+            mCurrentState = EKS_STATE_PathMove;
         } break;
         default: {
             changeState(StateID_Move);
-            mCurrentState = 0;
+            mCurrentState = EKS_STATE_Move;
         } break;
     }
 }
@@ -368,7 +386,7 @@ void dAcEKs_c::kill(bool dropItem) {
     if (field_0xDB6 != 0) {
         killWithFlagNoItemDrop();
     } else if (dropItem == true) {
-        if (mType == 3) {
+        if (mType == EKS_CURSED) {
             if (tryDropItem(0.05f)) {
                 spawnDrop(ITEM_EVIL_CRYSTAL, mRoomID, mPosition, mAngle);
             }
@@ -393,8 +411,8 @@ void dAcEKs_c::chaseTargetY(f32 ratio, f32 maxStepSize) {
 void dAcEKs_c::playBlinkAnm() {
     mAnmTexPat.play();
     if (mAnmTexPat.isStop(0)) {
-        if (mCurrentAnmTexPat == 2) {
-            setBlink(0);
+        if (mCurrentAnmTexPat == EKS_TEXPAT_BLINK3) {
+            setBlink(EKS_TEXPAT_BLINK1);
         }
 
         mBlinkTimer--;
@@ -446,7 +464,7 @@ void dAcEKs_c::fn_155_1470() {
                     field_0xDC1 = 0;
                     if (getStartingPos().squareDistanceToXZ(mPosition) < 6400.f) {
                         changeState(StateID_WaitReady);
-                        mCurrentState = 1;
+                        mCurrentState = EKS_STATE_Wait;
                         return;
                     }
                 } else {
@@ -732,7 +750,7 @@ void dAcEKs_c::fn_155_2270() {
     y = y - mRotation.y;
     if (field_0xDA6 != 0) {
         if (transitionToNextState()) {
-            if (mType == 2) {
+            if (mType == EKS_ELECTRIC) {
                 fn_155_3EC0();
                 field_0xDA9 = 1;
             }
@@ -765,9 +783,9 @@ void dAcEKs_c::fn_155_2270() {
                                 mTgRef.get()->incrementField_0x456();
                             }
                             changeState(StateID_AttackReady);
-                            mCurrentState = 9;
+                            mCurrentState = EKS_STATE_AttackReady;
 
-                            if (mType == 2) {
+                            if (mType == EKS_ELECTRIC) {
                                 fn_155_3EC0();
                                 field_0xDA9 = 1;
                             }
@@ -1072,19 +1090,19 @@ void dAcEKs_c::fn_155_3480() {
 bool dAcEKs_c::transitionToNextState() {
     if (mCurrentState != mNextState) {
         switch (mNextState) {
-            case 0:  changeState(StateID_Move); break;
-            case 1:  changeState(StateID_Wait); break;
-            case 4:  changeState(StateID_WakeUp); break;
-            case 5:  changeState(StateID_ReturnToWait); break;
-            case 6:  changeState(StateID_Chase); break;
-            case 7:  changeState(StateID_ChaseAttack); break;
-            case 8:  changeState(StateID_Fighting); break;
-            case 9:  changeState(StateID_AttackReady); break;
-            case 10: changeState(StateID_Attack); break;
-            case 11: changeState(StateID_Damage); break;
-            case 12: changeState(StateID_Stun); break;
-            case 13: changeState(StateID_WindBlow); break;
-            case 2:  changeState(StateID_PathMove); break;
+            case EKS_STATE_Move:         changeState(StateID_Move); break;
+            case EKS_STATE_Wait:         changeState(StateID_Wait); break;
+            case EKS_STATE_WakeUp:       changeState(StateID_WakeUp); break;
+            case EKS_STATE_ReturnToWait: changeState(StateID_ReturnToWait); break;
+            case EKS_STATE_Chase:        changeState(StateID_Chase); break;
+            case EKS_STATE_ChaseAttack:  changeState(StateID_ChaseAttack); break;
+            case EKS_STATE_Fighting:     changeState(StateID_Fighting); break;
+            case EKS_STATE_AttackReady:  changeState(StateID_AttackReady); break;
+            case EKS_STATE_Attack:       changeState(StateID_Attack); break;
+            case EKS_STATE_Damage:       changeState(StateID_Damage); break;
+            case EKS_STATE_Stun:         changeState(StateID_Stun); break;
+            case EKS_STATE_WindBlow:     changeState(StateID_WindBlow); break;
+            case EKS_STATE_PathMove:     changeState(StateID_PathMove); break;
         }
         mCurrentState = mNextState;
         return true;
@@ -1111,16 +1129,16 @@ void dAcEKs_c::fn_155_3720(f32 scale, f32 rate) {
 
 void dAcEKs_c::fn_155_3750(u8 state) {
     switch (state) {
-        case 0:  mNextState = state; break;
-        case 1:  mNextState = 5; break;
-        case 2:  mNextState = state; break;
-        default: mNextState = 0; break;
+        case EKS_STATE_Move:     mNextState = state; break;
+        case EKS_STATE_Wait:     mNextState = EKS_STATE_ReturnToWait; break;
+        case EKS_STATE_PathMove: mNextState = state; break;
+        default:                 mNextState = EKS_STATE_Move; break;
     }
 }
 
 void dAcEKs_c::fn_155_37A0() {
     mSph.OnAtSet();
-    if (mType == 2) {
+    if (mType == EKS_ELECTRIC) {
         fn_155_3E90();
         field_0xDA9 = 0;
         field_0xD60 = 0;
@@ -1128,7 +1146,7 @@ void dAcEKs_c::fn_155_37A0() {
 }
 
 void dAcEKs_c::fn_155_37F0() {
-    if (mType == 2) {
+    if (mType == EKS_ELECTRIC) {
         fn_155_3E90();
         field_0xDA9 = 0;
         field_0xD60 = 0;
@@ -1137,14 +1155,14 @@ void dAcEKs_c::fn_155_37F0() {
 
 void dAcEKs_c::fn_155_3840() {
     mSph.ClrAtSet();
-    if (mType == 2) {
+    if (mType == EKS_ELECTRIC) {
         fn_155_3EC0();
         field_0xDA9 = 1;
     }
 }
 
 void dAcEKs_c::fn_155_3890() {
-    if (mType == 2) {
+    if (mType == EKS_ELECTRIC) {
         fn_155_3EC0();
         field_0xDA9 = 1;
     }
@@ -1207,9 +1225,9 @@ void dAcEKs_c::setBlink(u8 blink) {
     nw4r::g3d::ResAnmTexPat pat(nullptr);
     mCurrentAnmTexPat = blink;
     switch (mCurrentAnmTexPat) {
-        case 0: pat = mResFile.GetResAnmTexPat("blink_1"); break;
-        case 1: pat = mResFile.GetResAnmTexPat("blink_2"); break;
-        case 2: pat = mResFile.GetResAnmTexPat("blink_3"); break;
+        case EKS_TEXPAT_BLINK1: pat = mResFile.GetResAnmTexPat("blink_1"); break;
+        case EKS_TEXPAT_BLINK2: pat = mResFile.GetResAnmTexPat("blink_2"); break;
+        case EKS_TEXPAT_BLINK3: pat = mResFile.GetResAnmTexPat("blink_3"); break;
     }
     mAnmTexPat.setAnm(mMdl.getModel(), pat, 0, m3d::PLAY_MODE_4);
 }
@@ -1268,6 +1286,466 @@ void dAcEKs_c::fn_155_3F50() {
             field_0xD9E--;
         }
     }
+}
+
+bool dAcEKs_c::createHeap() {
+    static const char *resFiles[] = {"Kiesu", "Kiesu_fire", "Kiesu_electric", "KiesuDevil"};
+    static const char *mdlNames[] = {"kiesu", "F_kiesu", "EKiesu", "DKiesu"};
+
+    mType = getFromParams(0, 0x7);
+    nw4r::g3d::ResFile mdlResFile(getOarcResFile(resFiles[mType]));
+    nw4r::g3d::ResFile anmResFile(getOarcResFile("Kiesu_anime"));
+
+    TRY_CREATE(mMdl.create3(*this, mdlResFile.ptr(), anmResFile.ptr(), mdlNames[mType], "fly", 0x133));
+
+    mResFile = mdlResFile;
+
+    nw4r::g3d::ResAnmTexPat anmTexPat(mResFile.GetResAnmTexPat("blink_1"));
+
+    TRY_CREATE(mAnmTexPat.create(mMdl.getModel().getResMdl(), anmTexPat, &mAllocator, nullptr, 1));
+
+    fn_80030980(mMdl.getModel(), 1, false);
+    mMdl.getModel().setAnm(mAnmTexPat);
+
+    return true;
+}
+
+int dAcEKs_c::actorCreate() {
+    if (StoryflagManager::sInstance->getFlag(STORYFLAG_GRATITUDE_QUEST_FINISHED)) {
+        if (dScGame_c::isCurrentStage("F000") || dScGame_c::isCurrentStage("D000")) {
+            return FAILED;
+        }
+    }
+
+    CREATE_ALLOCATOR(dAcEKs_c);
+
+    mAcch.Set(this, 1, &mAcchCir);
+    mAcchCir.SetWall(20, 60);
+
+    mStts.SetRank(2);
+
+    mSph.Set(sSrcSph);
+    mSph.SetStts(mStts);
+
+    mAcceleration = 0.f;
+    mMaxSpeed = -40.f;
+
+    setStartingPosition(mPosition);
+    field_0xBE0 = mPosition;
+    field_0xBEC.set(0, 100, 0);
+    field_0xC10.set(0, 0, 0);
+    field_0xCE4 = 500.f;
+
+    field_0xDB7 = 0;
+    field_0xDA5 = 0;
+    field_0xDA9 = 0;
+    field_0xDAA = 0;
+    field_0xDB6 = 0;
+    field_0xDAC = 1;
+    field_0xDBE = 45;
+    field_0xDBB = 0;
+    field_0xDC1 = 0;
+
+    mSph.ClrAtSet();
+    mHealth = 4;
+    field_0xD84 = 0;
+
+    mEmitter1.init(this);
+    mEmitter2.init(this);
+
+    field_0xDA7 = 0;
+    field_0xDAD = 0;
+    field_0xDAE = 0;
+    field_0xDC8 = 0;
+
+    field_0xD04 = 0.f;
+    field_0xD00 = 0.f;
+
+    field_0xD88 = mRotation.y;
+    field_0xD8A = mRotation.y - 0x8000;
+
+    field_0xDBF = 0;
+    field_0xD60 = 0;
+    field_0xD62 = 10 + cM::rndInt(5);
+    field_0xDB1 = 0;
+    field_0xDCF = (mRotation.z >> 12) & 1;
+    field_0xD9A = 0;
+    if (field_0xDCF == 0) {
+        field_0xDD0 = 0;
+        mTimeArea.setField0x08(1);
+        mTimeArea.setField0x00(1);
+
+        if (dScGame_c::isCurrentStage("D301")) {
+            setActorProperty(AC_PROP_0x400);
+        }
+    }
+    field_0xC3C = getFromParams(6, 0xF) * 100.f;
+    field_0xC40 = getFromParams(10, 0xF) * 100.f;
+    field_0xC44 = ((mRotation.z >> 0) & 0xF) * 100.f;
+    field_0xC48 = ((mRotation.z >> 4) & 0xF) * 100.f;
+
+    if (!mTgRef.isLinked() || ((mRotation.z >> 8) & 0xF) < 3) {
+        field_0xDA6 = 0;
+    }
+
+    mAngle.z = mRotation.z = 0;
+
+    lbl_155_bss_388 = 0;
+    lbl_155_bss_389 = 0;
+
+    field_0xDB0 = mRail.init(getFromParams(22, 0xFF), mRoomID, 1, 0, false, 0.f, 0.f, 0.01f);
+    if (field_0xDB0 != 0) {
+        mRail.setSpeed(15.f);
+    }
+    if (field_0xDB0 != 0) {
+        mStartingState = 2;
+    } else {
+        mStartingState = getFromParams(3, 0x7);
+    }
+
+    mVec3_c bboxMin(-250, -800, -250);
+    mVec3_c bboxMax(250, 250, 250);
+    mBoundingBox.Set(bboxMin, bboxMax);
+
+    field_0xD9C = cM::rndF(0x10000);
+    field_0xD9E = 0;
+    mScale.set(1.2, 1.2, 1.2);
+
+    mMdl.getModel().setScale(mScale);
+    mWaterEmitter.init(this, 30, 1, 0);
+    if (mType != EKS_NORMAL) {
+        field_0xDA4 = 1;
+        nw4r::g3d::ResNode node = mMdl.getModel().getResMdl().GetResNode("center");
+        mCenterNode = node.GetID();
+    } else {
+        field_0xDA4 = 0;
+    }
+
+    if (mType == EKS_FIRE) {
+        mSph.SetAtModifier(AT_MOD_FIRE);
+        mSph.SetCo_0x8000();
+        mTargetFiTextID = 0xE;
+    } else if (mType == EKS_ELECTRIC) {
+        mSph.SetAtModifier(AT_MOD_ELECTRIC);
+        field_0xDA9 = 1;
+        mTargetFiTextID = 0xD;
+    } else if (mType == EKS_CURSED) {
+        mSph.SetAtModifier(AT_MOD_CURSED);
+        mTargetFiTextID = 0xC;
+    }
+
+    if (mType == EKS_FIRE) {
+        mLightInfluence.mPos = mPosition;
+        mLightInfluence.mClr.Set(0xFF, 0xA0, 0x50, 0xFF);
+        mLightInfluence.SetScale(400);
+        field_0xD20 = 400.f;
+        field_0xD24 = 1.f;
+        field_0xD28 = 40.f;
+        dLightEnv_c::GetPInstance()->plight_set(&mLightInfluence);
+    } else if (mType == EKS_ELECTRIC) {
+        mLightInfluence.mPos = mPosition;
+        mLightInfluence.mClr.Set(0x64, 0xFF, 0xFF, 0xFF);
+        mLightInfluence.SetScale(300);
+        field_0xD20 = 400.f;
+        field_0xD24 = 1.f;
+        field_0xD28 = 40.f;
+        dLightEnv_c::GetPInstance()->plight_set(&mLightInfluence);
+    }
+    setStartingState();
+    mAcch.CrrPos(*dBgS::GetInstance());
+
+    return SUCCEEDED;
+}
+
+int dAcEKs_c::actorPostCreate() {
+    if (field_0xDCF == 0) {
+        if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, mPosition)) {
+            mTimeArea.setField0x00(0.f);
+        }
+        mMdl.getModel().setScale(mScale * mTimeArea.getDistMaybe());
+    }
+
+    if (isState(StateID_Wait)) {
+        mPosition.y = getLineCrossYRange(mPosition, 200);
+        setStartingPosition(mPosition);
+    }
+
+    mPnts[0].set(mStartingPos);
+
+    if (isState(StateID_Wait)) {
+        mPnts[0].y -= 20.f;
+    }
+
+    updateMatrix();
+
+    return SUCCEEDED;
+}
+
+int dAcEKs_c::doDelete() {
+    if (mType == EKS_FIRE || mType == EKS_ELECTRIC) {
+        dLightEnv_c::GetPInstance()->plight_cut(&mLightInfluence);
+    }
+    return SUCCEEDED;
+}
+
+int dAcEKs_c::actorExecute() {
+    s32 _weird_zero = 0;
+
+    mTimer++;
+
+    if (field_0xDCF == 0) {
+        int checkedTime = mTimeArea.check(mRoomID, mPosition, 0, 30, 0.2);
+        if (checkedTime != 0) {
+            if (checkedTime > 0) {
+                startSound(SE_TIMESLIP_TIMESLIP);
+                field_0xD9A = 15;
+            } else {
+                startSound(SE_TIMESLIP_TIMESLIP_REV);
+                mSph.OnCoSet();
+                mSph.OnTgSet();
+            }
+
+            static mVec3_c effScale(1, 1, 1);
+            dJEffManager_c::spawnEffect(
+                PARTICLE_RESOURCE_ID_MAPPING_464_, mPosition, nullptr, &effScale, nullptr, nullptr, 0, 0
+            );
+            fn_80030700();
+        }
+
+        if (mTimeArea.isNearZero()) {
+            mSph.ClrCoSet();
+            mSph.ClrTgSet();
+            mSph.ClrAtSet();
+
+            fn_800306D0();
+            if (mType == EKS_FIRE || mType == EKS_ELECTRIC) {
+                field_0xD20 = 0.f;
+                mLightInfluence.SetScale(0.f);
+            }
+
+            return SUCCEEDED;
+        }
+
+        if (field_0xD9A > 0) {
+            field_0xD9A--;
+        }
+    }
+    if (mHealth != 0) {
+        fn_155_A60();
+    }
+
+    mStateMgr.executeState();
+    field_0xD9C++;
+
+    if (isState(StateID_Chase) || isState(StateID_ChaseAttack) || isState(StateID_Fighting) ||
+        isState(StateID_AttackReady) || isState(StateID_Attack) || isState(StateID_WindBlow)) {
+        fn_155_3F50();
+    }
+
+    if (mType == EKS_FIRE) {
+        if (field_0xDA9 != 0 || isState(StateID_Wait)) {
+            field_0xD20 = 0.f;
+            mLightInfluence.SetScale(0.f);
+        } else {
+            if (field_0xD60 > 0) {
+                field_0xD20 = 0.f;
+            } else {
+                field_0xD20 = 400.f;
+            }
+        }
+
+        mLightInfluence.mClr.Set(0xFF, 0xA0, 0x50, 0xFF);
+        sLib::addCalcScaledDiff(&mLightInfluence.mScale, field_0xD20, field_0xD24, field_0xD28);
+    } else if (mType == EKS_ELECTRIC) {
+        if (field_0xDA9 != 0 || isState(StateID_Wait) || field_0xD60 > 0) {
+            field_0xD20 = 0.f;
+            mLightInfluence.SetScale(0.f);
+        } else {
+            if ((dScGame_c::getUpdateFrameCount() & 8) != 0) {
+                mLightInfluence.SetScale(300.f);
+            } else {
+                mLightInfluence.SetScale(200.f);
+            }
+        }
+        mLightInfluence.mClr.Set(0x64, 0xFF, 0xFF, 0xFF);
+    }
+
+    if (!isState(StateID_WindBlow)) {
+        if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_BELLOWS) && mSph.GetTgDamageFlags() == 0x8) {
+            if (field_0xDA6 != 0) {
+                mCurrentState = EKS_STATE_WindBlow;
+                if (mTgRef.isLinked()) {
+                    mTgRef.get()->setField_0x47A();
+                }
+            }
+            mVelocity.set(0, 0, 0);
+            mAngle.y = cLib::targetAngleY(dAcPy_c::GetLink()->mPositionCopy2, mPosition);
+            mAngle.x = cLib::targetAngleX(dAcPy_c::GetLink()->mPositionCopy2, mPosition);
+
+            // I Guess we funky
+            s32 t = 7281;
+            field_0xD66 = (cM::rndFX(0.25f + (0.01f * _weird_zero)) + (0.75f + (0.01f * _weird_zero))) * t;
+            field_0xD68 = (cM::rndFX(0.25f + (0.01f * _weird_zero)) + (0.65f + (0.01f * _weird_zero))) * t;
+
+            if (field_0xD66 < 0) {
+                field_0xD64 = -910;
+            } else {
+                field_0xD64 = 910;
+            }
+            if (isState(StateID_Wait)) {
+                mSpeed = 0.f;
+                mVelocity.set(0, 0, 0);
+                field_0xDAA = 1;
+                mPosition.y -= 30.f;
+                changeState(StateID_WindBlow);
+            } else {
+                mSpeed = 35.f;
+                if (mAngle.x > 0xAAB) {
+                    mVelocity.y = 15.f;
+                } else if (mAngle.x < -0xAAB) {
+                    mVelocity.y = -15.f;
+                }
+                changeState(StateID_WindBlow);
+            }
+        }
+    }
+
+    calcVelocity();
+
+    mPosition += mVelocity;
+    mPosition += mStts.GetCcMove();
+
+    if (!(isState(StateID_Wait) || isState(StateID_WaitReady))) {
+        mAcch.CrrPos(*dBgS::GetInstance());
+        mWaterEmitter.execute(mAcch.GetWtrGroundH(), mAcch.GetGroundH());
+    }
+
+    if (field_0xDCF == 0) {
+        mMdl.getModel().setScale(mScale * mTimeArea.getDistMaybe());
+    } else {
+        mMdl.getModel().setScale(mScale);
+    }
+
+    updateMatrix();
+    mMdl.getModel().setLocalMtx(mWorldMtx);
+    mMdl.getModel().calc(false);
+    mSph.SetC(mPosition + field_0xC10);
+    dCcS::GetInstance()->Set(&mSph);
+
+    if (isNotWaitingNorDamage()) {
+        mPositionCopy2.set(mPosition);
+        mPositionCopy3.set(mPosition);
+        if (!isState(StateID_Stun)) {
+            mPositionCopy3.y += 60.f;
+        } else {
+            mPositionCopy3.y += 40.f;
+        }
+        fn_80030c20(0x2, 700, 50, -500, 500);
+    }
+
+    fn_80030400(mMdl.getModel(), 100, false, field_0xDBF);
+
+    if (field_0xD30 != 0) {
+        if (checkObjectProperty(OBJ_PROP_0x1)) {
+            field_0xD31 = 0;
+        } else {
+            if ((mTimer % 12) == 0) {
+                mVec3_c start = mPosition;
+                mVec3_c end = dScGame_c::getCamera()->getPosition();
+                end.y += 100.f;
+                end += start;
+                end *= 0.5f;
+
+                if (dBgS_ObjLinChk::LineCross(&start, &end, nullptr)) {
+                    field_0xD31 = 0;
+                } else {
+                    field_0xD31 = 1;
+                }
+            }
+        }
+    } else {
+        field_0xD31 = 1;
+        if (checkObjectProperty(OBJ_PROP_0x1)) {
+            field_0xD31 = 0;
+        }
+    }
+
+    if (field_0xDA9 == 0) {
+        if (!isState(StateID_Wait) && field_0xDA4 != 0) {
+            if (mType == EKS_FIRE) {
+                if (field_0xD60 > 0) {
+                    field_0xD60--;
+                } else {
+                    if (field_0xD31 != 0) {
+                        holdSound(SE_EKs_FIRE_LV);
+                        mMdl.getModel().getNodeWorldMtx(mCenterNode, mCenterWorldMtx);
+                        mCenterWorldMtx.getTranslation(field_0xB98);
+                        mEmitter1.holdEffect(
+                            PARTICLE_RESOURCE_ID_MAPPING_402_, field_0xB98, nullptr, &mScale, nullptr, nullptr
+                        );
+                        mLightInfluence.mPos = field_0xB98;
+                    }
+                }
+            } else if (mType == EKS_ELECTRIC) {
+                if (field_0xD60 > 0) {
+                    field_0xD60--;
+                } else {
+                    if (field_0xD31 != 0) {
+                        fn_155_3E90();
+                        holdSound(SE_EKs_ELEC_LV);
+                        mMdl.getModel().getNodeWorldMtx(mCenterNode, mCenterWorldMtx);
+                        mCenterWorldMtx.getTranslation(field_0xB98);
+                        mEmitter1.holdEffect(
+                            PARTICLE_RESOURCE_ID_MAPPING_401_, field_0xB98, nullptr, &mScale, nullptr, nullptr
+                        );
+                        mLightInfluence.mPos = field_0xB98;
+                    }
+                }
+            } else if (mType == EKS_CURSED) {
+                if (field_0xD60 > 0) {
+                    field_0xD60--;
+                } else {
+                    if (field_0xD31 != 0) {
+                        holdSound(SE_EKs_MA_LV);
+                        mMdl.getModel().getNodeWorldMtx(mCenterNode, mCenterWorldMtx);
+                        mCenterWorldMtx.getTranslation(field_0xB98);
+                        mEmitter1.holdEffect(
+                            PARTICLE_RESOURCE_ID_MAPPING_400_, field_0xB98, nullptr, &mScale, nullptr, nullptr
+                        );
+                        mEmitter1.setGlobalAlpha(dStageMgr_c::GetInstance()->getGlobalAlpha());
+                    }
+                }
+            }
+        }
+    }
+
+    return SUCCEEDED;
+}
+int dAcEKs_c::draw() {
+    if (field_0xDCF == 0 && mTimeArea.isNearZero()) {
+        return SUCCEEDED;
+    }
+
+    if (field_0xDA9 == 0 && !isState(StateID_Wait) && field_0xDA4 != 0) {
+        if (mType == EKS_FIRE || mType == EKS_ELECTRIC) {
+            mLightingInfo.mLightingCode = 0xF;
+        }
+    }
+
+    drawModelType1(&mMdl.getModel());
+
+    if (!isState(StateID_Wait)) {
+        field_0xD18 = mPosition.y - mAcch.GetGroundH();
+        // I hate this xD
+        mQuat_c shadowRot(
+            mVec3_c(0.f + dAcEKs_HIO_c::sInstance.getZero(), 5, 0.f + dAcEKs_HIO_c::sInstance.getZero()),
+            50.f + dAcEKs_HIO_c::sInstance.getZero()
+        );
+        field_0xAE4.transS(mPosition);
+        drawShadow(mShadow, nullptr, field_0xAE4, &shadowRot, -1, -1, -1, -1, -1, field_0xD18);
+    }
+
+    return SUCCEEDED;
 }
 
 void dAcEKs_c::initializeState_Wait() {}
