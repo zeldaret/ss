@@ -56,7 +56,7 @@ int dTgBeetle_c::actorExecute() {
     if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, mBeetleFlag) || mActorSubtype) {
         dAcBoomerang_c *beetlePtr =
             (dAcBoomerang_c *)dAcPy_c::GetLink()
-                ->vt_0x1C0(); // boomerang pointer cast required because function currently returns void*
+                ->getBeetleInFlight(); // boomerang pointer cast required because function currently returns void*
 
         if (mZoneShape == RectangularPrismShape) { // rectangular prism
             if (beetlePtr && checkAreaBox(mMatrix1, beetlePtr->mPosition)) {
