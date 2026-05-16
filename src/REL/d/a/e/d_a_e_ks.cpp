@@ -2101,16 +2101,230 @@ void dAcEKs_c::finalizeState_ReturnToWait() {
     field_0xD30 = 0;
 }
 
-void dAcEKs_c::initializeState_WaitReady() {}
-void dAcEKs_c::executeState_WaitReady() {}
+void dAcEKs_c::initializeState_WaitReady() {
+    setAnim("turn_ed", 1, 1, 0);
+    setBlink(EKS_TEXPAT_BLINK1);
+    mBlinkTimer = cM::rndInt(75) + 15;
+    mAcchCir.SetWall(0, 5);
+    mSpeed = 0.f;
+    field_0xDA5 = 0;
+    field_0xD50 = 30;
+    mAcch.ClrRoofHit();
+    mAcch.SetField_0xD4(0.f);
+    mAcch.SetGroundUpY(0.f);
+    field_0xDAD = 0;
+    field_0xDAE = 0;
+}
+void dAcEKs_c::executeState_WaitReady() {
+    mMdl.play();
+    playBlinkAnm();
+    if (field_0xD50 > 0) {
+        field_0xD50++;
+    }
+    sLib::addCalcAngle(mRotation.x.ref(), 0, 12, 0xAAB);
+    sLib::addCalcAngle(mRotation.y.ref(), field_0xD8A, 12, 0xAAB);
+    sLib::addCalcAngle(mAngle.y.ref(), field_0xD8A, 12, 0xAAB);
+
+    sLib::addCalcScaledDiff(&mPosition.x, getStartingPos().x, 0.1, 3);
+    sLib::addCalcScaledDiff(&mPosition.z, getStartingPos().z, 0.1, 3);
+    if (sLib::chase(&mPosition.y, getStartingPos().y, 6) || mAcch.ChkRoofHit()) {
+        if (field_0xD50 <= 0) {
+            changeState(StateID_Wait);
+            mCurrentState = EKS_STATE_Wait;
+        }
+    }
+}
 void dAcEKs_c::finalizeState_WaitReady() {}
 
-void dAcEKs_c::initializeState_Move() {}
-void dAcEKs_c::executeState_Move() {}
-void dAcEKs_c::finalizeState_Move() {}
+void dAcEKs_c::initializeState_Move() {
+    field_0xD30 = 1;
+    setAnim("fly", 1.5, cM::rndFX(0.2) + 1.f, 0);
+    if (mCurrentAnmTexPat == EKS_TEXPAT_BLINK2) {
+        setBlink(EKS_TEXPAT_BLINK3);
+    } else {
+        setBlink(EKS_TEXPAT_BLINK1);
+    }
 
-void dAcEKs_c::initializeState_Chase() {}
-void dAcEKs_c::executeState_Chase() {}
+    mBlinkTimer = cM::rndInt(75) + 15;
+    field_0xD52 = cM::rndInt(20) + 20;
+    field_0xD54 = cM::rndInt(30) + 30;
+
+    if (field_0xDA6 == 0) {
+        mTargetPos.x = getStartingPos().x + cM::rndFX(800);
+        mTargetPos.y = getStartingPos().y + cM::rndFX(400);
+        mTargetPos.z = getStartingPos().z + cM::rndFX(800);
+    }
+
+    setPitchYawToPoint(mTargetPos);
+    mSpeed = field_0xCF8 + 15.f;
+    field_0xC70 = 0.f;
+    field_0xDB7 = 0;
+    field_0xDC1 = 0;
+    field_0xD90 = 3;
+    field_0xDA5 = 0;
+    mSqueakSoundTimer = cM::rndInt(20) + 20;
+    field_0xD82 = 0;
+}
+void dAcEKs_c::executeState_Move() {
+    if (field_0xD82 > 1) {
+        field_0xD82 = 0;
+        if (!checkBeyondRadius(getStartingPos(), 490000.f)) {
+            setActorProperty(AC_PROP_0x1);
+        }
+    } else {
+        field_0xD82++;
+    }
+
+    fn_155_3720(mSpeed, cM::rndFX(0.2) + 1.f);
+    mMdl.play();
+    playBlinkAnm();
+    soundSqueak();
+    if (field_0xD9A > 0) {
+        mSpeed = 0.f;
+    } else {
+        sLib::addCalcScaledDiff(&mSpeed, 15, 0.1, 0.1);
+    }
+
+    if (std::abs(field_0xD00) > 0.01f) {
+        sLib::addCalcScaled(&field_0xD00, 0.1, 1);
+    } else {
+        field_0xD00 = 0.f;
+    }
+    if (std::abs(field_0xD04) > 0.01f) {
+        sLib::addCalcScaled(&field_0xD04, 0.1, 1);
+    } else {
+        field_0xD04 = 0.f;
+    }
+    fn_155_1C80();
+}
+void dAcEKs_c::finalizeState_Move() {
+    field_0xD30 = 0;
+    field_0xCF8 = 0.f;
+    field_0xDC8 = 0;
+    field_0xD04 = 0.f;
+    field_0xD00 = 0.f;
+}
+
+void dAcEKs_c::initializeState_Chase() {
+    setAnim("fly", 1.5, cM::rndFX(0.2) + 1.f, 0);
+
+    if (mCurrentAnmTexPat == EKS_TEXPAT_BLINK2) {
+        setBlink(EKS_TEXPAT_BLINK3);
+    } else {
+        setBlink(EKS_TEXPAT_BLINK1);
+    }
+
+    mBlinkTimer = cM::rndInt(75) + 15;
+    field_0xD56 = 0;
+    field_0xD58 = cM::rndInt(20) + 20;
+
+    field_0xD90 = 3;
+    field_0xDB7 = 0;
+    field_0xDB8 = 0;
+    field_0xDB9 = 0;
+    field_0xDA5 = 1;
+
+    field_0xBC8.set(cM::rndFX(200), cM::rndF(100) + 100.f, cM::rndF(100) + 200.f);
+    fn_155_3BE0(field_0xBC8);
+
+    setPitchYawToPoint(targetPlayerOrScrapper(0)->mPosition + field_0xBEC);
+    mAngle.y = mRotation.y;
+    mSpeed = 0.f;
+    field_0xCE0 = 0.f;
+    mSqueakSoundTimer = cM::rndInt(20) + 20;
+    unsetActorProperty(AC_PROP_0x1);
+}
+void dAcEKs_c::executeState_Chase() {
+    fn_155_3720(field_0xCE0, cM::rndFX(0.1) + 1.f);
+    mMdl.play();
+    playBlinkAnm();
+    soundSqueak();
+
+    dAcObjBase_c *pTarget = targetPlayerOrScrapper(0);
+    dAcPy_c *pPlayer = nullptr;
+    if (pTarget->isPlayer()) {
+        pPlayer = static_cast<dAcPy_c *>(pTarget);
+    }
+    mVec3_c targetPos = pTarget->mPosition;
+    s16 targetRot = pTarget->mRotation.y;
+
+    if (pPlayer && !pPlayer->checkFlags0x340(0x100)) {
+        changeState(StateID_Fighting);
+        return;
+    }
+
+    if (field_0xD56 > 0) {
+        field_0xD56--;
+    }
+    if (field_0xD90 > 0) {
+        field_0xD90--;
+    }
+    targetRot = cLib::targetAngleY(targetPos, mPosition) - targetRot;
+    if (field_0xD56 <= 0) {
+        field_0xD56 = cM::rndInt(10) + 10;
+        if (u16(targetRot + 0x3FFF) <= 0x7FFE) {
+            field_0xBC8.set(cM::rndFX(200), cM::rndF(200), -200 - cM::rndF(150));
+            adjustTargetRoof();
+            adjustTargetGnd();
+        } else {
+            field_0xBC8.set(cM::rndFX(200), cM::rndF(200), cM::rndF(150) + 200.f);
+            adjustTargetRoof();
+            adjustTargetGnd();
+        }
+        fn_155_3BE0(field_0xBC8);
+
+        if (mAcch.ChkGndHit() || mAcch.ChkWallHit(0) || mAcch.ChkRoofHit()) {
+            if (field_0xCE0 >= 50.f) {
+                field_0xCE0 = 50.f;
+            }
+            if (++field_0xDB8 < 2) {
+                field_0xDB8 = 0;
+                field_0xD56 = cM::rndInt(10) + 10;
+                mVec3_c v(cM::rndFX(150), cM::rndFX(150), 0);
+                fn_155_3BD0(v);
+                adjustTargetRoof();
+                adjustTargetGnd();
+            }
+        }
+    }
+
+    setPitchYawToPoint(targetPos + field_0xBEC);
+    if (field_0xD9A > 0) {
+        field_0xCE0 = 0;
+    } else {
+        sLib::addCalcScaledDiff(&field_0xCE0, 30, 0.1, 1);
+    }
+
+    cLib::addCalcPos2(&mPosition, mTargetPos, 0.1, field_0xCE0);
+    sLib::addCalcAngle(mAngle.y.ref(), mYaw_0xC36, 10, 0x71C);
+    sLib::addCalcAngle(mRotation.y.ref(), mYaw_0xC36, 10, 0x71C);
+    sLib::addCalcAngle(mRotation.x.ref(), mPitch_0xC34, 12, 0xB6);
+    clampRotationX();
+    f32 r = field_0xC44 + 1600.f;
+    if (checkBeyondRadius(getStartingPos(), r * r)) {
+        setIdleState();
+    } else {
+        if (field_0xD90 <= 0) {
+            if (!fn_155_2B80(true, 1)) {
+                setIdleState();
+                return;
+            }
+            field_0xD90 = 3;
+        }
+        if (targetPos.squareDistanceToXZ(mPosition) < 90000.f) {
+            if (mTargetPos.squareDistanceToXZ(mPosition) < 90000.f) {
+                if (u16(targetRot + 0x3FFF) <= 0x7FFE) {
+                    changeState(StateID_Fighting);
+                } else if (pPlayer && (pPlayer->checkCurrentAction(0x70) || pPlayer->checkActionFlags(0x20000))) {
+                    changeState(StateID_Fighting);
+                }
+            } else if (--field_0xD58 <= 0) {
+                field_0xD58 = cM::rndInt(20) + 20;
+                changeState(StateID_ChaseAttack);
+            }
+        }
+    }
+}
 void dAcEKs_c::finalizeState_Chase() {}
 
 void dAcEKs_c::initializeState_ChaseAttack() {}
