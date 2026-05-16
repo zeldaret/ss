@@ -20,6 +20,7 @@
 #include "d/d_pouch.h"
 #include "d/d_sc_game.h"
 #include "d/d_stage_mgr.h"
+#include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "d/t/d_t_ks.h"
@@ -28,6 +29,7 @@
 #include "m/m3d/m_fanm.h"
 #include "m/m_angle.h"
 #include "m/m_color.h"
+#include "m/m_mtx.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resanmtexpat.h"
@@ -1748,9 +1750,244 @@ int dAcEKs_c::draw() {
     return SUCCEEDED;
 }
 
-void dAcEKs_c::initializeState_Wait() {}
-void dAcEKs_c::executeState_Wait() {}
-void dAcEKs_c::finalizeState_Wait() {}
+void dAcEKs_c::initializeState_Wait() {
+    // Float Ordering
+    static const f32 __f[1] = {0.f};
+
+    mAcchCir.SetWall(0, 5);
+    setAnim("wait", 4, 1, 0);
+    setBlink(EKS_TEXPAT_BLINK1);
+    mAnmTexPat.setFrame(3, 0);
+    mStts.SetRank(11);
+    mSpeed = 0.f;
+    field_0xC10.y = -35.f;
+    field_0xD4A = 30;
+    field_0xDA5 = 0;
+    field_0xDAA = 0;
+    field_0xDC4 = cM::rndInt(35);
+    field_0xD90 = 3;
+    field_0xDCE = 0;
+    field_0xDB4 = 0;
+    if (field_0xDB0 != 0) {
+        field_0xDB1 = 1;
+        field_0xD8E = field_0xDCA * 30;
+    } else if ((s32)getFromParams(30, 3) == 1) {
+        field_0xDB1 = 1;
+        field_0xD8E = (cM::rndInt(20) + 10) * 30;
+    }
+
+    mRotation.y = field_0xD8A;
+    mRotation.x = mAng(0);
+    mAcch.ClrRoofHit();
+    mAcch.SetField_0xD4(0);
+    mAcch.SetGroundUpY(0);
+    setBattleBgmRelated(0);
+
+    if (field_0xDA6 != 0) {
+        fn_155_3E30();
+    } else {
+        setActorProperty(AC_PROP_0x1);
+    }
+
+    if (mType == EKS_FIRE) {
+        mSph.ClrCo_0x8000();
+        field_0xD20 = 0.f;
+        mLightInfluence.SetScale(0.f);
+    } else if (mType == EKS_ELECTRIC) {
+        fn_155_3EC0();
+        field_0xD20 = 0.f;
+        mLightInfluence.SetScale(0.f);
+    }
+    mPosition.y = getLineCrossYRange(mPosition, 200);
+    setStartingPosition(mPosition);
+}
+
+// NONMATCHING
+void dAcEKs_c::executeState_Wait() {
+    mMdl.play();
+    u16 flag = getFromParams(14, 0xFF);
+    if (flag < 0xFF) {
+        if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag)) {
+            if (field_0xDCE == 0) {
+                bool b = false;
+                mStartingState = EKS_STARTSTATE_Move;
+                if (field_0xDA6 == 0) {
+                    mMtx_c m;
+                    m.YrotS(mRotation.y + 0x8000);
+                    mVec3_c out, in(0, 0, 500);
+                    m.multVecSR(in, out);
+
+                    mVec3_c start(getStartingPos() + out);
+                    mVec3_c out2 = out * 2.f;
+                    mVec3_c end(getStartingPos() + out2);
+                    if (dBgS_ObjLinChk::LineCross(&start, &end, nullptr) && dBgS_ObjLinChk::ChkWall()) {
+                        b = true;
+                    }
+                    if (!b) {
+                        out *= 2.f;
+                    }
+                    setStartingPosition(getStartingPos() + out);
+                }
+                field_0xCF8 = 20.f;
+                field_0xDC8 = 150;
+                field_0xD04 = 0.9f;
+                field_0xD00 = 1.7f;
+                field_0xDCE = 1;
+
+            } else if (field_0xDCE == 1) {
+                changeState(StateID_WakeUp);
+                return;
+            }
+        } else if (field_0xDB4 != 0 && --field_0xD4A < 0xF) {
+            mAnmTexPat.play();
+            if (field_0xD4A < 0) {
+                mStartingState = EKS_STARTSTATE_Move;
+                field_0xDAA = 1;
+                dTgKiesuTag_c *pTg = mTgRef.get();
+                if (pTg) {
+                    pTg->setField_0x47A();
+                }
+                changeState(StateID_WakeUp);
+                return;
+            }
+        }
+
+        if (fn_155_2EA0()) {
+            playBlinkAnm();
+            if (field_0xD62 > 0) {
+                field_0xD62--;
+            } else {
+                field_0xD62 = cM::rndInt(5) + 10;
+                f32 f = 800.f;
+                if (field_0xD1C < f * f && !dBgS_ObjLinChk::LineCross(&mPosition, &field_0xC28, nullptr)) {
+                    field_0xDB4 = 1;
+                    field_0xD4A = cM::rndInt(15);
+                }
+            }
+        } else if (field_0xDA5 == 0) {
+            mAnmTexPat.setFrame(3, 0);
+        }
+        return;
+    }
+
+    if (field_0xDA6 != 0) {
+        if (field_0xDA5 == 0) {
+            if (field_0xDAD != 0) {
+                if (field_0xDC4 != 0) {
+                    field_0xDC4--;
+                } else {
+                    field_0xDA5 = 1;
+                    field_0xD4C = cLib::targetAngleY(mPosition, targetPlayerOrScrapper(0)->mPosition) - 0x8000;
+                }
+            }
+        } else {
+            sLib::addCalcAngle(mRotation.y.ref(), field_0xD4C, 5, 0xAAB);
+
+            if (--field_0xD4A < 15) {
+                mAnmTexPat.play();
+                if (field_0xD4A < 0) {
+                    field_0xD4C = field_0xD4C + 0x8000;
+                    changeState(StateID_WakeUp);
+                    return;
+                }
+            }
+        }
+        if (field_0xDB4 != 0 || field_0xDAA != 0) {
+            if (--field_0xD4A < 15) {
+                mAnmTexPat.play();
+                if (field_0xD4A < 0) {
+                    field_0xDAA = 1;
+                    if (mTgRef.isLinked()) {
+                        mTgRef.get()->setField_0x47A();
+                    }
+                    changeState(StateID_WakeUp);
+                    return;
+                }
+            }
+        }
+    } else {
+        fn_155_3E30();
+        if (field_0xDA5 == 0) {
+            if (field_0xD90 > 0) {
+                field_0xD90--;
+            } else {
+                if (fn_155_2D60(true, 0)) {
+                    field_0xDA5 = 1;
+                    field_0xD4C = cLib::targetAngleY(mPosition, targetPlayerOrScrapper(0)->mPosition) - 0x8000;
+                } else {
+                    field_0xD90 = 3;
+                }
+            }
+        } else {
+            sLib::addCalcAngle(mRotation.y.ref(), field_0xD4C, 5, 0xAAB);
+
+            if (--field_0xD4A < 15) {
+                mAnmTexPat.play();
+                if (field_0xD4A < 0) {
+                    field_0xD4C = field_0xD4C + 0x8000;
+                    changeState(StateID_WakeUp);
+                    return;
+                }
+            }
+        }
+        if (field_0xDAA != 0 || field_0xDB4 != 0) {
+            if (--field_0xD4A < 15) {
+                mAnmTexPat.play();
+                if (field_0xD4A < 0) {
+                    changeState(StateID_WakeUp);
+                    return;
+                }
+            }
+        }
+        if (field_0xDB1 != 0) {
+            if (field_0xD8E != 0) {
+                field_0xD8E--;
+            } else {
+                field_0xDAA = 1;
+                changeState(StateID_WakeUp);
+                return;
+            }
+        }
+    }
+
+    if (dLightEnv_c::GetPInstance()->check_BPM8(&mPosition, nullptr) || field_0xDAE != 0) {
+        field_0xDAA = 1;
+        field_0xD4A = cM::rndInt(10);
+    }
+    if (fn_155_2EA0()) {
+        playBlinkAnm();
+        if (field_0xD62 > 0) {
+            field_0xD62--;
+        } else {
+            field_0xD62 = cM::rndInt(5) + 10;
+            f32 f = 800.f;
+            if (field_0xD1C < f * f && !dBgS_ObjLinChk::LineCross(&mPosition, &field_0xC28, nullptr)) {
+                field_0xDB4 = 1;
+                field_0xD4A = cM::rndInt(15);
+            }
+        }
+    } else {
+        if (field_0xDA5 == 0) {
+            mAnmTexPat.setFrame(3, 0);
+        }
+    }
+}
+void dAcEKs_c::finalizeState_Wait() {
+    mStts.SetRank(2);
+    field_0xC10.y = 0.f;
+    setBattleBgmRelated(2);
+
+    if (mType == EKS_FIRE) {
+        mSph.SetCo_0x8000();
+        field_0xD20 = 400.f;
+        field_0xD24 = 1.f;
+        field_0xD28 = 40.f;
+    } else if (mType == EKS_ELECTRIC) {
+        field_0xD20 = 400.f;
+        field_0xD24 = 1.f;
+        field_0xD28 = 40.f;
+    }
+}
 
 void dAcEKs_c::initializeState_WakeUp() {}
 void dAcEKs_c::executeState_WakeUp() {}
@@ -1802,4 +2039,6 @@ void dAcEKs_c::finalizeState_WindBlow() {}
 
 void dAcEKs_c::initializeState_PathMove() {}
 void dAcEKs_c::executeState_PathMove() {}
-void dAcEKs_c::finalizeState_PathMove() {}
+void dAcEKs_c::finalizeState_PathMove() {
+    field_0xD30 = 0;
+}
