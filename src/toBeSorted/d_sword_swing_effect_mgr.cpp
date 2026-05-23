@@ -3,16 +3,7 @@
 #include "c/c_math.h"
 #include "egg/math/eggMatrix.h"
 #include "m/m_vec.h"
-
-// TODO: can't use EGG::Vector3f::cross because the Vector3f -> mVec3_c conversion
-// forces additional stack stores. An open-coded cross function works too in this
-// file but maybe pattern comes up in more files and then we can move it to d_vec?
-inline void cross(mVec3_c &result, const mVec3_c &left, const mVec3_c &right) {
-    result.set(
-        (left.y * right.z) - (left.z * right.y), (left.z * right.x) - (left.x * right.z),
-        (left.x * right.y) - (left.y * right.x)
-    );
-}
+#include "d/d_vec.h"
 
 static bool fn_8006A8D0(const mVec2_c &v1, const mVec2_c &v2, const mVec2_c &v3, const mVec2_c &v4, mVec2_c &result) {
     mVec2_c t1 = v2 - v1;
@@ -56,7 +47,7 @@ void dSwordSwingEffectProcMgr_c::createSwingEntries(const mVec3_c &v1, const mVe
     mVec3_c diff = v1 - v2;
     
     mVec3_c cross_;
-    cross(cross_, lastDiff, diff);
+    vecCross(cross_, lastDiff, diff);
 
     f32 diffMag = diff.mag();
 
@@ -150,7 +141,7 @@ void dSwordSwingEffectProcMgr_c::createSwingEntries(const mVec3_c &v1, const mVe
         diff2.normalize();
         diff1.normalize();
 
-        cross(cross_, diff1, diff2);
+        vecCross(cross_, diff1, diff2);
         cross_.normalize();
 
         // Same code as in dowsing_target...

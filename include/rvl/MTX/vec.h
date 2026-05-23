@@ -29,6 +29,10 @@ f32 PSVECDistance(const Vec *, const Vec *);
 #define VECDistance       PSVECDistance
 
 void C_VECHalfAngle(const Vec *, const Vec *, Vec *);
+void C_VECReflect(const Vec *, const Vec *, Vec *);
+
+#define VECHalfAngle      C_VECHalfAngle
+#define VECReflect        C_VECReflect
 
 #ifdef __cplusplus
 }

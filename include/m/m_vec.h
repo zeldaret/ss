@@ -265,6 +265,9 @@ public:
     s16 atan2sX_Z() const {
         return cM::atan2s(x, z);
     }
+    s16 atan2snX_nZ() const {
+        return cM::atan2s(-x, -z);
+    }
     s16 atan2snY_XZ() const {
         return cM::atan2s(-y, absXZ());
     }
