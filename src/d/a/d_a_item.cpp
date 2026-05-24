@@ -10,7 +10,6 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
-#include "d/d_angle.h"
 #include "d/d_camera.h"
 #include "d/d_linkage.h"
 #include "d/d_player.h"
@@ -2038,7 +2037,7 @@ void dAcItem_c::executeState_GetDemo() {
             // TODO close but an extsh is missing
             // Same pattern as in rotateTowardsCamera
             mAng3_c rot;
-            setRotXYVec(rot, diff);
+            rot.set(-diff.atan2sY_XZ(), diff.atan2sX_Z(), mAng(0));
             u32 alpha = 0xFF;
             if (dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL) {
                 alpha = 0x80;
@@ -2584,7 +2583,7 @@ void dAcItem_c::rotateTowardsCamera() {
     mVec3_c diff = cam->getPosition() - mPosition;
     // TODO close but an extsh is missing
     // Same pattern as in executeState_GetDemo
-    setRotXYVec(mRotation, diff);
+    mRotation.set(-diff.atan2sY_XZ(), diff.atan2sX_Z(), mAng(0));
 }
 
 void dAcItem_c::rotateFixedBirdStatuette() {

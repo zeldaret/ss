@@ -1514,6 +1514,8 @@ d/a/obj/d_a_obj_bomb.cpp:
 	.data       start:0x80534490 end:0x805347A8
 	.sdata      start:0x805739B0 end:0x805739C8
 	.sbss       start:0x805758E0 end:0x805758F0
+	.sdata2     start:0x8057BF80 end:0x8057C058
+	.bss        start:0x805B48A8 end:0x805B49E8
 
 d/a/obj/d_a_obj_arrow.cpp:
 	.text       start:0x8025D5E0 end:0x80260D38 align:16
@@ -1522,6 +1524,8 @@ d/a/obj/d_a_obj_arrow.cpp:
 	.data       start:0x805347A8 end:0x80534AD0
 	.sdata      start:0x805739C8 end:0x805739D8
 	.sbss       start:0x805758F0 end:0x80575900
+	.sdata2     start:0x8057C058 end:0x8057C0F8
+	.bss        start:0x805B49E8 end:0x805B4BE0
 
 d/a/obj/d_a_obj_boomerang.cpp:
 	.text       start:0x80260D40 end:0x80265618 align:16
@@ -1531,7 +1535,7 @@ d/a/obj/d_a_obj_boomerang.cpp:
 	.sdata      start:0x805739D8 end:0x80573A30
 	.sbss       start:0x80575900 end:0x80575908
 	.sdata2     start:0x8057C0F8 end:0x8057C180
-	.bss        start:0x805B4BF0 end:0x805B4DD8
+	.bss        start:0x805B4BE0 end:0x805B4DD8
 
 d/a/obj/d_a_obj_fairy.cpp:
 	.text       start:0x80265620 end:0x80268598 align:16

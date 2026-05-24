@@ -914,6 +914,19 @@ public:
     static mColor sGuideColor2;
     static mColor sGuideColor3;
 
+    // Really not sure about these - there exist virtual functions for these use cases...
+    const mAng& getField_0x1268() const {
+        return field_0x1268;
+    }
+
+    const mAng& getField_0x126A() const {
+        return field_0x126A;
+    }
+
+    void getWeaponLMtx(mMtx_c &mtx) const {
+        mMainMdl.getNodeWorldMtx(PLAYER_MAIN_NODE_WEAPON_L, mtx);
+    }
+
 protected:
     /* 0x370 */ mHeapAllocator_c mModelAllocator;
     /* 0x38C */ mHeapAllocator_c mSwordAllocator;

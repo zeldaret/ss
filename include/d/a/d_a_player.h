@@ -62,7 +62,18 @@ public:
     // Item select/equip/use functions [0x801E3160 - 0x801E7AD0] ?
     static s32 calcItemWheelSelection(bool reset, s32 numOptions);
 
-    static void addDigInteractionTarget(dAcBase_c*, f32);
+    static void addDigInteractionTarget(dAcBase_c *, f32);
+    static void fn_801E2FC0(const mVec3_c &v1, cBgS_PolyInfo &, f32);
+
+    // Slingshot, Bow functions [0x80208CA0 - 0x8020AC30]
+    mAng fn_80208CA0();
+    f32 fn_80208CE0(); // 50.0f
+    f32 fn_80208CF0(); // 3.0f
+    void fn_80209700(f32 &, f32 &, bool);
+    const mVec3_c *fn_802097E0(mAng &, mAng &);
+    f32 fn_802097B0(); // 50.0f
+    f32 fn_802097C0(); // 1000.0f
+    f32 fn_802097D0(); // 4000.0f
 
 public:
     f32 getField_0x4564() const {

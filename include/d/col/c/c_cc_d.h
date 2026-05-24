@@ -552,6 +552,10 @@ public:
         return mSrc.mDamage;
     }
 
+    void SetInfo_0x0(u8 val) {
+        mSrc.mInfo.field_0x0 = val;
+    }
+
     const cCcD_SrcGObjAt &GetSrc() const {
         return mSrc;
     }
@@ -604,6 +608,9 @@ public:
 
     void Set_0x4C(u32 f) {
         field_0x4C = f;
+    }
+    bool Chk_0x4C(u32 f) const {
+        return field_0x4C & f;
     }
 
     u32 MskType(u32 mask) const {
@@ -930,6 +937,10 @@ public:
         mTg.Set_0x4C(f);
     }
 
+    bool ChkTg_0x4C(u32 f) const {
+        return mTg.Chk_0x4C(f);
+    }
+
     void SetAtCallback(cCcD_HitCallback cb) {
         mAt.SetCallback(cb);
     }
@@ -981,12 +992,21 @@ public:
     void OnAt_0x40() {
         mAt.OnSPrm(0x40);
     }
+    void OnAt_0x1000() {
+        mAt.OnSPrm(0x1000);
+    }
+    void OnAt_0x2000() {
+        mAt.OnSPrm(0x2000);
+    }
     // Related to Beetle (no hook)
     void OnAt_0x4000() {
         mAt.OnSPrm(0x4000);
     }
 
 
+    void SetAtInfo_0x0(u8 amount) {
+        mAt.SetInfo_0x0(amount);
+    }
 
     void SetAtDamage(u8 amount) {
         mAt.SetAtDamage(amount);

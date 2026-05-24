@@ -55,6 +55,10 @@ public:
         return mState;
     }
 
+    f32 getField_0x1C() const {
+        return field_0x1C;
+    }
+
     bool checkState(State_e state) const {
         return mState == state;
     }
@@ -66,6 +70,21 @@ public:
 
     bool checkConnection(ConnectionType_e type) const {
         return (checkState(STATE_ACTIVE) && mType == type);
+    }
+
+    bool hasJntCol() const {
+        return field_0xA0 != nullptr;
+    }
+
+    dJntCol_c *getJntCol() {
+        return field_0xA0;
+    }
+
+    // TODO - can we get rid of this inline?
+    int getArrowOffsetPosAndAngle(
+        mVec3_c const *param_1, mAng3_c const *param_2, mVec3_c *param_3, mVec3_c *param_4, bool param_5
+    ) const {
+        return field_0xA0->getArrowOffsetPosAndAngle(param_1, param_2, param_3, param_4, param_5);
     }
 
 public:
