@@ -3047,7 +3047,7 @@ void dAcEKs_c::executeState_PathMove() {
                 }
                 field_0xDCA = mRail.getPath().getPointParam(idx, 0);
                 if (checkPathPntParam(field_0xDCA)) {
-                    setStartingPosition(*(const mVec3_c *)mRail.getPath().getPoint(idx));
+                    setStartingPosition(*mRail.getPoint(idx));
                     mStartingPos.y = getLineCrossYRange(getStartingPosition(), 300);
                     changeState(StateID_ReturnToWait);
                     return;
@@ -3058,10 +3058,10 @@ void dAcEKs_c::executeState_PathMove() {
         }
         if (field_0xDC9 == 1) {
             field_0xDC9 = 2;
-            mVec3_c pnt;
             const s32 pntIdx = mRail.getClosestXZPoint(mPosition);
-            const Vec *pPnt = mRail.getPoint(pntIdx);
-            pnt.copyFrom(pPnt);
+
+            mVec3_c pnt = *mRail.getPoint(pntIdx);
+
             if (mRail.getPosition().squareDistanceToXZ(mPosition) > pnt.squareDistanceToXZ(mPosition)) {
                 mRail.setSegment(pntIdx, 0.f);
                 setStartingPosition(mRail.getPosition());

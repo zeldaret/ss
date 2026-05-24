@@ -151,8 +151,8 @@ public:
         mPath.getDirection(mSegmentIndex, mSegmentTime, result);
     }
 
-    const Vec *getPoint(s32 idx) const {
-        return mPath.getPoint(idx);
+    const mVec3_c *getPoint(s32 idx) const {
+        return reinterpret_cast<const mVec3_c *>(mPath.getPoint(idx));
     }
 
     bool checkFlag(u32 flags) const {

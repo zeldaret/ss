@@ -610,8 +610,7 @@ s32 ActorOnRail_Ext::getClosestXZPoint(const mVec3_c &pos) const {
     s32 best = 0;
     mVec3_c c;
     for (s32 i = 0; i < mPath.getNumPoints(); i++) {
-        const Vec *point = mPath.getPoint(i);
-        c = *reinterpret_cast<const mVec3_c *>(point) - pos;
+        c = *getPoint(i) - pos;
         f32 dist = c.squareMagXZ();
         if (max > dist) {
             best = i;
