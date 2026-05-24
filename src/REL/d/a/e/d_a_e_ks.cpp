@@ -743,7 +743,6 @@ void dAcEKs_c::fn_155_1C80() {
 }
 
 void dAcEKs_c::fn_155_2270() {
-    // NONMATCHING
     if (field_0xD6A > 0) {
         field_0xD6A--;
     }
@@ -751,8 +750,8 @@ void dAcEKs_c::fn_155_2270() {
     dAcObjBase_c *pTarget = targetPlayerOrScrapper(0.f);
     field_0xBF8.set(pTarget->mPosition + field_0xBEC);
 
-    mAng y = cLib::targetAngleY(mPosition, mTargetPos);
-    y = y - mRotation.y;
+    mAng yAngleDiff = cLib::targetAngleY(mPosition, mTargetPos);
+    yAngleDiff = yAngleDiff - mRotation.y;
     if (field_0xDA6 != 0) {
         if (transitionToNextState()) {
             if (mType == EKS_ELECTRIC) {
@@ -814,8 +813,9 @@ void dAcEKs_c::fn_155_2270() {
             sLib::addCalcAngle(mAngle.y.ref(), mYaw_0xC36, 12, 0x1555);
             sLib::addCalcAngle(mRotation.y.ref(), mYaw_0xC36, 12, 0x1555);
             sLib::addCalcAngle(mRotation.x.ref(), 0, 12, 0x1555);
-            // ??
-            if (u16(y + 0x3FFF) <= 0x7FFE) {
+
+            s16 y;
+            if (u16(yAngleDiff + 0x3FFF) <= 0x7FFE) {
                 y = mRotation.x + 0xAAA;
             } else {
                 y = mRotation.x - 0xAAA;
@@ -897,13 +897,13 @@ void dAcEKs_c::fn_155_2270() {
             sLib::addCalcAngle(mRotation.y.ref(), mYaw_0xC36, 12, 0x1555);
             sLib::addCalcAngle(mRotation.x.ref(), 0, 12, 0x1555);
 
-            // ??
-            if (u16(y + 0x3FFF) <= 0x7FFE) {
-                y = mRotation.x + 0xAAA;
+            s16 x;
+            if (u16(yAngleDiff + 0x3FFF) <= 0x7FFE) {
+                x = mRotation.x + 0xAAA;
             } else {
-                y = mRotation.x - 0xAAA;
+                x = mRotation.x - 0xAAA;
             }
-            sLib::addCalcAngle(mRotation.x.ref(), y, 12, 0x1555);
+            sLib::addCalcAngle(mRotation.x.ref(), x, 12, 0x1555);
         }
     }
 }
@@ -1383,8 +1383,8 @@ int dAcEKs_c::actorCreate() {
             setActorProperty(AC_PROP_0x400);
         }
     }
-    field_0xC3C = getFromParams(6, 0xF) * 100.f;
-    field_0xC40 = getFromParams(10, 0xF) * 100.f;
+    field_0xC3C = getFromParams(6, 0xF, 100);
+    field_0xC40 = getFromParams(10, 0xF, 100);
     field_0xC44 = ((mRotation.z >> 0) & 0xF) * 100.f;
     field_0xC48 = ((mRotation.z >> 4) & 0xF) * 100.f;
 
@@ -2121,7 +2121,7 @@ void dAcEKs_c::executeState_WaitReady() {
     mMdl.play();
     playBlinkAnm();
     if (field_0xD50 > 0) {
-        field_0xD50++;
+        field_0xD50--;
     }
     sLib::addCalcAngle(mRotation.x.ref(), 0, 12, 0xAAB);
     sLib::addCalcAngle(mRotation.y.ref(), field_0xD8A, 12, 0xAAB);
