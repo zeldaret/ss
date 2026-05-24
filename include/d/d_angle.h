@@ -5,9 +5,7 @@
 #include "m/m_vec.h"
 
 inline void setRotXY(mAng3_c &rot, s32 x, s32 y) {
-    rot.x.mVal = x;
-    rot.y.mVal = y;
-    rot.z.mVal = 0;
+    rot.set(x, y, mAng(0));
 }
 
 inline void setRotXYVec(mAng3_c &rot, const mVec3_c &direction) {

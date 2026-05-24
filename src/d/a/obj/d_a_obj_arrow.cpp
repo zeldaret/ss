@@ -243,8 +243,7 @@ void dAcArrow_c::fn_8025E160() {
     if (isSlingshotProjectile()) {
         field_0x6A0 = 0.0f;
         if (mArrowType != 17) {
-            // TODO - this inline is not certain anyway...
-            setRotXY(mAngle, -link->getField_0x1268(), link->getField_0x126A() + link->getRotation().y);
+            setRotXY(mAngle, -link->getField_0x1268(), link->getRotation().y + link->getField_0x126A());
         } else {
             mAngle.y = mRotation.y;
             mAngle.x = -mRotation.x;
@@ -291,7 +290,7 @@ void dAcArrow_c::fn_8025E160() {
             tmp2.rotY(mAngle.y);
 
             mMtx_c mtx;
-            mtx.setAxisRotation(tmp, i * mAng::s2r_c(0x2000) + mAng::d2r_c(cM::rndF(2.5f)));
+            mtx.setAxisRotation(tmp, i * mAng::s2r_c(0x2000) + mAng::d2r_c(cM::rndFX(2.5f)));
             MTXMultVecSR(mtx, tmp2, tmp2);
             ang.x = tmp2.atan2sY_XZ();
             ang.y = tmp2.atan2sX_Z();
@@ -331,11 +330,9 @@ s16 dAcArrow_c::fn_8025E640() {
 }
 
 void dAcArrow_c::fn_8025E720(dAcObjBase_c *obj, const mVec3_c &v) {
-    // NONMATCHING
     mRef1.link(obj);
     mMtx_c mtx;
-    // TODO argument order
-    mtx.inverseTo(obj->mWorldMtx);
+    obj->mWorldMtx.inverseTo(mtx);
     MTXMultVec(mtx, v, field_0x6B0);
     mVec3_c v1 = mVec3_c::createProjectionXZ(mRotation, 1.0f);
     v1.y *= -1.0f;
@@ -344,7 +341,7 @@ void dAcArrow_c::fn_8025E720(dAcObjBase_c *obj, const mVec3_c &v) {
 
 void dAcArrow_c::updateMtx() {
     mWorldMtx.transS(mPosition);
-    mWorldMtx.XYZrotM(mRotation);
+    mWorldMtx.ZXYrotM(mRotation);
     if (mStateMgr.isState(StateID_BgStop)) {
         mMtx_c mtx;
         mtx.transS(0.0f, 0.0f, -90.0f);
@@ -850,12 +847,9 @@ void dAcArrow_c::onSlingshotHit(const mVec3_c &v, bool b) {
 }
 
 void dAcArrow_c::fn_802600D0(bool b) {
-    // NONMATCHING
     if (b) {
         mWorldMtx.getTranslation(mEffectTranslation);
-        mEffectRotation.x.mVal = 0;
-        mEffectRotation.y.mVal = mRotation.y;
-        mEffectRotation.z.mVal = mEffectRotationZ;
+        mEffectRotation.set(mAng(0), mRotation.y, mEffectRotationZ.mVal);
         if (mEffectId == PARTICLE_RESOURCE_ID_MAPPING_2_) {
             mEffectRotationZ += 0x888;
         }
