@@ -589,6 +589,22 @@ s32 ActorOnRail_Ext::getNextPointIndex() const {
     return getNextPointIndex(mSegmentIndex);
 }
 
+s32 ActorOnRail_Ext::getNextPointIndex2() const {
+    if (mSpeed >= 0.0f) {
+        return mSegmentIndex;
+    }
+
+    if (mSegmentIndex + 1 < mPath.getNumPoints()) {
+        return mSegmentIndex + 1;
+    }
+
+    if (mPath.isWrapping()) {
+        return 0;
+    }
+
+    return mPath.getLastPointIdx();
+}
+
 s32 ActorOnRail_Ext::getClosestXZPoint(const mVec3_c &pos) const {
     f32 max = EGG::Math<f32>::maxNumber();
     s32 best = 0;

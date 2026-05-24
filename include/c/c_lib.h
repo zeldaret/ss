@@ -12,6 +12,7 @@ s16 offsetPos(mVec3_c &target, const mVec3_c &v1, s16 angle, const mVec3_c &v2);
 void addCalcPos2(mVec3_c *src, const mVec3_c &target, f32 scale, f32 maxStep);
 f32 addCalcPosXZ(mVec3_c *src, const mVec3_c &target, f32 scale, f32 maxStep, f32 minStep);
 f32 addCalcPos(mVec3_c *src, const mVec3_c &target, f32 scale, f32 maxStep, f32 minStep);
+bool chasePos(mVec3_c &, mVec3_c &, f32);
 bool chasePosXZ(mVec3_c &, mVec3_c &, f32);
 
 // made up name

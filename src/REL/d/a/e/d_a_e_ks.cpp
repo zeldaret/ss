@@ -7,6 +7,7 @@
 #include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/col/bg/d_bg_pc.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
@@ -36,9 +37,11 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resnode.h"
+#include "nw4r/math/math_arithmetic.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/d_emitter.h"
+#include "toBeSorted/d_path.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/time_area_mgr.h"
 
@@ -827,7 +830,6 @@ void dAcEKs_c::fn_155_2270() {
             field_0xDC5--;
         } else {
             if (dAcPy_c::GetLink()->checkCurrentAction(/* SHIELD_BASH*/ 73)) {
-                ;
                 mWorldMtx.multVecSR(mVec3_c(0, 0, -250), field_0xC1C);
                 mTargetPos += field_0xC1C;
                 field_0xDC5 = 20;
@@ -2327,36 +2329,814 @@ void dAcEKs_c::executeState_Chase() {
 }
 void dAcEKs_c::finalizeState_Chase() {}
 
-void dAcEKs_c::initializeState_ChaseAttack() {}
-void dAcEKs_c::executeState_ChaseAttack() {}
-void dAcEKs_c::finalizeState_ChaseAttack() {}
+void dAcEKs_c::initializeState_ChaseAttack() {
+    setBlink(EKS_TEXPAT_BLINK2);
+    field_0xDA5 = 1;
+    fn_155_3BE0(mVec3_c(0, 100, 200));
+    setPitchYawToPoint(mTargetPos);
+    field_0xD5A = 0;
+    field_0xDAB = 0;
+    startSound(SE_EKs_V_ATTACK);
+    field_0xD9C = cM::rndF(65536);
+    if (mType == EKS_ELECTRIC) {
+        fn_155_3E90();
+        field_0xDA9 = 0;
+        field_0xD60 = 0;
+    }
+}
+void dAcEKs_c::executeState_ChaseAttack() {
+    mMdl.play();
+    if (!mAnmTexPat.isStop(0)) {
+        mAnmTexPat.play();
+    }
+    fn_155_3BE0(mVec3_c(0, 100, 200));
+    adjustTargetGnd();
+    setPitchYawToPoint(mTargetPos);
+    if (field_0xD9A > 0) {
+        field_0xCE0 = 0.f;
+    } else {
+        sLib::addCalcScaledDiff(&field_0xCE0, 30, 0.1, 1);
+    }
+    cLib::addCalcPos2(&mPosition, mTargetPos, 0.1, field_0xCE0);
+    sLib::addCalcAngle(mAngle.y.ref(), mYaw_0xC36, 10, 0x71C);
+    sLib::addCalcAngle(mRotation.y.ref(), mYaw_0xC36, 10, 0x71C);
+    sLib::addCalcAngle(mRotation.x.ref(), mPitch_0xC34, 12, 0xB6);
+    clampRotationX();
+    field_0xD5A++;
+    if (field_0xDAB != 0) {
+        changeState(StateID_Chase);
+    } else if (field_0xD5A > 8) {
+        mSph.OnAtSet();
+        field_0xDAB = 1;
+    }
+}
+void dAcEKs_c::finalizeState_ChaseAttack() {
+    mSph.ClrAtSet();
+    field_0xDAB = 1;
+    if (mType == EKS_ELECTRIC) {
+        fn_155_3EC0();
+        field_0xDA9 = 1;
+    }
+}
 
-void dAcEKs_c::initializeState_Fighting() {}
-void dAcEKs_c::executeState_Fighting() {}
+void dAcEKs_c::initializeState_Fighting() {
+    setAnim("hovering", 1, cM::rndFX(0.2) + 1.f, 0);
+    if (mCurrentAnmTexPat == EKS_TEXPAT_BLINK2) {
+        setBlink(EKS_TEXPAT_BLINK3);
+        field_0xD7A = 0;
+    } else {
+        setBlink(EKS_TEXPAT_BLINK1);
+        field_0xD7A = 17;
+    }
+    mBlinkTimer = cM::rndInt(75) + 15;
+    mSpeed = 0.f;
+    field_0xC70 = 0.f;
+    field_0xD6A = cM::rndInt(30) + 15;
+    if (field_0xDA6 == 0) {
+        field_0xBC8.set(cM::rndFX(250), cM::rndF(150) + 100.f, cM::rndF(120) + 150.f);
+    }
+    adjustTargetGnd();
+    adjustTargetRoof();
+    fn_155_3BE0(field_0xBC8);
+
+    setPitchYawToPoint(targetPlayerOrScrapper(0)->mPosition + field_0xBEC);
+    fn_155_1430();
+    field_0xDA5 = 1;
+    field_0xD90 = 3;
+    field_0xDC5 = 0;
+    mSqueakSoundTimer = cM::rndInt(20) + 20;
+    unsetActorProperty(AC_PROP_0x1);
+    if (dBgS_WtrChk::CheckPos(&mPosition, true, 100, -2000)) {
+        field_0xD10 = dBgS_WtrChk::GetWaterHeight();
+        field_0xDB3 = 1;
+    }
+}
+void dAcEKs_c::executeState_Fighting() {
+    fn_155_3720(field_0xC70, cM::rndFX(0.1) + 1.f);
+    mMdl.play();
+    if (field_0xD7A < (s16)17) {
+        field_0xD7A++;
+    } else if (field_0xDA6 != 0) {
+        if (mCurrentAnmTexPat == EKS_TEXPAT_BLINK2) {
+            mAnmTexPat.play();
+        } else {
+            playBlinkAnm();
+        }
+    } else {
+        playBlinkAnm();
+    }
+    soundSqueak();
+    fn_155_2270();
+}
 void dAcEKs_c::finalizeState_Fighting() {}
 
-void dAcEKs_c::initializeState_AttackReady() {}
-void dAcEKs_c::executeState_AttackReady() {}
-void dAcEKs_c::finalizeState_AttackReady() {}
+void dAcEKs_c::initializeState_AttackReady() {
+    setBlink(EKS_TEXPAT_BLINK2);
+    mVec3_c v(0, 150, 200);
+    v += field_0xBC8;
+    fn_155_3BE0(v);
 
-void dAcEKs_c::initializeState_Attack() {}
-void dAcEKs_c::executeState_Attack() {}
-void dAcEKs_c::finalizeState_Attack() {}
+    dAcObjBase_c *pTarget = AttentionManager::GetInstance()->getTargetedActor();
+    if (pTarget != this) {
+        const f32 y = (targetPlayerOrScrapper(0)->mPosition.y + 100.f);
+        if (field_0xBBC.y > y + 200.f) {
+            field_0xBBC.y = y + 200.f;
+        }
+    }
+    if (dBgS_ObjLinChk::LineCross(&mPosition, &field_0xBBC, nullptr)) {
+        field_0xBBC = dBgS_ObjLinChk::GetInstance().GetLinEnd();
+    }
+    mSpeed = 0.f;
+    field_0xD72 = cM::rndInt(15) + 15;
+    field_0xC90 = 100.f;
+    field_0xDA5 = 1;
+    fn_155_3720(0, 0.7);
+    if (mType == EKS_ELECTRIC) {
+        fn_155_3E90();
+        field_0xDA9 = 0;
+        field_0xD60 = 0;
+    }
+}
+void dAcEKs_c::executeState_AttackReady() {
+    f32 f = 10.f;
+    mMdl.play();
+    if (!mAnmTexPat.isStop(0)) {
+        mAnmTexPat.play();
+    }
 
-void dAcEKs_c::initializeState_Damage() {}
-void dAcEKs_c::executeState_Damage() {}
-void dAcEKs_c::finalizeState_Damage() {}
+    if (dAcPy_c::GetLink()->isRecovering() || !dAcPy_c::GetLink()->checkFlags0x340(0x100) ||
+        (EventManager::isInEvent() && !EventManager::isInEvent0Or7())) {
+        if (mType == EKS_ELECTRIC) {
+            fn_155_3EC0();
+            field_0xDA9 = 1;
+        }
+        changeState(StateID_Fighting);
+        return;
+    }
+    if (fn_155_3EF0()) {
+        if (mType == EKS_ELECTRIC) {
+            fn_155_3EC0();
+            field_0xDA9 = 1;
+        }
+        changeState(StateID_Fighting);
+        return;
+    }
+    setPitchYawToPoint(targetPlayerOrScrapper(0)->mPosition + field_0xBEC);
+    sLib::addCalcAngle(mAngle.y.ref(), mYaw_0xC36, 0xc, 0x1555);
+    sLib::addCalcAngle(mRotation.y.ref(), mYaw_0xC36, 0xc, 0x1555);
+    sLib::addCalcAngle(mRotation.x.ref(), 0, 0xc, 0x1555);
+    if (field_0xD9A <= 0) {
+        sLib::addCalcScaled(&field_0xC90, 0.8, 6.5);
+        cLib::addCalcPos2(&mPosition, field_0xBBC, 0.1, field_0xC90);
+        if (std::abs(field_0xC90) < 0.01f) {
+            fn_155_3720(f, 1.3);
+            if (--field_0xD72 <= 0) {
+                changeState(StateID_Attack);
+            }
+        } else {
+            fn_155_3720(0, 0.7);
+        }
+    }
+}
+void dAcEKs_c::finalizeState_AttackReady() {
+    fn_155_3480();
+}
 
-void dAcEKs_c::initializeState_Stun() {}
-void dAcEKs_c::executeState_Stun() {}
-void dAcEKs_c::finalizeState_Stun() {}
+void dAcEKs_c::initializeState_Attack() {
+    setAnim("fly", 1.5, cM::rndFX(0.2) + 1.f, 0);
+    setPitchYawToPoint(targetPlayerOrScrapper(0)->mPosition + field_0xBEC);
+    fn_155_3BE0(mVec3_c(0, 0, -50));
 
-void dAcEKs_c::initializeState_WindBlow() {}
-void dAcEKs_c::executeState_WindBlow() {}
-void dAcEKs_c::finalizeState_WindBlow() {}
+    /* TODO Probably an inline, but I have no clue what to call it */
+    bool b = dAcPy_c::GetLink()->checkActionFlags(0x40000) != 0 && dAcPy_c::GetLink()->checkFlags0x340(0x100);
+    if (b) {
+        field_0xBBC.set(dAcPy_c::GetLink()->getHeadTranslation());
+    }
 
-void dAcEKs_c::initializeState_PathMove() {}
-void dAcEKs_c::executeState_PathMove() {}
+    field_0xD74 = 15;
+    field_0xDA5 = 1;
+    mRotation.x = 0;
+    startSound(SE_EKs_V_ATTACK);
+    mSph.OnAtSet();
+    mSph.setCenter(mPosition);
+    if (mType == EKS_ELECTRIC) {
+        fn_155_3E90();
+        field_0xDA9 = 0;
+        field_0xD60 = 0;
+    }
+    field_0xDA2 = 0;
+}
+void dAcEKs_c::executeState_Attack() {
+    f32 scale = 25.f;
+    if (field_0xD9A > 0) {
+        scale = 0.f;
+    }
+    fn_155_3720(scale, cM::rndFX(0.1) + 1.f);
+    mMdl.play();
+    if (!mAnmTexPat.isStop(0)) {
+        mAnmTexPat.play();
+    }
+    if (dAcPy_c::GetLink()->isRecovering() || !dAcPy_c::GetLink()->checkFlags0x340(0x100) ||
+        (EventManager::isInEvent() && !EventManager::isInEvent0Or7())) {
+        changeState(StateID_Fighting);
+        return;
+    }
+    if (fn_155_3EF0()) {
+        changeState(StateID_Fighting);
+        return;
+    }
+
+    sLib::addCalcAngle(mRotation.x.ref(), mPitch_0xC34, 12, 0x38E);
+    if (mSph.ChkAtHit()) {
+        if (mSph.GetAtFlag0x8() != 0) {
+            changeState(StateID_Stun);
+            return;
+        }
+
+        if (mSph.GetAtActor()->isPlayer()) {
+            changeState(StateID_Fighting);
+            return;
+        }
+    }
+
+    if (cLib::chasePos(mPosition, field_0xBBC, scale)) {
+        changeState(StateID_Fighting);
+        return;
+    }
+
+    if (ChkHit() && --field_0xD74 <= 0) {
+        changeState(StateID_Fighting);
+        return;
+    }
+
+    if (++field_0xDA2 > 90) {
+        changeState(StateID_Fighting);
+        return;
+    }
+
+    mSph.OnAtSet();
+    mSph.moveCenter(mPosition);
+}
+void dAcEKs_c::finalizeState_Attack() {
+    mSph.ClrAtSet();
+    if (mType == EKS_ELECTRIC) {
+        fn_155_3EC0();
+        field_0xDA9 = 1;
+    }
+    field_0xD60 = 40;
+}
+
+void dAcEKs_c::initializeState_Damage() {
+    if (mHealth == 0) {
+        setAnim("dead", 4, 1, 0);
+        mAngle.y = field_0xD96;
+        mAngle.x = field_0xD98;
+    } else {
+        setAnim("hura2", 4, 1, 0);
+    }
+
+    if (mType == EKS_FIRE) {
+        field_0xD20 = 0.f;
+        field_0xD24 = 1.f;
+        field_0xD28 = mLightInfluence.mScale / (field_0xD5E * 2.f);
+    } else if (mType == EKS_ELECTRIC) {
+        field_0xD20 = 0.f;
+        field_0xD24 = 1.f;
+        field_0xD28 = mLightInfluence.mScale / (field_0xD5E * 2.f);
+    }
+    field_0xDB5 = 1;
+    field_0x346 = 1; // Part of dAcEnBase_c
+}
+void dAcEKs_c::executeState_Damage() {
+    mMdl.play();
+    if (mHealth == 0) {
+        if (field_0xD9A > 0) {
+            mSpeed = 0;
+        }
+
+        mRotation.x += field_0xD92;
+        mRotation.y += field_0xD94;
+
+        if (field_0xD60 > 0) {
+            field_0xD5E = 0;
+            field_0xDA9 = 1;
+        }
+        if (field_0xD5E > 0) {
+            field_0xD5E--;
+        } else {
+            field_0xDA9 = 1;
+        }
+
+        if (mAcch.ChkGroundLanding() && field_0xDB5 != 0) {
+            dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 1, field_0x1B0);
+            field_0xDB5 = 0;
+        }
+
+        if (mAcch.ChkGndHit() || mAcch.ChkWallHit(nullptr)) {
+            field_0xDA9 = 1;
+            if (dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd()) == POLY_ATTR_LAVA) {
+                kill(false);
+            } else {
+                kill(true);
+            }
+        } else if (mAcch.ChkWaterIn()) {
+            field_0xDA9 = 1;
+            kill(false);
+        } else if (!sLib::calcTimer(&field_0xDBE)) {
+            field_0xDA9 = 1;
+            kill(false);
+        }
+
+        return;
+    }
+
+    if (std::abs(mSpeed) > 0.01f) {
+        sLib::addCalcScaled(&mSpeed, 1, 5);
+    } else {
+        mSpeed = 0.f;
+    }
+
+    if (std::abs(mVelocity.y) > 0.01f) {
+        sLib::addCalcScaled(&mVelocity.y, 1, 5);
+    } else {
+        mVelocity.y = 0.f;
+    }
+
+    if (field_0xDC6 != 0) {
+        field_0xDC6--;
+    } else {
+        field_0x346 = 0; // Part of dAcEnBase_c
+        changeState(StateID_Fighting);
+    }
+}
+void dAcEKs_c::finalizeState_Damage() {
+    mAngle.x = mRotation.x;
+    mAngle.y = mRotation.y;
+    field_0xDBF = 0;
+}
+void dAcEKs_c::initializeState_Stun() {
+    setAnim("chance", 1, 1, 0);
+    setBlink(EKS_TEXPAT_BLINK1);
+    field_0xD76 = 150;
+    field_0xDA5 = 0;
+    mAngle.y = cLib::targetAngleY(dAcPy_c::GetLink()->mPosition, mPosition);
+    mSpeed = 30.f;
+    mAcceleration = -2.5f;
+    field_0xD5C = 5;
+    mStunSoundTimer = cM::rndInt(20) + 20;
+    mAcch.SetGroundUpY(0);
+    field_0xC10.y = 20.f;
+    field_0xDCC = 0;
+    if (mType == EKS_FIRE) {
+        mSph.ClrCo_0x8000();
+    } else if (mType == EKS_ELECTRIC) {
+        fn_155_3EC0();
+    }
+
+    unsetActorProperty(AC_PROP_0x1);
+
+    if (mType == EKS_FIRE) {
+        field_0xD20 = 0.f;
+        field_0xD24 = 1.f;
+        field_0xD28 = mLightInfluence.mScale / (field_0xD5C * 2.f);
+    } else if (mType == EKS_ELECTRIC) {
+        field_0xD20 = 0.f;
+        field_0xD24 = 1.f;
+        field_0xD28 = mLightInfluence.mScale / (field_0xD5C * 2.f);
+    }
+    field_0xDB5 = 1;
+    startSound(SE_EKs_V_DAMAGE);
+    field_0x346 = 1; // Part of dAcEnBase_c
+}
+void dAcEKs_c::executeState_Stun() {
+    setFinalBlowPosition(mPosition);
+    switch (field_0xDCC) {
+        case 0: {
+            mMdl.play();
+            soundStun();
+            sLib::addCalcAngle(mRotation.x.ref(), 0, 12, 0x1555);
+            if (field_0xD5C > 0) {
+                field_0xD5C--;
+            } else {
+                field_0xDA9 = 1;
+            }
+            if (mAcch.ChkGndHit()) {
+                if (field_0xDB5 != 0) {
+                    dJEffManager_c::spawnGroundEffect(
+                        mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 1, field_0x1B0
+                    );
+                    field_0xDB5 = 0;
+                }
+                field_0xD5C = 0;
+                field_0xDA9 = 1;
+                if (dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd()) == POLY_ATTR_LAVA) {
+                    dJEffManager_c::spawnGroundEffect(
+                        mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 1, field_0x1B0
+                    );
+                    resetInteractionFlags(0x1);
+                    startSound(SE_EKs_V_DEATH2);
+                    unsetActorProperty(AC_PROP_0x1);
+                    kill(false);
+                    return;
+                }
+                if (std::abs(mSpeed) > 0.01f) {
+                    sLib::addCalcScaled(&mSpeed, 1, 10);
+                } else {
+                    mSpeed = 0.f;
+                    setInteractionFlags(0x1);
+                }
+
+                mMdl.getModel().getNodeWorldMtx(mCenterNode, mCenterWorldMtx);
+                mCenterWorldMtx.getTranslation(field_0xBA4);
+                field_0xBA4.y += 50.f;
+
+                mEmitter2.holdEffect(
+                    PARTICLE_RESOURCE_ID_MAPPING_309_, field_0xBA4, nullptr, &mScale, nullptr, nullptr
+                );
+                mEmitter2.setGlobalAlpha(dStageMgr_c::GetInstance()->getGlobalAlpha());
+                holdSound(SE_E_PIYORI_LV);
+            }
+            if (mAcch.ChkWaterIn()) {
+                resetInteractionFlags(0x1);
+                startSound(SE_EKs_V_DEATH2);
+                unsetActorProperty(AC_PROP_0x1);
+                kill(false);
+            } else {
+                if (!dAcPy_c::GetLink()->checkCurrentAction(/* FINAL_BLOW */ 96)) {
+                    field_0xD76--;
+                    mSph.OnCoSet();
+                } else {
+                    mSph.ClrCoSet();
+                }
+                if (checkInteractionFlags(0x1000)) {
+                    mSph.ClrCoSet();
+                    field_0xDCC = 1;
+                    mHealth = 0;
+                } else {
+                    if (field_0xD76 <= 0) {
+                        resetInteractionFlags(0x1);
+                        mAcch.SetGroundUpY(30);
+                        mAngle.y = mRotation.y;
+                        if (mType == EKS_ELECTRIC) {
+                            field_0xDA9 = 1;
+                        } else {
+                            field_0xDA9 = 0;
+                        }
+                        changeState(StateID_Fighting);
+                    }
+                }
+            }
+        } break;
+        case 1: {
+            mSph.ClrTgSet();
+            mMdl.play();
+            field_0xDCC = 2;
+            mMdl.setRate(0.5f);
+            startSound(SE_EKs_V_DEATH2);
+            field_0xDCD = 5;
+            field_0xD0C = 1.f;
+            setAnim("Deliver", 4, 1, 0);
+            mHealth = 0;
+            resetInteractionFlags(0x1);
+        } break;
+        case 2: {
+            bool b = false;
+            if (field_0xDCD != 0) {
+                field_0xDCD--;
+            } else {
+                b = fn_80030570(mMdl.getModel(), 1, 1);
+            }
+            mMdl.play();
+            if (mMdl.getAnm().isStop() && b) {
+                kill(true);
+            }
+        } break;
+    }
+}
+void dAcEKs_c::finalizeState_Stun() {
+    field_0xC10.y = 0.f;
+    mAcceleration = 0.f;
+    mSph.OnCoSet();
+    resetInteractionFlags(0x1);
+    if (mType == EKS_FIRE) {
+        mSph.SetCo_0x8000();
+        field_0xD20 = 400.f;
+        field_0xD24 = 1.f;
+        field_0xD28 = 40.f;
+    } else if (mType == EKS_ELECTRIC) {
+        field_0xD60 = 0;
+        field_0xD20 = 400.f;
+        field_0xD24 = 1.f;
+        field_0xD28 = 40.f;
+    }
+    field_0x346 = 0; // Part of dAcEnBase_c
+}
+
+void dAcEKs_c::initializeState_WindBlow() {
+    setAnim("hura2", 1, 1, 0);
+    field_0xD86 = cM::rndInt(30) + 120;
+    field_0xDA9 = 1;
+
+    if (mType == EKS_FIRE) {
+        mSph.ClrCo_0x8000();
+        field_0xD20 = 0.f;
+        mLightInfluence.SetScale(0);
+    } else if (mType == EKS_ELECTRIC) {
+        fn_155_3EC0();
+        field_0xD20 = 0.f;
+        mLightInfluence.SetScale(0);
+    }
+    mAcceleration = -0.5f;
+    mAcch.ClrRoofNone();
+    mAcchCir.SetWall(20, 60);
+    mAcch.SetField_0xD4(55);
+    mAcch.SetGroundUpY(30);
+}
+void dAcEKs_c::executeState_WindBlow() {
+    s32 _weird_zero = 0;
+
+    mMdl.play();
+
+    if (field_0xD9A > 0) {
+        mSpeed = 0.f;
+    }
+
+    if (mAcch.ChkGroundLanding() && dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd()) == POLY_ATTR_LAVA) {
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 1, field_0x1B0);
+        startSound(SE_EKs_V_DEATH2);
+        unsetActorProperty(AC_PROP_0x1);
+        kill(false);
+        return;
+    }
+
+    if (mAcch.ChkWaterIn()) {
+        startSound(SE_EKs_V_DEATH2);
+        unsetActorProperty(AC_PROP_0x1);
+        kill(false);
+        return;
+    }
+
+    if (nw4r::math::FAbs(mSpeed) < 1.0f) {
+        if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_BELLOWS) && mSph.GetTgDamageFlags() == 0x8) {
+            mAngle.y = cLib::targetAngleY(dAcPy_c::GetLink()->mPosition, mPosition);
+            mAngle.x = cLib::targetAngleX(dAcPy_c::GetLink()->mPosition, mPosition);
+            s32 t = 7281;
+            field_0xD66 = (cM::rndFX(0.25f + (0.01f * _weird_zero)) + (0.75f + (0.01f * _weird_zero))) * t;
+            field_0xD68 = (cM::rndFX(0.25f + (0.01f * _weird_zero)) + (0.65f + (0.01f * _weird_zero))) * t;
+
+            if (field_0xD66 < 0) {
+                field_0xD64 = -0x38E;
+            } else {
+                field_0xD64 = 0x38E;
+            }
+
+            if (mAngle.x > 0xAAB) {
+                mVelocity.y = 15.f;
+            } else if (mAngle.x < -0xAAB) {
+                mVelocity.y = -15.f;
+            }
+
+            if (field_0xD9A > 0) {
+                mSpeed = 0.f;
+            } else {
+                mSpeed = 35.f;
+            }
+        }
+    }
+
+    if (std::abs(mSpeed) > 0.01f) {
+        sLib::addCalcScaled(&mSpeed, 0.3, 1.5);
+        mRotation.x += field_0xD66;
+        mRotation.y += field_0xD68;
+    } else {
+        mSpeed = 0.f;
+        if (mRotation.x.abs() < 0x444) {
+            mRotation.x = 0;
+        } else {
+            mRotation.x += field_0xD64;
+        }
+    }
+
+    sLib::addCalcAngle(&field_0xD66, 0, 16, 0x16C);
+    sLib::addCalcAngle(&field_0xD68, 0, 16, 0x16C);
+
+    f32 add = 0.1f * _weird_zero;
+    if (std::abs(mVelocity.y) > 0.01f + add) {
+        sLib::addCalcScaled(&mVelocity.y, 0.3, 1.5);
+    } else {
+        mVelocity.y = -(0.1f * _weird_zero);
+    }
+
+    if (field_0xD86 > 0) {
+        field_0xD86--;
+    } else if (field_0xDA6) {
+        if (transitionToNextState()) {
+            return;
+        }
+    } else {
+        changeState(StateID_Fighting);
+    }
+}
+void dAcEKs_c::finalizeState_WindBlow() {
+    mSpeed = 0.f;
+    mAcceleration = 0.f;
+    mVelocity.y = 0.f;
+    mRotation.x = 0;
+    mAngle.set(mRotation);
+    field_0xDA9 = 0;
+    if (mType == EKS_FIRE) {
+        mSph.SetCo_0x8000();
+        field_0xD20 = 400.f;
+        field_0xD24 = 1.f;
+        field_0xD28 = 40.f;
+    } else if (mType == EKS_ELECTRIC) {
+        field_0xDA9 = 1;
+        field_0xD20 = 400.f;
+        field_0xD24 = 1.f;
+        field_0xD28 = 40.f;
+    }
+}
+
+void dAcEKs_c::initializeState_PathMove() {
+    field_0xD30 = 1;
+    setAnim("fly", 1.5, cM::rndFX(0.2) + 1.f, 0);
+
+    if (mCurrentAnmTexPat == EKS_TEXPAT_BLINK2) {
+        setBlink(EKS_TEXPAT_BLINK3);
+    } else {
+        setBlink(EKS_TEXPAT_BLINK1);
+    }
+    mBlinkTimer = cM::rndInt(75) + 15;
+    mSpeed = 15.f;
+    if (field_0xDA6 != 0) {
+        field_0xDC9 = 3;
+    } else {
+        if (mRail.getSpeed() >= 0.f) {
+            mRail.setSpeed(15.f);
+        } else {
+            mRail.setSpeed(-15.f);
+        }
+        mTargetPos.set(mRail.getPosition());
+        field_0xDC9 = 0;
+    }
+    setPitchYawToPoint(mTargetPos);
+    field_0xD54 = cM::rndInt(30) + 30;
+    field_0xD90 = 3;
+    field_0xDA5 = 0;
+    field_0xDB1 = 0;
+
+    if (field_0xDA6 != 0) {
+        fn_155_3E30();
+    } else {
+        setActorProperty(AC_PROP_0x1);
+    }
+
+    mSqueakSoundTimer = cM::rndInt(20) + 20;
+    field_0xDB7 = 0;
+    field_0xDC1 = 0;
+    field_0xD52 = cM::rndInt(20) + 20;
+}
+void dAcEKs_c::executeState_PathMove() {
+    mMdl.play();
+    playBlinkAnm();
+    soundSqueak();
+
+    if (field_0xD54 > 0) {
+        field_0xD54--;
+    }
+    if (field_0xD90 > 0) {
+        field_0xD90--;
+    }
+
+    if (field_0xDA6 != 0) {
+        if (transitionToNextState()) {
+            if (mNextState == EKS_STATE_ReturnToWait) {
+                f32 y = getLineCrossYRange(mStartingPos, 300);
+                mStartingPos.set(mStartingPos.x + cM::rndFX(100), y, mStartingPos.z + cM::rndFX(100));
+            }
+            return;
+        }
+    } else {
+        if (field_0xDC9 == 3) {
+            field_0xDC9 = 0;
+            setActorProperty(AC_PROP_0x1);
+            mRail.setSegment(mRail.getClosestXZPoint(mPosition), 0.f);
+            setStartingPosition(mRail.getPosition());
+            mPnts[0].set(mRail.getPosition());
+            mRail.setSpeed(15);
+        }
+
+        if (!checkBeyondRadius(getStartingPos(), 490000.f)) {
+            field_0xDC9 = 0;
+            setStartingPosition(mRail.getPosition());
+            mPnts[0].set(mRail.getPosition());
+
+            if (field_0xD54 <= 0 && field_0xD90 <= 0) {
+                if (fn_155_2B80(true, 0)) {
+                    changeState(StateID_Chase);
+                    return;
+                }
+                field_0xD90 = 3;
+            }
+            u8 railStatus = mRail.execute();
+            if (railStatus != 0 && (railStatus != 3 || mRail.getSpeed() > 0.f)) {
+                s32 idx;
+                if (mRail.getSpeed() > 0.f) {
+                    idx = mRail.getSegmentIndex();
+                } else if (mRail.getSpeed() < 0.f) {
+                    idx = mRail.getNextPointIndex2();
+                }
+                field_0xDCA = mRail.getPath().getPointParam(idx, 0);
+                if (checkPathPntParam(field_0xDCA)) {
+                    setStartingPosition(*(const mVec3_c *)mRail.getPath().getPoint(idx));
+                    mStartingPos.y = getLineCrossYRange(getStartingPosition(), 300);
+                    changeState(StateID_ReturnToWait);
+                    return;
+                }
+            }
+        } else if (field_0xDC9 == 0) {
+            field_0xDC9 = 1;
+        }
+        if (field_0xDC9 == 1) {
+            field_0xDC9 = 2;
+            mVec3_c pnt;
+            const s32 pntIdx = mRail.getClosestXZPoint(mPosition);
+            const Vec *pPnt = mRail.getPoint(pntIdx);
+            pnt.copyFrom(pPnt);
+            if (mRail.getPosition().squareDistanceToXZ(mPosition) > pnt.squareDistanceToXZ(mPosition)) {
+                mRail.setSegment(pntIdx, 0.f);
+                setStartingPosition(mRail.getPosition());
+                mPnts[0].set(mRail.getPosition());
+            }
+        }
+        if (field_0xDC9 == 2) {
+            if (field_0xD52 > 0) {
+                field_0xD52--;
+            }
+            field_0xB8C.set(mPnts[field_0xD9E]);
+            f32 dist = mPosition.squareDistance(field_0xB8C);
+            if (checkWallCross()) {
+                field_0xDB7++;
+
+                if (field_0xDB7 < 5) {
+                    field_0xDC1 = 0;
+                    mTargetPos.x = field_0xB8C.x + cM::rndFX(800);
+                    mTargetPos.y = field_0xB8C.y + cM::rndF(400);
+                    mTargetPos.z = field_0xB8C.z + cM::rndFX(800);
+                    adjustTargetGnd();
+                    adjustTargetRoof();
+                } else if (field_0xDB7 < 10) {
+                    field_0xDC1 = 1;
+
+                    fn_155_3BD0(mVec3_c(cM::rndFX(200), cM::rndFX(200), cM::rndF(-300)));
+                    field_0xD52 = cM::rndInt(20) + 20;
+
+                    adjustTargetGnd();
+                    adjustTargetRoof();
+                } else if (field_0xDB7 > 20) {
+                    field_0xDB7 = 0;
+                }
+            }
+            if (field_0xD52 <= 0) {
+                if (field_0xD9E > 0) {
+                    mVec3_c startPos = mPosition;
+                    for (s32 i = 0; i <= field_0xD9E; ++i) {
+                        if (!dBgS_ObjLinChk::LineCross(&startPos, &mPnts[i], nullptr)) {
+                            field_0xD9E = i;
+                            field_0xB8C.set(mPnts[field_0xD9E]);
+                        }
+                    }
+                }
+                field_0xDC1 = 0;
+                field_0xD52 = cM::rndInt(20) + 20;
+                mTargetPos.x = field_0xB8C.x + cM::rndFX(800);
+                mTargetPos.y = field_0xB8C.y + cM::rndFX(400);
+                mTargetPos.z = field_0xB8C.z + cM::rndFX(800);
+                adjustTargetGnd();
+                adjustTargetRoof();
+            }
+
+            chaseTargetY(0.1, 3);
+            sLib::addCalcAngle(mRotation.y.ref(), mYaw_0xC36, 10, 0x38E);
+            sLib::addCalcAngle(mRotation.x.ref(), mPitch_0xC34, 12, 0xB6);
+            clampRotationX();
+            if (field_0xD9E != 0 && dist < 2500.f) {
+                field_0xD9E--;
+            }
+
+            if (field_0xD9E == 0 && !checkBeyondRadius(getStartingPos(), 490000)) {
+                field_0xDC9 = 0;
+            }
+        } else {
+            mTargetPos.set(mRail.getPosition());
+        }
+    }
+    setPitchYawToPoint(mTargetPos);
+    chaseTargetY(0.5, 4);
+    sLib::addCalcAngle(mRotation.y.ref(), mYaw_0xC36, 10, 0x38E);
+    sLib::addCalcAngle(mRotation.x.ref(), mPitch_0xC34, 12, 0xB6);
+    clampRotationX();
+}
 void dAcEKs_c::finalizeState_PathMove() {
     field_0xD30 = 0;
 }
