@@ -12,7 +12,7 @@ dCcD_SrcSph dAcObjBirdSp_c::sCcSrc = {
     /* mObjInf */ {
         /* mObjAt */ {0, 2, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
         // AT_TYPE_COMMON0 - AT_TYPE_WIND
-        /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000), 0x00000105, {0, 00, 0x407}, 0, 0},
+        /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000), 0x00000105, {0, 00, 0x407}, 0, 0},
         /* mObjCo */ {0x00004029}},
      /* mSphInf */ {1000.0f}
 };

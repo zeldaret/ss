@@ -53,10 +53,8 @@ dAcBase_c::dAcBase_c()
       mViewClipIdx(s_Create_ViewClipIdx),
       mActorNode(nullptr),
       mRoomID(s_Create_RoomId),
-      mActorSubtype(s_Create_Subtype) {
-    mJStudioActor = 0;
-    someStr[0] = 0;
-
+      mActorSubtype(s_Create_Subtype),
+      mJStudioActor(0) {
     if (s_Create_Position) {
         setPosition(*s_Create_Position);
     }
@@ -80,7 +78,7 @@ dAcBase_c::dAcBase_c()
     if (mpActorInfo == nullptr) {
         mpActorInfo = getActorInfoByProfileAndSubtype(mProfileName, mActorSubtype);
     }
-    someStr[0] = '\0';
+    mSomeStr.empty();
 }
 
 dAcBase_c::~dAcBase_c() {}

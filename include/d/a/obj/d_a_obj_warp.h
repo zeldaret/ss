@@ -63,9 +63,16 @@ public:
             || isLanayruTrialAndCompleted()
             || isHyliaTrialAndCompleted();
     }
+
+    void onCollectFirstTear() {
+        mFirstTearCollected = true;
+    }
+
 private:
-    /* 0x330 */ u8 field_0x330[0xC66-0x330];
+    /* 0x330 */ u8 field_0x330[0xC66 - 0x330];
     /* 0xC66 */ u8 mTrialIndexBitmask;
+    /* 0xC67 */ u8 field_0xC67[0xC8D - 0xC67];
+    /* 0xC8D */ bool mFirstTearCollected;
     /* 0x??? */ STATE_MGR_DECLARE(dAcOWarp_c);
 };
 

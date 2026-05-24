@@ -388,7 +388,7 @@ public:
     // bool ChkRoofHit() {
     //     return MaskRoofHit();
     // }
-    void OffClrSpeedY() {
+    void SetClrSpeedY() {
         mFlags |= CLR_SPEED_Y;
     }
     bool ChkClrSpeedY() {

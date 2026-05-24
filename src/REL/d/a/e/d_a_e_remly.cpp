@@ -357,7 +357,7 @@ int dAcEremly_c::actorExecute() {
             } break;
             case 12: {
                 if (!isState(StateID_Fly) && mAnimation != ANM_Swim && mAnimation != ANM_SwimDamage) {
-                    if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_0x80000 | AT_TYPE_SLINGSHOT)) {
+                    if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_GLITTERING_SPORES | AT_TYPE_SLINGSHOT)) {
                         mAngle.y = getXZAngleToPlayer();
                         mSpeed = -15.f;
                         changeState(StateID_Stun);

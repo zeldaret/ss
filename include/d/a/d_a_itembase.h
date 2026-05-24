@@ -234,11 +234,18 @@ struct ItemFlagStruct {
     u8 mFlagKind;
     u8 field_0x07;
 };
+
+struct ItemInitStruct {
+    u8 _0x00[0x0D - 0x00];
+};
+
 class dAcItemBase_c : public dAcObjBase_c {
 public:
     dAcItemBase_c() {}
     virtual ~dAcItemBase_c() {}
-    virtual u16 getItemId();
+    virtual u16 getItemId() const;
+    virtual u16 getItemIdFromParams() = 0;
+    virtual void setItemId(u16 id);
 
     static bool isValidItemTypeIdx(int itemId);
     static bool getItemTypeFromId(u16 itemID, u32 *pOutType);
@@ -254,8 +261,11 @@ public:
         return mId;
     }
 
-private:
+protected:
     u16 mId;
+
+    const ItemFlagStruct* getItemFlagStruct() const;
+    static const ItemFlagStruct* getItemFlagStruct(u16 id);
 
     static const ItemFlagStruct sDefaultFlagStruct;
     static const ItemFlagStruct sItemFlagStructs[167];

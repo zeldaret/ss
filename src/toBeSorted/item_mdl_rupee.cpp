@@ -1,0 +1,158 @@
+#include "toBeSorted/item_mdl_rupee.h"
+
+#include "common.h"
+#include "d/a/d_a_item.h"
+#include "d/a/d_a_itembase.h"
+#include "toBeSorted/arc_managers/oarc_manager.h"
+
+const dItemMdlRupee_c::MdlConfig dItemMdlRupee_c::sMdlConfig[] = {
+    { ITEM_GREEN_RUPEE, 0.0f},
+    {  ITEM_BLUE_RUPEE, 1.0f},
+    {   ITEM_RED_RUPEE, 2.0f},
+    {ITEM_SILVER_RUPEE, 3.0f},
+    {  ITEM_GOLD_RUPEE, 4.0f},
+    {      ITEM_RUPOOR, 5.0f},
+    {                0, 0.0f},
+};
+
+bool dItemMdlRupee_c::isMdlForItemId(u16 itemId) {
+    // NON-DETERMINISTIC CODEGEN AAAAAAAAAAAAAAAAAAAAAA
+    return itemId == ITEM_GREEN_RUPEE || itemId == ITEM_BLUE_RUPEE || itemId == ITEM_RED_RUPEE ||
+           itemId == ITEM_SILVER_RUPEE || itemId == ITEM_GOLD_RUPEE || itemId == ITEM_RUPOOR;
+}
+
+bool dItemMdlRupee_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator) {
+    if (item == nullptr) {
+        return false;
+    }
+
+    // no-op
+    int i = 0;
+    bool found = false;
+    while (!found && i < ARRAY_LENGTH(sMdlConfig)) {
+        if (itemId == sMdlConfig[i].itemId) {
+            found = true;
+        } else {
+            i++;
+        }
+    }
+
+    if (!found) {
+        return false;
+    }
+
+    {
+        void *resData1 = OarcManager::GetInstance()->getMdlFromArc2("PutRupee");
+        if (resData1 == nullptr) {
+            return false;
+        }
+        nw4r::g3d::ResFile res1(resData1);
+        if (!res1.IsValid()) {
+            return false;
+        }
+
+        nw4r::g3d::ResMdl mdl1 = res1.GetResMdl("PutRupee");
+        if (!mdl1.IsValid()) {
+            return false;
+        }
+        if (!mPutMdl.create(mdl1, allocator, 0x123)) {
+            return false;
+        }
+
+        nw4r::g3d::ResAnmTexPat anmTexPat1 = res1.GetResAnmTexPat("Rupee");
+        if (!anmTexPat1.IsValid()) {
+            return false;
+        }
+        if (!mPutAnmTexPat.create(mdl1, anmTexPat1, allocator, nullptr, 1)) {
+            return false;
+        }
+        mPutMdl.setAnm(mPutAnmTexPat);
+        mPutAnmTexPat.setFrame(sMdlConfig[i].texPatFrame, 0);
+    }
+
+    {
+        void *resData2 = OarcManager::GetInstance()->getMdlFromArc2("GetRupee");
+        if (resData2 == nullptr) {
+            return false;
+        }
+        nw4r::g3d::ResFile res2(resData2);
+        if (!res2.IsValid()) {
+            return false;
+        }
+
+        nw4r::g3d::ResMdl mdl2 = res2.GetResMdl("GetRupee");
+        if (!mdl2.IsValid()) {
+            return false;
+        }
+        if (!mGetMdl.create(mdl2, allocator, 0x123)) {
+            return false;
+        }
+
+        nw4r::g3d::ResAnmTexPat anmTexPat2 = res2.GetResAnmTexPat("Rupee");
+        if (!anmTexPat2.IsValid()) {
+            return false;
+        }
+        anmTexPat2.Bind(res2);
+        if (!mGetAnmTexPat.create(mdl2, anmTexPat2, allocator, nullptr, 1)) {
+            return false;
+        }
+        mGetMdl.setAnm(mGetAnmTexPat);
+        mGetAnmTexPat.setFrame(sMdlConfig[i].texPatFrame, 0);
+    }
+    
+
+    mpItem = item;
+    return true;
+}
+
+void dItemMdlRupee_c::setDrawMode(u8 arg) {
+    if (arg == DrawMode_Max) {
+        mDrawMode = DrawMode_Put;
+    } else {
+        mDrawMode = arg;
+    }
+}
+
+void dItemMdlRupee_c::setScale(const mVec3_c &scale) {
+    mPutMdl.setScale(scale);
+    mGetMdl.setScale(scale);
+}
+
+void dItemMdlRupee_c::setLocalMtx(const mMtx_c &mtx) {
+    mPutMdl.setLocalMtx(mtx);
+    mGetMdl.setLocalMtx(mtx);
+}
+
+void dItemMdlRupee_c::draw() {
+    switch (mDrawMode) {
+        case DrawMode_Put: mpItem->fn_8002ECD0(&mPutMdl, 7); break;
+        case DrawMode_Get: mpItem->fn_8002ECD0(&mGetMdl, 6); break;
+    }
+}
+
+void dItemMdlRupee_c::changeItemId(u16 itemId) {
+    int i = 0;
+    bool found = false;
+    while (!found && i < ARRAY_LENGTH(sMdlConfig)) {
+        if (itemId == sMdlConfig[i].itemId) {
+            found = true;
+        } else {
+            i++;
+        }
+    }
+
+    if (found) {
+        mPutAnmTexPat.setFrame(sMdlConfig[i].texPatFrame, 0);
+        mGetAnmTexPat.setFrame(sMdlConfig[i].texPatFrame, 0);
+    }
+}
+
+void dItemMdlRupee_c::setPriorityDraw() {
+    mPutMdl.setPriorityDraw(0x82, 0x7F);
+    mGetMdl.setPriorityDraw(0x82, 0x7F);
+}
+
+void dItemMdlRupee_c::unsetPriorityDraw() {
+    mPutMdl.setPriorityDraw(0x7F, 0x7F);
+    mGetMdl.setPriorityDraw(0x7F, 0x7F);
+}

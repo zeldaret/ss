@@ -1220,10 +1220,37 @@ toBeSorted/counters/extra_wallet_counter.cpp:
 	.data       start:0x805280B0 end:0x805280D0
 	.sbss       start:0x80575640 end:0x80575648
 
-toBeSorted/item_mdl.cpp:
-	.text       start:0x8016E2A0 end:0x80171AA8 align:16
-	.rodata     start:0x804E91D0 end:0x804E9A80
-	.data       start:0x805280D0 end:0x80528B20
+toBeSorted/item_mdl_misc.cpp:
+	.text       start:0x8016E2A0 end:0x8016F9DC align:16
+	.rodata     start:0x804E91D0 end:0x804E9650
+	.data       start:0x805280D0 end:0x80528490
+	.sdata      start:0x80572A10 end:0x80572A28
+	.sdata2     start:0x8057A1D8 end:0x8057A1E0
+
+toBeSorted/item_mdl_item.cpp:
+	.text       start:0x8016F9E0 end:0x8016FE20 align:16
+	.rodata     start:0x804E9650 end:0x804E9A48
+	.data       start:0x80528490 end:0x80528A68
+	.sdata      start:0x80572A28 end:0x80572A70
+
+toBeSorted/item_mdl_rupee.cpp:
+	.text       start:0x8016FE20 end:0x80170414 align:16
+	.rodata     start:0x804E9A48 end:0x804E9A80
+	.data       start:0x80528A68 end:0x80528AB0
+	.sdata      start:0x80572A70 end:0x80572A78
+
+toBeSorted/item_mdl_light_fruit.cpp:
+	.text       start:0x80170420 end:0x801708E4 align:16
+	.data       start:0x80528AB0 end:0x80528AE0
+	.sdata      start:0x80572A78 end:0x80572A90
+
+toBeSorted/item_mdl_stamina_fruit.cpp:
+	.text       start:0x801708F0 end:0x80170DA4 align:16
+	.data       start:0x80528AE0 end:0x80528B20
+	.sdata      start:0x80572A90 end:0x80572AA0
+
+toBeSorted/item_spawn.cpp:
+	.text       start:0x80170DB0 end:0x80171AA8 align:16
 
 toBeSorted/unk_screen_effect.cpp:
 	.text       start:0x80171AB0 end:0x801749D8 align:16
@@ -1468,12 +1495,14 @@ d/a/d_a_player.cpp:
 	.rodata     start:0x804EACF0 end:0x804EBBB0
 	.data       start:0x80530170 end:0x80533268
 	.sbss       start:0x805757B8 end:0x805758B8
+	.sdata2     start:0x8057B650 end:0x8057BD88
 
 d/a/d_a_item.cpp:
 	.text       start:0x80247200 end:0x80258E58 align:16
 	.ctors      start:0x804DB828 end:0x804DB82C
 	.rodata     start:0x804EBBB0 end:0x804ED340
 	.data       start:0x80533268 end:0x80534490
+	.sdata      start:0x80573968 end:0x805739B0
 	.sbss       start:0x805758B8 end:0x805758E0
 	.sdata2     start:0x8057BD88 end:0x8057BF80
 	.bss        start:0x805B4490 end:0x805B48A8
@@ -1483,6 +1512,7 @@ d/a/obj/d_a_obj_bomb.cpp:
 	.ctors      start:0x804DB82C end:0x804DB830
 	.rodata     start:0x804ED340 end:0x804ED350
 	.data       start:0x80534490 end:0x805347A8
+	.sdata      start:0x805739B0 end:0x805739C8
 	.sbss       start:0x805758E0 end:0x805758F0
 
 d/a/obj/d_a_obj_arrow.cpp:
@@ -1490,6 +1520,7 @@ d/a/obj/d_a_obj_arrow.cpp:
 	.ctors      start:0x804DB830 end:0x804DB834
 	.rodata     start:0x804ED350 end:0x804ED380
 	.data       start:0x805347A8 end:0x80534AD0
+	.sdata      start:0x805739C8 end:0x805739D8
 	.sbss       start:0x805758F0 end:0x80575900
 
 d/a/obj/d_a_obj_boomerang.cpp:

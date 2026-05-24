@@ -351,7 +351,7 @@ enum dCcD_ObjAtType {
     /* 0x 0001 0000 */ AT_TYPE_BELLOWS = (1 << 16),
     /* 0x 0002 0000 */ AT_TYPE_0x20000 = (1 << 17),
     /* 0x 0004 0000 */ AT_TYPE_0x40000 = (1 << 18),
-    /* 0x 0008 0000 */ AT_TYPE_0x80000 = (1 << 19),
+    /* 0x 0008 0000 */ AT_TYPE_GLITTERING_SPORES = (1 << 19),
     /* 0x 0010 0000 */ AT_TYPE_BUBBLE = (1 << 20),
     /* 0x 0020 0000 */ AT_TYPE_0x200000 = (1 << 21),
     /* 0x 0040 0000 */ AT_TYPE_BEETLE = (1 << 22),
@@ -361,7 +361,7 @@ enum dCcD_ObjAtType {
     /* 0x 0400 0000 */ AT_TYPE_KOLOKTOS_SWORD = (1 << 26),
     /* 0x 0800 0000 */ AT_TYPE_0x8000000 = (1 << 27),
     /* 0x 0148 8200 */ AT_TYPE_COMMON0 =
-        AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND,
+        AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND,
 };
 
 enum cCcD_AtModifiers_e {
@@ -461,6 +461,10 @@ public:
     void OffRPrm(u32 m) {
         mRPrm = (mRPrm & ~m) | m;
     }
+
+    void SetCallback(cCcD_HitCallback cb) {
+        mHit_cb = cb;
+    }
 };
 
 class cCcD_ObjAt : public cCcD_GAtTgCoCommonBase {
@@ -489,10 +493,6 @@ public:
     }
     u32 ChkSet() {
         return MskSPrm(1);
-    }
-
-    void SetCallback(cCcD_HitCallback cb) {
-        mHit_cb = cb;
     }
 
     u32 MskType(u32 mask) const {
@@ -657,12 +657,20 @@ public:
         field_0x4B = val;
     }
 
+    void SetSrcField_0x0C(u16 val) {
+        mSrc.field_0x0C = val;
+    }
+
     void SetInfo_0x1(u8 val) {
         mSrc.mInfo.field_0x1 = val;
     }
 
     void SetInfo_0x2(u16 val) {
         mSrc.mInfo.field_0x2 = val;
+    }
+
+    void OnInfo_0x2(u16 val) {
+        mSrc.mInfo.field_0x2 |= val;
     }
 
 public:
@@ -825,6 +833,11 @@ public:
         mCo.OnSPrm(f);
     }
 
+    void OffTgCoFlag(u32 f) {
+        mTg.OffSPrm(f);
+        mCo.OffSPrm(f);
+    }
+
     void SetAtType(u32 type) {
         mAt.SetType(type);
     }
@@ -856,6 +869,10 @@ public:
     // Related to directional attacks?
     void SetTgFlag_0xA(u16 flag) {
         mTg.SetFlag_0xA(flag);
+    }
+
+    void SetTgSrcField_0x0C(u16 val) {
+        mTg.SetSrcField_0x0C(val);
     }
 
     bool ChkTgHit() {
@@ -915,6 +932,10 @@ public:
 
     void SetAtCallback(cCcD_HitCallback cb) {
         mAt.SetCallback(cb);
+    }
+
+    void SetCoCallback(cCcD_HitCallback cb) {
+        mCo.SetCallback(cb);
     }
 
     u32 ChkTgNoAtHitInfSet() const {
@@ -997,6 +1018,12 @@ public:
     void OnTgElectric() {
         return mTg.OnSPrm(0x40000);
     }
+    void OnTg_0x800000() {
+        return mTg.OnSPrm(0x800000);
+    }
+    void OnTg_0x1000000() {
+        return mTg.OnSPrm(0x1000000);
+    }
     void OnTg_0x8000000() {
         return mTg.OnSPrm(0x8000000);
     }
@@ -1005,6 +1032,9 @@ public:
     }
     void ClrTg_0x10000() {
         return mTg.OffSPrm(0x10000);
+    }
+    void ClrTg_0x800000() {
+        return mTg.OffSPrm(0x800000);
     }
     void ClrTg_0x8000000() {
         return mTg.OffSPrm(0x8000000);
@@ -1016,6 +1046,9 @@ public:
     void OnTg_0x200000() {
         mTg.OnSPrm(0x200000);
     }
+    void ClrTg_0x200000() {
+        mTg.OffSPrm(0x200000);
+    }
 
     void SetTg_0x4B(u8 val) {
         mTg.Set_0x4B(val);
@@ -1025,6 +1058,9 @@ public:
     }
     void SetTgInfo_0x2(u16 val) {
         mTg.SetInfo_0x2(val);
+    }
+    void OnTgInfo_0x2(u16 val) {
+        mTg.OnInfo_0x2(val);
     }
     void SetTg_0x40000000() {
         mTg.OnSPrm(0x40000000);
