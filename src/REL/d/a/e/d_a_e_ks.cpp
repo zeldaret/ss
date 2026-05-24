@@ -1811,7 +1811,6 @@ void dAcEKs_c::executeState_Wait() {
     if (flag < 0xFF) {
         if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag)) {
             if (field_0xDCE == 0) {
-                bool b = false;
                 mStartingState = EKS_STARTSTATE_Move;
                 if (field_0xDA6 == 0) {
                     mMtx_c m;
@@ -1819,13 +1818,11 @@ void dAcEKs_c::executeState_Wait() {
                     mVec3_c out, in(0, 0, 500);
                     m.multVecSR(in, out);
 
-                    mVec3_c start(getStartingPos() + out);
-                    mVec3_c out2 = out * 2.f;
-                    mVec3_c end(getStartingPos() + out2);
-                    if (dBgS_ObjLinChk::LineCross(&start, &end, nullptr) && dBgS_ObjLinChk::ChkWall()) {
-                        b = true;
-                    }
-                    if (!b) {
+                    // TODO Fixup LineCross for Const References
+                    if (!(dBgS_ObjLinChk::LineCross(
+                              &(getStartingPos() + out), &(getStartingPos() + out * 2.0f), nullptr
+                          ) &&
+                          dBgS_ObjLinChk::ChkWall())) {
                         out *= 2.f;
                     }
                     setStartingPosition(getStartingPos() + out);
