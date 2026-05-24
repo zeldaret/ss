@@ -776,7 +776,7 @@ private:
     /* 0xC90 */ f32 (dAcItem_c::*mFn_0xC90)();
     /* 0xC9C */ void (dAcItem_c::*mFn_0xC9C)();
     /* 0xCA8 */ void (dAcItem_c::*mFnSetBoundingBox)();
-    /* 0xCB4 */ f32 (dAcItem_c::*mFnGetSinkSpeed)(void);
+    /* 0xCB4 */ f32 (dAcItem_c::*mFnGetSinkSpeed)();
     /* 0xCC0 */ dAcRef_c<dAcItem_c> mItemQueuePrev;
     /* 0xCCC */ dAcRef_c<dAcItem_c> mItemQueueNext;
     /* 0xCD8 */ f32 field_0xCD8;
