@@ -2920,11 +2920,10 @@ void dAcEKs_c::executeState_WindBlow() {
     sLib::addCalcAngle(&field_0xD66, 0, 16, 0x16C);
     sLib::addCalcAngle(&field_0xD68, 0, 16, 0x16C);
 
-    f32 add = 0.1f * _weird_zero;
-    if (std::abs(mVelocity.y) > 0.01f + add) {
+    if (std::abs(mVelocity.y) > 0.01f + (_weird_zero * 0.1f)) {
         sLib::addCalcScaled(&mVelocity.y, 0.3, 1.5);
     } else {
-        mVelocity.y = -(0.1f * _weird_zero);
+        mVelocity.y = -(_weird_zero * 0.1f);
     }
 
     if (field_0xD86 > 0) {
