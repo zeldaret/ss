@@ -15,7 +15,6 @@
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_pla.h"
 #include "d/col/cc/d_cc_s.h"
-#include "d/d_angle.h"
 #include "d/d_jnt_col.h"
 #include "d/d_light_env.h"
 #include "d/d_linkage.h"
@@ -243,7 +242,7 @@ void dAcArrow_c::fn_8025E160() {
     if (isSlingshotProjectile()) {
         field_0x6A0 = 0.0f;
         if (mArrowType != 17) {
-            setRotXY(mAngle, -link->getField_0x1268(), link->getRotation().y + link->getField_0x126A());
+            mAngle.set(mAng(-link->getField_0x1268()), mAng(link->getRotation().y + link->getField_0x126A()), mAng(0));
         } else {
             mAngle.y = mRotation.y;
             mAngle.x = -mRotation.x;
@@ -290,7 +289,7 @@ void dAcArrow_c::fn_8025E160() {
             tmp2.rotY(mAngle.y);
 
             mMtx_c mtx;
-            mtx.setAxisRotation(tmp, i * mAng::s2r_c(0x2000) + mAng::d2r_c(cM::rndFX(2.5f)));
+            mtx.setAxisRotation(tmp, i * mAng::s2r_c(0x2000) + mAng::d2r_c(cM::rndFX(12.0f)));
             MTXMultVecSR(mtx, tmp2, tmp2);
             ang.x = tmp2.atan2sY_XZ();
             ang.y = tmp2.atan2sX_Z();
@@ -488,8 +487,7 @@ void dAcArrow_c::executeState_Move() {
 
     sArrowLinChk.Set(&mOldPosition, &next, this);
     bool isCross = dBgS::GetInstance()->LineCross(&sArrowLinChk);
-    // TODO the constness here is probably a bit messed up
-    const cCcD_Obj *obj = nullptr;
+    cCcD_Obj *obj = nullptr;
     s32 flags = -1;
     if (mCcCps.ChkTgHit()) {
         obj = &mCcCps;
@@ -504,8 +502,7 @@ void dAcArrow_c::executeState_Move() {
         mPosition = obj->GetTgHitPos();
         const mVec3_c &hitDir = obj->GetTgAtHitDir();
         if (hitDir.squareMagXZ() < 1.0f) {
-            // TODO constness
-            mAngle.y = cLib::targetAngleY(mPosition, const_cast<cCcD_Obj *>(obj)->GetTgActor()->mPosition);
+            mAngle.y = cLib::targetAngleY(mPosition, obj->GetTgActor()->mPosition);
         } else {
             mAngle.y = hitDir.atan2snX_nZ();
         }

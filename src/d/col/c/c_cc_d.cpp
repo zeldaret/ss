@@ -355,11 +355,11 @@ void cCcD_Obj::ClrCoHit() {
     mCo.ClrEffCounter();
 }
 
-const mVec3_c &cCcD_Obj::GetAtHitPos() const {
+mVec3_c &cCcD_Obj::GetAtHitPos() {
     return mAt.mHitPos;
 }
 
-mVec3_c &cCcD_Obj::GetAtHitPos() {
+const mVec3_c &cCcD_Obj::GetAtHitPos() const {
     return mAt.mHitPos;
 }
 
@@ -375,11 +375,11 @@ bool cCcD_Obj::GetAtFlag0x8() const {
     return mAt.MskRPrm(8);
 }
 
-const mVec3_c &cCcD_Obj::GetTgHitPos() const {
+mVec3_c &cCcD_Obj::GetTgHitPos() {
     return mTg.mHitPos;
 }
 
-mVec3_c &cCcD_Obj::GetTgHitPos() {
+const mVec3_c &cCcD_Obj::GetTgHitPos() const {
     return mTg.mHitPos;
 }
 
