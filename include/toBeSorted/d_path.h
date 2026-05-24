@@ -123,18 +123,6 @@ public:
         return mSegmentTime;
     }
 
-    bool CheckFlag(u32 flag) const {
-        return (mFlags & flag) != 0;
-    }
-
-    void ClearFlag(u32 flag) {
-        mFlags &= ~flag;
-    }
-
-    void SetFlag(u32 flag) {
-        mFlags |= flag;
-    }
-
     const mVec3_c &getPosition() const {
         return mPosition;
     }
@@ -159,11 +147,11 @@ public:
         return (mFlags & flags) != 0;
     }
 
-    void offFlag(u32 flags) {
+    void unsetFlag(u32 flags) {
         mFlags &= ~flags;
     }
 
-    void onFlag(u32 flags) {
+    void setFlag(u32 flags) {
         mFlags |= flags;
     }
 

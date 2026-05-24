@@ -517,7 +517,7 @@ s32 ActorOnRail_Ext::execute() {
                     mSegmentDistance = 0.0f;
                     if (checkFlag(0x1)) {
                         ret = 3;
-                        offFlag(0x40000000);
+                        unsetFlag(0x40000000);
                         mSpeed *= -1.0f;
                     }
                     break;
@@ -545,7 +545,7 @@ s32 ActorOnRail_Ext::execute() {
                     mSegmentDistance = segmentLength;
                     if (checkFlag(0x1)) {
                         ret = 3;
-                        onFlag(0x40000000);
+                        setFlag(0x40000000);
                         mSpeed *= -1.0f;
                     }
                     break;

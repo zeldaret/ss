@@ -285,10 +285,10 @@ void dAcODungeonShip_c::executeState_Transparency() {
         if (isWithinDist1 && field_0x868 == 0 && field_0x862 == 0 && tmp2) {
             if (field_0x856 > 0) {
                 field_0x856 = 0xFF;
-                mPath.SetFlag(0x40000000);
+                mPath.setFlag(0x40000000);
             } else {
                 field_0x856 = 1;
-                mPath.ClearFlag(0x40000000);
+                mPath.unsetFlag(0x40000000);
             }
 
             u16 idx = fn_485_1900();
@@ -302,7 +302,7 @@ void dAcODungeonShip_c::executeState_Transparency() {
             field_0x858 = 50.0f;
         }
 
-        if (mPath.CheckFlag(0x40000000) && field_0x858 > 0.0f) {
+        if (mPath.checkFlag(0x40000000) && field_0x858 > 0.0f) {
             field_0x858 *= -1;
         }
     }
@@ -433,26 +433,22 @@ void dAcODungeonShip_c::fn_485_1660() {
     }
 }
 
-static u32 rot_7fff = 0x7FFF;
-static u32 rot_4000 = 0x4000;
-
 void dAcODungeonShip_c::fn_485_1720() {
     mPath.setSpeed(mSpeed);
     mPath.execute();
-    // TODO
     mPosition = mPath.getPosition();
 
     mVec3_c tmp;
     mPath.getDirection(tmp);
     mRotation.y = cM::atan2s(tmp.x, tmp.z);
-    if (mPath.CheckFlag(0x40000000)) {
-        mRotation.y += rot_7fff;
+    if (mPath.checkFlag(0x40000000)) {
+        mRotation.y += 0x7FFF;
     }
-    mRotation.y += rot_4000;
+    mRotation.y += 0x4000;
     mAngle.y = mRotation.y;
 
     int factor = 0x12C;
-    f32 tmp2 = nw4r::math::SinIdx((field_0x850 * 800));
+    f32 tmp2 = nw4r::math::SinIdx(field_0x850 * 800);
     tmp2 *= factor;
     field_0x84C = tmp2;
 }
@@ -460,7 +456,7 @@ void dAcODungeonShip_c::fn_485_1720() {
 bool dAcODungeonShip_c::fn_485_1830(s32 pathSegmentIndex, s32 direction, s32 *out) {}
 
 u16 dAcODungeonShip_c::fn_485_1900() {
-    s32 sign = mPath.CheckFlag(0x40000000) ? -1 : 1;
+    s32 sign = mPath.checkFlag(0x40000000) ? -1 : 1;
     s32 result;
     if (fn_485_1830(mPath.getSegmentIndex(), sign, &result)) {
         return result;
