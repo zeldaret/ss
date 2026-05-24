@@ -131,7 +131,7 @@ int dAcArrow_c::create() {
     }
 
     mBoundingBox.Set(mVec3_c(-6.0f, -6.0f, 0.0f), mVec3_c(6.0f, 6.0f, 110.0f));
-    field_0x684 = -1;
+    mCounterIdx = -1;
     field_0x68A = 300;
     field_0x688 = 50.0f - cM::rndF(20.0f);
     field_0x6A8 = 80.0f;
@@ -145,11 +145,11 @@ dAcArrow_c::~dAcArrow_c() {}
 void dAcArrow_c::hitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB) {
     dJntCol_c *col = i_actorB->getLinkage().getJntCol();
     if (col != nullptr) {
-        field_0x698 = col->getArrowOffsetPosAndAngle(
+        mBoundJntIdx = col->getArrowOffsetPosAndAngle(
             &i_objInfA->GetAtHitPos(), &mRotation, &field_0x6B0, &field_0x6BC, i_objInfB->ChkTg_0x4C(0x2000)
         );
 
-        if (field_0x698 >= 0) {
+        if (mBoundJntIdx >= 0) {
             mRef1.link(i_actorB);
         } else {
             mRef1.unlink();
@@ -157,7 +157,7 @@ void dAcArrow_c::hitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_O
     }
 }
 
-bool dAcArrow_c::fn_8025DD20(const mVec3_c &v1, mVec3_c &v2, bool noEffect) {
+bool dAcArrow_c::checkWaterHit(const mVec3_c &v1, mVec3_c &v2, bool noEffect) {
     if (dBgS_WtrLinChk::SetIsWater(&v1, &v2, this)) {
         const mVec3_c &end = dBgS_WtrLinChk::GetInstance().GetLinEnd();
         if (isSlingshotProjectile()) {
@@ -210,12 +210,11 @@ void dAcArrow_c::fn_8025DED0(f32 f) {
     mVec3_c next = mVec3_c(mPosition + mVelocity * (field_0x6A0 + 1.0f));
     mCcCps.OnAtSet();
 
-    if (!checkArrowFlag(ARROW_0x20)) {
+    if (!checkArrowFlag(ARROW_WATER_HIT)) {
         if (!isSlingshotProjectile()) {
             holdSound(SE_AW_FLY_LV);
         }
-    fb:
-        fn_8025DD20(mPosition, next, true);
+        checkWaterHit(mPosition, next, true);
     } else {
         f32 diff = next.y - field_0x6D4.y;
         if (diff < -300.0f) {
@@ -253,7 +252,7 @@ void dAcArrow_c::fn_8025E160() {
         link->fn_80209700(field_0x6A4, field_0x69C, false);
     } else {
         link->fn_80209700(field_0x6A4, field_0x69C, false);
-        if (checkArrowFlag(ARROW_0x80)) {
+        if (checkArrowFlag(ARROW_FULLY_CHARGED)) {
             const mVec3_c *v = link->fn_802097E0(mRotation.x, mRotation.y);
             if (v != nullptr) {
                 mPosition = *v;
@@ -276,7 +275,7 @@ void dAcArrow_c::fn_8025E160() {
     }
 
     // Spawn additional projectiles for Mighty Scattershot
-    if (isSlingshotProjectile() && checkArrowFlag(ARROW_0x80)) {
+    if (isSlingshotProjectile() && checkArrowFlag(ARROW_FULLY_CHARGED)) {
         mVec3_c tmp = mVec3_c::Ez;
         tmp.rotX(mAngle.x);
         tmp.rotY(mAngle.y);
@@ -304,7 +303,7 @@ void dAcArrow_c::fn_8025E160() {
     field_0x6C8 = mPosition;
     mVelocity.fromXY(mAngle.x, mAngle.y, field_0x69C);
     if (!isSlingshotProjectile()) {
-        field_0x684 = sCounter;
+        mCounterIdx = sCounter;
         sCounter++;
         if (sCounter == 6) {
             sCounter = 0;
@@ -385,7 +384,7 @@ dAcObjBase_c *dAcArrow_c::fn_8025E960() {
     } else {
         dJntCol_c *col = o1->getLinkage().getJntCol();
         if (col != nullptr) {
-            col->setArrowPosAndAngle(&field_0x6B0, &field_0x6BC, field_0x698, &mPosition, &mRotation);
+            col->setArrowPosAndAngle(&field_0x6B0, &field_0x6BC, mBoundJntIdx, &mPosition, &mRotation);
         } else {
             MTXMultVec(o1->mWorldMtx, field_0x6B0, mPosition);
             mVec3_c tmp;
@@ -413,7 +412,7 @@ bool dAcArrow_c::checkPickup() {
     if (dAcPy_c::getCurrentBowType() != 0) {
         if (mCcSph.ChkCoHit()) {
             dAcItem_c::giveItem(ITEM_SINGLE_ARROW, 0, -1);
-            setArrowFlag(ARROW_0x2);
+            setArrowFlag(ARROW_SHOULD_DESPAWN);
             return true;
         }
         mCcSph.SetC(mPosition);
@@ -432,7 +431,7 @@ void dAcArrow_c::executeState_Wait() {
     if (checkArrowFlag(ARROW_0x800)) {
         mStateMgr.changeState(StateID_Move);
     } else if (isSlingshotProjectile()) {
-        field_0x681 = 1;
+        mHiddenTimer = 1;
     }
 }
 
@@ -448,7 +447,7 @@ void dAcArrow_c::initializeState_Move() {
         mEffectId = PARTICLE_RESOURCE_ID_MAPPING_207_;
     } else {
         u8 dmg = sDamageArrMaybe[dAcPy_c::getCurrentBowType()];
-        if (checkArrowFlag(ARROW_0x80)) {
+        if (checkArrowFlag(ARROW_FULLY_CHARGED)) {
             mCcCps.SetAtFlagsUpper(0x2000000);
             mEffectId = PARTICLE_RESOURCE_ID_MAPPING_2_;
             dmg = (s32)dmg * 1.5f + 0.5f;
@@ -466,7 +465,7 @@ void dAcArrow_c::initializeState_Move() {
 void dAcArrow_c::executeState_Move() {
     mPosition += mVelocity;
     mVec3_c next = mVec3_c(mPosition + mVelocity * field_0x6A0);
-    if (!checkArrowFlag(ARROW_0x20)) {
+    if (!checkArrowFlag(ARROW_WATER_HIT)) {
         sArrowLinChk.Set(&mOldPosition, &next, this);
         mVec3_c t;
         if (dBgS::GetInstance()->LineCross(&sArrowLinChk)) {
@@ -475,8 +474,8 @@ void dAcArrow_c::executeState_Move() {
             t = next;
         }
 
-        if (fn_8025DD20(mOldPosition, t, false)) {
-            setArrowFlag(ARROW_0x20);
+        if (checkWaterHit(mOldPosition, t, false)) {
+            setArrowFlag(ARROW_WATER_HIT);
             unsetArrowFlag(ARROW_0x200);
             field_0x6D4 = dBgS_WtrLinChk::GetInstance().GetLinEnd();
             mVelocity.normalize();
@@ -531,7 +530,7 @@ void dAcArrow_c::executeState_Move() {
             }
             dLightEnv_c::GetPInstance()->setBPM8_Type6(&mCcCps.GetAtHitPos());
             if (isSlingshotProjectile()) {
-                fn_80260050(mCcCps.GetAtHitPos(), 0);
+                onSlingshotHit(mCcCps.GetAtHitPos(), 0);
                 return;
             }
             atActor = mCcCps.GetAtActor();
@@ -539,18 +538,18 @@ void dAcArrow_c::executeState_Move() {
             if (atActor != nullptr && atActor->getLinkage().hasJntCol()) {
                 bool b = false;
                 if (atActor != mRef1.get()) {
-                    field_0x698 = atActor->getLinkage().getArrowOffsetPosAndAngle(
+                    mBoundJntIdx = atActor->getLinkage().getArrowOffsetPosAndAngle(
                         &mCcCps.GetAtHitPos(), &mRotation, &field_0x6B0, &field_0x6BC, mCcCps.GetAtFlag0x2()
                     );
                     b = true;
                 }
 
-                if (field_0x698 >= 0) {
+                if (mBoundJntIdx >= 0) {
                     what = 4;
                     if (b) {
                         mRef1.link(atActor);
                     }
-                } else if (field_0x698 == -2 || mCcCps.GetAtFlag0x2()) {
+                } else if (mBoundJntIdx == -2 || mCcCps.GetAtFlag0x2()) {
                     what = 2;
                 }
             } else {
@@ -576,8 +575,8 @@ void dAcArrow_c::executeState_Move() {
         switch (what) {
             default: {
                 if (what == 2) {
-                    if (checkArrowFlag(ARROW_0x20)) {
-                        setArrowFlag(ARROW_0x2);
+                    if (checkArrowFlag(ARROW_WATER_HIT)) {
+                        setArrowFlag(ARROW_SHOULD_DESPAWN);
                     } else {
                         if (mCcCps.ChkAtHit()) {
                             mPosition = mCcCps.GetAtHitPos();
@@ -587,8 +586,8 @@ void dAcArrow_c::executeState_Move() {
                 } else if (what == 4) {
                     mStateMgr.changeState(StateID_ActorStop);
                 } else {
-                    setArrowFlag(ARROW_0x2);
-                    if (!checkArrowFlag(ARROW_0x20) && mCcCps.ChkAtHit()) {
+                    setArrowFlag(ARROW_SHOULD_DESPAWN);
+                    if (!checkArrowFlag(ARROW_WATER_HIT) && mCcCps.ChkAtHit()) {
                         mPosition = mCcCps.GetAtHitPos();
                     }
                 }
@@ -598,9 +597,9 @@ void dAcArrow_c::executeState_Move() {
             case 3: {
                 if (isCross) {
                     mPosition = sArrowLinChk.GetLinEnd();
-                    if (checkArrowFlag(ARROW_0x20) &&
+                    if (checkArrowFlag(ARROW_WATER_HIT) &&
                         (isSlingshotProjectile() || mPosition.y - field_0x6D4.y < -300.0f)) {
-                        setArrowFlag(ARROW_0x2);
+                        setArrowFlag(ARROW_SHOULD_DESPAWN);
                     } else {
                         s32 polyAtt0 = dBgS::GetInstance()->GetPolyAtt0(sArrowLinChk);
                         s32 polyAtt1 = dBgS::GetInstance()->GetPolyAtt1(sArrowLinChk);
@@ -610,18 +609,18 @@ void dAcArrow_c::executeState_Move() {
                             polyAtt0 == POLY_ATT_0_NONE || polyAtt0 == POLY_ATT_0_NUMA ||
                             polyAtt0 == POLY_ATT_0_STONE || polyAtt0 == POLY_ATT_0_METAL ||
                             (polyAtt0 == POLY_ATT_0_LIFE && (polyAtt1 == 2 || polyAtt1 == 3))) {
-                            if (checkArrowFlag(ARROW_0x20)) {
-                                setArrowFlag(ARROW_0x2);
+                            if (checkArrowFlag(ARROW_WATER_HIT)) {
+                                setArrowFlag(ARROW_SHOULD_DESPAWN);
                             } else {
                                 dAcPy_c::fn_801E2FC0(mPosition, sArrowLinChk, 0.5f);
                                 if (isSlingshotProjectile()) {
-                                    fn_80260050(mPosition, polyAtt0 == POLY_ATT_0_LAVA);
+                                    onSlingshotHit(mPosition, polyAtt0 == POLY_ATT_0_LAVA);
                                 } else {
                                     startBgHitSound(SE_AW_HIT, sArrowLinChk, nullptr);
                                     if (polyAtt0 == POLY_ATT_0_LAVA || polyAtt0 == POLY_ATT_0_NUMA ||
                                         polyAtt0 == POLY_ATT_0_NONE || specialCode == 16 || specialCode == 10 ||
                                         specialCode == 11) {
-                                        setArrowFlag(ARROW_0x2);
+                                        setArrowFlag(ARROW_SHOULD_DESPAWN);
                                     } else {
                                         mStateMgr.changeState(StateID_Bound);
                                     }
@@ -631,23 +630,23 @@ void dAcArrow_c::executeState_Move() {
                             mStateMgr.changeState(StateID_BgStop);
                         }
                     }
-                } else if (checkArrowFlag(ARROW_0x20)) {
+                } else if (checkArrowFlag(ARROW_WATER_HIT)) {
                     if (isSlingshotProjectile()) {
                         mPosition = next;
-                        setArrowFlag(ARROW_0x2);
+                        setArrowFlag(ARROW_SHOULD_DESPAWN);
                     } else {
                         f32 diff = mPosition.y - field_0x6D4.y;
                         if (diff < -300.0f) {
                             mCcCps.ClrAtSet();
                             mCcCps.ClrAtHit();
                             if (sLib::chase(&mScale.x, 0.0f, 0.1f)) {
-                                setArrowFlag(ARROW_0x2);
+                                setArrowFlag(ARROW_SHOULD_DESPAWN);
                             } else {
                                 mScale.y = mScale.z = mScale.x;
                                 mModel.setScale(mScale);
                             }
                         } else if (diff > 90.0f) {
-                            setArrowFlag(ARROW_0x2);
+                            setArrowFlag(ARROW_SHOULD_DESPAWN);
                         } else {
                             fn_8025DED0(mPosition.distance(field_0x6C8));
                         }
@@ -676,7 +675,7 @@ void dAcArrow_c::executeState_Move() {
                         if (field_0x68A != 0) {
                             field_0x68A--;
                         } else {
-                            setArrowFlag(ARROW_0x2);
+                            setArrowFlag(ARROW_SHOULD_DESPAWN);
                             return;
                         }
                         mRotation.x = mVelocity.atan2snY_XZ();
@@ -697,7 +696,7 @@ void dAcArrow_c::finalizeState_Move() {}
 
 void dAcArrow_c::initializeState_Bound() {
     if (isSlingshotProjectile()) {
-        fn_80260050(mPosition, false);
+        onSlingshotHit(mPosition, false);
     } else {
         mSpeed = 0.0f;
         fn_802601C0();
@@ -738,7 +737,7 @@ void dAcArrow_c::executeState_Bound() {
             setArrowFlag(ARROW_0x1);
         }
     } else if ((checkArrowFlag(ARROW_0x1) && mVelocity.y <= 0.0f) || field_0x6C8.y - 5000.0f > mPosition.y) {
-        setArrowFlag(ARROW_0x2);
+        setArrowFlag(ARROW_SHOULD_DESPAWN);
     }
 
     updateMtx();
@@ -791,10 +790,10 @@ void dAcArrow_c::executeState_BgStop() {
         ref = fn_8025E960();
     }
 
-    if (checkArrowFlag(ARROW_0x10) || ref == nullptr ||
+    if (checkArrowFlag(ARROW_OLD) || ref == nullptr ||
         ((!ref->checkObjectProperty(OBJ_PROP_0x10000) || !checkArrowFlag(ARROW_0x8000)) &&
          !dBgS::GetInstance()->ChkPolySafe(mPolyInfo))) {
-        setArrowFlag(ARROW_0x2);
+        setArrowFlag(ARROW_SHOULD_DESPAWN);
     } else if (!checkArrowFlag(ARROW_0x8000)) {
         bool b = false;
         s16 s1 = fn_8025E640();
@@ -829,8 +828,8 @@ void dAcArrow_c::initializeState_ActorStop() {
 void dAcArrow_c::executeState_ActorStop() {
     dAcObjBase_c *obj = fn_8025E960();
     checkPickup();
-    if (checkArrowFlag(ARROW_0x10) || obj == nullptr) {
-        setArrowFlag(ARROW_0x2);
+    if (checkArrowFlag(ARROW_OLD) || obj == nullptr) {
+        setArrowFlag(ARROW_SHOULD_DESPAWN);
     }
     unsetArrowFlag(ARROW_0x10000);
 }
@@ -839,13 +838,13 @@ void dAcArrow_c::finalizeState_ActorStop() {
     unsetArrowFlag(ARROW_0x10000);
 }
 
-void dAcArrow_c::fn_80260050(const mVec3_c &v, bool b) {
+void dAcArrow_c::onSlingshotHit(const mVec3_c &v, bool b) {
     if (b) {
         startSound(SE_PC_HIT_LAVA);
     } else {
         startSound(SE_PC_HIT);
     }
-    setArrowFlag(ARROW_0x2);
+    setArrowFlag(ARROW_SHOULD_DESPAWN);
     setArrowFlag(ARROW_0x100);
     dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_538_, v, nullptr, nullptr, nullptr, nullptr, 0, 0);
 }
@@ -853,16 +852,16 @@ void dAcArrow_c::fn_80260050(const mVec3_c &v, bool b) {
 void dAcArrow_c::fn_802600D0(bool b) {
     // NONMATCHING
     if (b) {
-        mWorldMtx.getTranslation(field_0x6E0);
-        field_0x692.x.mVal = 0;
-        field_0x692.y.mVal = mRotation.y;
-        field_0x692.z.mVal = field_0x68E;
+        mWorldMtx.getTranslation(mEffectTranslation);
+        mEffectRotation.x.mVal = 0;
+        mEffectRotation.y.mVal = mRotation.y;
+        mEffectRotation.z.mVal = mEffectRotationZ;
         if (mEffectId == PARTICLE_RESOURCE_ID_MAPPING_2_) {
-            field_0x68E += 0x888;
+            mEffectRotationZ += 0x888;
         }
         mMtx_c mtx;
-        mtx.transS(field_0x6E0);
-        mtx.ZXYrotM(field_0x692);
+        mtx.transS(mEffectTranslation);
+        mtx.ZXYrotM(mEffectRotation);
         mEffects.holdEffect(mEffectId, mtx, nullptr, nullptr);
     } else {
         mEffects.setFading(5);
@@ -900,7 +899,7 @@ int dAcArrow_c::actorExecute() {
         }
     }
 
-    if (checkArrowFlag(ARROW_0x2)) {
+    if (checkArrowFlag(ARROW_SHOULD_DESPAWN)) {
         // TODO - works but maybe temps or inlines?
         if (mRef2.isLinked()) {
             mRef2.get()->getLinkage().forceRemove(mRef2.get());
@@ -908,17 +907,16 @@ int dAcArrow_c::actorExecute() {
         fn_802601C0();
         if (mDespawnTimer != 0) {
             mDespawnTimer--;
-
         } else {
             deleteRequest();
             return SUCCEEDED;
         }
     } else {
-        if (field_0x684 == sCounter) {
-            setArrowFlag(ARROW_0x10);
+        if (mCounterIdx == sCounter) {
+            setArrowFlag(ARROW_OLD);
         }
-        if (field_0x681 != 0) {
-            field_0x681--;
+        if (mHiddenTimer != 0) {
+            mHiddenTimer--;
         }
         mStateMgr.executeState();
         if (mStateMgr.isState(StateID_Move)) {
@@ -928,7 +926,9 @@ int dAcArrow_c::actorExecute() {
 
     mPositionCopy2 = mPositionCopy3 = mPosition;
     if (checkArrowFlag(ARROW_0x1000)) {
-        fn_802600D0(mStateMgr.isState(StateID_Move) && !checkArrowFlag(ARROW_0x2) || checkArrowFlag(ARROW_0x100));
+        fn_802600D0(
+            (mStateMgr.isState(StateID_Move) && !checkArrowFlag(ARROW_SHOULD_DESPAWN)) || checkArrowFlag(ARROW_0x100)
+        );
     }
     updateRoomId();
     dAcObjBase_c *obj = mRef2.get();
@@ -944,10 +944,10 @@ int dAcArrow_c::actorExecute() {
 }
 
 int dAcArrow_c::draw() {
-    if (field_0x681 != 0) {
+    if (mHiddenTimer != 0) {
         return SUCCEEDED;
     }
-    if (checkArrowFlag(ARROW_0x2)) {
+    if (checkArrowFlag(ARROW_SHOULD_DESPAWN)) {
         return SUCCEEDED;
     }
     if (mStateMgr.isState(StateID_Wait) && checkArrowFlag(ARROW_INITIAL_SPAWN)) {

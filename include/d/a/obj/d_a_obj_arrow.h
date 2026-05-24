@@ -37,7 +37,7 @@ private:
     static const u8 sDamageArrMaybe[];
     static u16 sCounter;
 
-    bool fn_8025DD20(const mVec3_c &v1, mVec3_c &v2, bool noEffect);
+    bool checkWaterHit(const mVec3_c &v1, mVec3_c &v2, bool noEffect);
     void fn_8025DED0(f32 f);
     void fn_8025E160();
     void updateRoomId();
@@ -48,20 +48,20 @@ private:
     dAcObjBase_c *fn_8025E960();
     void initPickupCc();
     bool checkPickup();
-    void fn_80260050(const mVec3_c &v, bool);
+    void onSlingshotHit(const mVec3_c &v, bool);
     void fn_802600D0(bool);
     void fn_802601C0();
     bool fn_80260250(dAcObjBase_c *o1, dAcObjBase_c *o2);
 
     enum ArrowFlag_e {
         ARROW_0x1 = 1 << 0,
-        ARROW_0x2 = 1 << 1,
+        ARROW_SHOULD_DESPAWN = 1 << 1,
         ARROW_INITIAL_SPAWN = 1 << 2,
         ARROW_0x8 = 1 << 3,
-        ARROW_0x10 = 1 << 4,
-        ARROW_0x20 = 1 << 5,
+        ARROW_OLD = 1 << 4,
+        ARROW_WATER_HIT = 1 << 5,
         ARROW_0x40 = 1 << 6,
-        ARROW_0x80 = 1 << 7,
+        ARROW_FULLY_CHARGED = 1 << 7,
         ARROW_0x100 = 1 << 8,
         ARROW_0x200 = 1 << 9,
         ARROW_0x400 = 1 << 10,
@@ -98,22 +98,22 @@ private:
     /* 0x350 */ dAcRef_c<dAcObjBase_c> mRef1;
     /* 0x35C */ dCcD_Cps mCcCps;
     /* 0x4CC */ dCcD_Sph mCcSph;
-    /* 0x61C */ cBgS_PolyInfo mPolyInfo; // ??
+    /* 0x61C */ cBgS_PolyInfo mPolyInfo;
     /* 0x648 */ dEmitter_c mEffects;
     /* 0x67C */ u32 mArrowFlags;
     /* 0x680 */ u8 mArrowType;
-    /* 0x681 */ u8 field_0x681;
+    /* 0x681 */ u8 mHiddenTimer;
     /* 0x682 */ u8 mDespawnTimer;
     /* 0x683 */ u8 field_0x683;
-    /* 0x684 */ s16 field_0x684;
+    /* 0x684 */ s16 mCounterIdx;
     /* 0x686 */ u8 field_0x686[0x688 - 0x686];
     /* 0x688 */ s16 field_0x688;
     /* 0x68A */ s16 field_0x68A;
     /* 0x68C */ u16 mEffectId;
-    /* 0x68E */ mAng field_0x68E;
+    /* 0x68E */ mAng mEffectRotationZ;
     /* 0x690 */ mAng field_0x690;
-    /* 0x692 */ mAng3_c field_0x692;
-    /* 0x698 */ UNKWORD field_0x698;
+    /* 0x692 */ mAng3_c mEffectRotation;
+    /* 0x698 */ s32 mBoundJntIdx;
     /* 0x69C */ f32 field_0x69C;
     /* 0x6A0 */ f32 field_0x6A0;
     /* 0x6A4 */ f32 field_0x6A4;
@@ -123,7 +123,7 @@ private:
     /* 0x6BC */ mVec3_c field_0x6BC;
     /* 0x6C8 */ mVec3_c field_0x6C8;
     /* 0x6D4 */ mVec3_c field_0x6D4;
-    /* 0x6E0 */ mVec3_c field_0x6E0;
+    /* 0x6E0 */ mVec3_c mEffectTranslation;
     /* 0x6EC */ mVec3_c field_0x6EC;
     /* 0x6F8 */ dAcRef_c<dAcObjBase_c> mRef2;
     /* 0x704 */ STATE_MGR_DECLARE(dAcArrow_c);
