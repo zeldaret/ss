@@ -122,7 +122,15 @@ const dAcEKs_HIO_c dAcEKs_HIO_c::sInstance = {
 
 SPECIAL_ACTOR_PROFILE(E_KS, dAcEKs_c, fProfile::E_KS, 0xFE, 0, 4099);
 
-static dCcD_SrcSph sSrcSph = {{0x400}};
+static dCcD_SrcSph sSrcSph = {
+    {
+     /* mObjAt */ {AT_TYPE_DAMAGE, 0x1D, {0, 0, 0}, 2, 0, 0, 0, 0, 0},
+     /* mObjTg */
+        {~AT_TYPE_COMMON0, 0x200303, {0, 1, 0x40F}, 8, 0},
+     /* mObjCo*/ {0xE5},
+     },
+    {35.f}
+};
 
 STATE_DEFINE(dAcEKs_c, Wait);
 STATE_DEFINE(dAcEKs_c, WakeUp);
@@ -1804,7 +1812,6 @@ void dAcEKs_c::initializeState_Wait() {
     setStartingPosition(mPosition);
 }
 
-// NONMATCHING
 void dAcEKs_c::executeState_Wait() {
     mMdl.play();
     u16 flag = getFromParams(14, 0xFF);
