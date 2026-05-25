@@ -123,12 +123,39 @@ u32 dSndSourceEnemy_c::overrideHoldSoundId(u32 soundId, bool initial) {
 }
 
 u32 dSndSourceEnemyAnim_c::overrideStartSoundId(u32 soundId) {
-    // TODO
+    switch (mSourceType) {
+        case SND_SOURCE_MAGUPPO:
+            if (mSubtype == 1) {
+                switch (soundId) {
+                    case SE_EMagupp_APPEAR:     soundId = SE_EMagupp_APPEAR_SAND; break;
+                    case SE_EMagupp_DISAPPEAR:  soundId = SE_EMagupp_DISAPPEAR_SAND; break;
+                    case SE_EMagupp_WATER0:     soundId = SE_EMagupp_WATER0_SAND; break;
+                    case SE_EMagupp_SWIM:       soundId = SE_EMagupp_SWIM_SAND; break;
+                    case SE_EMagupp_BLOWNUP_LV: soundId = SE_EMagupp_BLOWNUP_LV_SAND; break;
+                }
+            }
+            break;
+        case SND_SOURCE_LIZARUFOS:
+            if (mSubtype == 0 && soundId == SE_ELizaru_FIRE_LV) {
+                soundId = SE_ELizaru_FIRE_LV_MA;
+            }
+            if (soundId == SE_E_DISAPPEAR) {
+                unregisterEnemySource();
+            }
+            break;
+        case SND_SOURCE_BC_Z:
+            if (soundId == SE_E_DISAPPEAR) {
+                unregisterEnemySource();
+            }
+            break;
+    }
     return soundId;
 }
 
 u32 dSndSourceEnemyAnim_c::overrideHoldSoundId(u32 soundId, bool initial) {
-    // TODO
+    if (mSourceType == SND_SOURCE_MAGUPPO && mSubtype == 1 && soundId == SE_EMagupp_BLOWNUP_LV) {
+        soundId = SE_EMagupp_BLOWNUP_LV_SAND;
+    }
     return soundId;
 }
 

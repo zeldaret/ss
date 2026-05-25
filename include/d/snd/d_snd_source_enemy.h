@@ -30,13 +30,15 @@ public:
         return specializeBgHitSoundId(soundId, mPolyAttr0, mPolyAttr1);
     }
 
+protected:
+    void unregisterEnemySource();
+
 private:
     // Probably not a problem for weak function order since getName is emitted
     // earlier through an explicit call
     bool isName(const char *name) const {
         return streq(name, getName());
     }
-    void unregisterEnemySource();
 
     /* 0x15C */ nw4r::ut::Node mMgrEnemyLink;
     /* 0x164 */ UNKWORD field_0x164;
