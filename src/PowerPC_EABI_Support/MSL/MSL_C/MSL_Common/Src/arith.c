@@ -8,6 +8,14 @@ int abs(int n) {
         return (n);
 }
 
+/* 804C91F8-804C9208 .text            labs */
+long labs(long n) {
+    if (n < 0)
+        return (-n);
+    else
+        return (n);
+}
+
 /* 80365078-803650D0 35F9B8 0058+00 0/0 1/1 0/0 .text            div */
 div_t div(int numerator, int denominator) {
     div_t ret;
