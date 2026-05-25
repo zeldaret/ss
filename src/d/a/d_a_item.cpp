@@ -445,15 +445,13 @@ extern const UnkFloat f2(1.0f);
 SPECIAL_ACTOR_PROFILE(ITEM, dAcItem_c, fProfile::ITEM, 0x2B, 0, 2);
 
 const dAcItem_c::sStaticPtmf dAcItem_c::sStaticPtmfs1[] = {
-    &dAcItem_c::fn_80248020, nullptr,
-    &dAcItem_c::fn_80248010, nullptr,
-    &dAcItem_c::fn_80255B30, &dAcItem_c::fn_80255BA0,
+    &dAcItem_c::fn_80248020, nullptr, &dAcItem_c::fn_80248010, nullptr, &dAcItem_c::fn_80255B30,
+    &dAcItem_c::fn_80255BA0,
 };
 
 const dAcItem_c::sStaticPtmf dAcItem_c::sStaticPtmfs2[] = {
-    &dAcItem_c::fn_80248040, nullptr,
-    &dAcItem_c::fn_80248030, nullptr,
-    &dAcItem_c::fn_80255BD0, &dAcItem_c::fn_80255C40,
+    &dAcItem_c::fn_80248040, nullptr, &dAcItem_c::fn_80248030, nullptr, &dAcItem_c::fn_80255BD0,
+    &dAcItem_c::fn_80255C40,
 };
 
 fLiMgBa_c dAcItem_c::sItemList;
@@ -1429,7 +1427,7 @@ void dAcItem_c::executeState_Wait() {
         if (fn_802574A0() && !tgBit1) {
             // TODO weird double load of link
             link = dAcPy_c::GetLinkM();
-            if (!link->vt_0x1C0()) {
+            if (!link->getBeetleInFlight()) {
                 addToGetQueue();
 
                 if ((link->ifHasHealthAndSomethingElse() && this == sItemListHead.get() &&
@@ -1752,7 +1750,7 @@ void dAcItem_c::executeState_Carry() {
     if (fn_802574A0()) {
         // TODO weird double load
         dAcPy_c *link = dAcPy_c::GetLinkM();
-        if (!link->vt_0x1C0()) {
+        if (!link->getBeetleInFlight()) {
             addToGetQueue();
             if (link->ifHasHealthAndSomethingElse() && this == sItemListHead.get() &&
                 FileManager::sInstance->getCurrentHealth() != 0) {
@@ -1816,7 +1814,7 @@ void dAcItem_c::executeState_GetBeetle() {
     if (link == nullptr) {
         return;
     }
-    dAcBoomerang_c *beetlePtr = (dAcBoomerang_c *)link->vt_0x1C0();
+    dAcBoomerang_c *beetlePtr = (dAcBoomerang_c *)link->getBeetleInFlight();
     if (beetlePtr == nullptr) {
         if (link->ifHasHealthAndSomethingElse() && this == sItemListHead.get() &&
             FileManager::sInstance->getCurrentHealth() != 0) {
