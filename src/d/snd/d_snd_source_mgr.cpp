@@ -18,6 +18,7 @@
 #include "d/snd/d_snd_source_group.h"
 #include "d/snd/d_snd_source_py_bird.h"
 #include "d/snd/d_snd_source_enemy.h"
+#include "d/snd/d_snd_distant_sound_actor_pool.h"
 #include "d/snd/d_snd_source_obj_clef.h"
 #include "d/snd/d_snd_source_obj.h"
 #include "d/snd/d_snd_source_npc.h"
@@ -644,6 +645,34 @@ void dSndSourceMgr_c::playFlowSound(u32 id) {
     } else {
         dSndSmallEffectMgr_c::GetInstance()->playSoundInternalChecked(sFlowSoundDefs[id].soundId, nullptr);
     }
+}
+
+bool dSndSourceMgr_c::isCertainEnemyType(dSoundSource_c *source) {
+    if (source == nullptr) {
+        return false;
+    }
+    if (source->getSourceType() >= SND_SOURCE_ENEMY_10) {
+        if (source->getSourceType() < 0xF) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void dSndSourceMgr_c::stopAllSound() {
+    for (dSoundSource_c *it = getAllSourcesFirst(); it != nullptr; it = getAllSourcesNext(it)) {
+        it->shutdown();
+    }
+    dSndDistantSoundActorPool_c::sInstance->disableAll();
+}
+
+void dSndSourceMgr_c::stopAllNonPlayerSound() {
+    for (dSoundSource_c *it = getAllSourcesFirst(); it != nullptr; it = getAllSourcesNext(it)) {
+        if (it->getCategory() != SND_SOURCE_CATEGORY_PLAYER) {
+            it->shutdown();
+        }
+    }
+    dSndDistantSoundActorPool_c::sInstance->disableAll();
 }
 
 struct dSndSourceMgrEmptySinit {
