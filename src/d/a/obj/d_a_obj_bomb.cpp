@@ -13,7 +13,9 @@ STATE_DEFINE(dAcBomb_c, Explode);
 STATE_DEFINE(dAcBomb_c, Carry);
 STATE_DEFINE(dAcBomb_c, WindCarry);
 
-bool dAcBomb_c::createHeap() {}
+bool dAcBomb_c::createHeap() {
+    return true;
+}
 
 int dAcBomb_c::create() {
     return SUCCEEDED;
