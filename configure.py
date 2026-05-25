@@ -832,7 +832,7 @@ config.libs = [
             Object(Matching, "d/snd/d_snd_rng_link_voice.cpp"),
             Object(NonMatching, "d/snd/d_snd_fi_vocal_mgr.cpp"),
             Object(NonMatching, "d/snd/d_snd_data.cpp"),
-            Object(NonMatching, "d/snd/d_snd_rng.cpp"),
+            Object(Matching, "d/snd/d_snd_rng.cpp"),
             Object(Matching, "d/snd/d_snd_rng_mgr.cpp"),
             Object(Matching, "d/snd/d_snd_rng_id.cpp"),
             Object(Matching, "d/snd/d_snd_rng_id_if.cpp"),
