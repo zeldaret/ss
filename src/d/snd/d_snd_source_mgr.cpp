@@ -651,10 +651,8 @@ bool dSndSourceMgr_c::isCertainEnemyType(dSoundSource_c *source) {
     if (source == nullptr) {
         return false;
     }
-    if (source->getSourceType() >= SND_SOURCE_ENEMY_10) {
-        if (source->getSourceType() < 0xF) {
-            return true;
-        }
+    if (SND_SOURCE_ENEMY_10 <= source->getSourceType() && source->getSourceType() < SND_SOURCE_ENEMY_15) {
+        return true;
     }
     return false;
 }
@@ -663,7 +661,7 @@ void dSndSourceMgr_c::stopAllSound() {
     for (dSoundSource_c *it = getAllSourcesFirst(); it != nullptr; it = getAllSourcesNext(it)) {
         it->shutdown();
     }
-    dSndDistantSoundActorPool_c::sInstance->disableAll();
+    dSndDistantSoundActorPool_c::GetInstance()->disableAll();
 }
 
 void dSndSourceMgr_c::stopAllNonPlayerSound() {
@@ -672,7 +670,7 @@ void dSndSourceMgr_c::stopAllNonPlayerSound() {
             it->shutdown();
         }
     }
-    dSndDistantSoundActorPool_c::sInstance->disableAll();
+    dSndDistantSoundActorPool_c::GetInstance()->disableAll();
 }
 
 struct dSndSourceMgrEmptySinit {
