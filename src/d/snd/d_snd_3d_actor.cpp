@@ -191,3 +191,11 @@ const char *dSnd3DActor_c::soundIdToSoundLabel(u32 soundId) const {
         return dSndMgr_c::getSoundLabelString(soundId);
     }
 }
+
+u32 dSnd3DActor_c::getSomeUserParam(u32 soundId) const {
+    if (mIsDemoActor) {
+        return dSndPlayerMgr_c::GetInstance()->getDemoArchiveDirectly()->GetSoundUserParam(soundId);
+    } else {
+        return dSndPlayerMgr_c::GetInstance()->getSomeUserParam(soundId);
+    }
+}
