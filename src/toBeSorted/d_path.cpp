@@ -517,7 +517,7 @@ s32 ActorOnRail_Ext::execute() {
                     mSegmentDistance = 0.0f;
                     if (checkFlag(0x1)) {
                         ret = 3;
-                        offFlag(0x40000000);
+                        unsetFlag(0x40000000);
                         mSpeed *= -1.0f;
                     }
                     break;
@@ -545,7 +545,7 @@ s32 ActorOnRail_Ext::execute() {
                     mSegmentDistance = segmentLength;
                     if (checkFlag(0x1)) {
                         ret = 3;
-                        onFlag(0x40000000);
+                        setFlag(0x40000000);
                         mSpeed *= -1.0f;
                     }
                     break;
@@ -589,13 +589,28 @@ s32 ActorOnRail_Ext::getNextPointIndex() const {
     return getNextPointIndex(mSegmentIndex);
 }
 
+s32 ActorOnRail_Ext::getNextPointIndex2() const {
+    if (mSpeed >= 0.0f) {
+        return mSegmentIndex;
+    }
+
+    if (mSegmentIndex + 1 < mPath.getNumPoints()) {
+        return mSegmentIndex + 1;
+    }
+
+    if (mPath.isWrapping()) {
+        return 0;
+    }
+
+    return mPath.getLastPointIdx();
+}
+
 s32 ActorOnRail_Ext::getClosestXZPoint(const mVec3_c &pos) const {
     f32 max = EGG::Math<f32>::maxNumber();
     s32 best = 0;
     mVec3_c c;
     for (s32 i = 0; i < mPath.getNumPoints(); i++) {
-        const Vec *point = mPath.getPoint(i);
-        c = *reinterpret_cast<const mVec3_c *>(point) - pos;
+        c = *getPoint(i) - pos;
         f32 dist = c.squareMagXZ();
         if (max > dist) {
             best = i;

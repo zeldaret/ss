@@ -225,7 +225,7 @@ void beginPad_BR() {
         if ((dCsGame_c::GetInstance() != nullptr && dCsGame_c::GetInstance()->shouldDraw() && !ex.field_0x22D0) ||
             (dAcPy_c::GetLink() != nullptr &&
              dAcPy_c::GetLink()->checkActionFlagsCont(0x400 | 0x100 | 0x80 | 0x40 | 0x10 | 0x4 | 0x2 | 0x1) &&
-             !dAcPy_c::GetLink()->vt_0x1C0() && !dLytMeter_c::GetMain()->getField_0x1377F()) ||
+             !dAcPy_c::GetLink()->getBeetleInFlight() && !dLytMeter_c::GetMain()->getField_0x1377F()) ||
             ex.field_0x22CF) {
             if (dLytControlGame_c::getInstance() && dLytControlGame_c::getInstance()->isStateNormal()) {
                 if (!(dPadManager_c::GetInstance() && dPadManager_c::GetInstance()->getField_0x25())) {

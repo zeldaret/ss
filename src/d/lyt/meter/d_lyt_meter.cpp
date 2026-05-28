@@ -1179,8 +1179,9 @@ void dLytMeterMain_c::checkPaneVisibility() {
 
         || (MinigameManager::isInMinigameState(MinigameManager::TRIAL_TIME_ATTACK) &&
             LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE) ||
-        (dLytMeter_c::getField_0x13B66() || (shouldBeHiddenGeneral() && !mItemSelect.fn_800F02F0() && !isDoingSkyKeepPuzzle()) ||
-         isInModeMap() || isInModePause())) {
+        (dLytMeter_c::getField_0x13B66() ||
+         (shouldBeHiddenGeneral() && !mItemSelect.fn_800F02F0() && !isDoingSkyKeepPuzzle()) || isInModeMap() ||
+         isInModePause())) {
         mPanesVisible[METER_ANIM_ITEM_SELECT] = false;
     }
 
@@ -1278,7 +1279,8 @@ void dLytMeterMain_c::checkPaneVisibility() {
          MinigameManager::isInMinigameState(MinigameManager::TRIAL_TIME_ATTACK) ||
          MinigameManager::isInMinigameState(MinigameManager::PUMPKIN_ARCHERY) ||
          MinigameManager::isInMinigameState(MinigameManager::SPIRAL_CHARGE_TUTORIAL) ||
-         MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER) || shouldBeHiddenGeneral() || mIsInSwordDrawEvent)
+         MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER) || shouldBeHiddenGeneral() ||
+         mIsInSwordDrawEvent)
 
         || (dLytMeter_c::getField_0x13B66() || fn_800D5420() ||
             (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->isOutputText()) ||
@@ -1352,7 +1354,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         }
     }
 
-    if ((dAcPy_c::GetLink()->hasvt_0x1C0() || dAcPy_c::GetLink()->checkActionFlagsCont(0x10) ||
+    if ((dAcPy_c::GetLink()->isBeetleInFlight() || dAcPy_c::GetLink()->checkActionFlagsCont(0x10) ||
          (shouldBeHiddenGeneral() && !mHelpOpen) || mGanbariGauge.fn_80104760() ||
 
          MinigameManager::isInMinigameState(MinigameManager::FUN_FUN_ISLAND) ||
@@ -1490,7 +1492,8 @@ void dLytMeterMain_c::checkPaneVisibility() {
         if (!field_0x137B2 || dLytAreaCaption_c::getVisible() || fn_800D5380(false) ||
             MinigameManager::isInAnyMinigame() || mIsInSwordDrawEvent
 
-            || shouldBeHiddenGeneral() || dLytMeter_c::getField_0x13B66() || fn_800D5420() || isInModeMap() || isInModePause()) {
+            || shouldBeHiddenGeneral() || dLytMeter_c::getField_0x13B66() || fn_800D5420() || isInModeMap() ||
+            isInModePause()) {
             mDrinkVisible = false;
         }
 

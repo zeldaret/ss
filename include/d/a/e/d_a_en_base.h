@@ -51,12 +51,14 @@ public:
     /* 0x33C */ u32 mInteractionFlags;
     /* 0x340 */ u16 field_0x338;
     /* 0x342 */ u16 mHealth;
-    /* 0x344 */ u8 _344[0x358 - 0x344];
+    /* 0x344 */ u8 _0x344[0x346 - 0x344];
+    /* 0x346 */ u8 field_0x346;
+    /* 0x347 */ u8 _0x347[0x358 - 0x347];
     /* 0x358 */ mVec3_c mFinalBlowPosition;
-    /* 0x364 */ u8 _364[0x374 - 0x364];
+    /* 0x364 */ u8 _0x364[0x374 - 0x364];
     /* 0x374 */ dAcEnData *mpEnemyData;
 
-    bool checkInteractionFlags(u32 mask) {
+    bool checkInteractionFlags(u32 mask) const {
         return mInteractionFlags & mask;
     }
     void setInteractionFlags(u32 flag) {
@@ -65,8 +67,14 @@ public:
     void resetInteractionFlags(u32 flag) {
         mInteractionFlags &= ~flag;
     }
+    void setFinalBlowPosition(const mVec3_c &v) {
+        mFinalBlowPosition = v;
+    }
 
     dAcBomb_c *getBombWithinRadius(f32 radius); // fn_8002f700
+
+    void playDeathEffect0(const mVec3_c &pos, const mVec3_c *pScale, bool skipKill);
+    void playDeathEffect1(const mVec3_c &pos, const mVec3_c *pScale, bool skipKill);
 
     // Deals with dealing damage to Enemy
     // Returns a value 0-13 (similar to mStts rank?)
@@ -75,9 +83,10 @@ public:
     // Returns 0-3 based on collision
     int fn_800301b0(const mVec3_c &pos, mAng ang, bool, f32);
     void fn_80030400(m3d::mdl_c &, u8, bool, u8);
-    void fn_800306d0();
+    bool fn_80030570(m3d::mdl_c &, u8, f32); // lighting related
+    void fn_800306D0();
     void fn_80030700();
-
+    dAcObjBase_c *targetPlayerOrScrapper(f32 biasToScrapper);
     static void fn_80030980(m3d::mdl_c &, s32, bool markDirty);
 
     void fn_80030c20(u32 flags, f32, f32, f32, f32);

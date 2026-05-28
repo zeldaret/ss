@@ -92,6 +92,9 @@ public:
     u32 getFromParams(u8 shift, u32 mask) {
         return (mParams >> shift) & mask;
     }
+    f32 getFromParams(u8 shift, u32 mask, f32 scale) {
+        return ((mParams >> shift) & mask) * scale;
+    }
 
 public:
     fBase_c();

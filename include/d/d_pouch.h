@@ -25,6 +25,8 @@ bool swapStockItems(s32 slot1, s32 slot2);
 
 void sortStock();
 
+bool tryDropItem(f32 chance);
+
 #define ITEM_CHECK_SLOT_NONE 60
 
 u16 itemCheckFindItemSlot(ITEM_ID item);

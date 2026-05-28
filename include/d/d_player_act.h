@@ -250,7 +250,9 @@ public:
     /* vt 0x1BC */ virtual UNKWORD vt_0x1BC() {
         return 0;
     }
-    /* vt 0x1C0 */ virtual void *vt_0x1C0() const {
+
+    // I believe this can only return the Beetle Actor in-flight (not on hand)
+    /* vt 0x1C0 */ virtual dAcObjBase_c *getBeetleInFlight() const {
         return nullptr;
     }
     /* vt 0x1C4 */ virtual UNKWORD getActorInActorRef1() {
@@ -648,8 +650,8 @@ public:
         return mSpecificAttackDirection;
     }
 
-    inline bool hasvt_0x1C0() const {
-        return vt_0x1C0() != nullptr;
+    inline bool isBeetleInFlight() const {
+        return getBeetleInFlight() != nullptr;
     }
 
     static s32 getCurrentSwordTypeInline() {

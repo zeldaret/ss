@@ -59,6 +59,11 @@ public:
         return mpPathPtr->pointCount;
     }
 
+    s32 getLastPointIdx() const {
+        s32 pnt = getNumPoints() - 1;
+        return pnt >= 0 ? pnt : 0;
+    }
+
     bool initWithPathId(s32 pathId, s32 roomId, bool pathSubtype);
     bool initWithPathIndex(s32 pathIndex, s32 roomId, bool pathSubtype);
 
@@ -118,18 +123,6 @@ public:
         return mSegmentTime;
     }
 
-    bool CheckFlag(u32 flag) const {
-        return (mFlags & flag) != 0;
-    }
-
-    void ClearFlag(u32 flag) {
-        mFlags &= ~flag;
-    }
-
-    void SetFlag(u32 flag) {
-        mFlags |= flag;
-    }
-
     const mVec3_c &getPosition() const {
         return mPosition;
     }
@@ -138,21 +131,34 @@ public:
         mSpeed = speed;
     }
 
+    f32 getSpeed() const {
+        return mSpeed;
+    }
+
     void getDirection(mVec3_c &result) {
         mPath.getDirection(mSegmentIndex, mSegmentTime, result);
+    }
+
+    const mVec3_c *getPoint(s32 idx) const {
+        return reinterpret_cast<const mVec3_c *>(mPath.getPoint(idx));
     }
 
     bool checkFlag(u32 flags) const {
         return (mFlags & flags) != 0;
     }
 
-    void offFlag(u32 flags) {
+    void unsetFlag(u32 flags) {
         mFlags &= ~flags;
     }
 
-    void onFlag(u32 flags) {
+    void setFlag(u32 flags) {
         mFlags |= flags;
     }
+
+    const dPath_c &getPath() const {
+        return mPath;
+    }
+    s32 getNextPointIndex2() const;
 
 private:
     s32 getNextPointIndex(s32 point) const;

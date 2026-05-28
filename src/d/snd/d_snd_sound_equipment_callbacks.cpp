@@ -27,7 +27,7 @@ void dSndSourceEquipment_c::cbBeFlyLv(dSndSeSound_c *sound, dSoundSource_c *sour
 }
 
 void dSndSourceEquipment_c::cbBeThrowRc(dSndSeSound_c *sound, dSoundSource_c *source, nw4r::snd::SoundHandle &handle) {
-    if (dAcPy_c::GetLink() != nullptr && !dAcPy_c::GetLink()->hasvt_0x1C0()) {
+    if (dAcPy_c::GetLink() != nullptr && !dAcPy_c::GetLink()->isBeetleInFlight()) {
         handle.Stop(10);
         return;
     }

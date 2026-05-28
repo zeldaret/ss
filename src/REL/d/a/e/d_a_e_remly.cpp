@@ -1999,8 +1999,7 @@ bool dAcEremly_c::calcHeadRotation(bool lookAtTarget, const mAng &range) {
 
     mVec3_c outpos;
     if (!dLightEnv_c::GetPInstance()->check_BPM8(&mPosition, &outpos)) {
-        // TODO - Return type pPlayer->vt_0x1C0()
-        dAcBase_c *pActor = static_cast<dAcBase_c *>(pPlayer->vt_0x1C0());
+        dAcObjBase_c *pActor = pPlayer->getBeetleInFlight();
         if (pActor) {
             field_0xA50.set(pActor->mPosition);
             field_0xB56 = 30;

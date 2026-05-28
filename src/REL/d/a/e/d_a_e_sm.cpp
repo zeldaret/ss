@@ -285,7 +285,7 @@ int dAcEsm_c::actorPostCreate() {
             } else {
                 mTimeArea.setField0x00(0.f);
                 field_0xB8C = 0.f;
-                fn_800306d0();
+                fn_800306D0();
             }
         } break;
         case 2: {
@@ -293,7 +293,7 @@ int dAcEsm_c::actorPostCreate() {
             if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), getPosition())) {
                 field_0xB8C = 0.f;
                 mTimeArea.setField0x00(0.f);
-                fn_800306d0();
+                fn_800306D0();
             } else {
                 field_0xB8C = 1.f;
                 mTimeArea.setField0x00(1.f);
@@ -309,7 +309,7 @@ int dAcEsm_c::actorPostCreate() {
 
     if (field_0xBBF == 1 || field_0xBBF == 3) {
         unsetActorProperty(AC_PROP_0x1);
-        fn_800306d0();
+        fn_800306D0();
         setBattleBgmRelated(0);
     }
 
@@ -370,7 +370,7 @@ int dAcEsm_c::actorExecute() {
             if (timeCheck != 0) {
                 if (field_0xBBF == 3) {
                     if (checkInteractionFlags(INTERACT_0x4)) {
-                        fn_800306d0();
+                        fn_800306D0();
                     }
                     return SUCCEEDED;
                 }
@@ -392,7 +392,7 @@ int dAcEsm_c::actorExecute() {
 
                 if (timeCheck > 0) {
                     startSound(SE_TIMESLIP_TIMESLIP);
-                    fn_800306d0();
+                    fn_800306D0();
                 } else {
                     startSound(SE_TIMESLIP_TIMESLIP_REV);
                     fn_80030700();
@@ -401,7 +401,7 @@ int dAcEsm_c::actorExecute() {
 
             if (field_0xBBF == 3 && mTimeArea.isNearZero()) {
                 if (checkInteractionFlags(INTERACT_0x4)) {
-                    fn_800306d0();
+                    fn_800306D0();
                 }
                 return SUCCEEDED;
             }

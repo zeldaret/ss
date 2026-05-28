@@ -2118,7 +2118,7 @@ config.libs = [
     Rel(NonMatching, "d_a_e_hp", "REL/d/a/e/d_a_e_hp.cpp"),
     Rel(NonMatching, "d_a_e_hydra", "REL/d/a/e/d_a_e_hydra.cpp"),
     Rel(NonMatching, "d_a_e_kg", "REL/d/a/e/d_a_e_kg.cpp"),
-    Rel(NonMatching, "d_a_e_ks", "REL/d/a/e/d_a_e_ks.cpp"),
+    Rel(Matching, "d_a_e_ks", "REL/d/a/e/d_a_e_ks.cpp"),
     Rel(NonMatching, "d_a_e_kumite_gira", "REL/d/a/e/d_a_e_kumite_gira.cpp"),
     Rel(NonMatching, "d_a_e_lizarufos", "REL/d/a/e/d_a_e_lizarufos.cpp"),
     Rel(NonMatching, "d_a_e_liza_tail", "REL/d/a/e/d_a_e_liza_tail.cpp"),

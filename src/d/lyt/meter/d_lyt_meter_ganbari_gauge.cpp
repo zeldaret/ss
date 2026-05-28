@@ -600,7 +600,7 @@ bool dLytMeterGanbariGauge_c::execute() {
     mAnm[GANBARI_ANIM_DRINK].setFrame(drinkFrame);
     mAnm[GANBARI_ANIM_DRINK].setAnimEnable(true);
 
-    if (!EventManager::isInEvent() && !dAcPy_c::GetLink()->hasvt_0x1C0() &&
+    if (!EventManager::isInEvent() && !dAcPy_c::GetLink()->isBeetleInFlight() &&
         !dAcPy_c::GetLink()->checkActionFlagsCont(0x10) &&
         (d3d::isOnScreen(dAcPy_c::GetLink()->mPositionCopy3) || fn_80104710(false) || isCrawling()) &&
         *mStateMgrWheel.getStateID() != StateID_Full && *mStateMgrMain.getStateID() == StateID_InvisibleWait &&
@@ -609,7 +609,7 @@ bool dLytMeterGanbariGauge_c::execute() {
     } else if (!EventManager::isInEvent() && *mStateMgrWheel.getStateID() == StateID_Full &&
                *mStateMgrWheel.getOldStateID() != StateID_Full && *mStateMgrMain.getStateID() == StateID_Wait) {
         mStateMgrMain.changeState(StateID_OutWait);
-    } else if ((EventManager::isInEvent() || dAcPy_c::GetLink()->hasvt_0x1C0() ||
+    } else if ((EventManager::isInEvent() || dAcPy_c::GetLink()->isBeetleInFlight() ||
                 dAcPy_c::GetLink()->checkActionFlagsCont(0x10) ||
                 (!d3d::isOnScreen(dAcPy_c::GetLink()->mPositionCopy3) && !fn_80104710(false) && !isCrawling())) &&
                *mStateMgrMain.getStateID() == StateID_Wait) {
