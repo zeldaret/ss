@@ -30,3 +30,11 @@ void dLytMapCapture_c::executeState_RenderingWaitStep2() {
     }
 }
 void dLytMapCapture_c::finalizeState_RenderingWaitStep2() {}
+
+bool dLytMapCapture_c::isBusyRendering() const{
+    return mIsBusyRendering;
+}
+
+void dLytMapCapture_c::execute() {
+    mStateMgr.executeState();
+}
