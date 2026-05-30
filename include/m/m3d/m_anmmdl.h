@@ -60,11 +60,11 @@ public:
     void setAnmFile(void *data) {
         mAnmFile = nw4r::g3d::ResFile(data);
     }
-    nw4r::g3d::ResFile getAnmFile() {
+    nw4r::g3d::ResFile &getAnmFile() {
         return mAnmFile;
     }
 
-    nw4r::g3d::ResFile getMdlFile() {
+    nw4r::g3d::ResFile &getMdlFile() {
         return mMdlFile;
     }
 

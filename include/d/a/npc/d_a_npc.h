@@ -7,7 +7,11 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_message.h"
 #include "libms/flowfile.h"
+#include "m/m3d/m_anmchr.h"
+#include "m/m3d/m_anmtexsrt.h"
 #include "m/m3d/m_mdl.h"
+#include "m/m3d/m_smdl.h"
+#include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
@@ -15,6 +19,8 @@
 #include "s/s_State.hpp"
 #include "s/s_StateInterfaces.hpp"
 #include "toBeSorted/d_d3d.h"
+#include "toBeSorted/d_flow_mgr.h"
+#include "toBeSorted/sound_info.h"
 
 class dAcNpc_c;
 
@@ -210,6 +216,70 @@ public:
     /* vt 0x3C */ virtual u16 getSwitchChoice(const MsbFlowInfo *element, u16 param) const override;
     /* vt 0x40 */ virtual bool triggerEntryPointChecked(s32 labelPart1, s32 labelPart2) override;
 
+    enum FlowNpcId_e {
+        FLOW_NPC_SELF = 0, // pseudo-id
+
+        FLOW_NPC_ZLD = 1,
+        FLOW_NPC_DSK,
+        FLOW_NPC_TALK_KENSEI,
+        FLOW_NPC_RVL,
+        FLOW_NPC_KBN,
+        FLOW_NPC_KBN2,
+        FLOW_NPC_SORAJIMA_MALE,
+        FLOW_NPC_SORAJIMA_FEMALE,
+        FLOW_NPC_SKN,
+        FLOW_NPC_SKN2,
+        FLOW_NPC_KNIGHT_LEADER,
+        FLOW_NPC_CE_FRIEND,
+        FLOW_NPC_GHM,
+        FLOW_NPC_OIM,
+        FLOW_NPC_YIM,
+        FLOW_NPC_MOLE_NORMAL,
+        FLOW_NPC_MOLE_NORMAL2,
+        FLOW_NPC_SENPAI,
+        FLOW_NPC_DRB,
+        FLOW_NPC_SENPAI_B,
+        FLOW_NPC_SORAJIMA_MOTHER,
+        FLOW_NPC_SLRP,
+        FLOW_NPC_SLB,
+        FLOW_NPC_GRA,
+        FLOW_NPC_MOLE_TACKLE2,
+        FLOW_NPC_PDU,
+        FLOW_NPC_SMA2,
+        FLOW_NPC_MED_HUS_NIGHT,
+        FLOW_NPC_MED_WIFE_NIGHT,
+        FLOW_NPC_DOUGUYA_NIGHT,
+        FLOW_NPC_DOUGUYA_MOTHER,
+        FLOW_NPC_AZUKARIYA_NIGHT,
+        FLOW_NPC_AZUKARIYA_FATHER,
+        FLOW_NPC_SENPAIA_MOTHER,
+        FLOW_NPC_AKU_HUMAN,
+        FLOW_NPC_SALBAGE_MORRY,
+        FLOW_NPC_DOUGUYA_MOTHER_LOD,
+        FLOW_NPC_JUNK_MOTHER_LOD,
+        FLOW_NPC_SENPAIA_MOTHER_LOD,
+        FLOW_NPC_BBRVL,
+        FLOW_NPC_SORAJIMA_MAN_D,
+        FLOW_NPC_SORAJIMA_MAN_E,
+        FLOW_NPC_DAISHINKAN_N,
+        FLOW_NPC_PMA,
+        FLOW_NPC_DRBC,
+        FLOW_NPC_MOLE_MG,
+        FLOW_NPC_GRD,
+        FLOW_NPC_GRC,
+        FLOW_NPC_SLB2,
+        FLOW_NPC_CE_LADY,
+        FLOW_NPC_MOLE,
+
+        FLOW_LINK = 100,
+        FLOW_NPC_INV_OFFSET = 101,
+    };
+
+    dAcObjBase_c *getActorForId(s32 flowNpcId);
+    u16 flowNpcIdToProfile(s32 flowNpcId);
+    dAcObjBase_c *getObj(s32 idx);
+    s32 getIdx(s32 flowNpcId);
+
 private:
     void extract2xU16Params(const MsbFlowInfo *element, u16 *p1, u16 *p2);
     void extract4xU8Params(const MsbFlowInfo *element, u8 *p1, u8 *p2, u8 *p3, u8 *p4);
@@ -220,7 +290,7 @@ private:
     // exact type isn't known but this Makes Sense
     /* 0x068 */ dAcRef_c<dAcObjBase_c> mObjRefs[16];
     /* 0x128 */ UNKWORD field_0x128[4];
-    /* 0x138 */ UNKWORD field_0x138;
+    /* 0x138 */ s32 field_0x138;
     /* 0x13C */ UNKWORD field_0x13C;
 };
 
@@ -232,6 +302,7 @@ private:
 class dAcNpc_c : public dAcObjBase_c {
 public:
     dAcNpc_c();
+    dAcNpc_c(dFlowMgrBase_c *flowMgr);
     virtual ~dAcNpc_c();
 
     /* vt 0x080 */ virtual bool giveItem(u8 param, ITEM_ID item_id);
@@ -283,7 +354,7 @@ public:
     /* vt 0x0E8 */ virtual void acNpc_vt_0xE8();
 
     /* vt 0x074 */ virtual void *getObjectListEntry() override {
-        return &mActorListEntry;
+        return &mNpcListEntry;
     }
 
     /* vt 0x0EC */ virtual int acNpc_vt_0xEC() {
@@ -353,10 +424,10 @@ public:
     /* vt 0x184 */ virtual void acNpc_vt_0x184();
     /* vt 0x188 */ virtual void acNpc_vt_0x188();
     /* vt 0x18C */ virtual void acNpc_vt_0x18C();
-    /* vt 0x190 */ virtual void acNpc_vt_0x190();
-    /* vt 0x194 */ virtual void acNpc_vt_0x194();
-    /* vt 0x198 */ virtual void acNpc_vt_0x198();
-    /* vt 0x19C */ virtual void acNpc_vt_0x19C();
+    /* vt 0x190 */ virtual const mAng &acNpc_vt_0x190();
+    /* vt 0x194 */ virtual const mAng &acNpc_vt_0x194();
+    /* vt 0x198 */ virtual const mAng &acNpc_vt_0x198();
+    /* vt 0x19C */ virtual const mAng &acNpc_vt_0x19C();
     /* vt 0x1A0 */ virtual void acNpc_vt_0x1A0();
     /* vt 0x1A4 */ virtual void acNpc_vt_0x1A4();
     /* vt 0x1A8 */ virtual void acNpc_vt_0x1A8();
@@ -412,14 +483,34 @@ protected:
         d3d::AnmMdlWrapper *mdl, dNpcMdlCallbackMulti_c *multi, dNpcMdlCallbackBase_c *head,
         dNpcMdlCallbackBase_c *neck, dNpcMdlCallbackBase_c *spine
     );
+    bool initHeadNeckSpineCallbacks(
+        d3d::AnmMdlWrapper *mdl, dNpcMdlCallbackMulti_c *multi, dNpcMdlCallbackAng_c *head, dNpcMdlCallbackAng_c *neck,
+        dNpcMdlCallbackAng_c *spine
+    );
+
+    m3d::anmTexSrt_c *
+    newAnmTexSrt(d3d::AnmMdlWrapper *mdl, mAllocator_c *allocator, const char *mdlName, const char *anmName);
+    void setAnmTexSrt(d3d::AnmMdlWrapper *mdl, m3d::anmTexSrt_c *texSrt, const char *anmName);
+    bool createAnmChr(
+        d3d::AnmMdlWrapper *mdl, const char *mdlName, const char *anmName, mAllocator_c *allocator, m3d::anmChr_c *anm
+    );
 
     static const char *sHeadNodeName;
     static const char *sNeckNodeName;
     static const char *sSpine2NodeName;
 
 private:
-    /* 0x330 */ u8 field_0x330[0x358 - 0x330];
-    /* 0x358 */ fLiNdBa_c mActorListEntry;
+    void addToNpcList();
+    void loadMainPos(f32 offsetY1, f32 offsetY2);
+    void loadMainPos(const mVec3_c *offset);
+    void loadMainAndHeadPos(f32 posYOffset, f32 headYOffset, d3d::AnmMdlWrapper *mdl);
+    void loadMainAndHeadPos(const mVec3_c *posOffset, const mVec3_c *headOffset, d3d::AnmMdlWrapper *mdl);
+
+    static s32 getPathIndexForId(s32 id, s32 roomId, bool spth);
+
+    /* 0x330 */ u8 field_0x330[0x340 - 0x330];
+    /* 0x340 */ SoundInfo mSoundInfo;
+    /* 0x358 */ fLiNdBa_c mNpcListEntry;
     /* 0x364 */ dFlowNpc_c mFlow;
     /* 0x4A4 */ u8 field_0x4A4[0x4C0 - 0x4A4];
     /* 0x4C0 */ STATE_MGR_DECLARE(dAcNpc_c);
