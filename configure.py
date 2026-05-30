@@ -774,7 +774,7 @@ config.libs = [
             Object(Matching, "d/snd/d_snd_3d_manager.cpp"),
             Object(NonMatching, "d/snd/d_snd_state_mgr.cpp"),
             Object(Matching, "d/snd/d_snd_stage_data.cpp"),
-            Object(NonMatching, "d/snd/d_snd_stage_reverb.cpp"),
+            Object(Matching, "d/snd/d_snd_stage_reverb.cpp"),
             Object(NonMatching, "d/snd/d_snd_stage_callbacks.cpp"),
             Object(NonMatching, "d/snd/d_snd_event_callbacks.cpp"),
             Object(NonMatching, "d/snd/d_snd_event_demo_callbacks.cpp"),
