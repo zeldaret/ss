@@ -837,7 +837,7 @@ config.libs = [
             Object(Matching, "d/snd/d_snd_rng_id.cpp"),
             Object(Matching, "d/snd/d_snd_rng_id_if.cpp"),
             Object(Matching, "d/snd/d_snd_file_mgr.cpp"),
-            Object(NonMatching, "d/snd/d_snd_calc_pitch.cpp"),
+            Object(Matching, "d/snd/d_snd_calc_pitch.cpp"),
         ],
     },
     {
