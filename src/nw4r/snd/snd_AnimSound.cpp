@@ -90,8 +90,8 @@ void AnimSoundImpl::UpdateFrame(f32 frame, PlayDirection dir) {
 }
 
 void AnimSoundImpl::UpdateForward(f32 frame) {
-    s32 currFrameFloor = std::floorf(mCurrentFrame);
-    s32 targetFrame = std::floorf(frame);
+    s32 currFrameFloor = std::floor(mCurrentFrame);
+    s32 targetFrame = std::floor(frame);
 
     if (mNeedTriggerEventsAtCurrentFrame && mCurrentFrame == currFrameFloor) {
         currFrameFloor -= 1;
@@ -118,8 +118,8 @@ void AnimSoundImpl::UpdateForward(f32 frame) {
 }
 
 void AnimSoundImpl::UpdateBackward(f32 frame) {
-    s32 currFrameCeil = std::ceilf(mCurrentFrame);
-    s32 targetFrame = std::ceilf(frame);
+    s32 currFrameCeil = std::ceil(mCurrentFrame);
+    s32 targetFrame = std::ceil(frame);
 
     if (currFrameCeil >= mReader.GetAnimDuration()) {
         currFrameCeil -= mReader.GetAnimDuration();

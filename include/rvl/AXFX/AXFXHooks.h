@@ -1,6 +1,9 @@
 #ifndef RVL_SDK_AXFX_HOOKS_H
 #define RVL_SDK_AXFX_HOOKS_H
 #include "common.h"
+
+#include <stddef.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

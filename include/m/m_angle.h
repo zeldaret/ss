@@ -4,9 +4,10 @@
 #include "c/c_math.h"
 #include "common.h"
 #include "m/m_vec.h"
-#include "math.h"
 #include "nw4r/math/math_triangular.h"
 #include "s/s_Math.h"
+
+#include <cmath>
 
 class mAng {
 public:

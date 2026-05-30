@@ -2,10 +2,11 @@
 #define C_M3D_H
 
 #include "common.h"
-#include "math.h"
 #include "nw4r/types_nw4r.h"
 
 #include "nw4r/math.h" // IWYU pragma: export
+
+#include <cmath>
 
 class cM3dGAab;
 class cM3dGCps;

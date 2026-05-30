@@ -41,7 +41,7 @@
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/time_area_mgr.h"
 
-#include <cmath.h>
+#include <cmath>
 
 SPECIAL_ACTOR_PROFILE(E_SM, dAcEsm_c, fProfile::E_SM, 0xEB, 0, 4098);
 

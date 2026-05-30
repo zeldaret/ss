@@ -1,6 +1,6 @@
 #include "s/s_Math.h"
 
-#include "math.h"
+#include <cmath>
 
 namespace sLib {
 

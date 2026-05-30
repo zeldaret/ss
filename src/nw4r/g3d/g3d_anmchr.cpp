@@ -5,7 +5,7 @@
 
 #include "rvl/GX.h" // IWYU pragma: export
 
-#include <cmath.h>
+#include <cmath>
 
 namespace nw4r {
 namespace g3d {

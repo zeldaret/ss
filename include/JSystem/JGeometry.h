@@ -2,8 +2,9 @@
 #define JGEOMETRY_H
 
 #include "common.h"
-#include "math.h"
 #include "JSystem/JMath/JMath.h"
+
+#include <cmath>
 
 // TODO - a lot of this has been moved to nw4r and egg. Kept for reference for now.
 

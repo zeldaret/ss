@@ -1,19 +1,20 @@
-#ifndef MSL_WPRINTF_H
-#define MSL_WPRINTF_H
+#ifndef _MSL_COMMON_WPRINTF_H
+#define _MSL_COMMON_WPRINTF_H
 
-#include "__va_arg.h"
-#include "common.h"
-
-#include "wchar.h"
+#include <wstring.h>
+#include <cstddef>
+#include <cstdarg>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-int vswprintf(wchar_t *, size_t, const wchar_t *, va_list);
-int swprintf(wchar_t *, size_t, const wchar_t *, ...);
+int swprintf(wchar_t *dst, size_t maxlen, const wchar_t *fmt, ...);
+
+int vsnwprintf_s(wchar_t* str, size_t n, const wchar_t* fmt, va_list args);
 
 #ifdef __cplusplus
 }
 #endif
-#endif
+
+#endif /* _MSL_COMMON_WPRINTF_H */

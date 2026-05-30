@@ -5,7 +5,7 @@
 #include "m/m_vec.h"
 #include "toBeSorted/deg_angle_util.h"
 
-#include <math.h>
+#include <cmath>
 
 void d_camera_math_float_order() {
     // Maybe more functions here

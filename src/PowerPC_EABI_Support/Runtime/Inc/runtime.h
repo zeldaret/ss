@@ -1,6 +1,6 @@
 #ifndef RUNTIME_H
 #define RUNTIME_H
 
-#include "common.h"
+#include <types.h>
 
 #endif /* RUNTIME_H */

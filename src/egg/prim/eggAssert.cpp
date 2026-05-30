@@ -1,6 +1,7 @@
 #include "egg/prim/eggAssert.h"
 
-#include "__va_arg.h"
+#include <cstdarg>
+
 #include "egg/core/eggSystem.h"
 #include "egg/core/eggXfbManager.h"
 #include "nw4r/db/db_directPrint.h"

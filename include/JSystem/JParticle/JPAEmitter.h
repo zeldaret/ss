@@ -12,6 +12,8 @@
 #include "egg/math/eggVector.h"
 #include "m/m_angle.h"
 
+#include <cstdint>
+
 class JPAResourceManager;
 class JPABaseEmitter;
 class JPAEmitterManager;

@@ -4,7 +4,6 @@
 #include "common.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
-#include "math.h"
 
 #include <cmath>
 
@@ -49,11 +48,11 @@ f32 dDegree::abs() const {
 }
 
 f32 dDegree::sin() const {
-    return std::sinf(toRad());
+    return std::sin(toRad());
 }
 
 f32 dDegree::cos() const {
-    return std::cosf(toRad());
+    return std::cos(toRad());
 }
 
 f32 dDegree::tan() const {

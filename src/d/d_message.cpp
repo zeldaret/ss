@@ -48,6 +48,7 @@
 
 #include <cstring>
 #include <stdio.h>
+#include <stdlib.h>
 
 s32 dFlow_c::sExitId = -1;
 

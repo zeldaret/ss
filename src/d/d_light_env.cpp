@@ -46,9 +46,9 @@ void dLightEnv_c::sphere_to_cartesian(f32 angY, f32 angXZ, mVec3_c *pOut) {
     f32 radXZ = angXZ / (180.f / M_PI);
 
     mVec3_c pos;
-    pos.x = std::cosf(radY) * std::sinf(radXZ);
-    pos.y = std::sinf(radY);
-    pos.z = std::cosf(radY) * std::cosf(radXZ);
+    pos.x = std::cos(radY) * std::sin(radXZ);
+    pos.y = std::sin(radY);
+    pos.z = std::cos(radY) * std::cos(radXZ);
 
     pOut->x = pos.x;
     pOut->y = pos.y;

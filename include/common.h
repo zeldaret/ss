@@ -108,8 +108,6 @@
 #define DECOMP_DONT_INLINE __attribute__((never_inline))
 #endif
 
-#include "stddef.h"
-
 typedef signed char s8;
 typedef signed short s16;
 typedef signed long s32;
@@ -174,8 +172,7 @@ private:
 };
 #endif
 
-#define INT32_MAX (0x7fffffff)
-#define UINT32_MAX (0xffffffff)
+#define MSL_INLINE inline
 
 #define FLOAT_MIN (1.175494351e-38f)
 #define FLOAT_MAX (3.40282346638528860e+38f)

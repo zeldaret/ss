@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "rvl/MTX.h"
-#include "math.h"
+#include <cmath>
 
 void JMAMTXApplyScale(const Mtx, Mtx, f32, f32, f32);
 void JMAEulerToQuat(s16 param_0, s16 param_1, s16 param_2, Quaternion* param_3);

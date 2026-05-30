@@ -1,5 +1,6 @@
 #include "alloc.h"
 #include "critical_regions.h"
+#include <cstring>
 
 typedef struct Block {
     struct Block* prev;
@@ -82,7 +83,6 @@ typedef struct mem_pool_obj {
 } mem_pool_obj;
 
 mem_pool_obj __malloc_pool;
-static int initialized = 0;
 
 static SubBlock* SubBlock_merge_prev(SubBlock*, SubBlock**);
 static void SubBlock_merge_next(SubBlock*, SubBlock**);
@@ -124,7 +124,29 @@ static const unsigned long fix_pool_sizes[] = {4, 12, 20, 36, 52, 68};
 
 void __sys_free();
 
-static inline SubBlock* SubBlock_merge_prev(SubBlock* ths, SubBlock** start) {
+void Block_link(Block* ths, SubBlock* sb) {
+    SubBlock** st;
+    SubBlock_set_free(sb);
+    st = &Block_start(ths);
+
+    if (*st != 0) {
+        sb->prev = (*st)->prev;
+        sb->prev->next = sb;
+        sb->next = *st;
+        (*st)->prev = sb;
+        *st = sb;
+        *st = SubBlock_merge_prev(*st, st);
+        SubBlock_merge_next(*st, st);
+    } else {
+        *st = sb;
+        sb->prev = sb;
+        sb->next = sb;
+    }
+    if (ths->max_size < SubBlock_size(*st))
+        ths->max_size = SubBlock_size(*st);
+}
+
+static SubBlock* SubBlock_merge_prev(SubBlock* ths, SubBlock** start) {
     unsigned long prevsz;
     SubBlock* p;
 
@@ -144,7 +166,7 @@ static inline SubBlock* SubBlock_merge_prev(SubBlock* ths, SubBlock** start) {
     return ths;
 }
 
-static inline void SubBlock_merge_next(SubBlock* pBlock, SubBlock** pStart) {
+static void SubBlock_merge_next(SubBlock* pBlock, SubBlock** pStart) {
     SubBlock* next_sub_block;
     unsigned long this_cur_size;
 
@@ -179,29 +201,7 @@ static inline void SubBlock_merge_next(SubBlock* pBlock, SubBlock** pStart) {
     }
 }
 
-inline void Block_link(Block* ths, SubBlock* sb) {
-    SubBlock** st;
-    SubBlock_set_free(sb);
-    st = &Block_start(ths);
-
-    if (*st != 0) {
-        sb->prev = (*st)->prev;
-        sb->prev->next = sb;
-        sb->next = *st;
-        (*st)->prev = sb;
-        *st = sb;
-        *st = SubBlock_merge_prev(*st, st);
-        SubBlock_merge_next(*st, st);
-    } else {
-        *st = sb;
-        sb->prev = sb;
-        sb->next = sb;
-    }
-    if (ths->max_size < SubBlock_size(*st))
-        ths->max_size = SubBlock_size(*st);
-}
-
-static inline Block* __unlink(__mem_pool_obj* pool_obj, Block* bp) {
+static Block* __unlink(__mem_pool_obj* pool_obj, Block* bp) {
     Block* result = bp->next;
     if (result == bp) {
         result = 0;
@@ -221,7 +221,6 @@ static inline Block* __unlink(__mem_pool_obj* pool_obj, Block* bp) {
     return result;
 }
 
-/* 80362D78-8036300C 35D6B8 0294+00 2/2 0/0 0/0 .text            deallocate_from_var_pools */
 static void deallocate_from_var_pools(__mem_pool_obj* pool_obj, void* ptr) {
     SubBlock* sb = SubBlock_from_pointer(ptr);
     SubBlock* _sb;
@@ -250,7 +249,6 @@ static inline __mem_pool* get_malloc_pool(void) {
     return &protopool;
 }
 
-/* 80362C20-80362D78 35D560 0158+00 1/1 0/0 0/0 .text            deallocate_from_fixed_pools */
 void deallocate_from_fixed_pools(__mem_pool_obj* pool_obj, void* ptr, unsigned long size) {
     unsigned long i = 0;
     FixSubBlock* p;
@@ -307,7 +305,6 @@ void deallocate_from_fixed_pools(__mem_pool_obj* pool_obj, void* ptr, unsigned l
     }
 }
 
-/* 80362BC8-80362C20 35D508 0058+00 1/1 0/0 0/0 .text            __pool_free */
 void __pool_free(__mem_pool* pool, void* ptr) {
     __mem_pool_obj* pool_obj;
     unsigned long size;
@@ -326,7 +323,6 @@ void __pool_free(__mem_pool* pool, void* ptr) {
     }
 }
 
-/* 80362B58-80362BC8 35D498 0070+00 0/0 2/2 0/0 .text            free */
 void free(void* ptr) {
     __begin_critical_region(malloc_pool_access);
     __pool_free(get_malloc_pool(), ptr);

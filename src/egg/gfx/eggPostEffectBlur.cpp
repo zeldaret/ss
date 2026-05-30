@@ -6,7 +6,6 @@
 #include "egg/gfx/eggGXUtility.h"
 #include "egg/math/eggMath.h"
 #include "egg/math/eggVector.h"
-#include "math.h"
 #include "nw4r/math/math_triangular.h"
 #include "nw4r/math/math_types.h"
 #include "rvl/GX/GXAttr.h"

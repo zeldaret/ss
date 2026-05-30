@@ -1,11 +1,11 @@
 #ifndef SIZED_STRING_H
 #define SIZED_STRING_H
 
-#include "__va_arg.h"
 #include "common.h"
-#include "string.h"
-#include "wstring.h"
-#include "printf.h"
+#include <stdarg.h>
+#include <string.h>
+#include <stddef.h>
+#include <printf.h>
 
 extern "C" bool strequals(const char *a, const char *b);
 

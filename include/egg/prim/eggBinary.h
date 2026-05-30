@@ -3,6 +3,8 @@
 
 #include "common.h"
 
+#include <cstddef>
+
 namespace EGG {
 
 /**

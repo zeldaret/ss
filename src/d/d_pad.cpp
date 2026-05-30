@@ -850,7 +850,7 @@ void ex_c::acc_c::fn_800576D0(s32 chan) {
                 f32 f = acc.dot(dir);
                 if (!cM3d_IsZero(cross.squaredLength())) {
                     cross.normalize();
-                    f32 acos = std::acosf(f);
+                    f32 acos = std::acos(f);
                     MTXRotAxisRad(field_0x1098, cross, acos);
                     // TODO - bad part end
                 } else {

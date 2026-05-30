@@ -1,6 +1,6 @@
 #include "m/m_angle.h"
 
-#include "math.h"
+#include <cmath>
 
 mAng3_c mAng3_c::Zero(0, 0, 0);
 

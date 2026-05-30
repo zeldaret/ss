@@ -2,6 +2,7 @@
 
 #include "rvl/BASE.h" // IWYU pragma: export
 #include "rvl/GX.h"   // IWYU pragma: export
+#include <cstdint>
 
 namespace nw4r {
 namespace g3d {

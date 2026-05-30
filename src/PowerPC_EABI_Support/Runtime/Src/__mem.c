@@ -1,6 +1,6 @@
-#include "stddef.h"
+#include <stddef.h>
 
-void* memcpy(void* dst, const void* src, size_t n) {
+__declspec(section ".init") void* memcpy(void* dst, const void* src, size_t n) {
     const unsigned char* s;
     unsigned char* d;
 
@@ -20,7 +20,7 @@ void* memcpy(void* dst, const void* src, size_t n) {
     return dst;
 }
 
-void __fill_mem(void* dst, int val, size_t n) {
+__declspec(section ".init") void __fill_mem(void* dst, int val, size_t n) {
     unsigned long v = (unsigned char)val;
     unsigned long i;
 
@@ -78,7 +78,7 @@ void __fill_mem(void* dst, int val, size_t n) {
     return;
 }
 
-void* memset(void* dst, int val, size_t n) {
+__declspec(section ".init") void* memset(void* dst, int val, size_t n) {
     __fill_mem(dst, val, n);
 
     return dst;
