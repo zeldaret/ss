@@ -1,8 +1,7 @@
 #ifndef _MSL_COMMON_ANSI_FILES_H
 #define _MSL_COMMON_ANSI_FILES_H
 
-#include "stddef.h"
-#include "wchar.h"
+#include <cstddef>
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,9 +28,9 @@ enum __file_kinds {
 };
 
 enum __file_orientation {
-    /* 0x0 */ UNORIENTED,
-    /* 0x1 */ CHAR_ORIENTED,
-    /* 0x2 */ WIDE_ORIENTED,
+    __unoriented,
+    __char_oriented,
+    __wide_oriented
 };
 
 typedef struct _file_modes {

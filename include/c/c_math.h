@@ -4,7 +4,7 @@
 #include "common.h"
 #include "egg/math/eggMath.h"
 
-#include <cmath.h>
+#include <cmath>
 
 namespace cM {
 s16 atan2s(f32, f32);

@@ -2,7 +2,7 @@
 #define LIBMS_MSGFILE_H
 
 #include "common.h"
-#include <wchar.h>
+#include <cstddef>
 
 #ifdef __cplusplus
 extern "C" {

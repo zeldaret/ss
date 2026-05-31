@@ -2,7 +2,7 @@
 #define RVL_SDK_OS_UTF_H
 
 #include "common.h"
-#include "wchar.h"
+#include "stddef.h"
 
 #ifdef __cplusplus
 extern "C" {

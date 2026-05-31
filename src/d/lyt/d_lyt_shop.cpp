@@ -32,7 +32,7 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/counters/counter.h"
 
-#include <cwchar>
+#include <cstddef>
 
 struct ShopUpgradeItemData {
     /* 0x0 */ s32 itemId;

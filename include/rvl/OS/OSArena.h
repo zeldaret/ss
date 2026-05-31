@@ -1,6 +1,8 @@
 #ifndef RVL_SDK_OS_ARENA_H
 #define RVL_SDK_OS_ARENA_H
 #include "common.h"
+
+#include <stddef.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

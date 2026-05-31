@@ -1,17 +1,22 @@
-#ifndef MSL_CPP_CSTDLIB_H
-#define MSL_CPP_CSTDLIB_H
-#include <stdlib.h>
+#ifndef MSL_CSTDLIB_H_
+#define MSL_CSTDLIB_H_
+
+#include <abort_exit.h>
+#include <arith.h>
+#include <strtoul.h>
+
 #ifdef __cplusplus
-
-// TODO: Fillout impls
+extern "C" {
 namespace std {
-// using ::abs;
-// using ::atof;
-// using ::mbstowcs;
-// using ::mbtowc;
-// using ::rand;
-// using ::wcstombs;
-} // namespace std
-
+    using ::strtol;
+    using ::strtoul;
+    using ::div;
+    using ::exit;
+    using ::abort;
+    using ::atoi;
+    using ::atof;
+}
+};
 #endif
+
 #endif

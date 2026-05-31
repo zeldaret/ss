@@ -37,7 +37,7 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/file_manager.h"
 
-#include <cwchar>
+#include <cstddef>
 
 struct DepositSellValues {
     /* 0x00 */ u8 itemId;

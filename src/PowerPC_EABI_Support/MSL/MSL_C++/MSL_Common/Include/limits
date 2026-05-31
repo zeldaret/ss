@@ -1,37 +1,8 @@
-#ifndef _STD_LIMITS_H
-#define _STD_LIMITS_H
+#ifndef _MSL_LIMITS_H
+#define _MSL_LIMITS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#define CHAR_BIT 8
-
-#define SCHAR_MIN (-0x7F - 1)
-#define SCHAR_MAX 0x7F
-#define UCHAR_MAX 0xFF
-
-#define CHAR_MIN 0
-#define CHAR_MAX SCHAR_MAX
-
-#define SHRT_MIN  (-0x7FFF - 1)
-#define SHRT_MAX  0x7FFF
-#define USHRT_MAX 0xFFFF
-
-#define INT_MIN  (-0x7FFFFFFF - 1)
-#define INT_MAX  0x7FFFFFFF
-#define UINT_MAX 0xFFFFFFFF
-
-#define LONG_MIN  (-0x7FFFFFFFL - 1)
-#define LONG_MAX  0x7FFFFFFFL
-#define ULONG_MAX 0xFFFFFFFFUL
-
-#define LLONG_MIN  (-0x7FFFFFFFFFFFFFFFLL - 1)
-#define LLONG_MAX  0x7FFFFFFFFFFFFFFFLL
-#define ULLONG_MAX 0xFFFFFFFFFFFFFFFFULL
-
-#ifdef __cplusplus
-}
+#include <climits>
+#include <float.h>
 
 namespace std {
 template <typename T>
@@ -97,6 +68,39 @@ public:
 	inline static unsigned long max() { return 0xFFFFFFFF; }
 };
 
-} // namespace std
+template <>
+class numeric_limits<float> {
+public:
+	inline static float min();
+	inline static float max() { return FLT_MAX; }
+	inline static float signaling_NaN() {
+#if __REVOLUTION_SDK__
+        static const unsigned long x = 0x7fbfffffUL;
+        return *reinterpret_cast<const float*>(&x);
+#else
+        return *(float*)__float_nan;
 #endif
+    }
+};
+
+#if __REVOLUTION_SDK__
+template <>
+class numeric_limits<double> {
+public:
+	inline static double min();
+	inline static double max();
+	inline static double signaling_NaN() {
+        static const unsigned long long x = 0x7ff7ffffffffffffULL;
+        return *reinterpret_cast<const double*>(&x);
+    }
+    //TODO: this function is almost certainly fake, but for some reason the constant shows up twice in debug .rodata
+	inline static double signaling_NaN_2() {
+        static const unsigned long long x = 0x7ff7ffffffffffffULL;
+        return *reinterpret_cast<const double*>(&x);
+    }
+};
+#endif
+
+} // namespace std
+
 #endif

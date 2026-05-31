@@ -1,7 +1,7 @@
 #ifndef _MSL_COMMON_SCANF_H
 #define _MSL_COMMON_SCANF_H
 
-#include "ansi_files.h"
+#include <ansi_files.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,6 +34,7 @@ typedef struct {
 } __wInStrCtrl;
 
 int __StringRead(void* str, int ch, int behavior);
+int sscanf(const char* buffer, const char* format, ...);
 
 #ifdef __cplusplus
 }

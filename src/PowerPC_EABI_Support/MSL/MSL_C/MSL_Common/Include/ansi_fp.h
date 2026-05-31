@@ -1,7 +1,6 @@
 #ifndef _MSL_COMMON_ANSI_FP_H
 #define _MSL_COMMON_ANSI_FP_H
 
-
 #define SIGDIGLEN 36
 
 typedef struct decimal {
@@ -21,15 +20,15 @@ typedef struct decform {
 	short digits;
 } decform;
 
-/* void __ull2dec(decimal*, u64);
+void __ull2dec(decimal*, unsigned long long);
 void __timesdec(decimal*, const decimal*, const decimal*);
 void __str2dec(decimal*, const char*, short);
-void __two_exp(decimal*, s32);
-BOOL __equals_dec(const decimal*, const decimal*);
-BOOL __less_dec(const decimal*, const decimal*);
+void __two_exp(decimal*, long);
+int __equals_dec(const decimal*, const decimal*);
+int __less_dec(const decimal*, const decimal*);
 void __minus_dec(decimal*, const decimal*, const decimal*);
-void __num2dec_internal(decimal*, f64);
-void __num2dec(const decform*, f64, decimal*);
-f64 __dec2num(const decimal*); */
+void __num2dec_internal(decimal*, double);
+void __num2dec(const decform*, double, decimal*);
+double __dec2num(const decimal*);
 
 #endif

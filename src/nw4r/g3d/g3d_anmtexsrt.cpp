@@ -515,7 +515,7 @@ void ApplyTexSrtAnmResult(ResTexSrt srt, ResMatIndMtxAndScale ind, const TexSrtA
         maxElem = ut::Max(maxElem, ut::Abs(mtx._13));
 
         scaleExp = static_cast<s8>(math::FGetExpPart(maxElem) + 1);
-        f32 invScale = std::ldexp(1.0f, -scaleExp); // TODO ldexpf rename
+        f32 invScale = std::ldexpf(1.0f, -scaleExp);
 
         mtx._00 *= invScale;
         mtx._01 *= invScale;

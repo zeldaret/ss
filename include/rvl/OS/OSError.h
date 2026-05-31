@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_OS_ERROR_H
 #define RVL_SDK_OS_ERROR_H
 
-#include "__va_arg.h"
 #include "common.h"
+#include <stdarg.h>
 
 #include "rvl/OS/OSContext.h"
 

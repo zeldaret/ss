@@ -1,9 +1,9 @@
-#include "string.h"
+#include "mem_funcs.h"
+#include <cstring>
 
-/* 80366130-803661FC 360A70 00CC+00 0/0 2/2 0/0 .text            memmove */
 void* memmove(void* dst, const void* src, size_t n) {
-    unsigned char* csrc;
-    unsigned char* cdst;
+    const char* csrc;
+    char* cdst;
 
     int reverse = (unsigned int)src < (unsigned int)dst;
 
@@ -25,19 +25,11 @@ void* memmove(void* dst, const void* src, size_t n) {
         return dst;
     } else {
         if (!reverse) {
-            csrc = ((unsigned char*)src) - 1;
-            cdst = ((unsigned char*)dst) - 1;
-            n++;
-
-            while (--n > 0) {
+            for (csrc = (const char*)src - 1, cdst = (char*)dst - 1, n++; --n;){
                 *++cdst = *++csrc;
             }
         } else {
-            csrc = (unsigned char*)src + n;
-            cdst = (unsigned char*)dst + n;
-            n++;
-
-            while (--n > 0) {
+            for (csrc = (const char*)src + n, cdst = (char*)dst + n, n++; --n;){
                 *--cdst = *--csrc;
             }
         }
@@ -46,7 +38,6 @@ void* memmove(void* dst, const void* src, size_t n) {
     return dst;
 }
 
-/* 80366104-80366130 360A44 002C+00 0/0 1/1 0/0 .text            memchr */
 void* memchr(const void* ptr, int ch, size_t count) {
     const unsigned char* p;
 
@@ -59,7 +50,6 @@ void* memchr(const void* ptr, int ch, size_t count) {
     return NULL;
 }
 
-/* 803660D8-80366104 360A18 002C+00 0/0 1/1 0/0 .text            __memrchr */
 void* __memrchr(const void* ptr, int ch, size_t count) {
     const unsigned char* p;
 
@@ -72,7 +62,6 @@ void* __memrchr(const void* ptr, int ch, size_t count) {
     return NULL;
 }
 
-/* 8036608C-803660D8 3609CC 004C+00 0/0 19/19 5/5 .text            memcmp */
 int memcmp(const void* lhs, const void* rhs, size_t count) {
     const unsigned char* p1;
     const unsigned char* p2;

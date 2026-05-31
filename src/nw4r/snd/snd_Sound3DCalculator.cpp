@@ -210,9 +210,9 @@ void Sound3DCalculator::CalcPanDpl2(
             }
     // clang-format on
 
-    f32 cosAvg = (std::cosf(mFrontSpeakerAngleDpl2) + std::cosf(mRearSpeakerAngleDpl2)) / 2.0f;
+    f32 cosAvg = (std::cos(mFrontSpeakerAngleDpl2) + std::cos(mRearSpeakerAngleDpl2)) / 2.0f;
 
-    f32 rearFactor = cosAvg / (cosAvg + -std::cosf(mRearSpeakerAngleDpl2));
+    f32 rearFactor = cosAvg / (cosAvg + -std::cos(mRearSpeakerAngleDpl2));
 
     panLR *= mPanRange;
     panFR *= mPanRange;

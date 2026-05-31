@@ -1,8 +1,8 @@
 #ifndef EGG_ASSERT_H
 #define EGG_ASSERT_H
 
-#include "__va_arg.h"
 #include "common.h"
+#include <cstdarg>
 
 namespace EGG {
 // All this is guess

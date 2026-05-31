@@ -1,8 +1,9 @@
 
 // Ported from https://github.com/kiwi515/ogws/blob/master/src/nw4r/ut/ut_TextWriterBase.cpp
 
-#include "__va_arg.h"
 #include "nw4r/ut.h"
+
+#include <cstdarg>
 
 namespace nw4r {
 namespace ut {

@@ -223,6 +223,7 @@ cflags_base = [
     f"-i build/{config.version}/include",
     f"-DBUILD_VERSION={version_num}",
     f"-DVERSION_{config.version}",
+    "-DPLATFORM_WII",
     "-i src",
     "-i src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Include",
     "-i src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Include",
@@ -256,6 +257,7 @@ cflags_runtime = [
     "-common off",
     "-inline auto",
     "-func_align 4",
+    "-fp_contract off",
 ]
 
 # Framework flags

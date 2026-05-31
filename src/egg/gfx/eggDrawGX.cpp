@@ -3,7 +3,6 @@
 #include "common.h"
 #include "egg/gfx/eggGXUtility.h"
 #include "egg/gfx/eggStateGX.h"
-#include "math.h"
 #include "nw4r/g3d/res/g3d_restex.h"
 #include "nw4r/math/math_triangular.h"
 #include "nw4r/math/math_types.h"

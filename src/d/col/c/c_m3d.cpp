@@ -11,7 +11,6 @@
 #include "d/col/c/c_m3d_g_unk.h"
 #include "egg/math/eggMath.h"
 #include "m/m_vec.h"
-#include "math.h"
 #include "nw4r/math/math_types.h"
 #include "rvl/MTX.h" // IWYU pragma: export
 #include "rvl/MTX/vec.h"

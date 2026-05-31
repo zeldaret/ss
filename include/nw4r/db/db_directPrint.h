@@ -1,10 +1,11 @@
 #ifndef NW4R_DB_DIRECT_PRINT_H
 #define NW4R_DB_DIRECT_PRINT_H
 
-#include "__va_arg.h"
 #include "common.h"
 
 #include "rvl/GX.h" // IWYU pragma: export
+
+#include <cstdarg>
 
 namespace nw4r {
 

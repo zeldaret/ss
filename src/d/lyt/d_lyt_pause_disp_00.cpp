@@ -27,7 +27,7 @@
 #include "sized_string.h"
 #include "toBeSorted/counters/counter.h"
 
-#include <limits.h>
+#include <climits>
 
 STATE_DEFINE(dLytPauseDisp00_c, None);
 STATE_DEFINE(dLytPauseDisp00_c, In);

@@ -1,7 +1,6 @@
 #ifndef NW4R_MATH_ARITHMETIC_H
 #define NW4R_MATH_ARITHMETIC_H
 
-#include "math.h"
 #include "nw4r/types_nw4r.h" // IWYU pragma: export
 #include "rvl/OS.h"          // IWYU pragma: export
 
@@ -32,7 +31,7 @@ inline f32 FAbs(register f32 x) {
 }
 
 inline f32 FCeil(f32 x) {
-    return std::ceilf(x);
+    return std::ceil(x);
 }
 
 inline f32 FExp(f32 x) {
@@ -40,7 +39,7 @@ inline f32 FExp(f32 x) {
 }
 
 inline f32 FFloor(f32 x) {
-    return std::floorf(x);
+    return std::floor(x);
 }
 
 inline f32 FInv(register f32 x) {

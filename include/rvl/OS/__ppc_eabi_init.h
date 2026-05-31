@@ -12,7 +12,7 @@ DECL_SECTION(".init") void __flush_cache(void *, size_t);
 void __init_user(void);
 void __init_cpp(void);
 void __fini_cpp(void);
-DECL_WEAK void exit(void);
+DECL_WEAK void exit(int status);
 void _ExitProcess(void);
 
 /**

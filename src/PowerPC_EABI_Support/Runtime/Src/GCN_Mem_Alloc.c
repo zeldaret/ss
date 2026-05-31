@@ -1,9 +1,9 @@
 /**
- * GCN_Mem_Alloc.c
+ * GCN_mem_alloc.c
  * Description:
  */
 
-#include "RVL/OS.h"
+#include <rvl/OS.h>
 
 inline static void InitDefaultHeap(void) {
 	void* arenaLo;
@@ -25,7 +25,6 @@ inline static void InitDefaultHeap(void) {
 	OSSetArenaLo(arenaLo = arenaHi);
 }
 
-/* 80362914-803629CC 35D254 00B8+00 0/0 1/1 0/0 .text            __sys_free */
 void __sys_free(void* p) {
     if (__OSCurrHeap == -1) {
         InitDefaultHeap();
