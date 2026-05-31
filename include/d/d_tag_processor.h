@@ -47,7 +47,7 @@ public:
     void fn_800B61D0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void setFramesLeftOnPause(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void fn_800B5500(u8 cmdLen, wchar_t *ptr);
-    void fn_800B5540(wchar_t *ptr);
+    void enableChangeBtn(wchar_t *ptr);
     void fn_800B60E0(u8 cmdLen, wchar_t *ptr);
     void fn_800B6110(u8 cmdLen, wchar_t *ptr);
     void fn_800B6140(u8 cmdLen, wchar_t *ptr);
@@ -216,6 +216,8 @@ private:
         TAG_CMD_OPTION_1 = 0x10001,
         TAG_CMD_OPTION_2 = 0x10002,
         TAG_CMD_OPTION_3 = 0x10003,
+
+        TAG_CMD_CHANGE_BTN = 0x10011,
 
         TAG_CMD_WRITE_HERONAME = 0x20000,
         TAG_CMD_WRITE_ITEM = 0x20001,

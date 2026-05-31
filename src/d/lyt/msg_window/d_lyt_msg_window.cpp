@@ -1,6 +1,7 @@
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
 
 #include "common.h"
+#include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_lyt_hio.h"
 #include "d/d_message.h"
@@ -8,10 +9,10 @@
 #include "d/d_stage_mgr.h"
 #include "d/d_tag_processor.h"
 #include "d/d_textwindow_unk.h"
+#include "d/lyt/d_lyt_boss_caption.h"
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_map.h"
 #include "d/lyt/d_textbox.h"
-
 
 // clang-format off
 // vtable order
@@ -33,7 +34,6 @@
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "f/f_base.h"
-#include "m/m_fader_base.h"
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
@@ -41,7 +41,7 @@
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/fi_context.h"
 
-#include <cstring>
+#include <cstdlib>
 
 class dLytMsgWindow_HIO_c {
 public:
@@ -143,7 +143,7 @@ bool dLytMsgWindow_c::build() {
     field_0x81D = 0;
 
     mNumOptions = 0;
-    field_0x820 = 0;
+    mValidChangeBtnMask = 0;
 
     field_0x81E = 0;
 
@@ -289,7 +289,7 @@ void dLytMsgWindow_c::finalizeState_In() {}
 void dLytMsgWindow_c::initializeState_OutputText() {
     field_0x81C = 0;
     field_0x81D = 0;
-    field_0x820 = 0;
+    mValidChangeBtnMask = 0;
     field_0x81E = 0;
 }
 void dLytMsgWindow_c::executeState_OutputText() {
@@ -362,7 +362,7 @@ void dLytMsgWindow_c::executeState_WaitKeyChangePage0() {
             field_0x813 = 0;
             allowChange = true;
         }
-    } else if (dPad::getDownTrigA() || fn_8011A5D0()) {
+    } else if (dPad::getDownTrigA() || checkChangeBtnTrig()) {
         dSndPlayerMgr_c::GetInstance()->leaveMsgWait();
         allowChange = true;
     }
@@ -422,7 +422,7 @@ void dLytMsgWindow_c::executeState_WaitKeyMsgEnd0() {
             field_0x813 = 0;
             allowChange = true;
         }
-    } else if (dPad::getDownTrigA() || fn_8011A5D0()) {
+    } else if (dPad::getDownTrigA() || checkChangeBtnTrig()) {
         dSndPlayerMgr_c::GetInstance()->leaveMsgWait();
         allowChange = true;
     }
@@ -491,6 +491,8 @@ void dLytMsgWindow_c::executeState_WaitKeyMsgEnd2() {
 void dLytMsgWindow_c::finalizeState_WaitKeyMsgEnd2() {}
 
 static wchar_t *sBufs[4];
+// Not sure about this one
+wchar_t *sEmptyBuf[0x400];
 
 void dLytMsgWindow_c::initializeState_WaitKeySelectQuestion() {
     // TODO regswaps
@@ -671,12 +673,7 @@ bool dLytMsgWindow_c::execute() {
     u8 old_field_0x816 = field_0x816;
     if (*mStateMgr.getStateID() == StateID_DemoIn || *mStateMgr.getStateID() == StateID_DemoVisible ||
         *mStateMgr.getStateID() == StateID_DemoOut) {
-        dStageMgr_c *mgr = dStageMgr_c::GetInstance();
-        // Bleh
-        bool b =
-            !(mgr->getFader()->isNotStatus(static_cast<mFaderBase_c::EStatus>(-1)) ||
-              mgr->getFader()->isNotStatus(mFaderBase_c::FADED_OUT));
-        if (!b) {
+        if (!dStageMgr_c::GetInstance()->isFaderSettled()) {
             field_0x819 = 1;
             field_0x81B = 1;
         }
@@ -688,11 +685,14 @@ bool dLytMsgWindow_c::execute() {
             mStateMgr.changeState(StateID_Invisible);
         }
         mpMsgWindowUnk->reset();
-        mSelectBtn.remove();
+        mSelectBtn.execute();
         field_0x81B = 0;
-        // TODO boss caption
+        dLytBossCaption_c::unk_inline2();
     }
-    // TODO ActorEventFlowManagerRelated::checkEventFinished
+
+    if (dMessage_c::getInstance()->getInMapEvent() && sFlowMgr != nullptr) {
+        sFlowMgr->checkFinished();
+    }
 
     mStateMgr.executeState();
 
@@ -722,7 +722,7 @@ bool dLytMsgWindow_c::execute() {
 bool dLytMsgWindow_c::draw() {
     if (isVisible() || field_0x1220 != 0) {
         if (mpCurrentSubtype != nullptr) {
-            // TODO tag processor
+            mpTagProcessor->resetSomeThings();
             mpCurrentSubtype->addToDrawList();
         }
         mSelectBtn.draw();
@@ -732,9 +732,48 @@ bool dLytMsgWindow_c::draw() {
 }
 
 bool dLytMsgWindow_c::setCurrentLabelName(const char *name, bool storeFile) {
-    // TODO
-    mName = name;
-    return !std::strcmp(name, "FR_SIREN_04");
+    if (!isVisible()) {
+        if (storeFile) {
+            s32 idx = dMessage_c::getMsbtIndexForLabel(name);
+            if (idx < 0) {
+                return false;
+            }
+            dMessage_c::getInstance()->setCurrentTextFileNumber(idx);
+        }
+        field_0x80C = 1;
+        field_0x810 = 0;
+        field_0x815 = 0;
+        field_0x813 = 0;
+        if (!std::strcmp(name, "FR_SIREN_04")) {
+            dLytMeter_c::GetInstance()->setMeterField_0x13773(1);
+        }
+
+        s32 idx = -1;
+        if (field_0x80E) {
+            int i = 0;
+            const char *p;
+            bool found = 0;
+            for (p = name; *p != '\0'; p++) {
+                if (found) {
+                    if (idx == -1) {
+                        idx = atoi(name + i);
+                    }
+                } else if (*p == ':') {
+                    found = true;
+                }
+                i++;
+            }
+        }
+        mName = name;
+        mMsgIdx = idx;
+        if (field_0x1220 == 0) {
+            dAcBase_c *ac = EventManager::fn_800A08F0(fBase_c::ACTOR);
+            dSndPlayerMgr_c::GetInstance()->setMsgActor(mMsgIdx, ac);
+        }
+        return true;
+    } else {
+        return false;
+    }
 }
 
 bool dLytMsgWindow_c::isVisible() const {
@@ -752,12 +791,43 @@ bool dLytMsgWindow_c::isOutputtingText() const {
     return *mStateMgr.getStateID() == StateID_OutputText;
 }
 
+bool dLytMsgWindow_c::fn_80117310() const {
+    if (isOutputtingText() && field_0x81E) {
+        return true;
+    }
+    return false;
+}
+
+void dLytMsgWindow_c::fn_80117360() {
+    field_0x815 = true;
+    field_0x816 = false;
+}
+
+void dLytMsgWindow_c::fn_80117380() {
+    field_0x815 = false;
+}
+
+const char *dLytMsgWindow_c::fn_80117390(bool b) const {
+    if (isOutputtingText() || b) {
+        return mCurrentEntrypointName;
+    }
+    return nullptr;
+}
+
 void dLytMsgWindow_c::setCurrentEntrypointName(const char *name) {
     mCurrentEntrypointName = name;
 }
 
 void dLytMsgWindow_c::setCurrentFlowFilename(const char *name) {
     mCurrentFlowFileName = name;
+}
+
+void dLytMsgWindow_c::setNumericArg0(s32 arg) {
+    mpTagProcessor->setNumericArg0(arg);
+}
+
+void dLytMsgWindow_c::setNumericArgs(s32 *args, s32 count) {
+    mpTagProcessor->setNumericArgs(args, count);
 }
 
 void dLytMsgWindow_c::createSubMsgManager(u8 type) {
@@ -865,4 +935,44 @@ void dLytMsgWindow_c::removeSubMsgManagers() {
     dLyt_HIO_c::getInstance()->setStr2("");
     dLyt_HIO_c::getInstance()->setStr1("");
     dLyt_HIO_c::getInstance()->setStr3("");
+}
+
+bool dLytMsgWindow_c::checkChangeBtnTrig() {
+    if ((mValidChangeBtnMask & 0x1) && dPad::getDownTrigA()) {
+        return true;
+    }
+    if ((mValidChangeBtnMask & 0x2) && dPad::getDownTrigB()) {
+        return true;
+    }
+    if ((mValidChangeBtnMask & 0x4) && dPad::getDownTrigMinus()) {
+        return true;
+    }
+    if ((mValidChangeBtnMask & 0x8) && dPad::getDownTrigPlus()) {
+        return true;
+    }
+    if ((mValidChangeBtnMask & 0x10) && dPad::getDownTrig1()) {
+        return true;
+    }
+    if ((mValidChangeBtnMask & 0x20) && dPad::getDownTrig2()) {
+        return true;
+    }
+    if ((mValidChangeBtnMask & 0x40) && dPad::getDownTrigC()) {
+        return true;
+    }
+    if ((mValidChangeBtnMask & 0x80) && dPad::getDownTrigZ()) {
+        return true;
+    }
+    if ((mValidChangeBtnMask & 0x100) && dPad::getDownTrigUp()) {
+        return true;
+    }
+    if ((mValidChangeBtnMask & 0x200) && dPad::getDownTrigDown()) {
+        return true;
+    }
+    if ((mValidChangeBtnMask & 0x400) && dPad::getDownTrigLeft()) {
+        return true;
+    }
+    if ((mValidChangeBtnMask & 0x800) && dPad::getDownTrigRight()) {
+        return true;
+    }
+    return false;
 }

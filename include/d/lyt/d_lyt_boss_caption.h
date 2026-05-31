@@ -17,12 +17,19 @@ public:
         field_0x646 = 0;
     }
 
+    static void unk_inline2() {
+        if (sInstance != nullptr) {
+            sInstance->field_0x647 = 1;
+        }
+    }
+
 private:
     static dLytBossCaption_c *sInstance;
 
     u8 _0x00[0x645 - 0x00];
     u8 field_0x645;
     u8 field_0x646;
+    u8 field_0x647;
 };
 
 #endif

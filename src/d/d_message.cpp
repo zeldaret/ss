@@ -47,8 +47,8 @@
 #include "rvl/OS.h"
 
 #include <cstring>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdio>
 
 s32 dFlow_c::sExitId = -1;
 
