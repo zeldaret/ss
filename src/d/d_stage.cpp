@@ -360,15 +360,9 @@ dRoomTable_c::dRoomTable_c() {
 
 MapRelated::MapRelated()
     : field_0x0FC(0.0f, 0.0f, 0.0f),
-      field_0x108(0.0f),
-      field_0x10C(0.0f),
-      field_0x110(0.0f),
-      field_0x114(0.0f),
-      field_0x118(0.0f),
-      field_0x11C(0.0f),
-      field_0x120(0.0f),
-      field_0x124(0.0f),
-      field_0x128(0.0f),
+      field_0x108(0.0f, 0.0f, 0.0f),
+      field_0x114(0.0f, 0.0f, 0.0f),
+      field_0x120(0.0f, 0.0f, 0.0f),
       field_0x12C(0.0f),
       field_0x1E0(0),
       field_0x1E6(0),
