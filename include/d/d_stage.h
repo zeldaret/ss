@@ -42,9 +42,12 @@ class MapRelated {
         bool c;
     };
 
+    
+
 public:
     MapRelated();
     ~MapRelated();
+    int fn_801B5970(const GXTexObj*);
     /* 0x000 */ mHeapAllocator_c mAllocator;
     /* 0x01C */ Child mChildren[8];
     /* 0x0FC */ mVec3_c field_0x0FC;

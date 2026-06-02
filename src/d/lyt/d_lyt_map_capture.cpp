@@ -40,26 +40,18 @@ void dLytMapCapture_c::execute() {
     mStateMgr.executeState();
 }
 
-void fn_8012D6D0(mVec3_c *ignored, mVec3_c *out) {
+void dLytMapCapture_c::fn_8012D6D0(mVec3_c *out) {
     *out = dStage_c::GetInstance()->getMapRelated()->field_0x0FC;
 }
 
-void fn_8012D610(mVec3_c *ignored, mVec3_c *out){
+void dLytMapCapture_c::fn_8012D610(mVec3_c *out){
     dStage_c::GetInstance()->getMapRelated()->fn_801B50C0(0);
-    const mVec3_c &v = dStage_c::GetInstance()->getMapRelated()->fn_801B4CB0();
-    
-    float z = v.z;
-    float y = v.y; 
-    float x = v.x;    
-    out->y = y;
-    out->x = x;    
-    out->z = z;
+    *out = dStage_c::GetInstance()->getMapRelated()->fn_801B4CB0();
 }
 
-extern int fn_801B5970(MapRelated*, const GXTexObj*);
 
 void dLytMapCapture_c::fn_8012D800(nw4r::lyt::Pane *param_2, const GXTexObj *param_3) {
-    if (param_3 != nullptr && dStage_c::GetInstance() != nullptr && fn_801B5970(dStage_c::GetInstance()->getMapRelated(), param_3)) {
+    if (param_3 != nullptr && dStage_c::GetInstance() != nullptr && dStage_c::GetInstance()->getMapRelated()->fn_801B5970(param_3)) {
         field_0x070.width = GXGetTexObjWidth(param_3);
         field_0x070.height = GXGetTexObjHeight(param_3);
         param_2->SetSize(field_0x070);

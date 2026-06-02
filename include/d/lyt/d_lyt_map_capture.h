@@ -5,6 +5,7 @@
 #include "nw4r/lyt/lyt_picture.h"
 #include "s/s_State.hpp"
 #include "s/s_StateID.hpp"
+#include "m/m_vec.h"
 
 class dLytMapCapture_c {
 public:
@@ -31,8 +32,8 @@ public:
     
     void execute();
     bool isBusyRendering() const;
-
-    
+    void fn_8012D610(mVec3_c *out);
+    void fn_8012D6D0(mVec3_c *out);
 
 private:
     void fn_8012D6F0();
