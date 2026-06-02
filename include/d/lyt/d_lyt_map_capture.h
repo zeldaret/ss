@@ -33,6 +33,7 @@ public:
     void execute();
     bool isBusyRendering() const;
     void fn_8012D610(mVec3_c *out);
+    void fn_8012D670(mVec3_c *out);
     void fn_8012D6D0(mVec3_c *out);
 
 private:

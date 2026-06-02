@@ -49,6 +49,11 @@ void dLytMapCapture_c::fn_8012D610(mVec3_c *out){
     *out = dStage_c::GetInstance()->getMapRelated()->fn_801B4CB0();
 }
 
+void dLytMapCapture_c::fn_8012D670(mVec3_c *out){
+    dStage_c::GetInstance()->getMapRelated()->fn_801B50C0(0);
+    *out = dStage_c::GetInstance()->getMapRelated()->fn_801B4C90();
+}
+
 
 void dLytMapCapture_c::fn_8012D800(nw4r::lyt::Pane *param_2, const GXTexObj *param_3) {
     if (param_3 != nullptr && dStage_c::GetInstance() != nullptr && dStage_c::GetInstance()->getMapRelated()->fn_801B5970(param_3)) {
