@@ -5,12 +5,11 @@
 #include "nw4r/lyt/lyt_picture.h"
 #include "s/s_State.hpp"
 #include "s/s_StateID.hpp"
+#include "m/m_vec.h"
 
 class dLytMapCapture_c {
 public:
     dLytMapCapture_c() :mStateMgr(*this), mpPicture(nullptr) {
-        field_0x070 = 0.0f;
-        field_0x074 = 0.0f;
         mRenderRequest = false;
         mIsBusyRendering = false;
         field_0x06C = 0.0f;
@@ -33,9 +32,13 @@ public:
     
     void execute();
     bool isBusyRendering() const;
+    void fn_8012D610(mVec3_c *out);
+    void fn_8012D670(mVec3_c *out);
+    void fn_8012D6D0(mVec3_c *out);
 
 private:
     void fn_8012D6F0();
+    void fn_8012D800(nw4r::lyt::Pane *pane, const GXTexObj *texObj);
 
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMapCapture_c);
     /* 0x040 */ nw4r::lyt::Picture *mpPicture;
@@ -43,8 +46,7 @@ private:
     /* 0x064 */ f32 field_0x064;
     /* 0x068 */ f32 field_0x068;
     /* 0x06C */ f32 field_0x06C;
-    /* 0x070 */ f32 field_0x070;
-    /* 0x074 */ f32 field_0x074;
+    /* 0x070 */ nw4r::lyt::Size field_0x070;
     /* 0x078 */ bool mRenderRequest;
     /* 0x079 */ bool mIsBusyRendering;
 };

@@ -42,21 +42,18 @@ class MapRelated {
         bool c;
     };
 
+    
+
 public:
     MapRelated();
     ~MapRelated();
+    int fn_801B5970(const GXTexObj*);
     /* 0x000 */ mHeapAllocator_c mAllocator;
     /* 0x01C */ Child mChildren[8];
     /* 0x0FC */ mVec3_c field_0x0FC;
-    /* 0x108 */ f32 field_0x108;
-    /* 0x10C */ f32 field_0x10C;
-    /* 0x110 */ f32 field_0x110;
-    /* 0x114 */ f32 field_0x114;
-    /* 0x118 */ f32 field_0x118;
-    /* 0x11C */ f32 field_0x11C;
-    /* 0x120 */ f32 field_0x120;
-    /* 0x124 */ f32 field_0x124;
-    /* 0x128 */ f32 field_0x128;
+    /* 0x108 */ mVec3_c field_0x108;
+    /* 0x114 */ mVec3_c field_0x114;
+    /* 0x120 */ mVec3_c field_0x120;
     /* 0x12C */ f32 field_0x12C;
     /* 0x130 */ EGG::ScreenEffectBlur mScreenEffect;
     /* 0x168 */ EGG::PostEffectBlur mPostEffect;
@@ -95,6 +92,7 @@ public:
     void fn_801B4B80(u32 mapParams, const mVec3_c &center, const mVec3_c &size);
     void fn_801B4C70(const mVec3_c &);
     void fn_801B50C0(s32);
+    const mVec3_c &fn_801B4C90() const;
     const mVec3_c &fn_801B4CB0() const;
     s32 fn_801B4F10(s32 roomid, const mVec3_c &position) const;
 };
