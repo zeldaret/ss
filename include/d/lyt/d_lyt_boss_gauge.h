@@ -18,7 +18,7 @@ public:
 
     void setMode(s32 mode);
 
-    void fn_80158940();
+    void fn_80158940(f32);
 
     void setField_0x545(bool value) {
         field_0x545 = value;

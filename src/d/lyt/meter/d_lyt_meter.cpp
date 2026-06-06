@@ -1058,9 +1058,9 @@ bool dLytMeterMain_c::fn_800D5590() {
     return field_0x13773;
 }
 
-void dLytMeterMain_c::fn_800D5630() {
+void dLytMeterMain_c::fn_800D5630(f32 f) {
     if (mpBossGauge != nullptr) {
-        mpBossGauge->fn_80158940();
+        mpBossGauge->fn_80158940(f);
     }
 }
 

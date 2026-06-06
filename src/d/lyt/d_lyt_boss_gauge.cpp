@@ -5,14 +5,8 @@ STATE_DEFINE(dLytBossGauge_c, In);
 STATE_DEFINE(dLytBossGauge_c, Move);
 STATE_DEFINE(dLytBossGauge_c, Out);
 
-static const d2d::LytBrlanMapping brlanMap[] = {
-    {    "s_bossGauge_00_in.brlan",        "G_inOut_00"},
-    {    "bossGauge_00_out.brlan",         "G_inOut_00"},
-    {    "bossGauge_00_dangerLoop.brlan",  "G_danger_00"},
-    {    "bossGauge_00_move.brlan",        "G_move_00"},
-};
 
-void dLytBossGauge_c::fn_80158290(){return;}
+void dLytBossGauge_c::fn_80158290(){0.0f;return;}
 void dLytBossGauge_c::fn_801583E0(){return;}
 void dLytBossGauge_c::fn_801583F0(){return;}
 
@@ -84,6 +78,13 @@ void dLytBossGauge_c::fn_801582A0(){
     }
 }
 
+static const d2d::LytBrlanMapping brlanMap[] = {
+    {    "bossGauge_00_in.brlan",        "G_inOut_00"},
+    {    "bossGauge_00_out.brlan",         "G_inOut_00"},
+    {    "bossGauge_00_dangerLoop.brlan",  "G_danger_00"},
+    {    "bossGauge_00_move.brlan",        "G_move_00"},
+};
+
 bool dLytBossGauge_c::build(){
     sInstance = this;
     field_0x54c = 0.8f;
@@ -123,12 +124,10 @@ bool dLytBossGauge_c::build(){
 
 bool dLytBossGauge_c::remove(){
     mLyt.unbindAnims();
-    int iVar1 = 0;  
-  
-    do {        
-        mAnmGroups[iVar1].remove();
-        iVar1++;
-    } while (iVar1 < 4);
+      
+    for(int i = 0; i<4; i++) {        
+        mAnmGroups[i].remove();
+    }
 
     return true;
 }
@@ -141,12 +140,12 @@ bool dLytBossGauge_c::execute(){
         for(int i = 0; i < 3 ; i++){ 
             if(mAnmGroups[i].isEnabled() ){
                 if(i < 2 && mAnmGroups[i].isStop()){
-                   mAnmGroups[i].setAnimEnable(false);                   
+                   mAnmGroups[i].setAnimEnable(false);
                 }
                 mAnmGroups[i].play();
             }            
         }
-        mLyt.calc();    
+        mLyt.calc();
     }    
     return true;
 }
@@ -162,5 +161,25 @@ bool dLytBossGauge_c::draw(){
 void dLytBossGauge_c::setMode(s32 mode){   
     field_0x548 = mode;
     field_0x544 = 1;
+    return;
+}
+
+void dLytBossGauge_c::fn_80158940(f32 f){
+
+    int f2 = mAnmGroups[3].getAnimDuration() * f + 0.5f;
+
+    mAnmGroups[3].setAnimEnable(true);
+    mAnmGroups[3].setFrame(f2);
+    mLyt.calc();
+    mAnmGroups[3].setAnimEnable(false);    
+    
+    if(f >= field_0x54c){
+        if(!mAnmGroups[2].isEnabled()){
+            mAnmGroups[2].setAnimEnable(true);   
+            mAnmGroups[2].setFrame(0.0f);     
+        }else{
+            mAnmGroups[2].setAnimEnable(false);
+        }
+    }
     return;
 }
