@@ -1408,13 +1408,19 @@ d/d_camera.cpp:
 d/d_light_obj.cpp:
 	.text       start:0x8019ED10 end:0x801A65C8 align:16
 	.data       start:0x8052C230 end:0x8052C430
+	.sdata      start:0x80572EB8 end:0x80573118
 	.sbss       start:0x80575710 end:0x80575740
+	.sdata2     start:0x8057AFA8 end:0x8057B160
+	.bss        start:0x805B27D8 end:0x805B28B0
 
 d/tg/d_t_weather.cpp:
 	.text       start:0x801A65D0 end:0x801AF7D8 align:16
 	.ctors      start:0x804DB804 end:0x804DB808
 	.rodata     start:0x804EA918 end:0x804EA950
 	.data       start:0x8052C430 end:0x8052C858
+	.sdata      start:0x80573118 end:0x80573248
+	.sdata2     start:0x8057B160 end:0x8057B4D8
+	.bss        start:0x805B28B0 end:0x805B29E0
 
 d/d_message.cpp:
 	.text       start:0x801AF7E0 end:0x801B329C align:16

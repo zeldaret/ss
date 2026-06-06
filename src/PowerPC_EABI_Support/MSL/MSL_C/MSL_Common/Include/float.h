@@ -45,7 +45,7 @@ extern int __double_huge[];
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+/*
 inline int __fpclassifyf(float __value) {
     switch (*(int*)&__value & 0x7f800000) {
     case 0x7f800000:
@@ -63,7 +63,8 @@ inline int __fpclassifyf(float __value) {
 
     return FP_NORMAL;
 }
-
+*/
+int __fpclassifyf(float __value);
 inline int __fpclassifyd(double __value) {
     switch (__HI(__value) & 0x7ff00000) {
 	case 0x7ff00000: {
