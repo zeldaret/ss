@@ -3,6 +3,8 @@
 
 #include "d/lyt/d2d.h"
 #include "s/s_State.hpp"
+#include "sized_string.h"
+#include "toBeSorted/arc_managers/layout_arc_manager.h"
 
 class dLytBossGauge_c {
 public:
@@ -22,6 +24,23 @@ public:
         field_0x545 = value;
     }
 
+    void setField_0x546(bool value){
+        field_0x546 = value;
+    }
+
+    void fn_80158290();
+    void fn_801582A0();
+    void fn_801583E0();
+    void fn_801583F0();
+    void fn_80158400();
+    void fn_80158480();
+    void fn_80158490();
+    void fn_801584A0();
+    void fn_80158520();
+    void fn_80158530();
+    void fn_80158540();
+    void fn_801585C0();
+
 private:
     STATE_FUNC_DECLARE(dLytBossGauge_c, None);
     STATE_FUNC_DECLARE(dLytBossGauge_c, In);
@@ -30,13 +49,18 @@ private:
 
     STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytBossGauge_c);
 
+    static dLytBossGauge_c *sInstance;
+
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytBossGauge_c);
     /* 0x040 */ d2d::ResAccIf_c mResAcc;
     /* 0x3B0 */ d2d::dLytSub mLyt;
     /* 0x444 */ d2d::AnmGroup_c mAnmGroups[4];
     /* 0x544 */ u8 field_0x544;
     /* 0x545 */ bool field_0x545;
-    /* 0x546 */ u8 _0x546[0x550 - 0x546];
+    /* 0x546 */ bool field_0x546;
+    /* 0x547 */ u8 field_0x547;
+    /* 0x548 */ s32 field_0x548;
+    /* 0x54c */ float field_0x54c;
 };
 
 #endif
