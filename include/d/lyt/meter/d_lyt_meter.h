@@ -99,7 +99,7 @@ public:
     bool fn_800D5380(u8);
     void executeMap();
     bool fn_800D5590();
-    void fn_800D5630();
+    void fn_800D5630(f32);
     bool isInModeMap();
     bool isInModePause();
     bool shouldBeHiddenGeneral();
