@@ -24,7 +24,7 @@ public:
         field_0x545 = value;
     }
 
-    void setField_0x546(bool value){
+    void setField_0x546(bool value) {
         field_0x546 = value;
     }
 
