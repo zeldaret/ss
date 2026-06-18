@@ -196,9 +196,10 @@ void dLytBossGauge_c::fn_80158940(f32 f) {
         if (!mAnmGroups[BOSS_GAUGE_ANIM_DANGERLOOP].isEnabled()) {
             mAnmGroups[BOSS_GAUGE_ANIM_DANGERLOOP].setAnimEnable(true);
             mAnmGroups[BOSS_GAUGE_ANIM_DANGERLOOP].setFrame(0.0f);
-        } else {
-            mAnmGroups[BOSS_GAUGE_ANIM_DANGERLOOP].setAnimEnable(false);
         }
+    } else {
+        mAnmGroups[BOSS_GAUGE_ANIM_DANGERLOOP].setAnimEnable(false);
     }
+
     return;
 }
