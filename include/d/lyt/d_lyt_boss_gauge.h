@@ -18,8 +18,6 @@ public:
 
     void setMode(s32 mode);
 
-    void fn_80158940(f32);
-
     void setField_0x545(bool value) {
         field_0x545 = value;
     }
@@ -28,18 +26,8 @@ public:
         field_0x546 = value;
     }
 
-    void fn_80158290();
     void fn_801582A0();
-    void fn_801583E0();
-    void fn_801583F0();
-    void fn_80158400();
-    void fn_80158480();
-    void fn_80158490();
-    void fn_801584A0();
-    void fn_80158520();
-    void fn_80158530();
-    void fn_80158540();
-    void fn_801585C0();
+    void fn_80158940(f32);
 
 private:
     STATE_FUNC_DECLARE(dLytBossGauge_c, None);
@@ -60,7 +48,7 @@ private:
     /* 0x546 */ bool field_0x546;
     /* 0x547 */ u8 field_0x547;
     /* 0x548 */ s32 field_0x548;
-    /* 0x54c */ float field_0x54c;
+    /* 0x54c */ f32 field_0x54c;
 };
 
 #endif

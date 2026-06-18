@@ -10,58 +10,10 @@ STATE_DEFINE(dLytBossGauge_c, Out);
 #define BOSS_GAUGE_ANIM_DANGERLOOP 2
 #define BOSS_GAUGE_ANIM_MOVE 3
 
-void dLytBossGauge_c::fn_80158290() {
+dLytBossGauge_c *dLytBossGauge_c::sInstance;
+
+void dLytBossGauge_c::initializeState_None() {
     0.0f;
-    return;
-}
-void dLytBossGauge_c::fn_801583E0() {
-    return;
-}
-void dLytBossGauge_c::fn_801583F0() {
-    return;
-}
-
-void dLytBossGauge_c::fn_80158400() {
-    if (mAnmGroups[BOSS_GAUGE_ANIM_IN].isEndReached()) {
-        mAnmGroups[BOSS_GAUGE_ANIM_IN].setAnimEnable(false);
-        mStateMgr.changeState(dLytBossGauge_c::StateID_Move);
-    }
-    return;
-}
-
-void dLytBossGauge_c::fn_80158480() {
-    return;
-}
-void dLytBossGauge_c::fn_80158490() {
-    return;
-}
-
-void dLytBossGauge_c::fn_801584A0() {
-    if (field_0x545) {
-        mAnmGroups[BOSS_GAUGE_ANIM_OUT].setAnimEnable(true);
-        mAnmGroups[BOSS_GAUGE_ANIM_OUT].setFrame(0.0f);
-        mStateMgr.changeState(dLytBossGauge_c::StateID_Out);
-        field_0x545 = false;
-    }
-    return;
-}
-
-void dLytBossGauge_c::fn_80158520() {
-    return;
-}
-void dLytBossGauge_c::fn_80158530() {
-    return;
-}
-
-void dLytBossGauge_c::fn_80158540() {
-    if (mAnmGroups[BOSS_GAUGE_ANIM_OUT].isEndReached()) {
-        mAnmGroups[BOSS_GAUGE_ANIM_OUT].setAnimEnable(false);
-        field_0x546 = true;
-        mStateMgr.changeState(dLytBossGauge_c::StateID_None);
-    }
-}
-
-void dLytBossGauge_c::fn_801585C0() {
     return;
 }
 
@@ -94,6 +46,58 @@ void dLytBossGauge_c::fn_801582A0() {
         field_0x546 = 0;
         field_0x544 = 0;
     }
+}
+
+void dLytBossGauge_c::executeState_None() {
+    return;
+}
+void dLytBossGauge_c::finalizeState_None() {
+    return;
+}
+
+void dLytBossGauge_c::initializeState_In() {
+    if (mAnmGroups[BOSS_GAUGE_ANIM_IN].isEndReached()) {
+        mAnmGroups[BOSS_GAUGE_ANIM_IN].setAnimEnable(false);
+        mStateMgr.changeState(dLytBossGauge_c::StateID_Move);
+    }
+    return;
+}
+
+void dLytBossGauge_c::executeState_In() {
+    return;
+}
+
+void dLytBossGauge_c::finalizeState_In() {
+    return;
+}
+
+void dLytBossGauge_c::initializeState_Move() {
+    if (field_0x545) {
+        mAnmGroups[BOSS_GAUGE_ANIM_OUT].setAnimEnable(true);
+        mAnmGroups[BOSS_GAUGE_ANIM_OUT].setFrame(0.0f);
+        mStateMgr.changeState(dLytBossGauge_c::StateID_Out);
+        field_0x545 = false;
+    }
+    return;
+}
+
+void dLytBossGauge_c::executeState_Move() {
+    return;
+}
+void dLytBossGauge_c::finalizeState_Move() {
+    return;
+}
+
+void dLytBossGauge_c::initializeState_Out() {
+    if (mAnmGroups[BOSS_GAUGE_ANIM_OUT].isEndReached()) {
+        mAnmGroups[BOSS_GAUGE_ANIM_OUT].setAnimEnable(false);
+        field_0x546 = true;
+        mStateMgr.changeState(dLytBossGauge_c::StateID_None);
+    }
+}
+
+void dLytBossGauge_c::executeState_Out() {
+    return;
 }
 
 static const d2d::LytBrlanMapping brlanMap[] = {
@@ -140,16 +144,6 @@ bool dLytBossGauge_c::build() {
     return true;
 }
 
-bool dLytBossGauge_c::remove() {
-    mLyt.unbindAnims();
-
-    for (int i = 0; i < 4; i++) {
-        mAnmGroups[i].remove();
-    }
-
-    return true;
-}
-
 bool dLytBossGauge_c::execute() {
     mStateMgr.executeState();
 
@@ -171,6 +165,16 @@ bool dLytBossGauge_c::draw() {
     if (*mStateMgr.getStateID() != dLytBossGauge_c::StateID_None) {
         mLyt.addToDrawList();
     }
+    return true;
+}
+
+bool dLytBossGauge_c::remove() {
+    mLyt.unbindAnims();
+
+    for (int i = 0; i < 4; i++) {
+        mAnmGroups[i].remove();
+    }
+
     return true;
 }
 
