@@ -41,7 +41,7 @@ public:
     public:
         rain_c() {
             field_0x30 = 0;
-            field_0x2C = 0;
+            mRainIntensity = 0;
             field_0x31 = 0;
             field_0x28 = 0.0f;
             mPrevCamPos.setZero();
@@ -62,7 +62,7 @@ public:
         /* 0x18 */ EGG::ResTIMG *mpTexture;
         /* 0x1C */ mVec3_c mPrevCamPos;
         /* 0x28 */ f32 field_0x28;
-        /* 0x2C */ s32 field_0x2C;
+        /* 0x2C */ s32 mRainIntensity;
         /* 0x30 */ u8 field_0x30;
         /* 0x31 */ u8 field_0x31;
     };
@@ -117,7 +117,7 @@ public:
         static const int NUM = 8;
 
     public:
-        near_cloud_c() : mpTexture(nullptr), field_0xF4(0), field_0xF5(0), field_0xF6(0) {
+        near_cloud_c() : mpTexture(nullptr), mInitialSet(0), field_0xF5(0), field_0xF6(0) {
             for (int i = 0; i < NUM; i++) {
                 field_0x18[i].setZero();
                 field_0xE8[i] = 0;
@@ -144,10 +144,10 @@ public:
         /* 0x78 */ f32 field_0x78[NUM];
         /* 0x98 */ f32 field_0x98[NUM];
         /* 0xB8 */ f32 field_0xB8[NUM];
-        /* 0xD8 */ u16 field_0xD8[NUM];
+        /* 0xD8 */ mAng field_0xD8[NUM];
         /* 0xE8 */ u8 field_0xE8[NUM];
         /* 0xF0 */ EGG::ResTIMG *mpTexture;
-        /* 0xF4 */ u8 field_0xF4;
+        /* 0xF4 */ u8 mInitialSet;
         /* 0xF5 */ u8 field_0xF5;
         /* 0xF6 */ u8 field_0xF6;
     };

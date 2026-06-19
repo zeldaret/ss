@@ -243,6 +243,10 @@ struct WIND_INFLUENCE {
     /* 0x00 */ mVec3_c mVel;
     /* 0x0C */ f32 field_0x0C;
     /* 0x10 */ f32 field_0x10;
+
+    mVec3_c getVel() const {
+        return mVel;
+    }
 };
 
 struct PaletteEAF_smol_entry {
@@ -350,6 +354,9 @@ public:
     void set0x35B0(f32 f);
     void set0x35B0_i(f32 f) {
         mWind.field_0x10 = f;
+    }
+    const WIND_INFLUENCE &wind_influence() const {
+        return mWind;
     }
 
     // Params are guesses
@@ -501,6 +508,10 @@ public:
         return field_0x5D59[i].mEnabled;
     }
 
+    u8 getField_0x5D6C() const {
+        return field_0x5D6C;
+    }
+
 private:
     /* 0x0004 */ Spf currentSpf;
     /* 0x020C */ Spf spfs[20];
@@ -566,7 +577,8 @@ private:
         bool mEnabled;
         u8 mValue;
     } field_0x5D59[9];
-    /* 0x5D6C */ u8 field_0x5D6C[0x5D70 - 0x5D6C];
+    /* 0x5D6B */ u8 field_0x5D6B;
+    /* 0x5D6C */ u8 field_0x5D6C;
 
     static dLightEnv_c sInstance;
     static dLightEnv_c *sPInstance;

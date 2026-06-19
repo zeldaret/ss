@@ -6,6 +6,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_camera.h"
 #include "d/d_light_env.h"
+#include "d/d_player_act.h"
 #include "d/d_sc_game.h"
 #include "d/flag/dungeonflag_manager.h"
 #include "d/flag/storyflag_manager.h"
@@ -44,14 +45,74 @@ dWeatherTag_c *dWeatherTag_c::GetInstance() {
     return sInstance;
 }
 
-bool avoidRainInThunderheadLocation(bool unk) {
-    // TODO
-    return true;
+bool noWeatherInThunderheadLocation(bool clouds) {
+    bool ret = false;
+
+    dCamera_c *cam = dScGame_c::getCamera();
+    mVec3_c v1(-167647.0f, 0.0f, -51135.0f); // Bug Rock
+
+    if (cam == nullptr) {
+        return false;
+    }
+
+    if (cam->getPosition().y < 18150.0f && cam->getPosition().y > 17150.0f) {
+        v1.y = cam->getPosition().y;
+        if (cam->getPosition().y < 17600.0f) {
+            if (cam->getPosition().distance(v1) < 1675.0f &&
+                dAcPy_c::GetLinkM()->getPosition().distance(v1) < 1675.0f) {
+                ret = true;
+            }
+        } else {
+            if (cam->getPosition().distance(v1) < 1400.0f &&
+                dAcPy_c::GetLinkM()->getPosition().distance(v1) < 1400.0f) {
+                ret = true;
+            }
+            if (cam->getPosition().x < -167519.0f && cam->getPosition().z > -167773.0f &&
+                cam->getPosition().z < -49474.0f && cam->getPosition().z > -50000.0f) {
+                ret = true;
+            }
+        }
+    }
+
+    if (!clouds) {
+        mVec3_c v2(-169205.0f, 18248.0f, -49903.0f); // Bug Haven Island
+        if (cam->getPosition().distance(v2) < 440.0f) {
+            ret = true;
+        }
+        mVec3_c v3(-159762.0f, 20212.0f, -83040.0f); // Mogma Mitts Island
+        if (cam->getPosition().distance(v3) < 740.0f) {
+            ret = true;
+        }
+        mVec3_c v4(-161799.0f, 19959.0f, -83324.0f); // Mogma Mitts Island
+        if (cam->getPosition().distance(v4) < 670.0f) {
+            ret = true;
+        }
+        mVec3_c v5(-165637.0f, 17352.0f, -50186.0f); // Bug Haven Island
+        if (cam->getPosition().distance(v5) < 400.0f) {
+            ret = true;
+        }
+        mVec3_c v6(-100492.0f, 16337.0f, -121497.0f); // East Island
+        if (cam->getPosition().distance(v6) < 350.0f) {
+            ret = true;
+        }
+        mVec3_c v7(-99270.0f, 17292.0f, -122033.0f); // East Island
+        if (cam->getPosition().distance(v7) < 350.0f) {
+            ret = true;
+        }
+    }
+
+    return ret;
 }
 
 bool isAirborne() {
-    // TODO
-    return true;
+    bool ret = false;
+    if (dAcPy_c::GetLinkM()->getRidingActorType() == daPlayerActBase_c::RIDING_LOFTWING ||
+        dAcPy_c::GetLinkM()->checkCurrentAction(19 /* FREE_FALL */) ||
+        dAcPy_c::GetLinkM()->checkCurrentAction(122 /* USING_SAILCLOTH */) ||
+        dAcPy_c::GetLinkM()->didDiveSky_andNotOther()) {
+        ret = true;
+    }
+    return ret;
 }
 
 bool isInTentalusBossRoomAfterDefeat() {
@@ -64,7 +125,6 @@ bool isInTentalusBossRoomAfterDefeat() {
 }
 
 bool dWeatherTag_c::createHeap() {
-    // TODO
     u32 dummy1 = 0;
     if (!mRain.create(&mAllocator, &dummy1)) {
         return true;
@@ -185,7 +245,6 @@ int dWeatherTag_c::create() {
 }
 
 int dWeatherTag_c::doDelete() {
-    // TODO
     return SUCCEEDED;
 }
 
@@ -228,7 +287,7 @@ void dWeatherTag_c::rain_c::calc() {
     dCamera_c *cam = dScGame_c::getCamera();
 
     if (cam != nullptr && field_0x31) {
-        field_0x2C = 400;
+        mRainIntensity = 400;
         env.setField_0x38E1(0);
         if (!isInTentalusBossRoomAfterDefeat()) {
             if (dScGame_c::isCurrentStage("F023")) {
@@ -237,10 +296,10 @@ void dWeatherTag_c::rain_c::calc() {
                     return;
                 }
                 if (env.getSpfSetting().mIdxStart == 0 && env.getSpfSetting().mIdxEnd == 1) {
-                    field_0x2C = env.getSpfSetting().mRatio * 400.0f;
+                    mRainIntensity = env.getSpfSetting().mRatio * 400.0f;
                 }
-                if (avoidRainInThunderheadLocation(0) == true) {
-                    field_0x2C = -1;
+                if (noWeatherInThunderheadLocation(false) == true) {
+                    mRainIntensity = -1;
                 }
             } else if (dScGame_c::isCurrentStage("B400")) {
                 if (DungeonflagManager::sInstance->getCounterOrFlag(3, 8)) {
@@ -265,11 +324,14 @@ void dWeatherTag_c::rain_c::calc() {
 }
 
 void dWeatherTag_c::rain_c::drawXlu() {
+    // NONMATCHING - various issues
+
     u32 i1 = 10;
     dLightEnv_c &env = dLightEnv_c::GetInstance();
     dCamera_c *cam = dScGame_c::getCamera();
-    bool b = false;
+    bool noRainSplashes = false;
 
+    // #FFFFFF
     mColor col(0xFF, 0xFF, 0xFF, 0x28);
 
     EGG::Matrix34f cameraMtx(
@@ -297,11 +359,10 @@ void dWeatherTag_c::rain_c::drawXlu() {
             i1 = 8;
         } else if (dScGame_c::isCurrentStage("F023")) {
             if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_LEVIAS_FIGHT_DEFEATED)) {
-                // No rain in Thunderhead after Levias is defeated
                 return;
             }
-            if (avoidRainInThunderheadLocation(0) == true) {
-                b = true;
+            if (noWeatherInThunderheadLocation(false) == true) {
+                noRainSplashes = true;
                 i1 = 8;
             }
         } else if (dScGame_c::isCurrentStage("B400")) {
@@ -324,10 +385,10 @@ void dWeatherTag_c::rain_c::drawXlu() {
         f32 f2 = 1.0f - speed * 0.9f;
         u8 alpha = i1 * field_0x28;
 
-        if (field_0x2C != 0) {
+        if (mRainIntensity != 0) {
             GXSetCullMode(GX_CULL_NONE);
             GXSetClipMode(GX_CLIP_DISABLE);
-            if (!b) {
+            if (!noRainSplashes) {
                 EGG::DrawGX::LoadTexture(mpTexture, GX_TEXMAP0);
                 EGG::DrawGX::BeginDrawQuad(
                     EGG::DrawGX::COLORCHAN_1, EGG::DrawGX::ZMODE_0, EGG::DrawGX::BLEND_3, true, false
@@ -346,12 +407,12 @@ void dWeatherTag_c::rain_c::drawXlu() {
                     f = 1.0f;
                 }
                 col.a = col.a * f;
+                f32 scale = 80.0f;
                 mVec3_c rayTgt(
                     camPos.x + camDir.x * 5000.0f, camPos.y + camDir.y * 4000.0f, camPos.z + camDir.z * 5000.0f
                 );
-                f32 scale = 80.0f;
 
-                for (int i = 0; i < field_0x2C >> 1; i++) {
+                for (int i = 0; i < mRainIntensity >> 1; i++) {
                     mVec3_c tmp;
                     tmp.x = cM::rndFX(3000.0f) + rayTgt.x;
                     tmp.y = cM::rndFX(3000.0f) + rayTgt.y;
@@ -371,9 +432,9 @@ void dWeatherTag_c::rain_c::drawXlu() {
             // what?
             nw4r::math::MTX34 camMtx2 = EGG::DrawGX::s_cameraMtx;
             MTXCopy(camMtx2, EGG::DrawGX::s_cameraMtx);
-            if (field_0x2C > 0) {
+            if (mRainIntensity > 0) {
                 EGG::DrawGX::BeginDrawLine(EGG::DrawGX::COLORCHAN_1, EGG::DrawGX::ZMODE_0);
-                for (int i = 0; i <= field_0x2C; i++) {
+                for (int i = 0; i <= mRainIntensity; i++) {
                     mVec3_c tmp;
                     tmp.x = camPos.x + camDir.x * 1000.0f + cM::rndFX(900.0);
                     tmp.y = camPos.y + camDir.y * 1000.0f + cM::rndFX(900.0);
@@ -395,6 +456,7 @@ void dWeatherTag_c::rain_c::drawXlu() {
                     if (camDist < 100.0f) {
                         continue;
                     }
+                    // #B5D7FF
                     EGG::DrawGX::DrawLine(tmp, 2, mColor(0xB5, 0xD7, 0xFF, alpha), 6);
                 }
             } else {
@@ -406,6 +468,7 @@ void dWeatherTag_c::rain_c::drawXlu() {
                     tmp.y = cM::rndF(-1000.0f) + 18199.0f;
                     tmp.z = cM::rndFX(150.0f) + -51111.0f;
                     mVec3_c v = tmp + offset;
+                    // #B5D7FF
                     EGG::DrawGX::DrawLine(v, 2, mColor(0xB5, 0xD7, 0xFF, alpha), 6);
                 }
             }
@@ -415,6 +478,8 @@ void dWeatherTag_c::rain_c::drawXlu() {
 }
 
 void dWeatherTag_c::moya_c::calc() {
+    // NONMATCHING - various issues
+
     dLightEnv_c &env = dLightEnv_c::GetInstance();
     f32 speed = -100.0f;
     u8 maxAlpha = 0xFF;
@@ -521,6 +586,8 @@ void dWeatherTag_c::moya_c::calc() {
 }
 
 void dWeatherTag_c::moya_c::drawXlu() {
+    // NONMATCHING - FPR regswap
+
     dLightEnv_c &env = dLightEnv_c::GetInstance();
     dCamera_c *cam = dScGame_c::getCamera();
     if (field_0xB81 && (!env.fn_80024770(8) || env.fn_800247A0(8)) && mInitialSet &&
@@ -538,13 +605,14 @@ void dWeatherTag_c::moya_c::drawXlu() {
         mVec3_c posInCamSpace;
         mVec3_c screenCenter(0.0f, 0.0f, 0.0f);
         mColor tevCol1 = ActorLighting::getLightTev1Color();
-        tevCol1.r *= 0.8f;
-        tevCol1.g *= 0.8f;
-        tevCol1.b *= 0.8f;
+        tevCol1.r = tevCol1.r * 0.8f;
+        tevCol1.g = tevCol1.g * 0.8f;
+        tevCol1.b = tevCol1.b * 0.8f;
 
         GXSetCullMode(GX_CULL_NONE);
         GXSetClipMode(GX_CLIP_DISABLE);
         mColor c3;
+        // #FFFFFF
         GXSetChanAmbColor(GX_COLOR0, mColor(0xFF, 0xFF, 0xFF, 0xFF));
         GXSetTevColor(GX_TEVREG1, tevCol1);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
@@ -561,7 +629,9 @@ void dWeatherTag_c::moya_c::drawXlu() {
             MTXMultVec(*cameraMtx, worldPos, posInCamSpace);
             mMtx_c mtx2;
             mtx2.transS(posInCamSpace);
-            // TODO FPR regswap
+            // TODO FPR regswap - swapping these two statements fixes the temp registers
+            // but messes up constant loads.
+            // Note that the .sdata2 order is 300.0f, 50.0f, 3.0f
             int i1 = -(posInCamSpace.z + 50.0f) / 2.0f;
             f32 scale = -posInCamSpace.z / 2000.0f;
             if (scale > 1.0f) {
@@ -605,7 +675,132 @@ void dWeatherTag_c::moya_c::drawXlu() {
 }
 
 void dWeatherTag_c::near_cloud_c::calc() {
-    // TODO
+    dLightEnv_c &env = dLightEnv_c::GetInstance();
+    f32 f = 5000.0f;
+    dCamera_c *cam = dScGame_c::getCamera();
+    if (cam != nullptr && field_0xF5) {
+        if (dScGame_c::isCurrentStage("B200") && dAcPy_c::GetLinkM()->mRoomID == 6) {
+            mInitialSet = 0;
+        } else {
+            mVec3_c _linkPos = dAcPy_c::GetLinkM()->getPosition();
+            mVec3_c camPos = cam->getPosition();
+            mVec3_c camTgt = cam->getTarget();
+            mVec3_c camDir = camTgt - camPos;
+            if (camDir.normalizeRS()) {
+                if (field_0xF6 == 1) {
+                    if (env.getField_0x5D6C() != 2) {
+                        field_0xF6 = 0;
+                    }
+                } else {
+                    if (dScGame_c::isCurrentStage("B400")) {
+                        f = 400.0f;
+                    }
+                    mVec3_c rayTgt = camPos + camDir * f * 0.5f;
+                    if (!mInitialSet) {
+                        for (int i = 0; i < NUM; i++) {
+                            field_0x18[i].x = rayTgt.x + cM::rndFX(f);
+                            field_0x18[i].y = rayTgt.y + cM::rndFX(f);
+                            field_0x18[i].z = rayTgt.z + cM::rndFX(f);
+                            field_0xE8[i] = 20;
+                            field_0x98[i] = cM::rndF(45.0f) + 90.0f;
+                            field_0xB8[i] = cM::rndF(360.0f);
+                            field_0xD8[i] = cM::rndF(65536.0f);
+                            field_0x78[i] = cM::rndF(0.2f) + 0.8f;
+                        }
+                        mInitialSet = true;
+                        field_0xF6 = 0;
+                    }
+
+                    mVec3_c cartesian;
+                    mVec3_c ex(1.0f, 0.0f, 0.0f);
+                    f32 f2, f3;
+                    if (dScGame_c::isCurrentStage("F000") || dScGame_c::isCurrentStage("F020") ||
+                        dScGame_c::isCurrentStage("F023") || dScGame_c::isCurrentStage("B400")) {
+                        f2 = mAng(dScGame_c::getUpdateFrameCount() * 128).sin() * 2.0f;
+                        if (f2 > 1.0f) {
+                            f2 = 1.0f;
+                        }
+                        if (f2 <= 0.0f) {
+                            if (env.getField_0x5D6C() == 2) {
+                                field_0xF6 = 1;
+                            }
+                            f2 = 0.0f;
+                        }
+                        f3 = 280.0f;
+                        if (dScGame_c::isCurrentStage("B400")) {
+                            if (env.getField_0x38E0() == 0) {
+                                f3 = 24.0f;
+                            } else {
+                                f3 = 35.0f;
+                            }
+                        }
+                    } else {
+                        ex = env.wind_influence().getVel();
+                        f2 = env.wind_influence().field_0x0C;
+                        sLib::chase(&f2, 0.0f, 0.01f);
+                        env.setWind(ex, f2);
+                        f3 = 400.0f;
+                    }
+
+                    
+                    for (int i = 0; i < NUM; i++) {
+                        env.sphere_to_cartesian(field_0x98[i], field_0xB8[i], &cartesian);
+                        f32 s = mAng(field_0xD8[i]).sin();
+                        field_0xD8[i] += field_0x78[i] * 45.0f + 10.0f;
+                        field_0x98[i] += (field_0x78[i] - 0.5f) * 4.0f * s;
+                        field_0xB8[i] += (field_0x78[i] - 0.5f) * 2.0f * s;
+                        
+                        field_0x18[i].x += cartesian.x * field_0x78[i] * (f3 * 0.15f);
+                        field_0x18[i].y += cartesian.y * field_0x78[i] * (f3 * 0.15f);
+                        field_0x18[i].z += cartesian.z * field_0x78[i] * (f3 * 0.15f);
+                        if (!dScGame_c::isCurrentStage("F000") || !dScGame_c::isCurrentStage("F020") ||
+                            !dScGame_c::isCurrentStage("F023") || !dScGame_c::isCurrentStage("B400")) {
+                            // @bug (?) This condition is always true since you can't be in all those four stages at the
+                            // same time :)
+                            field_0x18[i].y += f3 * 0.25 * field_0x78[i];
+                        }
+                        f32 f4 = f3 * field_0x78[i];
+                        field_0x18[i] += ex * f4 * field_0x78[i];
+                        if (field_0x18[i].distance(rayTgt) > f) {
+                            if (field_0x18[i].distance(rayTgt) > f + f * 0.4f) {
+                                field_0x18[i].x = rayTgt.x + cM::rndFX(f);
+                                field_0x18[i].y = rayTgt.y + cM::rndFX(f);
+                                field_0x18[i].z = rayTgt.z + cM::rndFX(f);
+                            } else {
+                                mVec3_c result;
+                                env.get_vectle_calc(&field_0x18[i], &rayTgt, &result);
+                                result.normalize();
+                                result.x *= cM::rndF(0.01f) + 0.99f;
+                                result.y *= cM::rndF(0.01f) + 0.99f;
+                                result.z *= cM::rndF(0.01f) + 0.99f;
+                                field_0x18[i].x = rayTgt.x + result.x * f;
+                                field_0x18[i].y = rayTgt.y + result.y * f;
+                                field_0x18[i].z = rayTgt.z + result.z * f;
+                            }
+                        }
+                        f32 d = rayTgt.distance(field_0x18[i]);
+                        field_0xE8[i] = 20;
+                        if (dScGame_c::isCurrentStage("B400")) {
+                            field_0xE8[i] = 30;
+                        } else if (dScGame_c::isCurrentStage("F300") || dScGame_c::isCurrentStage("F301") ||
+                                   dScGame_c::isCurrentStage("F301_4")) {
+                            field_0xE8[i] = 35;
+                        }
+
+                        if (d > f - f * 0.5f) {
+                            if (d >= f) {
+                                field_0xE8[i] = 0;
+                            } else {
+                                field_0xE8[i] = ((f - d) / (f * 0.5f)) * (f32)field_0xE8[i];
+                            }
+                        }
+
+                        field_0xE8[i] = field_0xE8[i] * f2;
+                    }
+                }
+            }
+        }
+    }
 }
 
 void dWeatherTag_c::near_cloud_c::drawXlu() {
@@ -705,7 +900,8 @@ void dWeatherTag_c::executeState_Wait() {
         dLightEnv_c::GetPInstance()->set0x35B0_i(0.0f);
     }
 
-    if ((dScGame_c::isCurrentStage("F000") || dScGame_c::isCurrentStage("F020") || dScGame_c::isCurrentStage("F023")) && isAirborne()) {
+    if ((dScGame_c::isCurrentStage("F000") || dScGame_c::isCurrentStage("F020") || dScGame_c::isCurrentStage("F023")) &&
+        isAirborne()) {
         mMoya.setField_0xB81(1);
     } else {
         mMoya.setField_0xB81(0);
