@@ -3,8 +3,6 @@
 
 #include "d/lyt/d2d.h"
 #include "s/s_State.hpp"
-#include "sized_string.h"
-#include "toBeSorted/arc_managers/layout_arc_manager.h"
 
 class dLytBossGauge_c {
 public:
@@ -26,7 +24,6 @@ public:
         field_0x546 = value;
     }
 
-    void fn_801582A0();
     void fn_80158940(f32);
 
 private:

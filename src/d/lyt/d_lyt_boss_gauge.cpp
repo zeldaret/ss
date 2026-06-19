@@ -1,5 +1,9 @@
 #include "d/lyt/d_lyt_boss_gauge.h"
 
+#include "common.h"
+#include "toBeSorted/arc_managers/layout_arc_manager.h"
+#include "sized_string.h"
+
 STATE_DEFINE(dLytBossGauge_c, None);
 STATE_DEFINE(dLytBossGauge_c, In);
 STATE_DEFINE(dLytBossGauge_c, Move);
@@ -13,11 +17,10 @@ STATE_DEFINE(dLytBossGauge_c, Out);
 dLytBossGauge_c *dLytBossGauge_c::sInstance;
 
 void dLytBossGauge_c::initializeState_None() {
-    0.0f;
     return;
 }
 
-void dLytBossGauge_c::fn_801582A0() {
+void dLytBossGauge_c::executeState_None() {
     if (field_0x544) {
         mAnmGroups[BOSS_GAUGE_ANIM_IN].setAnimEnable(true);
         mAnmGroups[BOSS_GAUGE_ANIM_IN].setFrame(0.0f);
@@ -48,22 +51,18 @@ void dLytBossGauge_c::fn_801582A0() {
     }
 }
 
-void dLytBossGauge_c::executeState_None() {
-    return;
-}
 void dLytBossGauge_c::finalizeState_None() {
     return;
 }
-
 void dLytBossGauge_c::initializeState_In() {
-    if (mAnmGroups[BOSS_GAUGE_ANIM_IN].isEndReached()) {
-        mAnmGroups[BOSS_GAUGE_ANIM_IN].setAnimEnable(false);
-        mStateMgr.changeState(dLytBossGauge_c::StateID_Move);
-    }
     return;
 }
 
 void dLytBossGauge_c::executeState_In() {
+    if (mAnmGroups[BOSS_GAUGE_ANIM_IN].isEndReached()) {
+        mAnmGroups[BOSS_GAUGE_ANIM_IN].setAnimEnable(false);
+        mStateMgr.changeState(dLytBossGauge_c::StateID_Move);
+    }
     return;
 }
 
@@ -72,6 +71,10 @@ void dLytBossGauge_c::finalizeState_In() {
 }
 
 void dLytBossGauge_c::initializeState_Move() {
+    return;
+}
+
+void dLytBossGauge_c::executeState_Move() {
     if (field_0x545) {
         mAnmGroups[BOSS_GAUGE_ANIM_OUT].setAnimEnable(true);
         mAnmGroups[BOSS_GAUGE_ANIM_OUT].setFrame(0.0f);
@@ -81,14 +84,14 @@ void dLytBossGauge_c::initializeState_Move() {
     return;
 }
 
-void dLytBossGauge_c::executeState_Move() {
-    return;
-}
 void dLytBossGauge_c::finalizeState_Move() {
     return;
 }
-
 void dLytBossGauge_c::initializeState_Out() {
+    return;
+}
+
+void dLytBossGauge_c::executeState_Out() {
     if (mAnmGroups[BOSS_GAUGE_ANIM_OUT].isEndReached()) {
         mAnmGroups[BOSS_GAUGE_ANIM_OUT].setAnimEnable(false);
         field_0x546 = true;
@@ -96,7 +99,7 @@ void dLytBossGauge_c::initializeState_Out() {
     }
 }
 
-void dLytBossGauge_c::executeState_Out() {
+void dLytBossGauge_c::finalizeState_Out() {
     return;
 }
 
@@ -113,7 +116,7 @@ bool dLytBossGauge_c::build() {
 
     void *data = LayoutArcManager::GetInstance()->getLoadedData("BossGauge");
 
-    mResAcc.attach(data, "arc");
+    mResAcc.attach(data, "");
     mLyt.setResAcc(&mResAcc);
     mLyt.build("bossGauge_00.brlyt", nullptr);
 
