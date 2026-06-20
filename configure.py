@@ -573,7 +573,7 @@ config.libs = [
             Object(Matching, "d/lyt/d_lyt_sky_gauge.cpp"),
             Object(Matching, "d/lyt/d_lyt_deposit_stock.cpp"),
             Object(Matching, "d/lyt/d_lyt_deposit_box_cursor.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_boss_gauge.cpp"),
+            Object(Matching, "d/lyt/d_lyt_boss_gauge.cpp"),
             Object(Matching, "d/lyt/d_lyt_pause_back.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_pause_disp_00.cpp"),
             Object(Matching, "d/lyt/d_lyt_pause_disp_01.cpp"),
