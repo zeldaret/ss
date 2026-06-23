@@ -35,14 +35,16 @@ public:
     /* 0x006 */ u8 field_0x006;
     /* 0x007 */ u8 field_0x007;
     /* 0x008 */ u8 field_0x008;
-    /* 0x009 */ u8 field_0x009[0xc-9];
+    /* 0x009 */ u8 field_0x009;
+    /* 0x00A */ u8 field_0x00A;
+    /* 0x00B */ u8 field_0x00B;
     /* 0x00C */ s16 mRotY;
     /* 0x00E */ s16 field_0x00E;
     /* 0x010 */ f32 field_0x010;
     /* 0x014 */ f32 field_0x014;
     /* 0x018 */ mVec3_c mPos;
     /* 0x024 */ mVec3_c field_0x024;
-    /* 0x030 */ u8 field_0x030[0x3C-0x30];
+    /* 0x030 */ mVec3_c field_0x030;
     /* 0x03C */ mVec3_c field_0x03C;
     /* 0x048 */ mVec3_c field_0x048;
     /* 0x054 */ mVec3_c field_0x054;
@@ -60,13 +62,14 @@ public:
     virtual int create() override;
     virtual int actorExecute() override;
     virtual int draw() override;
-    void updateSwarmBeeColliders();
+    virtual int doDelete() override;
+    u32 updateSwarmBeeColliders();
     void actuallyUpdateSwarmBees();
     void handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee);
     void fn_14_1350(dAcNpcBeeSingleBee* bee);
     void fn_14_1F40(dAcNpcBeeSingleBee* bee);
     u32 fn_14_2630();
-    u32 fn_14_2690(dAcNpcBeeSingleBee* bee);
+    s32 fn_14_2690(dAcNpcBeeSingleBee* bee);
     void fn_14_20F0(dAcNpcBeeSingleBee* bee);
 
 private:

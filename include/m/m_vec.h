@@ -272,8 +272,13 @@ public:
         return cM::atan2s(-y, absXZ());
     }
 
-    s16 atan2sY_XZ() const {
+    // TODO: make sure this isn't bad
+    s32 atan2sY_XZ() const {
         return cM::atan2s(y, absXZ());
+    }
+
+    s32 atan2sXZ_Y() const {
+        return -atan2sY_XZ();
     }
 
     f32 angle(const mVec3_c &other) const {
