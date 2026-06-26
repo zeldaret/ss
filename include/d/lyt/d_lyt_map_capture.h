@@ -2,14 +2,14 @@
 #define D_LYT_MAP_CAPTURE_H
 
 #include "common.h"
+#include "m/m_vec.h"
 #include "nw4r/lyt/lyt_picture.h"
 #include "s/s_State.hpp"
 #include "s/s_StateID.hpp"
-#include "m/m_vec.h"
 
 class dLytMapCapture_c {
 public:
-    dLytMapCapture_c() :mStateMgr(*this), mpPicture(nullptr) {
+    dLytMapCapture_c() : mStateMgr(*this), mpPicture(nullptr) {
         mRenderRequest = false;
         mIsBusyRendering = false;
         field_0x06C = 0.0f;
@@ -25,11 +25,11 @@ public:
     void renderRequest() {
         mRenderRequest = true;
     }
-    
+
     void setPicture(nw4r::lyt::Picture *pic) {
         mpPicture = pic;
     }
-    
+
     void execute();
     bool isBusyRendering() const;
     void fn_8012D610(mVec3_c *out);
@@ -38,7 +38,7 @@ public:
 
 private:
     void fn_8012D6F0();
-    void fn_8012D800(nw4r::lyt::Pane *pane, const GXTexObj *texObj);
+    void fn_8012D800(nw4r::lyt::Pane *pane, GXTexObj *texObj);
 
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMapCapture_c);
     /* 0x040 */ nw4r::lyt::Picture *mpPicture;

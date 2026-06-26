@@ -42,12 +42,10 @@ class MapRelated {
         bool c;
     };
 
-    
-
 public:
     MapRelated();
     ~MapRelated();
-    int fn_801B5970(const GXTexObj*);
+    bool fn_801B5970(GXTexObj *) const;
     /* 0x000 */ mHeapAllocator_c mAllocator;
     /* 0x01C */ Child mChildren[8];
     /* 0x0FC */ mVec3_c field_0x0FC;
@@ -57,7 +55,7 @@ public:
     /* 0x12C */ f32 field_0x12C;
     /* 0x130 */ EGG::ScreenEffectBlur mScreenEffect;
     /* 0x168 */ EGG::PostEffectBlur mPostEffect;
-    /* 0x1E0 */ u32 field_0x1E0;
+    /* 0x1E0 */ EGG::CpuTexture *mpCpuTexture;
     /* 0x1E4 */ u16 field_0x1E4;
     /* 0x1E6 */ u16 field_0x1E6;
     /* 0x1E8 */ u8 field_0x1E8;
@@ -65,7 +63,7 @@ public:
     /* 0x1EA */ s8 field_0x1EA;
     /* 0x1EB */ u8 field_0x1EB;
     /* 0x1EC */ s8 field_0x1EC;
-    /* 0x1ED */ u8 field_0x1ED;
+    /* 0x1ED */ s8 field_0x1ED;
     /* 0x1EE */ u8 field_0x1EE;
     /* 0x1EF */ u8 field_0x1EF;
     /* 0x1F0 */ u8 field_0x1F0;
@@ -87,11 +85,15 @@ public:
         field_0x1EF = v;
     }
 
+    Child *getChildForFloor(s32 floor) {
+        return &mChildren[floor + 3];
+    }
+
     void init(MapRelated *);
     void fn_801b4900();
     void fn_801B4B80(u32 mapParams, const mVec3_c &center, const mVec3_c &size);
     void fn_801B4C70(const mVec3_c &);
-    void fn_801B50C0(s32);
+    bool fn_801B50C0(s32);
     const mVec3_c &fn_801B4C90() const;
     const mVec3_c &fn_801B4CB0() const;
     s32 fn_801B4F10(s32 roomid, const mVec3_c &position) const;

@@ -14,6 +14,7 @@
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/snd/d_snd_source_mgr.h"
+#include "egg/gfx/eggCpuTexture.h"
 #include "f/f_base.h"
 #include "f/f_profile.h"
 #include "f/f_profile_name.h"
@@ -23,6 +24,7 @@
 #include "nw4r/g3d/res/g3d_resmat.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/math/math_types.h"
+#include "rvl/GX/GXTexture.h"
 #include "s/s_FPhase.h"
 #include "toBeSorted/arc_managers/current_stage_arc_manager.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
@@ -364,7 +366,7 @@ MapRelated::MapRelated()
       field_0x114(0.0f, 0.0f, 0.0f),
       field_0x120(0.0f, 0.0f, 0.0f),
       field_0x12C(0.0f),
-      field_0x1E0(0),
+      mpCpuTexture(NULL),
       field_0x1E6(0),
       field_0x1E8(0),
       field_0x1E9(4),
@@ -393,4 +395,51 @@ MapRelated::MapRelated()
 extern "C" void fn_801B4AE0();
 MapRelated::~MapRelated() {
     fn_801B4AE0();
+}
+
+const mVec3_c &MapRelated::fn_801B4C90() const {
+    return mChildren[3 + field_0x1ED].a;
+}
+
+const mVec3_c &MapRelated::fn_801B4CB0() const {
+    return mChildren[3 + field_0x1ED].b;
+}
+
+extern "C" u32 lbl_805732F0;
+
+bool MapRelated::fn_801B50C0(s32 s) {
+    if (s < 0) {
+        if (s < -3) {
+            return false;
+        }
+    } else {
+        if (s > 4) {
+            return false;
+        }
+    }
+
+    if (!getChildForFloor(s)->c) {
+        return false;
+    }
+
+    field_0x1ED = s;
+
+    if (getChildForFloor(field_0x1ED)->c) {
+        field_0x108 = getChildForFloor(field_0x1ED)->a;
+        field_0x114 = getChildForFloor(field_0x1ED)->b;
+        field_0x120 = field_0x108;
+
+        field_0x1E6 = lbl_805732F0;
+    }
+
+    return true;
+}
+
+bool MapRelated::fn_801B5970(GXTexObj *tex) const {
+    if (mpCpuTexture == NULL) {
+        return false;
+    }
+
+    mpCpuTexture->getTexObj(tex);
+    return true;
 }
