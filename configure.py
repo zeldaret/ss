@@ -678,7 +678,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/d_a_jstudio_act.cpp"),
             Object(NonMatching, "toBeSorted/d_a_jstudio_sys.cpp"),
             Object(Matching, "d/lyt/d_lyt_control_game.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_control_title.cpp"),
+            Object(Matching, "d/lyt/d_lyt_control_title.cpp"),
             Object(NonMatching, "d/tg/d_t_map_area.cpp"),
             Object(NonMatching, "d/tg/d_t_truck_rails.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_force_sign.cpp"),
