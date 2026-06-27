@@ -10,6 +10,7 @@
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
 #include "sized_string.h"
+#include "toBeSorted/d_flow_mgr.h"
 
 // Forward declarations required for vtable order
 class dLytMsgWindowTalk_c;
@@ -84,6 +85,9 @@ public:
         return mNameCopy;
     }
 
+    bool fn_80117310() const;
+    void fn_80117360();
+    void fn_80117380();
     const char *fn_80117390(bool) const;
 
     // This function appears to be related to a compiler quirk.
@@ -118,17 +122,18 @@ public:
         return mTextOptionSelection;
     }
 
-    void onFlag0x820(u16 flag) {
-        field_0x820 |= flag;
+    void enableChangeBtn(u16 flag) {
+        mValidChangeBtnMask |= flag;
     }
 
 private:
     bool setTextToDisplay(const wchar_t *text);
     void createSubMsgManager(u8 type);
     void removeSubMsgManagers();
-    bool fn_8011A5D0() const;
+    bool checkChangeBtnTrig();
 
     static dLytMsgWindow_c *sInstance;
+    static dFlowMgrBase_c *sFlowMgr;
 
     STATE_FUNC_DECLARE(dLytMsgWindow_c, Invisible);
     STATE_FUNC_DECLARE(dLytMsgWindow_c, In);
@@ -203,7 +208,7 @@ private:
     /* 0x81D */ u8 field_0x81D;
     /* 0x81E */ u8 field_0x81E;
 
-    /* 0x820 */ u16 field_0x820;
+    /* 0x820 */ u16 mValidChangeBtnMask;
     /* 0x824 */ s32 mNumOptions;
     /* 0x828 */ dLytMsgWindowCharData *field_0x828;
 

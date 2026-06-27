@@ -927,10 +927,10 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
                 }
             }
             break;
-        case 0x10011:
+        case TAG_CMD_CHANGE_BTN:
             if (rect == nullptr && !mIsShadowText) {
                 if (field_0xEEF == 0 && mNumericArgsCopy[10] == field_0x840) {
-                    fn_800B5540(endPtr);
+                    enableChangeBtn(endPtr);
                     field_0xEEF = 1;
                     field_0x840++;
                 }
@@ -1104,8 +1104,8 @@ void dTagProcessor_c::fn_800B5520(wchar_t *src) {
     field_0x820 = READ_U32(src, 4);
 }
 
-void dTagProcessor_c::fn_800B5540(wchar_t *src) {
-    dLytMsgWindow_c::getInstance()->onFlag0x820(sMsgWindowFlags[READ_U8(src, 0)]);
+void dTagProcessor_c::enableChangeBtn(wchar_t *src) {
+    dLytMsgWindow_c::getInstance()->enableChangeBtn(sMsgWindowFlags[READ_U8(src, 0)]);
 }
 
 wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, bool isProcessingOption) {
