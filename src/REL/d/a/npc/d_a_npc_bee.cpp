@@ -49,8 +49,8 @@ bool dAcNpcBee_c::createHeap() {
     };
     mSwarmBeeCount = 0x14;
     for (int i = 0; i < (int)ARRAY_LENGTH(sModelNames); i++) {
-        // instruction reordering
-        TRY_CREATE(mBeeModels[i].create(mRes.GetResMdl(sModelNames[i]), mSwarmBeeCount, &mAllocator,  true, nullptr));
+        nw4r::g3d::ResMdl mdl = mRes.GetResMdl(sModelNames[i]);
+        TRY_CREATE(mBeeModels[i].create(mdl, mSwarmBeeCount, &mAllocator,  true, nullptr));
     }
     return SUCCEEDED;
 }
