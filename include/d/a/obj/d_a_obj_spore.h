@@ -9,7 +9,7 @@ public:
     dAcOSpore_c() {}
     virtual ~dAcOSpore_c() {}
 
-    static fLiNdBa_c* getListHead();
+    static fLiNdBa_c *getListHead();
     s32 getSporeType() const {
         return mParams & 0xF;
     }
@@ -18,7 +18,7 @@ public:
     }
 
 private:
-static fLiMgBa_c sSpores;
+    static fLiMgBa_c sSpores;
 };
 
 #endif

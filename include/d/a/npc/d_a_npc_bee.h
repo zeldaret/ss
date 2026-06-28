@@ -38,7 +38,7 @@ public:
     /* 0x009 */ u8 mAttackTimer;
     /* 0x00A */ u8 mIsAttacking;
     /* 0x00B */ u8 mWallReflectTimer;
-    /* 0x00C */ s16 mTimer; // only counts up, used for kinda random calculations
+    /* 0x00C */ s16 mTimer;             // only counts up, used for kinda random calculations
     /* 0x00E */ s16 mFlyingStatesTimer; // used for vanishing after flying up and something else
     /* 0x010 */ f32 mCrawlingSpeed;
     /* 0x014 */ f32 mSpeed;
@@ -53,10 +53,9 @@ public:
     /* 0x06C */ dCcD_Linked_Sph mCollider;
 };
 
-
 class dAcNpcBee_c : public dAcEnBase_c {
 public:
-    dAcNpcBee_c(): mRes(nullptr) {}
+    dAcNpcBee_c() : mRes(nullptr) {}
     virtual ~dAcNpcBee_c() {}
     virtual bool createHeap() override;
     virtual int create() override;
@@ -65,18 +64,18 @@ public:
     virtual int doDelete() override;
     u32 updateSwarmBeeColliders();
     void actuallyUpdateSwarmBees();
-    void handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee);
-    void handleBeeFlyingStates(dAcNpcBeeSingleBee* bee);
-    void handleBeeRising(dAcNpcBeeSingleBee* bee);
-    s32 beeCheckWallFloorCollision(dAcNpcBeeSingleBee* bee);
-    void handleBeeBlownAway(dAcNpcBeeSingleBee* bee);
+    void handleBeeCrawlingOnHive(dAcNpcBeeSingleBee *bee);
+    void handleBeeFlyingStates(dAcNpcBeeSingleBee *bee);
+    void handleBeeRising(dAcNpcBeeSingleBee *bee);
+    s32 beeCheckWallFloorCollision(dAcNpcBeeSingleBee *bee);
+    void handleBeeBlownAway(dAcNpcBeeSingleBee *bee);
 
 private:
     /* 0x0378 */ u8 mSwarmBeeCount;
     /* 0x0379 */ u8 mRumbleTimer; // rumble timer
     /* 0x037A */ u8 mSceneflag;
-    /* 0x037B */ u8 field_0x037B; // padding
-    /* 0x037C */ s16 mFrameCounter; // used to only search for new targets every 16 frames
+    /* 0x037B */ u8 field_0x037B;    // padding
+    /* 0x037C */ s16 mFrameCounter;  // used to only search for new targets every 16 frames
     /* 0x037E */ u8 field_0x037E[2]; // padding
     /* 0x0380 */ f32 mAttackActorDistFromHome;
     /* 0x0384 */ u8 field_0x0384[4]; // padding?
@@ -87,8 +86,8 @@ private:
     /* 0xB818 */ dAcRef_c<dAcObjBase_c> mAttackRef;
     /* 0xB824 */ dColliderLinkedList mColliderList;
     /* 0xB830 */ mVec3_c mAliveBeePos; // overwritten by all alive bees, so it's the last on in the list
-    /* 0xB83C */ dAcObjBase_c* mAttackActor;
-    /* 0xB840 */ dAcOSpore_c* mSporeActor;
+    /* 0xB83C */ dAcObjBase_c *mAttackActor;
+    /* 0xB840 */ dAcOSpore_c *mSporeActor;
 };
 
 #endif

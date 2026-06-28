@@ -14,7 +14,7 @@
 /** a process for drawing shapes directly */
 class dShpProcBase_c : public m3d::proc_c {
 public:
-    dShpProcBase_c(): mLightSetId(1) {}
+    dShpProcBase_c() : mLightSetId(1) {}
     virtual ~dShpProcBase_c() {}
 
     void setResMat(nw4r::g3d::ResMat mat);

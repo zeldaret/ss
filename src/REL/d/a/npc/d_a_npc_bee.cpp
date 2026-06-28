@@ -1,4 +1,5 @@
 #include "d/a/npc/d_a_npc_bee.h"
+
 #include "c/c_lib.h"
 #include "c/c_math.h"
 #include "common.h"
@@ -34,13 +35,14 @@
 #include "nw4r/math/math_triangular.h"
 #include "s/s_Math.h"
 #include "toBeSorted/d_emitter.h"
+
 #include <cmath>
 
 SPECIAL_ACTOR_PROFILE(NPC_BEE, dAcNpcBee_c, fProfile::NPC_BEE, 0x123, 0, 0);
 
 bool dAcNpcBee_c::createHeap() {
     mRes = nw4r::g3d::ResFile(getOarcResFile("Bee"));
-    static const char* sModelNames[4] = {
+    static const char *sModelNames[4] = {
         "fly_A",
         "fly_B",
         "walk_A",
@@ -49,27 +51,28 @@ bool dAcNpcBee_c::createHeap() {
     mSwarmBeeCount = 0x14;
     for (int i = 0; i < (int)ARRAY_LENGTH(sModelNames); i++) {
         nw4r::g3d::ResMdl mdl = mRes.GetResMdl(sModelNames[i]);
-        TRY_CREATE(mBeeModels[i].create(mdl, mSwarmBeeCount, &mAllocator,  true, nullptr));
+        TRY_CREATE(mBeeModels[i].create(mdl, mSwarmBeeCount, &mAllocator, true, nullptr));
     }
     return SUCCEEDED;
 }
 static dCcD_SrcSph beeColliderSrc = {
-    /* mObjInf */ {
-        /* mObjAt */ {AT_TYPE_0x2000000, 0x20000F, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
-        /* mObjTg */ {AT_TYPE_BUGNET | AT_TYPE_BELLOWS | AT_TYPE_BOMB, 0x00004011, {0, 00, 0x40F}, 8, 0},
-        /* mObjCo */ {0}},
-     /* mSphInf */ {15.0f}
+    /* mObjInf */ {/* mObjAt */ {AT_TYPE_0x2000000, 0x20000F, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
+                   /* mObjTg */ {AT_TYPE_BUGNET | AT_TYPE_BELLOWS | AT_TYPE_BOMB, 0x00004011, {0, 00, 0x40F}, 8, 0},
+                   /* mObjCo */ {0}},
+    /* mSphInf */
+    {15.0f}
 };
 
 // non matching
 int dAcNpcBee_c::create() {
     mSceneflag = getFromParams(0x10, 0xFF);
     // mRoom regalloc
-    if (mSceneflag != 0xFF && SceneflagManager::sInstance && SceneflagManager::sInstance->checkFlag(getRoomId(), mSceneflag)) {
+    if (mSceneflag != 0xFF && SceneflagManager::sInstance &&
+        SceneflagManager::sInstance->checkFlag(getRoomId(), mSceneflag)) {
         return FAILED;
     }
     CREATE_ALLOCATOR(dAcNpcBee_c);
-    dAcNpcBeeSingleBee* bee = &mBees[0];
+    dAcNpcBeeSingleBee *bee = &mBees[0];
     for (int i = 0; i < mSwarmBeeCount; i++, bee++) {
         bee->mIndex = i;
         bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_CRAWL;
@@ -87,17 +90,18 @@ int dAcNpcBee_c::create() {
     mInteractionFlags |= 0x80;
     mColliderList.SetStts(mStts);
     mFrameCounter = cM::rndF(65536);
-    dAcObjBase_c* honeycomb = dAcObjBase_c::create(fProfile::NPC_HONEYCOMB, -1, mParams, &mPosition, nullptr, nullptr, -1);
+    dAcObjBase_c *honeycomb =
+        dAcObjBase_c::create(fProfile::NPC_HONEYCOMB, -1, mParams, &mPosition, nullptr, nullptr, -1);
     if (honeycomb == nullptr) {
         return FAILED;
     } else {
-        mHiveRef.link(static_cast<dAcNpcHc_c*>(honeycomb));
+        mHiveRef.link(static_cast<dAcNpcHc_c *>(honeycomb));
         mAttackRef.link(dAcPy_c::GetLinkM());
     }
     return SUCCEEDED;
 }
 
-int dAcNpcBee_c::doDelete()  {
+int dAcNpcBee_c::doDelete() {
     return SUCCEEDED;
 }
 
@@ -112,12 +116,12 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
         bool noSporeFound = true;
         fLiNdBa_c *current = dAcOSpore_c::getListHead();
         if (current != nullptr) {
-            for (;current != nullptr;current = current->getNext()) {
-                dAcOSpore_c* spore = static_cast<dAcOSpore_c*>(current->p_owner);
+            for (; current != nullptr; current = current->getNext()) {
+                dAcOSpore_c *spore = static_cast<dAcOSpore_c *>(current->p_owner);
                 if (spore != nullptr && spore->isGlitteringSpore()) {
-                    mVec3_c& sporePos = spore->mPosition;
+                    mVec3_c &sporePos = spore->mPosition;
                     if (spore->mPosition.squareDistanceToXZ(mAliveBeePos) < 1000000.f &&
-                    std::fabsf(spore->mPosition.y - mAliveBeePos.y) < 500.f) {
+                        std::fabsf(spore->mPosition.y - mAliveBeePos.y) < 500.f) {
                         if (!dBgS_ObjLinChk::LineCross(&mAliveBeePos, &sporePos, this)) {
                             mAttackRef.link(spore);
                             noSporeFound = false;
@@ -130,8 +134,10 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
         }
         if (noSporeFound) {
             dAcEbc_c *boko = nullptr;
-            while((boko = static_cast<dAcEbc_c*>(fManager_c::searchBaseByProfName(fProfile::E_BC, boko)))) {
-                if (boko->getField_0x130D()) continue;
+            while ((boko = static_cast<dAcEbc_c *>(fManager_c::searchBaseByProfName(fProfile::E_BC, boko)))) {
+                if (boko->getField_0x130D()) {
+                    continue;
+                }
                 f32 distToPlayer = mAliveBeePos.distance(dAcPy_c::GetLink()->mPositionCopy2);
                 f32 distToBoko = mAliveBeePos.distance(boko->mPositionCopy2);
                 if (distToBoko < distToPlayer) {
@@ -145,11 +151,11 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
     if (mAttackActor == nullptr) {
         mAttackActor = player;
     }
-    dAcNpcBeeSingleBee* bee = &mBees[0];
+    dAcNpcBeeSingleBee *bee = &mBees[0];
     u8 beesAlive = 0;
     int beeModelIndex = 0;
     static mVec3_c colliderDisabledPos(10000.f, -20000.f, 50000.f);
-    dCamera_c* camera = dScGame_c::getCamera();
+    dCamera_c *camera = dScGame_c::getCamera();
     bool isFirst = true;
     int flyingBeeCount = 0;
     mAttackActorDistFromHome = mStartingPos.distance(mAttackActor->mPositionCopy2);
@@ -163,7 +169,7 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
             if (bee->mActionTimer) {
                 bee->mActionTimer--;
             }
-            if(bee->mDisableAttackTimer) {
+            if (bee->mDisableAttackTimer) {
                 bee->mDisableAttackTimer--;
             }
             if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_CRAWL) {
@@ -244,14 +250,14 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
     }
 }
 
-void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee) {
-    #define CRAWLING_SUBSTATE_NONMOVING 0
-    #define CRAWLING_SUBSTATE_MOVE 1
-    #define CRAWLING_SUBSTATE_FLY 2
-    #define CRAWLING_SUBSTATE_LAND 3
-    #define CRAWLING_SUBSTATE_PRE_RISE 4
+void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee *bee) {
+#define CRAWLING_SUBSTATE_NONMOVING 0
+#define CRAWLING_SUBSTATE_MOVE 1
+#define CRAWLING_SUBSTATE_FLY 2
+#define CRAWLING_SUBSTATE_LAND 3
+#define CRAWLING_SUBSTATE_PRE_RISE 4
     f32 targetSpeed = 0.0f;
-    dAcNpcHc_c* hive = mHiveRef.get();
+    dAcNpcHc_c *hive = mHiveRef.get();
     if (hive == nullptr || hive->mHealth == 0) {
         bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_DEAD;
     } else {
@@ -265,10 +271,12 @@ void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee) {
                 return;
             }
         }
-        if (dAcPy_c::GetLink()->getRidingActorType() != daPlayerActBase_c::RIDING_LOFTWING && (mAttackActor->getPosition().y - getPosition().y) < 0.f && bee->mSubState != CRAWLING_SUBSTATE_PRE_RISE) {
+        if (dAcPy_c::GetLink()->getRidingActorType() != daPlayerActBase_c::RIDING_LOFTWING &&
+            (mAttackActor->getPosition().y - getPosition().y) < 0.f && bee->mSubState != CRAWLING_SUBSTATE_PRE_RISE) {
             // using getSpeed inline breaks the match
             f32 aggroDistance = mAttackActor->mSpeed * 20.f + 350.f;
-            if (hive->field_0x915 >= 5 || hive->mHealth == 1 || (hive->field_0x916 == 0 && mAttackActorDistFromHome < aggroDistance)) {
+            if (hive->field_0x915 >= 5 || hive->mHealth == 1 ||
+                (hive->field_0x916 == 0 && mAttackActorDistFromHome < aggroDistance)) {
                 bee->mSubState = CRAWLING_SUBSTATE_PRE_RISE;
                 bee->mActionTimer = cM::rndF(15.f);
             } else if (bee->mSubState != CRAWLING_SUBSTATE_FLY && hive->field_0x915 != 0) {
@@ -349,9 +357,9 @@ void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee) {
 }
 
 // non matching
-void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
+void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee *bee) {
     bee->mIsFlying = 1;
-    dAcNpcHc_c* hive = mHiveRef.get();
+    dAcNpcHc_c *hive = mHiveRef.get();
     bee->mCollider.ClrAtSet();
     bool isFlyingAway = false;
     bool isAttacking = false;
@@ -368,12 +376,15 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
             bee->mPos += bee->mSwordDodgeOffset;
             bee->mSwordDodgeOffset *= 0.8f;
         } else {
-            if (mAttackActor == dAcPy_c::GetLink() && dAcPy_c::GetLink()->checkFlags0x354(4) && bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_CHASE) {
+            if (mAttackActor == dAcPy_c::GetLink() && dAcPy_c::GetLink()->checkFlags0x354(4) &&
+                bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_CHASE) {
                 dodgedSword = false;
                 local_98 = dAcPy_c::GetLink()->getPosition() - bee->mPos;
                 if (local_98.squareMagXZ() < 90000.f) {
-                    if (dAcPy_c::GetLink()->getSpecificAttackDirection() == (s16)daPlayerActBase_c::ATTACK_DIRECTION_LEFT || 
-                    dAcPy_c::GetLink()->getSpecificAttackDirection() == (s16)daPlayerActBase_c::ATTACK_DIRECTION_RIGHT) {
+                    if (dAcPy_c::GetLink()->getSpecificAttackDirection() ==
+                            (s16)daPlayerActBase_c::ATTACK_DIRECTION_LEFT ||
+                        dAcPy_c::GetLink()->getSpecificAttackDirection() ==
+                            (s16)daPlayerActBase_c::ATTACK_DIRECTION_RIGHT) {
                         local_98.y += 150.f;
                         if (std::fabsf(local_98.y) < 50.f) {
                             if (local_98.y < 0.f) {
@@ -448,13 +459,11 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
                 bee->mTargetPos.z = cM::rndFX(100.f);
             }
             bee->mAttackTimer = 0x50;
-            
         }
         offsetToTarget += bee->mTargetPos;
         f32 maxDist = 1000000.f;
-        if ((bee->mFlyingStatesTimer == 0 || distToTarget > maxDist) || (
-            mAttackActor == dAcPy_c::LINK && dAcPy_c::LINK->checkActionFlags(0x40000)
-        )) {
+        if ((bee->mFlyingStatesTimer == 0 || distToTarget > maxDist) ||
+            (mAttackActor == dAcPy_c::LINK && dAcPy_c::LINK->checkActionFlags(0x40000))) {
             if (mSporeActor == mAttackActor || (hive != nullptr && mAttackActorDistFromHome < 300.f)) {
                 bee->mFlyingStatesTimer = cM::rndF(30.f) + 20.f;
             } else {
@@ -478,7 +487,10 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
         if (bee->mSpeed >= 10.f && mSporeActor != mAttackActor) {
             bee->mCollider.OnAtSet();
         }
-    } else if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_TO_HIVE || bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_UP) {
+    } else if (
+        bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_TO_HIVE ||
+        bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_UP
+    ) {
         isFlyingAway = true;
         offsetToTarget = bee->mTargetPos - bee->mPos;
         f32 distToTarget;
@@ -541,7 +553,6 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
             sLib::addCalcAngle(bee->mModelRotation.x.ref(), -0x4000, 2, 0x1000);
         } else {
             sLib::addCalcAngle(bee->mModelRotation.x.ref(), 0, 2, 0x1000);
-
         }
     }
     if (bee->mWallReflectTimer == 0) {
@@ -560,7 +571,7 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
     sLib::addCalcAngle(bee->mModelRotation.z.ref(), bee->mCrawlingRotation.z, 2, 0x200);
 }
 
-void dAcNpcBee_c::handleBeeRising(dAcNpcBeeSingleBee* bee) {
+void dAcNpcBee_c::handleBeeRising(dAcNpcBeeSingleBee *bee) {
     bee->mIsFlying = 1;
     switch (bee->mSubState) {
         case 0: {
@@ -571,20 +582,22 @@ void dAcNpcBee_c::handleBeeRising(dAcNpcBeeSingleBee* bee) {
         }
         case 1: {
             cLib::addCalcPos2(&bee->mPos, bee->mTargetPos, 0.2f, 15.0f);
-            sLib::addCalcAngle(bee->mCrawlingRotation.y.ref(), cLib::targetAngleY(bee->mPos, mAttackActor->mPositionCopy2), 2, 0x800);
+            sLib::addCalcAngle(
+                bee->mCrawlingRotation.y.ref(), cLib::targetAngleY(bee->mPos, mAttackActor->mPositionCopy2), 2, 0x800
+            );
             sLib::addCalcAngle(bee->mCrawlingRotation.x.ref(), 0, 2, 0x800);
             sLib::addCalcAngle(bee->mCrawlingRotation.z.ref(), 0, 2, 0x800);
             if (bee->mActionTimer == 0) {
                 bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_CHASE;
                 bee->mSubState = 0;
-                bee->mFlyingStatesTimer = cM::rndF(155.f) + 300.f; 
+                bee->mFlyingStatesTimer = cM::rndF(155.f) + 300.f;
             }
         }
-    }   
+    }
 }
 
 // TODO: data
-void dAcNpcBee_c::handleBeeBlownAway(dAcNpcBeeSingleBee* bee) {
+void dAcNpcBee_c::handleBeeBlownAway(dAcNpcBeeSingleBee *bee) {
     bee->mPos += bee->field_0x048;
     bee->mPos.x += nw4r::math::SinIdx(bee->mTimer * 0x900) * 10.f;
     bee->mPos.y += nw4r::math::SinIdx(bee->mTimer * 0xa00) * 10.f;
@@ -621,20 +634,23 @@ int dAcNpcBee_c::actorExecute() {
 u32 dAcNpcBee_c::updateSwarmBeeColliders() {
     mMtx_c mtx;
     mtx.YrotS(dAcPy_c::LINK->mRotation.y);
-    dAcNpcBeeSingleBee* bee = &mBees[0];
+    dAcNpcBeeSingleBee *bee = &mBees[0];
     for (int i = 0; i < mSwarmBeeCount; i++, bee++) {
         if (bee->mBeeState != dAcNpcBeeSingleBee::BEE_STATE_DEAD) {
             if (bee->mCollider.ChkTgHit()) {
                 if (bee->mCollider.ChkTgAtHitType(AT_TYPE_BUGNET)) {
                     bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_DEAD;
                     dAcPy_c::LINK->bugNetCollectTreasure(ITEM_DEKU_HORNET);
-                    dAcNpcIcgKobun_c* npc = static_cast<dAcNpcIcgKobun_c*>(fManager_c::searchBaseByProfName(fProfile::NPC_ICGK));
+                    dAcNpcIcgKobun_c *npc =
+                        static_cast<dAcNpcIcgKobun_c *>(fManager_c::searchBaseByProfName(fProfile::NPC_ICGK));
                     if (npc != nullptr) {
                         npc->fn_66_30C0(ITEM_DEKU_HORNET);
                     }
                 } else if (bee->mCollider.ChkTgAtHitType(AT_TYPE_BOMB)) {
                     bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_DEAD;
-                    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_394_, bee->mPos, nullptr, nullptr, nullptr, nullptr, 0, 0);
+                    dJEffManager_c::spawnEffect(
+                        PARTICLE_RESOURCE_ID_MAPPING_394_, bee->mPos, nullptr, nullptr, nullptr, nullptr, 0, 0
+                    );
                 } else {
                     bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_BLOWN_AWAY;
                     bee->field_0x048 = bee->mCollider.GetTgAtHitDir();
@@ -646,7 +662,7 @@ u32 dAcNpcBee_c::updateSwarmBeeColliders() {
                     } else {
                         // can this even be reached? all possible AT types should be handled
                         bee->field_0x048 *= cM::rndF(5.f) + 25.f;
-                        bee->field_0x048.y = cM::rndF(5.f) +15.f;
+                        bee->field_0x048.y = cM::rndF(5.f) + 15.f;
                         mVec3_c local_b8(cM::rndFX(20.f), 0.f, 0.f);
                         mtx.multVec(local_b8, local_b8);
                         bee->field_0x048 += local_b8;
@@ -660,7 +676,7 @@ u32 dAcNpcBee_c::updateSwarmBeeColliders() {
 }
 
 int dAcNpcBee_c::draw() {
-    dShpProc1_c* model = &mBeeModels[0];
+    dShpProc1_c *model = &mBeeModels[0];
     for (int i = 0; i < 4; i++, model++) {
         model->entry();
     }
@@ -670,7 +686,7 @@ int dAcNpcBee_c::draw() {
 /**
  * Returns bits when a collision is detected, 2 is wall, 1 is floor
  */
-s32 dAcNpcBee_c::beeCheckWallFloorCollision(dAcNpcBeeSingleBee* bee) {
+s32 dAcNpcBee_c::beeCheckWallFloorCollision(dAcNpcBeeSingleBee *bee) {
     dBgS_ObjGndChk gndChk;
     dBgS_ObjLinChk linChk;
     mVec3_c local_148;
