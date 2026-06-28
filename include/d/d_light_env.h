@@ -303,8 +303,8 @@ struct Mist {
 };
 
 struct SpfSetting {
-    s16 mIdxStart;
-    s16 mIdxEnd;
+    u16 mIdxStart;
+    u16 mIdxEnd;
     f32 mRatio;
 };
 
@@ -348,6 +348,9 @@ public:
 
     void setLightFilter(f32 ratio);
     void set0x35B0(f32 f);
+    void set0x35B0_i(f32 f) {
+        mWind.field_0x10 = f;
+    }
 
     // Params are guesses
     void setBPM8(const mVec3_c *pos, u32 type, f32 radius);
@@ -418,6 +421,10 @@ public:
         return mOverrideSpfSetting;
     }
 
+    const SpfSetting &getSpfSetting() const {
+        return mCurrentSpfSetting;
+    }
+
     const PaletteEAF_smol_entry &getSmallEAF(s32 idx1, s32 idx2) {
         return field_0x38E4.field_0x00[idx1].field_0x00[idx2];
     }
@@ -466,12 +473,32 @@ public:
         field_0x38DC = v;
     }
 
+    u8 getField_0x38E0() const {
+        return field_0x38E0;
+    }
+
+    void setField_0x38E1(u8 val) {
+        field_0x38E1 = val;
+    }
+
     f32 getfield_0x5D44() const {
         return field_0x5D44;
     }
 
     void setField_0x5D48(f32 val) {
         field_0x5D48 = val;
+    }
+
+    Mist &getMist() {
+        return mMistInfo;
+    }
+
+    const mVec3_c &getMistPos() const {
+        return mMistPos;
+    }
+
+    bool getField_0x5D59(int i) const {
+        return field_0x5D59[i].mEnabled;
     }
 
 private:
@@ -525,8 +552,9 @@ private:
     /* 0x38C8 */ mVec3_c field_0x38C8;
     /* 0x38D4 */ u32 mPlayerRoomId;
     /* 0x38D8 */ s32 mAlternateRoomId;
-    /* 0x38D8 */ u32 field_0x38DC;
-    /* 0x38D8 */ s32 field_0x38E0;
+    /* 0x38DC */ u32 field_0x38DC;
+    /* 0x38E0 */ u8 field_0x38E0;
+    /* 0x38E1 */ u8 field_0x38E1;
     /* 0x38E4 */ Bpm3 field_0x38E4;
     /* 0x48E4 */ Bpm4 field_0x48E4;
     /* 0x5CE4 */ PaletteDefaultMCF field_0x5CE4;
