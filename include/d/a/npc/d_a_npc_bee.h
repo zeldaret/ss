@@ -40,7 +40,7 @@ public:
     /* 0x00B */ u8 mWallReflectTimer;
     /* 0x00C */ s16 mTimer; // only counts up, used for kinda random calculations
     /* 0x00E */ s16 mFlyingStatesTimer; // used for vanishing after flying up and something else
-    /* 0x010 */ f32 field_0x010;
+    /* 0x010 */ f32 mCrawlingSpeed;
     /* 0x014 */ f32 mSpeed;
     /* 0x018 */ mVec3_c mPos;
     /* 0x024 */ mVec3_c field_0x024;
@@ -75,11 +75,11 @@ private:
     /* 0x0378 */ u8 mSwarmBeeCount;
     /* 0x0379 */ u8 mRumbleTimer; // rumble timer
     /* 0x037A */ u8 mSceneflag;
-    /* 0x037B */ u8 field_0x037B;
+    /* 0x037B */ u8 field_0x037B; // padding
     /* 0x037C */ s16 mFrameCounter; // used to only search for new targets every 16 frames
-    /* 0x037E */ u8 field_0x037E[0x380-0x37E];
+    /* 0x037E */ u8 field_0x037E[2]; // padding
     /* 0x0380 */ f32 mAttackActorDistFromHome;
-    /* 0x0384 */ u8 field_0x0384[0x388-0x384];
+    /* 0x0384 */ u8 field_0x0384[4]; // padding?
     /* 0x0388 */ nw4r::g3d::ResFile mRes;
     /* 0x038C */ dShpProc1_c mBeeModels[4];
     /* 0x045C */ dAcNpcBeeSingleBee mBees[100];

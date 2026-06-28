@@ -38,7 +38,6 @@
 
 SPECIAL_ACTOR_PROFILE(NPC_BEE, dAcNpcBee_c, fProfile::NPC_BEE, 0x123, 0, 0);
 
-// non matching
 bool dAcNpcBee_c::createHeap() {
     mRes = nw4r::g3d::ResFile(getOarcResFile("Bee"));
     static const char* sModelNames[4] = {
@@ -54,7 +53,7 @@ bool dAcNpcBee_c::createHeap() {
     }
     return SUCCEEDED;
 }
-static dCcD_SrcSph beeCcSrc = {
+static dCcD_SrcSph beeColliderSrc = {
     /* mObjInf */ {
         /* mObjAt */ {AT_TYPE_0x2000000, 0x20000F, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
         /* mObjTg */ {AT_TYPE_BUGNET | AT_TYPE_BELLOWS | AT_TYPE_BOMB, 0x00004011, {0, 00, 0x40F}, 8, 0},
@@ -66,7 +65,7 @@ static dCcD_SrcSph beeCcSrc = {
 int dAcNpcBee_c::create() {
     mSceneflag = getFromParams(0x10, 0xFF);
     // mRoom regalloc
-    if (mSceneflag != 0xFF && SceneflagManager::sInstance && SceneflagManager::sInstance->checkFlag(mRoomID, mSceneflag)) {
+    if (mSceneflag != 0xFF && SceneflagManager::sInstance && SceneflagManager::sInstance->checkFlag(getRoomId(), mSceneflag)) {
         return FAILED;
     }
     CREATE_ALLOCATOR(dAcNpcBee_c);
@@ -76,7 +75,7 @@ int dAcNpcBee_c::create() {
         bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_CRAWL;
         bee->mPos = mPosition;
         bee->mTimer = cM::rndF(65536);
-        mColliderList.addCc(bee->mCollider, beeCcSrc);
+        mColliderList.addCc(bee->mCollider, beeColliderSrc);
         bee->mCollider.mTg.OffSPrm(0x100);
         bee->mCollider.mAt.OnSPrm(0x100);
         if (i < mSwarmBeeCount / 2) {
@@ -107,7 +106,7 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
     if (mHiveRef.isLinked()) {
         setStartingPosition(mHiveRef.get()->field_0x928);
     }
-    dAcPy_c *player = dAcPy_c::GetLink2();
+    dAcPy_c *player = dAcPy_c::GetLinkM();
     if ((mFrameCounter & 0xF) == 0) {
         mAttackRef.link(player);
         bool noSporeFound = true;
@@ -115,7 +114,7 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
         if (current != nullptr) {
             for (;current != nullptr;current = current->getNext()) {
                 dAcOSpore_c* spore = static_cast<dAcOSpore_c*>(current->p_owner);
-                if (spore != nullptr && (s32)(spore->mParams & 0xF) == 1) {
+                if (spore != nullptr && spore->isGlitteringSpore()) {
                     mVec3_c& sporePos = spore->mPosition;
                     if (spore->mPosition.squareDistanceToXZ(mAliveBeePos) < 1000000.f &&
                     std::fabsf(spore->mPosition.y - mAliveBeePos.y) < 500.f) {
@@ -149,10 +148,10 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
     dAcNpcBeeSingleBee* bee = &mBees[0];
     u8 beesAlive = 0;
     int beeModelIndex = 0;
-    static mVec3_c someVec(10000.f, -20000.f, 50000.f);
+    static mVec3_c colliderDisabledPos(10000.f, -20000.f, 50000.f);
     dCamera_c* camera = dScGame_c::getCamera();
-    bool bVar3 = true;
-    int iVar12 = 0;
+    bool isFirst = true;
+    int flyingBeeCount = 0;
     mAttackActorDistFromHome = mStartingPos.distance(mAttackActor->mPositionCopy2);
     mPosition = mStartingPos;
     for (int i = 0; i < mSwarmBeeCount; i++, bee++) {
@@ -174,9 +173,9 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
                 bee->mTimer++;
                 if (bee->mBeeState <= dAcNpcBeeSingleBee::BEE_STATE_FLY_UP) {
                     handleBeeFlyingStates(bee);
-                    iVar12++;
-                    if (bVar3) {
-                        bVar3 = false;
+                    flyingBeeCount++;
+                    if (isFirst) {
+                        isFirst = false;
                         mPosition = bee->mPos;
                     }
                 } else if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_BLOWN_AWAY) {
@@ -202,9 +201,7 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
                                 beeModelIndex = 1;
                             }
                         } else {
-                            s32 tmp = -(bee->mTimer >> 2 & 1);
-                            tmp += 3;
-                            beeModelIndex = tmp;
+                            beeModelIndex = (bee->mTimer >> 2 & 1) ? 2 : 3;
                         }
                         if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_CRAWL) {
                             mtx.transS(bee->mPos);
@@ -235,11 +232,11 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
         if (!hideBee && bee->mDisableAttackTimer == 0) {
             bee->mCollider.SetC(bee->mPos);
         } else {
-            bee->mCollider.SetC(someVec);
+            bee->mCollider.SetC(colliderDisabledPos);
         }
     }
-    if (iVar12 != 0) {
-        holdSoundWithIntParam(SE_Bee_FLY_LV, iVar12);
+    if (flyingBeeCount != 0) {
+        holdSoundWithIntParam(SE_Bee_FLY_LV, flyingBeeCount);
     }
     mColliderList.registerColliders();
     if (!beesAlive) {
@@ -247,7 +244,6 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
     }
 }
 
-// non matching
 void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee) {
     #define CRAWLING_SUBSTATE_NONMOVING 0
     #define CRAWLING_SUBSTATE_MOVE 1
@@ -270,8 +266,9 @@ void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee) {
             }
         }
         if (dAcPy_c::GetLink()->getRidingActorType() != daPlayerActBase_c::RIDING_LOFTWING && (mAttackActor->getPosition().y - getPosition().y) < 0.f && bee->mSubState != CRAWLING_SUBSTATE_PRE_RISE) {
-            f32 compSpeed = mAttackActor->getSpeed() * 20.f + 350.f;
-            if (hive->field_0x915 >= 5 || hive->mHealth == 1 || (hive->field_0x916 == 0 && mAttackActorDistFromHome < compSpeed)) {
+            // using getSpeed inline breaks the match
+            f32 aggroDistance = mAttackActor->mSpeed * 20.f + 350.f;
+            if (hive->field_0x915 >= 5 || hive->mHealth == 1 || (hive->field_0x916 == 0 && mAttackActorDistFromHome < aggroDistance)) {
                 bee->mSubState = CRAWLING_SUBSTATE_PRE_RISE;
                 bee->mActionTimer = cM::rndF(15.f);
             } else if (bee->mSubState != CRAWLING_SUBSTATE_FLY && hive->field_0x915 != 0) {
@@ -279,12 +276,11 @@ void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee) {
                 bee->mSubState = CRAWLING_SUBSTATE_FLY;
             }
         }
-        mVec3_c local_74;
-        mVec3_c local_80 = bee->mTargetPos - bee->field_0x024;
         bee->mIsFlying = 0;
-        local_74 = local_80;
+        mVec3_c local_74;
+        local_74 = bee->mTargetPos - bee->field_0x024;
         if (bee->mSubState == CRAWLING_SUBSTATE_NONMOVING) {
-            bee->field_0x010 = 0.f;
+            bee->mCrawlingSpeed = 0.f;
             if (bee->mActionTimer == 0) {
                 if (cM::rnd() < 0.02f) {
                     bee->mActionTimer = cM::rndF(70.f) + 30.f;
@@ -306,7 +302,7 @@ void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee) {
             targetSpeed = 2.f;
         } else if (bee->mSubState == CRAWLING_SUBSTATE_FLY) {
             bee->mIsFlying = 1;
-            sLib::addCalcScaledDiff(&bee->field_0x010, 50.f, 0.1f, 5.f);
+            sLib::addCalcScaledDiff(&bee->mCrawlingSpeed, 50.f, 0.1f, 5.f);
             sLib::addCalcAngle(bee->mCrawlingRotation.y.ref(), local_74.atan2sX_Z(), 2, 0x800);
             if ((bee->mActionTimer & 0x7) == 0) {
                 bee->mTargetPos.x = cM::rndFX(300.f);
@@ -318,8 +314,8 @@ void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee) {
             targetSpeed = 5.f;
         } else if (bee->mSubState == CRAWLING_SUBSTATE_LAND) {
             bee->mIsFlying = 1;
-            sLib::addCalcScaled(&bee->field_0x010, 1.f, 5.f);
-            if (bee->field_0x010 <= 0.1f) {
+            sLib::addCalcScaled(&bee->mCrawlingSpeed, 1.f, 5.f);
+            if (bee->mCrawlingSpeed <= 0.1f) {
                 bee->mSubState = CRAWLING_SUBSTATE_NONMOVING;
             }
         } else if (bee->mSubState == CRAWLING_SUBSTATE_PRE_RISE && bee->mActionTimer == 0) {
@@ -334,10 +330,7 @@ void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee) {
         bee->field_0x024 += bee->field_0x048;
         s16 xRot = -bee->field_0x024.x * 32768.f / 200.f;
         s16 zRot = bee->field_0x024.z * 32768.f / 200.f;
-        local_74.y = bee->field_0x010;
-        local_74.x = 0.f;
-        local_74.z = 0.f;
-        local_74.y = -68.f - local_74.y;
+        local_74.set(0.f, -68.f - bee->mCrawlingSpeed, 0.f);
         mtx.scaleS(1.f, 1.15f, 1.f);
         mtx.YrotM(hive->mRotation.y);
         mtx.ZrotM(xRot);
@@ -360,7 +353,7 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
     bee->mIsFlying = 1;
     dAcNpcHc_c* hive = mHiveRef.get();
     bee->mCollider.ClrAtSet();
-    bool bVar11 = false;
+    bool isFlyingAway = false;
     bool isAttacking = false;
     bool dodgedSword;
     mMtx_c mtx;
@@ -458,7 +451,8 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
             
         }
         offsetToTarget += bee->mTargetPos;
-        if ((bee->mFlyingStatesTimer == 0 || distToTarget > 1000000.f) || (
+        f32 maxDist = 1000000.f;
+        if ((bee->mFlyingStatesTimer == 0 || distToTarget > maxDist) || (
             mAttackActor == dAcPy_c::LINK && dAcPy_c::LINK->checkActionFlags(0x40000)
         )) {
             if (mSporeActor == mAttackActor || (hive != nullptr && mAttackActorDistFromHome < 300.f)) {
@@ -485,7 +479,7 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
             bee->mCollider.OnAtSet();
         }
     } else if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_TO_HIVE || bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_UP) {
-        bVar11 = true;
+        isFlyingAway = true;
         offsetToTarget = bee->mTargetPos - bee->mPos;
         f32 distToTarget;
         f32 fVar17;
@@ -494,7 +488,6 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
         } else {
             fVar17 = 55.f;
         }
-        // local_8c = local_c8;
         distToTarget = offsetToTarget.mag();
         if (fVar17 < 55.f) {
             fVar17 = 55.f;
@@ -520,7 +513,7 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
     if (bee->mWallReflectTimer == 0) {
         if (isAttacking) {
             bee->mCrawlingRotation.y = offsetToTarget.atan2sX_Z();
-            bee->mCrawlingRotation.x = -offsetToTarget.atan2sY_XZ();
+            bee->mCrawlingRotation.x = offsetToTarget.atan2sXZ_Y();
         } else {
             s32 fVar17 = nw4r::math::SinIdx(bee->mTimer * 0xDAC) * 1500.f;
             s32 fVar16 = nw4r::math::SinIdx(bee->mTimer * 3000) * 1500.f;
@@ -537,11 +530,10 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
     if (bee->mFlyingStatesTimer != 0) {
         bee->mFlyingStatesTimer--;
     }
-    if (bVar11) {
+    if (isFlyingAway) {
         sLib::addCalcAngle(bee->mModelRotation.y.ref(), bee->mCrawlingRotation.y, 2, 0x800);
         sLib::addCalcAngle(bee->mModelRotation.x.ref(), bee->mCrawlingRotation.x, 2, 0x800);
     } else {
-        // TODO: wrong stack thing
         local_98 = mAttackActor->mPositionCopy2 - bee->mPos;
         s16 sVar15 = local_98.atan2sX_Z();
         sLib::addCalcAngle(bee->mModelRotation.y.ref(), sVar15, 2, 0x1000);
@@ -678,14 +670,16 @@ int dAcNpcBee_c::draw() {
 /**
  * Returns bits when a collision is detected, 2 is wall, 1 is floor
  */
-s32 beeCheckWallFloorCollision(dAcNpcBeeSingleBee* bee) {
+s32 dAcNpcBee_c::beeCheckWallFloorCollision(dAcNpcBeeSingleBee* bee) {
     dBgS_ObjGndChk gndChk;
     dBgS_ObjLinChk linChk;
+    mVec3_c local_148;
+    mVec3_c scaled;
     u32 ret = 0;
-    mVec3_c local_148 = bee->mPos - bee->mOldPos;
+    local_148 = bee->mPos - bee->mOldPos;
     local_148.y = 0.f;
     local_148.normalize();
-    mVec3_c scaled = local_148 * 50.f;
+    scaled = local_148 * 50.f;
     local_148 = bee->mPos + scaled;
     linChk.Set(&bee->mPos, &local_148, nullptr);
     if (dBgS::GetInstance()->LineCross(&linChk)) {
@@ -694,7 +688,7 @@ s32 beeCheckWallFloorCollision(dAcNpcBeeSingleBee* bee) {
         bee->mPos.z = linChk.GetLinEnd().z - scaled.z;
     }
     local_148 = bee->mPos;
-    local_148.z += 100.f;
+    local_148.y += 100.f;
     gndChk.SetPos(&local_148);
     if (bee->mPos.y <= dBgS::GetInstance()->GroundCross(&gndChk) + 15.f) {
         // imagine using temp variables...

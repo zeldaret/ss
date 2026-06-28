@@ -272,8 +272,7 @@ public:
         return cM::atan2s(-y, absXZ());
     }
 
-    // TODO: make sure this isn't bad
-    s32 atan2sY_XZ() const {
+    s16 atan2sY_XZ() const {
         return cM::atan2s(y, absXZ());
     }
 
