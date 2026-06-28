@@ -61,7 +61,7 @@ public:
     }
 
     bool create(nw4r::g3d::ResMat mat, nw4r::g3d::ResShp shp, s32 count, mHeapAllocator_c *alloc, bool xlu, u32 *pSize);
-    bool create(s32 count, nw4r::g3d::ResMdl mdl, mHeapAllocator_c *alloc, bool xlu, u32 *pSize) {
+    bool create(nw4r::g3d::ResMdl mdl, s32 count, mHeapAllocator_c *alloc, bool xlu, u32 *pSize) {
         return create(mdl.GetResMat(0), mdl.GetResShp(0), count, alloc, xlu, pSize);
     }
     void draw();

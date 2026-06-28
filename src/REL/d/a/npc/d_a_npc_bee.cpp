@@ -50,7 +50,7 @@ bool dAcNpcBee_c::createHeap() {
     mSwarmBeeCount = 0x14;
     for (int i = 0; i < (int)ARRAY_LENGTH(sModelNames); i++) {
         // instruction reordering
-        TRY_CREATE(mBeeModels[i].create(mSwarmBeeCount, mRes.GetResMdl(sModelNames[i]),  &mAllocator, true, nullptr));
+        TRY_CREATE(mBeeModels[i].create(mRes.GetResMdl(sModelNames[i]), mSwarmBeeCount, &mAllocator,  true, nullptr));
     }
     return SUCCEEDED;
 }
@@ -148,7 +148,6 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
     dCamera_c* camera = dScGame_c::getCamera();
     bool bVar3 = true;
     int iVar12 = 0;
-    int iVar17 = 0;
     field_0x0380 = mStartingPos.distance(mAttackActor->mPositionCopy2);
     mPosition = mStartingPos;
     for (int i = 0; i < mSwarmBeeCount; i++, bee++) {
@@ -181,11 +180,14 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
                     fn_14_1F40(bee);
                 }
             }
+            mVec3_c localA4;
+            mVec3_c localB0;
             if (bee->field_0x008 == 0) {
-                mVec3_c localA4 = bee->mPos - camera->getPosition();
+                localA4 = bee->mPos - camera->getPosition();
+                // float constants should be in a different order
                 if (localA4.absXZ() < 3000.f) {
                     localA4.normalize();
-                    mVec3_c localB0 = camera->getTarget() - camera->getPosition();
+                    localB0 = camera->getTarget() - camera->getPosition();
                     localB0.normalize();
                     if (localB0.dot(localA4) > 0.5f) {
                         if (bee->field_0x003) {
@@ -217,13 +219,12 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
             }
             field_0xB830 = bee->mPos;
         }
-        
-        for (u32 uVar8 = 0, iVar18 = 4; iVar18 != 0; uVar8++, iVar18--) {
-            if (!bVar9 && (uVar8 & 0xFF) == (uVar13 & 0xFF)) {
-                mBeeModels[uVar8 & 0xFF].setDrawDisabled(i, false);
-                mBeeModels[uVar8 & 0xFF].setTransform(i, mtx);
+        for (u8 uVar8 = 0; uVar8 < ARRAY_LENGTH(mBeeModels); uVar8++) {
+            if (!bVar9 && uVar8 == (u8)uVar13) {
+                mBeeModels[uVar8].setDrawDisabled(i, false);
+                mBeeModels[uVar8].setTransform(i, mtx);
             } else {
-                mBeeModels[uVar8 & 0xFF].setDrawDisabled(i, true);
+                mBeeModels[uVar8].setDrawDisabled(i, true);
             }
         }
         if (!bVar9 && bee->field_0x006 == 0) {
@@ -664,21 +665,20 @@ s32 fn_14_2690(dAcNpcBeeSingleBee* bee) {
     dBgS_ObjGndChk gndChk;
     dBgS_ObjLinChk linChk;
     u32 ret = 0;
-    mVec3_c local_148_2 = bee->mPos - bee->field_0x03C;
-    mVec3_c local_148 = local_148_2;
+    mVec3_c local_148 = bee->mPos - bee->field_0x03C;
     local_148.y = 0.f;
     local_148.normalize();
     mVec3_c scaled = local_148 * 50.f;
-    mVec3_c another = bee->mPos + scaled;
-    linChk.Set(&bee->mPos, &another, nullptr);
+    local_148 = bee->mPos + scaled;
+    linChk.Set(&bee->mPos, &local_148, nullptr);
     if (dBgS::GetInstance()->LineCross(&linChk)) {
         ret = 2;
         bee->mPos.x = linChk.GetLinEnd().x - scaled.x;
         bee->mPos.z = linChk.GetLinEnd().z - scaled.z;
     }
-    mVec3_c local_149 = bee->mPos;
-    local_149.z += 100.f;
-    gndChk.SetPos(&local_149);
+    local_148 = bee->mPos;
+    local_148.z += 100.f;
+    gndChk.SetPos(&local_148);
     if (bee->mPos.y <= dBgS::GetInstance()->GroundCross(&gndChk) + 15.f) {
         // imagine using temp variables...
         bee->mPos.y = dBgS::GetInstance()->GroundCross(&gndChk) + 15.f;
