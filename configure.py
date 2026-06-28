@@ -1355,8 +1355,8 @@ config.libs = [
     JSystemLib(
         "JGadget",
         [
-            Object(NonMatching, "JSystem/JGadget/binary.cpp"),
-            Object(NonMatching, "JSystem/JGadget/linklist.cpp"),
+            Object(Matching, "JSystem/JGadget/binary.cpp"),
+            Object(Matching, "JSystem/JGadget/linklist.cpp"),
             Object(NonMatching, "JSystem/JGadget/std-vector.cpp"),
         ],
     ),
@@ -1364,19 +1364,19 @@ config.libs = [
         "JStudio",
         [
             Object(NonMatching, "JSystem/JStudio/JStudio/ctb.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/ctb-data.cpp"),
+            Object(Matching, "JSystem/JStudio/JStudio/ctb-data.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/functionvalue.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/fvb.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/fvb-data.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/fvb-data-parse.cpp"),
+            Object(Matching, "JSystem/JStudio/JStudio/fvb-data.cpp"),
+            Object(Matching, "JSystem/JStudio/JStudio/fvb-data-parse.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-control.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-data.cpp"),
+            Object(Matching, "JSystem/JStudio/JStudio/jstudio-data.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-math.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-object.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/object-id.cpp"),
+            Object(Matching, "JSystem/JStudio/JStudio/object-id.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/stb.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/stb-data.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/stb-data-parse.cpp"),
+            Object(Matching, "JSystem/JStudio/JStudio/stb-data.cpp"),
+            Object(Matching, "JSystem/JStudio/JStudio/stb-data-parse.cpp"),
         ],
     ),
     JSystemLib(
@@ -1388,8 +1388,12 @@ config.libs = [
             Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object-camera.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object-light.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object-message.cpp"),
-            # this one is hard to identify
-            Object(NonMatching, "toBeSorted/JSystem/unk_jstage_maybe.cpp"),
+        ],
+    ),
+    JSystemLib(
+        "JStage",
+        [
+            Object(NonMatching, "JSystem/JStage/unk_jstage_maybe.cpp"),
         ],
     ),
     JSystemLib(
