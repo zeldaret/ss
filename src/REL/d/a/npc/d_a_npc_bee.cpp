@@ -54,8 +54,13 @@ bool dAcNpcBee_c::createHeap() {
     }
     return SUCCEEDED;
 }
-
-static dCcD_SrcSph sph; // TODO
+static dCcD_SrcSph beeCcSrc = {
+    /* mObjInf */ {
+        /* mObjAt */ {AT_TYPE_0x2000000, 0x20000F, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
+        /* mObjTg */ {AT_TYPE_BUGNET | AT_TYPE_BELLOWS | AT_TYPE_BOMB, 0x00004011, {0, 00, 0x40F}, 8, 0},
+        /* mObjCo */ {0}},
+     /* mSphInf */ {15.0f}
+};
 
 // non matching
 int dAcNpcBee_c::create() {
@@ -70,19 +75,19 @@ int dAcNpcBee_c::create() {
         bee->mIndex = i;
         bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_CRAWL;
         bee->mPos = mPosition;
-        bee->mRotY = cM::rndF(65536);
-        mColliderList.addCc(bee->mCollider, sph);
+        bee->mTimer = cM::rndF(65536);
+        mColliderList.addCc(bee->mCollider, beeCcSrc);
         bee->mCollider.mTg.OffSPrm(0x100);
         bee->mCollider.mAt.OnSPrm(0x100);
         if (i < mSwarmBeeCount / 2) {
-            bee->field_0x008 = 1;
+            bee->mHide = 1;
         }
     }
     // probably inline here, regswaps
     mStts.SetRank(3);
     mInteractionFlags |= 0x80;
     mColliderList.SetStts(mStts);
-    field_0x037C = cM::rndF(65536);
+    mFrameCounter = cM::rndF(65536);
     dAcObjBase_c* honeycomb = dAcObjBase_c::create(fProfile::NPC_HONEYCOMB, -1, mParams, &mPosition, nullptr, nullptr, -1);
     if (honeycomb == nullptr) {
         return FAILED;
@@ -103,33 +108,33 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
         setStartingPosition(mHiveRef.get()->field_0x928);
     }
     dAcPy_c *player = dAcPy_c::GetLink2();
-    if ((field_0x037C & 0xF) == 0) {
+    if ((mFrameCounter & 0xF) == 0) {
         mAttackRef.link(player);
-        bool bVar3 = true;
+        bool noSporeFound = true;
         fLiNdBa_c *current = dAcOSpore_c::getListHead();
         if (current != nullptr) {
             for (;current != nullptr;current = current->getNext()) {
                 dAcOSpore_c* spore = static_cast<dAcOSpore_c*>(current->p_owner);
                 if (spore != nullptr && (s32)(spore->mParams & 0xF) == 1) {
                     mVec3_c& sporePos = spore->mPosition;
-                    if (spore->mPosition.squareDistanceToXZ(field_0xB830) < 1000000.f &&
-                    std::fabsf(spore->mPosition.y - field_0xB830.y) < 500.f) {
-                        if (!dBgS_ObjLinChk::LineCross(&field_0xB830, &sporePos, this)) {
+                    if (spore->mPosition.squareDistanceToXZ(mAliveBeePos) < 1000000.f &&
+                    std::fabsf(spore->mPosition.y - mAliveBeePos.y) < 500.f) {
+                        if (!dBgS_ObjLinChk::LineCross(&mAliveBeePos, &sporePos, this)) {
                             mAttackRef.link(spore);
-                            bVar3 = false;
-                            field_0xB840 = spore;
+                            noSporeFound = false;
+                            mSporeActor = spore;
                             break;
                         }
                     }
                 }
             }
         }
-        if (bVar3) {
+        if (noSporeFound) {
             dAcEbc_c *boko = nullptr;
             while((boko = static_cast<dAcEbc_c*>(fManager_c::searchBaseByProfName(fProfile::E_BC, boko)))) {
                 if (boko->getField_0x130D()) continue;
-                f32 distToPlayer = field_0xB830.distance(dAcPy_c::GetLink()->mPositionCopy2);
-                f32 distToBoko = field_0xB830.distance(boko->mPositionCopy2);
+                f32 distToPlayer = mAliveBeePos.distance(dAcPy_c::GetLink()->mPositionCopy2);
+                f32 distToBoko = mAliveBeePos.distance(boko->mPositionCopy2);
                 if (distToBoko < distToPlayer) {
                     mAttackRef.link(boko);
                     break;
@@ -143,46 +148,46 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
     }
     dAcNpcBeeSingleBee* bee = &mBees[0];
     u8 beesAlive = 0;
-    int uVar13 = 0;
+    int beeModelIndex = 0;
     static mVec3_c someVec(10000.f, -20000.f, 50000.f);
     dCamera_c* camera = dScGame_c::getCamera();
     bool bVar3 = true;
     int iVar12 = 0;
-    field_0x0380 = mStartingPos.distance(mAttackActor->mPositionCopy2);
+    mAttackActorDistFromHome = mStartingPos.distance(mAttackActor->mPositionCopy2);
     mPosition = mStartingPos;
     for (int i = 0; i < mSwarmBeeCount; i++, bee++) {
-        bool bVar9 = true;
+        bool hideBee = true;
         mMtx_c mtx;
         if (bee->mBeeState != dAcNpcBeeSingleBee::BEE_STATE_DEAD) {
             beesAlive++;
-            bee->field_0x03C = bee->mPos;
-            if (bee->field_0x002) {
-                bee->field_0x002--;
+            bee->mOldPos = bee->mPos;
+            if (bee->mActionTimer) {
+                bee->mActionTimer--;
             }
-            if(bee->field_0x006) {
-                bee->field_0x006--;
+            if(bee->mDisableAttackTimer) {
+                bee->mDisableAttackTimer--;
             }
             if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_CRAWL) {
                 handleBeeCrawlingOnHive(bee);
-                bee->field_0x006 = 5;
+                bee->mDisableAttackTimer = 5;
             } else {
-                bee->mRotY++;
-                if (bee->mBeeState <= dAcNpcBeeSingleBee::BEE_STATE_FLY_UP2) {
-                    fn_14_1350(bee);
+                bee->mTimer++;
+                if (bee->mBeeState <= dAcNpcBeeSingleBee::BEE_STATE_FLY_UP) {
+                    handleBeeFlyingStates(bee);
                     iVar12++;
                     if (bVar3) {
                         bVar3 = false;
                         mPosition = bee->mPos;
                     }
-                } else if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_UNK4) {
-                    fn_14_20F0(bee);
+                } else if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_BLOWN_AWAY) {
+                    handleBeeBlownAway(bee);
                 } else if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_RISE) {
-                    fn_14_1F40(bee);
+                    handleBeeRising(bee);
                 }
             }
             mVec3_c localA4;
             mVec3_c localB0;
-            if (bee->field_0x008 == 0) {
+            if (bee->mHide == 0) {
                 localA4 = bee->mPos - camera->getPosition();
                 // float constants should be in a different order
                 if (localA4.absXZ() < 3000.f) {
@@ -190,44 +195,44 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
                     localB0 = camera->getTarget() - camera->getPosition();
                     localB0.normalize();
                     if (localB0.dot(localA4) > 0.5f) {
-                        if (bee->field_0x003) {
-                            if (bee->mRotY & 1) {
-                                uVar13 = 0;
+                        if (bee->mIsFlying) {
+                            if (bee->mTimer & 1) {
+                                beeModelIndex = 0;
                             } else {
-                                uVar13 = 1;
+                                beeModelIndex = 1;
                             }
                         } else {
-                            s32 tmp = -(bee->mRotY >> 2 & 1);
+                            s32 tmp = -(bee->mTimer >> 2 & 1);
                             tmp += 3;
-                            uVar13 = tmp;
+                            beeModelIndex = tmp;
                         }
                         if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_CRAWL) {
                             mtx.transS(bee->mPos);
-                            mtx.ZrotM(bee->field_0x060.x);
-                            mtx.XrotM(bee->field_0x060.z);
-                            mtx.YrotM(bee->field_0x060.y);
+                            mtx.ZrotM(bee->mCrawlingRotation.x);
+                            mtx.XrotM(bee->mCrawlingRotation.z);
+                            mtx.YrotM(bee->mCrawlingRotation.y);
                             mtx.XrotM(0x8000);
                         } else {
                             mtx.transS(bee->mPos);
-                            mtx.YrotM(bee->field_0x066.y);
-                            mtx.XrotM(bee->field_0x066.x);
-                            mtx.ZrotM(bee->field_0x066.z);
+                            mtx.YrotM(bee->mModelRotation.y);
+                            mtx.XrotM(bee->mModelRotation.x);
+                            mtx.ZrotM(bee->mModelRotation.z);
                         }
-                        bVar9 = false;
+                        hideBee = false;
                     }
                 }
             }
-            field_0xB830 = bee->mPos;
+            mAliveBeePos = bee->mPos;
         }
-        for (u8 uVar8 = 0; uVar8 < ARRAY_LENGTH(mBeeModels); uVar8++) {
-            if (!bVar9 && uVar8 == (u8)uVar13) {
-                mBeeModels[uVar8].setDrawDisabled(i, false);
-                mBeeModels[uVar8].setTransform(i, mtx);
+        for (u8 j = 0; j < ARRAY_LENGTH(mBeeModels); j++) {
+            if (!hideBee && j == (u8)beeModelIndex) {
+                mBeeModels[j].setDrawDisabled(i, false);
+                mBeeModels[j].setTransform(i, mtx);
             } else {
-                mBeeModels[uVar8].setDrawDisabled(i, true);
+                mBeeModels[j].setDrawDisabled(i, true);
             }
         }
-        if (!bVar9 && bee->field_0x006 == 0) {
+        if (!hideBee && bee->mDisableAttackTimer == 0) {
             bee->mCollider.SetC(bee->mPos);
         } else {
             bee->mCollider.SetC(someVec);
@@ -244,14 +249,19 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
 
 // non matching
 void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee) {
-    f32 fVar7 = 0.0f;
+    #define CRAWLING_SUBSTATE_NONMOVING 0
+    #define CRAWLING_SUBSTATE_MOVE 1
+    #define CRAWLING_SUBSTATE_FLY 2
+    #define CRAWLING_SUBSTATE_LAND 3
+    #define CRAWLING_SUBSTATE_PRE_RISE 4
+    f32 targetSpeed = 0.0f;
     dAcNpcHc_c* hive = mHiveRef.get();
     if (hive == nullptr || hive->mHealth == 0) {
         bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_DEAD;
     } else {
-        if (bee->field_0x008) {
+        if (bee->mHide) {
             if (hive->mHealth == 1) {
-                bee->field_0x008 = 0;
+                bee->mHide = 0;
                 bee->field_0x024.x = cM::rndFX(300.f);
                 bee->field_0x024.z = cM::rndFX(300.f);
             } else {
@@ -259,67 +269,67 @@ void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee) {
                 return;
             }
         }
-        if (dAcPy_c::GetLink()->getRidingActorType() != daPlayerActBase_c::RIDING_LOFTWING && (mAttackActor->getPosition().y - getPosition().y) < 0.f && bee->field_0x005 != 4) {
+        if (dAcPy_c::GetLink()->getRidingActorType() != daPlayerActBase_c::RIDING_LOFTWING && (mAttackActor->getPosition().y - getPosition().y) < 0.f && bee->mSubState != CRAWLING_SUBSTATE_PRE_RISE) {
             f32 compSpeed = mAttackActor->getSpeed() * 20.f + 350.f;
-            if (hive->field_0x915 >= 5 || hive->mHealth == 1 || (hive->field_0x916 == 0 && field_0x0380 < compSpeed)) {
-                bee->field_0x005 = 4;
-                bee->field_0x002 = cM::rndF(15.f);
-            } else if (bee->field_0x005 != 2 && hive->field_0x915 != 0) {
-                bee->field_0x002 = cM::rndF(70.f) + 30.f;
-                bee->field_0x005 = 2;
+            if (hive->field_0x915 >= 5 || hive->mHealth == 1 || (hive->field_0x916 == 0 && mAttackActorDistFromHome < compSpeed)) {
+                bee->mSubState = CRAWLING_SUBSTATE_PRE_RISE;
+                bee->mActionTimer = cM::rndF(15.f);
+            } else if (bee->mSubState != CRAWLING_SUBSTATE_FLY && hive->field_0x915 != 0) {
+                bee->mActionTimer = cM::rndF(70.f) + 30.f;
+                bee->mSubState = CRAWLING_SUBSTATE_FLY;
             }
         }
         mVec3_c local_74;
-        mVec3_c local_80 = bee->field_0x054 - bee->field_0x024;
-        bee->field_0x003 = 0;
+        mVec3_c local_80 = bee->mTargetPos - bee->field_0x024;
+        bee->mIsFlying = 0;
         local_74 = local_80;
-        if (bee->field_0x005 == 0) {
+        if (bee->mSubState == CRAWLING_SUBSTATE_NONMOVING) {
             bee->field_0x010 = 0.f;
-            if (bee->field_0x002 == 0) {
+            if (bee->mActionTimer == 0) {
                 if (cM::rnd() < 0.02f) {
-                    bee->field_0x002 = cM::rndF(70.f) + 30.f;
-                    bee->field_0x005 = 2;
+                    bee->mActionTimer = cM::rndF(70.f) + 30.f;
+                    bee->mSubState = CRAWLING_SUBSTATE_FLY;
                 } else {
-                    bee->field_0x002 = cM::rndF(30.f) + 5.f;
-                    bee->field_0x054.x = cM::rndFX(300.f);
-                    bee->field_0x054.z = cM::rndFX(300.f);
-                    bee->field_0x005 = 1;
+                    bee->mActionTimer = cM::rndF(30.f) + 5.f;
+                    bee->mTargetPos.x = cM::rndFX(300.f);
+                    bee->mTargetPos.z = cM::rndFX(300.f);
+                    bee->mSubState = CRAWLING_SUBSTATE_MOVE;
                 }
             }
-        } else if (bee->field_0x005 == 1) {
-            bee->mRotY++;
-            sLib::addCalcAngle(bee->field_0x060.y.ref(), local_74.atan2sX_Z(), 2, 0x400);
-            if (bee->field_0x002 == 0 || local_74.absXZ() < 10.f) {
-                bee->field_0x005 = 0;
-                bee->field_0x002 = cM::rndF(15.f) + 2.f;
+        } else if (bee->mSubState == CRAWLING_SUBSTATE_MOVE) {
+            bee->mTimer++;
+            sLib::addCalcAngle(bee->mCrawlingRotation.y.ref(), local_74.atan2sX_Z(), 2, 0x400);
+            if (bee->mActionTimer == 0 || local_74.absXZ() < 10.f) {
+                bee->mSubState = CRAWLING_SUBSTATE_NONMOVING;
+                bee->mActionTimer = cM::rndF(15.f) + 2.f;
             }
-            fVar7 = 2.f;
-        } else if (bee->field_0x005 == 2) {
-            bee->field_0x003 = 1;
+            targetSpeed = 2.f;
+        } else if (bee->mSubState == CRAWLING_SUBSTATE_FLY) {
+            bee->mIsFlying = 1;
             sLib::addCalcScaledDiff(&bee->field_0x010, 50.f, 0.1f, 5.f);
-            sLib::addCalcAngle(bee->field_0x060.y.ref(), local_74.atan2sX_Z(), 2, 0x800);
-            if ((bee->field_0x002 & 0x7) == 0) {
-                bee->field_0x054.x = cM::rndFX(300.f);
-                bee->field_0x054.z = cM::rndFX(300.f);
+            sLib::addCalcAngle(bee->mCrawlingRotation.y.ref(), local_74.atan2sX_Z(), 2, 0x800);
+            if ((bee->mActionTimer & 0x7) == 0) {
+                bee->mTargetPos.x = cM::rndFX(300.f);
+                bee->mTargetPos.z = cM::rndFX(300.f);
             }
-            if (bee->field_0x002 == 0) {
-                bee->field_0x005 = 3;
+            if (bee->mActionTimer == 0) {
+                bee->mSubState = CRAWLING_SUBSTATE_LAND;
             }
-            fVar7 = 5.f;
-        } else if (bee->field_0x005 == 3) {
-            bee->field_0x003 = 1;
+            targetSpeed = 5.f;
+        } else if (bee->mSubState == CRAWLING_SUBSTATE_LAND) {
+            bee->mIsFlying = 1;
             sLib::addCalcScaled(&bee->field_0x010, 1.f, 5.f);
             if (bee->field_0x010 <= 0.1f) {
-                bee->field_0x005 = 0;
+                bee->mSubState = CRAWLING_SUBSTATE_NONMOVING;
             }
-        } else if (bee->field_0x005 == 4 && bee->field_0x002 == 0) {
+        } else if (bee->mSubState == CRAWLING_SUBSTATE_PRE_RISE && bee->mActionTimer == 0) {
             bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_RISE;
-            bee->field_0x005 = 0;
+            bee->mSubState = 0;
         }
-        sLib::addCalcScaledDiff(&bee->field_0x014, fVar7, 0.5f, 0.5f);
+        sLib::addCalcScaledDiff(&bee->mSpeed, targetSpeed, 0.5f, 0.5f);
         mMtx_c mtx;
-        mtx.YrotS(bee->field_0x060.y);
-        local_74.set(0.f, 0.f, bee->field_0x014);
+        mtx.YrotS(bee->mCrawlingRotation.y);
+        local_74.set(0.f, 0.f, bee->mSpeed);
         mtx.multVec(local_74, bee->field_0x048);
         bee->field_0x024 += bee->field_0x048;
         s16 xRot = -bee->field_0x024.x * 32768.f / 200.f;
@@ -334,39 +344,39 @@ void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee* bee) {
         mtx.XrotM(zRot);
         mtx.multVec(local_74, bee->mPos);
         bee->mPos += mStartingPos;
-        if (bee->field_0x003 == 0) {
-            sLib::addCalcAngle(bee->field_0x060.x.ref(), xRot, 2, 0x800);
-            sLib::addCalcAngle(bee->field_0x060.z.ref(), zRot, 2, 0x800);
+        if (bee->mIsFlying == 0) {
+            sLib::addCalcAngle(bee->mCrawlingRotation.x.ref(), xRot, 2, 0x800);
+            sLib::addCalcAngle(bee->mCrawlingRotation.z.ref(), zRot, 2, 0x800);
         } else {
-            bee->mRotY++;
-            sLib::addCalcAngle(bee->field_0x060.x.ref(), 0, 1, 0x1000);
-            sLib::addCalcAngle(bee->field_0x060.z.ref(), -0x8000, 1, 0x1000);
+            bee->mTimer++;
+            sLib::addCalcAngle(bee->mCrawlingRotation.x.ref(), 0, 1, 0x1000);
+            sLib::addCalcAngle(bee->mCrawlingRotation.z.ref(), -0x8000, 1, 0x1000);
         }
     }
 }
 
 // non matching
-void dAcNpcBee_c::fn_14_1350(dAcNpcBeeSingleBee* bee) {
-    bee->field_0x003 = 1;
+void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee* bee) {
+    bee->mIsFlying = 1;
     dAcNpcHc_c* hive = mHiveRef.get();
     bee->mCollider.ClrAtSet();
     bool bVar11 = false;
-    bool bVar10 = false;
-    bool bVar9;
+    bool isAttacking = false;
+    bool dodgedSword;
     mMtx_c mtx;
-    mVec3_c local_8c;
+    mVec3_c offsetToTarget;
     mVec3_c local_98;
     if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_CHASE) {
-        if (bee->field_0x009 != 0) {
-            bee->field_0x009--;
+        if (bee->mAttackTimer != 0) {
+            bee->mAttackTimer--;
         }
-        if (bee->field_0x007 != 0) {
-            bee->field_0x007--;
-            bee->mPos += bee->field_0x030;
-            bee->field_0x030 *= 0.8f;
+        if (bee->mSwordDodgeTimer != 0) {
+            bee->mSwordDodgeTimer--;
+            bee->mPos += bee->mSwordDodgeOffset;
+            bee->mSwordDodgeOffset *= 0.8f;
         } else {
             if (mAttackActor == dAcPy_c::GetLink() && dAcPy_c::GetLink()->checkFlags0x354(4) && bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_CHASE) {
-                bVar9 = false;
+                dodgedSword = false;
                 local_98 = dAcPy_c::GetLink()->getPosition() - bee->mPos;
                 if (local_98.squareMagXZ() < 90000.f) {
                     if (dAcPy_c::GetLink()->getSpecificAttackDirection() == (s16)daPlayerActBase_c::ATTACK_DIRECTION_LEFT || 
@@ -374,14 +384,14 @@ void dAcNpcBee_c::fn_14_1350(dAcNpcBeeSingleBee* bee) {
                         local_98.y += 150.f;
                         if (std::fabsf(local_98.y) < 50.f) {
                             if (local_98.y < 0.f) {
-                                bee->field_0x030.y = 10.f;
+                                bee->mSwordDodgeOffset.y = 10.f;
                             } else {
-                                bee->field_0x030.y = -10.f;
+                                bee->mSwordDodgeOffset.y = -10.f;
                             }
-                            bee->field_0x030.y *= (50.f - std::fabsf(local_98.y)) * (cM::rndF(0.02f) + 0.02f);
-                            bee->field_0x030.x = cM::rndFX(5.f);
-                            bee->field_0x030.z = cM::rndFX(5.f);
-                            bVar9 = true;
+                            bee->mSwordDodgeOffset.y *= (50.f - std::fabsf(local_98.y)) * (cM::rndF(0.02f) + 0.02f);
+                            bee->mSwordDodgeOffset.x = cM::rndFX(5.f);
+                            bee->mSwordDodgeOffset.z = cM::rndFX(5.f);
+                            dodgedSword = true;
                         }
                     } else {
                         mtx.YrotS(-dAcPy_c::GetLink()->mRotation.y);
@@ -397,86 +407,87 @@ void dAcNpcBee_c::fn_14_1350(dAcNpcBeeSingleBee* bee) {
                             local_98.y = cM::rndFX(7.f);
                             local_98.z = cM::rndFX(7.f);
                             mtx.YrotS(dAcPy_c::GetLink()->mRotation.y);
-                            mtx.multVec(local_98, bee->field_0x030);
-                            bVar9 = true;
+                            mtx.multVec(local_98, bee->mSwordDodgeOffset);
+                            dodgedSword = true;
                         }
                     }
-                    if (bVar9) {
-                        bee->field_0x002 = bee->field_0x007 = cM::rndF(5.f) + 10.f;
-                        bee->field_0x014 = 0.f;
+                    if (dodgedSword) {
+                        bee->mActionTimer = bee->mSwordDodgeTimer = cM::rndF(5.f) + 10.f;
+                        bee->mSpeed = 0.f;
                     }
                 }
             }
         }
-        local_8c = mAttackActor->mPositionCopy2 - bee->mPos;
-        f32 local_8cMagXZ = local_8c.squareMagXZ();
-        if (local_8cMagXZ < 90000.f && mAttackActor->getSpeed() < 10.f) {
-            if ((bee->field_0x009 != 0 && bee->field_0x014 > 10.f) || local_8cMagXZ < 400.f) {
-                bee->field_0x002 = 0;
+        offsetToTarget = mAttackActor->mPositionCopy2 - bee->mPos;
+        f32 distToTarget = offsetToTarget.squareMagXZ();
+        // targeted actor is less than 300 units away and not moving
+        if (distToTarget < 90000.f && mAttackActor->getSpeed() < 10.f) {
+            if ((bee->mAttackTimer != 0 && bee->mSpeed > 10.f) || distToTarget < 400.f) {
+                bee->mActionTimer = 0;
             }
-            if (bee->field_0x002 == 0) {
-                bee->field_0x00A = 0;
-                if (bee->field_0x009 != 0 || cM::rnd() < 0.95f) {
-                    bee->field_0x014 = cM::rndF(5.f) + 5.f;
-                    bee->field_0x054.x = cM::rndFX(200.f);
-                    bee->field_0x054.y = cM::rndFX(50.f);
-                    bee->field_0x054.z = cM::rndF(50.f) + 100.f;
+            if (bee->mActionTimer == 0) {
+                bee->mIsAttacking = 0;
+                if (bee->mAttackTimer != 0 || cM::rnd() < 0.95f) {
+                    bee->mSpeed = cM::rndF(5.f) + 5.f;
+                    bee->mTargetPos.x = cM::rndFX(200.f);
+                    bee->mTargetPos.y = cM::rndFX(50.f);
+                    bee->mTargetPos.z = cM::rndF(50.f) + 100.f;
                     mtx.YrotS(mAttackActor->mRotation.y);
-                    mtx.multVec(bee->field_0x054, bee->field_0x054);
-                    bee->field_0x002 = cM::rndF(15.f) + 15.f;
+                    mtx.multVec(bee->mTargetPos, bee->mTargetPos);
+                    bee->mActionTimer = cM::rndF(15.f) + 15.f;
                 } else {
-                    bee->field_0x014 = cM::rndF(5.f) + 17.f;
-                    bee->field_0x054.x = 0.f;
-                    bee->field_0x054.y = 0.f;
-                    bee->field_0x054.z = 0.f;
-                    bee->field_0x002 = 0x14;
-                    bee->field_0x00A = 1;
-                    bVar10 = true;
+                    bee->mSpeed = cM::rndF(5.f) + 17.f;
+                    bee->mTargetPos.x = 0.f;
+                    bee->mTargetPos.y = 0.f;
+                    bee->mTargetPos.z = 0.f;
+                    bee->mActionTimer = 0x14;
+                    bee->mIsAttacking = 1;
+                    isAttacking = true;
                 }
             }
         } else {
-            bee->field_0x00A = 0;
-            if (bee->field_0x002 == 0) {
-                bee->field_0x002 = cM::rndF(15.f) + 15.f;
-                bee->field_0x014 = cM::rndF(5.f) + 17.f + 2.f;
-                bee->field_0x054.x = cM::rndFX(100.f);
-                bee->field_0x054.y = cM::rndFX(50.f);
-                bee->field_0x054.z = cM::rndFX(100.f);
+            bee->mIsAttacking = 0;
+            if (bee->mActionTimer == 0) {
+                bee->mActionTimer = cM::rndF(15.f) + 15.f;
+                bee->mSpeed = cM::rndF(5.f) + 17.f + 2.f;
+                bee->mTargetPos.x = cM::rndFX(100.f);
+                bee->mTargetPos.y = cM::rndFX(50.f);
+                bee->mTargetPos.z = cM::rndFX(100.f);
             }
-            bee->field_0x009 = 0x50;
+            bee->mAttackTimer = 0x50;
             
         }
-        local_8c += bee->field_0x054;
-        if ((bee->field_0x00E == 0 || local_8cMagXZ > 1000000.f) || (
+        offsetToTarget += bee->mTargetPos;
+        if ((bee->mFlyingStatesTimer == 0 || distToTarget > 1000000.f) || (
             mAttackActor == dAcPy_c::LINK && dAcPy_c::LINK->checkActionFlags(0x40000)
         )) {
-            if (field_0xB840 == mAttackActor || (hive != nullptr && field_0x0380 < 300.f)) {
-                bee->field_0x00E = cM::rndF(30.f) + 20.f;
+            if (mSporeActor == mAttackActor || (hive != nullptr && mAttackActorDistFromHome < 300.f)) {
+                bee->mFlyingStatesTimer = cM::rndF(30.f) + 20.f;
             } else {
                 if (hive != nullptr) {
-                    bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_FLY_UP;
-                    bee->field_0x054 = mStartingPos;
+                    bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_FLY_TO_HIVE;
+                    bee->mTargetPos = mStartingPos;
                 } else {
-                    bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_FLY_UP2;
+                    bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_FLY_UP;
                     mtx.YrotS(cM::rndF(65536.f));
-                    local_8c.y = cM::rndF(2000.f) + 6000.f;
-                    local_8c.x = 0.f;
-                    local_8c.z = 8000.f;
-                    mtx.multVec(local_8c, local_98);
-                    bee->field_0x054 = local_98 + mAttackActor->mPositionCopy2;
-                    bee->field_0x00E = cM::rndF(55.f) + 200.f;
+                    offsetToTarget.y = cM::rndF(2000.f) + 6000.f;
+                    offsetToTarget.x = 0.f;
+                    offsetToTarget.z = 8000.f;
+                    mtx.multVec(offsetToTarget, local_98);
+                    bee->mTargetPos = local_98 + mAttackActor->mPositionCopy2;
+                    bee->mFlyingStatesTimer = cM::rndF(55.f) + 200.f;
                 }
-                bee->field_0x014 = cM::rndF(5.f) + 17.f;
-                bee->field_0x00A = 0;
+                bee->mSpeed = cM::rndF(5.f) + 17.f;
+                bee->mIsAttacking = 0;
             }
         }
-        if (bee->field_0x014 >= 10.f && field_0xB840 != mAttackActor) {
+        if (bee->mSpeed >= 10.f && mSporeActor != mAttackActor) {
             bee->mCollider.OnAtSet();
         }
-    } else if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_UP || bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_UP2) {
+    } else if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_TO_HIVE || bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_UP) {
         bVar11 = true;
-        local_8c = bee->field_0x054 - bee->mPos;
-        f32 fVar16;
+        offsetToTarget = bee->mTargetPos - bee->mPos;
+        f32 distToTarget;
         f32 fVar17;
         if (hive != nullptr) {
             fVar17 = hive->mScale.x * 55.f;
@@ -484,129 +495,131 @@ void dAcNpcBee_c::fn_14_1350(dAcNpcBeeSingleBee* bee) {
             fVar17 = 55.f;
         }
         // local_8c = local_c8;
-        fVar16 = local_8c.mag();
+        distToTarget = offsetToTarget.mag();
         if (fVar17 < 55.f) {
             fVar17 = 55.f;
         }
-        if (fVar16 < fVar17) {
-            if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_UP) {
+        if (distToTarget < fVar17) {
+            if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_TO_HIVE) {
                 bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_CRAWL;
-                bee->field_0x014 = 0.f;
+                bee->mSpeed = 0.f;
             }
         } else {
-            if (fVar16 > 500.f) {
-                fVar16 = 500.f;
+            if (distToTarget > 500.f) {
+                distToTarget = 500.f;
             }
             // weird mul vs slwi
-            local_8c.x += fVar16 * nw4r::math::SinIdx(bee->mRotY * 0x300);
-            local_8c.y += fVar16 * nw4r::math::CosIdx(bee->mRotY * 0x300) * 0.5f;
-            local_8c.z += fVar16 * nw4r::math::CosIdx(bee->mRotY * 0x500);
+            offsetToTarget.x += distToTarget * nw4r::math::SinIdx(bee->mTimer * 0x300);
+            offsetToTarget.y += distToTarget * nw4r::math::CosIdx(bee->mTimer * 0x300) * 0.5f;
+            offsetToTarget.z += distToTarget * nw4r::math::CosIdx(bee->mTimer * 0x500);
         }
-        if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_UP2 && bee->field_0x00E == 0) {
+        if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_UP && bee->mFlyingStatesTimer == 0) {
             bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_DEAD;
         }
     }
-    if (bee->field_0x00B == 0) {
-        if (bVar10) {
-            bee->field_0x060.y = local_8c.atan2sX_Z();
-            bee->field_0x060.x = -local_8c.atan2sY_XZ();
+    if (bee->mWallReflectTimer == 0) {
+        if (isAttacking) {
+            bee->mCrawlingRotation.y = offsetToTarget.atan2sX_Z();
+            bee->mCrawlingRotation.x = -offsetToTarget.atan2sY_XZ();
         } else {
-            s32 fVar17 = nw4r::math::SinIdx(bee->mRotY * 0xDAC) * 1500.f;
-            s32 fVar16 = nw4r::math::SinIdx(bee->mRotY * 3000) * 1500.f;
+            s32 fVar17 = nw4r::math::SinIdx(bee->mTimer * 0xDAC) * 1500.f;
+            s32 fVar16 = nw4r::math::SinIdx(bee->mTimer * 3000) * 1500.f;
             // non match
-            sLib::addCalcAngle(bee->field_0x060.y.ref(), fVar17 + local_8c.atan2sX_Z(), 1, 0x1000);
-            sLib::addCalcAngle(bee->field_0x060.x.ref(), fVar16 - local_8c.atan2sY_XZ(), 1, 0x1000);
+            sLib::addCalcAngle(bee->mCrawlingRotation.y.ref(), fVar17 + offsetToTarget.atan2sX_Z(), 1, 0x1000);
+            sLib::addCalcAngle(bee->mCrawlingRotation.x.ref(), fVar16 - offsetToTarget.atan2sY_XZ(), 1, 0x1000);
         }
     }
-    mtx.YrotS(bee->field_0x060.y);
-    mtx.XrotM(bee->field_0x060.x);
-    local_8c.set(0.f, 0.f, bee->field_0x014);
-    mtx.multVec(local_8c, bee->field_0x048);
+    mtx.YrotS(bee->mCrawlingRotation.y);
+    mtx.XrotM(bee->mCrawlingRotation.x);
+    offsetToTarget.set(0.f, 0.f, bee->mSpeed);
+    mtx.multVec(offsetToTarget, bee->field_0x048);
     bee->mPos += bee->field_0x048;
-    if (bee->field_0x00E != 0) {
-        bee->field_0x00E--;
+    if (bee->mFlyingStatesTimer != 0) {
+        bee->mFlyingStatesTimer--;
     }
     if (bVar11) {
-        sLib::addCalcAngle(bee->field_0x066.y.ref(), bee->field_0x060.y, 2, 0x800);
-        sLib::addCalcAngle(bee->field_0x066.x.ref(), bee->field_0x060.x, 2, 0x800);
+        sLib::addCalcAngle(bee->mModelRotation.y.ref(), bee->mCrawlingRotation.y, 2, 0x800);
+        sLib::addCalcAngle(bee->mModelRotation.x.ref(), bee->mCrawlingRotation.x, 2, 0x800);
     } else {
         // TODO: wrong stack thing
         local_98 = mAttackActor->mPositionCopy2 - bee->mPos;
         s16 sVar15 = local_98.atan2sX_Z();
-        sLib::addCalcAngle(bee->field_0x066.y.ref(), sVar15, 2, 0x1000);
-        if (bee->field_0x00A != 0) {
-            sLib::addCalcAngle(bee->field_0x066.x.ref(), -0x4000, 2, 0x1000);
+        sLib::addCalcAngle(bee->mModelRotation.y.ref(), sVar15, 2, 0x1000);
+        if (bee->mIsAttacking != 0) {
+            sLib::addCalcAngle(bee->mModelRotation.x.ref(), -0x4000, 2, 0x1000);
         } else {
-            sLib::addCalcAngle(bee->field_0x066.x.ref(), 0, 2, 0x1000);
+            sLib::addCalcAngle(bee->mModelRotation.x.ref(), 0, 2, 0x1000);
 
         }
     }
-    if (bee->field_0x00B == 0) {
-        if (fn_14_2690(bee) == 2) {
-            bee->field_0x00B = cM::rndF(5.f) + 10.f;
-            bee->field_0x060.y += ((s16)cM::rndFX(8000.f)) + 0x8000;
+    if (bee->mWallReflectTimer == 0) {
+        // if wall hit
+        // potential @bug, doesn't catch when both wall and floor are hit
+        if (beeCheckWallFloorCollision(bee) == 2) {
+            bee->mWallReflectTimer = cM::rndF(5.f) + 10.f;
+            bee->mCrawlingRotation.y += ((s16)cM::rndFX(8000.f)) + 0x8000;
         }
     } else {
-        bee->field_0x00B--;
+        bee->mWallReflectTimer--;
     }
-    if ((bee->mRotY & 0xF) == 0 && cM::rnd() < 0.5f) {
-        bee->field_0x060.z = cM::rndFX(5000.f);
+    if ((bee->mTimer & 0xF) == 0 && cM::rnd() < 0.5f) {
+        bee->mCrawlingRotation.z = cM::rndFX(5000.f);
     }
-    sLib::addCalcAngle(bee->field_0x066.z.ref(), bee->field_0x060.z, 2, 0x200);
+    sLib::addCalcAngle(bee->mModelRotation.z.ref(), bee->mCrawlingRotation.z, 2, 0x200);
 }
 
-void dAcNpcBee_c::fn_14_1F40(dAcNpcBeeSingleBee* bee) {
-    bee->field_0x003 = 1;
-    switch (bee->field_0x005) {
+void dAcNpcBee_c::handleBeeRising(dAcNpcBeeSingleBee* bee) {
+    bee->mIsFlying = 1;
+    switch (bee->mSubState) {
         case 0: {
-            bee->field_0x054 = mStartingPos + (bee->mPos - mStartingPos) * (cM::rndF(0.5f) + 1.5f);
-            bee->field_0x002 = 0x14;
-            bee->field_0x005 = 1;
+            bee->mTargetPos = mStartingPos + (bee->mPos - mStartingPos) * (cM::rndF(0.5f) + 1.5f);
+            bee->mActionTimer = 0x14;
+            bee->mSubState = 1;
             // fallthrough
         }
         case 1: {
-            cLib::addCalcPos2(&bee->mPos, bee->field_0x054, 0.2f, 15.0f);
-            sLib::addCalcAngle(bee->field_0x060.y.ref(), cLib::targetAngleY(bee->mPos, mAttackActor->mPositionCopy2), 2, 0x800);
-            sLib::addCalcAngle(bee->field_0x060.x.ref(), 0, 2, 0x800);
-            sLib::addCalcAngle(bee->field_0x060.z.ref(), 0, 2, 0x800);
-            if (bee->field_0x002 == 0) {
+            cLib::addCalcPos2(&bee->mPos, bee->mTargetPos, 0.2f, 15.0f);
+            sLib::addCalcAngle(bee->mCrawlingRotation.y.ref(), cLib::targetAngleY(bee->mPos, mAttackActor->mPositionCopy2), 2, 0x800);
+            sLib::addCalcAngle(bee->mCrawlingRotation.x.ref(), 0, 2, 0x800);
+            sLib::addCalcAngle(bee->mCrawlingRotation.z.ref(), 0, 2, 0x800);
+            if (bee->mActionTimer == 0) {
                 bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_CHASE;
-                bee->field_0x005 = 0;
-                bee->field_0x00E = cM::rndF(155.f) + 300.f; 
+                bee->mSubState = 0;
+                bee->mFlyingStatesTimer = cM::rndF(155.f) + 300.f; 
             }
         }
     }   
 }
 
 // TODO: data
-void dAcNpcBee_c::fn_14_20F0(dAcNpcBeeSingleBee* bee) {
+void dAcNpcBee_c::handleBeeBlownAway(dAcNpcBeeSingleBee* bee) {
     bee->mPos += bee->field_0x048;
-    bee->mPos.x += nw4r::math::SinIdx(bee->mRotY * 0x900) * 10.f;
-    bee->mPos.y += nw4r::math::SinIdx(bee->mRotY * 0xa00) * 10.f;
-    bee->mPos.z += nw4r::math::SinIdx(bee->mRotY * 0xb00) * 10.f;
+    bee->mPos.x += nw4r::math::SinIdx(bee->mTimer * 0x900) * 10.f;
+    bee->mPos.y += nw4r::math::SinIdx(bee->mTimer * 0xa00) * 10.f;
+    bee->mPos.z += nw4r::math::SinIdx(bee->mTimer * 0xb00) * 10.f;
     if ((bee->mIndex & 1) != 0) {
-        bee->field_0x066.y += 0xD00;
+        bee->mModelRotation.y += 0xD00;
     } else {
-        bee->field_0x066.y -= 0xD00;
+        bee->mModelRotation.y -= 0xD00;
     }
-    bee->field_0x066.x += 0xA00;
-    if (bee->field_0x002 == 0) {
+    bee->mModelRotation.x += 0xA00;
+    if (bee->mActionTimer == 0) {
         bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_CHASE;
-        bee->field_0x005 = 0;
-        bee->field_0x00E = cM::rndF(155.f) + 300.f;
+        bee->mSubState = 0;
+        bee->mFlyingStatesTimer = cM::rndF(155.f) + 300.f;
     }
-    fn_14_2690(bee);
+    beeCheckWallFloorCollision(bee);
 }
 
 int dAcNpcBee_c::actorExecute() {
-    field_0x037C++;
+    mFrameCounter++;
     updateSwarmBeeColliders();
     actuallyUpdateSwarmBees();
-    if (field_0x0379) {
-        field_0x0379--;
-        if (field_0x0379 == 7) {
+    if (mRumbleTimer) {
+        mRumbleTimer--;
+        if (mRumbleTimer == 7) {
             dRumble_c::start(dRumble_c::sRumblePreset1, 1);
-        } else if (field_0x0379 == 5) {
+        } else if (mRumbleTimer == 5) {
             dRumble_c::stop(-1);
         }
     }
@@ -631,20 +644,21 @@ u32 dAcNpcBee_c::updateSwarmBeeColliders() {
                     bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_DEAD;
                     dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_394_, bee->mPos, nullptr, nullptr, nullptr, nullptr, 0, 0);
                 } else {
-                    bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_UNK4;
+                    bee->mBeeState = dAcNpcBeeSingleBee::BEE_STATE_BLOWN_AWAY;
                     bee->field_0x048 = bee->mCollider.GetTgAtHitDir();
                     bee->field_0x048.normalize();
                     if (bee->mCollider.ChkTgAtHitType(AT_TYPE_BELLOWS)) {
                         bee->field_0x048 *= cM::rndF(5.f) + 15.f;
-                        bee->field_0x002 = cM::rndF(5.f) + 15.f;
-                        field_0x0379 |= 8;
+                        bee->mActionTimer = cM::rndF(5.f) + 15.f;
+                        mRumbleTimer |= 8;
                     } else {
+                        // can this even be reached? all possible AT types should be handled
                         bee->field_0x048 *= cM::rndF(5.f) + 25.f;
                         bee->field_0x048.y = cM::rndF(5.f) +15.f;
                         mVec3_c local_b8(cM::rndFX(20.f), 0.f, 0.f);
                         mtx.multVec(local_b8, local_b8);
                         bee->field_0x048 += local_b8;
-                        bee->field_0x002 = cM::rndF(50.f) + 200.f;
+                        bee->mActionTimer = cM::rndF(50.f) + 200.f;
                     }
                 }
             }
@@ -661,11 +675,14 @@ int dAcNpcBee_c::draw() {
     return 1;
 }
 
-s32 fn_14_2690(dAcNpcBeeSingleBee* bee) {
+/**
+ * Returns bits when a collision is detected, 2 is wall, 1 is floor
+ */
+s32 beeCheckWallFloorCollision(dAcNpcBeeSingleBee* bee) {
     dBgS_ObjGndChk gndChk;
     dBgS_ObjLinChk linChk;
     u32 ret = 0;
-    mVec3_c local_148 = bee->mPos - bee->field_0x03C;
+    mVec3_c local_148 = bee->mPos - bee->mOldPos;
     local_148.y = 0.f;
     local_148.normalize();
     mVec3_c scaled = local_148 * 50.f;
