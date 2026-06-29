@@ -12,8 +12,6 @@ int dLytControlTitle_c::create() {
     return SUCCEEDED;
 }
 
-
-
 int dLytControlTitle_c::doDelete() {
     return SUCCEEDED;
 }
