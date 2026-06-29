@@ -40,6 +40,14 @@
 
 SPECIAL_ACTOR_PROFILE(NPC_BEE, dAcNpcBee_c, fProfile::NPC_BEE, 0x123, 0, 0);
 
+static dCcD_SrcSph beeColliderSrc = {
+    /* mObjInf */ {/* mObjAt */ {AT_TYPE_0x2000000, 0x20000F, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
+                   /* mObjTg */ {AT_TYPE_BUGNET | AT_TYPE_BELLOWS | AT_TYPE_BOMB, 0x00004011, {0, 00, 0x40F}, 8, 0},
+                   /* mObjCo */ {0}},
+    /* mSphInf */
+    {15.0f}
+};
+
 bool dAcNpcBee_c::createHeap() {
     mRes = nw4r::g3d::ResFile(getOarcResFile("Bee"));
     static const char *sModelNames[4] = {
@@ -55,15 +63,7 @@ bool dAcNpcBee_c::createHeap() {
     }
     return SUCCEEDED;
 }
-static dCcD_SrcSph beeColliderSrc = {
-    /* mObjInf */ {/* mObjAt */ {AT_TYPE_0x2000000, 0x20000F, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
-                   /* mObjTg */ {AT_TYPE_BUGNET | AT_TYPE_BELLOWS | AT_TYPE_BOMB, 0x00004011, {0, 00, 0x40F}, 8, 0},
-                   /* mObjCo */ {0}},
-    /* mSphInf */
-    {15.0f}
-};
 
-// non matching
 int dAcNpcBee_c::create() {
     mSceneflag = getFromParams(0x10, 0xFF);
     // mRoom regalloc
@@ -85,9 +85,8 @@ int dAcNpcBee_c::create() {
             bee->mHide = 1;
         }
     }
-    // probably inline here, regswaps
+    setInteractionFlags(0x80);
     mStts.SetRank(3);
-    mInteractionFlags |= 0x80;
     mColliderList.SetStts(mStts);
     mFrameCounter = cM::rndF(65536);
     dAcObjBase_c *honeycomb =
@@ -156,12 +155,13 @@ void dAcNpcBee_c::actuallyUpdateSwarmBees() {
     int beeModelIndex = 0;
     static mVec3_c colliderDisabledPos(10000.f, -20000.f, 50000.f);
     dCamera_c *camera = dScGame_c::getCamera();
+    bool hideBee;
     bool isFirst = true;
     int flyingBeeCount = 0;
     mAttackActorDistFromHome = mStartingPos.distance(mAttackActor->mPositionCopy2);
     mPosition = mStartingPos;
-    for (int i = 0; i < mSwarmBeeCount; i++, bee++) {
-        bool hideBee = true;
+    for (u32 i = 0; (s32)i < mSwarmBeeCount; i++, bee++) {
+        hideBee = true;
         mMtx_c mtx;
         if (bee->mBeeState != dAcNpcBeeSingleBee::BEE_STATE_DEAD) {
             beesAlive++;
@@ -513,8 +513,8 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee *bee) {
             if (distToTarget > 500.f) {
                 distToTarget = 500.f;
             }
-            // weird mul vs slwi
-            offsetToTarget.x += distToTarget * nw4r::math::SinIdx(bee->mTimer * 0x300);
+            // seems fake, I suspenct there is an inline that takes s16
+            offsetToTarget.x += distToTarget * nw4r::math::SinIdx((s16)(bee->mTimer * 0x400));
             offsetToTarget.y += distToTarget * nw4r::math::CosIdx(bee->mTimer * 0x300) * 0.5f;
             offsetToTarget.z += distToTarget * nw4r::math::CosIdx(bee->mTimer * 0x500);
         }
@@ -529,9 +529,8 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee *bee) {
         } else {
             s32 fVar17 = nw4r::math::SinIdx(bee->mTimer * 0xDAC) * 1500.f;
             s32 fVar16 = nw4r::math::SinIdx(bee->mTimer * 3000) * 1500.f;
-            // non match
-            sLib::addCalcAngle(bee->mCrawlingRotation.y.ref(), fVar17 + offsetToTarget.atan2sX_Z(), 1, 0x1000);
-            sLib::addCalcAngle(bee->mCrawlingRotation.x.ref(), fVar16 - offsetToTarget.atan2sY_XZ(), 1, 0x1000);
+            sLib::addCalcAngle(bee->mCrawlingRotation.y.ref(), fVar17 + cM::atan2s(offsetToTarget.x, offsetToTarget.z), 1, 0x1000);
+            sLib::addCalcAngle(bee->mCrawlingRotation.x.ref(), fVar16 - cM::atan2s(offsetToTarget.y, offsetToTarget.absXZ()), 1, 0x1000);
         }
     }
     mtx.YrotS(bee->mCrawlingRotation.y);
