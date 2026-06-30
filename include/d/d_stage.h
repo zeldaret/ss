@@ -164,6 +164,8 @@ public:
         return curr_room_id;
     }
 
+    dFader_c& getFader() { return mFader; }
+
     bool fn_801B3EE0();
     void fn_801B3F20();
     void fn_801B3F30();

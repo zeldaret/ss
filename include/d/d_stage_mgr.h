@@ -121,6 +121,14 @@ public:
         return (field_0x88A0 & flag) != 0;
     }
 
+    void unsetFlags0x88a0(u32 flag){
+        field_0x88A0 &= flag;
+    }
+
+    void setFlags0x88a0(u32 flag){
+        field_0x88A0 |= flag;
+    }
+
     void initUnkWithWater(u32 val, d3d::UnkWithWater *waterThing);
     void destroyUnkWithWater(u32 val, d3d::UnkWithWater *waterThing);
 
