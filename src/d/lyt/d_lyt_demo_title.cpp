@@ -4,7 +4,9 @@
 #include "d/d_stage.h"
 #include "d/d_stage_mgr.h"
 #include "d/d_sys.h"
+#include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_deposit.h"
+#include "d/lyt/d_lyt_map_global.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 
 extern "C" u32 lbl_805B7120;
@@ -168,7 +170,7 @@ void dLytDemoTitleMain_c::fn_802B0A50() {
     dStageMgr_c::GetInstance()->setFlags0x88a0(0x1);
 
     dSys_c::setClearColor(mColor(0xFF));
-    
+
     mAnmGroups[TITLE_DEMO_MAIN_ANIM_IN].setAnimEnable(true);
     mAnmGroups[TITLE_DEMO_MAIN_ANIM_IN].setFrame(0.0f);
     mLytBase.calc();
@@ -176,105 +178,104 @@ void dLytDemoTitleMain_c::fn_802B0A50() {
     mIsAnimating = false;
 }
 
-void dLytDemoTitleMain_c::fn_802B0B00(){
+void dLytDemoTitleMain_c::fn_802B0B00() {
     mStateMgr.changeState(StateID_ModeMove);
     mIsAnimating = false;
-    return;  
+    return;
 }
 
-void dLytDemoTitleMain_c::fn_802B0B50(){
+void dLytDemoTitleMain_c::fn_802B0B50() {
     mAnmGroups[TITLE_DEMO_MAIN_ANIM_OUT].setAnimEnable(true);
     mAnmGroups[TITLE_DEMO_MAIN_ANIM_OUT].setFrame(0.0f);
     mLytBase.calc();
     mStateMgr.changeState(StateID_ModeOut);
     mIsAnimating = false;
-    return; 
-}
-
-void dLytDemoTitleMain_c::fn_802B0BD0(){
-    mStateMgr.changeState(StateID_ModeEnd);
-    mIsAnimating = false;
-    return;  
-}
-
-void dLytDemoTitleMain_c::fn_802B0C20(){
     return;
 }
 
-void dLytDemoTitle_c::fn_802B0C20(){
+void dLytDemoTitleMain_c::fn_802B0BD0() {
+    mStateMgr.changeState(StateID_ModeEnd);
+    mIsAnimating = false;
+    return;
+}
+
+void dLytDemoTitle_c::initializeState_In() {
+    return;
+}
+
+void dLytDemoTitle_c::executeState_In() {
     if (mIsAnimating) {
         mMain.fn_802B0A50();
         mStateMgr.changeState(StateID_In);
-        mIsAnimating=false;
-    }   
-    return; 
-}
-
-void dLytDemoTitle_c::fn_802B0CA0(){
+        mIsAnimating = false;
+    }
     return;
 }
 
-void dLytDemoTitle_c::fn_802B0CB0(){
+void dLytDemoTitle_c::finalizeState_In() {
     return;
 }
 
-void dLytDemoTitle_c::fn_802B0CC0(){
+void dLytDemoTitle_c::initializeState_Move() {
+    return;
+}
+
+void dLytDemoTitle_c::executeState_Move() {
     if (mMain.getmIsAnimating()) {
         mMain.fn_802B0B00();
         mStateMgr.changeState(StateID_Move);
-    }   
-    return; 
-}
-
-void dLytDemoTitle_c::fn_802B0D20(){
+    }
     return;
 }
 
-void dLytDemoTitle_c::fn_802B0D30(){
+void dLytDemoTitle_c::finalizeState_Move() {
     return;
 }
 
-void dLytDemoTitle_c::fn_802B0D40(){
+void dLytDemoTitle_c::initializeState_Out() {
+    return;
+}
+
+void dLytDemoTitle_c::executeState_Out() {
     if (mMain.getmIsAnimating() && field_0x58d) {
         mMain.fn_802B0B50();
         mStateMgr.changeState(StateID_Out);
-        field_0x58d=false;
-    }   
-    return; 
-}
-
-void dLytDemoTitle_c::fn_802B0DB0(){
+        field_0x58d = false;
+    }
     return;
 }
 
-void dLytDemoTitle_c::fn_802B0DC0(){
+void dLytDemoTitle_c::finalizeState_Out() {
     return;
 }
 
-void dLytDemoTitle_c::fn_802B0DD0(){
+void dLytDemoTitle_c::initializeState_End() {
+    return;
+}
 
+void dLytDemoTitle_c::executeState_End() {
     if (mMain.getmIsAnimating()) {
         deleteRequest();
         mMain.fn_802B0BD0();
         mStateMgr.changeState(StateID_End);
     }
-    
+
     return;
 }
 
-void dLytDemoTitle_c::fn_802B0E30(){
+void dLytDemoTitle_c::finalizeState_End() {
     return;
 }
 
-void dLytDemoTitle_c::fn_802B0E40(){
+void dLytDemoTitle_c::initializeState_None() {
     return;
 }
 
-void dLytDemoTitle_c::fn_802B0E50(){
+void dLytDemoTitle_c::executeState_None() {
     return;
 }
 
-void dLytDemoTitle_c::fn_802B0E60(){
+void dLytDemoTitle_c::finalizeState_None() {
     return;
 }
 
@@ -282,11 +283,42 @@ dLytDemoTitle_c::dLytDemoTitle_c() : mStateMgr(*this) {}
 
 dLytDemoTitleMain_c::~dLytDemoTitleMain_c() {}
 
-bool dLytDemoTitle_c::fn_802B1270(d2d::ResAccIf_c *resAcc){
+extern "C" char *lbl_805759D0;
 
-    mMain.fn_802B0760(resAcc);
+bool dLytDemoTitle_c::fn_802B1270(){
+    sInstance = this;
+    
+    resAcc.attach(LayoutArcManager::GetInstance()->getLoadedData("DemoTitle"), "");
+
+    mMain.fn_802B0760(&resAcc);
     mStateMgr.changeState(StateID_None);
-    mIsAnimating=true;
-    field_0x58d=false;
+    mIsAnimating = true;
+    field_0x58d = false;
     return true;
 }
+
+bool dLytDemoTitle_c::fn_802B1300() {
+    if (*mStateMgr.getStateID() != StateID_None) {
+        mMain.fn_802B0860();
+    }
+
+    mStateMgr.executeState();
+
+    return true;
+}
+
+bool dLytDemoTitle_c::fn_802B13A0() {
+    if (*mStateMgr.getStateID() != StateID_None) {
+        mMain.fn_802B0950();
+    }    
+    return true;
+}
+
+bool dLytDemoTitle_c::fn_802B1410() {
+    mMain.fn_802B0980();
+    resAcc.detach();
+    lbl_805759D0=0;
+    return true;
+}
+
+dLytDemoTitle_c::~dLytDemoTitle_c() {}
