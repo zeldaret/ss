@@ -72,7 +72,7 @@ public:
     enum AcProperties_e {
         AC_PROP_0x1 = (1 << 0),
         AC_PROP_0x2 = (1 << 1),
-        AC_PROP_0x4 = (1 << 2),
+        AC_PROP_0x4 = (1 << 2), // when set, also update in event
         AC_PROP_0x100 = (1 << 8),
         AC_PROP_0x400 = (1 << 10),
         AC_PROP_0x800 = (1 << 11),

@@ -276,6 +276,10 @@ public:
         return cM::atan2s(y, absXZ());
     }
 
+    s32 atan2sXZ_Y() const {
+        return -atan2sY_XZ();
+    }
+
     f32 angle(const mVec3_c &other) const {
         return EGG::Vector3f::angle(other);
     }

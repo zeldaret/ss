@@ -8,6 +8,7 @@ class dAcNpcIcgKobun_c : public dAcNpc_c {
 public:
     dAcNpcIcgKobun_c() : mStateMgr(*this) {}
     virtual ~dAcNpcIcgKobun_c() {}
+    void fn_66_30C0(u32 itemId);
 
 private:
     /* 0x??? */ STATE_MGR_DECLARE(dAcNpcIcgKobun_c);
