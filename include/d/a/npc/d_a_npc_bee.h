@@ -29,14 +29,14 @@ public:
     /* 0x000 */ u8 mIndex;
     /* 0x001 */ u8 mBeeState; // see State enum
     /* 0x002 */ u8 mActionTimer;
-    /* 0x003 */ u8 mIsFlying;
+    /* 0x003 */ bool mIsFlying;
     /* 0x004 */ u8 field_0x004; // unused
     /* 0x005 */ u8 mSubState;
     /* 0x006 */ u8 mDisableAttackTimer;
     /* 0x007 */ u8 mSwordDodgeTimer;
-    /* 0x008 */ u8 mHide;
-    /* 0x009 */ u8 mAttackTimer;
-    /* 0x00A */ u8 mIsAttacking;
+    /* 0x008 */ bool mHide;
+    /* 0x009 */ u8 mAttackCooldownTimer;
+    /* 0x00A */ bool mIsAttacking;
     /* 0x00B */ u8 mWallReflectTimer;
     /* 0x00C */ s16 mTimer;             // only counts up, used for kinda random calculations
     /* 0x00E */ s16 mFlyingStatesTimer; // used for vanishing after flying up and something else
@@ -72,16 +72,14 @@ public:
 
 private:
     /* 0x0378 */ u8 mSwarmBeeCount;
-    /* 0x0379 */ u8 mRumbleTimer; // rumble timer
+    /* 0x0379 */ u8 mRumbleTimer;
     /* 0x037A */ u8 mSceneflag;
-    /* 0x037B */ u8 field_0x037B;    // padding
     /* 0x037C */ s16 mFrameCounter;  // used to only search for new targets every 16 frames
-    /* 0x037E */ u8 field_0x037E[2]; // padding
     /* 0x0380 */ f32 mAttackActorDistFromHome;
-    /* 0x0384 */ u8 field_0x0384[4]; // padding?
+    /* 0x0384 */ u8 field_0x0384[4]; // unused
     /* 0x0388 */ nw4r::g3d::ResFile mRes;
     /* 0x038C */ dShpProc1_c mBeeModels[4];
-    /* 0x045C */ dAcNpcBeeSingleBee mBees[100];
+    /* 0x045C */ dAcNpcBeeSingleBee mBees[100]; // only 20 slots are used
     /* 0xB80C */ dAcRef_c<dAcNpcHc_c> mHiveRef;
     /* 0xB818 */ dAcRef_c<dAcObjBase_c> mAttackRef;
     /* 0xB824 */ dColliderLinkedList mColliderList;
