@@ -97,9 +97,9 @@ int dAcSalbageObj_c::preExecute() {
         }
     }
 
-    getDowsingUnusedF32();
-    field_0x95C.set(0.0f, getDowsingTargetYOffset(), 0.0f);
-    mDowsingTarget.setOffset(field_0x95C);
+    (void)getDowsingUnusedF32();
+    mDowsingOffset.set(0.0f, getDowsingTargetYOffset(), 0.0f);
+    mDowsingTarget.setOffset(mDowsingOffset);
 
     return result;
 }
@@ -312,7 +312,7 @@ void dAcSalbageObj_c::loadBehaviorFromParams() {
 }
 
 void dAcSalbageObj_c::initializeState_Wait() {
-    mDowsingTarget.initialize(getDowsingSlot(), 0, &field_0x95C, getDowsingUnusedF32());
+    mDowsingTarget.initialize(getDowsingSlot(), 0, &mDowsingOffset, getDowsingUnusedF32());
     mDowsingTarget.doRegister();
     mIsDowsingRegistered = true;
 }

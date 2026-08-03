@@ -17,11 +17,17 @@
 class dAcSalbageObj_c;
 
 enum SalvageObj_e {
+    SALVAGE_OBJ_NONE = -1,
+
     SALVAGE_OBJ_PROPERA = 0,
     SALVAGE_OBJ_ROULETTE = 1,
     SALVAGE_OBJ_DIVINER_CRYSTAL = 2,
+    SALVAGE_OBJ_SALVAGE_MORRY = 3,
+    SALVAGE_OBJ_MOLE_ELDER = 4,
     SALVAGE_OBJ_WATER_JAR = 5,
     SALVAGE_OBJ_POT = 6,
+
+    SALVAGE_OBJ_MAX = 7,
 };
 
 class dSalvageIfObj_c : public dSalvageIf_c {
@@ -176,7 +182,7 @@ protected:
     /* 0x908 */ mMtx_c mWorldSRMtx;
     /* 0x938 */ f32 field_0x938;
     /* 0x93C */ DowsingTarget mDowsingTarget;
-    /* 0x95C */ mVec3_c field_0x95C;
+    /* 0x95C */ mVec3_c mDowsingOffset;
     /* 0x968 */ bool mIsDowsingRegistered;
     /* 0x96C */ const sStateID_c *mpNextStateId;
 };

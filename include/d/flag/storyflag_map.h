@@ -1640,12 +1640,12 @@ enum StoryFlags_e {
     /** [Windmill Propeller picked up]
      *  Story Flag #324 (0x0144) - JP 805ACD7F 0x04 / US 805A9AFF 0x04
      */
-    STORYFLAG_324,
+    STORYFLAG_PROPERA_PICKUP,
 
     /** [Village Windmill reparation cutscene]
      *  Story Flag #325 (0x0145) - JP 805ACD7F 0x08 / US 805A9AFF 0x08
      */
-    STORYFLAG_325,
+    STORYFLAG_WINDMILL_REPAIRED,
 
     /** [Wyrna's 5 gratitude crystals collected (not the crystals themselves)]
      *  Story Flag #326 (0x0146) - JP 805ACD7F 0x10 / US 805A9AFF 0x10
@@ -1842,12 +1842,12 @@ enum StoryFlags_e {
     /** [Spiral Charge Ability]
      *  Story Flag #364 (0x016C) - JP 805ACD83 0x04 / US 805A9B03 0x04
      */
-    STORYFLAG_364,
+    STORYFLAG_SPIRAL_CHARGE_UNLOCKED,
 
     /** [Pumpkin Soup for Levias Collected, unset by picking up something else]
      *  Story Flag #365 (0x016D) - JP 805ACD83 0x08 / US 805A9B03 0x08
      */
-    STORYFLAG_365,
+    STORYFLAG_PUMPKIN_SOUP_PICKUP,
 
     /** [Unset when Scrapper has a job, set when he has finished it]
      *  Story Flag #366 (0x016E) - JP 805ACD83 0x10 / US 805A9B03 0x10
@@ -1877,17 +1877,17 @@ enum StoryFlags_e {
     /** [Accepting the Fortune Teller Crystal Sidequest]
      *  Story Flag #371 (0x0173) - JP 805ACD82 0x02 / US 805A9B02 0x02
      */
-    STORYFLAG_371,
+    STORYFLAG_CRYSTAL_QUEST_STARTED,
 
     /** [Sets after Sprapper picked the Crystal Ball up]
      *  Story Flag #372 (0x0174) - JP 805ACD82 0x04 / US 805A9B02 0x04
      */
-    STORYFLAG_372,
+    STORYFLAG_CRYSTAL_PICKUP,
 
     /** [Sets before the Fortune Teller gives his Crystals]
      *  Story Flag #373 (0x0175) - JP 805ACD82 0x08 / US 805A9B02 0x08
      */
-    STORYFLAG_373,
+    STORYFLAG_CRYSTAL_DELIVERED,
 
     /** [Sets when talking to the Fortune Teller in the Bazzar after 8x08 (Fortunes only cost half)]
      *  Story Flag #374 (0x0176) - JP 805ACD82 0x10 / US 805A9B02 0x10
@@ -2002,17 +2002,17 @@ enum StoryFlags_e {
     /** [Search for Party Wheel Crystal Quest started]
      *  Story Flag #396 (0x018C) - JP 805ACD8F 0x20 / US 805A9B0F 0x20
      */
-    STORYFLAG_396,
+    STORYFLAG_PARTY_WHEEL_QUEST_STARTED,
 
     /** [Set after Scrapper picks up Party Wheel]
      *  Story Flag #397 (0x018D) - JP 805ACD8F 0x80 / US 805A9B0F 0x80
      */
-    STORYFLAG_397,
+    STORYFLAG_PARTY_WHEEL_PICKUP,
 
     /** [Set before Fun Fun Owner gives his Crystals]
      *  Story Flag #398 (0x018E) - JP 805ACD8E 0x01 / US 805A9B0E 0x01
      */
-    STORYFLAG_398,
+    STORYFLAG_PARTY_WHEEL_DELIVERED,
 
     /** [Sets after you get a free try at Diveing game]
      *  Story Flag #399 (0x018F) - JP 805ACD91 0x80 / US 805A9B11 0x80
@@ -2357,7 +2357,7 @@ enum StoryFlags_e {
     /** [Goron Text near Big Frog]
      *  Story Flag #467 (0x01D3) - JP 805ACD8F 0x10 / US 805A9B0F 0x10
      */
-    STORYFLAG_467,
+    STORYFLAG_WATER_BASIN_QUEST_STARTED,
 
     /** [Goron Text after Watering 1st Frog]
      *  Story Flag #468 (0x01D4) - JP 805ACD8F 0x40 / US 805A9B0F 0x40
@@ -2372,17 +2372,17 @@ enum StoryFlags_e {
     /** [Kina's Crystal Quest started]
      *  Story Flag #470 (0x01D6) - JP 805ACD8E 0x04 / US 805A9B0E 0x04
      */
-    STORYFLAG_470,
+    STORYFLAG_MOLE_ELDER_QUEST_STARTED,
 
     /** [Guld picked up (unsets after)]
      *  Story Flag #471 (0x01D7) - JP 805ACD8E 0x08 / US 805A9B0E 0x08
      */
-    STORYFLAG_471,
+    STORYFLAG_MOLE_ELDER_PICKUP,
 
     /** [Kina's Crystal Quest related]
      *  Story Flag #472 (0x01D8) - JP 805ACD8E 0x10 / US 805A9B0E 0x10
      */
-    STORYFLAG_472,
+    STORYFLAG_MOLE_ELDER_DELIVERED,
 
     /** [Kina's Crystal Quest related]
      *  Story Flag #473 (0x01D9) - JP 805ACD8E 0x20 / US 805A9B0E 0x20
@@ -2417,7 +2417,7 @@ enum StoryFlags_e {
     /** [Owlans Crystal Sidequest started]
      *  Story Flag #479 (0x01DF) - JP 805ACD91 0x08 / US 805A9B11 0x08
      */
-    STORYFLAG_479,
+    STORYFLAG_PLANT_SPECIES_QUEST_STARTED,
 
     /** []
      *  Story Flag #480 (0x01E0) - JP 805ACD91 0x10 / US 805A9B11 0x10
