@@ -8,6 +8,10 @@
 
 namespace JStudio {
 namespace ctb {
+
+// TODO(Zeldex) - More forward declarations for this file?
+struct TFactory;
+
 struct TObject : public object::TObject_ID {
     TObject(const void* id, u32 size, const void* param_2) : object::TObject_ID(id, size) {
         pData_ = param_2;
@@ -115,14 +119,6 @@ struct TObject_TxyzRy : public TObject {
     virtual int getScheme() const;
 };
 
-struct TFactory {
-    TFactory() {}
-
-    virtual ~TFactory();
-    virtual TObject* create(JStudio::ctb::data::TParse_TBlock const&);
-    virtual void destroy(JStudio::ctb::TObject*);
-};
-
 struct TControl {
     TControl();
     virtual ~TControl();
@@ -140,6 +136,13 @@ struct TControl {
     /* 0x8 */ JGadget::TLinkList<TObject, -12> ocObject_;
 };
 
+struct TFactory {
+    TFactory() {}
+
+    virtual ~TFactory();
+    virtual TObject* create(JStudio::ctb::data::TParse_TBlock const&);
+    virtual void destroy(JStudio::ctb::TObject*);
+};
 struct TParse : public JGadget::binary::TParse_header_block {
     TParse(JStudio::ctb::TControl*);
     virtual ~TParse();

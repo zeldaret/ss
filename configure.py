@@ -1363,7 +1363,7 @@ config.libs = [
     JSystemLib(
         "JStudio",
         [
-            Object(NonMatching, "JSystem/JStudio/JStudio/ctb.cpp"),
+            Object(Matching, "JSystem/JStudio/JStudio/ctb.cpp"),
             Object(Matching, "JSystem/JStudio/JStudio/ctb-data.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/functionvalue.cpp"),
             Object(NonMatching, "JSystem/JStudio/JStudio/fvb.cpp"),
