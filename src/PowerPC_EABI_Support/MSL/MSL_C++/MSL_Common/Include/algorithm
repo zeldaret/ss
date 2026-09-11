@@ -118,7 +118,8 @@ inline void fill(ForwardIt first, ForwardIt last, const T& value) {
     }
 }
 
-#if PLATFORM_SHIELD
+// In Skyward Sword, these versions are used
+#if PLATFORM_SHIELD || PLATFORM_WII
 template <class T, bool IsPOD = true>
 struct __msl_copy {
     static T* copy(T* first, T* last, T* result) {
@@ -148,14 +149,14 @@ inline T* copy(const T* first, const T* last, T* result) {
 }
 #endif
 
-template<class InputIt, class OutputIt>
-inline OutputIt copy(InputIt first, InputIt last,
-              OutputIt d_first) {
-    for (; first < last; ++first, ++d_first) {
-        *d_first = *first;
-    }
-    return d_first;
-}
+// template<class InputIt, class OutputIt>
+// inline OutputIt copy(InputIt first, InputIt last,
+//               OutputIt d_first) {
+//     for (; first < last; ++first, ++d_first) {
+//         *d_first = *first;
+//     }
+//     return d_first;
+// }
 
 template <class BidirectionalIterator1, class BidirectionalIterator2>
 inline BidirectionalIterator2 copy_backward(BidirectionalIterator1 first, BidirectionalIterator1 last, BidirectionalIterator2 result) {
@@ -180,7 +181,8 @@ struct __copy_backward<T, true>
 {
 	static T* copy_backward(T* first, T* last, T* result)
 	{
-#if DEBUG
+// In Skyward Sword, this is used
+#if DEBUG || PLATFORM_WII
 		size_t n = static_cast<size_t>(last - first);
 		result -= n;
 		memmove(result, first, n*sizeof(T));

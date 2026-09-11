@@ -177,7 +177,18 @@ struct TVector {
         return pFirst;
     }
 
-    void clear() { erase(begin(), end()); }
+    // TODO(Zeldex) - This Matches for Skyward Sword - but I highly doubt this is correct.
+    T* erase(T* pLast) {
+        u32 remaining = (int)((uintptr_t)pEnd_ - (uintptr_t)pLast) / 4;
+        T* ppvVar3 = std::copy(pEnd_ - remaining, pEnd_, pBegin_);
+        DestroyElement_(ppvVar3, pEnd_);
+        pEnd_ = ppvVar3;
+        return pLast;
+    } 
+
+    void clear() {
+        erase(pEnd_);
+    }
 
     /* 0x00 */ Allocator mAllocator;
     /* 0x04 */ T* pBegin_;
@@ -193,7 +204,8 @@ struct TVector_pointer_void : public TVector<void*, TAllocator<void*> > {
 
     ~TVector_pointer_void();
 
-    void insert(void**, void* const&);
+    // In Skyward Sword, return type is fixed
+    void** insert(void**, void* const&);
     void** erase(void**, void**);
 
     void clear() { erase(begin(), end()); }

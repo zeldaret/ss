@@ -26875,7 +26875,7 @@ Insert__Q27JGadget13TNodeLinkListFQ37JGadget13TNodeLinkList8iteratorPQ27JGadget1
 Erase__Q27JGadget13TNodeLinkListFPQ27JGadget13TLinkListNode = .text:0x804B7D80; // type:function size:0x24
 extend_default__Q27JGadget6vectorFUlUlUl = .text:0x804B7DB0; // type:function size:0x8
 __ct__Q27JGadget20TVector_pointer_voidFRCQ27JGadget14TAllocator<Pv> = .text:0x804B7DC0; // type:function size:0x20
-fn_804B7DE0 = .text:0x804B7DE0; // type:function size:0x584
+__ct__Q27JGadget20TVector_pointer_voidFUlRCPvRCQ27JGadget14TAllocator<Pv> = .text:0x804B7DE0; // type:function size:0x584
 __dt__Q27JGadget20TVector_pointer_voidFv = .text:0x804B8370; // type:function size:0xB4
 insert__Q27JGadget20TVector_pointer_voidFPPvRCPv = .text:0x804B8430; // type:function size:0x594
 erase__Q27JGadget20TVector_pointer_voidFPPvPPv = .text:0x804B89D0; // type:function size:0x88
