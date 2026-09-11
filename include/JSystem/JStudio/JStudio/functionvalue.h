@@ -111,15 +111,14 @@ public:
     void range_setOutside_begin(TFunctionValue::TEOutside begin) { mBegin = begin; }
     void range_setOutside_end(TFunctionValue::TEOutside end) { mEnd = end; }
     f64 range_getParameter_outside(f64 arg1) const {
-        f64 result = arg1;
-        result -= fBegin_;
-        if (result < 0.0) {
-            result = TFunctionValue::toFunction(mBegin)(result, fDifference_);
-        } else if (result >= fDifference_) {
-            result = TFunctionValue::toFunction(mEnd)(result, fDifference_);
+        arg1 -= fBegin_;
+        if (arg1 < 0.0) {
+            arg1 = TFunctionValue::toFunction(mBegin)(arg1, fDifference_);
+        } else if (arg1 >= fDifference_) {
+            arg1 = TFunctionValue::toFunction(mEnd)(arg1, fDifference_);
         }
-        result += fBegin_;
-        return result;
+        arg1 += fBegin_;
+        return arg1;
     }
     f64 range_getParameter_progress(f64 arg1) const { return _20 + _28 * (arg1 - _20); }
     f64 range_getBegin() const { return fBegin_;}
@@ -146,7 +145,7 @@ public:
 
     void interpolate_initialize() { interpolate_ = 0; }
     void interpolate_prepare() {}
-    u32 interpolate_get() const { return interpolate_; }
+    s32 interpolate_get() const { return interpolate_; }
     void interpolate_set(TFunctionValue::TEInterpolate interpolate) { interpolate_ = interpolate; }
 
 private:

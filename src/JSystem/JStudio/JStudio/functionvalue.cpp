@@ -9,6 +9,11 @@
 
 namespace JStudio {
 
+#if PLATFORM_WII || PLATFORM_SHIELD
+#define NUMERIC_LIMIT double
+#else
+#define NUMERIC_LIMIT float
+#endif
 namespace {
 
 const ExtrapolateParameter gapfnExtrapolateParameter_[4] = {
@@ -51,20 +56,17 @@ static f64 dummy_literal1() {
 namespace functionvalue {
 
 f64 interpolateValue_hermite(f64 c0, f64 c1, f64 x, f64 c2, f64 x2, f64 c3, f64 x3) {
-    f64 a;
-    f64 b;
-    f64 c;
-    f64 d;
-
-    a = c0 - c1;
-    b = a * (1.0 / (x2 - c1));               // (a - b) * 1.0 / (c - d)
-    c = b - 1.0;                             // 1.0
-    d = (3.0 + -2.0 * b) * (b * b);  // 3.0 - 2.0 * b
-    f64 cab = (c * a * b);
-    f64 coeffx3 = cab * x3;
-    f64 cca = (c * c * a);
-    f64 coeffc2 = cca * c2;
-    return ((1.0 - d) * x + (d * c3)) + coeffc2 + coeffx3;
+     f64 valueDifference         = c0 - c1;
+    f64 inverseControlSpan      = (1 / (x2 - c1));
+    f64 scaledDiff              = valueDifference * inverseControlSpan;
+    f64 squaredScaledDiff       = (scaledDiff * scaledDiff);
+    f64 offset                  = scaledDiff - 1;
+    f64 cubicTerm               = (3 + (-2 * scaledDiff)) * squaredScaledDiff;
+    f64 linearTerm              = 1 - cubicTerm;
+    f64 offsetSquared           = valueDifference * (offset * offset);
+    f64 scaledDiffOffsetProduct = scaledDiff * (offset * valueDifference);
+    return (scaledDiffOffsetProduct * x3)
+         + ((offsetSquared * c2) + ((linearTerm * x) + (cubicTerm * c3)));
 }
 
 
@@ -140,7 +142,7 @@ f64 extrapolateParameter_turn(f64 param_0, f64 param_1) {
 }  // namespace functionvalue
 
 void TFunctionValueAttribute_range::range_initialize() {
-    fBegin_ = NAN;
+    fBegin_ = std::numeric_limits<double>::signaling_NaN();
     fEnd_ = fBegin_;
     fDifference_ = fBegin_;
 
@@ -190,36 +192,28 @@ void TFunctionValueAttribute_range::range_set(f64 begin, f64 end) {
 f64 TFunctionValueAttribute_range::range_getParameter(f64 arg1, f64 arg2, f64 arg3) const {
     f64 progress = range_getParameter_progress(arg1);
     TFunctionValue::TEAdjust adjust = range_getAdjust();
-
-    f64 result;
-
+ 
     switch (adjust) {
     default:
         // JUTWarn w;
         // w << "unknown adjust : " << adjust;
     case 0:
-        result = range_getParameter_outside(progress);
-        break;
+        return range_getParameter_outside(progress);
     case 1:
-        result = range_getParameter_outside(progress + fBegin_);
-        break;
+        return range_getParameter_outside(progress + fBegin_);
     case 2:
-        result = range_getParameter_outside(progress + fEnd_);
-        break;
+        return range_getParameter_outside(progress + fEnd_);
     case 3:
-        result = range_getParameter_outside(progress + 0.5 * (fBegin_ + fEnd_));
-        break;
+        return  range_getParameter_outside(progress + 0.5 * (fBegin_ + fEnd_)); 
     case 4:
         f64 temp = range_getParameter_outside(progress);
-        result = arg2 + ((temp - fBegin_) * (arg3 - arg2)) / fDifference_;
-        break;
-    }
-    return result;
+        return arg2 + ((temp - fBegin_) * (arg3 - arg2)) / fDifference_; 
+    } 
 }
 
 
 TFunctionValueAttribute_range::TFunctionValueAttribute_range()
-    : fBegin_(NAN), fEnd_(fBegin_), fDifference_(fBegin_),
+    : fBegin_(std::numeric_limits<NUMERIC_LIMIT>::signaling_NaN()), fEnd_(fBegin_), fDifference_(fBegin_),
       mProgress(TFunctionValue::PROG_INIT), mAdjust(TFunctionValue::ADJ_INIT), _20(fBegin_),
       _28(fBegin_), mBegin(TFunctionValue::OUT_INIT), mEnd(TFunctionValue::OUT_INIT) {}
 
@@ -277,7 +271,7 @@ f64 TFunctionValue_composite::composite_index(TVector_pointer<TFunctionValue*> c
     JUT_ASSERT(599, pFront!=NULL);
     TValue fData = pFront->getValue(param_3);
     s32 index = floor(fData);
-    u32 uVar2 = param_2.get_outside();
+    s32 uVar2 = param_2.get_outside();
     switch (uVar2) {
     case 0:
     case 3:
@@ -296,9 +290,8 @@ f64 TFunctionValue_composite::composite_index(TVector_pointer<TFunctionValue*> c
 #endif
         index = dt.rem;
         if (index < 0) {
-            index = size + index;
-            index--;
-        }
+            index += size - 1;
+        } 
         break;
     }
     case 2:
@@ -426,11 +419,6 @@ f64 TFunctionValue_composite::composite_divide(TVector_pointer<TFunctionValue*> 
     return fData;
 }
 
-#if PLATFORM_WII || PLATFORM_SHIELD
-#define NUMERIC_LIMIT double
-#else
-#define NUMERIC_LIMIT float
-#endif
 
 TFunctionValue_constant::TFunctionValue_constant() : fValue_(std::numeric_limits<NUMERIC_LIMIT>::signaling_NaN()) {}
 
@@ -443,7 +431,7 @@ TFunctionValueAttributeSet TFunctionValue_constant::getAttributeSet() {
 }
 
 void TFunctionValue_constant::initialize() {
-    fValue_ = NAN;
+    fValue_ = std::numeric_limits<NUMERIC_LIMIT>::signaling_NaN();
 }
 
 void TFunctionValue_constant::prepare() {
@@ -454,7 +442,7 @@ f64 TFunctionValue_constant::getValue(f64 arg1) {
     return fValue_;
 }
 
-TFunctionValue_transition::TFunctionValue_transition() : _48(NAN), _50(_48) {}
+TFunctionValue_transition::TFunctionValue_transition() : _48(std::numeric_limits<NUMERIC_LIMIT>::signaling_NaN()), _50(_48) {}
 
 u32 TFunctionValue_transition::getType() const {
     return 3;
@@ -468,7 +456,7 @@ void TFunctionValue_transition::initialize() {
     range_initialize();
     interpolate_initialize();
 
-    _48 = NAN;
+    _48 = std::numeric_limits<NUMERIC_LIMIT>::signaling_NaN();
     _50 = _48;
 }
 
@@ -518,7 +506,7 @@ f64 TFunctionValue_transition::getValue(f64 param_1) {
     }
 }
 
-TFunctionValue_list::TFunctionValue_list() : _44(NULL), uData_(0), _50(NAN), pfnUpdate_(NULL) {}
+TFunctionValue_list::TFunctionValue_list() : _44(NULL), uData_(0), _50(std::numeric_limits<NUMERIC_LIMIT>::signaling_NaN()), pfnUpdate_(NULL) {}
 
 u32 TFunctionValue_list::getType() const {
     return 4;
@@ -534,7 +522,7 @@ void TFunctionValue_list::initialize() {
 
     _44 = NULL;
     uData_ = 0;
-    _50 = NAN;
+    _50 = std::numeric_limits<NUMERIC_LIMIT>::signaling_NaN();
     pfnUpdate_ = NULL;
 }
 
@@ -542,7 +530,7 @@ void TFunctionValue_list::prepare() {
     range_prepare();
     interpolate_prepare();
 
-    u32 interp = interpolate_get();
+    s32 interp = interpolate_get();
 
     switch (interp) {
     default:
@@ -698,7 +686,7 @@ void TFunctionValue_list_parameter::prepare() {
     range_prepare();
     interpolate_prepare();
 
-    u32 interp = interpolate_get();
+    s32 interp = interpolate_get();
     switch (interp) {
     default:
         // JUTWarn w;
@@ -768,8 +756,8 @@ f64 TFunctionValue_list_parameter::update_INTERPOLATE_BSPLINE_dataMore3_(
     local_68[2] = pfVar2[1];
     local_48[2] = pfVar2[-2];
     local_48[3] = pfVar2[0];
-    s32 iVar5 = ((intptr_t)pfVar2 - (intptr_t)rThis.dat1.get()) / 4;
-    s32 iVar3 = ((intptr_t)rThis.dat2.get() - (intptr_t)pfVar2) / 4;
+    size_t iVar5 = ((intptr_t)pfVar2 - (intptr_t)rThis.dat1.get()) / 4;
+    size_t iVar3 = ((intptr_t)rThis.dat2.get() - (intptr_t)pfVar2) / 4;
     switch(iVar5) {
     case 2:
         local_68[0] = 2.0 * local_68[1] - local_68[2];
