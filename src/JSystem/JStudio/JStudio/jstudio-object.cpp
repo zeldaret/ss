@@ -488,7 +488,7 @@ void JStudio::TObject_ambientLight::do_paragraph(u32 param_1, void const* param_
     }
 
     control = getControl();
-    u32 uVar1 = (param_1 >> 5);
+    s32 uVar1 = (param_1 >> 5);
     data::TEOperationData operation = (data::TEOperationData)(param_1 &= 0x1F);
     u32 u;
     const u32* pN;
@@ -740,7 +740,7 @@ u32 const JStudio::TAdaptor_light::sauVariableValue_2_DIRECTION_THETA_PHI[2] = {
     10, 11,
 };
 
- u32 const JStudio::TAdaptor_light::sauVariableValue_3_COLOR_RGB[3] = {
+u32 const JStudio::TAdaptor_light::sauVariableValue_3_COLOR_RGB[3] = {
     0, 1, 2,
 };
 
@@ -876,7 +876,7 @@ JStudio::TObject_message::TObject_message(JStudio::stb::data::TParse_TBlock_obje
 void JStudio::TObject_message::do_paragraph(u32 param_1, void const* param_2, u32 param_3) {
     TAdaptor* adaptor = getAdaptor();
     if (adaptor != NULL) {
-        u32 uVar1 = (param_1 >> 5);
+        s32 uVar1 = (param_1 >> 5);
         data::TEOperationData operation = (data::TEOperationData)(param_1 &= 0x1f);
         typedef void (TAdaptor_message::*messageParagraphFunc)(JStudio::data::TEOperationData, const void*, u32); 
         messageParagraphFunc pmfn_ = NULL;
@@ -1142,6 +1142,9 @@ void JStudio::TObject_sound::do_paragraph(u32 param_1, void const* param_2, u32 
             u = 3;
             pOutput = &JStudio::soovv_sound_PARENT_ENABLE_;
             goto value_or_fun;
+        case 81:
+            pmfn_ = &TAdaptor_sound::adaptor_do_UNKNOWN; // FIXME - Placeholder function - gets the ordering right I think
+            goto fun;
         case 86:
             pmfn_ = &TAdaptor_sound::adaptor_do_REPEAT;
             u = 4;

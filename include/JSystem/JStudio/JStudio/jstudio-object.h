@@ -440,6 +440,7 @@ struct TAdaptor_sound : public TAdaptor {
     virtual void adaptor_do_PARENT(JStudio::data::TEOperationData, const void*, u32) = 0;
     virtual void adaptor_do_PARENT_NODE(JStudio::data::TEOperationData, const void*, u32) = 0;
     virtual void adaptor_do_PARENT_ENABLE(JStudio::data::TEOperationData, const void*, u32) = 0;
+    virtual void adaptor_do_UNKNOWN(JStudio::data::TEOperationData, const void*, u32) = 0; // FIXME - Order and Name Tempoary
     virtual void adaptor_do_REPEAT(JStudio::data::TEOperationData, const void*, u32) = 0;
     virtual void adaptor_do_CONTINUOUS(JStudio::data::TEOperationData, const void*, u32) = 0;
     virtual void adaptor_do_LOCATED(JStudio::data::TEOperationData, const void*, u32) = 0;
