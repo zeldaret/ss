@@ -285,7 +285,7 @@ void TObject::process_paragraph_reserved_(u32 arg1, const void* pContent, u32 uS
     }
     case 0x82:
         // ASSERT(pContent != NULL);
-        break;
+        return;
     }
 }
 

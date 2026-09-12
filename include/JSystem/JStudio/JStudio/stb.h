@@ -13,21 +13,6 @@ namespace stb {
 
 class TControl;
 
-class TParse : public TParse_header_block {
-public:
-    TParse(TControl*);
-    virtual ~TParse();
-    virtual bool parseHeader_next(void const**, u32*, u32);
-    virtual bool parseBlock_next(void const**, u32*, u32);
-    virtual bool parseHeader(data::TParse_THeader const&, u32);
-    virtual bool parseBlock_block(data::TParse_TBlock const&, u32);
-    virtual bool parseBlock_object(data::TParse_TBlock_object const&, u32);
-
-    TControl* getControl() const { return pControl; }
-
-private:
-    TControl* pControl;
-};
 
 class TObject : public object::TObject_ID {
 public:
@@ -242,6 +227,22 @@ struct TParseData_string : public TParseData<0x60> {
     TParseData_string() : TParseData<0x60>() {}
 
     const char* getData() const { return (const char*)getContent(); }
+};
+
+class TParse : public TParse_header_block {
+public:
+    TParse(TControl*);
+    virtual ~TParse();
+    virtual bool parseHeader_next(void const**, u32*, u32);
+    virtual bool parseBlock_next(void const**, u32*, u32);
+    virtual bool parseHeader(data::TParse_THeader const&, u32);
+    virtual bool parseBlock_block(data::TParse_TBlock const&, u32);
+    virtual bool parseBlock_object(data::TParse_TBlock_object const&, u32);
+
+    TControl* getControl() const { return pControl; }
+
+private:
+    TControl* pControl;
 };
 
 }  // namespace stb
