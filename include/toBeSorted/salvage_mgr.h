@@ -21,7 +21,7 @@ public:
 
     bool checkDeliveredStoryflag(const s32 &id) const;
     bool checkPickupStoryflag(const s32 &id) const;
-    bool startedQuestForSalvageObj(const dAcSalbageObj_c *obj) const;
+    bool hasStartedQuestForSalvageObj(const dAcSalbageObj_c *obj) const;
     bool hasDowsingForSalvageObj(const dAcSalbageObj_c *obj) const;
     mMtx_c getCarryRotMtx(const s32 &id) const;
     mMtx_c getCarryRotMtx2(const s32 &id) const {
@@ -44,8 +44,8 @@ public:
     bool checkIsOnDeliveryStage() const;
     bool checkIsOnDeliveryStage2() const;
     u16 getDeliverToActorId(s32 id);
-    dAcObjBase_c *findDeliverToActor();
-    bool startedQuestForId(const s32 &id) const;
+    dAcObjBase_c *findDeliveryTarget();
+    bool hasStartedQuestForId(const s32 &id) const;
     bool hasDowsingForId(const s32 &id) const;
 
     void noop();

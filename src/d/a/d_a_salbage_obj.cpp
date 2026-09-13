@@ -323,7 +323,7 @@ void dAcSalbageObj_c::executeState_Wait() {
             dAcObjBase_c::create(fProfile::NPC_SLB, mRoomID, 0xFFFFFD01, &pos, nullptr, nullptr, -1);
         }
 
-        if (dSalvageMgr_c::sInstance->startedQuestForSalvageObj(this)) {
+        if (dSalvageMgr_c::sInstance->hasStartedQuestForSalvageObj(this)) {
             addAttentionTargetIfNeeded();
         }
     }

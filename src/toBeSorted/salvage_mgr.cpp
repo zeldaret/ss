@@ -69,7 +69,7 @@ void dSalvageMgr_c::setupDeliverToActorLink() {
     if (checkIsOnDeliveryStage2() && field_0x2C > 0) {
         // TODO wrong registers
         if (!mDeliverToRef.isLinked() || mDeliverToRef.get()->mProfileName != getDeliverToActorId(mCurrentPickupIdx)) {
-            dAcObjBase_c *deliverTo = findDeliverToActor();
+            dAcObjBase_c *deliverTo = findDeliveryTarget();
             if (deliverTo == nullptr) {
                 mDeliverToRef.unlink();
                 field_0x2C = field_0x2C - 1 < 0 ? 0 : field_0x2C - 1;
@@ -86,8 +86,8 @@ void dSalvageMgr_c::setupDeliverToActorLink() {
 struct SalvageMgrObjTransform {
     ~SalvageMgrObjTransform() {}
 
-    /* 0x00 */ mVec3_c field_0x00;
-    /* 0x0C */ mAng3_c field_0x0C;
+    /* 0x00 */ mVec3_c offset;
+    /* 0x0C */ mAng3_c rotation;
 };
 
 #define deg_ang(x, y, z) mAng3_c(mAng::fromDeg(x), mAng::fromDeg(y), mAng::fromDeg(z))
@@ -187,8 +187,8 @@ static const SalvageMgrObjEntrypoints sEntrypoints[SALVAGE_OBJ_MAX] = {
 mMtx_c dSalvageMgr_c::getCarryRotMtx(const s32 &id) const {
     SalvageMgrObjTransform tf = sTransforms[id];
     mMtx_c result;
-    result.transS(tf.field_0x00);
-    result.ZYXrotM(tf.field_0x0C);
+    result.transS(tf.offset);
+    result.ZYXrotM(tf.rotation);
     return result;
 }
 
@@ -223,16 +223,16 @@ bool dSalvageMgr_c::checkIsOnDeliveryStage2() const {
     return checkIsOnDeliveryStage();
 }
 
-bool dSalvageMgr_c::startedQuestForSalvageObj(const dAcSalbageObj_c *obj) const {
+bool dSalvageMgr_c::hasStartedQuestForSalvageObj(const dAcSalbageObj_c *obj) const {
     s32 id = obj->getSalvageIf()->getSalvageObjId();
     if (id < 0) {
         return false;
     }
     s32 it = id;
-    return startedQuestForId(it);
+    return hasStartedQuestForId(it);
 }
 
-bool dSalvageMgr_c::startedQuestForId(const s32 &id) const {
+bool dSalvageMgr_c::hasStartedQuestForId(const s32 &id) const {
     if (id == -1) {
         return false;
     } else if (sDefs[id].questStartedStoryflag == -1) {
@@ -343,7 +343,7 @@ bool dSalvageMgr_c::checkIsOnDeliveryStage() const {
     }
 }
 
-dAcObjBase_c *dSalvageMgr_c::findDeliverToActor() {
+dAcObjBase_c *dSalvageMgr_c::findDeliveryTarget() {
     if (mDeliverToRef.isLinked()) {
         return mDeliverToRef.get();
     } else if (mCurrentPickupIdx == -1) {
