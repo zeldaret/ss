@@ -33,12 +33,12 @@ void dSalvageMgr_c::init() {
         }
     }
     field_0x2C = 10;
-    setupDeliverToActorLink();
+    setupDeliverToTarget();
 }
 
 void dSalvageMgr_c::execute() {
     handlePickupIndex();
-    setupDeliverToActorLink();
+    setupDeliverToTarget();
 }
 
 void dSalvageMgr_c::handlePickupIndex() {
@@ -65,7 +65,7 @@ void dSalvageMgr_c::handlePickupIndex() {
     }
 }
 
-void dSalvageMgr_c::setupDeliverToActorLink() {
+void dSalvageMgr_c::setupDeliverToTarget() {
     if (checkIsOnDeliveryStage2() && field_0x2C > 0) {
         // TODO wrong registers
         if (!mDeliverToRef.isLinked() || mDeliverToRef.get()->mProfileName != getDeliverToActorId(mCurrentPickupIdx)) {

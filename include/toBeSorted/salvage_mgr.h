@@ -40,7 +40,7 @@ public:
     void setPickupIndex(const s32 &id);
     void unsetPickupStoryflag(const s32 &id);
     void handlePickupIndex();
-    void setupDeliverToActorLink();
+    void setupDeliverToTarget();
     bool checkIsOnDeliveryStage() const;
     bool checkIsOnDeliveryStage2() const;
     u16 getDeliverToActorId(s32 id);
