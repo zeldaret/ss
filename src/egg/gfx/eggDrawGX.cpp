@@ -594,7 +594,7 @@ void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
                 DrawCircleYPolygonFan(mtx, 0.0f, POS_NUM[i - DL_9]);
 
                 MTXIdentity(mtx);
-                MTXRotRad(mtx, M_PI, 0x7A);
+                MTXRotRad(mtx, 0x7A, M_PI);
                 MTXTransApply(mtx, mtx, 0.0f, -0.5f, 0.0f);
                 DrawCircleYPolygonFan(mtx, 0.0f, POS_NUM[i - DL_9]);
                 break;
@@ -604,7 +604,7 @@ void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
                 nw4r::math::MTX34 mtx;
                 MTXIdentity(mtx);
                 DrawCircleYPolygonFan(mtx, 1.0f, POS_NUM[i - DL_11]);
-                MTXRotRad(mtx, M_PI, 0x7A);
+                MTXRotRad(mtx, 0x7A, M_PI);
                 DrawCircleYPolygonFan(mtx, 0.0f, POS_NUM[i - DL_11]);
                 break;
             }
@@ -612,7 +612,7 @@ void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
             case DL_8: {
                 nw4r::math::MTX34 mtx;
                 MTXIdentity(mtx);
-                MTXRotRad(mtx, M_PI / 2.0f, 0x78);
+                MTXRotRad(mtx, 0x78, M_PI / 2.0f);
                 DrawCircleYPolygonFan(mtx, 0.0f, POS_NUM[i - DL_7]);
                 break;
             }
