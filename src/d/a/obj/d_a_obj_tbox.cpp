@@ -1371,13 +1371,13 @@ int dAcTbox_c::actorExecuteInEvent() {
                 s16 rot2 = link->mRotation.y;
                 s16 d = sLib::addCalcAngle(&rot2, a1, 2, 0x3FFF, 1);
                 if (f9 < 1.0f && labs(d) < 0xB6) {
-                    link->setPosYRot(v1, a1, 0, 0, 0);
+                    link->setPosYRot(&v1, a1, 0, 0, 0);
                     mEvent.advanceNext();
                 } else {
-                    link->setPosYRot(pos, rot2, 0, 0, 0);
+                    link->setPosYRot(&pos, rot2, 0, 0, 0);
                 }
             } else {
-                link->setPosYRot(v1, a1, 0, 0, 0);
+                link->setPosYRot(&v1, a1, 0, 0, 0);
                 mEvent.advanceNext();
             }
 

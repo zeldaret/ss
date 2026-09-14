@@ -154,6 +154,10 @@ public:
         return *(const math::VEC3 *)&ref().volume_max;
     }
 
+    bool HasParentNode() {
+        return ref().toParentNode == nullptr;
+    }
+
     ResNode GetParentNode() {
         return ofs_to_obj<ResNode>(ref().toParentNode);
     }
