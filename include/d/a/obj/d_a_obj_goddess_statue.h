@@ -26,16 +26,16 @@ public:
     STATE_FUNC_DECLARE(dAcOGoddessStatue_c, Wait);
 
 private:
-    ActorEventRelated mEvent;
-    nw4r::g3d::ResFile mResFile;
-    m3d::smdl_c mMdl;
-    dBgW mBgW;
-    /* 0x??? */ STATE_MGR_DECLARE(dAcOGoddessStatue_c);
-    mMtx_c mMtx;
-    mVec3_c mScale2;
-    u8 mSceneFlag;
-    u8 mExitID;
-    bool mCrestActivated;
+    /* 0x368 */ ActorEventRelated mEvent;
+    /* 0x3B8 */ nw4r::g3d::ResFile mResFile;
+    /* 0x3BC */ m3d::smdl_c mMdl;
+    /* 0x3D8 */ dBgW mBgW;
+    /* 0x5E8 */ STATE_MGR_DECLARE(dAcOGoddessStatue_c);
+    /* 0x624 */ mMtx_c mMtx;
+    /* 0x654 */ mVec3_c mScale2;
+    /* 0x660 */ u8 mSceneFlag;
+    /* 0x661 */ u8 mExitID;
+    /* 0x662 */ bool mCrestActivated;
 
     static f32 sSendToSwSB;
 };

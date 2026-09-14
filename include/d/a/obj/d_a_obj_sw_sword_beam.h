@@ -102,14 +102,14 @@ protected:
     virtual void setCrestPosRot(m3d::smdl_c *mdl);
     virtual void vt_0x88();
 
-    dAcRef_c<dAcOSwSwordBeam_c> mSwSwordBeamRef;
-    u32 mBoneID;
-    mVec3_c mSwPos;
-    mVec3_c mSwScale;
-    mAng3_c mSwRot;
-    float mSendToSwSB;
-    bool mTransferToCrest;
-    u8 pad[3];
+    /* 0x330 */ dAcRef_c<dAcOSwSwordBeam_c> mSwSwordBeamRef;
+    /* 0x33C */ u32 mBoneID;
+    /* 0x340 */ mVec3_c mSwPos;
+    /* 0x34C */ mVec3_c mSwScale;
+    /* 0x358 */ mAng3_c mSwRot;
+    /* 0x360 */ float mSendToSwSB;
+    /* 0x364 */ bool mTransferToCrest;
+    /* 0x365 */ u8 pad[3];
 };
 
 #endif
