@@ -10,6 +10,7 @@
 #include "d/d_stage_mgr.h"
 #include "d/flag/flag_managers.h"
 #include "d/flag/storyflag_manager.h"
+#include "d/t/d_t_weather.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "m/m_angle.h"
@@ -146,7 +147,6 @@ static void handleBzsArea(int roomid, const BzsSectionHead *section) {
 
 extern "C" bool fn_8005C5D0(u32);
 extern "C" void spawnLightObject();
-extern "C" void spawnWeatherTag();
 
 static void handleBzsPly(int roomid, const BzsSectionHead *section) {
     const PLY *ply = OFS_TO_PTR(PLY, section);
@@ -239,7 +239,7 @@ static void handleBzsPly(int roomid, const BzsSectionHead *section) {
         dStage_c::GetInstance()->handleRoomChange(roomid);
         dBase_c::createBase(fProfile::CAMERA, dStage_c::GetInstance(), 0, fBase_c::OTHER);
         spawnLightObject();
-        spawnWeatherTag();
+        dWeatherTag_c::spawnWeatherTag();
     }
 }
 
