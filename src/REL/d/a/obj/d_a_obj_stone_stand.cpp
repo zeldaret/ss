@@ -5,9 +5,11 @@
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/d_rumble.h"
 #include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
 #include "f/f_profile.h"
 #include "m/m3d/m_smdl.h"
@@ -16,7 +18,9 @@
 #include "nw4r/g3d/res/g3d_resanmclr.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
+#include "nw4r/math/math_triangular.h"
 #include "s/s_Math.h"
+#include "toBeSorted/event.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_STONE_STAND, dAcOStoneStand_c, fProfile::OBJ_STONE_STAND, 0x24B, 0, 3);
 
@@ -33,10 +37,10 @@ bool dAcOStoneStand_c::createHeap() {
     TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     for (s32 i = 0; i < 3; i++) {
         mdl = mResFile.GetResMdl(sResMdlAnmNames[i]);
-        TRY_CREATE(mMdls[i].create(mdl, &mAllocator, 0x128));
+        TRY_CREATE(mTabletMdls[i].create(mdl, &mAllocator, 0x128));
         nw4r::g3d::ResAnmClr anm = mResFile.GetResAnmClr(sResMdlAnmNames[i]);
         mAnm[i].create(mdl, anm, &mAllocator, nullptr, 1);
-        mMdls[i].setAnm(mAnm[i]);
+        mTabletMdls[i].setAnm(mAnm[i]);
         mAnm[i].setRate(0.f, 0);
         f32 frameMax = mAnm[i].getFrameMax(0);
         mAnm[i].setFrame(frameMax - 1.f, 0);
@@ -106,6 +110,10 @@ int dAcOStoneStand_c::create() {
     return SUCCEEDED;
 }
 
+int dAcOStoneStand_c::doDelete() {
+    return SUCCEEDED;
+}
+
 int dAcOStoneStand_c::actorExecute() {
     mStateMgr.executeState();
     updateMatrix();
@@ -118,7 +126,7 @@ int dAcOStoneStand_c::actorExecute() {
     for (s32 i = 0; i < 3; i++) {
         mAnm[i].play();
         mMdl.getNodeWorldMtx(mLocatorABone, mTabletMatrix[i]);
-        mMdls[i].setLocalMtx(mTabletMatrix[i]);
+        mTabletMdls[i].setLocalMtx(mTabletMatrix[i]);
     }
     mBgW.Move();
     mPositionCopy2 = mPosition;
@@ -202,19 +210,111 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
         if (!a || i != mVisibleTabletState || mAnm[mVisibleTabletState].getRate(0) != 0.f) {
             mMdl.getNodeWorldMtx(mLocatorABone, mtx);
         }
-        mMdls[i].setLocalMtx(mtx);
+        mTabletMdls[i].setLocalMtx(mtx);
     }
     return SUCCEEDED;
 }
 
+int dAcOStoneStand_c::draw() {
+    drawModelType1(&mMdl);
+    for (int i = 0; i < mOpenedLightPillarState; i++) {
+        drawModelType1(&mTabletMdls[i]);
+    }
+    return SUCCEEDED;
+}
+
+void dAcOStoneStand_c::doInteraction(s32 param) {
+    if (param == 5) {
+        void *data = getOarcZev("LithographyStand");
+        Event event("StoneStandSceneChange", data, 400, 0x100001, nullptr, nullptr);
+        mEvent.scheduleEvent(event, 0);
+
+        const dAcPy_c *link = dAcPy_c::GetLink();
+        mLinkPos = link->mPosition;
+        mLinkRot = link->mRotation;
+    }
+}
+
 void dAcOStoneStand_c::initializeState_Wait() {}
-void dAcOStoneStand_c::executeState_Wait() {}
+
+void dAcOStoneStand_c::executeState_Wait() {
+    if (mActivatedSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActivatedSceneflag)) {
+        void *data = getOarcZev("LithographyStand");
+        Event event("LithographyStandAppear", data, 1, 0x100000, nullptr, nullptr);
+        mEvent.scheduleEvent(event, 0);
+    }
+}
+
 void dAcOStoneStand_c::finalizeState_Wait() {}
-void dAcOStoneStand_c::initializeState_Shake() {}
-void dAcOStoneStand_c::executeState_Shake() {}
-void dAcOStoneStand_c::finalizeState_Shake() {}
+
+void dAcOStoneStand_c::initializeState_Shake() {
+    field_0x7A8 = -5.f;
+}
+
+void dAcOStoneStand_c::executeState_Shake() {
+    field_0x7A8 *= 0.85f;
+    field_0x7A4 = field_0x7A8 * nw4r::math::SinIdx(field_0x7BE);
+    field_0x7BE.mVal += 0x2000;
+    if (fabsf(field_0x7A8) < 0.05f) {
+        mStateMgr.changeState(StateID_OnSwitch);
+    }
+}
+
+void dAcOStoneStand_c::finalizeState_Shake() {
+    field_0x7A4 = 0.f;
+    field_0x7A8 = 0.f;
+}
+
 void dAcOStoneStand_c::initializeState_OnSwitch() {}
-void dAcOStoneStand_c::executeState_OnSwitch() {}
+
+void dAcOStoneStand_c::executeState_OnSwitch() {
+    // if (can)
+}
+
 void dAcOStoneStand_c::finalizeState_OnSwitch() {}
 
-void fn_513_14D0() {}
+void dAcOStoneStand_c::fn_513_14D0() {
+    switch (field_0x7C9) {
+        case 0: {
+            setCrestPosRot(&mMdl);
+            holdSound(SE_SndStn_UP_LV);
+            if (sLib::chase(&field_0x78C.y, 2.5f, mPosition.y)) {
+                startSound(SE_SndStn_UP_END);
+                dRumble_c::start(dRumble_c::sRumblePreset3, 0x11);
+                field_0x7A8 = -5.f;
+                field_0x7C9 = 1;
+            }
+            break;
+        }
+        case 1: {
+            field_0x7A8 *= 0.85f;
+            field_0x7A4 = field_0x7A8 * nw4r::math::SinIdx(field_0x7BE);
+            field_0x7BE.mVal += 0x2000;
+            if (fabsf(field_0x7A8) < 0.05f) {
+                field_0x7A4 = 0.f;
+                field_0x7A8 = 0.f;
+                field_0x7C9 = 2;
+                mStateMgr.changeState(StateID_OnSwitch);
+            }
+            break;
+        }
+        case 2: {
+            mEvent.advanceNext();
+        }
+    }
+}
+
+bool dAcOStoneStand_c::canInsertTablet() {
+    if (mTabletCSIndex == 0 && !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_FARON_PILLAR_OPENED)) {
+        return true;
+    }
+    if (mTabletCSIndex == 1 && !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_ELDIN_PILLAR_OPENED)) {
+        return true;
+    }
+    if (mTabletCSIndex == 2 && !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_LANAYRU_PILLAR_OPENED)) {
+        return true;
+    }
+    return false;
+}
+
+void dAcOStoneStand_c::vt_0x88(f32 &param) {}

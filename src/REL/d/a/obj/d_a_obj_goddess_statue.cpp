@@ -25,8 +25,8 @@ bool dAcOGoddessStatue_c::createHeap() {
     mMdl.setLocalMtx(mWorldMtx);
     mMdl.calc(true);
     mMdl.getNodeWorldMtx(0, mMtx);
-    mScale2.set(1.f, 1.f, 1.f);
-    return !mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mMtx, &mScale2);
+    mBgWScale.set(1.f, 1.f, 1.f);
+    return !mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mMtx, &mBgWScale);
 }
 
 f32 dAcOGoddessStatue_c::sSendToSwSB = 100.f;
@@ -87,4 +87,4 @@ void dAcOGoddessStatue_c::executeState_Wait() {
 
 void dAcOGoddessStatue_c::finalizeState_Wait() {}
 
-void dAcOGoddessStatue_c::vt_0x88() {}
+void dAcOGoddessStatue_c::vt_0x88(f32 &param) {}

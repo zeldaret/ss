@@ -1,6 +1,5 @@
 #include "d/a/obj/d_a_obj_sw_sword_beam.h"
 
-#include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
@@ -81,8 +80,8 @@ int dAcOSwSwordBeam_c::create() {
     mMaxSpeed = -40.f;
     field_0xc88 = 0;
     mSceneflag = getFromParams(0, 0xFF);
-    field_0xca0 = cM::rndInt(0x46) * 0x38e;
-    field_0xca2 = 0x38e;
+    field_0xCA0 = cM::rndInt(0x46) * 0x38e;
+    field_0xCA2 = 0x38e;
     field_0xc9a = cM::rndInt(0x46) * 0x38e;
     field_0xc68.set(1.f, 0.f, 0.f, 0.f);
     field_0xc78.set(1.f, 0.f, 0.f, 0.f);
@@ -423,8 +422,8 @@ void dAcOSwSwordBeam_c::fn_507_1F80() {
 }
 
 void dAcOSwSwordBeam_c::fn_507_2130() {
-    sLib::addCalcScaledDiff(&field_0xc88, 5.f * field_0xca0.sin() * mScale.y, 0.2f, 1.f);
-    field_0xca0 += field_0xca2;
+    sLib::addCalcScaledDiff(&field_0xc88, 5.f * field_0xCA0.sin() * mScale.y, 0.2f, 1.f);
+    field_0xCA0 += field_0xCA2;
     bool a = true;
     if (!mStateMgr.isState(StateID_Wait) && !mStateMgr.isState(StateID_End)) {
         a = false;
@@ -542,4 +541,4 @@ void dAcGoddessCrestHolder_c::setCrestPosRot(m3d::smdl_c *mdl) {
     swordBeam->mRotation.set(mSwRot);
 }
 
-void dAcGoddessCrestHolder_c::vt_0x88() {}
+void dAcGoddessCrestHolder_c::vt_0x88(f32 &param) {}

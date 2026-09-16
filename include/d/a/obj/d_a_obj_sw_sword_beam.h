@@ -1,7 +1,6 @@
 #ifndef D_A_OBJ_SW_SWORD_BEAM_H
 #define D_A_OBJ_SW_SWORD_BEAM_H
 
-#include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/cc/d_cc_d.h"
@@ -42,6 +41,14 @@ public:
         mSomeFloatFromOtherActor = val;
     }
 
+    void setField_0xC90(f32 val) {
+        field_0xC90 = val;
+    }
+
+    void setField_0xCAA(bool val) {
+        field_0xCAA = val;
+    }
+
 private:
     s32 getEquippedSword();
     void fn_507_1A50();
@@ -78,8 +85,8 @@ private:
     s16 field_0xc9a;
     s16 field_0xC9C;
     s16 field_0xC9E;
-    mAng field_0xca0;
-    s16 field_0xca2;
+    mAng field_0xCA0;
+    s16 field_0xCA2;
     u8 mSubtype;
     u8 mSceneflag;
 
@@ -100,7 +107,7 @@ class dAcGoddessCrestHolder_c : public dAcObjBase_c {
 protected:
     virtual void setCrestAtBone(char *bone_name, m3d::smdl_c *model, u8 *sceneflag);
     virtual void setCrestPosRot(m3d::smdl_c *mdl);
-    virtual void vt_0x88();
+    virtual void vt_0x88(f32 &param);
 
     /* 0x330 */ dAcRef_c<dAcOSwSwordBeam_c> mSwSwordBeamRef;
     /* 0x33C */ u32 mBoneID;

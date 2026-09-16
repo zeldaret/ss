@@ -21,7 +21,7 @@ public:
     virtual int actorExecute() override;
     virtual int actorExecuteInEvent() override;
     virtual int draw() override;
-    virtual void vt_0x88() override;
+    virtual void vt_0x88(f32 &param) override;
 
     STATE_FUNC_DECLARE(dAcOGoddessStatue_c, Wait);
 
@@ -32,7 +32,7 @@ private:
     /* 0x3D8 */ dBgW mBgW;
     /* 0x5E8 */ STATE_MGR_DECLARE(dAcOGoddessStatue_c);
     /* 0x624 */ mMtx_c mMtx;
-    /* 0x654 */ mVec3_c mScale2;
+    /* 0x654 */ mVec3_c mBgWScale;
     /* 0x660 */ u8 mSceneFlag;
     /* 0x661 */ u8 mExitID;
     /* 0x662 */ bool mCrestActivated;
