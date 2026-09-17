@@ -20,6 +20,7 @@
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/math/math_triangular.h"
 #include "s/s_Math.h"
+#include "toBeSorted/attention.h"
 #include "toBeSorted/event.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_STONE_STAND, dAcOStoneStand_c, fProfile::OBJ_STONE_STAND, 0x24B, 0, 3);
@@ -29,6 +30,14 @@ STATE_DEFINE(dAcOStoneStand_c, Shake);
 STATE_DEFINE(dAcOStoneStand_c, OnSwitch);
 
 char *dAcOStoneStand_c::sResMdlAnmNames[3] = {"SekibanMapADemo", "SekibanMapBDemo", "SekibanMapCDemo"};
+
+const InteractionTargetDef dAcOStoneStand_c::sInteraction1 = {
+    0, 3, 0, EXAMINE_TALK, 0, 250.f, 60.f, 60.f, -50.f, 150.f, 50.f, 1.f,
+};
+
+const InteractionTargetDef dAcOStoneStand_c::sInteraction2 = {
+    1, 3, 0, EXAMINE_TALK, 0, 250.f, 60.f, 60.f, -50.f, 150.f, 50.f, 1.f,
+};
 
 bool dAcOStoneStand_c::createHeap() {
     void *data = getOarcResFile("LithographyStand");
@@ -89,24 +98,24 @@ int dAcOStoneStand_c::create() {
         mAnm[mOpenedLightPillarState].setFrame(0.f, 0);
     }
     nw4r::g3d::ResMdl mdl = mMdl.getResMdl();
-    mLocatorABone = mdl.GetResNode("locator_A").GetID();
+    mLocatorBones[0] = mdl.GetResNode("locator_A").GetID();
     mdl = mMdl.getResMdl();
-    mLocatorABone = mdl.GetResNode("locator_B").GetID();
+    mLocatorBones[1] = mdl.GetResNode("locator_B").GetID();
     mdl = mMdl.getResMdl();
-    mLocatorABone = mdl.GetResNode("locator_C").GetID();
+    mLocatorBones[2] = mdl.GetResNode("locator_C").GetID();
     for (s32 i = 0; i < 3; i++) {
-        mMdl.getNodeWorldMtx(mLocatorABone, mTabletMatrix[i]);
+        mMdl.getNodeWorldMtx(mLocatorBones[i], mTabletMatrix[i]);
     }
     setCrestAtBone("SetGS", &mMdl, &mActivatedSceneflag);
     mMdl.setPriorityDraw(0x1C, 9);
     mAcceleration = 0.f;
     mMaxSpeed = -40.f;
-    if (mActivatedSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mRoomID)) {
+    if (mActivatedSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, (u8)mRoomID)) {
         mStateMgr.changeState(StateID_OnSwitch);
     } else {
         mStateMgr.changeState(StateID_Wait);
     }
-    mBoundingBox.Set(mVec3_c(-75.f, -15.f, -75.f), mVec3_c(75.f, 200.f, 75.f));
+    mBoundingBox.Set(mVec3_c(-75.f, -15.f, -75.f), mVec3_c(75.f, 205.f, 75.f));
     return SUCCEEDED;
 }
 
@@ -125,12 +134,12 @@ int dAcOStoneStand_c::actorExecute() {
     mMdl.calc(false);
     for (s32 i = 0; i < 3; i++) {
         mAnm[i].play();
-        mMdl.getNodeWorldMtx(mLocatorABone, mTabletMatrix[i]);
+        mMdl.getNodeWorldMtx(mLocatorBones[i], mTabletMatrix[i]);
         mTabletMdls[i].setLocalMtx(mTabletMatrix[i]);
     }
     mBgW.Move();
     mPositionCopy2 = mPosition;
-    mPosition.y += 150.f;
+    mPositionCopy2.y += 150.f;
     mPositionCopy3 = mPositionCopy2;
     mVec3_c vec(0.f, 75.f, 30.f);
     vec.rotY(mRotation.y);
@@ -159,7 +168,9 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
                         mVec3_c vec2 = vec - link->mPosition;
                         if (vec2.squareMagXZ() < 50.f && labs(mRotation.y - target) < 0xb6) {
                             link->setPosRot(&mLinkPos, &mLinkRot, false, 0, 0);
-                            updateExecutePriority((*fProfile::sProfileList[200])->m_execute_order + 1);
+                            // const fProfile::fBaseProfile_c *a = ;
+
+                            updateExecutePriority((*fProfile::sProfileList)[200]->m_execute_order + 1);
                             mEvent.advanceNext();
                         }
                     } else {
@@ -208,7 +219,7 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
     for (s32 i = 0; i < 3; i++) {
         mAnm[i].play();
         if (!a || i != mVisibleTabletState || mAnm[mVisibleTabletState].getRate(0) != 0.f) {
-            mMdl.getNodeWorldMtx(mLocatorABone, mtx);
+            mMdl.getNodeWorldMtx(mLocatorBones[i], mtx);
         }
         mTabletMdls[i].setLocalMtx(mtx);
     }
@@ -268,7 +279,10 @@ void dAcOStoneStand_c::finalizeState_Shake() {
 void dAcOStoneStand_c::initializeState_OnSwitch() {}
 
 void dAcOStoneStand_c::executeState_OnSwitch() {
-    // if (can)
+    if (canInsertTablet()) {
+        AttentionManager::GetInstance()->addTarget(*this, sInteraction1, 0, nullptr);
+        AttentionManager::GetInstance()->addTarget(*this, sInteraction2, 0, nullptr);
+    }
 }
 
 void dAcOStoneStand_c::finalizeState_OnSwitch() {}

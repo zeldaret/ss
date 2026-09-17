@@ -24,6 +24,7 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resnode.h"
+#include "nw4r/math/math_triangular.h"
 #include "nw4r/math/math_types.h"
 #include "nw4r/ut/ut_Color.h"
 #include "rvl/GX/GXTypes.h"
@@ -78,14 +79,14 @@ int dAcOSwSwordBeam_c::create() {
     mUnk2.Set(mVec3_c(-100.f, 10.f, -150.f), mVec3_c(100.f, 120.f, 150.f));
     mAcceleration = -1.f;
     mMaxSpeed = -40.f;
-    field_0xc88 = 0;
+    field_0xC88 = 0;
     mSceneflag = getFromParams(0, 0xFF);
     field_0xCA0 = cM::rndInt(0x46) * 0x38e;
     field_0xCA2 = 0x38e;
-    field_0xc9a = cM::rndInt(0x46) * 0x38e;
-    field_0xc68.set(1.f, 0.f, 0.f, 0.f);
-    field_0xc78.set(1.f, 0.f, 0.f, 0.f);
-    field_0xc58.set(1.f, 0.f, 0.f, 0.f);
+    field_0xC9A = cM::rndInt(0x46) * 0x38e;
+    field_0xC68.set(1.f, 0.f, 0.f, 0.f);
+    field_0xC78.set(1.f, 0.f, 0.f, 0.f);
+    field_0xC58.set(1.f, 0.f, 0.f, 0.f);
     mMdl.setAnm(mAnmTexSrt);
     mMdl.setAnm(mAnmTexPat);
     mAnmTexPat.setRate(0.f, 0);
@@ -114,7 +115,7 @@ int dAcOSwSwordBeam_c::actorExecute() {
     mAnmTexPat.play();
     mAnmTexSrt.play();
     fn_507_2130();
-    mUnk1.Set(mPosition + mVec3_c::Ey * (field_0xc88 + 75.f), mRotation.y);
+    mUnk1.Set(mPosition + mVec3_c::Ey * (field_0xC88 + 75.f), mRotation.y);
     dCcS::GetInstance()->Set(&mUnk1);
     if (mSpawnedFromOtherActor && mStateMgr.isState(StateID_Wait)) {
         mUnk2.Set(mVec3_c(-100.f, 10.f, -150.f), mVec3_c(100.f, 120.f, mSomeFloatFromOtherActor + 150.f));
@@ -246,7 +247,7 @@ void dAcOSwSwordBeam_c::executeState_Wait() {
     }
 LAB_80e4e72c:
     if (mUnk1.ChkTgHit()) {
-        field_0xC96 += 0x38e;
+        field_0xC96.mVal += 0x38e;
     }
     if (mSpawnedFromOtherActor && !field_0xCAB && mUnk2.ChkTgHit()) {
         if (mUnk2.ChkTgAtHitType(AT_TYPE_0x800000) || (mUnk2.ChkTgAtHitType(AT_TYPE_SWORD) && mUnk2.ChkTgBit25())) {
@@ -262,13 +263,13 @@ LAB_80e4e72c:
 }
 
 void dAcOSwSwordBeam_c::finalizeState_Wait() {
-    field_0xC96 = 0;
+    field_0xC96.mVal = 0;
     field_0xCA8 = fn_507_1F30();
 }
 
 void dAcOSwSwordBeam_c::initializeState_Rotate() {
     mAnmTexPat.setFrame(1.f, 0);
-    field_0xC9E = field_0xCA8 ? 0x3333 : 0xCCCD;
+    field_0xC9E = field_0xCA8 ? 0x3333 : -0x3333;
     field_0xCA6 = 0x19;
     startSound(SE_SwSB_REACT_01);
     startSound(SE_SwSB_REACT_02);
@@ -289,7 +290,7 @@ void dAcOSwSwordBeam_c::executeState_RotateEnd() {
     bool b = false;
     if (sLib::absDiff(field_0xC9E, 0) < 0x38e) {
         field_0xC9E = 0;
-        b = sLib::addCalcAngle2(&field_0xC9C, 0, field_0xCA8 ? 0xf : -0xf, 0x38e, 0x20) == 0;
+        b = sLib::addCalcAngle2(field_0xC9C.ref(), 0, field_0xCA8 ? 0xf : -0xf, 0x38e, 0x20) == 0;
     } else {
         sLib::addCalcAngle(&field_0xC9E, 0, 0x14, 0x38e, 0x20);
     }
@@ -340,12 +341,12 @@ s32 dAcOSwSwordBeam_c::getEquippedSword() {
 
 void dAcOSwSwordBeam_c::initializeState_OnSwitch() {
     mTimer = 0x3c;
-    field_0xC96 = 0;
-    field_0xC94 = 0;
-    field_0xC98 = 0;
+    field_0xC96.mVal = 0;
+    field_0xC94.mVal = 0;
+    field_0xC98.mVal = 0;
     mMdl.setTevKColorAll(GX_KCOLOR3, nw4r::ut::Color(0x40, 0xc0, 0xff, 0xff), false);
     dJEffManager_c::spawnEffect(
-        PARTICLE_RESOURCE_ID_MAPPING_352_, mPosition + (mVec3_c::Ey * (field_0xc88 + 75)), &mRotation, &mScale, nullptr,
+        PARTICLE_RESOURCE_ID_MAPPING_352_, mPosition + (mVec3_c::Ey * (field_0xC88 + 75)), &mRotation, &mScale, nullptr,
         nullptr, 0, 0
     );
     startSound(SE_SwSB_REACT_FIN);
@@ -371,7 +372,7 @@ void dAcOSwSwordBeam_c::initializeState_End() {
 
 void dAcOSwSwordBeam_c::executeState_End() {
     if (mUnk1.ChkTgHit()) {
-        field_0xC96 += 0x38e;
+        field_0xC96.mVal += 0x38e;
     }
     if (!EventManager::sInstance->isInEvent() && mSubtype == 1) {
         u16 flag = mSceneflag + 2;
@@ -386,20 +387,25 @@ void dAcOSwSwordBeam_c::finalizeState_End() {}
 void dAcOSwSwordBeam_c::fn_507_1A50() {
     field_0xC9C += field_0xC9E;
     mQuat_c quat;
-    quat.setAxisRotation(mVec3_c::Ey, field_0xC9C * 9.58738e-05f);
-    field_0xc68 = quat;
+    quat.setAxisRotation(mVec3_c::Ey, mAng::s2r(field_0xC9C));
+    field_0xC68 = quat;
 }
 
 void dAcOSwSwordBeam_c::fn_507_1AF0() {
-    /*field_0xc9a += field_0xca2 * 0.5f;
-    field_0xC94 = -field_0xC98 * 0.9f;
-
-    field_0xC96 = (field_0xC96+field_0xC94)*0.7f;
-    field_0xC98 +=field_0xC96 ;
-
-
-    EGG::Quatf a;
-    a.setAxisRotation(mVec3_c::Ey, f32)*/
+    field_0xC94 = field_0xC98 * .9f;
+    field_0xC9A += field_0xCA2 * 0.5f;
+    field_0xC96 += field_0xC94;
+    field_0xC96 *= 0.7;
+    field_0xC98 += field_0xC96;
+    f32 cos = nw4r::math::CosIdx(field_0xCA0);
+    mQuat_c quat;
+    quat.setAxisRotation(mVec3_c::Ey, mAng::s2r(cos * 546.f));
+    f32 sin = nw4r::math::SinIdx(field_0xC9A);
+    mQuat_c quat2;
+    quat2.setAxisRotation(mVec3_c::Ez, mAng::s2r(sin * 546.f));
+    mQuat_c quat3;
+    quat3.setAxisRotation(mVec3_c::Ez, mAng::s2r(field_0xC98));
+    field_0xC78 = quat2 * quat3 * quat;
 }
 
 bool dAcOSwSwordBeam_c::fn_507_1F30() {
@@ -408,11 +414,11 @@ bool dAcOSwSwordBeam_c::fn_507_1F30() {
 
 void dAcOSwSwordBeam_c::fn_507_1F80() {
     updateMatrix();
-    EGG::Quatf a = field_0xc68 * field_0xc78;
+    EGG::Quatf a = field_0xC68 * field_0xC78;
     mMtx_c mtx1;
     mtx1.fromQuat(a);
     mMtx_c mtx2;
-    f32 temp = field_0xc88 + 75.f;
+    f32 temp = field_0xC88 + 75.f;
     PSMTXTrans(mtx2, 0.f, temp, 0.f);
     PSMTXConcat(mWorldMtx.m, mtx2.m, mWorldMtx.m);
     PSMTXConcat(mWorldMtx.m, mtx1.m, mWorldMtx.m);
@@ -422,7 +428,7 @@ void dAcOSwSwordBeam_c::fn_507_1F80() {
 }
 
 void dAcOSwSwordBeam_c::fn_507_2130() {
-    sLib::addCalcScaledDiff(&field_0xc88, 5.f * field_0xCA0.sin() * mScale.y, 0.2f, 1.f);
+    sLib::addCalcScaledDiff(&field_0xC88, 5.f * field_0xCA0.sin() * mScale.y, 0.2f, 1.f);
     field_0xCA0 += field_0xCA2;
     bool a = true;
     if (!mStateMgr.isState(StateID_Wait) && !mStateMgr.isState(StateID_End)) {
@@ -434,17 +440,19 @@ void dAcOSwSwordBeam_c::fn_507_2130() {
             return;
         }
     }
-    field_0xc78.slerpTo(field_0xc58, 0.5f, field_0xc78);
-    field_0xc9a = 0;
+    field_0xC78.slerpTo(field_0xC58, 0.5f, field_0xC78);
+    const int tmp = 0;
+    field_0xC9A = tmp;
 }
 
+static volatile u32 FLAGS_1 = 0x00000001;
+static u32 FLAGS_2 = 0x00100001;
+
 void dAcOSwSwordBeam_c::fn_507_22A0() {
-    static volatile u32 FLAGS_1 = 0x00000001;
-    static u32 FLAGS_2 = 0x00100001;
-    u32 f1 = FLAGS_1;
+    u32 f1 = ~FLAGS_1;
     u32 f2 = FLAGS_2;
 
-    Event event("SwSwordBeam", getOarcZev("GoddessSymbolSc"), 100, f2 & ~f1, nullptr, nullptr);
+    Event event("SwSwordBeam", getOarcZev("GoddessSymbolSc"), 100, f2 & f1, nullptr, nullptr);
     mEvent.scheduleEvent(event, 0);
 }
 
@@ -507,16 +515,22 @@ void dAcGoddessCrestHolder_c::setCrestAtBone(char *bone_name, m3d::smdl_c *model
     nw4r::g3d::ResMdl mdl = model->getResMdl();
     nw4r::g3d::ResNode bone = mdl.GetResNode(bone_name);
     nw4r::g3d::ResNode parentBone = bone.GetParentNode();
-    // nw4r::math::VEC3(bone.ref().scale) * nw4r::math::VEC3(parentBone.ref().scale);
+    // mVec3_c(bone.ref().scale) * mVec3_c(parentBone.ref().scale);
     mSwScale.x = bone.ref().scale.x * parentBone.ref().scale.x;
     mSwScale.y = bone.ref().scale.y * parentBone.ref().scale.y;
     mSwScale.z = bone.ref().scale.z * parentBone.ref().scale.z;
+    // mSwScale = mVec3_c(
+    //     bone.ref().scale.x * parentBone.ref().scale.x, bone.ref().scale.y * parentBone.ref().scale.y,
+    //     bone.ref().scale.z * parentBone.ref().scale.z
+    // );
 
     mBoneID = bone.GetID();
     model->getNodeWorldMtxMultVecZero(mBoneID, mSwPos);
 
     nw4r::math::VEC3 boneRot = bone.ref().rot;
     nw4r::math::VEC3 parentRot = parentBone.ref().rot;
+
+    // nw4r::math::VEC3 rot = boneRot + parentRot;
 
     mSwRot.x = mAng::fromDeg(boneRot.x + parentRot.x);
     mSwRot.y = mAng::fromDeg(boneRot.y + parentRot.y);

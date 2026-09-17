@@ -10,6 +10,7 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
+#include "toBeSorted/attention.h"
 
 class dAcOStoneStand_c : public dAcGoddessCrestHolder_c {
 public:
@@ -45,9 +46,10 @@ private:
     /* 0x798 */ mVec3_c mLinkPos;
     /* 0x7A4 */ f32 field_0x7A4;
     /* 0x7A8 */ f32 field_0x7A8;
-    /* 0x7AC */ u32 mLocatorABone;
-    /* 0x7B0 */ u32 mLocatorBBone;
-    /* 0x7B4 */ u32 mLocatorACone;
+    u32 mLocatorBones[3];
+    // /* 0x7AC */ u32 mLocatorABone;
+    // /* 0x7B0 */ u32 mLocatorBBone;
+    // /* 0x7B4 */ u32 mLocatorCBone;
     /* 0x7B8 */ mAng3_c mLinkRot;
     /* 0x7BE */ mAng field_0x7BE;
     /* 0x7C0 */ u32 mVisibleTabletState;
@@ -60,6 +62,8 @@ private:
     /* 0x7CA */ bool mInsertedTablet;
 
     static char *sResMdlAnmNames[3];
+    static const InteractionTargetDef sInteraction1;
+    static const InteractionTargetDef sInteraction2;
 };
 
 #endif
