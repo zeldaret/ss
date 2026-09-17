@@ -13,6 +13,24 @@
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
 
+class dAcOSwSwordBeam_c;
+
+class dAcGoddessCrestHolder_c : public dAcObjBase_c {
+protected:
+    virtual void setCrestAtBone(char *bone_name, m3d::smdl_c *model, u8 *sceneflag);
+    virtual void setCrestPosRot(m3d::smdl_c *mdl);
+    virtual void vt_0x88(f32 &param);
+
+    /* 0x330 */ dAcRef_c<dAcOSwSwordBeam_c> mSwSwordBeamRef;
+    /* 0x33C */ u32 mBoneID;
+    /* 0x340 */ mVec3_c mSwPos;
+    /* 0x34C */ mVec3_c mSwScale;
+    /* 0x358 */ mAng3_c mSwRot;
+    /* 0x360 */ float mSendToSwSB;
+    /* 0x364 */ bool mTransferToCrest;
+    /* 0x365 */ u8 pad[3];
+};
+
 class dAcOSwSwordBeam_c : public dAcObjBase_c {
 public:
     dAcOSwSwordBeam_c() : mEvent(*this, nullptr), mStateMgr(*this) {}
@@ -99,22 +117,8 @@ private:
     /* 0xCB0 */ s32 mCsExitID;
 
     static dCcD_SrcUnk sCcSrc;
-};
-
-class dAcGoddessCrestHolder_c : public dAcObjBase_c {
-protected:
-    virtual void setCrestAtBone(char *bone_name, m3d::smdl_c *model, u8 *sceneflag);
-    virtual void setCrestPosRot(m3d::smdl_c *mdl);
-    virtual void vt_0x88(f32 &param);
-
-    /* 0x330 */ dAcRef_c<dAcOSwSwordBeam_c> mSwSwordBeamRef;
-    /* 0x33C */ u32 mBoneID;
-    /* 0x340 */ mVec3_c mSwPos;
-    /* 0x34C */ mVec3_c mSwScale;
-    /* 0x358 */ mAng3_c mSwRot;
-    /* 0x360 */ float mSendToSwSB;
-    /* 0x364 */ bool mTransferToCrest;
-    /* 0x365 */ u8 pad[3];
+    static const s16 lbl_507_data_0;
+    static const s16 lbl_507_data_50;
 };
 
 #endif

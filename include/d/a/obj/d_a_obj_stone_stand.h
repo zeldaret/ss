@@ -46,13 +46,10 @@ private:
     /* 0x798 */ mVec3_c mLinkPos;
     /* 0x7A4 */ f32 field_0x7A4;
     /* 0x7A8 */ f32 field_0x7A8;
-    u32 mLocatorBones[3];
-    // /* 0x7AC */ u32 mLocatorABone;
-    // /* 0x7B0 */ u32 mLocatorBBone;
-    // /* 0x7B4 */ u32 mLocatorCBone;
+    /* 0x7AC */ u32 mLocatorBones[3];
     /* 0x7B8 */ mAng3_c mLinkRot;
     /* 0x7BE */ mAng field_0x7BE;
-    /* 0x7C0 */ u32 mVisibleTabletState;
+    /* 0x7C0 */ s32 mVisibleTabletState;
     /* 0x7C4 */ u8 mActivatedSceneflag;
     /* 0x7C5 */ u8 mPillarCSExitOffset;
     /* 0x7C6 */ u8 mTabletCSIndex;
@@ -62,8 +59,10 @@ private:
     /* 0x7CA */ bool mInsertedTablet;
 
     static char *sResMdlAnmNames[3];
+    static const u32 pad[2];
     static const InteractionTargetDef sInteraction1;
     static const InteractionTargetDef sInteraction2;
+    static const s16 lbl_513_rodata_A8;
 };
 
 #endif

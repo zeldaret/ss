@@ -21,6 +21,8 @@
 #include "toBeSorted/d_lib.h"
 #include "toBeSorted/event_manager.h"
 
+f32 dAcOSwordCandle_c::lbl_530_data_0 = -0.f;
+
 SPECIAL_ACTOR_PROFILE(OBJ_SWORD_CANDLE, dAcOSwordCandle_c, fProfile::OBJ_SWORD_CANDLE, 0x24C, 0, 7);
 
 u16 dAcOSwordCandle_c::lbl_530_bss_8[6] = {
@@ -35,15 +37,10 @@ dCcD_SrcCyl dAcOSwordCandle_c::sCylSrc = {
     /* mObjInf */
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
      /* mObjTg */
-     {AT_TYPE_SWORD | AT_TYPE_BOMB | AT_TYPE_0x40 | AT_TYPE_SLINGSHOT | AT_TYPE_WHIP | AT_TYPE_ARROW |
-          AT_TYPE_CLAWSHOT | AT_TYPE_0x800000,
-      0x200111,
-      {0, 0xb, 0x407},
-      0x0,
-      0x0},
-     /* mObjCo */ {0x29}},
+     {0, 0x111, {0, 0x0, 0x407}, 0x0, 0x0},
+     /* mObjCo */ {0xE9}},
     /* mCylInf */
-    {50.f, 130.f}
+    {100.f, 50.f}
 };
 
 bool dAcOSwordCandle_c::createHeap() {
@@ -58,11 +55,11 @@ bool dAcOSwordCandle_c::createHeap() {
     return SUCCEEDED;
 }
 
-int dAcOSwordCandle_c::create() {
+int dAcOSwordCandle_c::actorCreate() {
     mActivatedSceneflag = getFromParams(0, 0xFF);
     mRiseFromGroundSceneflag = getFromParams(0xC, 0xFF);
     mTransferToCrest = true;
-    mSendToSwSB = 0.f;
+    mSendToSwSB = lbl_530_data_0;
     CREATE_ALLOCATOR(dAcOSwordCandle_c);
     mBgW.SetCrrFunc(dBgS_MoveBGProc_Typical);
     dBgS::GetInstance()->Regist(&mBgW, this);
@@ -250,6 +247,8 @@ void dAcOSwordCandle_c::finalizeState_WaitClear() {
     field_0x818 = 1;
 }
 
+f32 dAcOSwordCandle_c::lbl_530_data_F0 = 255.f;
+
 void dAcOSwordCandle_c::fn_530_1180() {
     dAcOstageKraken_c *stageKraken = dAcOstageKraken_c::getStageKrakenPtr();
     mMtx_c mtx;
@@ -288,9 +287,7 @@ void dAcOSwordCandle_c::fn_530_1180() {
                 mMdl.setLocalMtx(mWorldMtx);
                 mMdl.calc(false);
                 setCrestAtBone("SetGS", &mMdl, &mActivatedSceneflag);
-                120.f;
-                float tmp = 255.f;
-                vt_0x88(tmp);
+                vt_0x88(lbl_530_data_F0);
                 dAcOSwSwordBeam_c *swSwordBeam = mSwSwordBeamRef.get();
                 // todo
 

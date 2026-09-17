@@ -34,6 +34,8 @@
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
 
+const s16 dAcOSwSwordBeam_c::lbl_507_data_0 = 0;
+
 SPECIAL_ACTOR_PROFILE(OBJ_SW_SWORD_BEAM, dAcOSwSwordBeam_c, fProfile::OBJ_SW_SWORD_BEAM, 0x1A2, 0, 3);
 
 STATE_DEFINE(dAcOSwSwordBeam_c, Wait);
@@ -44,10 +46,10 @@ STATE_DEFINE(dAcOSwSwordBeam_c, End);
 
 // clang-format off
 dCcD_SrcUnk dAcOSwSwordBeam_c::sCcSrc = {
-    {{AT_TYPE_DAMAGE, 0x2003F, {0, 0, 0}, 1, 0, 0, 0, 0},
-    {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, 0x0, 0x06, 0x407, 0, },
-    {0}},
-    {-1.0f, -246.0f, -472.0f, 73.0f, 255.0f, 482.0f}};
+    {{0, 0, {0, 0, 0}, 0, 0, 0, 0, 0},
+    {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000), 0x111, 0x0, 0x06, 0x40F, 0, },
+    {0xe9}},
+    {-100.0f, -50.0f, -12.5f, 100.f, 50.f, 12.5f}};
 // clang-format on
 
 bool dAcOSwSwordBeam_c::createHeap() {
@@ -81,9 +83,9 @@ int dAcOSwSwordBeam_c::create() {
     mMaxSpeed = -40.f;
     field_0xC88 = 0;
     mSceneflag = getFromParams(0, 0xFF);
-    field_0xCA0 = cM::rndInt(0x46) * 0x38e;
-    field_0xCA2 = 0x38e;
-    field_0xC9A = cM::rndInt(0x46) * 0x38e;
+    field_0xCA0 = cM::rndInt(0x46) * lbl_507_data_50;
+    field_0xCA2 = lbl_507_data_50;
+    field_0xC9A = cM::rndInt(0x46) * lbl_507_data_50;
     field_0xC68.set(1.f, 0.f, 0.f, 0.f);
     field_0xC78.set(1.f, 0.f, 0.f, 0.f);
     field_0xC58.set(1.f, 0.f, 0.f, 0.f);
@@ -217,6 +219,8 @@ void dAcOSwSwordBeam_c::unkVirtFunc_0x6C() {
     }
 }
 
+const s16 dAcOSwSwordBeam_c::lbl_507_data_50 = 0x38E;
+
 int dAcOSwSwordBeam_c::draw() {
     drawModelType1(&mMdl);
     static mQuat_c rot(0.f, 0.f, 0.f, 10.f);
@@ -247,7 +251,7 @@ void dAcOSwSwordBeam_c::executeState_Wait() {
     }
 LAB_80e4e72c:
     if (mUnk1.ChkTgHit()) {
-        field_0xC96.mVal += 0x38e;
+        field_0xC96.mVal += lbl_507_data_50;
     }
     if (mSpawnedFromOtherActor && !field_0xCAB && mUnk2.ChkTgHit()) {
         if (mUnk2.ChkTgAtHitType(AT_TYPE_0x800000) || (mUnk2.ChkTgAtHitType(AT_TYPE_SWORD) && mUnk2.ChkTgBit25())) {
@@ -288,11 +292,11 @@ void dAcOSwSwordBeam_c::initializeState_RotateEnd() {}
 
 void dAcOSwSwordBeam_c::executeState_RotateEnd() {
     bool b = false;
-    if (sLib::absDiff(field_0xC9E, 0) < 0x38e) {
+    if (sLib::absDiff(field_0xC9E, 0) < b) {
         field_0xC9E = 0;
-        b = sLib::addCalcAngle2(field_0xC9C.ref(), 0, field_0xCA8 ? 0xf : -0xf, 0x38e, 0x20) == 0;
+        b = sLib::addCalcAngle2(field_0xC9C.ref(), 0, field_0xCA8 ? 0xf : -0xf, b, 0x20) == 0;
     } else {
-        sLib::addCalcAngle(&field_0xC9E, 0, 0x14, 0x38e, 0x20);
+        sLib::addCalcAngle(&field_0xC9E, 0, 0x14, b, 0x20);
     }
     if (b) {
         mStateMgr.changeState(StateID_OnSwitch);
@@ -372,7 +376,7 @@ void dAcOSwSwordBeam_c::initializeState_End() {
 
 void dAcOSwSwordBeam_c::executeState_End() {
     if (mUnk1.ChkTgHit()) {
-        field_0xC96.mVal += 0x38e;
+        field_0xC96.mVal += lbl_507_data_50;
     }
     if (!EventManager::sInstance->isInEvent() && mSubtype == 1) {
         u16 flag = mSceneflag + 2;
@@ -392,10 +396,10 @@ void dAcOSwSwordBeam_c::fn_507_1A50() {
 }
 
 void dAcOSwSwordBeam_c::fn_507_1AF0() {
-    field_0xC94 = field_0xC98 * .9f;
     field_0xC9A += field_0xCA2 * 0.5f;
+    field_0xC94 = field_0xC98 * .9f;
     field_0xC96 += field_0xC94;
-    field_0xC96 *= 0.7;
+    field_0xC96 *= 0.7f;
     field_0xC98 += field_0xC96;
     f32 cos = nw4r::math::CosIdx(field_0xCA0);
     mQuat_c quat;
@@ -441,8 +445,7 @@ void dAcOSwSwordBeam_c::fn_507_2130() {
         }
     }
     field_0xC78.slerpTo(field_0xC58, 0.5f, field_0xC78);
-    const int tmp = 0;
-    field_0xC9A = tmp;
+    field_0xC9A = lbl_507_data_0;
 }
 
 static volatile u32 FLAGS_1 = 0x00000001;

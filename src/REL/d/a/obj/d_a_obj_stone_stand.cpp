@@ -31,6 +31,8 @@ STATE_DEFINE(dAcOStoneStand_c, OnSwitch);
 
 char *dAcOStoneStand_c::sResMdlAnmNames[3] = {"SekibanMapADemo", "SekibanMapBDemo", "SekibanMapCDemo"};
 
+const u32 dAcOStoneStand_c::pad[2] = {0, 0};
+
 const InteractionTargetDef dAcOStoneStand_c::sInteraction1 = {
     0, 3, 0, EXAMINE_TALK, 0, 250.f, 60.f, 60.f, -50.f, 150.f, 50.f, 1.f,
 };
@@ -99,10 +101,10 @@ int dAcOStoneStand_c::create() {
     }
     nw4r::g3d::ResMdl mdl = mMdl.getResMdl();
     mLocatorBones[0] = mdl.GetResNode("locator_A").GetID();
-    mdl = mMdl.getResMdl();
-    mLocatorBones[1] = mdl.GetResNode("locator_B").GetID();
-    mdl = mMdl.getResMdl();
-    mLocatorBones[2] = mdl.GetResNode("locator_C").GetID();
+    nw4r::g3d::ResMdl mdl2 = mMdl.getResMdl();
+    mLocatorBones[1] = mdl2.GetResNode("locator_B").GetID();
+    nw4r::g3d::ResMdl mdl3 = mMdl.getResMdl();
+    mLocatorBones[2] = mdl3.GetResNode("locator_C").GetID();
     for (s32 i = 0; i < 3; i++) {
         mMdl.getNodeWorldMtx(mLocatorBones[i], mTabletMatrix[i]);
     }
@@ -153,23 +155,21 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
     if (mEvent.isThisActorInEvent()) {
         switch (mEvent.getCurrentEventCommand()) {
             case 'act0': {
-                if (!mEvent.isInEvent("LithographyStandAppear")) {
+                if (mEvent.isInEvent("LithographyStandAppear")) {
                     mEvent.advanceNext();
                 } else {
                     field_0x7C8 = 0x1E;
                     mVec3_c vec = mVec3_c::Ez * 125.f;
                     vec.rotY(mRotation.y);
                     vec += mPosition;
-                    s16 target = mRotation.y - 0x8000;
+                    mAng target = mRotation.y - 0x8000;
                     if (link != nullptr) {
                         cLib::addCalcPos(&vec, mLinkPos, 0.25f, 200.f, 0.f);
                         sLib::addCalcAngle(&mLinkRot.y.mVal, target, 4, 0x7fff, 0);
                         link->setPosRot(&mLinkPos, &mLinkRot, false, 0, 0);
                         mVec3_c vec2 = vec - link->mPosition;
-                        if (vec2.squareMagXZ() < 50.f && labs(mRotation.y - target) < 0xb6) {
+                        if (vec2.squareMagXZ() < 50.f && labs((s16)(mRotation.y - target)) < 0xb6) {
                             link->setPosRot(&mLinkPos, &mLinkRot, false, 0, 0);
-                            // const fProfile::fBaseProfile_c *a = ;
-
                             updateExecutePriority((*fProfile::sProfileList)[200]->m_execute_order + 1);
                             mEvent.advanceNext();
                         }
@@ -183,7 +183,7 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
                 if (mEvent.isInEvent("LithographyStandAppear")) {
                     fn_513_14D0();
                 } else if (mPillarCSExitOffset != 0xFF) {
-                    dScGame_c::GetInstance()->triggerExit(mRoomID, mPillarCSExitOffset + mTabletCSIndex);
+                    dScGame_c::GetInstance()->triggerExit(mRoomID, u8(mPillarCSExitOffset + mTabletCSIndex));
                 }
                 break;
             }
@@ -198,7 +198,7 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
                     if (link->getCurrentAnimFrame() > 90.f) {
                         mAnm[mVisibleTabletState].setRate(1.f, 0);
                         mEvent.advanceNext();
-                        updateExecutePriority((*fProfile::sProfileList[0x7a])->m_execute_order);
+                        updateExecutePriority((*fProfile::sProfileList)[0x7A]->m_execute_order);
                     }
                 }
                 break;
@@ -219,9 +219,9 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
     for (s32 i = 0; i < 3; i++) {
         mAnm[i].play();
         if (!a || i != mVisibleTabletState || mAnm[mVisibleTabletState].getRate(0) != 0.f) {
-            mMdl.getNodeWorldMtx(mLocatorBones[i], mtx);
+            mMdl.getNodeWorldMtx(mLocatorBones[i], mTabletMatrix[i]);
         }
-        mTabletMdls[i].setLocalMtx(mtx);
+        mTabletMdls[i].setLocalMtx(mTabletMatrix[i]);
     }
     return SUCCEEDED;
 }
@@ -236,9 +236,11 @@ int dAcOStoneStand_c::draw() {
 
 void dAcOStoneStand_c::doInteraction(s32 param) {
     if (param == 5) {
-        void *data = getOarcZev("LithographyStand");
-        Event event("StoneStandSceneChange", data, 400, 0x100001, nullptr, nullptr);
-        mEvent.scheduleEvent(event, 0);
+        {
+            void *data = getOarcZev("LithographyStand");
+            Event event("StoneStandSceneChange", data, 400, 0x100001, nullptr, nullptr);
+            mEvent.scheduleEvent(event, 0);
+        }
 
         const dAcPy_c *link = dAcPy_c::GetLink();
         mLinkPos = link->mPosition;
@@ -248,10 +250,15 @@ void dAcOStoneStand_c::doInteraction(s32 param) {
 
 void dAcOStoneStand_c::initializeState_Wait() {}
 
+volatile u32 FLAGS_1 = 0x00000001;
+u32 FLAGS_2 = 0x00100001;
+
 void dAcOStoneStand_c::executeState_Wait() {
     if (mActivatedSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActivatedSceneflag)) {
+        u32 f1 = ~FLAGS_1;
         void *data = getOarcZev("LithographyStand");
-        Event event("LithographyStandAppear", data, 1, 0x100000, nullptr, nullptr);
+        u32 f2 = FLAGS_2;
+        Event event("LithographyStandAppear", data, 1, f2 & f1, nullptr, nullptr);
         mEvent.scheduleEvent(event, 0);
     }
 }
@@ -262,10 +269,12 @@ void dAcOStoneStand_c::initializeState_Shake() {
     field_0x7A8 = -5.f;
 }
 
+const s16 dAcOStoneStand_c::lbl_513_rodata_A8 = 0x2000;
+
 void dAcOStoneStand_c::executeState_Shake() {
     field_0x7A8 *= 0.85f;
     field_0x7A4 = field_0x7A8 * nw4r::math::SinIdx(field_0x7BE);
-    field_0x7BE.mVal += 0x2000;
+    field_0x7BE += mAng(lbl_513_rodata_A8);
     if (fabsf(field_0x7A8) < 0.05f) {
         mStateMgr.changeState(StateID_OnSwitch);
     }
@@ -292,7 +301,7 @@ void dAcOStoneStand_c::fn_513_14D0() {
         case 0: {
             setCrestPosRot(&mMdl);
             holdSound(SE_SndStn_UP_LV);
-            if (sLib::chase(&field_0x78C.y, 2.5f, mPosition.y)) {
+            if (sLib::chase(&mPosition.y, field_0x78C.y, 2.5f)) {
                 startSound(SE_SndStn_UP_END);
                 dRumble_c::start(dRumble_c::sRumblePreset3, 0x11);
                 field_0x7A8 = -5.f;
@@ -303,7 +312,7 @@ void dAcOStoneStand_c::fn_513_14D0() {
         case 1: {
             field_0x7A8 *= 0.85f;
             field_0x7A4 = field_0x7A8 * nw4r::math::SinIdx(field_0x7BE);
-            field_0x7BE.mVal += 0x2000;
+            field_0x7BE += mAng(lbl_513_rodata_A8);
             if (fabsf(field_0x7A8) < 0.05f) {
                 field_0x7A4 = 0.f;
                 field_0x7A8 = 0.f;

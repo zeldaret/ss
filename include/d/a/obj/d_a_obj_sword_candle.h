@@ -20,7 +20,7 @@ public:
     virtual ~dAcOSwordCandle_c() {}
 
     virtual bool createHeap() override;
-    virtual int create() override;
+    virtual int actorCreate() override;
     virtual int actorPostCreate() override;
     virtual int doDelete() override;
     virtual int actorExecute() override;
@@ -60,7 +60,9 @@ private:
     /* 0x818 */ u8 field_0x818;
 
     static u16 lbl_530_bss_8[6];
+    static f32 lbl_530_data_0;
     static dCcD_SrcCyl sCylSrc;
+    static f32 lbl_530_data_F0;
 };
 
 #endif
