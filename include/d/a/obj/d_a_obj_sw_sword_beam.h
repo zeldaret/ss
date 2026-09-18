@@ -17,6 +17,8 @@ class dAcOSwSwordBeam_c;
 
 class dAcGoddessCrestHolder_c : public dAcObjBase_c {
 protected:
+    virtual ~dAcGoddessCrestHolder_c() {};
+
     virtual void setCrestAtBone(char *bone_name, m3d::smdl_c *model, u8 *sceneflag);
     virtual void setCrestPosRot(m3d::smdl_c *mdl);
     virtual void vt_0x88(f32 &param);
@@ -34,7 +36,7 @@ protected:
 class dAcOSwSwordBeam_c : public dAcObjBase_c {
 public:
     dAcOSwSwordBeam_c() : mEvent(*this, nullptr), mStateMgr(*this) {}
-    virtual ~dAcOSwSwordBeam_c() {}
+    virtual ~dAcOSwSwordBeam_c();
 
     virtual bool createHeap() override;
     virtual int create() override;

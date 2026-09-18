@@ -1,16 +1,13 @@
 #ifndef D_A_OBJ_SWORD_CANDLE_H
 #define D_A_OBJ_SWORD_CANDLE_H
 
-#include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_sw_sword_beam.h"
 #include "d/col/bg/d_bg_w.h"
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_shadow.h"
-#include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/d_emitter.h"
 

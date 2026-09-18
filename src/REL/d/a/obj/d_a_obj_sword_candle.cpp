@@ -18,7 +18,6 @@
 #include "rvl/GX/GXTypes.h"
 #include "s/s_Math.h"
 #include "toBeSorted/d_emitter.h"
-#include "toBeSorted/d_lib.h"
 #include "toBeSorted/event_manager.h"
 
 f32 dAcOSwordCandle_c::lbl_530_data_0 = -0.f;
@@ -92,8 +91,8 @@ int dAcOSwordCandle_c::actorCreate() {
         field_0x818 = 1;
     }
     if (mActivatedSceneflag < 0xff && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActivatedSceneflag)) {
-        field_0x816 = 1;
         unsetActorProperty(1);
+        field_0x816 = 1;
     }
     mMdl.setPriorityDraw(0x1C, 9);
     mBoundingBox.Set(mVec3_c(-150.f, -20.f, -150.f), mVec3_c(150.f, 500.f, 150.f));
@@ -180,17 +179,16 @@ int dAcOSwordCandle_c::actorExecuteInEvent() {
 }
 
 void dAcOSwordCandle_c::registerInEvent() {
-    if (strequals(EventManager::sInstance->getCurrentEventName(), "SwordCandle")) {
+    if (EventManager::sInstance->isCurrentEvent("SwordCandle")) {
         dAcPy_c::LINK->mObjectActorFlags |= 0x200;
         return;
     }
-    if (!strequals(EventManager::sInstance->getCurrentEventName(), "GodsMark") &&
-        !strequals(EventManager::sInstance->getCurrentEventName(), "SceneChange") &&
-        !strequals(EventManager::sInstance->getCurrentEventName(), "SwSwordBeam") &&
-        !strequals(EventManager::sInstance->getCurrentEventName(), "STB")) {
+    if (EventManager::sInstance->isCurrentEvent("GodsMark") || EventManager::sInstance->isCurrentEvent("SceneChange") ||
+        EventManager::sInstance->isCurrentEvent("SwSwordBeam") || EventManager::sInstance->isCurrentEvent("STB")) {
+        mEmitter.remove(true);
+    } else {
         field_0x817 = 1;
     }
-    mEmitter.remove(true);
 }
 
 void dAcOSwordCandle_c::unkVirtFunc_0x6C() {
@@ -274,12 +272,10 @@ void dAcOSwordCandle_c::fn_530_1180() {
                 field_0x7DC.mRadius = 1000.f;
             }
             if (stageKraken->mMarkLeftRight != 0 && sLib::calcTimer(&mTimer) == 0) {
-                mColor color(0, 0, 0, 0xFF);
-                mMdl.setTevColorAll(GX_TEVREG2, color, false);
+                mMdl.setTevColorAll(GX_TEVREG2, mColor(0, 0, 0, 0xFF), false);
                 field_0x7FC = mPosition;
-                mVec3_c pos = mPosition - vec * 200.f;
-                mPosition = pos;
-                mOldPosition = pos;
+                mPosition = mPosition - vec * 200.f;
+                mOldPosition = mPosition;
                 mObjectActorFlags &= ~0x200;
                 field_0x818 = 1;
                 field_0x808 = 0.f;
@@ -289,8 +285,7 @@ void dAcOSwordCandle_c::fn_530_1180() {
                 setCrestAtBone("SetGS", &mMdl, &mActivatedSceneflag);
                 vt_0x88(lbl_530_data_F0);
                 dAcOSwSwordBeam_c *swSwordBeam = mSwSwordBeamRef.get();
-                // todo
-
+                swSwordBeam->mActorProperties |= 4;
                 mEvent.advanceNext();
             }
             break;
@@ -301,19 +296,18 @@ void dAcOSwordCandle_c::fn_530_1180() {
                 field_0x80C = 255.f;
             } else if (field_0x808 > 120.f) {
                 sLib::chase(&field_0x80C, 0.f, 12.75);
-                mColor color(0, 0, 0, field_0x80C);
-                mMdl.setTevColorAll(GX_TEVREG2, color, false);
+                mMdl.setTevColorAll(GX_TEVREG2, mColor(0, 0, 0, field_0x80C), false);
                 vt_0x88(field_0x80C);
             }
             if (sLib::chase(&field_0x808, 200.f, 2.f)) {
                 mStateMgr.changeState(StateID_Wait);
-                // todo, same as earlier
+                dAcOSwSwordBeam_c *swSwordBeam = mSwSwordBeamRef.get();
+                swSwordBeam->mActorProperties &= ~0x4;
                 stageKraken->mActorProperties &= ~0x4;
                 mEvent.advanceNext();
             }
-            mVec3_c pos = field_0x7FC - vec * (200.f - field_0x808);
-            mPosition = pos;
-            mOldPosition = pos;
+            mPosition = field_0x7FC - vec * (200.f - field_0x808);
+            mOldPosition = mPosition;
             updateMatrix();
             mMdl.setLocalMtx(mWorldMtx);
             mMdl.calc(false);

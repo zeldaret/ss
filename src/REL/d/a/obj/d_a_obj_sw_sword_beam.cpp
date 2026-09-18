@@ -24,7 +24,6 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resnode.h"
-#include "nw4r/math/math_triangular.h"
 #include "nw4r/math/math_types.h"
 #include "nw4r/ut/ut_Color.h"
 #include "rvl/GX/GXTypes.h"
@@ -172,8 +171,7 @@ int dAcOSwSwordBeam_c::actorExecuteInEvent() {
             }
         }
     } else if (field_0xCAA) {
-        mColor color = mColor(field_0xC90, field_0xC90, field_0xC90, 0xFF);
-        mMdl.setTevKColorAll(GX_KCOLOR3, color, false);
+        mMdl.setTevKColorAll(GX_KCOLOR3, mColor(field_0xC90, field_0xC90, field_0xC90, 0xFF), false);
         mLightingInfo.mTevK3Color = mColor(field_0xC90, field_0xC90, field_0xC90, 0xFF);
         mLightingInfo.mUseTevK3 = true;
         field_0xCAA = false;
@@ -204,14 +202,14 @@ void dAcOSwSwordBeam_c::registerInEvent() {
 void dAcOSwSwordBeam_c::unkVirtFunc_0x6C() {
     dAcPy_c *link = dAcPy_c::LINK;
     if (field_0xCAC && getSquareDistToPlayer() < 160000.f) {
-        mVec3_c a = mVec3_c::Ez * 400.f;
-        a.rotY(mRotation.y);
-        a += mPosition + (mVec3_c::Ey * 100.f);
-        if (dBgS_ObjGndChk::CheckPos(a)) {
-            a.y = dBgS_ObjGndChk::GetGroundHeight();
+        mVec3_c pos = mVec3_c::Ez * 400.f;
+        pos.rotY(mRotation.y);
+        pos += mPosition + mVec3_c::Ey * 100.f;
+        if (dBgS_ObjGndChk::CheckPos(pos)) {
+            pos.y = dBgS_ObjGndChk::GetGroundHeight();
         }
-        mAng c = mRotation.y - 0x8000;
-        link->setPosYRot(&a, c, false, 0, 0);
+        mAng rot = mRotation.y - 0x8000;
+        link->setPosYRot(&pos, rot, false, 0, 0);
     }
     field_0xCAC = false;
     if (link->checkObjectProperty(OBJ_PROP_0x200)) {
@@ -223,7 +221,7 @@ const s16 dAcOSwSwordBeam_c::lbl_507_data_50 = 0x38E;
 
 int dAcOSwSwordBeam_c::draw() {
     drawModelType1(&mMdl);
-    static mQuat_c rot(0.f, 0.f, 0.f, 10.f);
+    static mQuat_c rot(0.f, 0.f, 0.f, 100.f);
     drawShadow(mShadow, nullptr, mWorldMtx, &rot, -1, -1, -1, -1, -1, 0.f);
     return SUCCEEDED;
 }
@@ -281,7 +279,7 @@ void dAcOSwSwordBeam_c::initializeState_Rotate() {
 
 void dAcOSwSwordBeam_c::executeState_Rotate() {
     if (sLib::calcTimer(&field_0xCA6) == 0) {
-        mStateMgr.changeState(StateID_End);
+        mStateMgr.changeState(StateID_RotateEnd);
     } else {
         fn_507_1A50();
     }
@@ -292,11 +290,11 @@ void dAcOSwSwordBeam_c::initializeState_RotateEnd() {}
 
 void dAcOSwSwordBeam_c::executeState_RotateEnd() {
     bool b = false;
-    if (sLib::absDiff(field_0xC9E, 0) < b) {
+    if (sLib::absDiff(field_0xC9E, 0) < lbl_507_data_50) {
         field_0xC9E = 0;
-        b = sLib::addCalcAngle2(field_0xC9C.ref(), 0, field_0xCA8 ? 0xf : -0xf, b, 0x20) == 0;
+        b = sLib::addCalcAngle2(field_0xC9C.ref(), 0, field_0xCA8 ? 0xf : -0xf, lbl_507_data_50, 0x20) == 0;
     } else {
-        sLib::addCalcAngle(&field_0xC9E, 0, 0x14, b, 0x20);
+        sLib::addCalcAngle(&field_0xC9E, 0, 0x14, lbl_507_data_50, 0x20);
     }
     if (b) {
         mStateMgr.changeState(StateID_OnSwitch);
@@ -349,10 +347,8 @@ void dAcOSwSwordBeam_c::initializeState_OnSwitch() {
     field_0xC94.mVal = 0;
     field_0xC98.mVal = 0;
     mMdl.setTevKColorAll(GX_KCOLOR3, nw4r::ut::Color(0x40, 0xc0, 0xff, 0xff), false);
-    dJEffManager_c::spawnEffect(
-        PARTICLE_RESOURCE_ID_MAPPING_352_, mPosition + (mVec3_c::Ey * (field_0xC88 + 75)), &mRotation, &mScale, nullptr,
-        nullptr, 0, 0
-    );
+    mVec3_c tmp = mPosition + (mVec3_c::Ey * (field_0xC88 + 75.f));
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_352_, tmp, &mRotation, &mScale, nullptr, nullptr, 0, 0);
     startSound(SE_SwSB_REACT_FIN);
 }
 
@@ -401,14 +397,13 @@ void dAcOSwSwordBeam_c::fn_507_1AF0() {
     field_0xC96 += field_0xC94;
     field_0xC96 *= 0.7f;
     field_0xC98 += field_0xC96;
-    f32 cos = nw4r::math::CosIdx(field_0xCA0);
+    f32 tmp = mAng::s2r(field_0xC98);
     mQuat_c quat;
-    quat.setAxisRotation(mVec3_c::Ey, mAng::s2r(cos * 546.f));
-    f32 sin = nw4r::math::SinIdx(field_0xC9A);
+    quat.setAxisRotation(mVec3_c::Ey, mAng::s2r(field_0xCA0.cos() * 546.f));
     mQuat_c quat2;
-    quat2.setAxisRotation(mVec3_c::Ez, mAng::s2r(sin * 546.f));
+    quat2.setAxisRotation(mVec3_c::Ez, mAng::s2r(field_0xC9A.sin() * 546.f));
     mQuat_c quat3;
-    quat3.setAxisRotation(mVec3_c::Ez, mAng::s2r(field_0xC98));
+    quat3.setAxisRotation(mVec3_c::Ez, tmp);
     field_0xC78 = quat2 * quat3 * quat;
 }
 
@@ -557,5 +552,7 @@ void dAcGoddessCrestHolder_c::setCrestPosRot(m3d::smdl_c *mdl) {
     swordBeam->mPosition = mSwPos;
     swordBeam->mRotation.set(mSwRot);
 }
+
+dAcOSwSwordBeam_c::~dAcOSwSwordBeam_c() {};
 
 void dAcGoddessCrestHolder_c::vt_0x88(f32 &param) {}

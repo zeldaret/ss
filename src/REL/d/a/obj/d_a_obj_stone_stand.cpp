@@ -18,7 +18,6 @@
 #include "nw4r/g3d/res/g3d_resanmclr.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
-#include "nw4r/math/math_triangular.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/event.h"
@@ -45,7 +44,7 @@ bool dAcOStoneStand_c::createHeap() {
     void *data = getOarcResFile("LithographyStand");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("LithographyStand");
-    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120));
     for (s32 i = 0; i < 3; i++) {
         mdl = mResFile.GetResMdl(sResMdlAnmNames[i]);
         TRY_CREATE(mTabletMdls[i].create(mdl, &mAllocator, 0x128));
@@ -112,7 +111,7 @@ int dAcOStoneStand_c::create() {
     mMdl.setPriorityDraw(0x1C, 9);
     mAcceleration = 0.f;
     mMaxSpeed = -40.f;
-    if (mActivatedSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, (u8)mRoomID)) {
+    if (mActivatedSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActivatedSceneflag)) {
         mStateMgr.changeState(StateID_OnSwitch);
     } else {
         mStateMgr.changeState(StateID_Wait);
@@ -165,7 +164,7 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
                     mAng target = mRotation.y - 0x8000;
                     if (link != nullptr) {
                         cLib::addCalcPos(&vec, mLinkPos, 0.25f, 200.f, 0.f);
-                        sLib::addCalcAngle(&mLinkRot.y.mVal, target, 4, 0x7fff, 0);
+                        sLib::addCalcAngle(mLinkRot.y.ref(), target, 4, 0x7fff, 0);
                         link->setPosRot(&mLinkPos, &mLinkRot, false, 0, 0);
                         mVec3_c vec2 = vec - link->mPosition;
                         if (vec2.squareMagXZ() < 50.f && labs((s16)(mRotation.y - target)) < 0xb6) {
@@ -203,10 +202,8 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
                 }
                 break;
             }
-            case '????': {
-                mEvent.advanceNext();
-                break;
-            }
+            case '????': break;
+            default:     mEvent.advanceNext();
         }
     }
     updateMatrix();
@@ -273,7 +270,7 @@ const s16 dAcOStoneStand_c::lbl_513_rodata_A8 = 0x2000;
 
 void dAcOStoneStand_c::executeState_Shake() {
     field_0x7A8 *= 0.85f;
-    field_0x7A4 = field_0x7A8 * nw4r::math::SinIdx(field_0x7BE);
+    field_0x7A4 = field_0x7A8 * field_0x7BE.sin();
     field_0x7BE += mAng(lbl_513_rodata_A8);
     if (fabsf(field_0x7A8) < 0.05f) {
         mStateMgr.changeState(StateID_OnSwitch);
@@ -311,7 +308,7 @@ void dAcOStoneStand_c::fn_513_14D0() {
         }
         case 1: {
             field_0x7A8 *= 0.85f;
-            field_0x7A4 = field_0x7A8 * nw4r::math::SinIdx(field_0x7BE);
+            field_0x7A4 = field_0x7A8 * field_0x7BE.sin();
             field_0x7BE += mAng(lbl_513_rodata_A8);
             if (fabsf(field_0x7A8) < 0.05f) {
                 field_0x7A4 = 0.f;
