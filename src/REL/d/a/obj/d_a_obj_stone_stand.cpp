@@ -158,16 +158,17 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
                     mEvent.advanceNext();
                 } else {
                     field_0x7C8 = 0x1E;
-                    mVec3_c vec = mVec3_c::Ez * 125.f;
+                    mVec3_c vec3 = mVec3_c::Ez * 125.f;
+                    mVec3_c vec = vec3;
                     vec.rotY(mRotation.y);
                     vec += mPosition;
-                    mAng target = mRotation.y - 0x8000;
+                    s32 target = mRotation.y - 0x8000;
                     if (link != nullptr) {
                         cLib::addCalcPos(&vec, mLinkPos, 0.25f, 200.f, 0.f);
                         sLib::addCalcAngle(mLinkRot.y.ref(), target, 4, 0x7fff, 0);
                         link->setPosRot(&mLinkPos, &mLinkRot, false, 0, 0);
-                        mVec3_c vec2 = vec - link->mPosition;
-                        if (vec2.squareMagXZ() < 50.f && labs((s16)(mRotation.y - target)) < 0xb6) {
+                        if ((vec - link->mPosition).squareMagXZ() < 50.f &&
+                            labs((s16)(mRotation.y - (s16)target)) < 0xb6) {
                             link->setPosRot(&mLinkPos, &mLinkRot, false, 0, 0);
                             updateExecutePriority((*fProfile::sProfileList)[200]->m_execute_order + 1);
                             mEvent.advanceNext();

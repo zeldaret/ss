@@ -20,7 +20,9 @@
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
 
-f32 dAcOSwordCandle_c::lbl_530_data_0 = -0.f;
+#pragma explicit_zero_data on
+f32 dAcOSwordCandle_c::lbl_530_data_0 = 0.f;
+#pragma explicit_zero_data off
 
 SPECIAL_ACTOR_PROFILE(OBJ_SWORD_CANDLE, dAcOSwordCandle_c, fProfile::OBJ_SWORD_CANDLE, 0x24C, 0, 7);
 
