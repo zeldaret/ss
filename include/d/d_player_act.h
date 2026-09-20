@@ -6,9 +6,9 @@
 #include "d/d_player_base.h"
 #include "m/m_vec.h"
 
-
 class dAcEnBase_c;
 class dAcOFairy_c;
+class dAcBomb_c;
 
 // Does this one have a vtable?
 // Name unknown
