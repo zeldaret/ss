@@ -160,7 +160,7 @@ void dAcBombf_c::regrowBomb() {
             bomb->setActorProperty(AC_PROP_0x1);
         }
         if (field_0x3D4 == 0) {
-            bomb->field_0xA44 *= 1.5f;
+            bomb->mFuseTime *= 1.5f;
         }
     }
 }

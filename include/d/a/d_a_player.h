@@ -54,6 +54,24 @@ protected:
     /* 0x4564 */ f32 field_0x4564;
 
 public:
+    // Bomb Function [0x80202CA0 - 0x80202DF0?]
+    static f32 getBombDistanceUnknown0();
+    static s32 getBombExplodeTimer();
+    static f32 getBombAcceleration();
+    static f32 getBombMaxSpeed();
+    static f32 getBombUnknown0_0();
+    static f32 getBombUnknown0_1();
+    static f32 getBombUnknown1_0();
+    static f32 getBombUnknown1_1();
+    static f32 getBombAcceleration_1();
+    static f32 getBombMaxSpeed_1();
+    static f32 getBombBounceSpeed();   // GetBombBoundRate
+    static f32 getBombExplodeScale();  // getBombEffScale
+    static f32 getBombExplodeRadius(); // getBombAt
+    static f32 getBombUnkFloat_0();
+    static f32 getBombUnkFloat_1();
+    static f32 getBombUnkFloat_2();
+
     // Beetle Functions [0x8021AA70 - 0x8021BE20]
     s16 getBeetleFlightTime();
     mAng getBeetleAngle0();
