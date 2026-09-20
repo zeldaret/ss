@@ -109,6 +109,20 @@ public:
     f32 fn_802097C0(); // 1000.0f
     f32 fn_802097D0(); // 4000.0f
 
+    // Minigame Functions [0x8023BB60 - 0x8023BDD0]
+    static bool isInMinigameInsectCapture();
+    static bool isInMinigamePumpkinCarry();
+    static bool isInMinigameBambooCutting();
+    static bool isInMinigameThrillDigger();
+    static bool isInMinigameFunFunIsland();
+    static bool isInMinigameHouseCleaning();
+    static bool isInMinigameTrialTimeAttack();
+    static bool isInMinigameBossRush();
+    static bool isInMinigamePumpkinArchery();
+    static bool isInMinigameHarpPlaying();
+    static bool isInMinigameRollerCoaster();
+    static bool isInMinigameSprialChargeTutorial();
+
 public:
     f32 getField_0x4564() const {
         return field_0x4564;
@@ -172,9 +186,6 @@ public:
     }
     static s32 getCurrentBugNetType();
 
-    static bool isInBambooCuttingMinigame() {
-        return MinigameManager::isInMinigameState(MinigameManager::BAMBOO_CUTTING);
-    }
     static bool isItemRestrictedByBokoBase(ITEM_ID item);
 
     static u32 getCurrentHealthCapacity();

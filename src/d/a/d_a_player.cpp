@@ -6,6 +6,7 @@
 #include "d/a/obj/d_a_obj_bomb.h"
 #include "f/f_profile.h"
 #include "f/f_profile_name.h"
+#include "toBeSorted/minigame_mgr.h"
 
 #include <stddef.h>
 
@@ -112,4 +113,41 @@ void dAcPy_c::ObjectArray::removeBombs() {
             }
         }
     }
+}
+
+bool dAcPy_c::isInMinigameInsectCapture() {
+    return MinigameManager::GetInstance()->checkInInsectCapture();
+}
+bool dAcPy_c::isInMinigamePumpkinCarry() {
+    return MinigameManager::GetInstance()->checkInPumpkinCarry();
+}
+bool dAcPy_c::isInMinigameBambooCutting() {
+    return MinigameManager::GetInstance()->checkInBambooCutting();
+}
+bool dAcPy_c::isInMinigameThrillDigger() {
+    return MinigameManager::GetInstance()->checkInThrillDigger();
+}
+bool dAcPy_c::isInMinigameFunFunIsland() {
+    return MinigameManager::GetInstance()->checkInFunFunIsland();
+}
+bool dAcPy_c::isInMinigameHouseCleaning() {
+    return MinigameManager::GetInstance()->checkInHouseCleaning();
+}
+bool dAcPy_c::isInMinigameTrialTimeAttack() {
+    return MinigameManager::GetInstance()->checkInTrialTimeAttack();
+}
+bool dAcPy_c::isInMinigameBossRush() {
+    return MinigameManager::GetInstance()->checkInBossRush();
+}
+bool dAcPy_c::isInMinigamePumpkinArchery() {
+    return MinigameManager::GetInstance()->checkInPumpkinArchery();
+}
+bool dAcPy_c::isInMinigameHarpPlaying() {
+    return MinigameManager::GetInstance()->checkInHarpPlaying();
+}
+bool dAcPy_c::isInMinigameRollerCoaster() {
+    return MinigameManager::GetInstance()->checkInRollerCoaster();
+}
+bool dAcPy_c::isInMinigameSprialChargeTutorial() {
+    return MinigameManager::GetInstance()->checkInSprialChargeTutorial();
 }

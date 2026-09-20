@@ -2714,21 +2714,14 @@ bool dLytMeterItemSelect_c::isWheelBlockedByCurrentAction() {
     if (dAcPy_c::LINK->getRidingActorType() == dAcPy_c::RIDING_LOFTWING ||
         dAcPy_c::LINK->checkActionFlags(dAcPy_c::FLG0_SWING_ROPE) || dAcPy_c::LINK->checkCurrentAction(0x9C) ||
         dAcPy_c::LINK->getRidingActorType() == dAcPy_c::RIDING_TRUCK_MINECART ||
-        dAcPy_c::LINK->checkCurrentAction(0x95) || isInSpiralChargeTutorialMinigame() || isInRollercoasterMinigame() ||
-        dAcPy_c::LINK->checkCurrentAction(0x8C) || dLytMeter_c::GetMain()->isInSwordDrawEvent() ||
-        checkIsInSkykeepPuzzle() || dLytMeter_c::GetInstance()->getMeterField_0x13770() == 0) {
+        dAcPy_c::LINK->checkCurrentAction(0x95) || MinigameManager::GetInstance()->checkInSprialChargeTutorial() ||
+        MinigameManager::GetInstance()->checkInRollerCoaster() || dAcPy_c::LINK->checkCurrentAction(0x8C) ||
+        dLytMeter_c::GetMain()->isInSwordDrawEvent() || checkIsInSkykeepPuzzle() ||
+        dLytMeter_c::GetInstance()->getMeterField_0x13770() == 0) {
         return true;
     }
 
     return false;
-}
-
-bool dLytMeterItemSelect_c::isInSpiralChargeTutorialMinigame() {
-    return MinigameManager::isInMinigameState(MinigameManager::SPIRAL_CHARGE_TUTORIAL);
-}
-
-bool dLytMeterItemSelect_c::isInRollercoasterMinigame() {
-    return MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER);
 }
 
 void dLytMeterItemSelect_c::setCurrentItemText(ITEM_ID item) {
