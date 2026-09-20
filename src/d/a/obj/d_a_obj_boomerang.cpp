@@ -184,7 +184,7 @@ int dAcBoomerang_c::create() {
 
     mAcch.Set(this, 1, &mAcchCir);
     mAcch.SetGroundUpY(20.f);
-    mAcch.SetField_0xD4(30.f);
+    mAcch.SetRoofCrrHeight(30.f);
     mAcch.ClrRoofNone();
     mAcch.SetBeetle();
     mAcch.OnWaterGrp();

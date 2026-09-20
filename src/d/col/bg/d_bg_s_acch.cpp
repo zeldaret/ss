@@ -53,19 +53,19 @@ dBgS_Acch::dBgS_Acch()
       field_0x0A8(0.0f),
       field_0x0AC(0.0f),
       mGroundHeight(-1e9f),
-      field_0x0B4(120.0f),
+      mGndChkOffset(120.0f),
       field_0x0C8(0.0f),
       field_0x0CC(0.0f),
       mRoofHeight(1e9f),
-      field_0x0D4(1.0f),
+      mRoofCrrHeight(1.0f),
       field_0x0D8(0.0f),
       mpOutPolyInfo(nullptr),
       mRoofH_0x0E0(0.0f),
       mGroundH_0x0E4(0.0f),
       field_0x0E8(1e9f),
       field_0x1D0(-1.0f),
-      field_0x2F4(1000.0f),
-      field_0x390(0),
+      mWtrCheckOffset(1000.0f),
+      mWtrMode(0),
       field_0x394(0) {
     SetPolyPassChk(GetPolyPassChkInfo());
     SetGrpPassChk(GetGrpPassChkInfo());
@@ -159,7 +159,7 @@ void dBgS_Acch::GroundCheck(dBgS &bgs, bool param2) {
         mVec3_c gnd_pos = *GetPos();
 
         // This Ordering is weird
-        f32 temp = (field_0x0B4 - field_0x0A8) + field_0x0AC;
+        f32 temp = (mGndChkOffset - field_0x0A8) + field_0x0AC;
         if (mFlags & ACCH_FLAG_0x20000) {
             if (temp <= 1.1f) {
                 temp = 1.1f;
@@ -199,7 +199,7 @@ void dBgS_Acch::GroundCheck(dBgS &bgs, bool param2) {
         }
 
         if (gnd_pos.y < mpPos->y + field_0x0E8 &&
-            mpPos->y + field_0x0E8 < (field_0x0B4 - field_0x0A8) + field_0x0AC + mpPos->y) {
+            mpPos->y + field_0x0E8 < (mGndChkOffset - field_0x0A8) + field_0x0AC + mpPos->y) {
             gnd_pos.y = mpPos->y + field_0x0E8;
         }
 
@@ -277,11 +277,11 @@ void dBgS_Acch::GroundRoofProc(dBgS &bgs, bool param2) {
         mRoofHeight = bgs.RoofChk(&mRoof);
 
         if (mRoofHeight != 1e9f) {
-            if (mpPos->y + field_0x0D4 > mRoofHeight) {
-                field_0x0D8 = mRoofHeight - field_0x0D4;
+            if (mpPos->y + mRoofCrrHeight > mRoofHeight) {
+                field_0x0D8 = mRoofHeight - mRoofCrrHeight;
                 SetRoofHit();
-            } else if (field_0x0C8 + field_0x0D4 > mRoofHeight) {
-                field_0x0D8 = mRoofHeight - field_0x0D4;
+            } else if (field_0x0C8 + mRoofCrrHeight > mRoofHeight) {
+                field_0x0D8 = mRoofHeight - mRoofCrrHeight;
                 SetRoofHit();
             }
         }
@@ -414,8 +414,8 @@ void dBgS_Acch::SphCheck() {
         if (height > field_0x0A8 && field_0x0A8 > 0.0f) {
             height = field_0x0A8;
         }
-        if (height > field_0x0D4 && field_0x0D4 > 1.0f) {
-            height = field_0x0D4;
+        if (height > mRoofCrrHeight && mRoofCrrHeight > 1.0f) {
+            height = mRoofCrrHeight;
         }
         height *= 0.8f;
     }

@@ -86,6 +86,7 @@ public:
     bool fn_80030570(m3d::mdl_c &, u8, f32); // lighting related
     void fn_800306D0();
     void fn_80030700();
+    static void fn_800307E0(mVec3_c *pPos, s32);
     dAcObjBase_c *targetPlayerOrScrapper(f32 biasToScrapper);
     static void fn_80030980(m3d::mdl_c &, s32, bool markDirty);
 

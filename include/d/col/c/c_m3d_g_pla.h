@@ -5,6 +5,7 @@
 #include "d/col/c/c_m3d.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
+#include "nw4r/math/math_types.h"
 #include "rvl/MTX/vec.h"
 
 // Plane with a normal
@@ -29,8 +30,12 @@ public:
         mD = -VECDotProduct(mNormal, point);
     }
 
+    void SetupNP(const mVec3_c &normal, const mVec3_c &point) {
+        mNormal = normal;
+        mD = -nw4r::math::VEC3Dot(mNormal, point);
+    }
+
     // Unused
-    // void SetupNP(const mVec3_c &, const mVec3_c &);
     // bool getCrossY(const mVec3_c &, f32 *) const;
     // void Set(const cM3dGPla *);
 

@@ -19,15 +19,15 @@ public:
 public:
     enum ConnectionType_e {
         CONNECTION_0 = 0,
-        CONNECTION_1 = 1,
+        CONNECTION_1 = 1, // Standard
         CONNECTION_2 = 2,
         CONNECTION_3 = 3,
-        CONNECTION_4 = 4,
-        CONNECTION_5 = 5,
-        CONNECTION_6 = 6,
-        CONNECTION_7 = 7,
-        CONNECTION_8 = 8,
-        CONNECTION_9 = 9,
+        CONNECTION_4 = 4, // clawshot
+        CONNECTION_5 = 5, // Beetle
+        CONNECTION_6 = 6, // From Sword Swing?
+        CONNECTION_7 = 7, // Whip
+        CONNECTION_8 = 8, // Arrow/Heartf
+        CONNECTION_9 = 9, // Chandelier/lotus flower
     };
     enum State_e {
         STATE_0 = 0,
@@ -85,6 +85,19 @@ public:
         mVec3_c const *param_1, mAng3_c const *param_2, mVec3_c *param_3, mVec3_c *param_4, bool param_5
     ) const {
         return field_0xA0->getArrowOffsetPosAndAngle(param_1, param_2, param_3, param_4, param_5);
+    }
+
+    dAcBase_c *getControllingActor() {
+        return static_cast<dAcBase_c *>(mControllingActor.p_owner);
+    }
+
+    void setField_0x8C_0x90(f32 f0, f32 f1) {
+        field_0x8C = f0;
+        field_0x90 = f1;
+    }
+    void setField_0x94_0x98(f32 f0, f32 f1) {
+        field_0x94 = f0;
+        field_0x98 = f1;
     }
 
 public:

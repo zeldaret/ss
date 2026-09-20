@@ -61,6 +61,7 @@ enum dBgPc_Attribute {
     POLY_ATTR_DAMAGE = 13,
     POLY_ATTR_SLOPE_RUN = 15,
     POLY_ATTR_SAND_DEEP_SLOW = 16,
+    POLY_ATTR_CURSED_WATER = 17,
 };
 class dBgPc {
 public:

@@ -2,9 +2,10 @@
 #define D_A_PLAYER_ACT_H
 
 #include "d/a/d_a_base.h"
-#include "d/a/obj/d_a_obj_bomb.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/d_player_base.h"
 #include "m/m_vec.h"
+
 
 class dAcEnBase_c;
 class dAcOFairy_c;
@@ -247,7 +248,7 @@ public:
         return false;
     }
     /* vt 0x1B8 */ virtual void canHandleGameOver() {}
-    /* vt 0x1BC */ virtual UNKWORD vt_0x1BC() {
+    /* vt 0x1BC */ virtual dAcObjBase_c *getBeetleHeldActor() {
         return 0;
     }
 
@@ -414,7 +415,7 @@ public:
     /* vt 0x2A4 */ virtual bool isRunningUpWall() {
         return false;
     }
-    /* vt 0x2A8 */ virtual void lookTowardItem() {}
+    /* vt 0x2A8 */ virtual void lookTowardItem(const mVec3_c &, u32, mAng, f32, f32, f32) {}
     /* vt 0x2AC */ virtual void vt_0x2AC() {}
     /* vt 0x2B0 */ virtual void vt_0x2B0() {}
     /* vt 0x2B4 */ virtual void triggerMoveEventMaybe(u32, u32, u32, const mVec3_c *, const mAng &, u32, u32) {}

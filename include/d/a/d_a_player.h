@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_item.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/d_player_mdl.h"
 #include "m/m_angle.h"
@@ -32,8 +33,22 @@ public:
     /* vt 0x314 */ virtual void vt_0x314();
     /* vt 0x318 */ virtual void vt_0x318();
 
+    struct ObjectArray {
+        static const size_t sNumObjects = 16;
+
+        bool insert(dAcObjBase_c *);
+        void execute();
+        dAcObjBase_c *get(s32 index);
+        void removeBombs();
+
+        dAcObjRef_c mObjs[sNumObjects];
+        u32 mCounter[sNumObjects];
+    };
+
 protected:
-    /* 0x137C */ u8 _0x137C[0x16F0 - 0x137C];
+    /* 0x137C */ ObjectArray mOwnedObjects;
+    /* 0x147C */ ObjectArray mOwnedProjectiles;
+    /* 0x157C */ u8 _0x157C[0x16F0 - 0x157C];
     /* 0x16F0 */ nw4r::g3d::ResFile mHeldResFile;
     /* 0x16F4 */ u8 _0x16F4[0x4564 - 0x16F4];
     /* 0x4564 */ f32 field_0x4564;
@@ -58,6 +73,7 @@ public:
     void setBeetleFlashClr(const mColor &);
     void setBeetleBackAnim();
     s32 getBeetleWarningTimeLeft();
+    void setBeetleReleasedObject(dAcObjBase_c *pObj);
 
     // Item select/equip/use functions [0x801E3160 - 0x801E7AD0] ?
     static s32 calcItemWheelSelection(bool reset, s32 numOptions);
@@ -115,6 +131,14 @@ public:
 
     static dAcPy_c *GetLink2() {
         return LINK2;
+    }
+
+    static bool insertOwnedObject(dAcObjBase_c *pObj) {
+        return LINK2->mOwnedObjects.insert(pObj);
+    }
+
+    ObjectArray &getOwnedObjects() {
+        return mOwnedObjects;
     }
 
     void onShieldUpdate();
