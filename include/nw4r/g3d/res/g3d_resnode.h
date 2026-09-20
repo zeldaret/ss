@@ -144,6 +144,14 @@ public:
         return *(const math::VEC3 *)&ref().translate;
     }
 
+    const math::VEC3 &GetRotation() const {
+        return *(const math::VEC3 *)&ref().rot;
+    }
+
+    const math::VEC3 &GetScale() const {
+        return *(const math::VEC3 *)&ref().scale;
+    }
+
     // not in the dwarf
     const math::VEC3 &GetBoundsMin() const {
         return *(const math::VEC3 *)&ref().volume_min;

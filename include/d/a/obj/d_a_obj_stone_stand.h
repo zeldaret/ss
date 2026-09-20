@@ -60,8 +60,7 @@ private:
 
     static char *sResMdlAnmNames[3];
     static const u32 pad[2];
-    static const InteractionTargetDef sInteraction1;
-    static const InteractionTargetDef sInteraction2;
+    static const InteractionTargetDef sInteractions[];
     static const s16 lbl_513_rodata_A8;
 };
 

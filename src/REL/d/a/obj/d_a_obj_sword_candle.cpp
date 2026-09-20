@@ -1,5 +1,6 @@
 #include "d/a/obj/d_a_obj_sword_candle.h"
 
+#include "d/a/d_a_base.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_stage_kraken.h"
@@ -93,7 +94,7 @@ int dAcOSwordCandle_c::actorCreate() {
         field_0x818 = 1;
     }
     if (mActivatedSceneflag < 0xff && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActivatedSceneflag)) {
-        unsetActorProperty(1);
+        unsetActorProperty(AC_PROP_0x1);
         field_0x816 = 1;
     }
     mMdl.setPriorityDraw(0x1C, 9);
@@ -182,7 +183,7 @@ int dAcOSwordCandle_c::actorExecuteInEvent() {
 
 void dAcOSwordCandle_c::registerInEvent() {
     if (EventManager::sInstance->isCurrentEvent("SwordCandle")) {
-        dAcPy_c::LINK->mObjectActorFlags |= 0x200;
+        dAcPy_c::LINK->setObjectProperty(OBJ_PROP_0x200);
         return;
     }
     if (EventManager::sInstance->isCurrentEvent("GodsMark") || EventManager::sInstance->isCurrentEvent("SceneChange") ||
@@ -194,8 +195,8 @@ void dAcOSwordCandle_c::registerInEvent() {
 }
 
 void dAcOSwordCandle_c::unkVirtFunc_0x6C() {
-    if (dAcPy_c::GetLink()->mObjectActorFlags & 0x200) {
-        dAcPy_c::LINK->mObjectActorFlags &= ~0x200;
+    if (dAcPy_c::GetLink()->checkObjectProperty(OBJ_PROP_0x200)) {
+        dAcPy_c::LINK->unsetObjectProperty(OBJ_PROP_0x200);
     }
     field_0x817 = 0;
 }
@@ -222,8 +223,8 @@ void dAcOSwordCandle_c::finalizeState_Wait() {}
 
 void dAcOSwordCandle_c::initializeState_WaitClear() {
     dBgS::GetInstance()->Release(&mBgW);
-    mActorProperties &= ~0x1;
-    mObjectActorFlags |= 0x200;
+    unsetActorProperty(AC_PROP_0x1);
+    setObjectProperty(OBJ_PROP_0x200);
 }
 
 volatile u32 FLAGS_1 = 0x00000001;
@@ -240,7 +241,7 @@ void dAcOSwordCandle_c::executeState_WaitClear() {
 }
 
 void dAcOSwordCandle_c::finalizeState_WaitClear() {
-    mObjectActorFlags &= ~0x200;
+    unsetObjectProperty(OBJ_PROP_0x200);
     nw4r::g3d::ResMdl mdl = mMdl.getResMdl();
     nw4r::g3d::ResNode resNode = mdl.GetResNode("loc_Effect");
     mMdl.getNodeWorldMtxMultVecZero(resNode.GetID(), field_0x7F0);
@@ -278,7 +279,7 @@ void dAcOSwordCandle_c::fn_530_1180() {
                 field_0x7FC = mPosition;
                 mPosition = mPosition - vec * 200.f;
                 mOldPosition = mPosition;
-                mObjectActorFlags &= ~0x200;
+                unsetObjectProperty(OBJ_PROP_0x200);
                 field_0x818 = 1;
                 field_0x808 = 0.f;
                 updateMatrix();

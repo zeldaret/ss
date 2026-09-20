@@ -5,6 +5,7 @@
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_shadow.h"
+#include "d/flag/sceneflag_manager.h"
 #include "m/m3d/m_anmtexpat.h"
 #include "m/m3d/m_anmtexsrt.h"
 #include "m/m3d/m_smdl.h"
@@ -53,12 +54,20 @@ public:
     STATE_FUNC_DECLARE(dAcOSwSwordBeam_c, OnSwitch);
     STATE_FUNC_DECLARE(dAcOSwSwordBeam_c, End);
 
+    bool checkFlag0() const {
+        return mSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag);
+    }
+    bool checkFlag1() const {
+        u16 flag = mSceneflag + 2;
+        return flag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag);
+    }
+
     void setSpawnedFromOtherActor(bool val) {
         mSpawnedFromOtherActor = val;
     }
 
-    void setSomeFloatFromOtherActor(f32 val) {
-        mSomeFloatFromOtherActor = val;
+    void setField_0xC8C(f32 val) {
+        field_0xC8C = val;
     }
 
     void setField_0xC90(f32 val) {
@@ -97,7 +106,7 @@ private:
     /* 0xC68 */ mQuat_c field_0xC68;
     /* 0xC78 */ mQuat_c field_0xC78;
     /* 0xC88 */ f32 field_0xC88;
-    /* 0xC8C */ f32 mSomeFloatFromOtherActor;
+    /* 0xC8C */ f32 field_0xC8C;
     /* 0xC90 */ f32 field_0xC90;
     /* 0xC94 */ mAng field_0xC94;
     /* 0xC96 */ mAng field_0xC96;

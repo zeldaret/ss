@@ -18,6 +18,7 @@
 #include "nw4r/g3d/res/g3d_resanmclr.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
+#include "nw4r/math/math_arithmetic.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/event.h"
@@ -32,12 +33,9 @@ char *dAcOStoneStand_c::sResMdlAnmNames[3] = {"SekibanMapADemo", "SekibanMapBDem
 
 const u32 dAcOStoneStand_c::pad[2] = {0, 0};
 
-const InteractionTargetDef dAcOStoneStand_c::sInteraction1 = {
-    0, 3, 0, EXAMINE_TALK, 0, 250.f, 60.f, 60.f, -50.f, 150.f, 50.f, 1.f,
-};
-
-const InteractionTargetDef dAcOStoneStand_c::sInteraction2 = {
-    1, 3, 0, EXAMINE_TALK, 0, 250.f, 60.f, 60.f, -50.f, 150.f, 50.f, 1.f,
+const InteractionTargetDef dAcOStoneStand_c::sInteractions[2] = {
+    {0, 3, 0, EXAMINE_TALK, 0, 250.f, 60.f, 60.f, -50.f, 150.f, 50.f, 1.f},
+    {1, 3, 0, EXAMINE_TALK, 0, 250.f, 60.f, 60.f, -50.f, 150.f, 50.f, 1.f},
 };
 
 bool dAcOStoneStand_c::createHeap() {
@@ -94,16 +92,12 @@ int dAcOStoneStand_c::create() {
     } else {
         mOpenedLightPillarState = 0;
     }
-
     if (mOpenedLightPillarState < 3) {
         mAnm[mOpenedLightPillarState].setFrame(0.f, 0);
     }
-    nw4r::g3d::ResMdl mdl = mMdl.getResMdl();
-    mLocatorBones[0] = mdl.GetResNode("locator_A").GetID();
-    nw4r::g3d::ResMdl mdl2 = mMdl.getResMdl();
-    mLocatorBones[1] = mdl2.GetResNode("locator_B").GetID();
-    nw4r::g3d::ResMdl mdl3 = mMdl.getResMdl();
-    mLocatorBones[2] = mdl3.GetResNode("locator_C").GetID();
+    mLocatorBones[0] = mMdl.getResMdl().GetResNode("locator_A").GetID();
+    mLocatorBones[1] = mMdl.getResMdl().GetResNode("locator_B").GetID();
+    mLocatorBones[2] = mMdl.getResMdl().GetResNode("locator_C").GetID();
     for (s32 i = 0; i < 3; i++) {
         mMdl.getNodeWorldMtx(mLocatorBones[i], mTabletMatrix[i]);
     }
@@ -150,7 +144,7 @@ int dAcOStoneStand_c::actorExecute() {
 
 int dAcOStoneStand_c::actorExecuteInEvent() {
     dAcPy_c *link = dAcPy_c::LINK;
-    bool a = false;
+    bool act2 = false;
     if (mEvent.isThisActorInEvent()) {
         switch (mEvent.getCurrentEventCommand()) {
             case 'act0': {
@@ -158,17 +152,16 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
                     mEvent.advanceNext();
                 } else {
                     field_0x7C8 = 0x1E;
-                    mVec3_c vec3 = mVec3_c::Ez * 125.f;
-                    mVec3_c vec = vec3;
-                    vec.rotY(mRotation.y);
-                    vec += mPosition;
-                    s32 target = mRotation.y - 0x8000;
+                    mVec3_c targetPos = mVec3_c(mVec3_c::Ez * 125.f);
+                    targetPos.rotY(mRotation.y);
+                    targetPos += mPosition;
+                    s32 targetAng = mRotation.y - 0x8000;
                     if (link != nullptr) {
-                        cLib::addCalcPos(&vec, mLinkPos, 0.25f, 200.f, 0.f);
-                        sLib::addCalcAngle(mLinkRot.y.ref(), target, 4, 0x7fff, 0);
+                        cLib::addCalcPos(&mLinkPos, targetPos, 0.25f, 200.f, 0.f);
+                        sLib::addCalcAngle(mLinkRot.y.ref(), targetAng, 4, 0x7fff, 0);
                         link->setPosRot(&mLinkPos, &mLinkRot, false, 0, 0);
-                        if ((vec - link->mPosition).squareMagXZ() < 50.f &&
-                            labs((s16)(mRotation.y - (s16)target)) < 0xb6) {
+                        if (targetPos.squareDistanceToXZ(link->mPosition) < 50.f &&
+                            mAng(mRotation.y - mAng(targetAng)).abs() < 0xB6) {
                             link->setPosRot(&mLinkPos, &mLinkRot, false, 0, 0);
                             updateExecutePriority((*fProfile::sProfileList)[200]->m_execute_order + 1);
                             mEvent.advanceNext();
@@ -188,7 +181,7 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
                 break;
             }
             case 'act2': {
-                a = true;
+                act2 = true;
                 if (!mInsertedTablet) {
                     mOpenedLightPillarState++;
                     link->getBodyMtx(&mTabletMatrix[mVisibleTabletState], 0xF);
@@ -216,7 +209,7 @@ int dAcOStoneStand_c::actorExecuteInEvent() {
     mMdl.calc(false);
     for (s32 i = 0; i < 3; i++) {
         mAnm[i].play();
-        if (!a || i != mVisibleTabletState || mAnm[mVisibleTabletState].getRate(0) != 0.f) {
+        if (!act2 || i != mVisibleTabletState || mAnm[mVisibleTabletState].getRate(0) != 0.f) {
             mMdl.getNodeWorldMtx(mLocatorBones[i], mTabletMatrix[i]);
         }
         mTabletMdls[i].setLocalMtx(mTabletMatrix[i]);
@@ -273,7 +266,7 @@ void dAcOStoneStand_c::executeState_Shake() {
     field_0x7A8 *= 0.85f;
     field_0x7A4 = field_0x7A8 * field_0x7BE.sin();
     field_0x7BE += mAng(lbl_513_rodata_A8);
-    if (fabsf(field_0x7A8) < 0.05f) {
+    if (nw4r::math::FAbs(field_0x7A8) < 0.05f) {
         mStateMgr.changeState(StateID_OnSwitch);
     }
 }
@@ -287,8 +280,8 @@ void dAcOStoneStand_c::initializeState_OnSwitch() {}
 
 void dAcOStoneStand_c::executeState_OnSwitch() {
     if (canInsertTablet()) {
-        AttentionManager::GetInstance()->addTarget(*this, sInteraction1, 0, nullptr);
-        AttentionManager::GetInstance()->addTarget(*this, sInteraction2, 0, nullptr);
+        AttentionManager::GetInstance()->addTarget(*this, sInteractions[0], 0, nullptr);
+        AttentionManager::GetInstance()->addTarget(*this, sInteractions[1], 0, nullptr);
     }
 }
 
@@ -311,7 +304,7 @@ void dAcOStoneStand_c::fn_513_14D0() {
             field_0x7A8 *= 0.85f;
             field_0x7A4 = field_0x7A8 * field_0x7BE.sin();
             field_0x7BE += mAng(lbl_513_rodata_A8);
-            if (fabsf(field_0x7A8) < 0.05f) {
+            if (nw4r::math::FAbs(field_0x7A8) < 0.05f) {
                 field_0x7A4 = 0.f;
                 field_0x7A8 = 0.f;
                 field_0x7C9 = 2;
@@ -326,16 +319,9 @@ void dAcOStoneStand_c::fn_513_14D0() {
 }
 
 bool dAcOStoneStand_c::canInsertTablet() {
-    if (mTabletCSIndex == 0 && !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_FARON_PILLAR_OPENED)) {
-        return true;
-    }
-    if (mTabletCSIndex == 1 && !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_ELDIN_PILLAR_OPENED)) {
-        return true;
-    }
-    if (mTabletCSIndex == 2 && !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_LANAYRU_PILLAR_OPENED)) {
-        return true;
-    }
-    return false;
+    return (mTabletCSIndex == 0 && !StoryflagManager::sInstance->getFlag(STORYFLAG_FARON_PILLAR_OPENED)) ||
+           (mTabletCSIndex == 1 && !StoryflagManager::sInstance->getFlag(STORYFLAG_ELDIN_PILLAR_OPENED)) ||
+           (mTabletCSIndex == 2 && !StoryflagManager::sInstance->getFlag(STORYFLAG_LANAYRU_PILLAR_OPENED));
 }
 
 void dAcOStoneStand_c::vt_0x88(f32 &param) {}

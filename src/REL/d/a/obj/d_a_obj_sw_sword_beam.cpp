@@ -10,7 +10,6 @@
 #include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
-#include "egg/math/eggMatrix.h"
 #include "egg/math/eggQuat.h"
 #include "f/f_base.h"
 #include "m/m3d/m_smdl.h"
@@ -24,10 +23,8 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resnode.h"
-#include "nw4r/math/math_types.h"
 #include "nw4r/ut/ut_Color.h"
 #include "rvl/GX/GXTypes.h"
-#include "rvl/MTX/mtx.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/d_emitter.h"
@@ -119,14 +116,14 @@ int dAcOSwSwordBeam_c::actorExecute() {
     mUnk1.Set(mPosition + mVec3_c::Ey * (field_0xC88 + 75.f), mRotation.y);
     dCcS::GetInstance()->Set(&mUnk1);
     if (mSpawnedFromOtherActor && mStateMgr.isState(StateID_Wait)) {
-        mUnk2.Set(mVec3_c(-100.f, 10.f, -150.f), mVec3_c(100.f, 120.f, mSomeFloatFromOtherActor + 150.f));
+        mUnk2.Set(mVec3_c(-100.f, 10.f, -150.f), mVec3_c(100.f, 120.f, field_0xC8C + 150.f));
         mUnk2.Set(mPosition, mRotation.y);
         dCcS::GetInstance()->Set(&mUnk2);
     }
     fn_507_1F80();
     mPositionCopy3 = mPosition;
     mPositionCopy3.y += 100.f;
-    if (mSpawnedFromOtherActor && mSomeFloatFromOtherActor <= 0.f) {
+    if (mSpawnedFromOtherActor && field_0xC8C <= 0.f) {
         mPositionCopy3.y += 100.f;
     }
     mPositionCopy2 = mPosition;
@@ -134,7 +131,7 @@ int dAcOSwSwordBeam_c::actorExecute() {
     if (!checkSceneFlag()) {
         // TODO fake
         AttentionManager *attMan = AttentionManager::GetInstance();
-        float a = mSomeFloatFromOtherActor + 800.f;
+        float a = field_0xC8C + 800.f;
         float b = 100.f;
         float c = -500.f;
         float d = 500.f;
@@ -188,13 +185,13 @@ void dAcOSwSwordBeam_c::registerInEvent() {
         mAng angle = link->mRotation.y;
         link->setObjectProperty(OBJ_PROP_0x200);
 
-        if (mSpawnedFromOtherActor && mSomeFloatFromOtherActor <= 0.f) {
+        if (mSpawnedFromOtherActor && field_0xC8C <= 0.f) {
             angle = getXZAngleToPlayer() - 0x8000;
         }
         link->setPosYRot(nullptr, angle, false, 0, 0);
         field_0xCAC = true;
     }
-    if (mSpawnedFromOtherActor && mSomeFloatFromOtherActor <= 0.f) {
+    if (mSpawnedFromOtherActor && field_0xC8C <= 0.f) {
         mPositionCopy3.y = mPosition.y + 100.f;
     }
 }
@@ -202,13 +199,14 @@ void dAcOSwSwordBeam_c::registerInEvent() {
 void dAcOSwSwordBeam_c::unkVirtFunc_0x6C() {
     dAcPy_c *link = dAcPy_c::LINK;
     if (field_0xCAC && getSquareDistToPlayer() < 160000.f) {
-        mVec3_c pos = mVec3_c::Ez * 400.f;
+        mVec3_c pos(link->mPosition);
+        mAng rot = mRotation.y - 0x8000;
+        pos = mVec3_c::Ez * 400.f;
         pos.rotY(mRotation.y);
         pos += mPosition + mVec3_c::Ey * 100.f;
         if (dBgS_ObjGndChk::CheckPos(pos)) {
             pos.y = dBgS_ObjGndChk::GetGroundHeight();
         }
-        mAng rot = mRotation.y - 0x8000;
         link->setPosYRot(&pos, rot, false, 0, 0);
     }
     field_0xCAC = false;
@@ -393,7 +391,7 @@ void dAcOSwSwordBeam_c::fn_507_1A50() {
 
 void dAcOSwSwordBeam_c::fn_507_1AF0() {
     field_0xC9A += field_0xCA2 * 0.5f;
-    field_0xC94 = field_0xC98 * .9f;
+    field_0xC94 = -field_0xC98.mVal * .9f;
     field_0xC96 += field_0xC94;
     field_0xC96 *= 0.7f;
     field_0xC98 += field_0xC96;
@@ -413,14 +411,12 @@ bool dAcOSwSwordBeam_c::fn_507_1F30() {
 
 void dAcOSwSwordBeam_c::fn_507_1F80() {
     updateMatrix();
-    EGG::Quatf a = field_0xC68 * field_0xC78;
     mMtx_c mtx1;
-    mtx1.fromQuat(a);
+    mtx1.fromQuat(field_0xC68 * field_0xC78);
     mMtx_c mtx2;
-    f32 temp = field_0xC88 + 75.f;
-    PSMTXTrans(mtx2, 0.f, temp, 0.f);
-    PSMTXConcat(mWorldMtx.m, mtx2.m, mWorldMtx.m);
-    PSMTXConcat(mWorldMtx.m, mtx1.m, mWorldMtx.m);
+    mtx2.transS(0.f, field_0xC88 + 75.f, 0.f);
+    mWorldMtx.concat(mtx2);
+    mWorldMtx.concat(mtx1);
     mMdl.setLocalMtx(mWorldMtx);
     mMdl.setScale(mScale);
     mMdl.calc(false);
@@ -429,11 +425,11 @@ void dAcOSwSwordBeam_c::fn_507_1F80() {
 void dAcOSwSwordBeam_c::fn_507_2130() {
     sLib::addCalcScaledDiff(&field_0xC88, 5.f * field_0xCA0.sin() * mScale.y, 0.2f, 1.f);
     field_0xCA0 += field_0xCA2;
-    bool a = true;
+    bool stateNotWaitOrEnd = true;
     if (!mStateMgr.isState(StateID_Wait) && !mStateMgr.isState(StateID_End)) {
-        a = false;
+        stateNotWaitOrEnd = false;
     }
-    if (a) {
+    if (stateNotWaitOrEnd) {
         if (!EventManager::sInstance->isInEvent()) {
             fn_507_1AF0();
             return;
@@ -454,43 +450,8 @@ void dAcOSwSwordBeam_c::fn_507_22A0() {
     mEvent.scheduleEvent(event, 0);
 }
 
-// TODO fake
 bool dAcOSwSwordBeam_c::checkSceneFlag() {
-    bool subtype0andFlagTrue = false;
-    bool ret = true;
-    if (mSubtype == 0) {
-        bool tmp = (mSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag));
-        if (tmp) {
-            subtype0andFlagTrue = true;
-        }
-    }
-
-    if (!subtype0andFlagTrue) {
-        bool subtype0andFlagTrue = false;
-        if (mSubtype == 1) {
-            u16 flag = mSceneflag + 2;
-            bool tmp = (flag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag));
-            if (tmp) {
-                subtype0andFlagTrue = true;
-            }
-        }
-        if (!subtype0andFlagTrue) {
-            ret = false;
-        }
-    }
-    return ret;
-
-    // functionally equivalent to
-    // switch (mSubtype) {
-    //     case 0: {
-    //         return (mSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag));
-    //     }
-    //     case 1: {
-    //         u16 flag = mSceneflag + 2;
-    //         return (flag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag));
-    //     }
-    //     default: return false;
-    // }
+    return (mSubtype == 0 && checkFlag0()) || (mSubtype == 1 && checkFlag1());
 }
 
 bool dAcOSwSwordBeam_c::isleOfSongsCanGetHit() {
@@ -513,26 +474,18 @@ void dAcGoddessCrestHolder_c::setCrestAtBone(char *bone_name, m3d::smdl_c *model
     nw4r::g3d::ResMdl mdl = model->getResMdl();
     nw4r::g3d::ResNode bone = mdl.GetResNode(bone_name);
     nw4r::g3d::ResNode parentBone = bone.GetParentNode();
-    // mVec3_c(bone.ref().scale) * mVec3_c(parentBone.ref().scale);
-    mSwScale.x = bone.ref().scale.x * parentBone.ref().scale.x;
-    mSwScale.y = bone.ref().scale.y * parentBone.ref().scale.y;
-    mSwScale.z = bone.ref().scale.z * parentBone.ref().scale.z;
-    // mSwScale = mVec3_c(
-    //     bone.ref().scale.x * parentBone.ref().scale.x, bone.ref().scale.y * parentBone.ref().scale.y,
-    //     bone.ref().scale.z * parentBone.ref().scale.z
-    // );
+
+    mVec3_c boneScale = bone.GetScale();
+    mVec3_c parentBoneScale = parentBone.GetScale();
+    mSwScale.set(boneScale.x * parentBoneScale.x, boneScale.y * parentBoneScale.y, boneScale.z * parentBoneScale.z);
 
     mBoneID = bone.GetID();
     model->getNodeWorldMtxMultVecZero(mBoneID, mSwPos);
 
-    nw4r::math::VEC3 boneRot = bone.ref().rot;
-    nw4r::math::VEC3 parentRot = parentBone.ref().rot;
-
-    // nw4r::math::VEC3 rot = boneRot + parentRot;
-
-    mSwRot.x = mAng::fromDeg(boneRot.x + parentRot.x);
-    mSwRot.y = mAng::fromDeg(boneRot.y + parentRot.y);
-    mSwRot.z = mAng::fromDeg(boneRot.z + parentRot.z);
+    mVec3_c rot = *(mVec3_c *)&bone.GetRotation() + *(mVec3_c *)&parentBone.GetRotation();
+    mSwRot.set(
+        mRotation.x + mAng::fromDeg(rot.x), mRotation.y + mAng::fromDeg(rot.y), mRotation.z + mAng::fromDeg(rot.z)
+    );
 
     dAcOSwSwordBeam_c *swSwordBeam = (dAcOSwSwordBeam_c *)dAcObjBase_c::create(
         fProfile::OBJ_SW_SWORD_BEAM, mRoomID, *sceneflag, &mSwPos, &mSwRot, &mSwScale, -1
@@ -541,16 +494,16 @@ void dAcGoddessCrestHolder_c::setCrestAtBone(char *bone_name, m3d::smdl_c *model
         mSwSwordBeamRef.link(swSwordBeam);
         if (mTransferToCrest) {
             swSwordBeam->setSpawnedFromOtherActor(true);
-            swSwordBeam->setSomeFloatFromOtherActor(mSendToSwSB);
+            swSwordBeam->setField_0xC8C(mSendToSwSB);
         }
     }
 }
 
 void dAcGoddessCrestHolder_c::setCrestPosRot(m3d::smdl_c *mdl) {
-    dAcOSwSwordBeam_c *swordBeam = (dAcOSwSwordBeam_c *)mSwSwordBeamRef.get();
+    dAcOSwSwordBeam_c *swordBeam = mSwSwordBeamRef.get();
     mdl->getNodeWorldMtxMultVecZero(mBoneID, mSwPos);
-    swordBeam->mPosition = mSwPos;
-    swordBeam->mRotation.set(mSwRot);
+    swordBeam->setPosition(mSwPos);
+    swordBeam->setRotation(mAng3_c(mSwRot));
 }
 
 dAcOSwSwordBeam_c::~dAcOSwSwordBeam_c() {};
