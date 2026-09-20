@@ -88,6 +88,7 @@ public:
     STATE_MGR_DEFINE_UTIL_GETSTATEID(dAcBomb_c);
     STATE_MGR_DEFINE_UTIL_GETOLDSTATEID(dAcBomb_c);
     STATE_MGR_DEFINE_UTIL_GETNEWSTATEID(dAcBomb_c);
+    STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dAcBomb_c);
 
     void coHitCallback(cCcD_Obj *i_objInfB);
     void tgHitCallback(dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfA, cCcD_Obj *i_objInfB);
@@ -147,7 +148,7 @@ public:
     /* 0xA42 */ u8 field_0xA42;
     /* 0xA44 */ s16 mFuseTime;
     /* 0xA46 */ u16 field_0xA46;
-    /* 0xA48 */ u8 _3[0xA4A - 0xA48];
+    /* 0xA48 */ mAng field_0xA48;
     /* 0xA4A */ mAng mBombRotationY;
     /* 0xA4C */ f32 mBombSpeed;
     /* 0xA50 */ f32 field_0xA50;

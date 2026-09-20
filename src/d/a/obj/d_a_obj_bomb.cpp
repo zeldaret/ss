@@ -28,6 +28,7 @@
 #include "m/m3d/m3d.h"
 #include "m/m_angle.h"
 #include "m/m_color.h"
+#include "m/m_mtx.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
@@ -54,16 +55,6 @@ SPECIAL_ACTOR_PROFILE(BOMB, dAcBomb_c, fProfile::BOMB, 0x128, 0, 2);
 
 static const Vec vec_fn_80259E80 = {0, 60, 0};
 
-dCcD_SrcSph sSphSrc = {
-    /* mObjInf */
-    {/* mObjAt */ {AT_TYPE_BOMB, 0x1803E, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */
-     {~(AT_TYPE_BUGNET | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_0x10), 0x800111, {0, 0x0A, 0x40F}, 0, 0},
-     /* mObjCo */ {0xE9}},
-    /* mSphInf */
-    {0.0f}
-};
-
 struct dAcBomc_HIO_c {
     static const f32 getBBoxX() {
         return 36.f;
@@ -76,6 +67,9 @@ struct dAcBomc_HIO_c {
     }
     static const f32 getBombScale() {
         return 30.f;
+    }
+    static const s32 getSomething() {
+        return 40;
     }
     static const mVec3_c getBBoxMin() {
         return mVec3_c(-bbox_x, 0.f, -bbox_x);
@@ -97,6 +91,16 @@ STATE_DEFINE(dAcBomb_c, FlowerWait);
 STATE_DEFINE(dAcBomb_c, Explode);
 STATE_DEFINE(dAcBomb_c, Carry);
 STATE_DEFINE(dAcBomb_c, WindCarry);
+
+dCcD_SrcSph sSphSrc = {
+    /* mObjInf */
+    {/* mObjAt */ {AT_TYPE_BOMB, 0x1803E, {0, 0, 0}, sHIO.getSomething(), 0, 0, 0, 0, 0},
+     /* mObjTg */
+     {~(AT_TYPE_BUGNET | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_0x10), 0x800111, {0, 0x0A, 0x40F}, 0, 0},
+     /* mObjCo */ {0xE9}},
+    /* mSphInf */
+    {sHIO.getBombScale()}
+};
 
 void dAcBomb_c::coHitCallback(cCcD_Obj *i_objInfB) {
     if (!i_objInfB->ChkCo_0x8000()) {
@@ -955,7 +959,166 @@ void dAcBomb_c::unkVirtFunc_0x6C() {
     }
 }
 
-int dAcBomb_c::actorExecute() {}
+// NONMATCHING
+int dAcBomb_c::actorExecute() {
+    unset0xA3C(FLAG_0x400000 | FLAG_0x100);
+    mVec3_c v;
+    fn_8025A1F0(v);
+
+    f32 f = field_0xA84.getSquareMag();
+    if (!check0xA3C(FLAG_0x8000)) {
+        if (f > 1.f) {
+            v += field_0xA84;
+            rollTo(field_0xA84);
+            rollToInternal(field_0xA84);
+        }
+        f = 0.f;
+        field_0xA84 = mVec3_c::Zero;
+    } else {
+        unset0xA3C(FLAG_0x8000);
+    }
+
+    field_0xA48 = 0;
+    field_0xA60 = field_0xA54;
+
+    executeState();
+
+    if (check0xA3C(FLAG_0x1000)) {
+        deleteRequest();
+        return SUCCEEDED;
+    }
+
+    if (!isState(StateID_Explode)) {
+        if (check0xA3C(FLAG_0x800)) {
+            if (sLib::chase(&mScale.x, 0.f, 0.0875f)) {
+                deleteRequest();
+                return SUCCEEDED;
+            }
+
+            mScale.y = mScale.z = mScale.x;
+            mMdl.setScale(mScale);
+        } else if (mFuseTime < 4) {
+            f32 scale = nw4r::ut::Min((4 - mFuseTime) * 0.133333f, 0.4f) + 1.f;
+            mScale.set(scale, scale, scale);
+            mMdl.setScale(mScale);
+        }
+
+        if (checkWaterIn()) {
+            if (!check0xA3C(FLAG_0x800 | FLAG_0x20)) {
+                if (!check0xA3C(FLAG_0x20000000)) {
+                    mVec3_c pos;
+                    // !!! FPR alloc here is weird I guess
+                    f32 diff0 = nw4r::math::FAbs(mOldPosition.y - mPosition.y);
+                    f32 diff1 = nw4r::math::FAbs(mAcch.GetWtrGroundH() - mPosition.y);
+                    if (diff0 < 1.f) {
+                        pos.x = mPosition.x;
+                        pos.y = mAcch.GetWtrGroundH();
+                        pos.z = mPosition.z;
+                    } else {
+                        f32 f = diff1 / diff0;
+                        if (f > 1.f) {
+                            f = 1.f;
+                        }
+                        pos = f * mOldPosition + (1.f - f) * mPosition;
+                    }
+                    dAcPy_c::fn_801E2FC0(pos, mAcch.mWtr, 0.8f);
+                }
+                startSound(SE_BM_FALL_WATER);
+                if (mLinkage.checkState(dLinkage_c::STATE_ACTIVE)) {
+                    mLinkage.forceRemove(this);
+                }
+                set0xA3C(FLAG_0x800);
+
+                field_0xA6C = mVec3_c::Zero;
+                mSpeed *= 0.5f;
+                mVelocity.y *= 0.5f;
+
+                mAcceleration = dAcPy_c::getBombAcceleration_1();
+                mMaxSpeed = dAcPy_c::getBombMaxSpeed_1();
+            }
+
+            if (check0xA3C(FLAG_0x1000)) {
+                deleteRequest();
+                field_0xA6C = mVec3_c::Zero;
+                return SUCCEEDED;
+            }
+        } else {
+            unset0xA3C(FLAG_0x20);
+            mAcceleration = dAcPy_c::getBombAcceleration();
+            mMaxSpeed = dAcPy_c::getBombMaxSpeed();
+        }
+
+        if (mSpeed > 1.f || f > 1.f) {
+            mVec3_c v;
+            setXYZCirclePoint(v, mAngle.y, mSpeed, 0.f);
+            bool gndNotHit = true;
+            if (f > 1.f) {
+                v += field_0xA84;
+            } else if (mAcch.ChkGndHit()) {
+                gndNotHit = false;
+            }
+
+            mMtx_c m;
+            f32 f = v.absXZ();
+            s32 atan0 = v.atan2sX_Z();
+            mAng a1 = f / ((sHIO.getBombScale() * 2.f * mScale.x) * M_PI) * 65536.f;
+            mAng a0 = mAng(atan0) - mRotation.y;
+            m.YrotS(a0);
+            if (gndNotHit) {
+                a1.mVal >>= 1;
+            }
+            m.XrotM(a1);
+            m.YrotM(-a0);
+            MTXConcat(m, mMtx, mMtx);
+        }
+
+        f32 scale = mScale.y * 25.f;
+        f32 f = 0.f;
+        if (field_0xA48 != 0 && field_0xA48 < 0x4000) {
+            /// !! Need to load field_0xA48 again
+            f = scale * nw4r::ut::Min(((1.f / field_0xA48.cos()) - 1.f) * 0.75f, 0.5f);
+        }
+        mLinkage.fn_800511E0(this);
+        mUnkRef.modifyMtx();
+
+        mMtx_c m2, m0, m1;
+        m0.transS(0.f, scale, 0.f);
+        mWorldMtx.concat(m0);
+        mWorldMtx.concat(mMtx);
+
+        m1.transS(0.f, -scale, 0.f);
+        mWorldMtx.concat(m1);
+
+        m2.transS(0.f, f, 0.f);
+        MTXConcat(m2, mWorldMtx, mWorldMtx);
+
+        mMdl.setLocalMtx(mWorldMtx);
+        mVec3_c in(0.f, mScale.y * sHIO.getBombScale(), 0.f);
+        mWorldMtx.multVec(in, mPositionCopy2);
+        mPositionCopy3 = mPositionCopy2;
+        mSph.moveCenter(mPositionCopy2);
+        mSph.SetR(mScale.x * sHIO.getBombScale() * field_0xA50);
+        if (check0xA3C(FLAG_0x800)) {
+            mSph.ClrTgSet();
+            mSph.ClrTgHit();
+        }
+        if (mSph.GetR() > 0.01f) {
+            dCcS::GetInstance()->Set(&mSph);
+        } else {
+            mSph.ClrCoHit();
+            mSph.ClrTgHit();
+        }
+
+        if (!check0xA3C(FLAG_0x800)) {
+            setSmokePos();
+        }
+
+        mMdl.calc(false);
+        setBombColor();
+    }
+
+    return SUCCEEDED;
+}
 
 int dAcBomb_c::draw() {
     if (isState(StateID_Explode) || (getBombType() == BOMB_2 && !dAcPy_c::GetLink()->checkActionFlagsCont(0x400000))) {
