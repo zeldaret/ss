@@ -32,7 +32,7 @@ bool dAcPy_c::ObjectArray::insert(dAcObjBase_c *pObj) {
         }
 
         if (isProfile(pObj, fProfile::BOMB)) {
-            mCounter[i] = MAX(0, static_cast<dAcBomb_c *>(pObj)->get0xA44()) + 3;
+            mCounter[i] = MAX(0, static_cast<dAcBomb_c *>(pObj)->getFuseTimer()) + 3;
         } else {
             mCounter[i] = 90;
         }
@@ -47,7 +47,7 @@ bool dAcPy_c::ObjectArray::insert(dAcObjBase_c *pObj) {
         mObjs[i].link(pObj);
 
         if (isProfile(pObj, fProfile::BOMB)) {
-            mCounter[i] = MAX(0, static_cast<dAcBomb_c *>(pObj)->get0xA44()) + 3;
+            mCounter[i] = MAX(0, static_cast<dAcBomb_c *>(pObj)->getFuseTimer()) + 3;
         } else {
             mCounter[i] = 90;
         }

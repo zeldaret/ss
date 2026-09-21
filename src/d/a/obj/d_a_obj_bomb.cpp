@@ -42,8 +42,7 @@
 #include "toBeSorted/attention.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
-
-#include <cstdlib>
+#include "toBeSorted/minigame_mgr.h"
 
 // For real??
 template <typename T>
@@ -63,7 +62,7 @@ struct dAcBomc_HIO_c {
         return 66.f;
     }
     static const f32 getBBoxZ() {
-        return 6.f;
+        return 5.f;
     }
     static const f32 getBombScale() {
         return 30.f;
@@ -139,7 +138,7 @@ void dAcBomb_c::tgHitCallback(dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfA, cCcD_
 
             mVec3_c target;
             setXYZCirclePoint(target, pPlayer->mRotation.y, 30.f, 0.f);
-            setTarget(target);
+            rollTo(target);
         } else if (i_objInfB->ChkAtType(
                        AT_TYPE_SWORD | AT_TYPE_0x40 | AT_TYPE_SLINGSHOT | AT_TYPE_0x20000 | AT_TYPE_BEETLE
                    ) &&
@@ -473,7 +472,7 @@ void dAcBomb_c::initializeState_Explode() {
 
     f32 d = cM3d_SignedLenPlaAndPos(&plane, mPosition);
 
-    mVec3_c temp(dAcPy_c::getBombExplodeScale(), dAcPy_c::getBombExplodeScale(), dAcPy_c::getBombExplodeScale());
+    mVec3_c temp(dAcPy_c::getBombParticleScale(), dAcPy_c::getBombParticleScale(), dAcPy_c::getBombParticleScale());
     if (d < dAcPy_c::getBombDistanceUnknown0()) {
         dEmitterBase_c *pEmitter = dJEffManager_c::spawnEffect(
             PARTICLE_RESOURCE_ID_MAPPING_322_, mPosition, nullptr, &temp, nullptr, nullptr, 0, 0
@@ -531,7 +530,7 @@ void dAcBomb_c::initializeState_Explode() {
     if (getBombType() == BOMB_2) {
         mSph.SetR(200.f);
     } else {
-        mSph.SetR(dAcPy_c::getBombExplodeScale());
+        mSph.SetR(dAcPy_c::getBombExplodeRadius());
     }
 
     mSph.SetC(mPosition);
@@ -542,8 +541,8 @@ void dAcBomb_c::initializeState_Explode() {
 
     startSound(SE_BM_EXPLODE);
     mLinkage.forceRemove(this);
-    mFuseTime = 0;
     unsetObjectProperty(OBJ_PROP_0x1000);
+    mFuseTime = 0;
 
     f32 dist = mPosition.squareDistance(pPlayer->mPosition);
     if (dist < 160000.f) {
@@ -641,6 +640,7 @@ void dAcBomb_c::initializeState_Wait() {
         set0xA3C(FLAG_0x2000000);
     }
 }
+// NONMATCHING
 void dAcBomb_c::executeState_Wait() {
     if (checkExplode()) {
         return;
@@ -666,13 +666,13 @@ void dAcBomb_c::executeState_Wait() {
     s16 s = out.atan2sX_Z();
     f32 d = out.absXZ();
 
-    s16 out_s;
+    mAng out_s;
 
     if (mAcch.ChkGndHit()) {
         mAng a = mAcch.GetGnd().GetAngle(s);
-        mVelocity.y -= d * std::abs(a.sin());
-
+        mVelocity.y -= d * nw4r::math::FAbs(a.sin());
         f32 cos = a.cos();
+
         out.x *= cos;
         out.z *= cos;
         if (field_0xA40 != 0) {
@@ -734,7 +734,7 @@ void dAcBomb_c::executeState_Wait() {
             f2 = 1.f;
         }
         if (attr == POLY_ATTR_SAND_DEEP_SLOW || attr == POLY_ATTR_SAND_MED) {
-            dTgStream_c::getForce(mPosition, force);
+            dTgStream_c::getForce(mPosition, force, dTgStream_c::sSandStreamList);
         }
 
         cLib::addCalcPosXZ(&field_0xA90, force, 0.5f, 10.f, 3.f);
@@ -745,15 +745,48 @@ void dAcBomb_c::executeState_Wait() {
         }
         setRoomId();
 
+        mAng a0, a1;
         if (mAcch.ChkGndHit()) {
             cM3dGPla plane;
             dBgS::GetInstance()->GetTriPla(mAcch.GetGnd(), &plane);
+            field_0xA48 = cM::atan2s(plane.GetN().absXZ(), plane.GetN().y);
+            a1 = plane.GetN().atan2sX_Z();
+            a0 = a1 - s;
         }
-        // ...
+
+        bool hit = false;
+        f32 outXZ = out.absXZ();
+        if (mAcch.ChkWallHit(nullptr) && mAng::abs(mAcchCir.GetWallAngleY() - s) > 0x4400 && outXZ > 1.0f) {
+            bounceWall(mAcchCir.GetWallAngleY());
+            hit = true;
+            startSoundWithFloatParam(SE_BM_BOUND, mVelocity.y);
+        } else if (mAcch.ChkRoofHit() && mVelocity.y > 0.f) {
+            startSoundWithFloatParam(SE_BM_BOUND, mVelocity.y);
+            mVelocity.y = 0.f;
+        } else if (mAcch.ChkGroundLanding() && mSpeed > 5.0f && field_0xA48 < mAng::fromDeg(50.f) &&
+                   mAng::abs(s) > 0x4000) {
+            bounceWall(a1);
+            hit = true;
+            mVelocity.y = vely;
+            mAcch.ClrGroundLanding();
+            mAcch.i_ClrGroundHit();
+        } else if (mSph.ChkCoHit() && field_0xA42 == 0 && mStts.GetCcMove().absXZ() >= 1.f) {
+            bounceWall(mStts.GetCcMove().atan2sX_Z());
+            field_0xA42 = 5;
+            hit = true;
+        }
+
+        if (hit) {
+            fn_8025A1F0(out);
+            s16 sVar15 = out.atan2sX_Z();
+            if (mAcch.ChkGndHit()) {
+                out_s = mAcch.GetGnd().GetAngle(sVar15);
+            }
+        }
 
         if (mAcch.ChkGroundLanding()) {
             if (vely < -5.f) {
-                startSoundWithFloatParam(SE_BM_BOUND, -1.f);
+                startSoundWithFloatParam(SE_BM_BOUND, vely * -1.0f);
                 if (dBgS::GetInstance()->GetPolyAtt0(mAcch.GetGnd()) != POLY_ATT_0_LAVA) {
                     dJEffManager_c::spawnGroundEffect(
                         mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 0.8f, field_0x1B0
@@ -761,16 +794,83 @@ void dAcBomb_c::executeState_Wait() {
                 }
             }
 
-            // ...
-
-            f32 f3 = dAcPy_c::getBombUnkFloat_0();
+            f32 f3 = dAcPy_c::getBombBounceSpeed();
+            f32 f4 = vely * -f3;
             s32 attr = dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd());
 
             if (check0xA3C(FLAG_0x40000) ||
-                ((dAcPy_c::getBombUnkFloat_1() <= f3 && attr != POLY_ATTR_SAND_DEEP_INSTANT) &&
-                 attr != POLY_ATTR_CURSED_WATER && attr != POLY_ATTR_SAND_DEEP_SLOW && attr != POLY_ATTR_SAND_MED)) {
+                !((f3 < dAcPy_c::getBombUnkFloat_0() || attr != POLY_ATTR_SAND_DEEP_INSTANT) &&
+                  (attr != POLY_ATTR_CURSED_WATER && attr != POLY_ATTR_SAND_DEEP_SLOW && attr != POLY_ATTR_SAND_MED))) {
+                sLib::chase(&mSpeed, 0.0f, 7.0f);
+            } else {
                 mSpeed *= 0.9f;
                 mBombSpeed *= 0.9f;
+                if (out_s < 0) {
+                    mSpeed *= out_s.cos();
+                    mBombSpeed *= out_s.cos();
+                }
+                if (check0xA3C(FLAG_0x80000)) {
+                    unset0xA3C(FLAG_0x80000);
+                    mVelocity.y = 0.f;
+                } else if (f4 > dAcPy_c::getBombUnkFloat_1()) {
+                    mVelocity.y = dAcPy_c::getBombUnkFloat_1();
+                } else {
+                    mVelocity.y = f4;
+                }
+            }
+        } else if (mAcch.ChkGndHit()) {
+            cM3dGPla plane;
+            dBgS::GetInstance()->GetTriPla(mAcch.GetGnd(), &plane);
+            int code = dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd());
+            if (check0xA3C(FLAG_0x40000)) {
+                if (code == POLY_ATTR_SAND_DEEP_SLOW || code == POLY_ATTR_SAND_MED) {
+                    outXZ = 0.2f;
+                } else {
+                    outXZ = 0.1f;
+                }
+            } else {
+                outXZ = 0.75f;
+            }
+            if (code != POLY_ATTR_CURSED_WATER) {
+                if (field_0xA48 < mAng::fromDeg(20.0f)) {
+                    mVec3_c v0 = plane.GetN() * 2.f;
+                    mVec3_c v1 = v0 * field_0xA48.sin();
+                    v1.y = 0.0f;
+
+                    mAng yRot = v1.atan2sX_Z();
+                    if (field_0xA84.squareMagXZ() > 1.0f) {
+                        mAng rot = mAng::fromVec(field_0xA84);
+                        if (mAng::abs(yRot - rot) >= 0x4000) {
+                            field_0xA84.rotY(-yRot);
+                            field_0xA84.z *= 0.99f;
+                            sLib::chase(&field_0xA84.z, 0.0f, 1.0f);
+                            field_0xA84.rotY(yRot);
+                        }
+                    }
+
+                    if (mAng::abs(yRot - mAngle.y) >= 0x4000) {
+                        sLib::chase(&mSpeed, 0.0f, outXZ);
+                    }
+                    mSpeed *= 0.9f;
+                    rollTo(v1);
+                    mSpeed = nw4r::ut::Min(mSpeed, 30.f);
+
+                    if (mAng::abs(yRot - mBombRotationY) >= 0x4000) {
+                        sLib::chase(&mBombSpeed, 0.0f, outXZ);
+                    }
+                    mBombSpeed *= 0.9f;
+                    rollToInternal(v1);
+                    mBombSpeed = nw4r::ut::Min(mBombSpeed, 30.f);
+                } else {
+                    sLib::chase(&mBombSpeed, 0.0f, outXZ);
+                    if (sLib::chase(&mSpeed, 0.0f, outXZ)) {
+                        if (field_0xA84.getSquareMag() < 1.f && field_0xA90.getSquareMag() < 1.f) {
+                            setPickupTarget();
+                        }
+                        unset0xA3C(FLAG_0x40000);
+                        mSph.ClrAtSet();
+                    }
+                }
             }
         }
     }
@@ -792,6 +892,24 @@ void dAcBomb_c::initializeState_FlowerWait() {
 }
 void dAcBomb_c::executeState_FlowerWait() {
     dAcPy_c *pPlayer = dAcPy_c::GetLink2();
+
+    if (mScale.x < 1.f || field_0xA50 < 1.f) {
+        if (mScale.x < 0.15f && !MinigameManager::GetInstance()->checkInThrillDigger() &&
+            ((getBombType() == BOMB_2 && pPlayer->checkActionFlagsCont(0x400000)) ||
+             (getBombType() != BOMB_2 && !pPlayer->checkActionFlagsCont(0x400000)))) {
+            startSound(SE_O_BOMB_FLOWER_SPROUT);
+        }
+        sLib::chase(&mScale.x, 1.0f, 0.1f);
+        mScale.z = mScale.y = mScale.x;
+        mVec3_c scale = mScale * field_0xA50;
+        mMdl.setScale(scale);
+
+        mMtx_c m = mMtx;
+        m.setTranslation(field_0xA78);
+        setTransformFromFlower(m);
+        mSph.ClrTgSet();
+        return;
+    }
 
     AttentionManager::GetInstance()->addUnk3Target(*this, 1, 250.f, -200.f, 200.f);
     lookAt();
@@ -998,7 +1116,7 @@ int dAcBomb_c::actorExecute() {
             mScale.y = mScale.z = mScale.x;
             mMdl.setScale(mScale);
         } else if (mFuseTime < 4) {
-            f32 scale = nw4r::ut::Min((4 - mFuseTime) * 0.133333f, 0.4f) + 1.f;
+            f32 scale = nw4r::ut::Min((4 - mFuseTime) * (1.0f / 7.5f), 0.4f) + 1.f;
             mScale.set(scale, scale, scale);
             mMdl.setScale(mScale);
         }
@@ -1021,7 +1139,7 @@ int dAcBomb_c::actorExecute() {
                         }
                         pos = f * mOldPosition + (1.f - f) * mPosition;
                     }
-                    dAcPy_c::fn_801E2FC0(pos, mAcch.mWtr, 0.8f);
+                    dAcPy_c::fn_801E2FC0(pos, mAcch.GetWtr(), 0.8f);
                 }
                 startSound(SE_BM_FALL_WATER);
                 if (mLinkage.checkState(dLinkage_c::STATE_ACTIVE)) {
@@ -1076,7 +1194,9 @@ int dAcBomb_c::actorExecute() {
         f32 f = 0.f;
         if (field_0xA48 != 0 && field_0xA48 < 0x4000) {
             /// !! Need to load field_0xA48 again
-            f = scale * nw4r::ut::Min(((1.f / field_0xA48.cos()) - 1.f) * 0.75f, 0.5f);
+            f32 f0 = field_0xA48.cos();
+            f32 f_temp = ((1.0f / f0) - 1.f);
+            f = scale * nw4r::ut::Min(f_temp * 0.75f, 0.5f);
         }
         mLinkage.fn_800511E0(this);
         mUnkRef.modifyMtx();

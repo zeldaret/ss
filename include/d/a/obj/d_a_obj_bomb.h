@@ -108,10 +108,9 @@ public:
     void rollTo(const mVec3_c &dir);
     void rollToInternal(const mVec3_c &dir);
 
-    s16 get0xA44() const {
+    s16 getFuseTimer() const {
         return mFuseTime;
     }
-
     bool check0xA3C(u32 mask) const {
         return (field_0xA3C & mask);
     }

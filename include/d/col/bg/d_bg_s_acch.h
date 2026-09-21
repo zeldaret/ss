@@ -524,6 +524,12 @@ public:
     const dBgS_GndChk &GetGnd() const {
         return mGnd;
     }
+    dBgS_WtrChk &GetWtr() {
+        return mWtr;
+    }
+    const dBgS_WtrChk &GetWtr() const {
+        return mWtr;
+    }
 
     dBgS_RoofChk &GetRoof() {
         return mRoof;

@@ -65,12 +65,11 @@ public:
     static f32 getBombUnknown1_1();
     static f32 getBombAcceleration_1();
     static f32 getBombMaxSpeed_1();
-    static f32 getBombBounceSpeed();   // GetBombBoundRate
-    static f32 getBombExplodeScale();  // getBombEffScale
-    static f32 getBombExplodeRadius(); // getBombAt
+    static f32 getBombBounceSpeed();
+    static f32 getBombParticleScale();
+    static f32 getBombExplodeRadius();
     static f32 getBombUnkFloat_0();
     static f32 getBombUnkFloat_1();
-    static f32 getBombUnkFloat_2();
 
     // Beetle Functions [0x8021AA70 - 0x8021BE20]
     s16 getBeetleFlightTime();
