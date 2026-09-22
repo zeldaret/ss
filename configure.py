@@ -648,7 +648,7 @@ config.libs = [
             Object(Matching, "d/a/obj/d_a_obj_switch.cpp"),
             Object(Matching, "d/d_thp_player.cpp"),
             Object(NonMatching, "d/tg/d_t_alldie.cpp"),
-            Object(NonMatching, "d/tg/d_t_view_clip.cpp"),
+            Object(Matching, "d/tg/d_t_view_clip.cpp"),
             Object(Matching, "d/tg/d_t_switch.cpp"),
             Object(NonMatching, "d/tg/d_t_mass_object.cpp"),
             Object(NonMatching, "d/tg/d_t_camera.cpp"),
