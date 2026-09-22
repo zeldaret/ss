@@ -9,9 +9,9 @@ public:
     dAcOstageKraken_c() : mStateMgr(*this) {}
     virtual ~dAcOstageKraken_c() {}
 
-    static dAcOstageKraken_c *getStageKrakenPtr();
+    static dAcOstageKraken_c *GetInstance();
 
-    static dAcOstageKraken_c *STAGE_KRAKEN;
+    static dAcOstageKraken_c *sInstance;
 
     STATE_FUNC_DECLARE(dAcOstageKraken_c, Wait);
     STATE_FUNC_DECLARE(dAcOstageKraken_c, MarkLight);

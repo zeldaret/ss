@@ -251,7 +251,7 @@ void dAcOSwordCandle_c::finalizeState_WaitClear() {
 f32 dAcOSwordCandle_c::lbl_530_data_F0 = 255.f;
 
 void dAcOSwordCandle_c::fn_530_1180() {
-    dAcOstageKraken_c *stageKraken = dAcOstageKraken_c::getStageKrakenPtr();
+    dAcOstageKraken_c *stageKraken = dAcOstageKraken_c::GetInstance();
     mMtx_c mtx;
     mtx.ZXYrotS(mRotation);
     mVec3_c vec;

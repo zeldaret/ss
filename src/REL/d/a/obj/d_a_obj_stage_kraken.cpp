@@ -20,6 +20,6 @@ void dAcOstageKraken_c::initializeState_MarkVanish() {}
 void dAcOstageKraken_c::executeState_MarkVanish() {}
 void dAcOstageKraken_c::finalizeState_MarkVanish() {}
 
-dAcOstageKraken_c *dAcOstageKraken_c::getStageKrakenPtr() {
-    return dAcOstageKraken_c::STAGE_KRAKEN;
+dAcOstageKraken_c *dAcOstageKraken_c::GetInstance() {
+    return dAcOstageKraken_c::sInstance;
 }
