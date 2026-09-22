@@ -551,6 +551,10 @@ public:
                    FLG0_HANGING_ITEM | FLG0_HANGING_LEDGE | FLG0_UNK_0x10 | FLG0_IN_AIR,
     };
 
+    enum dAcPy_FLG1 {
+        ActFLG1_INCRAWLSPACE = 0x400000
+    };
+
     inline bool checkFlags0x340(u32 mask) const {
         return (someFlags_0x340 & mask) != 0;
     }

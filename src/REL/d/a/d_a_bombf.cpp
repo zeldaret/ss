@@ -144,9 +144,9 @@ void dAcBombf_c::regrowBomb() {
     // These params are hell
     s8 viewclip_idx = checkActorProperty(dAcBase_c::AC_PROP_0x1) ? mViewClipIdx : -1;
     u32 actorParams1;
-    actorParams1 = 1;
+    actorParams1 = dAcBomb_c::BOMBF;
     if (field_0x3D0) {
-        actorParams1 = 2;
+        actorParams1 = dAcBomb_c::BOMBF_CRAWLSPACE;
     }
     dAcObjBase_c *ac = dAcObjBase_c::create(
         "Bomb", mRoomID, actorParams1, &mPosition, nullptr, nullptr, 0xFFFFFFFF, 0xFFFF, viewclip_idx

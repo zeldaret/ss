@@ -52,7 +52,7 @@ inline T MyClamp(T value, T min, T max) {
 
 SPECIAL_ACTOR_PROFILE(BOMB, dAcBomb_c, fProfile::BOMB, 0x128, 0, 2);
 
-static const Vec vec_fn_80259E80 = {0, 60, 0};
+static const Vec sSmokeOffset = {0, 60, 0};
 
 struct dAcBomc_HIO_c {
     static const f32 getBBoxX() {
@@ -77,7 +77,6 @@ struct dAcBomc_HIO_c {
         return mVec3_c(bbox_x, bbox_y, bbox_x);
     }
     static const f32 bbox_x, bbox_y, bbox_z;
-    static const f32 bbox_min_y;
 };
 static dAcBomc_HIO_c sHIO = {};
 
@@ -106,7 +105,7 @@ void dAcBomb_c::coHitCallback(cCcD_Obj *i_objInfB) {
         return;
     }
 
-    set0xA3C(FLAG_0x4);
+    setFlag(dAcBomb_c::FLAG_BOMB_HIT);
     setActorProperty(AC_PROP_0x4);
 }
 
@@ -120,10 +119,10 @@ void dAcBomb_c::tgHitCallback(dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfA, cCcD_
     if ((i_objInfB->ChkAtType(AT_TYPE_WIND | AT_TYPE_BELLOWS) && i_objInfB->GetAtSrcModifier() == AT_MOD_WIND) &&
         !(i_actorB &&
           (i_actorB->mProfileName == fProfile::OBJ_WIND || i_actorB->mProfileName == fProfile::OBJ_TORNADO))) {
-        if (!getLinkage().checkState(dLinkage_c::STATE_ACTIVE) && !check0xA3C(FLAG_0x4)) {
+        if (!getLinkage().checkState(dLinkage_c::STATE_ACTIVE) && !checkFlag(dAcBomb_c::FLAG_BOMB_HIT)) {
             if (!(isState(StateID_FlowerWait) || isState(StateID_Explode))) {
-                cLib::addCalcPosXZ(&field_0xA84, i_objInfA->GetTgAtHitDir() * 0.5f, 0.5f, 10.f, 1.f);
-                set0xA3C(FLAG_0x8000);
+                cLib::addCalcPosXZ(&mHitForce, i_objInfA->GetTgAtHitDir() * 0.5f, 0.5f, 10.f, 1.f);
+                setFlag(dAcBomb_c::FLAG_0x8000);
             }
         }
     } else if (!i_objInfB->ChkAtType(AT_TYPE_0x40 | AT_TYPE_WIND | AT_TYPE_WHIP | AT_TYPE_BEETLE) ||
@@ -142,21 +141,21 @@ void dAcBomb_c::tgHitCallback(dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfA, cCcD_
         } else if (i_objInfB->ChkAtType(
                        AT_TYPE_SWORD | AT_TYPE_0x40 | AT_TYPE_SLINGSHOT | AT_TYPE_0x20000 | AT_TYPE_BEETLE
                    ) &&
-                   check0xA3C(FLAG_0x1000000 | FLAG_0x400000)) {
-            unset0xA3C(FLAG_0x1000000);
-            set0xA3C(FLAG_0x400000);
+                   checkFlag(dAcBomb_c::FLAG_FLOWER | dAcBomb_c::FLAG_0x400000)) {
+            unsetFlag(dAcBomb_c::FLAG_FLOWER);
+            setFlag(dAcBomb_c::FLAG_0x400000);
             unsetActorProperty(AC_PROP_0x1);
             if (isState(StateID_FlowerWait)) {
                 dAcPy_c::insertOwnedObject(this);
             }
-            if (!check0xA3C(FLAG_0x100) && i_objInfB->ChkAtType(AT_TYPE_SWORD)) {
-                set0xA3C(FLAG_0x100);
+            if (!checkFlag(dAcBomb_c::FLAG_0x100) && i_objInfB->ChkAtType(AT_TYPE_SWORD)) {
+                setFlag(dAcBomb_c::FLAG_0x100);
             }
         } else {
-            set0xA3C(FLAG_0x4);
+            setFlag(dAcBomb_c::FLAG_BOMB_HIT);
             setActorProperty(AC_PROP_0x4);
             if (i_objInfB->ChkAtType(AT_TYPE_BOMB)) {
-                set0xA3C(FLAG_0x2);
+                setFlag(dAcBomb_c::FLAG_CHAIN_BOMB);
             }
         }
     }
@@ -178,7 +177,7 @@ bool dAcBomb_c::createHeap() {
 
     mMainMatID = m3d::getMatID(mdl, "m_Main");
 
-    if (getBombType() == BOMB_2) {
+    if (getBombType() == BOMBF_CRAWLSPACE) {
         mMdl.setPriorityDraw(0x82, 0x7F);
     }
     return result;
@@ -199,7 +198,7 @@ int dAcBomb_c::create() {
 
     mAcchCir.SetWall(30.f, 30.f);
 
-    if (getBombType() == BOMB_2) {
+    if (getBombType() == BOMBF_CRAWLSPACE) {
         mStts.SetRank(4);
     } else {
         mStts.SetRank(5);
@@ -230,26 +229,26 @@ int dAcBomb_c::create() {
     switch (getBombType()) {
         case BOMB_0:
         case BOMB_4:
-        case BOMB_6: {
+        case BOMB_EXPLODE_NO_DAMAGE: {
             changeState(StateID_Explode);
         } break;
-        case BOMB_3: {
-            set0xA3C(FLAG_0x200000);
-            set0xA3C(FLAG_0x1);
+        case BOMB_PLAYER_CARRY: {
+            setFlag(dAcBomb_c::FLAG_0x200000);
+            setFlag(dAcBomb_c::FLAG_PLAYER_MAKE);
             if (checkWaterIn()) {
-                set0xA3C(FLAG_0x20);
+                setFlag(dAcBomb_c::FLAG_UNDERWATER);
                 mAcceleration = dAcPy_c::getBombAcceleration_1();
                 mMaxSpeed = dAcPy_c::getBombMaxSpeed_1();
             }
             changeState(StateID_Carry);
         } break;
-        case BOMB_7: {
-            set0xA3C(FLAG_0x8000000);
+        case BOMB_BOCO_CARRY: {
+            setFlag(dAcBomb_c::FLAG_BOKO_CARRY);
             changeState(StateID_Carry);
         } break;
-        case BOMB_1:
-        case BOMB_2:
-        case BOMB_5: {
+        case BOMBF:
+        case BOMBF_CRAWLSPACE:
+        case BOMB_5:           {
             mPosition = pos;
             changeState(StateID_FlowerWait);
         } break;
@@ -276,7 +275,7 @@ int dAcBomb_c::create() {
     setBombColor();
     mMdl.calc(false);
     setSmokePos();
-    field_0xA78 = mPosition;
+    mExternalTranslation = mPosition;
 
     return SUCCEEDED;
 }
@@ -296,15 +295,19 @@ int dAcBomb_c::doDelete() {
 
 // NONMATCHING
 bool dAcBomb_c::checkExplode() {
-    if (field_0xA46 != 0) {
-        field_0xA46--;
+    if (mCarryTimer != 0) {
+        mCarryTimer--;
     }
 
     if (mFuseTime > 0) {
-        bool b = !check0xA3C(FLAG_0x1000000 | FLAG_0x200000 | FLAG_0x800 | FLAG_0x200) && !isState(StateID_Explode);
+        bool b = !checkFlag(
+                     dAcBomb_c::FLAG_FLOWER | dAcBomb_c::FLAG_0x200000 | dAcBomb_c::FLAG_FALL_IN_WATER |
+                     dAcBomb_c::FLAG_NEAR_TIMEDOOR
+                 ) &&
+                 !isState(StateID_Explode);
         if (b) {
             mFuseTime--;
-            if (check0xA3C(FLAG_0x8000000 | FLAG_0x800000)) {
+            if (checkFlag(dAcBomb_c::FLAG_BOKO_CARRY | dAcBomb_c::FLAG_FUSE_PAUSED)) {
                 s16 explodeTimer = dAcPy_c::getBombExplodeTimer();
                 if (mFuseTime == (explodeTimer >> 1) || mFuseTime == (explodeTimer >> 2) ||
                     mFuseTime == (explodeTimer >> 3) || mFuseTime == (explodeTimer >> 4)) {
@@ -314,14 +317,14 @@ bool dAcBomb_c::checkExplode() {
         }
     }
 
-    if (check0xA3C(FLAG_0x800000 | FLAG_0x800 | FLAG_0x200)) {
+    if (checkFlag(dAcBomb_c::FLAG_FUSE_PAUSED | dAcBomb_c::FLAG_FALL_IN_WATER | dAcBomb_c::FLAG_NEAR_TIMEDOOR)) {
         return false;
     }
 
-    if (mFuseTime == 0 || check0xA3C(FLAG_0x4) ||
+    if (mFuseTime == 0 || checkFlag(dAcBomb_c::FLAG_BOMB_HIT) ||
         (mSph.ChkCoHit() && mSph.GetCoActor()->isActorPlayer() &&
          static_cast<dAcPy_c *>(mSph.GetCoActor())->isBurning()) ||
-        (check0xA3C(FLAG_0x2000000) && field_0xA46 == 0) &&
+        (checkFlag(dAcBomb_c::FLAG_BEETLE_CARRY) && mCarryTimer == 0) &&
             ( // Check Beetle or Chu grab
                 (mSph.ChkCoHit() && mSph.GetCoActor()->mProfileName != fProfile::BOOMERANG &&
                  mSph.GetCoActor()->mProfileName != fProfile::E_SM) ||
@@ -361,13 +364,13 @@ void dAcBomb_c::setRoomId() {
 }
 
 void dAcBomb_c::setSmokePos() {
-    mVec3_c in = vec_fn_80259E80;
-    mWorldMtx.multVec(in, field_0xA54);
-    field_0xA6C = (field_0xA54 - field_0xA60) * 0.5f;
+    mVec3_c in = sSmokeOffset;
+    mWorldMtx.multVec(in, mSmokePosNext);
+    mSmokePos = (mSmokePosNext - mSmokePosPrev) * 0.5f;
 }
 
 bool dAcBomb_c::checkWaterIn() {
-    return check0xA3C(FLAG_0x20000000) ||
+    return checkFlag(dAcBomb_c::FLAG_0x20000000) ||
            (mAcch.ChkWaterHit() && (mPosition.y + mScale.x * sHIO.getBombScale() < mAcch.GetWtrGroundH()));
 }
 
@@ -383,14 +386,14 @@ void dAcBomb_c::setTransformFromFlower(const mMtx_c &m) {
     m0.multVecSR(mVec3_c::Ey, out);
 
     f32 f = field_0xA50 * (25.f * mScale.y);
-    m.getTranslation(field_0xA78);
+    m.getTranslation(mExternalTranslation);
 
-    mPosition = field_0xA78 + out * f;
+    mPosition = mExternalTranslation + out * f;
     mPosition.y -= f;
 }
 
 void dAcBomb_c::setPickupTarget() {
-    if (check0xA3C(FLAG_0x800)) {
+    if (checkFlag(dAcBomb_c::FLAG_FALL_IN_WATER)) {
         return;
     }
 
@@ -403,20 +406,21 @@ void dAcBomb_c::lookAt() {
 
 void dAcBomb_c::bounceWall(mAng angle) {
     mSpeed *= dAcPy_c::getBombBounceSpeed();
-    mBombSpeed *= dAcPy_c::getBombBounceSpeed();
+    mRollSpeed *= dAcPy_c::getBombBounceSpeed();
 
     mAngle.y = angle - mAng((mAngle.y + 0x8000) - angle);
-    mBombRotationY = angle - mAng((mBombRotationY + 0x8000) - angle);
+    mRollRotationY = angle - mAng((mRollRotationY + 0x8000) - angle);
 }
 
-void dAcBomb_c::fn_8025A1F0(mVec3_c &out) {
+void dAcBomb_c::getVelocity(mVec3_c &out) {
+    // out = Bomb Speed (Standard Parameters)
     setXYZCirclePoint(out, mAngle.y, mSpeed, mVelocity.y);
 
-    if (field_0xA40 != 0) {
-        f32 f = MyClamp(field_0xA40 * 0.02f, 0.f, 1.f);
+    if (mRollFrameTimer != 0) {
+        f32 f = MyClamp(mRollFrameTimer * 0.02f, 0.f, 1.f);
 
         mVec3_c v;
-        setXYZCirclePoint(v, mBombRotationY, mBombSpeed, 0.f);
+        setXYZCirclePoint(v, mRollRotationY, mRollSpeed, 0.f);
 
         out = out * (1.f - f) + v * f;
     }
@@ -434,7 +438,7 @@ void dAcBomb_c::initializeState_Explode() {
     }
 
     mRotation.y = cM::rndF(65536);
-    field_0xA6C = mVec3_c::Zero;
+    mSmokePos = mVec3_c::Zero;
     mVec3_c out;
     if (getOldStateID() == StateID_FlowerWait || dBgS::GetInstance()->ChkPolySafe(mUnkInfo)) {
         if (getOldStateID() == StateID_FlowerWait) {
@@ -489,7 +493,7 @@ void dAcBomb_c::initializeState_Explode() {
         if (pEmitter != nullptr) {
             pEmitter->setRate(5.f);
         }
-    } else if (check0xA3C(FLAG_0x2)) {
+    } else if (checkFlag(dAcBomb_c::FLAG_CHAIN_BOMB)) {
         (void)dJEffManager_c::spawnEffect(
             PARTICLE_RESOURCE_ID_MAPPING_321_, mPosition, nullptr, &temp, nullptr, nullptr, 0, 0
         );
@@ -521,13 +525,13 @@ void dAcBomb_c::initializeState_Explode() {
 
     mSph.ClrTgSet();
     mSph.ClrCoSet();
-    if (getBombType() == BOMB_6) {
+    if (getBombType() == BOMB_EXPLODE_NO_DAMAGE) {
         mSph.ClrAtSet();
     } else {
         mSph.OnAtSet();
     }
 
-    if (getBombType() == BOMB_2) {
+    if (getBombType() == BOMBF_CRAWLSPACE) {
         mSph.SetR(200.f);
     } else {
         mSph.SetR(dAcPy_c::getBombExplodeRadius());
@@ -565,11 +569,11 @@ void dAcBomb_c::executeState_Explode() {
 void dAcBomb_c::finalizeState_Explode() {}
 
 void dAcBomb_c::initializeState_Carry() {
-    unset0xA3C(FLAG_0x2000000 | FLAG_0x80000 | FLAG_0x40000 | FLAG_0x10000);
-    field_0xA84 = mVec3_c::Zero;
+    unsetFlag(dAcBomb_c::FLAG_BEETLE_CARRY | dAcBomb_c::FLAG_0x80000 | dAcBomb_c::FLAG_ROLL | dAcBomb_c::FLAG_0x10000);
+    mHitForce = mVec3_c::Zero;
     if (mLinkage.checkConnection(dLinkage_c::CONNECTION_5)) {
-        set0xA3C(FLAG_0x2000000);
-        field_0xA46 = 5;
+        setFlag(dAcBomb_c::FLAG_BEETLE_CARRY);
+        mCarryTimer = 5;
         mLinkage.offFlag(0x20000000);
     } else {
         dAcBase_c *pObj = mLinkage.getControllingActor();
@@ -593,11 +597,11 @@ void dAcBomb_c::executeState_Carry() {
     dAcPy_c *pPlayer = dAcPy_c::GetLink2();
 
     if (checkExplode()) {
-        unset0xA3C(FLAG_0x8000000 | FLAG_0x1000000 | FLAG_0x200000);
+        unsetFlag(dAcBomb_c::FLAG_BOKO_CARRY | dAcBomb_c::FLAG_FLOWER | dAcBomb_c::FLAG_0x200000);
     } else {
         if (!mLinkage.checkState(dLinkage_c::STATE_ACTIVE)) {
-            if (check0xA3C(FLAG_0x100000)) {
-                unset0xA3C(FLAG_0x100000);
+            if (checkFlag(dAcBomb_c::FLAG_0x100000)) {
+                unsetFlag(dAcBomb_c::FLAG_0x100000);
                 mMtx.ZrotS(-mRotation.z);
                 mMtx.XrotM(-mRotation.x);
                 mMtx.YrotM(-mRotation.y);
@@ -607,15 +611,15 @@ void dAcBomb_c::executeState_Carry() {
                 mMtx.m[2][3] = 0.f;
             }
             if (mLinkage.checkState(dLinkage_c::STATE_3)) {
-                set0xA3C(FLAG_0x80000 | FLAG_0x40000);
-                mBombRotationY = pPlayer->mRotation.y;
-                mBombSpeed = mSpeed;
-                field_0xA40 = 60;
+                setFlag(dAcBomb_c::FLAG_0x80000 | dAcBomb_c::FLAG_ROLL);
+                mRollRotationY = pPlayer->mRotation.y;
+                mRollSpeed = mSpeed;
+                mRollFrameTimer = 60;
             }
-            unset0xA3C(FLAG_0x8000000 | FLAG_0x1000000 | FLAG_0x200000);
+            unsetFlag(dAcBomb_c::FLAG_BOKO_CARRY | dAcBomb_c::FLAG_FLOWER | dAcBomb_c::FLAG_0x200000);
             changeState(StateID_Wait);
         } else if (!mLinkage.checkConnection(dLinkage_c::CONNECTION_5)) {
-            unset0xA3C(FLAG_0x2000000 | FLAG_0x1000000);
+            unsetFlag(dAcBomb_c::FLAG_BEETLE_CARRY | dAcBomb_c::FLAG_FLOWER);
         }
         mLinkage.bushTpFunc(mAcch);
         setRoomId();
@@ -635,9 +639,9 @@ void dAcBomb_c::initializeState_Wait() {
     mSph.OnCoSet();
     mSph.SetCoCallback(dAcBomb_coHitCallback);
     field_0xA42 = 5;
-    if (check0xA3C(FLAG_0x4000000)) {
-        unset0xA3C(FLAG_0x4000000);
-        set0xA3C(FLAG_0x2000000);
+    if (checkFlag(dAcBomb_c::FLAG_0x4000000)) {
+        unsetFlag(dAcBomb_c::FLAG_0x4000000);
+        setFlag(dAcBomb_c::FLAG_BEETLE_CARRY);
     }
 }
 // NONMATCHING
@@ -660,216 +664,213 @@ void dAcBomb_c::executeState_Wait() {
         field_0xA42--;
     }
 
-    mVec3_c out;
-    fn_8025A1F0(out);
+    mVec3_c bombVelocity;
+    getVelocity(bombVelocity);
 
-    s16 s = out.atan2sX_Z();
-    f32 d = out.absXZ();
+    s16 bombAngleY = bombVelocity.atan2sX_Z();
+    f32 bombSpeed = bombVelocity.absXZ();
 
-    mAng out_s;
+    mAng gndAngle;
 
     if (mAcch.ChkGndHit()) {
-        mAng a = mAcch.GetGnd().GetAngle(s);
-        mVelocity.y -= d * nw4r::math::FAbs(a.sin());
-        f32 cos = a.cos();
+        gndAngle = mAcch.GetGnd().GetAngle(bombAngleY);
+        mVelocity.y -= bombSpeed * nw4r::math::FAbs(gndAngle.sin());
 
-        out.x *= cos;
-        out.z *= cos;
-        if (field_0xA40 != 0) {
-            field_0xA40--;
+        bombVelocity *= gndAngle.cos();
+
+        if (mRollFrameTimer != 0) {
+            mRollFrameTimer--;
         }
-        out_s = a;
-
     } else {
-        out_s = 0;
+        gndAngle = 0;
     }
 
-    f32 acc = mAcceleration;
-    f32 vely = mVelocity.y;
-    out.y += mVelocity.y + mAcceleration;
-    if (out.y < mMaxSpeed) {
-        out.y = mMaxSpeed;
-    }
-    mVelocity.y = out.y;
+    f32 prevAccel = mAcceleration;
+    mVelocity.y = nw4r::ut::Max(mVelocity.y + mAcceleration, mMaxSpeed);
+    bombVelocity.y = mVelocity.y;
+    mPosition += bombVelocity;
+    mPosition += mStts.GetCcMove();
 
-    mPosition += out + mStts.GetCcMove();
-
-    if (check0xA3C(FLAG_0x10000) && check0xA3C(FLAG_0x20) && mAcch.ChkWaterHit()) {
-        if (mAcch.GetWtrGroundH() <= mPosition.y + (mScale.x * 30.f) + 1.f) {
+    if (checkFlag(dAcBomb_c::FLAG_0x10000) && checkFlag(dAcBomb_c::FLAG_UNDERWATER) && mAcch.ChkWaterHit()) {
+        if (mPosition.y + (mScale.x * sHIO.getBombScale()) + 1.f >= mAcch.GetWtrGroundH()) {
+            mPosition.y = mAcch.GetWtrGroundH() - (mScale.x * sHIO.getBombScale()) - 1.f;
             mVelocity.y = 0.f;
-            mPosition.y = mAcch.GetWtrGroundH() - (mScale.x * 30.f) - 1.f;
         }
     }
-    mAcceleration = acc;
+    mAcceleration = prevAccel;
+    f32 prevVelocityY = mVelocity.y;
+    s16 a0 = 0;
+    s16 a1 = 0;
     f32 f = 1.f;
-    if (mAcch.ChkGndHit() && field_0xA84.squareMagXY() > 1.f) {
+    if (mAcch.ChkGndHit() && mHitForce.squareMagXZ() > 1.f) {
         cM3dGPla plane;
         dBgS::GetInstance()->GetTriPla(mAcch.GetGnd(), &plane);
 
-        f = plane.GetAngle(field_0xA84.atan2sX_Z()).cos();
+        f = plane.GetAngle(mHitForce.atan2sX_Z()).cos();
         f *= f;
     }
 
-    mPosition += (field_0xA84 * f) + field_0xA90;
+    mPosition += (mHitForce * f) + mStreamForce;
     mAcch.CrrPos(*dBgS::GetInstance());
-    f32 f1 = 0.f;
-    f32 f2 = 4.f;
+    f32 sinkTarget = 0.f;
+    f32 sinkRate = 4.f;
     mVec3_c force = mVec3_c::Zero;
-    f32 offs = mYOffset;
+    f32 sinkValue = mYOffset;
     if (mAcch.ChkGndHit() && !mLinkage.checkState(dLinkage_c::STATE_ACTIVE)) {
-        s32 attr = dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd());
+        s32 attr = dBgS::GetInstance()->GetSpecialCode(mAcch.mGnd);
         if (attr == POLY_ATTR_CURSED_WATER) {
-            f1 = -60.f;
-            if (mYOffset >= 0.f) {
-                vely *= 0.5f;
+            sinkTarget = -60.f;
+            if (sinkValue >= 0.f) {
+                prevVelocityY *= 0.5f;
                 mSpeed *= 0.5f;
             }
-            f2 = nw4r::math::FAbs(vely);
-            mVelocity.y = vely;
+            sinkRate = nw4r::math::FAbs(prevVelocityY);
+            mVelocity.y = prevVelocityY;
             mAcceleration = dAcPy_c::getBombAcceleration_1();
             mMaxSpeed = dAcPy_c::getBombMaxSpeed_1();
         } else if (attr == POLY_ATTR_SAND_DEEP_INSTANT || attr == POLY_ATTR_SAND_DEEP_SLOW ||
                    attr == POLY_ATTR_SAND_MED) {
-            f1 = -10.f;
-            f2 = 1.f;
+            sinkTarget = -10.f;
+            sinkRate = 1.f;
         }
         if (attr == POLY_ATTR_SAND_DEEP_SLOW || attr == POLY_ATTR_SAND_MED) {
             dTgStream_c::getForce(mPosition, force, dTgStream_c::sSandStreamList);
         }
+    }
+    cLib::addCalcPosXZ(&mStreamForce, force, 0.5f, 10.f, 3.f);
+    sLib::chase(&sinkValue, sinkTarget, sinkRate);
+    mYOffset = sinkValue;
+    if (sinkValue <= -60.f) {
+        setFlag(dAcBomb_c::FLAG_DELETE_BOMB);
+    }
+    setRoomId();
 
-        cLib::addCalcPosXZ(&field_0xA90, force, 0.5f, 10.f, 3.f);
-        sLib::chase(&offs, f1, f2);
-        mYOffset = offs;
-        if (offs <= -60.f) {
-            set0xA3C(FLAG_0x1000);
-        }
-        setRoomId();
+    if (mAcch.ChkGndHit()) {
+        cM3dGPla plane;
+        dBgS::GetInstance()->GetTriPla(mAcch.GetGnd(), &plane);
+        mGndAngle = cM::atan2s(plane.GetN().absXZ(), plane.GetN().y);
 
-        mAng a0, a1;
+        a1 = plane.GetN().atan2sX_Z();
+        a0 = a1 - bombAngleY;
+    }
+    bool hit = false;
+    f32 outXZ = bombVelocity.absXZ();
+    if (mAcch.ChkWallHit(nullptr) && mAng::abs(mAcchCir.GetWallAngleY() - bombAngleY) > 0x4400 && outXZ > 1.0f) {
+        bounceWall(mAcchCir.GetWallAngleY());
+        hit = true;
+        startSoundWithFloatParam(SE_BM_BOUND, outXZ);
+    } else if (mAcch.ChkRoofHit() && mVelocity.y > 0.f) {
+        startSoundWithFloatParam(SE_BM_BOUND, mVelocity.y);
+        mVelocity.y = 0.f;
+    } else if (mAcch.ChkGroundLanding() && mSpeed > 5.0f && mGndAngle >= mAng::fromDeg(50.f) &&
+               mAng::abs(a0) >= 0x4000) {
+        bounceWall(a1);
+        mVelocity.y = prevVelocityY;
+        mAcch.ClrGroundLanding();
+        mAcch.i_ClrGroundHit();
+        hit = true;
+    } else if (mSph.ChkCoHit() && field_0xA42 == 0 && mStts.GetCcMove().absXZ() >= 1.f) {
+        bounceWall(mStts.GetCcMove().atan2sX_Z());
+        field_0xA42 = 5;
+        hit = true;
+    }
+
+    mAng hitGndAngle = gndAngle;
+    if (hit) {
+        getVelocity(bombVelocity);
+        s16 sVar15 = bombVelocity.atan2sX_Z();
         if (mAcch.ChkGndHit()) {
-            cM3dGPla plane;
-            dBgS::GetInstance()->GetTriPla(mAcch.GetGnd(), &plane);
-            field_0xA48 = cM::atan2s(plane.GetN().absXZ(), plane.GetN().y);
-            a1 = plane.GetN().atan2sX_Z();
-            a0 = a1 - s;
+            hitGndAngle = mAcch.GetGnd().GetAngle(sVar15);
         }
+    }
 
-        bool hit = false;
-        f32 outXZ = out.absXZ();
-        if (mAcch.ChkWallHit(nullptr) && mAng::abs(mAcchCir.GetWallAngleY() - s) > 0x4400 && outXZ > 1.0f) {
-            bounceWall(mAcchCir.GetWallAngleY());
-            hit = true;
-            startSoundWithFloatParam(SE_BM_BOUND, mVelocity.y);
-        } else if (mAcch.ChkRoofHit() && mVelocity.y > 0.f) {
-            startSoundWithFloatParam(SE_BM_BOUND, mVelocity.y);
-            mVelocity.y = 0.f;
-        } else if (mAcch.ChkGroundLanding() && mSpeed > 5.0f && field_0xA48 < mAng::fromDeg(50.f) &&
-                   mAng::abs(s) > 0x4000) {
-            bounceWall(a1);
-            hit = true;
-            mVelocity.y = vely;
-            mAcch.ClrGroundLanding();
-            mAcch.i_ClrGroundHit();
-        } else if (mSph.ChkCoHit() && field_0xA42 == 0 && mStts.GetCcMove().absXZ() >= 1.f) {
-            bounceWall(mStts.GetCcMove().atan2sX_Z());
-            field_0xA42 = 5;
-            hit = true;
-        }
-
-        if (hit) {
-            fn_8025A1F0(out);
-            s16 sVar15 = out.atan2sX_Z();
-            if (mAcch.ChkGndHit()) {
-                out_s = mAcch.GetGnd().GetAngle(sVar15);
+    if (mAcch.ChkGroundLanding()) {
+        if (prevVelocityY < -5.f) {
+            startSoundWithFloatParam(SE_BM_BOUND, prevVelocityY * -1.0f);
+            if (dBgS::GetInstance()->GetPolyAtt0(mAcch.GetGnd()) != POLY_ATT_0_LAVA) {
+                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 0.8f, field_0x1B0);
             }
         }
 
-        if (mAcch.ChkGroundLanding()) {
-            if (vely < -5.f) {
-                startSoundWithFloatParam(SE_BM_BOUND, vely * -1.0f);
-                if (dBgS::GetInstance()->GetPolyAtt0(mAcch.GetGnd()) != POLY_ATT_0_LAVA) {
-                    dJEffManager_c::spawnGroundEffect(
-                        mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 0.8f, field_0x1B0
-                    );
-                }
+        prevVelocityY *= -dAcPy_c::getBombBounceSpeed();
+        s32 attr = dBgS::GetInstance()->GetSpecialCode(mAcch.mGnd);
+
+        if (!checkFlag(dAcBomb_c::FLAG_ROLL) &&
+            (prevVelocityY < dAcPy_c::getBombStopSpeedY() ||
+             (attr == POLY_ATTR_SAND_DEEP_INSTANT ||
+              (attr == POLY_ATTR_CURSED_WATER || attr == POLY_ATTR_SAND_DEEP_SLOW || attr == POLY_ATTR_SAND_MED)))) {
+            sLib::chase(&mSpeed, 0.0f, 7.0f);
+        } else {
+            mSpeed *= 0.9f;
+            mRollSpeed *= 0.9f;
+
+            if (hitGndAngle < 0) {
+                mSpeed *= hitGndAngle.cos();
+                mRollSpeed *= hitGndAngle.cos();
             }
 
-            f32 f3 = dAcPy_c::getBombBounceSpeed();
-            f32 f4 = vely * -f3;
-            s32 attr = dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd());
-
-            if (check0xA3C(FLAG_0x40000) ||
-                !((f3 < dAcPy_c::getBombUnkFloat_0() || attr != POLY_ATTR_SAND_DEEP_INSTANT) &&
-                  (attr != POLY_ATTR_CURSED_WATER && attr != POLY_ATTR_SAND_DEEP_SLOW && attr != POLY_ATTR_SAND_MED))) {
-                sLib::chase(&mSpeed, 0.0f, 7.0f);
+            if (checkFlag(dAcBomb_c::FLAG_0x80000)) {
+                unsetFlag(dAcBomb_c::FLAG_0x80000);
+                mVelocity.y = 0.f;
+            } else if (prevVelocityY > dAcPy_c::getBombMaxSpeedY()) {
+                mVelocity.y = dAcPy_c::getBombMaxSpeedY();
             } else {
-                mSpeed *= 0.9f;
-                mBombSpeed *= 0.9f;
-                if (out_s < 0) {
-                    mSpeed *= out_s.cos();
-                    mBombSpeed *= out_s.cos();
-                }
-                if (check0xA3C(FLAG_0x80000)) {
-                    unset0xA3C(FLAG_0x80000);
-                    mVelocity.y = 0.f;
-                } else if (f4 > dAcPy_c::getBombUnkFloat_1()) {
-                    mVelocity.y = dAcPy_c::getBombUnkFloat_1();
-                } else {
-                    mVelocity.y = f4;
-                }
+                mVelocity.y = prevVelocityY;
             }
-        } else if (mAcch.ChkGndHit()) {
-            cM3dGPla plane;
-            dBgS::GetInstance()->GetTriPla(mAcch.GetGnd(), &plane);
-            int code = dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd());
-            if (check0xA3C(FLAG_0x40000)) {
-                if (code == POLY_ATTR_SAND_DEEP_SLOW || code == POLY_ATTR_SAND_MED) {
-                    outXZ = 0.2f;
-                } else {
-                    outXZ = 0.1f;
-                }
+        }
+    } else if (mAcch.ChkGndHit()) {
+        cM3dGPla plane;
+        dBgS::GetInstance()->GetTriPla(mAcch.mGnd, &plane);
+        int code = dBgS::GetInstance()->GetSpecialCode(mAcch.mGnd);
+
+        f32 step;
+        if (checkFlag(dAcBomb_c::FLAG_ROLL)) {
+            if (code == POLY_ATTR_SAND_DEEP_SLOW || code == POLY_ATTR_SAND_MED) {
+                step = 0.2f;
             } else {
-                outXZ = 0.75f;
+                step = 0.1f;
             }
-            if (code != POLY_ATTR_CURSED_WATER) {
-                if (field_0xA48 < mAng::fromDeg(20.0f)) {
-                    mVec3_c v0 = plane.GetN() * 2.f;
-                    mVec3_c v1 = v0 * field_0xA48.sin();
-                    v1.y = 0.0f;
+        } else {
+            step = 0.75f;
+        }
+        if (code != POLY_ATTR_CURSED_WATER) {
+            if (mGndAngle >= mAng::fromDeg(20.0f)) {
+                mVec3_c v1 = 2.f * plane.GetN() * mGndAngle.sin();
+                v1.y = 0.0f;
 
-                    mAng yRot = v1.atan2sX_Z();
-                    if (field_0xA84.squareMagXZ() > 1.0f) {
-                        mAng rot = mAng::fromVec(field_0xA84);
-                        if (mAng::abs(yRot - rot) >= 0x4000) {
-                            field_0xA84.rotY(-yRot);
-                            field_0xA84.z *= 0.99f;
-                            sLib::chase(&field_0xA84.z, 0.0f, 1.0f);
-                            field_0xA84.rotY(yRot);
-                        }
+                mAng yRot = v1.atan2sX_Z();
+                f32 compare = mHitForce.squareMagXZ();
+                if (compare > 1.0f) {
+                    s32 a = yRot - mAng::fromVec(mHitForce);
+                    if (mAng::abs(a) >= 0x4000) {
+                        mHitForce.rotY(-yRot);
+                        mHitForce.z *= 0.99f;
+                        sLib::chase(&mHitForce.z, 0.0f, 1.0f);
+                        mHitForce.rotY(yRot);
                     }
+                }
 
-                    if (mAng::abs(yRot - mAngle.y) >= 0x4000) {
-                        sLib::chase(&mSpeed, 0.0f, outXZ);
-                    }
-                    mSpeed *= 0.9f;
-                    rollTo(v1);
-                    mSpeed = nw4r::ut::Min(mSpeed, 30.f);
+                if (mAng::abs(yRot - mAngle.y) >= 0x4000) {
+                    sLib::chase(&mSpeed, 0.0f, step);
+                }
+                mSpeed *= 0.99f;
+                rollTo(v1);
+                mSpeed = nw4r::ut::Min(mSpeed, 30.f);
 
-                    if (mAng::abs(yRot - mBombRotationY) >= 0x4000) {
-                        sLib::chase(&mBombSpeed, 0.0f, outXZ);
+                if (mAng::abs(yRot - mRollRotationY) >= 0x4000) {
+                    sLib::chase(&mRollSpeed, 0.0f, step);
+                }
+                mRollSpeed *= 0.99f;
+                rollToInternal(v1);
+                mRollSpeed = nw4r::ut::Min(mRollSpeed, 30.f);
+            } else {
+                sLib::chase(&mRollSpeed, 0.0f, step);
+                if (sLib::chase(&mSpeed, 0.0f, step)) {
+                    if (mHitForce.getSquareMag() < 1.f && mStreamForce.getSquareMag() < 1.f) {
+                        setPickupTarget();
                     }
-                    mBombSpeed *= 0.9f;
-                    rollToInternal(v1);
-                    mBombSpeed = nw4r::ut::Min(mBombSpeed, 30.f);
-                } else {
-                    sLib::chase(&mBombSpeed, 0.0f, outXZ);
-                    if (sLib::chase(&mSpeed, 0.0f, outXZ)) {
-                        if (field_0xA84.getSquareMag() < 1.f && field_0xA90.getSquareMag() < 1.f) {
-                            setPickupTarget();
-                        }
-                        unset0xA3C(FLAG_0x40000);
-                        mSph.ClrAtSet();
-                    }
+                    unsetFlag(dAcBomb_c::FLAG_ROLL);
+                    mSph.ClrAtSet();
                 }
             }
         }
@@ -883,7 +884,7 @@ void dAcBomb_c::finalizeState_Wait() {
 }
 
 void dAcBomb_c::initializeState_FlowerWait() {
-    set0xA3C(FLAG_0x1000000);
+    setFlag(dAcBomb_c::FLAG_FLOWER);
     mSph.ClrTgSet();
     mScale.set(0.1f, 0.1f, 0.1f);
     mStts.SetRank(0xD);
@@ -895,8 +896,8 @@ void dAcBomb_c::executeState_FlowerWait() {
 
     if (mScale.x < 1.f || field_0xA50 < 1.f) {
         if (mScale.x < 0.15f && !MinigameManager::GetInstance()->checkInThrillDigger() &&
-            ((getBombType() == BOMB_2 && pPlayer->checkActionFlagsCont(0x400000)) ||
-             (getBombType() != BOMB_2 && !pPlayer->checkActionFlagsCont(0x400000)))) {
+            ((getBombType() == BOMBF_CRAWLSPACE && pPlayer->checkActionFlagsCont(dAcPy_c::ActFLG1_INCRAWLSPACE)) ||
+             (getBombType() != BOMBF_CRAWLSPACE && !pPlayer->checkActionFlagsCont(dAcPy_c::ActFLG1_INCRAWLSPACE)))) {
             startSound(SE_O_BOMB_FLOWER_SPROUT);
         }
         sLib::chase(&mScale.x, 1.0f, 0.1f);
@@ -905,7 +906,7 @@ void dAcBomb_c::executeState_FlowerWait() {
         mMdl.setScale(scale);
 
         mMtx_c m = mMtx;
-        m.setTranslation(field_0xA78);
+        m.setTranslation(mExternalTranslation);
         setTransformFromFlower(m);
         mSph.ClrTgSet();
         return;
@@ -929,11 +930,11 @@ void dAcBomb_c::executeState_FlowerWait() {
     setPickupTarget();
 }
 void dAcBomb_c::finalizeState_FlowerWait() {
-    if (!(mLinkage.checkConnection(dLinkage_c::CONNECTION_5) && check0xA3C(FLAG_0x1000000))) {
-        unset0xA3C(FLAG_0x1000000);
+    if (!(mLinkage.checkConnection(dLinkage_c::CONNECTION_5) && checkFlag(dAcBomb_c::FLAG_FLOWER))) {
+        unsetFlag(dAcBomb_c::FLAG_FLOWER);
     }
 
-    if (getBombType() == BOMB_2) {
+    if (getBombType() == BOMBF_CRAWLSPACE) {
         mStts.SetRank(4);
     } else {
         mStts.SetRank(5);
@@ -944,11 +945,11 @@ void dAcBomb_c::finalizeState_FlowerWait() {
 }
 
 void dAcBomb_c::initializeState_WindCarry() {
-    unset0xA3C(FLAG_0x2000000 | FLAG_0x80000 | FLAG_0x40000 | FLAG_0x10000);
-    field_0xA84 = mVec3_c::Zero;
+    unsetFlag(dAcBomb_c::FLAG_BEETLE_CARRY | dAcBomb_c::FLAG_0x80000 | dAcBomb_c::FLAG_ROLL | dAcBomb_c::FLAG_0x10000);
+    mHitForce = mVec3_c::Zero;
     mSpeed = 0.f;
     mVelocity = mVec3_c::Zero;
-    mBombSpeed = 0.f;
+    mRollSpeed = 0.f;
     mLinkage.bushTpFunc(mAcch);
     setRoomId();
 }
@@ -981,11 +982,15 @@ void dAcBomb_c::finalizeState_WindCarry() {}
 
 void dAcBomb_c::setBombColor() {
     mColor clr(0, 0, 0, 0xFF);
-    if (!check0xA3C(FLAG_0x800)) {
-        bool b = !check0xA3C(FLAG_0x1000000 | FLAG_0x200000 | FLAG_0x800 | FLAG_0x200) && !isState(StateID_Explode);
+    if (!checkFlag(dAcBomb_c::FLAG_FALL_IN_WATER)) {
+        bool b = !checkFlag(
+                     dAcBomb_c::FLAG_FLOWER | dAcBomb_c::FLAG_0x200000 | dAcBomb_c::FLAG_FALL_IN_WATER |
+                     dAcBomb_c::FLAG_NEAR_TIMEDOOR
+                 ) &&
+                 !isState(StateID_Explode);
         if (b) {
             mEffect1.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_974_, mWorldMtx, nullptr, nullptr);
-            if (!check0xA3C(FLAG_0x8000000)) {
+            if (!checkFlag(dAcBomb_c::FLAG_BOKO_CARRY)) {
                 mEffect2.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_975_, mWorldMtx, nullptr, nullptr);
             }
 
@@ -1041,17 +1046,17 @@ void dAcBomb_c::rollTo(const mVec3_c &dir) {
 }
 
 void dAcBomb_c::rollToInternal(const mVec3_c &dir) {
-    if (field_0xA40 == 0) {
+    if (mRollFrameTimer == 0) {
         return;
     }
     mVec3_c v;
-    setXYZCirclePoint(v, mBombRotationY, mBombSpeed, 0.f);
+    setXYZCirclePoint(v, mRollRotationY, mRollSpeed, 0.f);
     v += dir;
 
     v.y = 0.f;
 
-    mBombRotationY = v.atan2sX_Z();
-    mBombSpeed = v.absXZ();
+    mRollRotationY = v.atan2sX_Z();
+    mRollSpeed = v.absXZ();
 }
 
 void dAcBomb_c::registerInEvent() {
@@ -1079,35 +1084,35 @@ void dAcBomb_c::unkVirtFunc_0x6C() {
 
 // NONMATCHING
 int dAcBomb_c::actorExecute() {
-    unset0xA3C(FLAG_0x400000 | FLAG_0x100);
+    unsetFlag(dAcBomb_c::FLAG_0x400000 | dAcBomb_c::FLAG_0x100);
     mVec3_c v;
-    fn_8025A1F0(v);
+    getVelocity(v);
 
-    f32 f = field_0xA84.getSquareMag();
-    if (!check0xA3C(FLAG_0x8000)) {
+    f32 f = mHitForce.getSquareMag();
+    if (!checkFlag(dAcBomb_c::FLAG_0x8000)) {
         if (f > 1.f) {
-            v += field_0xA84;
-            rollTo(field_0xA84);
-            rollToInternal(field_0xA84);
+            v += mHitForce;
+            rollTo(mHitForce);
+            rollToInternal(mHitForce);
         }
         f = 0.f;
-        field_0xA84 = mVec3_c::Zero;
+        mHitForce = mVec3_c::Zero;
     } else {
-        unset0xA3C(FLAG_0x8000);
+        unsetFlag(dAcBomb_c::FLAG_0x8000);
     }
 
-    field_0xA48 = 0;
-    field_0xA60 = field_0xA54;
+    mGndAngle = 0;
+    mSmokePosPrev = mSmokePosNext;
 
     executeState();
 
-    if (check0xA3C(FLAG_0x1000)) {
+    if (checkFlag(dAcBomb_c::FLAG_DELETE_BOMB)) {
         deleteRequest();
         return SUCCEEDED;
     }
 
     if (!isState(StateID_Explode)) {
-        if (check0xA3C(FLAG_0x800)) {
+        if (checkFlag(dAcBomb_c::FLAG_FALL_IN_WATER)) {
             if (sLib::chase(&mScale.x, 0.f, 0.0875f)) {
                 deleteRequest();
                 return SUCCEEDED;
@@ -1122,8 +1127,8 @@ int dAcBomb_c::actorExecute() {
         }
 
         if (checkWaterIn()) {
-            if (!check0xA3C(FLAG_0x800 | FLAG_0x20)) {
-                if (!check0xA3C(FLAG_0x20000000)) {
+            if (!checkFlag(dAcBomb_c::FLAG_FALL_IN_WATER | dAcBomb_c::FLAG_UNDERWATER)) {
+                if (!checkFlag(dAcBomb_c::FLAG_0x20000000)) {
                     mVec3_c pos;
                     // !!! FPR alloc here is weird I guess
                     f32 diff0 = nw4r::math::FAbs(mOldPosition.y - mPosition.y);
@@ -1145,9 +1150,9 @@ int dAcBomb_c::actorExecute() {
                 if (mLinkage.checkState(dLinkage_c::STATE_ACTIVE)) {
                     mLinkage.forceRemove(this);
                 }
-                set0xA3C(FLAG_0x800);
+                setFlag(dAcBomb_c::FLAG_FALL_IN_WATER);
 
-                field_0xA6C = mVec3_c::Zero;
+                mSmokePos = mVec3_c::Zero;
                 mSpeed *= 0.5f;
                 mVelocity.y *= 0.5f;
 
@@ -1155,13 +1160,13 @@ int dAcBomb_c::actorExecute() {
                 mMaxSpeed = dAcPy_c::getBombMaxSpeed_1();
             }
 
-            if (check0xA3C(FLAG_0x1000)) {
+            if (checkFlag(dAcBomb_c::FLAG_DELETE_BOMB)) {
                 deleteRequest();
-                field_0xA6C = mVec3_c::Zero;
+                mSmokePos = mVec3_c::Zero;
                 return SUCCEEDED;
             }
         } else {
-            unset0xA3C(FLAG_0x20);
+            unsetFlag(dAcBomb_c::FLAG_UNDERWATER);
             mAcceleration = dAcPy_c::getBombAcceleration();
             mMaxSpeed = dAcPy_c::getBombMaxSpeed();
         }
@@ -1171,7 +1176,7 @@ int dAcBomb_c::actorExecute() {
             setXYZCirclePoint(v, mAngle.y, mSpeed, 0.f);
             bool gndNotHit = true;
             if (f > 1.f) {
-                v += field_0xA84;
+                v += mHitForce;
             } else if (mAcch.ChkGndHit()) {
                 gndNotHit = false;
             }
@@ -1192,9 +1197,9 @@ int dAcBomb_c::actorExecute() {
 
         f32 scale = mScale.y * 25.f;
         f32 f = 0.f;
-        if (field_0xA48 != 0 && field_0xA48 < 0x4000) {
-            /// !! Need to load field_0xA48 again
-            f32 f0 = field_0xA48.cos();
+        if (mGndAngle != 0 && mGndAngle < 0x4000) {
+            /// !! Need to load mGndAngle again
+            f32 f0 = mGndAngle.cos();
             f32 f_temp = ((1.0f / f0) - 1.f);
             f = scale * nw4r::ut::Min(f_temp * 0.75f, 0.5f);
         }
@@ -1218,7 +1223,7 @@ int dAcBomb_c::actorExecute() {
         mPositionCopy3 = mPositionCopy2;
         mSph.moveCenter(mPositionCopy2);
         mSph.SetR(mScale.x * sHIO.getBombScale() * field_0xA50);
-        if (check0xA3C(FLAG_0x800)) {
+        if (checkFlag(dAcBomb_c::FLAG_FALL_IN_WATER)) {
             mSph.ClrTgSet();
             mSph.ClrTgHit();
         }
@@ -1229,7 +1234,7 @@ int dAcBomb_c::actorExecute() {
             mSph.ClrTgHit();
         }
 
-        if (!check0xA3C(FLAG_0x800)) {
+        if (!checkFlag(dAcBomb_c::FLAG_FALL_IN_WATER)) {
             setSmokePos();
         }
 
@@ -1241,7 +1246,8 @@ int dAcBomb_c::actorExecute() {
 }
 
 int dAcBomb_c::draw() {
-    if (isState(StateID_Explode) || (getBombType() == BOMB_2 && !dAcPy_c::GetLink()->checkActionFlagsCont(0x400000))) {
+    if (isState(StateID_Explode) ||
+        (getBombType() == BOMBF_CRAWLSPACE && !dAcPy_c::GetLink()->checkActionFlagsCont(0x400000))) {
         return SUCCEEDED;
     }
 
