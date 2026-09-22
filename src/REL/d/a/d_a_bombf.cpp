@@ -14,6 +14,13 @@ SPECIAL_ACTOR_PROFILE(BOMBF, dAcBombf_c, fProfile::BOMBF, 0x129, 0, 4099);
 
 STATE_DEFINE(dAcBombf_c, Wait);
 
+class dAcBombf_HIO_c {
+public:
+    inline static const char *getBombName() {
+        return "Bomb";
+    }
+};
+
 bool dAcBombf_c::createHeap() {
     nw4r::g3d::ResFile resFile(getOarcResFile("FlowerBomb"));
     nw4r::g3d::ResMdl resMdl = resFile.GetResMdl("LeafBomb");
@@ -30,8 +37,8 @@ int dAcBombf_c::actorCreate() {
     CREATE_ALLOCATOR(dAcBombf_c);
 
     field_0x3D2 = (mParams >> 4) & 0xF;
-    field_0x3D0 = field_0x3D2 == 1;
-    if (field_0x3D0) {
+    mIsUnderground = field_0x3D2 == 1;
+    if (mIsUnderground) {
         mModel.setPriorityDraw(0x82, 0x7F);
     }
 
@@ -133,7 +140,7 @@ int dAcBombf_c::actorExecute() {
 }
 
 int dAcBombf_c::draw() {
-    if (field_0x3D0 != 0 && !dAcPy_c::LINK->checkActionFlagsCont(0x400000)) {
+    if (mIsUnderground != 0 && !dAcPy_c::LINK->checkActionFlagsCont(0x400000)) {
         return SUCCEEDED;
     }
     drawModelType1(&mModel);
@@ -143,15 +150,12 @@ int dAcBombf_c::draw() {
 void dAcBombf_c::regrowBomb() {
     // These params are hell
     s8 viewclip_idx = checkActorProperty(dAcBase_c::AC_PROP_0x1) ? mViewClipIdx : -1;
-    u32 actorParams1;
-    actorParams1 = dAcBomb_c::BOMBF;
-    if (field_0x3D0) {
-        actorParams1 = dAcBomb_c::BOMBF_CRAWLSPACE;
-    }
-    dAcObjBase_c *ac = dAcObjBase_c::create(
-        "Bomb", mRoomID, actorParams1, &mPosition, nullptr, nullptr, 0xFFFFFFFF, 0xFFFF, viewclip_idx
+    u32 bombType = mIsUnderground ? dAcBomb_c::BOMBF_CRAWLSPACE : dAcBomb_c::BOMBF;
+    const char *name = dAcBombf_HIO_c::getBombName();
+    dAcBomb_c *ac = static_cast<dAcBomb_c *>(
+        dAcObjBase_c::create(name, mRoomID, bombType, &mPosition, nullptr, nullptr, 0xFFFFFFFF, 0xFFFF, viewclip_idx)
     );
-    mBombRef.link(static_cast<dAcBomb_c *>(ac));
+    mBombRef.link(ac);
     dAcBomb_c *bomb = mBombRef.get();
     if (bomb != nullptr) {
         field_0x394 = 0x3C;
@@ -166,8 +170,6 @@ void dAcBombf_c::regrowBomb() {
 }
 
 void dAcBombf_c::initializeState_Wait() {}
-
-extern "C" u16 lbl_8057A750;
 
 void dAcBombf_c::executeState_Wait() {
     if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mDespawnSceneFlag)) {
@@ -194,7 +196,9 @@ void dAcBombf_c::executeState_Wait() {
             } else {
                 startSound(SE_TIMESLIP_TIMESLIP_REV);
             }
-            dJEffManager_c::spawnEffect(lbl_8057A750, mPosition, nullptr, nullptr, nullptr, nullptr, 0, 0);
+            dJEffManager_c::spawnEffect(
+                PARTICLE_RESOURCE_ID_MAPPING_464_, mPosition, nullptr, nullptr, nullptr, nullptr, 0, 0
+            );
         }
 
         scaleFactor *= mTimeAreaStruct.field_0x00;
@@ -206,14 +210,14 @@ void dAcBombf_c::executeState_Wait() {
     }
     dAcBomb_c *bomb = mBombRef.get();
     if (bomb != nullptr) {
-        if (!bomb->mStateMgr.isState(dAcBomb_c::StateID_FlowerWait) && field_0x3D0 == 0) {
+        if (!bomb->mStateMgr.isState(dAcBomb_c::StateID_FlowerWait) && mIsUnderground == 0) {
             mBombRef.unlink();
             field_0x394 = 0x3C;
         }
     } else {
         if (field_0x394 != 0) {
             field_0x394--;
-        } else if (field_0x3D0 == 0 || dAcPy_c::LINK->getSquareDistanceTo(mPosition) > 22500.0f) {
+        } else if (mIsUnderground == 0 || dAcPy_c::LINK->getSquareDistanceTo(mPosition) > 22500.0f) {
             regrowBomb();
         }
     }
