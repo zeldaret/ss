@@ -1590,6 +1590,8 @@ d/tg/d_t_alldie.cpp:
 d/tg/d_t_view_clip.cpp:
 	.text       start:0x80274060 end:0x802743DC align:16
 	.data       start:0x80536128 end:0x805361B0
+	.sdata2     start:0x8057C508 end:0x8057C518
+	.bss        start:0x805B5668 end:0x805B56A8
 
 d/tg/d_t_switch.cpp:
 	.text       start:0x802743E0 end:0x802756D8 align:16
