@@ -526,6 +526,9 @@ public:
     void SetSrcModifer(u32 modifier) {
         mSrc.mInfo.mModifier = modifier;
     }
+    u32 GetSrcModifer() const {
+        return mSrc.mInfo.mModifier;
+    }
     void OnSrcModifer(u32 m) {
         mSrc.mInfo.mModifier |= m;
     }
@@ -949,6 +952,10 @@ public:
         mAt.SetCallback(cb);
     }
 
+    void SetTgCallback(cCcD_HitCallback cb) {
+        mTg.SetCallback(cb);
+    }
+
     void SetCoCallback(cCcD_HitCallback cb) {
         mCo.SetCallback(cb);
     }
@@ -1005,6 +1012,13 @@ public:
     // Related to Beetle (no hook)
     void OnAt_0x4000() {
         mAt.OnSPrm(0x4000);
+    }
+     // Related to Beetle (no hook)
+    u32 ChkAt_0x4000() {
+        return mAt.MskSPrm(0x4000);
+    }
+    u32 GetAtSrcModifier() const {
+        return mAt.GetSrcModifer();
     }
 
 
@@ -1114,6 +1128,9 @@ public:
     }
     void ClrCo_0x400() {
         mCo.OffSPrm(0x400);
+    }
+    u32 ChkCo_0x8000() {
+        return mCo.MskSPrm(0x8000);
     }
     void OnCo_0x8000() {
         mCo.OnSPrm(0x8000);

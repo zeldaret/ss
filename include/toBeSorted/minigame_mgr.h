@@ -31,11 +31,41 @@ public:
     static MinigameManager *GetInstance() {
         return sInstance;
     }
-    static bool checkInBossRush() {
-        return isInMinigameState(BOSS_RUSH);
+    static bool checkInInsectCapture() {
+        return isInMinigameState(INSECT_CAPTURE);
+    }
+    static bool checkInPumpkinCarry() {
+        return isInMinigameState(PUMPKIN_CARRY);
+    }
+    static bool checkInBambooCutting() {
+        return isInMinigameState(BAMBOO_CUTTING);
+    }
+    static bool checkInThrillDigger() {
+        return isInMinigameState(THRILL_DIGGER);
     }
     static bool checkInFunFunIsland() {
         return isInMinigameState(FUN_FUN_ISLAND);
+    }
+    static bool checkInHouseCleaning() {
+        return isInMinigameState(HOUSE_CLEANING);
+    }
+    static bool checkInTrialTimeAttack() {
+        return isInMinigameState(TRIAL_TIME_ATTACK);
+    }
+    static bool checkInBossRush() {
+        return isInMinigameState(BOSS_RUSH);
+    }
+    static bool checkInPumpkinArchery() {
+        return isInMinigameState(PUMPKIN_ARCHERY);
+    }
+    static bool checkInHarpPlaying() {
+        return isInMinigameState(HARP_PLAYING);
+    }
+    static bool checkInRollerCoaster() {
+        return isInMinigameState(ROLLERCOASTER);
+    }
+    static bool checkInSprialChargeTutorial() {
+        return isInMinigameState(SPIRAL_CHARGE_TUTORIAL);
     }
 
 private:

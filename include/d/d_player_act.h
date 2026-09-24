@@ -2,12 +2,13 @@
 #define D_A_PLAYER_ACT_H
 
 #include "d/a/d_a_base.h"
-#include "d/a/obj/d_a_obj_bomb.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/d_player_base.h"
 #include "m/m_vec.h"
 
 class dAcEnBase_c;
 class dAcOFairy_c;
+class dAcBomb_c;
 
 // Does this one have a vtable?
 // Name unknown
@@ -247,7 +248,7 @@ public:
         return false;
     }
     /* vt 0x1B8 */ virtual void canHandleGameOver() {}
-    /* vt 0x1BC */ virtual UNKWORD vt_0x1BC() {
+    /* vt 0x1BC */ virtual dAcObjBase_c *getBeetleHeldActor() {
         return 0;
     }
 
@@ -414,7 +415,7 @@ public:
     /* vt 0x2A4 */ virtual bool isRunningUpWall() {
         return false;
     }
-    /* vt 0x2A8 */ virtual void lookTowardItem() {}
+    /* vt 0x2A8 */ virtual void lookTowardItem(const mVec3_c &, u32, mAng, f32, f32, f32) {}
     /* vt 0x2AC */ virtual void vt_0x2AC() {}
     /* vt 0x2B0 */ virtual void vt_0x2B0() {}
     /* vt 0x2B4 */ virtual void triggerMoveEventMaybe(u32, u32, u32, const mVec3_c *, const mAng &, u32, u32) {}
@@ -548,6 +549,10 @@ public:
 
         FLG0_FLY = FLG0_TIGHT_ROPE | FLG0_SWING_ROPE | FLG0_IN_WATER | FLG0_ON_LADDDER | FLG0_ON_VINES |
                    FLG0_HANGING_ITEM | FLG0_HANGING_LEDGE | FLG0_UNK_0x10 | FLG0_IN_AIR,
+    };
+
+    enum dAcPy_FLG1 {
+        ActFLG1_INCRAWLSPACE = 0x400000
     };
 
     inline bool checkFlags0x340(u32 mask) const {

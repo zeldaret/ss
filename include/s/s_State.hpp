@@ -48,9 +48,19 @@
         return *mStateMgr.getStateID() == value;                                                                       \
     }
 
+#define STATE_MGR_DEFINE_UTIL_GETSTATEID(class_name)                                                                   \
+    const sFStateID_c<class_name> &getStateID() const {                                                                \
+        return (sFStateID_c<class_name> &)*mStateMgr.getStateID();                                                     \
+    }
+
 #define STATE_MGR_DEFINE_UTIL_GETOLDSTATEID(class_name)                                                                \
     const sFStateID_c<class_name> &getOldStateID() const {                                                             \
         return (sFStateID_c<class_name> &)*mStateMgr.getOldStateID();                                                  \
+    }
+
+#define STATE_MGR_DEFINE_UTIL_GETNEWSTATEID(class_name)                                                                \
+    const sFStateID_c<class_name> &getNewStateID() const {                                                             \
+        return (sFStateID_c<class_name> &)*mStateMgr.getNewStateID();                                                  \
     }
 
 // Use this when you need need sFStateID_c vtables to appear in a different order

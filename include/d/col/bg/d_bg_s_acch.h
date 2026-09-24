@@ -524,6 +524,12 @@ public:
     const dBgS_GndChk &GetGnd() const {
         return mGnd;
     }
+    dBgS_WtrChk &GetWtr() {
+        return mWtr;
+    }
+    const dBgS_WtrChk &GetWtr() const {
+        return mWtr;
+    }
 
     dBgS_RoofChk &GetRoof() {
         return mRoof;
@@ -532,8 +538,17 @@ public:
         return mRoof;
     }
 
-    void SetField_0xD4(f32 v) {
-        field_0x0D4 = v;
+    void SetGndChkOffset(f32 v) {
+        mGndChkOffset = v;
+    }
+    void SetRoofCrrHeight(f32 v) {
+        mRoofCrrHeight = v;
+    }
+    void SetWaterCheckOffset(f32 v) {
+        mWtrCheckOffset = v;
+    }
+    void SetWtrChkMode(u8 v) {
+        mWtrMode = v;
     }
 
 public:
@@ -555,12 +570,12 @@ public:
     /* 0x0A8 */ f32 field_0x0A8;
     /* 0x0AC */ f32 field_0x0AC;
     /* 0x0B0 */ f32 mGroundHeight;
-    /* 0x0B4 */ f32 field_0x0B4;
+    /* 0x0B4 */ f32 mGndChkOffset;
     /* 0x0B8 */ cM3dGPla mPlane_0x0B8;
     /* 0x0C8 */ f32 field_0x0C8;
     /* 0x0CC */ f32 field_0x0CC;
     /* 0x0D0 */ f32 mRoofHeight;
-    /* 0x0D4 */ f32 field_0x0D4;
+    /* 0x0D4 */ f32 mRoofCrrHeight;
     /* 0x0D8 */ f32 field_0x0D8;
     /* 0x0DC */ cBgS_PolyInfo *mpOutPolyInfo;
     /* 0x0E0 */ f32 mRoofH_0x0E0;
@@ -572,9 +587,9 @@ public:
     /* 0x1D0 */ f32 field_0x1D0;
     /* 0x1D4 */ dBgS_GndChk mGnd;
     /* 0x264 */ dBgS_RoofChk mRoof;
-    /* 0x2F4 */ f32 field_0x2F4;
+    /* 0x2F4 */ f32 mWtrCheckOffset;
     /* 0x2F8 */ dBgS_WtrChk mWtr;
-    /* 0x390 */ u8 field_0x390;
+    /* 0x390 */ u8 mWtrMode;
     /* 0x394 */ s32 field_0x394;
     /* 0x398 */ mVec3_c field_0x398;
     /* 0x3A4 */ mVec3_c field_0x3A4;

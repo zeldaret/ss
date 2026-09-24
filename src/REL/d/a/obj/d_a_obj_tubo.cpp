@@ -320,7 +320,7 @@ void dAcOtubo_c::finalizeState_Grab() {
         mSph.OnAtSet();
     }
     mObjAcch.ClrRoofNone();
-    mObjAcch.field_0x0D4 = 50.f;
+    mObjAcch.SetRoofCrrHeight(50.f);
 }
 
 void dAcOtubo_c::initializeState_Put() {}

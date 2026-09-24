@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_item.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/d_player_mdl.h"
 #include "m/m_angle.h"
@@ -32,13 +33,44 @@ public:
     /* vt 0x314 */ virtual void vt_0x314();
     /* vt 0x318 */ virtual void vt_0x318();
 
+    struct ObjectArray {
+        static const size_t sNumObjects = 16;
+
+        bool insert(dAcObjBase_c *);
+        void execute();
+        dAcObjBase_c *get(s32 index);
+        void removeBombs();
+
+        dAcObjRef_c mObjs[sNumObjects];
+        u32 mCounter[sNumObjects];
+    };
+
 protected:
-    /* 0x137C */ u8 _0x137C[0x16F0 - 0x137C];
+    /* 0x137C */ ObjectArray mOwnedObjects;
+    /* 0x147C */ ObjectArray mOwnedProjectiles;
+    /* 0x157C */ u8 _0x157C[0x16F0 - 0x157C];
     /* 0x16F0 */ nw4r::g3d::ResFile mHeldResFile;
     /* 0x16F4 */ u8 _0x16F4[0x4564 - 0x16F4];
     /* 0x4564 */ f32 field_0x4564;
 
 public:
+    // Bomb Function [0x80202CA0 - 0x80202DF0?]
+    static f32 getBombDistanceUnknown0();
+    static s32 getBombExplodeTimer();
+    static f32 getBombAcceleration();
+    static f32 getBombMaxSpeed();
+    static f32 getBombUnknown0_0();
+    static f32 getBombUnknown0_1();
+    static f32 getBombUnknown1_0();
+    static f32 getBombUnknown1_1();
+    static f32 getBombAcceleration_1();
+    static f32 getBombMaxSpeed_1();
+    static f32 getBombBounceSpeed();
+    static f32 getBombParticleScale();
+    static f32 getBombExplodeRadius();
+    static f32 getBombStopSpeedY();
+    static f32 getBombMaxSpeedY();
+
     // Beetle Functions [0x8021AA70 - 0x8021BE20]
     s16 getBeetleFlightTime();
     mAng getBeetleAngle0();
@@ -58,6 +90,7 @@ public:
     void setBeetleFlashClr(const mColor &);
     void setBeetleBackAnim();
     s32 getBeetleWarningTimeLeft();
+    void setBeetleReleasedObject(dAcObjBase_c *pObj);
 
     // Item select/equip/use functions [0x801E3160 - 0x801E7AD0] ?
     static s32 calcItemWheelSelection(bool reset, s32 numOptions);
@@ -74,6 +107,20 @@ public:
     f32 fn_802097B0(); // 50.0f
     f32 fn_802097C0(); // 1000.0f
     f32 fn_802097D0(); // 4000.0f
+
+    // Minigame Functions [0x8023BB60 - 0x8023BDD0]
+    static bool isInMinigameInsectCapture();
+    static bool isInMinigamePumpkinCarry();
+    static bool isInMinigameBambooCutting();
+    static bool isInMinigameThrillDigger();
+    static bool isInMinigameFunFunIsland();
+    static bool isInMinigameHouseCleaning();
+    static bool isInMinigameTrialTimeAttack();
+    static bool isInMinigameBossRush();
+    static bool isInMinigamePumpkinArchery();
+    static bool isInMinigameHarpPlaying();
+    static bool isInMinigameRollerCoaster();
+    static bool isInMinigameSprialChargeTutorial();
 
 public:
     f32 getField_0x4564() const {
@@ -117,6 +164,14 @@ public:
         return LINK2;
     }
 
+    static bool insertOwnedObject(dAcObjBase_c *pObj) {
+        return LINK2->mOwnedObjects.insert(pObj);
+    }
+
+    ObjectArray &getOwnedObjects() {
+        return mOwnedObjects;
+    }
+
     void onShieldUpdate();
 
     static dAcPy_c *LINK;
@@ -130,9 +185,6 @@ public:
     }
     static s32 getCurrentBugNetType();
 
-    static bool isInBambooCuttingMinigame() {
-        return MinigameManager::isInMinigameState(MinigameManager::BAMBOO_CUTTING);
-    }
     static bool isItemRestrictedByBokoBase(ITEM_ID item);
 
     static u32 getCurrentHealthCapacity();

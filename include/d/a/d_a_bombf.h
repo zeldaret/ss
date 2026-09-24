@@ -12,7 +12,6 @@ public:
     dAcBombf_c() : mStateMgr(*this) {}
     virtual ~dAcBombf_c() {}
     virtual bool createHeap() override;
-    virtual int create() override;
     virtual int actorExecute() override;
     virtual int draw() override;
     virtual int doDelete() override;
@@ -31,7 +30,7 @@ private:
     /* 0x394 */ UNKWORD field_0x394;
     /* 0x398 */ cBgS_PolyInfo field_0x398;
     /* 0x3C4 */ TimeAreaStruct mTimeAreaStruct;
-    /* 0x3D0 */ bool field_0x3D0;
+    /* 0x3D0 */ bool mIsUnderground;
     /* 0x3D1 */ u8 mDespawnSceneFlag;
     /* 0x3D2 */ u8 field_0x3D2;
     /* 0x3D3 */ u8 field_0x3D3;

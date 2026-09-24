@@ -6,7 +6,7 @@
 
 /**
  * @brief Gets a point on a XZ circle.
- * 
+ *
  * @param center   the circle center. Will also hold the result.
  * @param angle    the Y angle.
  * @param radius   the circle radius.
@@ -15,10 +15,15 @@ inline static void getXZCirclePoint(mVec3_c &center, const mAng &angle, f32 radi
     center.x += radius * angle.sin();
     center.z += radius * angle.cos();
 }
+inline static void setXYZCirclePoint(mVec3_c &center, const mAng &angle, f32 radius, f32 y) {
+    center.x = radius * angle.sin();
+    center.y = y;
+    center.z = radius * angle.cos();
+}
 
 /**
  * @brief Converts a 2D vector to a 3D vector holding the original's vector coordinates in its XY components.
- * 
+ *
  * @param v         The 2D vector
  * @return mVec3_c  The 3D vector
  */
@@ -28,7 +33,7 @@ inline mVec3_c vec2ToVec3XY(const mVec2_c &v) {
 
 /**
  * @brief Computes left x right
- * 
+ *
  * @param result the result
  * @param left left operant
  * @param right right operand

@@ -169,9 +169,6 @@ public:
 
     virtual ~dLytMeterItemSelect_c() {}
 
-    static bool isInSpiralChargeTutorialMinigame();
-    static bool isInRollercoasterMinigame();
-
     // This enum might be used externally too?
     enum InternalItem_e {
         I_BOMB_BAG,
