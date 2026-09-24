@@ -44,12 +44,6 @@
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/minigame_mgr.h"
 
-// For real??
-template <typename T>
-inline T MyClamp(T value, T min, T max) {
-    return (value < min ? min : value > max ? max : value);
-}
-
 SPECIAL_ACTOR_PROFILE(BOMB, dAcBomb_c, fProfile::BOMB, 0x128, 0, 2);
 
 static const Vec sSmokeOffset = {0, 60, 0};
@@ -417,8 +411,7 @@ void dAcBomb_c::getVelocity(mVec3_c &out) {
     setXYZCirclePoint(out, mAngle.y, mSpeed, mVelocity.y);
 
     if (mRollFrameTimer != 0) {
-        f32 f = MyClamp(mRollFrameTimer * 0.02f, 0.0f, 1.0f);
-
+        f32 f = cM::minMaxLimit(mRollFrameTimer * 0.02f, 0.0f, 1.0f);
         mVec3_c v;
         setXYZCirclePoint(v, mRollRotationY, mRollSpeed, 0.0f);
 
@@ -835,7 +828,7 @@ void dAcBomb_c::executeState_Wait() {
         }
         if (code != POLY_ATTR_CURSED_WATER) {
             if (mGndAngle >= mAng::fromDeg(20.0f)) {
-                mVec3_c v1 = 2.0f * plane.GetN() * mGndAngle.sin();
+                mVec3_c v1 = 2.0f * plane.GetN() * mAng(mGndAngle.mVal).sin();
                 v1.y = 0.0f;
 
                 mAng yRot = v1.atan2sX_Z();
@@ -1082,7 +1075,7 @@ void dAcBomb_c::unkVirtFunc_0x6C() {
     }
 }
 
-// NONMATCHING
+// NONMATCHING (https://decomp.me/scratch/4ws7h )
 int dAcBomb_c::actorExecute() {
     unsetFlag(dAcBomb_c::FLAG_0x400000 | dAcBomb_c::FLAG_0x100);
     mVec3_c v;
@@ -1129,10 +1122,14 @@ int dAcBomb_c::actorExecute() {
         if (checkWaterIn()) {
             if (!checkFlag(dAcBomb_c::FLAG_FALL_IN_WATER | dAcBomb_c::FLAG_UNDERWATER)) {
                 if (!checkFlag(dAcBomb_c::FLAG_0x20000000)) {
-                    mVec3_c pos;
                     // !!! FPR alloc here is weird I guess
-                    f32 diff0 = nw4r::math::FAbs(mOldPosition.y - mPosition.y);
-                    f32 diff1 = nw4r::math::FAbs(mAcch.GetWtrGroundH() - mPosition.y);
+                    f32 diff0 = (mOldPosition.y - mPosition.y);
+                    f32 diff1 = (mAcch.GetWtrGroundH() - mPosition.y);
+
+                    diff0 = nw4r::math::FAbs(diff0);
+                    diff1 = nw4r::math::FAbs(diff1);
+
+                    mVec3_c pos;
                     if (diff0 < 1.0f) {
                         pos.x = mPosition.x;
                         pos.y = mAcch.GetWtrGroundH();
@@ -1144,7 +1141,7 @@ int dAcBomb_c::actorExecute() {
                         }
                         pos = f * mOldPosition + (1.0f - f) * mPosition;
                     }
-                    dAcPy_c::fn_801E2FC0(pos, mAcch.GetWtr(), 0.8f);
+                    dAcPy_c::fn_801E2FC0(pos, mAcch.mWtr, 0.8f);
                 }
                 startSound(SE_BM_FALL_WATER);
                 if (mLinkage.checkState(dLinkage_c::STATE_ACTIVE)) {
@@ -1198,9 +1195,8 @@ int dAcBomb_c::actorExecute() {
         f32 scale = mScale.y * 25.0f;
         f32 f = 0.0f;
         if (mGndAngle != 0 && mGndAngle < 0x4000) {
-            /// !! Need to load mGndAngle again
-            f32 f0 = mGndAngle.cos();
-            f32 f_temp = ((1.0f / f0) - 1.0f);
+            /// TODO: Fake? mGndAngle load again
+            f32 f_temp = ((1.0f / mAng(mGndAngle.mVal).cos()) - 1.0f);
             f = scale * nw4r::ut::Min(f_temp * 0.75f, 0.5f);
         }
         mLinkage.fn_800511E0(this);
