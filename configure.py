@@ -2138,7 +2138,7 @@ config.libs = [
     Rel(NonMatching, "d_a_e_sf4", "REL/d/a/e/d_a_e_sf4.cpp"),
     Rel(NonMatching, "d_a_e_sf", "REL/d/a/e/d_a_e_sf.cpp"),
     Rel(NonMatching, "d_a_e_siren", "REL/d/a/e/d_a_e_siren.cpp"),
-    Rel(NonMatching, "d_a_e_skytail", "REL/d/a/e/d_a_e_skytail.cpp"),
+    Rel(Matching, "d_a_e_skytail", "REL/d/a/e/d_a_e_skytail.cpp"),
     Rel(NonMatching, "d_a_e_sm", "REL/d/a/e/d_a_e_sm.cpp"),
     Rel(NonMatching, "d_a_e_spark", "REL/d/a/e/d_a_e_spark.cpp"),
     Rel(NonMatching, "d_a_e_st", "REL/d/a/e/d_a_e_st.cpp"),

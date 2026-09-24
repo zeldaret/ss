@@ -88,7 +88,7 @@ public:
     void fn_80030700();
     dAcObjBase_c *targetPlayerOrScrapper(f32 biasToScrapper);
     static void fn_80030980(m3d::mdl_c &, s32, bool markDirty);
-
+    bool isWithinCameraView(f32, f32);
     void fn_80030c20(u32 flags, f32, f32, f32, f32);
 
     s32 someEnemyDamageCollisionStuffMaybe(dColliderLinkedList &list, u16 *pOutFlags);
