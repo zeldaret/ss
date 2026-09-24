@@ -164,6 +164,10 @@ public:
         mLinkage.field_0xA0 = pCol;
     }
 
+    dSalvageIf_c *getSalvageIf() const {
+        return mpSalvageIf;
+    }
+
     // could be their own thing?
     static void *getOarcFile(const char *oarcName, const char *fileName);
     static void *getOarcSubEntry(const char *oarcName, const char *fileName);

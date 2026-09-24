@@ -41,7 +41,7 @@ struct TimeAreaStruct {
         return fabsf(field_0x00) <= FLT_EPSILON;
     }
 
-    f32 getDistMaybe() {
+    f32 getDistMaybe() const {
         return field_0x00;
     }
 
@@ -71,6 +71,8 @@ public:
     // I think this might be an enum
     s32 fn_800B9B60(s32 roomId, const mVec3_c &position);
     f32 fn_800B9CE0(const mVec3_c &position);
+
+    static bool fn_800BBD40();
 
     bool isInLanayruMiningFacility() const {
         return mIsInLanayruMiningFacility;

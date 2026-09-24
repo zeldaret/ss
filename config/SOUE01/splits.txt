@@ -478,12 +478,19 @@ toBeSorted/d_event_director.cpp:
 toBeSorted/minigame_mgr.cpp:
 	.text       start:0x800A5060 end:0x800A5608 align:16
 	.ctors      start:0x804DB6C4 end:0x804DB6C8
+	.data       start:0x8050FF00 end:0x8050FF18
+	.sdata      start:0x80572250 end:0x80572260
 	.sbss       start:0x80575390 end:0x805753A0
 
 toBeSorted/salvage_mgr.cpp:
 	.text       start:0x800A5610 end:0x800A668C align:16
 	.ctors      start:0x804DB6C8 end:0x804DB6CC
+	.rodata     start:0x804E3718 end:0x804E3850
+	.data       start:0x8050FF18 end:0x8050FFB8
+	.sdata      start:0x80572260 end:0x80572288
 	.sbss       start:0x805753A0 end:0x805753A8
+	.sdata2     start:0x805796B8 end:0x80579748
+	.bss        start:0x805A60A8 end:0x805A6140
 
 toBeSorted/d_path.cpp:
 	.text       start:0x800A6690 end:0x800A9B00 align:16
@@ -1579,10 +1586,13 @@ d/d_thp_player.cpp:
 d/tg/d_t_alldie.cpp:
 	.text       start:0x80273BC0 end:0x8027405C align:16
 	.data       start:0x805360A0 end:0x80536128
+	.sdata2     start:0x8057C4F0 end:0x8057C508
 
 d/tg/d_t_view_clip.cpp:
 	.text       start:0x80274060 end:0x802743DC align:16
 	.data       start:0x80536128 end:0x805361B0
+	.sdata2     start:0x8057C508 end:0x8057C518
+	.bss        start:0x805B5668 end:0x805B56A8
 
 d/tg/d_t_switch.cpp:
 	.text       start:0x802743E0 end:0x802756D8 align:16

@@ -163,8 +163,13 @@ public:
     s8 getCurrRoomId() const {
         return curr_room_id;
     }
+    bool isRoomID(s32 id) const {
+        return curr_room_id == id;
+    }
 
-    dFader_c& getFader() { return mFader; }
+    dFader_c &getFader() {
+        return mFader;
+    }
 
     bool fn_801B3EE0();
     void fn_801B3F20();
