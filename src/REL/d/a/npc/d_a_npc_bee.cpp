@@ -107,7 +107,7 @@ int dAcNpcBee_c::doDelete() {
 // non matching
 void dAcNpcBee_c::actuallyUpdateSwarmBees() {
     if (mHiveRef.isLinked()) {
-        setStartingPosition(mHiveRef.get()->field_0x928);
+        setStartingPosition(mHiveRef.get()->getActualPosition());
     }
     dAcPy_c *player = dAcPy_c::GetLinkM();
     if ((mFrameCounter & 0xF) == 0) {
@@ -275,11 +275,11 @@ void dAcNpcBee_c::handleBeeCrawlingOnHive(dAcNpcBeeSingleBee *bee) {
             (mAttackActor->getPosition().y - getPosition().y) < 0.f && bee->mSubState != CRAWLING_SUBSTATE_PRE_RISE) {
             // using getSpeed inline breaks the match
             f32 aggroDistance = mAttackActor->mSpeed * 20.f + 350.f;
-            if (hive->field_0x915 >= 5 || hive->mHealth == 1 ||
-                (hive->field_0x916 == 0 && mAttackActorDistFromHome < aggroDistance)) {
+            if (hive->getBeeAngerTimer() >= 5 || hive->mHealth == 1 ||
+                (!hive->isPlayerObstructed() && mAttackActorDistFromHome < aggroDistance)) {
                 bee->mSubState = CRAWLING_SUBSTATE_PRE_RISE;
                 bee->mActionTimer = cM::rndF(15.f);
-            } else if (bee->mSubState != CRAWLING_SUBSTATE_FLY && hive->field_0x915 != 0) {
+            } else if (bee->mSubState != CRAWLING_SUBSTATE_FLY && hive->getBeeAngerTimer() != 0) {
                 bee->mActionTimer = cM::rndF(70.f) + 30.f;
                 bee->mSubState = CRAWLING_SUBSTATE_FLY;
             }
@@ -531,8 +531,12 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee *bee) {
         } else {
             s32 fVar17 = nw4r::math::SinIdx(bee->mTimer * 3500) * 1500.f;
             s32 fVar16 = nw4r::math::SinIdx(bee->mTimer * 3000) * 1500.f;
-            sLib::addCalcAngle(bee->mCrawlingRotation.y.ref(), fVar17 + cM::atan2s(offsetToTarget.x, offsetToTarget.z), 1, 0x1000);
-            sLib::addCalcAngle(bee->mCrawlingRotation.x.ref(), fVar16 - cM::atan2s(offsetToTarget.y, offsetToTarget.absXZ()), 1, 0x1000);
+            sLib::addCalcAngle(
+                bee->mCrawlingRotation.y.ref(), fVar17 + cM::atan2s(offsetToTarget.x, offsetToTarget.z), 1, 0x1000
+            );
+            sLib::addCalcAngle(
+                bee->mCrawlingRotation.x.ref(), fVar16 - cM::atan2s(offsetToTarget.y, offsetToTarget.absXZ()), 1, 0x1000
+            );
         }
     }
     mtx.YrotS(bee->mCrawlingRotation.y);
