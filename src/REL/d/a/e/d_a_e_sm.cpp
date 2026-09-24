@@ -164,7 +164,7 @@ int dAcEsm_c::actorCreate() {
     mAcchCir.SetWall(mScaleTarget.y * 100.f, mScaleTarget.x * 100.f);
     mStts.SetRank(10);
     mObjAcch.SetGndThinCellingOff();
-    mObjAcch.field_0x390 = 1;
+    mObjAcch.SetWtrChkMode(1);
 
     mMaxSpeed = -40.f;
 
@@ -1093,8 +1093,8 @@ bool dAcEsm_c::fn_187_4B50() {
     if (mBombRef.isLinked()) {
         dAcBomb_c *pBomb = mBombRef.get();
         if (pBomb) {
-            pBomb->On_0xA3C(0x4);
-            pBomb->Off_0xA3C(0x800000);
+            pBomb->setFlag(dAcBomb_c::FLAG_BOMB_HIT);
+            pBomb->unsetFlag(dAcBomb_c::FLAG_FUSE_PAUSED);
             mBombRef.unlink();
         }
 

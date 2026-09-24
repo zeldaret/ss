@@ -5,6 +5,7 @@
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_item.h"
 #include "d/a/d_a_player.h"
+#include "d/a/e/d_a_en_base.h"
 #include "d/a/npc/d_a_npc_ce_friend.h"
 #include "d/a/npc/d_a_npc_ce_lady.h"
 #include "d/a/obj/d_a_obj_base.h"
@@ -91,7 +92,11 @@ static dCcD_SrcCyl sSrcCyl = {
     {
      /* mObjAt */ {AT_TYPE_PHYSICS, 0x10013, {0, 0, 0}, 4, 0, 0, 0, 0, 0},
      /* mObjTg */
-        {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000), 0x2000111, {0, 0xF, 0x407}, 0, 0},
+        {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000),
+         0x2000111,
+         {0, 0xF, 0x407},
+         0,
+         0},
      /* mObjCo*/ {0xE9},
      },
     {
@@ -1067,7 +1072,6 @@ void dAcOBarrel_c::fn_293_3DB0() {
     quat_0xD90 = q1 * q2 * q0 * quat_0xD90;
 }
 
-extern "C" void fn_800307E0(const mVec3_c &, s32);
 void dAcOBarrel_c::fn_293_4200() {
     getLinkage().forceRemove(this);
 
@@ -1124,7 +1128,7 @@ void dAcOBarrel_c::fn_293_4200() {
                 PARTICLE_RESOURCE_ID_MAPPING_658_, emitPosition, nullptr, &mScale, nullptr, nullptr, 0, 0
             );
         }
-        fn_800307E0(mPosition, 0);
+        dAcEnBase_c::fn_800307E0(&mPosition, 0);
         startSound(SE_Barrel_BOMB);
         mStateMgr.changeState(StateID_Explode);
 

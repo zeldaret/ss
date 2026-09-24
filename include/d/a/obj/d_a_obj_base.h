@@ -1,7 +1,6 @@
 #ifndef D_A_OBJ_BASE_H
 #define D_A_OBJ_BASE_H
 
-#include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_salbage_if.h"
@@ -14,11 +13,9 @@
 #include "m/m3d/m_shadow.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
-#include "m/m_color.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
-#include "nw4r/math/math_arithmetic.h"
 
 // Ghidra: ActorObjectBase
 //   size: 0x330

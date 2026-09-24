@@ -208,7 +208,7 @@ int dAcEremly_c::actorCreate() {
     field_0xA50.z = mPosition.z;
     mAcchCir.SetWall(mScaleF * 10.f, mScaleF * 60.f);
 
-    mAcch.SetField_0xD4(100.f + _weird_zero);
+    mAcch.SetRoofCrrHeight(100.f + _weird_zero);
     field_0xB04 = 60.f;
 
     if (mIsHorwellsPet == 0) {
@@ -1113,7 +1113,7 @@ void dAcEremly_c::initializeState_Fly() {
     mYOffset = 0.f;
     mAnmStep = 0;
 
-    mAcch.SetField_0xD4(f);
+    mAcch.SetRoofCrrHeight(f);
 
     mVelocity.x = mVelocity.z = 0.f;
     mSpeed = 0.f;

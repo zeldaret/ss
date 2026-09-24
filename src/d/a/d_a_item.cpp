@@ -774,7 +774,7 @@ int dAcItem_c::create() {
         getItemFlagStruct(getItemId())->field_0x01 * 0.5f, getItemFlagStruct(getItemId())->field_0x00 * 0.6f
     );
     mObjAcch.Set(this, 1, &mAcchCir);
-    mObjAcch.field_0x0D4 = 50.0f;
+    mObjAcch.SetRoofCrrHeight(50.0f);
     mObjAcch.SetClrSpeedY();
     mObjAcch.SetField_0xC(4);
     mAcceleration = -2.0f;

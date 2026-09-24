@@ -41,6 +41,9 @@ public:
     dCcMassS_Mng &GetMassMng() {
         return mMassMng;
     }
+    void SetMass(cCcD_Obj *p_obj, u8 priority) {
+        mMassMng.SetObj(p_obj, priority);
+    }
 
     void Ct();
     void Dt();

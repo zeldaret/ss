@@ -5,6 +5,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_bomb.h"
 #include "d/d_cc.h"
+#include "f/f_list_mg.h"
 #include "m/m3d/m_mdl.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
@@ -86,6 +87,7 @@ public:
     bool fn_80030570(m3d::mdl_c &, u8, f32); // lighting related
     void fn_800306D0();
     void fn_80030700();
+    static void fn_800307E0(mVec3_c *pPos, s32);
     dAcObjBase_c *targetPlayerOrScrapper(f32 biasToScrapper);
     static void fn_80030980(m3d::mdl_c &, s32, bool markDirty);
     bool isWithinCameraView(f32, f32);
@@ -94,6 +96,10 @@ public:
     s32 someEnemyDamageCollisionStuffMaybe(dColliderLinkedList &list, u16 *pOutFlags);
 
     bool ChkCrossPlayer(f32 height);
+
+    static dAcEnBase_c *GetNextEnemy(dAcEnBase_c *pParent) {
+        return static_cast<dAcEnBase_c *>(getNextObject(&sEnemyList, pParent));
+    }
 
 protected:
     // TODO: Make accessors for this list to auto-convert to dAcEnBase?

@@ -999,8 +999,9 @@ void daPlayerModelBase_c::updateSwordModel() {
 }
 
 u32 daPlayerModelBase_c::getCurrentShieldPouchSlot() {
-    // Compiler quirk, inline function not inlined due to GetLink call
-    if (dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL || dAcPy_c::GetLink()->isInBambooCuttingMinigame()) {
+    // Compiler quirk, inline function not inlined due to MinigameManager::GetInstance call
+    if (dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL ||
+        MinigameManager::GetInstance()->checkInBambooCutting()) {
         return POUCH_SLOT_NONE;
     }
     return FileManager::GetInstance()->getShieldPouchSlot();

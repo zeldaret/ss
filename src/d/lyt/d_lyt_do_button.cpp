@@ -9,6 +9,7 @@
 #include "nw4r/math/math_types.h"
 #include "sized_string.h"
 #include "toBeSorted/event_manager.h"
+#include "toBeSorted/minigame_mgr.h"
 
 struct dLytDoButton_HIO_c {
     dLytDoButton_HIO_c();
@@ -294,7 +295,7 @@ bool dLytDobutton_c::remove() {
 bool dLytDobutton_c::execute() {
     bool isInEvent = EventManager::isInEvent();
     bool b1 = true;
-    if (dAcPy_c::GetLink()->isInBambooCuttingMinigame()) {
+    if (MinigameManager::GetInstance()->checkInBambooCutting()) {
         setActionTextStuff(ICON_12, ACT_DO_70, false);
     }
     if (field_0x490 == 0) {

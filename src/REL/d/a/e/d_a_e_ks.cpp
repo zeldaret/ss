@@ -187,7 +187,7 @@ void dAcEKs_c::setStartingState() {
             changeState(StateID_Move);
             mCurrentState = mStartingState;
             mAcch.ClrRoofNone();
-            mAcch.SetField_0xD4(55.f);
+            mAcch.SetRoofCrrHeight(55.f);
             mAcch.SetGroundUpY(30.f);
             mAcchCir.SetWall(20.f, 60.f);
         } break;
@@ -199,14 +199,14 @@ void dAcEKs_c::setStartingState() {
             }
             mAcch.ClrRoofHit();
             mAcch.SetGroundUpY(0.f);
-            mAcch.SetField_0xD4(0.f);
+            mAcch.SetRoofCrrHeight(0.f);
             mAcchCir.SetWall(0.f, 5.f);
 
         } break;
         case EKS_STARTSTATE_PathMove: {
             mCurrentState = mStartingState;
             mAcch.ClrRoofNone();
-            mAcch.SetField_0xD4(55.f);
+            mAcch.SetRoofCrrHeight(55.f);
             mAcch.SetGroundUpY(30.f);
             mAcchCir.SetWall(20.f, 60.f);
             changeState(StateID_PathMove);
@@ -1789,7 +1789,7 @@ void dAcEKs_c::initializeState_Wait() {
     mRotation.y = field_0xD8A;
     mRotation.x = mAng(0);
     mAcch.ClrRoofHit();
-    mAcch.SetField_0xD4(0);
+    mAcch.SetRoofCrrHeight(0);
     mAcch.SetGroundUpY(0);
     setBattleBgmRelated(0);
 
@@ -2042,7 +2042,7 @@ void dAcEKs_c::finalizeState_WakeUp() {
     mAngle.y = mRotation.y;
     mAcch.ClrRoofNone();
     mAcchCir.SetWall(20, 60);
-    mAcch.SetField_0xD4(55);
+    mAcch.SetRoofCrrHeight(55);
     mAcch.SetGroundUpY(30);
 }
 
@@ -2116,7 +2116,7 @@ void dAcEKs_c::initializeState_WaitReady() {
     field_0xDA5 = 0;
     field_0xD50 = 30;
     mAcch.ClrRoofHit();
-    mAcch.SetField_0xD4(0.f);
+    mAcch.SetRoofCrrHeight(0.f);
     mAcch.SetGroundUpY(0.f);
     field_0xDAD = 0;
     field_0xDAE = 0;
@@ -2853,7 +2853,7 @@ void dAcEKs_c::initializeState_WindBlow() {
     mAcceleration = -0.5f;
     mAcch.ClrRoofNone();
     mAcchCir.SetWall(20, 60);
-    mAcch.SetField_0xD4(55);
+    mAcch.SetRoofCrrHeight(55);
     mAcch.SetGroundUpY(30);
 }
 void dAcEKs_c::executeState_WindBlow() {
