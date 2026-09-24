@@ -5,7 +5,6 @@
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 
-
 void dColliderLinkedList::postInit(cCcD_Obj &ccD) {
     if (ccD.ChkAtSet()) {
         ccD.SetAt_0x40000000();
@@ -18,28 +17,28 @@ void dColliderLinkedList::postInit(cCcD_Obj &ccD) {
     }
 }
 
-void dColliderLinkedList::addCc(dCcD_Linked_Cyl &ccD, const dCcD_SrcCyl &src) {
+void dColliderLinkedList::addCc(dCcD_Linked<dCcD_Cyl> &ccD, const dCcD_SrcCyl &src) {
     ccD.Set(src);
     mList.append(&ccD.mNode);
     ccD.mNode.mpList = &mList;
     postInit(ccD);
 }
 
-void dColliderLinkedList::addCc(dCcD_Linked_Sph &ccD, const dCcD_SrcSph &src) {
+void dColliderLinkedList::addCc(dCcD_Linked<dCcD_Sph> &ccD, const dCcD_SrcSph &src) {
     ccD.Set(src);
     mList.append(&ccD.mNode);
     ccD.mNode.mpList = &mList;
     postInit(ccD);
 }
 
-void dColliderLinkedList::addCc(dCcD_Linked_Cps &ccD, const dCcD_SrcCps &src) {
+void dColliderLinkedList::addCc(dCcD_Linked<dCcD_Cps> &ccD, const dCcD_SrcCps &src) {
     ccD.Set(src);
     mList.append(&ccD.mNode);
     ccD.mNode.mpList = &mList;
     postInit(ccD);
 }
 
-void dColliderLinkedList::addCc(dCcD_Linked_Unk &ccD, const dCcD_SrcUnk &src) {
+void dColliderLinkedList::addCc(dCcD_Linked<dCcD_Unk> &ccD, const dCcD_SrcUnk &src) {
     ccD.Set(src);
     mList.append(&ccD.mNode);
     ccD.mNode.mpList = &mList;

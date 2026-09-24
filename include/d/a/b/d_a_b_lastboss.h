@@ -26,7 +26,7 @@ struct UnkLastBossCcSph1 {
     /* 0x008 */ mVec3_c field_0x008[5];
     /* 0x044 */ mVec3_c field_0x044[5];
     /* 0x080 */ mVec3_c field_0x080[5];
-    /* 0x0BC */ dCcD_Linked_Sph mCc;
+    /* 0x0BC */ dCcD_Linked<dCcD_Sph> mCc;
 };
 
 struct UnkLastBossCcSph2 {
@@ -41,7 +41,7 @@ struct UnkLastBossCcSph2 {
     /* 0x014 */ mVec3_c field_0x014[10];
     /* 0x08C */ mVec3_c field_0x08C[10];
     /* 0x104 */ mVec3_c field_0x104[10];
-    /* 0x17C */ dCcD_Linked_Sph mCc;
+    /* 0x17C */ dCcD_Linked<dCcD_Sph> mCc;
 };
 
 class dAcBlastboss_c : public dAcEnBase_c {
@@ -321,11 +321,11 @@ private:
     /* 0x0440 */ m3d::smdl_c mThunderMdl;
     /* 0x045C */ m3d::anmMatClr_c mThunderAnmMatClr;
     /* 0x0488 */ callback_c mMdlCallback;
-    /* 0x04C0 */ dCcD_Linked_Cyl mCc1;
-    /* 0x0620 */ dCcD_Linked_Cyl mCc2;
-    /* 0x0780 */ dCcD_Linked_Cyl mCc3;
-    /* 0x08E0 */ dCcD_Linked_Sph mCc4;
-    /* 0x0A40 */ dCcD_Linked_Sph mLightningCc;
+    /* 0x04C0 */ dCcD_Linked<dCcD_Cyl> mCc1;
+    /* 0x0620 */ dCcD_Linked<dCcD_Cyl> mCc2;
+    /* 0x0780 */ dCcD_Linked<dCcD_Cyl> mCc3;
+    /* 0x08E0 */ dCcD_Linked<dCcD_Sph> mCc4;
+    /* 0x0A40 */ dCcD_Linked<dCcD_Sph> mLightningCc;
     /* 0x0BA0 */ dScnCallback_c mScnCallback;
     /* 0x0BAC */ STATE_MGR_DECLARE(dAcBlastboss_c);
     /* 0x0BE8 */ dColliderLinkedList mCcList;

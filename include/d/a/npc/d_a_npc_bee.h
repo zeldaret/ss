@@ -50,7 +50,7 @@ public:
     /* 0x054 */ mVec3_c mTargetPos; // Either an absolute target or relative to the attacked actor
     /* 0x060 */ mAng3_c mCrawlingRotation;
     /* 0x066 */ mAng3_c mModelRotation;
-    /* 0x06C */ dCcD_Linked_Sph mCollider;
+    /* 0x06C */ dCcD_Linked<dCcD_Sph> mCollider;
 };
 
 class dAcNpcBee_c : public dAcEnBase_c {
@@ -74,7 +74,7 @@ private:
     /* 0x0378 */ u8 mSwarmBeeCount;
     /* 0x0379 */ u8 mRumbleTimer;
     /* 0x037A */ u8 mSceneflag;
-    /* 0x037C */ s16 mFrameCounter;  // used to only search for new targets every 16 frames
+    /* 0x037C */ s16 mFrameCounter; // used to only search for new targets every 16 frames
     /* 0x0380 */ f32 mAttackActorDistFromHome;
     /* 0x0384 */ u8 field_0x0384[4]; // unused
     /* 0x0388 */ nw4r::g3d::ResFile mRes;

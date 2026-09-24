@@ -18,35 +18,11 @@ public:
     /* 0x0C */ cListMg_c *mpList;
 };
 
-class dCcD_Linked_Unk : public dCcD_Unk {
+template <typename T>
+class dCcD_Linked : public T {
 public:
-    dCcD_Linked_Unk() : mNode(this) {}
-    virtual ~dCcD_Linked_Unk() {
-        mNode.remove();
-    }
-    /* 0x210 */ LinkedColliderNode mNode;
-};
-
-class dCcD_Linked_Cps : public dCcD_Cps {
-public:
-    dCcD_Linked_Cps() : mNode(this) {}
-    virtual ~dCcD_Linked_Cps() {
-        mNode.remove();
-    }
-    /* 0x170 */ LinkedColliderNode mNode;
-};
-class dCcD_Linked_Sph : public dCcD_Sph {
-public:
-    dCcD_Linked_Sph() : mNode(this) {}
-    virtual ~dCcD_Linked_Sph() {
-        mNode.remove();
-    }
-    /* 0x150 */ LinkedColliderNode mNode;
-};
-class dCcD_Linked_Cyl : public dCcD_Cyl {
-public:
-    dCcD_Linked_Cyl() : mNode(this) {}
-    virtual ~dCcD_Linked_Cyl() {
+    dCcD_Linked() : mNode(this) {}
+    virtual ~dCcD_Linked() {
         mNode.remove();
     }
     /* 0x150 */ LinkedColliderNode mNode;
@@ -68,10 +44,10 @@ public:
     virtual ~dColliderLinkedList();
 
     void postInit(cCcD_Obj &ccD);
-    void addCc(dCcD_Linked_Cyl &ccD, const dCcD_SrcCyl &src);
-    void addCc(dCcD_Linked_Sph &ccD, const dCcD_SrcSph &src);
-    void addCc(dCcD_Linked_Cps &ccD, const dCcD_SrcCps &src);
-    void addCc(dCcD_Linked_Unk &ccD, const dCcD_SrcUnk &src);
+    void addCc(dCcD_Linked<dCcD_Cyl> &ccD, const dCcD_SrcCyl &src);
+    void addCc(dCcD_Linked<dCcD_Sph> &ccD, const dCcD_SrcSph &src);
+    void addCc(dCcD_Linked<dCcD_Cps> &ccD, const dCcD_SrcCps &src);
+    void addCc(dCcD_Linked<dCcD_Unk> &ccD, const dCcD_SrcUnk &src);
     void SetStts(cCcD_Stts &stts);
     void registerColliders();
 
@@ -88,6 +64,16 @@ public:
     // to make it work...
     typedef bool (cCcD_Obj::*ccPtmf)();
     cCcD_Obj *find(ccPtmf f) const;
+
+    cCcD_Obj *findAtHit() const {
+        return find(&cCcD_Obj::ChkAtHit);
+    }
+    cCcD_Obj *findTgHit() const {
+        return find(&cCcD_Obj::ChkTgHit);
+    }
+    cCcD_Obj *findCoHit() const {
+        return find(&cCcD_Obj::ChkCoHit);
+    }
 
     void AtSet();
     void ClrAt();

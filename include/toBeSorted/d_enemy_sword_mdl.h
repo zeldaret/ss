@@ -29,7 +29,7 @@ private:
     /* 0x098 */ mVec3_c field_0x098;
     /* 0x0A4 */ f32 field_0x0A4;
     /* 0x0A8 */ f32 field_0x0A8;
-    /* 0x0AC */ dCcD_Linked_Cps mCcs[3];
+    /* 0x0AC */ dCcD_Linked<dCcD_Cps> mCcs[3];
 
 public:
     /* 0x52C */ dColliderLinkedList mCcList;
