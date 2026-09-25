@@ -24,7 +24,6 @@
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/stage_render_stuff.h"
 
-
 class dAcTbox_c : public dAcObjBase_c {
 public:
     enum TboxVariant_e {
@@ -150,8 +149,8 @@ private:
     /* 0x04D4 */ dShadowCircle_c mShadowCircle;
     /* 0x04DC */ LIGHT_INFLUENCE mLightInfo;
     /* 0x04F8 */ dBgW mBgWs[2];
-    /* 0x0918 */ dCcD_Linked_Unk mCcD1;
-    /* 0x0B30 */ dCcD_Linked_Unk mCcD2;
+    /* 0x0918 */ dCcD_Linked<dCcD_Unk> mCcD1;
+    /* 0x0B30 */ dCcD_Linked<dCcD_Unk> mCcD2;
     /* 0x0D48 */ dColliderLinkedList field_0x0D48;
     /* 0x0D54 */ dCcD_Unk mCcD3;
     /* 0x0F5C */ dCcD_Cyl mCcD4;
