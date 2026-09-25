@@ -24,10 +24,10 @@ class dAcESkytail_c : public dAcEnBase_c {
         mVec3_c mPos[12];
         mAng3_c mAng[12];
 
-        f32 mScaleSpine11;
-        s16 field_0x10DC;
-        s16 field_0x10DE;
-        s16 field_0x10E0;
+        f32 mScaleRear;
+        s16 field_0xE0; // Unused
+        s16 mMouthBigAngleY;
+        s16 mMouthSmallAngleY;
     };
     enum BodyNode_e {
         BODY_NODE_Center,
@@ -129,12 +129,19 @@ public:
     STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dAcESkytail_c);
     STATE_MGR_DEFINE_UTIL_CHANGESTATE(dAcESkytail_c);
 
-    void fn_172_A40();
-    void fn_172_3CD0();
-    void fn_172_4240(s32);
+    void checkHit();
+    void wiggleBody();
+    void wiggleAntenna(s32);
     void fn_172_45D0();
     void fn_172_45E0();
-    void fn_172_45F0();
+    void clampRotationX();
+
+    // Inline not final - Called from sky enemy
+    void setBirthPos(f32 x, f32 y, f32 z) {
+        mBirthPos.x = x;
+        mBirthPos.y = y;
+        mBirthPos.z = z;
+    }
 
 private:
     /* 0x0378 */ d3d::AnmMdlWrapper mBodyMdl;
@@ -146,88 +153,97 @@ private:
     /* 0x0FC0 */ STATE_MGR_DECLARE(dAcESkytail_c);
     /* 0x0FFC */ callbackBody_c mBodyTransform;
     /* 0x10E4 */ callbackAntenna_c mAntennaTransform[2];
-    /* 0x1234 */ mMtx_c field_0x1234;
-    /* 0x1264 */ mVec3_c field_0x1264;
-    /* 0x1270 */ mVec3_c field_0x1270;
-    /* 0x127C */ mVec3_c field_0x127C;
-    /* 0x1288 */ mVec3_c field_0x1288;
-    /* 0x1294 */ mVec3_c field_0x1294;
-    /* 0x12A0 */ mVec3_c field_0x12A0;
-    /* 0x12AC */ mVec3_c field_0x12AC;
-    /* 0x12B8 */ mVec3_c field_0x12B8;
+    /* 0x1234 */ mMtx_c mScratchMtx;
+    /* 0x1264 */ mVec3_c mScratchVec;
+    /* 0x1270 */ mVec3_c field_0x1270; // Unused
+    /* 0x127C */ mVec3_c mAccel;       // Acceleration ?
+    /* 0x1288 */ mVec3_c field_0x1288; // Unused
+    /* 0x1294 */ mVec3_c field_0x1294; // Unused
+    /* 0x12A0 */ mVec3_c field_0x12A0; // Related to Position Target?
+    /* 0x12AC */ mVec3_c mParallelMoveScratchVec;
+    /* 0x12B8 */ mVec3_c field_0x12B8; // Unused
     /* 0x12C4 */ mVec3_c mBirdPosition;
-    /* 0x12D0 */ mVec3_c field_0x12D0;
-    /* 0x12DC */ mVec3_c field_0x12DC;
-    /* 0x12E8 */ mVec3_c field_0x12E8;
-    /* 0x12F4 */ mVec3_c field_0x12F4;
-    /* 0x1300 */ mAng3_c field_0x1300;
+    /* 0x12D0 */ mVec3_c mBirthPos; // Set From sky enemy as well in BirthSkytail
+    /* 0x12DC */ mVec3_c mCloseSkytailAdjustment;
+    /* 0x12E8 */ mVec3_c mCloseSkytailTarget;
+    /* 0x12F4 */ mVec3_c field_0x12F4; // unused
+    /* 0x1300 */ mAng3_c field_0x1300; // unused
     /* 0x1306 */ mAng3_c mBirdRotation;
-    /* 0x130C */ f32 field_0x130C;
-    /* 0x1310 */ f32 field_0x1310;
-    /* 0x1314 */ f32 mScaleF;
-    /* 0x1318 */ f32 field_0x1318;
-    /* 0x131C */ f32 field_0x131C;
-    /* 0x1310 */ f32 field_0x1320;
+    /* 0x130C */ f32 field_0x130C; // Bird Related
+    /* 0x1310 */ f32 field_0x1310; // unused
+    /* 0x1314 */ f32 mBodyScale;
+    /* 0x1318 */ f32 mRandomMoveSpeedMultiplier;
+    /* 0x131C */ f32 field_0x131C; // unused
+    /* 0x1310 */ f32 field_0x1320; // unused
     /* 0x1324 */ f32 mDistanceToBird;
-    /* 0x1328 */ f32 field_0x1328;
-    /* 0x132C */ f32 field_0x132C;
-    /* 0x1330 */ f32 field_0x1330;
-    /* 0x1334 */ f32 field_0x1334;
-    /* 0x1338 */ f32 field_0x1338;
-    /* 0x133C */ f32 field_0x133C;
-    /* 0x1340 */ f32 field_0x1340;
-    /* 0x1344 */ f32 field_0x1344;
-    /* 0x1348 */ f32 field_0x1348;
-    /* 0x134C */ f32 field_0x134C;
+    /* 0x1328 */ f32 field_0x1328; // unused
+    /* 0x132C */ f32 field_0x132C; // unused
+
+    /* 0x1330 */ f32 field_0x1330; // Body wiggle X amplitude
+    /* 0x1334 */ f32 field_0x1334; // Body wiggle Y amplitude
+    /* 0x1338 */ f32 field_0x1338; // Antenna wiggle Z amplitude
+    /* 0x133C */ f32 field_0x133C; // Body wiggle Y amplitude adjustment
+
+    /* 0x1340 */ f32 mParallelMoveRateShift;
+    /* 0x1344 */ f32 mParallelMoveRateShiftTarget;
+
+    /* 0x1348 */ f32 field_0x1348; // (Effects Velocity)
+    /* 0x134C */ f32 field_0x134C; // (Effects Velocity)
     /* 0x1350 */ u8 _0x1350[0x135C - 0x1350];
-    /* 0x135C */ s32 field_0x135C;
-    /* 0x1360 */ s32 field_0x1360;
-    /* 0x1364 */ s32 field_0x1364;
-    /* 0x1368 */ s16 field_0x1368;
-    /* 0x136A */ s16 field_0x136A;
-    /* 0x136C */ s16 field_0x136C;
-    /* 0x136E */ s16 field_0x136E;
-    /* 0x1370 */ s16 field_0x1370;
-    /* 0x1372 */ s16 field_0x1372;
-    /* 0x1376 */ s16 field_0x1374;
-    /* 0x1376 */ s16 field_0x1376;
-    /* 0x1378 */ s16 field_0x1378;
-    /* 0x137A */ s16 field_0x137A;
-    /* 0x137C */ s16 field_0x137C;
-    /* 0x137E */ s16 field_0x137E;
-    /* 0x1380 */ s16 field_0x1380;
-    /* 0x1382 */ s16 field_0x1382;
-    /* 0x1384 */ s16 field_0x1384;
-    /* 0x1386 */ s16 field_0x1386;
-    /* 0x1388 */ s16 field_0x1388;
-    /* 0x1388 */ s16 field_0x138A;
-    /* 0x138C */ s16 field_0x138C;
-    /* 0x138E */ s16 field_0x138E;
-    /* 0x1390 */ s16 field_0x1390;
-    /* 0x1392 */ s16 field_0x1392;
-    /* 0x1394 */ s16 field_0x1394;
-    /* 0x1394 */ s16 field_0x1396;
-    /* 0x1398 */ s16 field_0x1398;
-    /* 0x139A */ s16 field_0x139A;
-    /* 0x139A */ s16 field_0x139C;
-    /* 0x139E */ s16 field_0x139E;
-    /* 0x13A0 */ s16 field_0x13A0;
-    /* 0x13A2 */ s16 field_0x13A2;
+    /* 0x135C */ s32 mFrontAttackSubstateTimer;
+    /* 0x1360 */ s32 field_0x1360; // ParallelMove Follow Position Index?
+    /* 0x1364 */ s32 mDeadSubstate;
+    /* 0x1368 */ s16 mLiveTimer;    // Starts at a random value and counts up always
+    /* 0x136A */ s16 field_0x136A;  // body wiggle phase X
+    /* 0x136C */ s16 field_0x136C;  // body wiggle phase shift X
+    /* 0x136E */ s16 field_0x136E;  // body wiggle phase Y term
+    /* 0x1370 */ s16 field_0x1370;  // antenna wiggle phase term
+    /* 0x1372 */ s16 field_0x1372;  // body wiggle phase Y term
+    /* 0x1376 */ s16 field_0x1374;  // Phase for field_0x1348 (Effects Velocity)
+    /* 0x1376 */ s16 field_0x1376;  // Phase for field_0x134C (Effects Velocity)
+    /* 0x1378 */ s16 mAngleTargetY; // Angle Y Target
+    /* 0x137A */ s16 mAngleTargetX; // Angle X Target
+    /* 0x137C */ s16 mAngleStep;    // Angle Step
+    /* 0x137E */ s16 field_0x137E;  // Angle Target Step
+    /* 0x1380 */ s16 field_0x1380;  // unused
+
+    /* 0x1382 */ s16 field_0x1382; // Phase for RotationX (Effects Velocity)
+    /* 0x1384 */ s16 field_0x1384; // increment for field_0x1382
+    /* 0x1386 */ s16 field_0x1386; // target angle for field_0x1384
+
+    /* 0x1388 */ s16 mMouthSmallPhase;
+    /* 0x138A */ s16 mMouthSmallPhaseIncrement; // unused
+    /* 0x138C */ s16 mMouthSmallPhaseIncrementTarget;
+    /* 0x138E */ s16 mMouthSmallAmplitudeAdd; // FrontAttack Related only
+
+    /* 0x1390 */ s16 mMouthBigPhase;
+    /* 0x1392 */ s16 mMouthBigPhaseIncrement; //
+    /* 0x1394 */ s16 mMouthBigPhaseIncrementTarget;
+    /* 0x1394 */ s16 mMouthBigAmplitudeAdd; // FrontAttack Related only
+
+    /* 0x1398 */ s16 field_0x1398; // FrontAttack Related only
+    /* 0x139A */ s16 field_0x139A; // ParallelMove Substate1 Timer
+    /* 0x139A */ s16 field_0x139C; // ParallelMove something? effectively useless
+    /* 0x139E */ s16 mScaleRearPhase;
+    /* 0x13A0 */ s16 mDeadStateTimer;
+    /* 0x13A2 */ s16 mHitCooldown;
     /* 0x13A4 */ u16 field_0x13A4[3];
-    /* 0x13AA */ u16 field_0x13AA;
-    /* 0x13AC */ u8 field_0x13AC;
-    /* 0x13AD */ u8 field_0x13AD;
-    /* 0x13AE */ u8 field_0x13AE;
-    /* 0x13AF */ u8 field_0x13AF;
-    /* 0x13B0 */ u8 field_0x13B0;
-    /* 0x13B1 */ u8 field_0x13B1;
-    /* 0x13B2 */ u8 field_0x13B2;
-    /* 0x13B3 */ u8 field_0x13B3;
-    /* 0x13B4 */ u8 field_0x13B4;
-    /* 0x13B5 */ u8 field_0x13B5;
-    /* 0x13B6 */ u8 field_0x13B6;
+    /* 0x13AA */ u16 field_0x13AA; // ParallelMove Follow Position Change Timer?
+
+    /* 0x13AC */ u8 mParallelMoveSubstate;
+    /* 0x13AD */ u8 field_0x13AD; // unused
+    /* 0x13AE */ u8 field_0x13AE; // unused
+    /* 0x13AF */ u8 field_0x13AF; // unused
+    /* 0x13B0 */ u8 field_0x13B0; // unused
+    /* 0x13B1 */ u8 mFrontAttackSubstate;
+    /* 0x13B2 */ u8 field_0x13B2; // unused
+    /* 0x13B3 */ u8 field_0x13B3; // unused
+
+    /* 0x13B4 */ u8 field_0x13B4;   // ParallelMove Substate3_4 Timer
+    /* 0x13B5 */ u8 field_0x13B5;   // ParallelMove SubState2 Timer
+    /* 0x13B6 */ bool field_0x13B6; // Respawn from Sky Enemy Tag?
     /* 0x13B7 */ bool field_0x13B7; // Maybe Bird has Player?
-    /* 0x13B8 */ u8 field_0x13B8;
+    /* 0x13B8 */ bool mbNearSkytail;
 };
 
 #endif

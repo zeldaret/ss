@@ -163,7 +163,7 @@ void dAcESkytail_c::callbackBody_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip
         m.ZrotM(-mAng[idx].z);
         if (idx >= 10 /* Last 2 nodes */) {
             mMtx_c scale;
-            scale.scaleS(mScaleSpine11, mScaleSpine11, mScaleSpine11);
+            scale.scaleS(mScaleRear, mScaleRear, mScaleRear);
             m.concat(scale);
         }
         m.YrotM(-0x4000);
@@ -172,20 +172,19 @@ void dAcESkytail_c::callbackBody_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip
 
     if (nodeId == BODY_NODE_LMouthBig) {
         result->GetMtx(m3);
-        m3.YrotM(field_0x10DE);
+        m3.YrotM(mMouthBigAngleY);
         result->SetMtx(m3);
     } else if (nodeId == BODY_NODE_LMouthSmall) {
         result->GetMtx(m4);
-        m4.YrotM(field_0x10E0);
+        m4.YrotM(mMouthSmallAngleY);
         result->SetMtx(m4);
     } else if (nodeId == BODY_NODE_RMouthBig) {
-        mMtx_c m;
         result->GetMtx(m5);
-        m5.YrotM(-field_0x10DE);
+        m5.YrotM(-mMouthBigAngleY);
         result->SetMtx(m5);
     } else if (nodeId == BODY_NODE_RMouthSmall) {
         result->GetMtx(m6);
-        m6.YrotM(-field_0x10E0);
+        m6.YrotM(-mMouthSmallAngleY);
         result->SetMtx(m6);
     }
 }
@@ -198,8 +197,8 @@ void dAcESkytail_c::callbackAntenna_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxMa
     result->SetMtx(m);
 }
 
-void dAcESkytail_c::fn_172_A40() {
-    if (sLib::calcTimer(&field_0x13A2) == 0) {
+void dAcESkytail_c::checkHit() {
+    if (sLib::calcTimer(&mHitCooldown) == 0) {
         u32 col = someEnemyDamageCollisionStuffMaybe(mCollider, nullptr);
 
         cCcD_Obj *pCcObj = mCollider.findTgHit();
@@ -208,13 +207,13 @@ void dAcESkytail_c::fn_172_A40() {
                 dJEffManager_c::spawnHitMarkEffect(7, *pCcObj, nullptr, true);
                 if (pCcObj == &mCc[COLLIDER_Rear]) {
                     startSound(SE_ESktl_DOWN);
-                    field_0x1364 = 0;
+                    mDeadSubstate = 0;
                 } else {
-                    field_0x1364 = 1;
+                    mDeadSubstate = 1;
                 }
 
                 mCollider.ClrTg();
-                field_0x13A2 = 500;
+                mHitCooldown = 500;
                 mHealth = 0;
                 changeState(StateID_Dead);
             } else if (pCcObj == &mCc[COLLIDER_Rear]) {
@@ -225,9 +224,9 @@ void dAcESkytail_c::fn_172_A40() {
                     default:
                         dJEffManager_c::spawnHitMarkEffect(7, mCc[COLLIDER_Rear], nullptr, true);
                         startSound(SE_ESktl_DOWN);
-                        field_0x1364 = 0;
+                        mDeadSubstate = 0;
                         mCollider.ClrTg();
-                        field_0x13A2 = 500;
+                        mHitCooldown = 500;
                         mHealth = 0;
                         changeState(StateID_Dead);
                         break;
@@ -236,7 +235,7 @@ void dAcESkytail_c::fn_172_A40() {
                        pCcObj == &mCc[COLLIDER_Spine6] || pCcObj == &mCc[COLLIDER_Spine8]) {
                 dJEffManager_c::spawnHitMarkEffect(3, *pCcObj, nullptr, true);
                 mCollider.ClrTg();
-                field_0x13A2 = 500;
+                mHitCooldown = 500;
             }
         }
     }
@@ -276,28 +275,28 @@ int dAcESkytail_c::create() {
     mHealth = 4;
     mSpeed = 70.0f;
     field_0x13B6 = 0;
-    field_0x13B8 = 0;
-    field_0x1364 = 2;
+    mbNearSkytail = false;
+    mDeadSubstate = 2;
     setStartingPosition(mPosition);
-    field_0x12D0.set(mPosition);
+    mBirthPos.set(mPosition);
 
     mCc[COLLIDER_Head].ClrAtSet();
     mCollider.ClrAt();
 
-    mBodyTransform.mScaleSpine11 = 1.0f;
-    field_0x1368 = cM::rndF(65536.0f);
-    mScaleF = 1.0f;
+    mBodyTransform.mScaleRear = 1.0f;
+    mLiveTimer = cM::rndF(65536.0f);
+    mBodyScale = 1.0f;
     field_0x1382 = cM::rndF(65536.0f);
 
-    field_0x1390 = cM::rndF(65536.0f);
-    field_0x1388 = field_0x1390;
-    field_0x138E = 0;
-    field_0x1396 = 0;
+    mMouthBigPhase = cM::rndF(65536.0f);
+    mMouthSmallPhase = mMouthBigPhase;
+    mMouthSmallAmplitudeAdd = 0;
+    mMouthBigAmplitudeAdd = 0;
 
-    mBodyMdl.getModel().setScale(mScaleF, mScaleF, mScaleF);
+    mBodyMdl.getModel().setScale(mBodyScale, mBodyScale, mBodyScale);
 
     field_0x13B7 = false;
-    field_0x135C = 0;
+    mFrontAttackSubstateTimer = 0;
 
     field_0x1338 = 0.0f;
     field_0x1334 = 0.0f;
@@ -309,10 +308,10 @@ int dAcESkytail_c::create() {
     field_0x136A = 0;
     field_0x136E = 0;
 
-    field_0x1344 = 0.0f;
-    field_0x1340 = 0.0f;
+    mParallelMoveRateShiftTarget = 0.0f;
+    mParallelMoveRateShift = 0.0f;
 
-    field_0x139E = 0;
+    mScaleRearPhase = 0;
 
     mWorldMtx.transS(mPosition);
     mWorldMtx.YrotM(mRotation.y);
@@ -320,11 +319,11 @@ int dAcESkytail_c::create() {
     mWorldMtx.ZrotM(mRotation.z);
     mBodyMdl.getModel().setLocalMtx(mWorldMtx);
 
-    fn_172_3CD0();
+    wiggleBody();
     mBodyMdl.getModel().calc(true);
 
     for (int i = 0; i < (s32)ARRAY_LENGTH(mAntennaMdl); ++i) {
-        fn_172_4240(i);
+        wiggleAntenna(i);
         mAntennaMdl[i].getModel().calc(true);
     }
 
@@ -342,7 +341,7 @@ int dAcESkytail_c::doDelete() {
 }
 
 int dAcESkytail_c::actorExecute() {
-    field_0x1368++;
+    mLiveTimer++;
 
     for (int i = 0; i < 3; ++i) {
         if (field_0x13A4[i] != 0) {
@@ -351,7 +350,7 @@ int dAcESkytail_c::actorExecute() {
     }
 
     if (field_0x13A4[0] == 0) {
-        field_0x13B8 = 0;
+        mbNearSkytail = false;
     }
 
     setStartingPosition(mPosition);
@@ -367,10 +366,10 @@ int dAcESkytail_c::actorExecute() {
             changeState(StateID_RandomMove);
         }
     }
-    if (field_0x13A2 > 0) {
+    if (mHitCooldown > 0) {
         mCollider.ClrTg();
         if (!pBird->fn_129_CFB0() && !isState(StateID_Dead)) {
-            field_0x13A2 = 0;
+            mHitCooldown = 0;
             mCollider.TgSet();
         }
     } else {
@@ -383,43 +382,43 @@ int dAcESkytail_c::actorExecute() {
 
     // Pulse the Rear Bulb
     if (!isState(StateID_Dead)) {
-        mBodyTransform.mScaleSpine11 = mAng(field_0x139E).sin() * 0.2f + 1.3f;
+        mBodyTransform.mScaleRear = 1.3f + mAng(mScaleRearPhase).sin() * 0.2f;
         f32 rate = mBodyMdl.getAnm().getRate();
         if (rate > 2.0f) {
             rate = 2.0f;
         }
-        field_0x139E = field_0x139E + mAng::fromDeg(180.0f / (20.001f - 5.0f * rate));
+        mScaleRearPhase += mAng::fromDeg(180.0f / (20.001f - 5.0f * rate));
     }
 
     if (!isState(StateID_Dead)) {
-        fn_172_A40();
+        checkHit();
     }
     fn_172_45E0();
     mRotation.set(mAngle);
-    fn_172_45F0();
-    // Bug oops!
+    clampRotationX();
 
-    if (!(field_0x1368 & 0xF) & (cM::rndF(1.0f) < 0.2f)) {
+    // Bug oops!
+    if (!(mLiveTimer & 0xF) & (cM::rndF(1.0f) < 0.2f)) {
         field_0x1386 = 1000.0f + cM::rndF(1000.f);
-        field_0x138C = field_0x1394 = field_0x1398 + 3000.0f + cM::rndF(3000.0f);
+        mMouthSmallPhaseIncrementTarget = mMouthBigPhaseIncrementTarget = field_0x1398 + 3000.0f + cM::rndF(3000.0f);
     }
 
-    field_0x1382 = (f32)field_0x1382 + (f32)field_0x1384;
+    field_0x1382 += (f32)field_0x1384;
     sLib::addCalcAngle(&field_0x1384, field_0x1386, 2, 200);
-    field_0x1390 += field_0x1392;
-    sLib::addCalcAngle(&field_0x1392, field_0x1394, 2, 200);
-    field_0x1388 = (f32)field_0x1388 + (f32)field_0x1392 * 2.0f;
-    sLib::addCalcAngle(&field_0x138A, field_0x138C, 2, 200);
+    mMouthBigPhase += mMouthBigPhaseIncrement;
+    sLib::addCalcAngle(&mMouthBigPhaseIncrement, mMouthBigPhaseIncrementTarget, 2, 200);
+    mMouthSmallPhase += (f32)mMouthBigPhaseIncrement * 2.0f;
+    sLib::addCalcAngle(&mMouthSmallPhaseIncrement, mMouthSmallPhaseIncrementTarget, 2, 200);
 
-    if (!isState(StateID_ParallelMove) || field_0x13AC != 2) {
-        sLib::addCalcScaled(&field_0x1340, 0.1f, 0.1f);
+    if (!isState(StateID_ParallelMove) || mParallelMoveSubstate != 2) {
+        sLib::addCalcScaled(&mParallelMoveRateShift, 0.1f, 0.1f);
         sLib::addCalcScaled(&field_0x133C, 0.1f, 0.1f);
         sLib::addCalcAngle(&field_0x1372, 0, 1, 1000);
     }
 
     mAng sin = mAng(field_0x1382).sin() * 3000.0f;
-    if (isState(StateID_ParallelMove) && (field_0x13AC == 3 || field_0x13AC == 4)) {
-        mVelocity = field_0x127C * mSpeed;
+    if (isState(StateID_ParallelMove) && (mParallelMoveSubstate == 3 || mParallelMoveSubstate == 4)) {
+        mVelocity = mAccel * mSpeed;
     } else {
         mMtx_c m;
         m.YrotS(mRotation.y);
@@ -466,10 +465,10 @@ int dAcESkytail_c::actorExecute() {
     mWorldMtx.XrotM(mRotation.x);
     mWorldMtx.ZrotM(mRotation.z);
     mBodyMdl.getModel().setLocalMtx(mWorldMtx);
-    fn_172_3CD0();
+    wiggleBody();
     mBodyMdl.getModel().calc(false);
     for (int i = 0; i < (s32)ARRAY_LENGTH(mAntennaMdl); ++i) {
-        fn_172_4240(i);
+        wiggleAntenna(i);
         mAntennaMdl[i].getModel().calc(false);
     }
 
@@ -477,22 +476,22 @@ int dAcESkytail_c::actorExecute() {
     if (pCcObj != nullptr && pCcObj == &mCc[COLLIDER_Head]) {
         dAcObjBase_c *pObj = pCcObj->GetCoActor();
         if (pObj->mProfileName == fProfile::E_SKYTAIL) {
-            field_0x13B8 = 1;
+            mbNearSkytail = true;
             mMtx_c m;
             mVec3_c v = pObj->mPosition - mPosition;
             m.YrotS(v.atan2sX_Z());
             mVec3_c in(0.0f, 0.0f, 430.0f);
             m.multVecSR(in);
-            field_0x12DC.set(in);
+            mCloseSkytailAdjustment.set(in);
             if (mPosition.y < pObj->mPosition.y) {
-                field_0x12DC.y -= 350.f;
+                mCloseSkytailAdjustment.y -= 350.f;
             } else {
-                field_0x12DC.y += 350.f;
+                mCloseSkytailAdjustment.y += 350.f;
             }
 
-            field_0x12E8.set(field_0x12A0 + field_0x12DC);
-            field_0x1378 = cLib::targetAngleY(mPosition, field_0x12E8);
-            field_0x137A = -cLib::targetAngleX(mPosition, field_0x12E8);
+            mCloseSkytailTarget.set(field_0x12A0 + mCloseSkytailAdjustment);
+            mAngleTargetY = cLib::targetAngleY(mPosition, mCloseSkytailTarget);
+            mAngleTargetX = -cLib::targetAngleX(mPosition, mCloseSkytailTarget);
             fn_172_45D0();
             field_0x13A4[0] += 5;
         } else if (pObj->mProfileName == fProfile::B_NUSI) {
@@ -512,8 +511,8 @@ int dAcESkytail_c::actorExecute() {
         }
     }
 
-    if (field_0x13B8 != 0) {
-        cLib::addCalcPos2(&field_0x12A0, field_0x12E8, 1.0f, 131.0f);
+    if (mbNearSkytail) {
+        cLib::addCalcPos2(&field_0x12A0, mCloseSkytailTarget, 1.0f, 131.0f);
     }
     mCc[COLLIDER_Head].SetC(mPosition);
     mCc[COLLIDER_Spine4].SetC(mBodyTransform.mPos[4 /* BODY_NODE_Spine04 */]);
@@ -534,33 +533,33 @@ int dAcESkytail_c::draw() {
 
 void dAcESkytail_c::initializeState_RandomMove() {
     field_0x12A0.set(
-        field_0x12D0.x + cM::rndFX(2000.0f), //
-        field_0x12D0.y + cM::rndFX(2000.0f), //
-        field_0x12D0.z + cM::rndFX(2000.0f)  //
+        mBirthPos.x + cM::rndFX(2000.0f), //
+        mBirthPos.y + cM::rndFX(2000.0f), //
+        mBirthPos.z + cM::rndFX(2000.0f)  //
     );
     setActorProperty(AC_PROP_0x1);
 }
 void dAcESkytail_c::executeState_RandomMove() {
     if (field_0x13A4[0] == 0) {
-        field_0x12A0.x = field_0x12D0.x + cM::rndFX(2000.0f);
-        field_0x12A0.y = field_0x12D0.y + +2000.0f + cM::rndFX(1000.0f);
-        field_0x12A0.z = field_0x12D0.z + cM::rndFX(2000.0f);
+        field_0x12A0.x = mBirthPos.x + cM::rndFX(2000.0f);
+        field_0x12A0.y = mBirthPos.y + +2000.0f + cM::rndFX(1000.0f);
+        field_0x12A0.z = mBirthPos.z + cM::rndFX(2000.0f);
 
-        field_0x137C = 0;
+        mAngleStep = 0;
         field_0x137E = cM::rndF(1000.0f) + 1000.0f;
-        field_0x1378 = cLib::targetAngleY(mPosition, field_0x12A0);
-        field_0x137A = -cLib::targetAngleX(mPosition, field_0x12A0);
+        mAngleTargetY = cLib::targetAngleY(mPosition, field_0x12A0);
+        mAngleTargetX = -cLib::targetAngleX(mPosition, field_0x12A0);
         fn_172_45D0();
-        field_0x1318 = cM::rndF(0.2f) + 1.0f;
+        mRandomMoveSpeedMultiplier = cM::rndF(0.2f) + 1.0f;
         field_0x13A4[0] = cM::rndF(60.0f) + 30.0f;
     }
     s16 zTarget = mAngle.y;
-    sLib::addCalcAngle(mAngle.y.ref(), field_0x1378, 8, field_0x137C);
-    sLib::addCalcAngle(mAngle.x.ref(), field_0x137A, 8, field_0x137C);
+    sLib::addCalcAngle(mAngle.y.ref(), mAngleTargetY, 8, mAngleStep);
+    sLib::addCalcAngle(mAngle.x.ref(), mAngleTargetX, 8, mAngleStep);
     zTarget -= mAngle.y;
     sLib::addCalcAngle(mAngle.z.ref(), zTarget * 8, 2, 3000);
-    sLib::addCalcAngle(&field_0x137C, field_0x137E, 1, 100);
-    sLib::addCalcScaledDiff(&mSpeed, field_0x1318 * 50.0f, 0.1f, 1.0f);
+    sLib::addCalcAngle(&mAngleStep, field_0x137E, 1, 100);
+    sLib::addCalcScaledDiff(&mSpeed, mRandomMoveSpeedMultiplier * 50.0f, 0.1f, 1.0f);
     mBodyMdl.setRate(mSpeed / 50.0f);
     if (field_0x13B6 != 0 && field_0x13B7 != 0) {
         changeState(StateID_Move);
@@ -571,7 +570,7 @@ void dAcESkytail_c::finalizeState_RandomMove() {
 }
 
 void dAcESkytail_c::initializeState_Move() {
-    field_0x13AC = 0;
+    mParallelMoveSubstate = 0;
 }
 
 void dAcESkytail_c::executeState_Move() {
@@ -580,23 +579,23 @@ void dAcESkytail_c::executeState_Move() {
     f32 f = 12.0f;
     dBird_c::getInstance()->fn_129_C4A0(v0, f);
     f32 distXZ = v0.absXZTo(mPosition);
-    switch (field_0x13AC) {
+    switch (mParallelMoveSubstate) {
         case 0: {
             if (field_0x13A4[0] == 0) {
-                field_0x1264.set(0.0f, 0.0f, 10000.0f);
+                mScratchVec.set(0.0f, 0.0f, 10000.0f);
                 field_0x12A0.set(0.0f, 0.0f, 0.0f);
-                field_0x1234.transS(mBirdPosition);
-                field_0x1234.ZXYrotM(mBirdRotation);
-                field_0x1234.multVec(field_0x1264, field_0x12A0);
+                mScratchMtx.transS(mBirdPosition);
+                mScratchMtx.ZXYrotM(mBirdRotation);
+                mScratchMtx.multVec(mScratchVec, field_0x12A0);
                 field_0x137E = 500.0f + cM::rndF(1000.0f);
-                field_0x1378 = cLib::targetAngleY(mPosition, field_0x12A0);
-                field_0x137A = -cLib::targetAngleX(mPosition, field_0x12A0);
+                mAngleTargetY = cLib::targetAngleY(mPosition, field_0x12A0);
+                mAngleTargetX = -cLib::targetAngleX(mPosition, field_0x12A0);
                 fn_172_45D0();
                 field_0x13A4[0] = 10.0f + cM::rndF(5.0f);
             }
             if (isWithinCameraView(0.0f, 0.0f)) {
                 if (distXZ > distf0) {
-                    field_0x13AC = 1;
+                    mParallelMoveSubstate = 1;
                     field_0x13A4[0] = 0;
                 }
             } else {
@@ -607,14 +606,14 @@ void dAcESkytail_c::executeState_Move() {
         case 1: {
             if (field_0x13A4[0] == 0) {
                 field_0x137E = 1000.0f + cM::rndF(500.0f);
-                field_0x1378 = cLib::targetAngleY(mPosition, v0);
-                field_0x137A = -cLib::targetAngleX(mPosition, v0);
+                mAngleTargetY = cLib::targetAngleY(mPosition, v0);
+                mAngleTargetX = -cLib::targetAngleX(mPosition, v0);
                 fn_172_45D0();
             }
             if (isWithinCameraView(0.0f, 0.0f)) {
                 if (distXZ < 4000.0f) {
                     mVec3_c v1 = mPosition - v0;
-                    field_0x135C = 30 + (s32)(v1.mag() / mSpeed);
+                    mFrontAttackSubstateTimer = 30 + (s32)(v1.mag() / mSpeed);
                     changeState(StateID_FrontAttack);
                     return;
                 }
@@ -626,24 +625,24 @@ void dAcESkytail_c::executeState_Move() {
     }
 
     s16 zTarget = mAngle.y;
-    sLib::addCalcAngle(mAngle.y.ref(), field_0x1378, 8, field_0x137C);
-    sLib::addCalcAngle(mAngle.x.ref(), field_0x137A, 8, field_0x137C);
+    sLib::addCalcAngle(mAngle.y.ref(), mAngleTargetY, 8, mAngleStep);
+    sLib::addCalcAngle(mAngle.x.ref(), mAngleTargetX, 8, mAngleStep);
     zTarget -= mAngle.y;
     sLib::addCalcAngle(mAngle.z.ref(), zTarget * 8, 2, 3000);
-    sLib::addCalcAngle(&field_0x137C, field_0x137E, 1, 100);
+    sLib::addCalcAngle(&mAngleStep, field_0x137E, 1, 100);
     sLib::addCalcScaledDiff(&mSpeed, 70.0f, 1.0f, 3.0f);
     mBodyMdl.setRate(mSpeed / 50.0f);
 }
 void dAcESkytail_c::finalizeState_Move() {}
 
 void dAcESkytail_c::initializeState_ParallelMove() {
-    field_0x13AC = 0;
+    mParallelMoveSubstate = 0;
     field_0x13AA = 90 + cM::rndInt(60);
     field_0x130C = 100.0f;
     field_0x139A = 5 + cM::rndInt(5);
     field_0x13B5 = 50 + cM::rndInt(20);
-    field_0x1344 = 0.0f;
-    field_0x1340 = 0.0f;
+    mParallelMoveRateShiftTarget = 0.0f;
+    mParallelMoveRateShift = 0.0f;
     field_0x1380 = 0;
     field_0x133C = 0.0f;
     field_0x139C = 0;
@@ -655,23 +654,23 @@ void dAcESkytail_c::executeState_ParallelMove() {
     f32 f = 12.0f;
     dBird_c::getInstance()->fn_129_C4A0(v0, f);
     f32 distXZ = v0.absXZTo(mPosition);
-    switch (field_0x13AC) {
+    switch (mParallelMoveSubstate) {
         case 0: {
             if (field_0x13A4[0] == 0) {
-                field_0x1264.set(0.0f, 0.0f, 3000.0f);
+                mScratchVec.set(0.0f, 0.0f, 3000.0f);
                 field_0x12A0.set(0.0f, 0.0f, 0.0f);
-                field_0x1234.transS(mBirdPosition);
-                field_0x1234.ZXYrotM(mBirdRotation);
-                field_0x1234.multVec(field_0x1264, field_0x12A0);
+                mScratchMtx.transS(mBirdPosition);
+                mScratchMtx.ZXYrotM(mBirdRotation);
+                mScratchMtx.multVec(mScratchVec, field_0x12A0);
                 field_0x137E = 500.0f + cM::rndF(1000.0f);
-                field_0x1378 = cLib::targetAngleY(mPosition, field_0x12A0);
-                field_0x137A = -cLib::targetAngleX(mPosition, field_0x12A0);
+                mAngleTargetY = cLib::targetAngleY(mPosition, field_0x12A0);
+                mAngleTargetX = -cLib::targetAngleX(mPosition, field_0x12A0);
                 fn_172_45D0();
                 field_0x13A4[0] = 10.0f + cM::rndF(5.0f);
             }
             if (isWithinCameraView(0.0f, 0.0f)) {
                 if (distXZ > distf0) {
-                    field_0x13AC = 1;
+                    mParallelMoveSubstate = 1;
                     field_0x13A4[0] = 0;
                     field_0x139A = 5 + cM::rndInt(5);
                     field_0x139C = 0;
@@ -687,21 +686,21 @@ void dAcESkytail_c::executeState_ParallelMove() {
                 field_0x1360 = 1 + cM::rndInt(3);
             }
 
-            field_0x12AC.set(sArrVecs[field_0x1360]);
-            field_0x1234.transS(mBirdPosition);
-            field_0x1234.ZXYrotM(mBirdRotation);
-            field_0x1234.multVec(field_0x12AC, field_0x12AC);
-            field_0x12A0.set(field_0x12AC);
-            field_0x1264.set(0.0f, 0.0f, 3000.0f);
-            field_0x1234.multVecSR(field_0x1264, field_0x1264);
-            field_0x12A0 += field_0x1264;
+            mParallelMoveScratchVec.set(sArrVecs[field_0x1360]);
+            mScratchMtx.transS(mBirdPosition);
+            mScratchMtx.ZXYrotM(mBirdRotation);
+            mScratchMtx.multVec(mParallelMoveScratchVec, mParallelMoveScratchVec);
+            field_0x12A0.set(mParallelMoveScratchVec);
+            mScratchVec.set(0.0f, 0.0f, 3000.0f);
+            mScratchMtx.multVecSR(mScratchVec, mScratchVec);
+            field_0x12A0 += mScratchVec;
 
             distXZ = mBirdPosition.distance(field_0x12A0);
 
             if (field_0x13A4[0] == 0) {
                 field_0x137E = 500.0f + cM::rndF(1000.0f);
-                field_0x1378 = cLib::targetAngleY(mPosition, field_0x12A0);
-                field_0x137A = -cLib::targetAngleX(mPosition, field_0x12A0);
+                mAngleTargetY = cLib::targetAngleY(mPosition, field_0x12A0);
+                mAngleTargetX = -cLib::targetAngleX(mPosition, field_0x12A0);
                 fn_172_45D0();
                 field_0x13A4[0] = 25.0f + cM::rndF(10.0f);
                 if (field_0x139A > 0) {
@@ -717,42 +716,42 @@ void dAcESkytail_c::executeState_ParallelMove() {
                 }
                 field_0x139C = 0;
                 if (field_0x139A <= 0) {
-                    field_0x13AC = 2;
-                    field_0x1340 = 0.0f;
-                    field_0x1344 = 1.0f;
+                    mParallelMoveSubstate = 2;
+                    mParallelMoveRateShift = 0.0f;
+                    mParallelMoveRateShiftTarget = 1.0f;
                     field_0x13B5 = 50 + cM::rndInt(20);
                     field_0x139A = 5 + cM::rndInt(5);
                 }
             } else if (dBird_c::getInstance()->getField_0xFCC() > 0 && --field_0x139A < 0) {
-                field_0x13AC = 2;
-                field_0x1340 = 0.0f;
-                field_0x1344 = 1.0f;
+                mParallelMoveSubstate = 2;
+                mParallelMoveRateShift = 0.0f;
+                mParallelMoveRateShiftTarget = 1.0f;
                 field_0x13B5 = 50 + cM::rndInt(20);
                 field_0x139A = 5 + cM::rndInt(5);
                 field_0x139C = 0;
             } else if (++field_0x139C > 0) {
-                field_0x13AC = 0;
+                mParallelMoveSubstate = 0;
                 field_0x13A4[0] = 0;
                 field_0x130C = 100.0f;
                 field_0x139C = 0;
             }
         } break;
         case 2: {
-            field_0x12AC.set(sArrVecs[field_0x1360]);
-            field_0x1234.transS(mBirdPosition);
-            field_0x1234.ZXYrotM(mBirdRotation);
-            field_0x1234.multVec(field_0x12AC, field_0x12AC);
-            field_0x12A0.set(field_0x12AC);
-            field_0x1264.set(0.0f, 0.0f, 3000.0f);
-            field_0x1234.multVecSR(field_0x1264, field_0x1264);
-            field_0x12A0 += field_0x1264;
+            mParallelMoveScratchVec.set(sArrVecs[field_0x1360]);
+            mScratchMtx.transS(mBirdPosition);
+            mScratchMtx.ZXYrotM(mBirdRotation);
+            mScratchMtx.multVec(mParallelMoveScratchVec, mParallelMoveScratchVec);
+            field_0x12A0.set(mParallelMoveScratchVec);
+            mScratchVec.set(0.0f, 0.0f, 3000.0f);
+            mScratchMtx.multVecSR(mScratchVec, mScratchVec);
+            field_0x12A0 += mScratchVec;
 
             distXZ = mBirdPosition.distance(field_0x12A0);
 
             if (field_0x13A4[0] == 0) {
                 field_0x137E = 500.0f + cM::rndF(1000.0f);
-                field_0x1378 = cLib::targetAngleY(mPosition, field_0x12A0);
-                field_0x137A = -cLib::targetAngleX(mPosition, field_0x12A0);
+                mAngleTargetY = cLib::targetAngleY(mPosition, field_0x12A0);
+                mAngleTargetX = -cLib::targetAngleX(mPosition, field_0x12A0);
                 fn_172_45D0();
                 field_0x13A4[0] = 20.0f + cM::rndF(10.0f);
             }
@@ -768,31 +767,30 @@ void dAcESkytail_c::executeState_ParallelMove() {
                 field_0x13B4 = 60;
                 mCollider.AtSet();
                 startSound(SE_ESktl_V_ATTACK);
-                field_0x13AC = 3;
-                field_0x127C.set(v0 - mPosition);
-                field_0x127C.normalizeRS();
+                mParallelMoveSubstate = 3;
+                mAccel.set(v0 - mPosition);
+                mAccel.normalizeRS();
                 field_0x130C = 80.0f;
                 if (dBird_c::getInstance()->getField_0xFAC().mag() > field_0x130C) {
                     field_0x130C = dBird_c::getInstance()->getField_0xFAC().mag();
                 }
-                field_0x1378 = cLib::targetAngleY(mPosition, v0);
-                field_0x137A = -cLib::targetAngleX(mPosition, v0);
+                mAngleTargetY = cLib::targetAngleY(mPosition, v0);
+                mAngleTargetX = -cLib::targetAngleX(mPosition, v0);
                 fn_172_45D0();
             }
 
-            sLib::addCalcScaledDiff(&field_0x1340, field_0x1344, 0.1f, 0.1f);
+            sLib::addCalcScaledDiff(&mParallelMoveRateShift, mParallelMoveRateShiftTarget, 0.1f, 0.1f);
             sLib::addCalcScaledDiff(&field_0x133C, 2.0f, 0.1f, 0.1f);
             sLib::addCalcAngle(&field_0x1372, 4000, 1, 1000);
         } break;
-
         case 3: {
             mVec3_c v2 = v0 - mPosition;
             v2.normalizeRS();
-            cLib::chasePos(field_0x127C, v2, 0.01f);
+            cLib::chasePos(mAccel, v2, 0.01f);
 
             field_0x137E = 500.0f + cM::rndF(1000.0f);
-            field_0x1378 = cLib::targetAngleY(mPosition, mPosition + field_0x127C * mSpeed);
-            field_0x137A = -cLib::targetAngleX(mPosition, mPosition + field_0x127C * mSpeed);
+            mAngleTargetY = cLib::targetAngleY(mPosition, mPosition + mAccel * mSpeed);
+            mAngleTargetX = -cLib::targetAngleX(mPosition, mPosition + mAccel * mSpeed);
             fn_172_45D0();
             if (field_0x13B4 != 0) {
                 field_0x13B4--;
@@ -809,10 +807,10 @@ void dAcESkytail_c::executeState_ParallelMove() {
             if (pCcObj != nullptr) {
                 if (pCcObj->GetAtActor()->mProfileName == fProfile::BIRD) {
                     mCollider.ClrAt();
-                    field_0x13AC = 4;
+                    mParallelMoveSubstate = 4;
                 } else if (pCcObj->GetAtActor()->isActorPlayer()) {
                     mCollider.ClrAt();
-                    field_0x13AC = 4;
+                    mParallelMoveSubstate = 4;
                 }
             }
         } break;
@@ -831,13 +829,13 @@ void dAcESkytail_c::executeState_ParallelMove() {
     }
 
     s16 zTarget = mAngle.y;
-    sLib::addCalcAngle(mAngle.y.ref(), field_0x1378, 8, field_0x137C);
-    sLib::addCalcAngle(mAngle.x.ref(), field_0x137A, 8, field_0x137C);
+    sLib::addCalcAngle(mAngle.y.ref(), mAngleTargetY, 8, mAngleStep);
+    sLib::addCalcAngle(mAngle.x.ref(), mAngleTargetX, 8, mAngleStep);
     zTarget -= mAngle.y;
     sLib::addCalcAngle(mAngle.z.ref(), zTarget * 8, 2, 3000);
-    sLib::addCalcAngle(&field_0x137C, field_0x137E, 1, 100);
+    sLib::addCalcAngle(&mAngleStep, field_0x137E, 1, 100);
     sLib::addCalcScaledDiff(&mSpeed, field_0x130C, 1.0f, 3.0f);
-    f32 rate = mSpeed / 50.0f + field_0x1340;
+    f32 rate = mSpeed / 50.0f + mParallelMoveRateShift;
     if (rate > 5.0f) {
         mBodyMdl.setRate(5.0f);
     } else {
@@ -851,9 +849,9 @@ void dAcESkytail_c::finalizeState_ParallelMove() {
 }
 
 void dAcESkytail_c::initializeState_FrontAttack() {
-    field_0x13B1 = 1;
-    field_0x1396 = 2000;
-    field_0x138E = 0;
+    mFrontAttackSubstate = 1;
+    mMouthBigAmplitudeAdd = 2000;
+    mMouthSmallAmplitudeAdd = 0;
     field_0x1398 = 4000;
     mCollider.AtSet();
     field_0x13A4[0] = 10.0f + cM::rndF(5.0f);
@@ -865,20 +863,20 @@ void dAcESkytail_c::executeState_FrontAttack() {
     dBird_c::getInstance()->fn_129_C4A0(v0, f);
     f32 distXZ = v0.absXZTo(mPosition);
     distXZ = mPosition.distance(v0);
-    switch (field_0x13B1) {
+    switch (mFrontAttackSubstate) {
         case 1: {
             if (field_0x13A4[0] == 0) {
                 field_0x137E = 1000.0f + cM::rndF(500.0f);
-                field_0x1378 = cLib::targetAngleY(mPosition, v0);
-                field_0x137A = -cLib::targetAngleX(mPosition, v0);
+                mAngleTargetY = cLib::targetAngleY(mPosition, v0);
+                mAngleTargetX = -cLib::targetAngleX(mPosition, v0);
                 fn_172_45D0();
                 field_0x13A4[0] = 10.0f + cM::rndF(5.0f);
             }
             if (isWithinCameraView(0.0f, 0.0f)) {
                 if (distXZ < 2500.0f) {
-                    field_0x13B1 = 0;
+                    mFrontAttackSubstate = 0;
                     mVec3_c v = mPosition - v0;
-                    field_0x135C = 30 + (s32)(v.mag() / mSpeed);
+                    mFrontAttackSubstateTimer = 30 + (s32)(v.mag() / mSpeed);
                 }
             } else {
                 changeState(StateID_ParallelMove);
@@ -886,41 +884,40 @@ void dAcESkytail_c::executeState_FrontAttack() {
             }
         } break;
         case 0: {
-            field_0x135C--;
-            field_0x1378 = cLib::targetAngleY(mPosition, v0);
-            field_0x137A = -cLib::targetAngleX(mPosition, v0);
+            mFrontAttackSubstateTimer--;
+            mAngleTargetY = cLib::targetAngleY(mPosition, v0);
+            mAngleTargetX = -cLib::targetAngleX(mPosition, v0);
             fn_172_45D0();
 
             if (isWithinCameraView(0.0f, 0.0f)) {
                 if (distXZ < 1300.0f) {
                     startSound(SE_ESktl_V_ATTACK);
-                    field_0x13B1 = 2;
+                    mFrontAttackSubstate = 2;
                     mVec3_c v = mPosition - v0;
-                    field_0x135C = 30 + (s32)(v.mag() / mSpeed);
+                    mFrontAttackSubstateTimer = 30 + (s32)(v.mag() / mSpeed);
                 }
-
-            } else if (!isWithinCameraView(0.0f, 0.0f) || field_0x135C <= 0) {
+            } else if (!isWithinCameraView(0.0f, 0.0f) || mFrontAttackSubstateTimer <= 0) {
                 changeState(StateID_ParallelMove);
                 return;
             }
         } break;
         case 2: {
-            field_0x135C--;
+            mFrontAttackSubstateTimer--;
             if (isWithinCameraView(0.0f, 0.0f)) {
                 if (distXZ < 800.0f) {
-                    field_0x13B1 = 4;
+                    mFrontAttackSubstate = 4;
                     mVec3_c v = mPosition - v0;
-                    field_0x135C = 120 + (s32)(v.mag() / mSpeed);
+                    mFrontAttackSubstateTimer = 120 + (s32)(v.mag() / mSpeed);
                 }
-            } else if (!isWithinCameraView(0.0f, 0.0f) || field_0x135C <= 0) {
+            } else if (!isWithinCameraView(0.0f, 0.0f) || mFrontAttackSubstateTimer <= 0) {
                 changeState(StateID_ParallelMove);
                 return;
             }
         } break;
         case 4: {
-            field_0x135C--;
+            mFrontAttackSubstateTimer--;
             isWithinCameraView(0.0f, 0.0f);
-            if (field_0x135C <= 0) {
+            if (mFrontAttackSubstateTimer <= 0) {
                 if (isWithinCameraView(0.0f, 0.0f)) {
                     changeState(StateID_Move);
                 } else {
@@ -931,11 +928,11 @@ void dAcESkytail_c::executeState_FrontAttack() {
         } break;
     }
     s16 zTarget = mAngle.y;
-    sLib::addCalcAngle(mAngle.y.ref(), field_0x1378, 8, field_0x137C);
-    sLib::addCalcAngle(mAngle.x.ref(), field_0x137A, 8, field_0x137C);
+    sLib::addCalcAngle(mAngle.y.ref(), mAngleTargetY, 8, mAngleStep);
+    sLib::addCalcAngle(mAngle.x.ref(), mAngleTargetX, 8, mAngleStep);
     zTarget -= mAngle.y;
     sLib::addCalcAngle(mAngle.z.ref(), zTarget * 8, 2, 3000);
-    sLib::addCalcAngle(&field_0x137C, field_0x137E, 1, 100);
+    sLib::addCalcAngle(&mAngleStep, field_0x137E, 1, 100);
     cCcD_Obj *pCcObj = mCollider.findAtHit();
     if (pCcObj != nullptr) {
         if (pCcObj->GetAtActor()->mProfileName == fProfile::BIRD) {
@@ -949,8 +946,8 @@ void dAcESkytail_c::executeState_FrontAttack() {
 }
 void dAcESkytail_c::finalizeState_FrontAttack() {
     mCollider.ClrAt();
-    field_0x138E = 0;
-    field_0x1396 = 0;
+    mMouthSmallAmplitudeAdd = 0;
+    mMouthBigAmplitudeAdd = 0;
     field_0x1398 = 0;
 }
 
@@ -962,7 +959,7 @@ void dAcESkytail_c::finalizeState_Charge() {
 
 void dAcESkytail_c::initializeState_Dead() {
     field_0x13AF = 0;
-    field_0x13A0 = 0;
+    mDeadStateTimer = 0;
     field_0x1334 = 8.0f + cM::rndFX(1.0f);
     field_0x1330 = 8.0f + cM::rndFX(1.0f);
     field_0x1338 = 7.0f + cM::rndFX(1.0f);
@@ -977,23 +974,23 @@ void dAcESkytail_c::initializeState_Dead() {
 }
 
 void dAcESkytail_c::executeState_Dead() {
-    field_0x13A0++;
-    field_0x13A2 = 500;
-    field_0x1264.set(0.0f, 0.0f, 5000.0f);
+    mDeadStateTimer++;
+    mHitCooldown = 500;
+    mScratchVec.set(0.0f, 0.0f, 5000.0f);
     field_0x12A0.set(0.0f, 0.0f, 0.0f);
 
-    field_0x1234.transS(mBirdPosition);
-    field_0x1234.ZXYrotM(mBirdRotation);
-    field_0x1234.multVec(field_0x1264, field_0x12A0);
+    mScratchMtx.transS(mBirdPosition);
+    mScratchMtx.ZXYrotM(mBirdRotation);
+    mScratchMtx.multVec(mScratchVec, field_0x12A0);
 
     field_0x137E = 500.0f + cM::rndF(1000.0f);
-    field_0x1378 = cLib::targetAngleY(mPosition, field_0x12A0);
-    field_0x137A = -cLib::targetAngleX(mPosition, field_0x12A0);
+    mAngleTargetY = cLib::targetAngleY(mPosition, field_0x12A0);
+    mAngleTargetX = -cLib::targetAngleX(mPosition, field_0x12A0);
 
     fn_172_45D0();
 
-    sLib::addCalcAngle(mAngle.y.ref(), field_0x1378, 8, field_0x137C);
-    sLib::addCalcAngle(mAngle.x.ref(), field_0x137A, 8, field_0x137C);
+    sLib::addCalcAngle(mAngle.y.ref(), mAngleTargetY, 8, mAngleStep);
+    sLib::addCalcAngle(mAngle.x.ref(), mAngleTargetX, 8, mAngleStep);
     mAngle.z += -0xAAA;
 
     field_0x1374 += -4000;
@@ -1006,7 +1003,7 @@ void dAcESkytail_c::executeState_Dead() {
     mBodyMdl.setRate(mSpeed / 50.0f);
 
     bool bVar = false;
-    if (field_0x13A0 > 15) {
+    if (mDeadStateTimer > 15) {
         bVar = fn_80030570(mBodyMdl.getModel(), 1, 2.0f);
         for (int i = 0; i < (s32)ARRAY_LENGTH(mAntennaMdl); ++i) {
             fn_80030570(mAntennaMdl[i].getModel(), 0, 2.0f);
@@ -1014,22 +1011,22 @@ void dAcESkytail_c::executeState_Dead() {
     }
 
     static mVec3_c scale(2.0f, 2.0f, 2.0f);
-    switch (field_0x1364) {
+    switch (mDeadSubstate) {
         case 0: {
-            mBodyTransform.mScaleSpine11 = 0.0f;
-            if (mBodyTransform.mScaleSpine11 == 0.0f) {
+            mBodyTransform.mScaleRear = 0.0f;
+            if (mBodyTransform.mScaleRear == 0.0f) {
                 mBodyMdl.getModel().setCullMode(3, GX_CULL_ALL, false);
                 dJEffManager_c::spawnEffect(
                     PARTICLE_RESOURCE_ID_MAPPING_460_, mBodyTransform.mPos[10], &mRotation, &scale, nullptr, nullptr, 0,
                     0
                 );
-                field_0x1364 = 2;
+                mDeadSubstate = 2;
             }
         } break;
         case 1: {
-            if (field_0x13A0 > 15) {
+            if (mDeadStateTimer > 15) {
                 mBodyMdl.getModel().setCullMode(3, GX_CULL_ALL, false);
-                field_0x1364 = 2;
+                mDeadSubstate = 2;
             }
 
         } break;
@@ -1060,11 +1057,11 @@ void dAcESkytail_c::executeState_Skytail() {
 
     mSpeed = 150.0f;
     mVec3_c v0(0.0f, -200.0f, 2100.0f);
-    field_0x1234.transS(mBirdPosition);
-    field_0x1234.ZXYrotM(mBirdRotation);
-    field_0x1234.multVec(v0, mPosition);
-    field_0x1378 = mBirdRotation.y;
-    field_0x137A = mBirdRotation.x;
+    mScratchMtx.transS(mBirdPosition);
+    mScratchMtx.ZXYrotM(mBirdRotation);
+    mScratchMtx.multVec(v0, mPosition);
+    mAngleTargetY = mBirdRotation.y;
+    mAngleTargetX = mBirdRotation.x;
     fn_172_45D0();
     mAngle.y = mBirdRotation.y;
     mAngle.x = mBirdRotation.x;
@@ -1074,7 +1071,7 @@ void dAcESkytail_c::executeState_Skytail() {
 }
 void dAcESkytail_c::finalizeState_Skytail() {}
 
-void dAcESkytail_c::fn_172_3CD0() {
+void dAcESkytail_c::wiggleBody() {
     mMtx_c m1, m0;
     mVec3_c v3, v0, v1, v2;
     mVec3_c *pos;
@@ -1097,21 +1094,21 @@ void dAcESkytail_c::fn_172_3CD0() {
 
     for (u32 i = 1; i < ARRAY_LENGTH(mBodyTransform.mPos); ++i, ++pos, ++ang) {
         if (i >= 11) {
-            s16 ang0 = field_0x1368 * 0.85f * field_0x136A - (i * field_0x136C);
+            s16 ang0 = mLiveTimer * 0.85f * field_0x136A - (i * field_0x136C);
             f32 sin0 = mAng(ang0).sin();
 
-            s16 ang1 = field_0x1368 * (field_0x136E + field_0x1372 + 0x600) - (i * 8000);
+            s16 ang1 = mLiveTimer * (field_0x136E + field_0x1372 + 0x600) - (i * 8000);
             f32 sin1 = mAng(ang1).sin();
 
             v1.set(
-                fVar14 * (sin0 * 1.5f), mBodyTransform.mScaleSpine11 * (fVar2 * (sin1 * 5.0f)),
-                mBodyTransform.mScaleSpine11 * -10.0f
+                fVar14 * (sin0 * 1.5f), mBodyTransform.mScaleRear * (fVar2 * (sin1 * 5.0f)),
+                mBodyTransform.mScaleRear * -10.0f
             );
         } else {
-            s16 ang0 = field_0x1368 * 0.85f * field_0x136A - (i * field_0x136C);
+            s16 ang0 = mLiveTimer * 0.85f * field_0x136A - (i * field_0x136C);
             f32 sin0 = mAng(ang0).sin();
 
-            s16 ang1 = field_0x1368 * (field_0x136E + field_0x1372 + 0x600) - (i * 8000);
+            s16 ang1 = mLiveTimer * (field_0x136E + field_0x1372 + 0x600) - (i * 8000);
             f32 sin1 = mAng(ang1).sin();
 
             sin1 = fVar2 * (sin1 * 5.0f);
@@ -1132,7 +1129,7 @@ void dAcESkytail_c::fn_172_3CD0() {
         pos[0] = pos[-1] + v1;
 
         if (i >= 11) {
-            v0.z = mBodyTransform.mScaleSpine11 * 100.0f;
+            v0.z = mBodyTransform.mScaleRear * 100.0f;
         } else {
             v0.z = 100.0f;
         }
@@ -1143,13 +1140,15 @@ void dAcESkytail_c::fn_172_3CD0() {
         fVar14 *= 1.15f;
     }
 
-    mBodyTransform.field_0x10DE = (field_0x1396 + 6000) * ((mAng(field_0x1390).sin() * 0.6f - 0.4f) - 0.1f);
-    mBodyTransform.field_0x10E0 = (field_0x138E + 4000) * ((mAng(field_0x1388).sin() * 0.6f - 0.4f) - 0.8f);
+    mBodyTransform.mMouthBigAngleY =
+        (mMouthBigAmplitudeAdd + 6000) * ((mAng(mMouthBigPhase).sin() * 0.6f - 0.4f) - 0.1f);
+    mBodyTransform.mMouthSmallAngleY =
+        (mMouthSmallAmplitudeAdd + 4000) * ((mAng(mMouthSmallPhase).sin() * 0.6f - 0.4f) - 0.8f);
 
     f32 scale = 0.8f;
 }
 
-void dAcESkytail_c::fn_172_4240(s32 idx) {
+void dAcESkytail_c::wiggleAntenna(s32 idx) {
     mMtx_c m0, m1;
     mVec3_c v3, v0, v1, v2;
     mVec3_c *pos;
@@ -1186,7 +1185,7 @@ void dAcESkytail_c::fn_172_4240(s32 idx) {
     f32 fVar2 = 1.0f;
     f32 fVar3 = field_0x1338 + 1.0f;
     for (u32 i = 1; i < ARRAY_LENGTH(mAntennaTransform[idx].mPos); ++i, ++ang, ++pos) {
-        s16 angle = field_0x1368 * (field_0x1370 + 0x600) - (i * 8000);
+        s16 angle = mLiveTimer * (field_0x1370 + 0x600) - (i * 8000);
         v1.set(fVar1 * fVar2, 0.0f, 50.0f * mAng(angle).sin() * fVar3);
 
         m1.multVec(v1, v2);
@@ -1219,7 +1218,7 @@ void dAcESkytail_c::fn_172_45E0() {
     return;
 }
 
-void dAcESkytail_c::fn_172_45F0() {
+void dAcESkytail_c::clampRotationX() {
     if (mRotation.x - 7282 <= (u32)mAng::d2s(140) - 1) {
         mRotation.x = 7281; // 40 deg
     } else if (mRotation.x + 0x8000 <= (u32)mAng::d2s(140)) {
