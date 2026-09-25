@@ -488,6 +488,16 @@ public:
         UPDATE_MODEL_BEETLE = 0x10000000,
     };
 
+    enum SwordType {
+        PRACTICE_SWORD = 0,
+        GODDESS_SWORD = 1,
+        LONG_SWORD = 2,
+        WHITE_SWORD = 3,
+        MASTER_SWORD = 4,
+        TRUE_MASTER_SWORD = 5,
+        NO_SWORD = 6,
+    };
+
     enum SwordAndMoreStates_e {
         NO_SHIETH = (1 << 0),
         POUCH = (1 << 1),
@@ -678,7 +688,7 @@ public:
         return isAttackingSpinHorizontal() || isAttackingSpinVertical();
     }
     void setBonkRelatedAnimFlag(bool b);
-    void setPosYRot(const mVec3_c &pos, mAng rot, bool force = false, UNKWORD = 0, UNKWORD = 0);
+    void setPosYRot(const mVec3_c *pos, mAng rot, bool force = false, UNKWORD = 0, UNKWORD = 0);
     void setTransform(const mMtx_c &mtx, bool force, UNKWORD, UNKWORD);
     bool someTargetedActorCheck() const;
     static mAng fn_8005BA90();
