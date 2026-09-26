@@ -91,8 +91,8 @@ static char *const sOpenEventNames[] = {
 // clang-format off
 // TODO just copied from somewhere
 const cCcD_SrcGObj dAcTbox_c::sColSrc = {
-  /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-  /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND), 0, {0, 0, 0x407}, 0, 0},
+  /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+  /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND), 0, {0, 0, 0x407}, 0, CUT_DIR_NONE},
   /* mObjCo */ {0xE9}
 };
 // clang-format on
@@ -1078,8 +1078,8 @@ int dAcTbox_c::create() {
     if (mVariant == SMALL) {
         // clang-format off
         static const dCcD_SrcUnk s3 = {{
-            /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-            /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x1010111, {7, 0x407}, 0, 0},
+            /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+            /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x1010111, {7, 0, 0x407}, 0, CUT_DIR_NONE},
             /* mObjCo */ {0x0}},
             {0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f},
         };
@@ -1089,8 +1089,8 @@ int dAcTbox_c::create() {
     } else {
         // clang-format off
         static const dCcD_SrcUnk s4 = {{
-            /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-            /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x1010111, {6, 0x407}, 0, 0},
+            /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+            /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x1010111, {6, 0, 0x407}, 0, CUT_DIR_NONE},
             /* mObjCo */ {0x0}},
             {0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f},
         };

@@ -32,8 +32,8 @@
 
 dBgS_BeetleLinChk dAcBoomerang_c::sLinChk;
 dCcD_SrcSph dAcBoomerang_c::sSphSrc = {
-    {{AT_TYPE_BEETLE, BoomerangAtFlags, {4, 0, 0}, 0, 1, 0, 0, 0},
-     {~AT_TYPE_COMMON0, 0x291, {0, 0, 0x407}, 0, 0},
+    {{AT_TYPE_BEETLE, BoomerangAtFlags, {4, 0, 0}, 0, 1, 0, CUT_DIR_NONE, 0},
+     {~AT_TYPE_COMMON0, 0x291, {0, 0, 0x407}, 0, CUT_DIR_NONE},
      {0x28}},
     {15.f}
 };

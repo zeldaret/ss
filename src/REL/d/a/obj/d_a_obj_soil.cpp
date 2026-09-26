@@ -39,9 +39,9 @@ STATE_DEFINE(dAcOsoil_c, Ready);
 
 dCcD_SrcCyl dAcOsoil_c::sCylSrc = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
-     {0, 0x111, {0, 0, 0x407}, 0, 0},
+     {0, 0x111, {0, 0, 0x407}, 0, CUT_DIR_NONE},
      /* mObjCo */ {0xC9}},
     /* mCylInf */
     {10.f, 15.f}

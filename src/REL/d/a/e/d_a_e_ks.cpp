@@ -124,9 +124,9 @@ SPECIAL_ACTOR_PROFILE(E_KS, dAcEKs_c, fProfile::E_KS, 0xFE, 0, 4099);
 
 static dCcD_SrcSph sSrcSph = {
     {
-     /* mObjAt */ {AT_TYPE_DAMAGE, 0x1D, {0, 0, 0}, 2, 0, 0, 0, 0, 0},
+     /* mObjAt */ {AT_TYPE_DAMAGE, 0x1D, {0, 0, 0}, 2, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
-        {~AT_TYPE_COMMON0, 0x200303, {0, 1, 0x40F}, 8, 0},
+        {~AT_TYPE_COMMON0, 0x200303, {0, 1, 0x40F}, 8, CUT_DIR_NONE},
      /* mObjCo*/ {0xE5},
      },
     {35.f}
@@ -290,27 +290,27 @@ void dAcEKs_c::fn_155_A60() {
                 s16 a = 0;
                 s16 x = -cLib::targetAngleX(mPosition, dAcPy_c::GetLink()->mPosition);
 
-                if (mSph.GetTgSoundID() == 0x01) {
+                if (mSph.GetTgAtCutDir() == CUT_DIR_U) {
                     x += 0x2000;
-                } else if (mSph.GetTgSoundID() == 0x80) {
+                } else if (mSph.GetTgAtCutDir() == CUT_DIR_RU) {
                     a = 0x1000;
                     x += 0x1000;
-                } else if (mSph.GetTgSoundID() == 0x40) {
+                } else if (mSph.GetTgAtCutDir() == CUT_DIR_R) {
                     a = 0x2000;
-                } else if (mSph.GetTgSoundID() == 0x20) {
+                } else if (mSph.GetTgAtCutDir() == CUT_DIR_RD) {
                     a = 0x1000;
                     x += -0x1000;
-                } else if (mSph.GetTgSoundID() == 0x10) {
+                } else if (mSph.GetTgAtCutDir() == CUT_DIR_D) {
                     x += -0x2000;
-                } else if (mSph.GetTgSoundID() == 0x08) {
+                } else if (mSph.GetTgAtCutDir() == CUT_DIR_LD) {
                     a = -0x1000;
                     x += -0x1000;
-                } else if (mSph.GetTgSoundID() == 0x04) {
+                } else if (mSph.GetTgAtCutDir() == CUT_DIR_L) {
                     a = -0x2000;
-                } else if (mSph.GetTgSoundID() == 0x02) {
+                } else if (mSph.GetTgAtCutDir() == CUT_DIR_LU) {
                     a = -0x1000;
                     x += 0x1000;
-                } else if (mSph.GetTgSoundID() == 0x100) {
+                } else if (mSph.GetTgAtCutDir() == CUT_DIR_STAB) {
                     x += -0x4000;
                 }
 

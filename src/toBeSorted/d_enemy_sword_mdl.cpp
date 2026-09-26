@@ -1,6 +1,7 @@
 #include "toBeSorted/d_enemy_sword_mdl.h"
 
 #include "common.h"
+#include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_sc_game.h"
 #include "m/m3d/m_shadow.h"
@@ -10,8 +11,8 @@
 
 dCcD_SrcCps sCcSrc = {
     {
-     {AT_TYPE_DAMAGE, 0x8D, {1, 0, 0}, 1, 0, 0, 0, 0, 0},
-     {0, 0, {0, 0, 0x407}, 0, 0},
+     {AT_TYPE_DAMAGE, 0x8D, {1, 0, 0}, 1, 0, 0, 0, CUT_DIR_NONE, 0},
+     {0, 0, {0, 0, 0x407}, 0, CUT_DIR_NONE},
      {0},
      },
     {30.0f},

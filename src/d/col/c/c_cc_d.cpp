@@ -486,12 +486,12 @@ bool cCcD_Obj::ChkTgBit25() const {
     return mTg.MskAtHitSPrm(0x2000000);
 }
 
-s32 cCcD_Obj::GetTgSoundID() const {
-    return mTg.mAtHitSrc.field_0x10;
+s32 cCcD_Obj::GetTgAtCutDir() const {
+    return mTg.mAtHitSrc.mCutDir;
 }
 
-s16 cCcD_Obj::GetTg_0x6A() const {
-    return mTg.mAtHitSrc.field_0x12;
+s16 cCcD_Obj::GetTgAtCutAng() const {
+    return mTg.mAtHitSrc.mCutAng;
 }
 
 bool cCcD_Obj::ChkTgBit8() const {

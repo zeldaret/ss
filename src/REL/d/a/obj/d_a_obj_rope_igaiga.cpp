@@ -36,9 +36,13 @@ STATE_DEFINE(dAcOropeIgaiga_c, Water);
 
 dCcD_SrcSph dAcOropeIgaiga_c::sSphSrc = {
     /* mObjInf */
-    {/* mObjAt */ {AT_TYPE_DAMAGE, 0x1F, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
+    {/* mObjAt */ {AT_TYPE_DAMAGE, 0x1F, {0, 0, 0}, 1, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
-     {~(AT_TYPE_WIND | AT_TYPE_0x8000 | AT_TYPE_GLITTERING_SPORES | AT_TYPE_BEETLE | AT_TYPE_BUGNET), 0x311, {0, 0, 0x407}, 0, 0},
+     {~(AT_TYPE_WIND | AT_TYPE_0x8000 | AT_TYPE_GLITTERING_SPORES | AT_TYPE_BEETLE | AT_TYPE_BUGNET),
+      0x311,
+      {0, 0, 0x407},
+      0,
+      CUT_DIR_NONE},
      /* mObjCo */ {0xA9}},
     /* mSphInf */
     {20.f},

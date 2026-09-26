@@ -58,13 +58,13 @@ STATE_DEFINE(dAcBlastboss_c, ThunderWait);
 
 static dCcD_SrcCyl sSrcCyl1 = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
      {~(AT_TYPE_BUGNET | AT_TYPE_GLITTERING_SPORES | AT_TYPE_BELLOWS | AT_TYPE_BEETLE | AT_TYPE_WIND | AT_TYPE_0x8000),
       0x4103,
       {0, 0x4, 0x407},
       0x0,
-      0x0},
+      CUT_DIR_NONE},
      /* mObjCo */ {0x0}},
     /* mCylInf */
     {40.f, 300.f}
@@ -72,9 +72,8 @@ static dCcD_SrcCyl sSrcCyl1 = {
 
 static dCcD_SrcCyl sSrcCyl2 = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */
-     {AT_TYPE_BELLOWS, 0x103, {0, 0x4, 0x407}, 0x0, 0x0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */ {AT_TYPE_BELLOWS, 0x103, {0, 0x4, 0x407}, 0x0, CUT_DIR_NONE},
      /* mObjCo */ {0x0}},
     /* mCylInf */
     {70.f, 30.f}
@@ -82,9 +81,8 @@ static dCcD_SrcCyl sSrcCyl2 = {
 
 static dCcD_SrcCyl sSrcCyl3 = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */
-     {0x0, 0x0, {0, 0x0, 0x407}, 0x0, 0x0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */ {0x0, 0x0, {0, 0x0, 0x407}, 0x0, CUT_DIR_NONE},
      /* mObjCo */ {0xE5}},
     /* mCylInf */
     {100.f, 250.f}
@@ -92,9 +90,8 @@ static dCcD_SrcCyl sSrcCyl3 = {
 
 static dCcD_SrcSph sSrcSph1 = {
     /* mObjInf */
-    {/* mObjAt */ {AT_TYPE_DAMAGE, 0x2008D, {0, 0, 0}, 4, 0, 0, 0, 0, 0},
-     /* mObjTg */
-     {0, 0, {0, 0x0, 0x407}, 0, 0},
+    {/* mObjAt */ {AT_TYPE_DAMAGE, 0x2008D, {0, 0, 0}, 4, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */ {0, 0, {0, 0x0, 0x407}, 0, CUT_DIR_NONE},
      /* mObjCo */ {0}},
     /* mSphInf */
     {100.0f}
@@ -102,9 +99,8 @@ static dCcD_SrcSph sSrcSph1 = {
 
 static dCcD_SrcSph sSrcSph2 = {
     /* mObjInf */
-    {/* mObjAt */ {AT_TYPE_DAMAGE, 0x22008D, {0, 0, 4}, 8, 0, 0, 0, 0, 0},
-     /* mObjTg */
-     {AT_TYPE_0x800000 | AT_TYPE_BUGNET, 0x103, {0, 0x19, 0x407}, 0, 0},
+    {/* mObjAt */ {AT_TYPE_DAMAGE, 0x22008D, {0, 0, 4}, 8, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */ {AT_TYPE_0x800000 | AT_TYPE_BUGNET, 0x103, {0, 0x19, 0x407}, 0, CUT_DIR_NONE},
      /* mObjCo */ {0}},
     /* mSphInf */
     {100.0f}
@@ -112,9 +108,8 @@ static dCcD_SrcSph sSrcSph2 = {
 
 static dCcD_SrcSph sSrcSph = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */
-     {AT_TYPE_BELLOWS, 0x4103, {0, 0x0, 0x40F}, 0, 0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */ {AT_TYPE_BELLOWS, 0x4103, {0, 0x0, 0x40F}, 0, CUT_DIR_NONE},
      /* mObjCo */ {0}},
     /* mSphInf */
     {30.0f}
@@ -1115,10 +1110,9 @@ void dAcBlastboss_c::executeState_Fight() {
             checkForCloseRangeAttack();
             checkForCounter();
         }
-        mCc1.SetTgFlag_0xA(0x1FF);
+        mCc1.SetTgCutDir(CUT_DIR_ALL);
     } else {
-        // TODO
-        mCc1.SetTgFlag_0xA(0);
+        mCc1.SetTgCutDir(CUT_DIR_NONE);
     }
 
     if (mTimers[TIMER_4] == 1) {
@@ -1204,14 +1198,14 @@ void dAcBlastboss_c::executeState_Attack() {
             mStateMgr.changeState(StateID_CounterAttack);
             return;
         }
-        mCc1.SetTgFlag_0xA(0);
+        mCc1.SetTgCutDir(CUT_DIR_NONE);
     } else {
         if (mpCurrentAnm == "AttackR") {
-            mCc1.SetTgFlag_0xA(0xE);
+            mCc1.SetTgCutDir(CUT_DIR_LD | CUT_DIR_L | CUT_DIR_LU);
         } else if (mpCurrentAnm == "AttackL") {
-            mCc1.SetTgFlag_0xA(0xE0);
+            mCc1.SetTgCutDir(CUT_DIR_RD | CUT_DIR_R | CUT_DIR_RU);
         } else {
-            mCc1.SetTgFlag_0xA(0x1);
+            mCc1.SetTgCutDir(CUT_DIR_U);
         }
     }
     checkForCounter();
@@ -1285,12 +1279,12 @@ void dAcBlastboss_c::executeState_CounterAttack() {
     if (link->checkCurrentAction(/* BACKFLIP */ 0x62)) {
         field_0x113E = 20;
     }
-    mCc1.SetTgFlag_0xA(0);
+    mCc1.SetTgCutDir(CUT_DIR_NONE);
     if (field_0x113E != 0) {
         field_0x1142 = 0;
         field_0x1134 = 0;
     } else if (b) {
-        mCc1.SetTgFlag_0xA(0x1FF);
+        mCc1.SetTgCutDir(CUT_DIR_ALL);
         field_0x1142 = 0;
         checkForCounter();
     }
@@ -1310,7 +1304,7 @@ void dAcBlastboss_c::initializeState_PunchAttack() {
 void dAcBlastboss_c::executeState_PunchAttack() {
     f32 speed = 0.0f;
     field_0x1131 = 1;
-    mCc1.SetTgFlag_0xA(0);
+    mCc1.SetTgCutDir(CUT_DIR_NONE);
     sLib::addCalcAngle(mAngle.y.ref(), mYAngleToLink, 2, 0x800);
     if (mMdl.getAnm().getFrame() < 15.0f) {
         speed = -10.0f;
@@ -1340,7 +1334,7 @@ void dAcBlastboss_c::executeState_DashAttack() {
     field_0x1131 = 1;
     f32 targetSpeed = 0.0f;
     f32 stepSize = 40.0f; // never set differently
-    mCc1.SetTgFlag_0xA(0x1FF);
+    mCc1.SetTgCutDir(CUT_DIR_ALL);
     sLib::addCalcAngle(mAngle.y.ref(), mYAngleToLink, 2, 0x1000);
     switch (mSubState) {
         case SUB_STATE_0: {
@@ -1415,7 +1409,7 @@ void dAcBlastboss_c::executeState_SmallAttack() {
     field_0x1131 = 1;
     f32 targetSpeed = 0.0f;
 
-    mCc1.SetTgFlag_0xA(0);
+    mCc1.SetTgCutDir(CUT_DIR_NONE);
     switch (mSubState) {
         case SUB_STATE_0: {
             if (mMdl.getAnm().getFrame() >= 31.0f && mMdl.getAnm().getFrame() <= 33.0f) {
@@ -1467,7 +1461,7 @@ void dAcBlastboss_c::initializeState_ThunderAttack() {
 void dAcBlastboss_c::executeState_ThunderAttack() {
     field_0x1131 = 1;
     f32 targetSpeed = 0.0f;
-    mCc1.SetTgFlag_0xA(0);
+    mCc1.SetTgCutDir(CUT_DIR_NONE);
     sLib::addCalcAngle(mAngle.y.ref(), mYAngleToLink, 2, 0x400);
     if (mMdl.getAnm().getFrame() >= 21.0f && mMdl.getAnm().getFrame() <= 25.0f) {
         mSwordMdl.enable();
@@ -1516,16 +1510,16 @@ void dAcBlastboss_c::executeState_Guard() {
     };
 
     static const u32 sGuardFlags[] = {
-        0x8 | 0x4 | 0x2,
-        0x8 | 0x4 | 0x2,
-        0x10 | 0x8 | 0x4 | 0x2,
-        0x80 | 0x40 | 0x20,
-        0x80 | 0x40 | 0x20,
-        0x80 | 0x40 | 0x20 | 0x10,
-        0x80 | 0x2 | 0x1,
-        0x20 | 0x10 | 0x8,
-        0x100,
-        0x100 | 0x80 | 0x40 | 0x20 | 0x10 | 0x8 | 0x4 | 0x2 | 0x1,
+        CUT_DIR_LD | CUT_DIR_L | CUT_DIR_LU,            // GUARD_RIGHT
+        CUT_DIR_LD | CUT_DIR_L | CUT_DIR_LU,            // GUARD_UPRIGHT
+        CUT_DIR_D | CUT_DIR_LD | CUT_DIR_L | CUT_DIR_LU, // GUARD_DOWNRIGHT
+        CUT_DIR_RU | CUT_DIR_R | CUT_DIR_RD,            // GUARD_LEFT
+        CUT_DIR_RU | CUT_DIR_R | CUT_DIR_RD,            // GUARD_UPLEFT
+        CUT_DIR_RU | CUT_DIR_R | CUT_DIR_RD | CUT_DIR_D, // GUARD_DOWNLEFT
+        CUT_DIR_RU | CUT_DIR_LU | CUT_DIR_U,            // GUARD_UP
+        CUT_DIR_RD | CUT_DIR_D | CUT_DIR_LD,            // GUARD_DOWN
+        CUT_DIR_STAB,                                 // GUARD_CENTER
+        CUT_DIR_ALL,
     };
 
     switch (mSubState) {
@@ -1607,21 +1601,21 @@ void dAcBlastboss_c::executeState_Guard() {
         setAnmRate(1.0f);
         if (link->isAttacking()) {
             switch (dAcPy_c::GetLinkM()->getSpecificAttackDirection()) {
-                case daPlayerActBase_c::ATTACK_DIRECTION_DOWN:      mGuardDirection = GUARD_UP; break;
-                case daPlayerActBase_c::ATTACK_DIRECTION_LEFT:      mGuardDirection = GUARD_LEFT; break;
-                case daPlayerActBase_c::ATTACK_DIRECTION_DOWNLEFT:  mGuardDirection = GUARD_UPLEFT; break;
-                case daPlayerActBase_c::ATTACK_DIRECTION_UPLEFT:    mGuardDirection = GUARD_DOWNLEFT; break;
-                case daPlayerActBase_c::ATTACK_DIRECTION_RIGHT:     mGuardDirection = GUARD_RIGHT; break;
-                case daPlayerActBase_c::ATTACK_DIRECTION_DOWNRIGHT: mGuardDirection = GUARD_UPRIGHT; break;
-                case daPlayerActBase_c::ATTACK_DIRECTION_UPRIGHT:   mGuardDirection = GUARD_DOWNRIGHT; break;
-                case daPlayerActBase_c::ATTACK_DIRECTION_UP:        mGuardDirection = GUARD_DOWN; break;
-                default:                                            mGuardDirection = GUARD_CENTER; break;
+                case CUT_DIR_U:  mGuardDirection = GUARD_UP; break;
+                case CUT_DIR_R:  mGuardDirection = GUARD_LEFT; break;
+                case CUT_DIR_RU: mGuardDirection = GUARD_UPLEFT; break;
+                case CUT_DIR_RD: mGuardDirection = GUARD_DOWNLEFT; break;
+                case CUT_DIR_L:  mGuardDirection = GUARD_RIGHT; break;
+                case CUT_DIR_LU: mGuardDirection = GUARD_UPRIGHT; break;
+                case CUT_DIR_LD: mGuardDirection = GUARD_DOWNRIGHT; break;
+                case CUT_DIR_D:  mGuardDirection = GUARD_DOWN; break;
+                default:        mGuardDirection = GUARD_CENTER; break;
             }
             setAnm(sGuardNames[mGuardDirection], 3.0);
         }
     }
 
-    mCc1.SetTgFlag_0xA(sGuardFlags[mGuardDirection]);
+    mCc1.SetTgCutDir(sGuardFlags[mGuardDirection]);
     checkForRangeAttack();
 }
 void dAcBlastboss_c::finalizeState_Guard() {}
@@ -1629,13 +1623,9 @@ void dAcBlastboss_c::finalizeState_Guard() {}
 void dAcBlastboss_c::initializeState_GuardBreak() {
     s32 side;
     s32 attackDir = dAcPy_c::GetLinkM()->getSpecificAttackDirection();
-    if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_LEFT ||
-        attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWNLEFT ||
-        attackDir == daPlayerActBase_c::ATTACK_DIRECTION_UPLEFT) {
+    if (attackDir == CUT_DIR_R || attackDir == CUT_DIR_RU || attackDir == CUT_DIR_RD) {
         side = 0;
-    } else if (attackDir == daPlayerActBase_c::ATTACK_DIRECTION_RIGHT ||
-               attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWNRIGHT ||
-               attackDir == daPlayerActBase_c::ATTACK_DIRECTION_UPRIGHT) {
+    } else if (attackDir == CUT_DIR_L || attackDir == CUT_DIR_LU || attackDir == CUT_DIR_LD) {
         side = 1;
     } else {
         side = (s32)cM::rndF(1.99f);
@@ -1659,7 +1649,7 @@ void dAcBlastboss_c::executeState_GuardBreak() {
         mSpeed = -30.0f;
     }
     sLib::addCalcScaled(&mSpeed, 1.0f, 4.0f);
-    mCc1.SetTgFlag_0xA(0x1FF);
+    mCc1.SetTgCutDir(CUT_DIR_ALL);
     checkForCounter();
 }
 void dAcBlastboss_c::finalizeState_GuardBreak() {}
@@ -1682,7 +1672,7 @@ void dAcBlastboss_c::executeState_Damage() {
     }
     field_0x113E = 0;
     if (mIsPhaseTwo == 0 && !link->isAttackingSpin()) {
-        mCc1.SetTgFlag_0xA(0x1FF);
+        mCc1.SetTgCutDir(CUT_DIR_ALL);
     }
     checkForCounter();
 }
@@ -1722,7 +1712,7 @@ void dAcBlastboss_c::executeState_SitDamage() {
                 mTimers[TIMER_4] = 15;
             }
             checkForCounter();
-            mCc1.SetTgFlag_0xA(0x1FF);
+            mCc1.SetTgCutDir(CUT_DIR_ALL);
             return;
         }
         case SUB_STATE_5: {
@@ -1749,7 +1739,7 @@ void dAcBlastboss_c::executeState_SitDamage() {
             }
         }
     }
-    mCc1.SetTgFlag_0xA(0);
+    mCc1.SetTgCutDir(CUT_DIR_NONE);
 }
 void dAcBlastboss_c::finalizeState_SitDamage() {}
 
@@ -1996,13 +1986,13 @@ void dAcBlastboss_c::executeState_Stun() {
 
     sLib::addCalcScaled(&mSpeed, 1.0f, 10.0f);
     if (mChanceAttackCounter >= 7) {
-        mCc1.SetTgFlag_0xA(0x1FF);
+        mCc1.SetTgCutDir(CUT_DIR_ALL);
         checkForCounter();
     } else {
         if (mInvulnerabilityTimerMaybe != 0) {
-            mCc1.SetTgFlag_0xA(0x1FF);
+            mCc1.SetTgCutDir(CUT_DIR_ALL);
         } else {
-            mCc1.SetTgFlag_0xA(0);
+            mCc1.SetTgCutDir(CUT_DIR_NONE);
         }
     }
 }
@@ -2016,7 +2006,7 @@ void dAcBlastboss_c::initializeState_ThunderWait() {
 }
 void dAcBlastboss_c::executeState_ThunderWait() {
     dAcPy_c *link = dAcPy_c::GetLinkM();
-    mCc1.SetTgFlag_0xA(0);
+    mCc1.SetTgCutDir(CUT_DIR_NONE);
 
     switch (mSubState) {
         case SUB_STATE_0: {
@@ -2051,7 +2041,7 @@ void dAcBlastboss_c::executeState_ThunderWait() {
         }
         case SUB_STATE_5: {
             if (mMdl.getAnm().getFrame() >= 20.0f) {
-                mCc1.SetTgFlag_0xA(0x1FF);
+                mCc1.SetTgCutDir(CUT_DIR_ALL);
                 checkForCounter();
             }
             if (mMdl.getAnm().isStop()) {
@@ -2264,15 +2254,13 @@ bool dAcBlastboss_c::checkDamage() {
                     field_0x1138 = 10;
                     field_0x11B8 = 5.0f;
                     field_0x11A4 = 7.0f;
-                    if (mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_LEFT ||
-                        mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_DOWNLEFT ||
-                        mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_UPLEFT) {
+                    if (mLastAttackDirection == CUT_DIR_R || mLastAttackDirection == CUT_DIR_RU ||
+                        mLastAttackDirection == CUT_DIR_RD) {
                         field_0x1137 = 1;
-                    } else if (mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_RIGHT ||
-                               mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_DOWNRIGHT ||
-                               mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_UPRIGHT) {
+                    } else if (mLastAttackDirection == CUT_DIR_L || mLastAttackDirection == CUT_DIR_LU ||
+                               mLastAttackDirection == CUT_DIR_LD) {
                         field_0x1137 = 2;
-                    } else if (mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_STAB) {
+                    } else if (mLastAttackDirection == CUT_DIR_STAB) {
                         field_0x1137 = 3;
                     } else {
                         field_0x1137 = 0;
@@ -2310,15 +2298,13 @@ bool dAcBlastboss_c::checkDamage() {
                     mAttackKnockbackZ = v2.z;
                     field_0x11B8 = 5.0f;
                     field_0x11A4 = 7.0f;
-                    if (mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_LEFT ||
-                        mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_DOWNLEFT ||
-                        mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_UPLEFT) {
+                    if (mLastAttackDirection == CUT_DIR_R || mLastAttackDirection == CUT_DIR_RU ||
+                        mLastAttackDirection == CUT_DIR_RD) {
                         field_0x1137 = 1;
-                    } else if (mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_RIGHT ||
-                               mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_DOWNRIGHT ||
-                               mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_UPRIGHT) {
+                    } else if (mLastAttackDirection == CUT_DIR_L || mLastAttackDirection == CUT_DIR_LU ||
+                               mLastAttackDirection == CUT_DIR_LD) {
                         field_0x1137 = 2;
-                    } else if (mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_DOWN) {
+                    } else if (mLastAttackDirection == CUT_DIR_U) {
                         field_0x1137 = 3;
                     } else {
                         field_0x1137 = 0;
@@ -2347,15 +2333,13 @@ bool dAcBlastboss_c::checkDamage() {
                 field_0x1138 = 10;
                 field_0x11B8 = 5.0f;
                 field_0x11A4 = 7.0f;
-                if (mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_LEFT ||
-                    mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_DOWNLEFT ||
-                    mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_UPLEFT) {
+                if (mLastAttackDirection == CUT_DIR_R || mLastAttackDirection == CUT_DIR_RU ||
+                    mLastAttackDirection == CUT_DIR_RD) {
                     field_0x1137 = 1;
-                } else if (mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_RIGHT ||
-                           mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_DOWNRIGHT ||
-                           mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_UPRIGHT) {
+                } else if (mLastAttackDirection == CUT_DIR_L || mLastAttackDirection == CUT_DIR_LU ||
+                           mLastAttackDirection == CUT_DIR_LD) {
                     field_0x1137 = 2;
-                } else if (mLastAttackDirection == daPlayerActBase_c::ATTACK_DIRECTION_STAB) {
+                } else if (mLastAttackDirection == CUT_DIR_STAB) {
                     field_0x1137 = 3;
                 } else {
                     field_0x1137 = 0;
@@ -2500,14 +2484,12 @@ bool dAcBlastboss_c::checkForCounter() {
 
             if (mStateMgr.isState(StateID_Attack)) {
                 if (mpCurrentAnm == "AttackR" &&
-                    (attackDir == dAcPy_c::ATTACK_DIRECTION_RIGHT || attackDir == dAcPy_c::ATTACK_DIRECTION_UPRIGHT ||
-                     attackDir == dAcPy_c::ATTACK_DIRECTION_DOWNRIGHT)) {
+                     (attackDir == CUT_DIR_L || attackDir == CUT_DIR_LD || attackDir == CUT_DIR_LU)) {
                     mGuardDirection = GUARD_RIGHT;
-                } else if (mpCurrentAnm == "AttackL" && (attackDir == dAcPy_c::ATTACK_DIRECTION_LEFT ||
-                                                         attackDir == dAcPy_c::ATTACK_DIRECTION_UPLEFT ||
-                                                         attackDir == dAcPy_c::ATTACK_DIRECTION_DOWNLEFT)) {
+                } else if (mpCurrentAnm == "AttackL" &&
+                          (attackDir == CUT_DIR_R || attackDir == CUT_DIR_RD || attackDir == CUT_DIR_RU)) {
                     mGuardDirection = GUARD_LEFT;
-                } else if (mpCurrentAnm == "AttackU" && attackDir == daPlayerActBase_c::ATTACK_DIRECTION_DOWN) {
+                } else if (mpCurrentAnm == "AttackU" && attackDir == CUT_DIR_U) {
                     mGuardDirection = GUARD_UP;
                 } else {
                     return false;
@@ -2521,15 +2503,15 @@ bool dAcBlastboss_c::checkForCounter() {
                 }
 
                 switch (attackDir) {
-                    case daPlayerActBase_c::ATTACK_DIRECTION_DOWN:      mGuardDirection = GUARD_UP; break;
-                    case daPlayerActBase_c::ATTACK_DIRECTION_LEFT:      mGuardDirection = GUARD_LEFT; break;
-                    case daPlayerActBase_c::ATTACK_DIRECTION_DOWNLEFT:  mGuardDirection = GUARD_UPLEFT; break;
-                    case daPlayerActBase_c::ATTACK_DIRECTION_UPLEFT:    mGuardDirection = GUARD_DOWNLEFT; break;
-                    case daPlayerActBase_c::ATTACK_DIRECTION_RIGHT:     mGuardDirection = GUARD_RIGHT; break;
-                    case daPlayerActBase_c::ATTACK_DIRECTION_DOWNRIGHT: mGuardDirection = GUARD_UPRIGHT; break;
-                    case daPlayerActBase_c::ATTACK_DIRECTION_UPRIGHT:   mGuardDirection = GUARD_DOWNRIGHT; break;
-                    case daPlayerActBase_c::ATTACK_DIRECTION_UP:        mGuardDirection = GUARD_DOWN; break;
-                    default:                                            mGuardDirection = GUARD_CENTER; break;
+                    case CUT_DIR_U:  mGuardDirection = GUARD_UP; break;
+                    case CUT_DIR_R:  mGuardDirection = GUARD_LEFT; break;
+                    case CUT_DIR_RU: mGuardDirection = GUARD_UPLEFT; break;
+                    case CUT_DIR_RD: mGuardDirection = GUARD_DOWNLEFT; break;
+                    case CUT_DIR_L:  mGuardDirection = GUARD_RIGHT; break;
+                    case CUT_DIR_LU: mGuardDirection = GUARD_UPRIGHT; break;
+                    case CUT_DIR_LD: mGuardDirection = GUARD_DOWNRIGHT; break;
+                    case CUT_DIR_D:  mGuardDirection = GUARD_DOWN; break;
+                    default:        mGuardDirection = GUARD_CENTER; break;
                 }
                 if (!mStateMgr.isState(StateID_Guard)) {
                     mStateMgr.changeState(StateID_Guard);
@@ -3047,20 +3029,20 @@ bool dAcBlastboss_c::checkForLinkSwordBySwordHit() {
 
 u8 dAcBlastboss_c::classifyAttackDirection(s32 attackDir) {
     switch (attackDir) {
-        case daPlayerActBase_c::ATTACK_DIRECTION_LEFT:
-        case daPlayerActBase_c::ATTACK_DIRECTION_DOWNLEFT:
-        case daPlayerActBase_c::ATTACK_DIRECTION_UPLEFT:    return 0;
+        case CUT_DIR_R:
+        case CUT_DIR_RU:
+        case CUT_DIR_RD:   return 0;
 
-        case daPlayerActBase_c::ATTACK_DIRECTION_RIGHT:
-        case daPlayerActBase_c::ATTACK_DIRECTION_DOWNRIGHT:
-        case daPlayerActBase_c::ATTACK_DIRECTION_UPRIGHT:   return 1;
+        case CUT_DIR_L:
+        case CUT_DIR_LU:
+        case CUT_DIR_LD:   return 1;
 
-        case daPlayerActBase_c::ATTACK_DIRECTION_DOWN:      return 2;
-        case daPlayerActBase_c::ATTACK_DIRECTION_UP:        return 3;
+        case CUT_DIR_U:    return 2;
+        case CUT_DIR_D:    return 3;
 
-        case daPlayerActBase_c::ATTACK_DIRECTION_STAB:      return 4;
+        case CUT_DIR_STAB: return 4;
 
-        default:                                            return -1;
+        default:          return -1;
     }
 }
 

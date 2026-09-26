@@ -260,8 +260,12 @@ static const GlitteringSporeRupeeChance sSporeRupeeChances[] = {
 };
 
 static const dCcD_SrcCyl sSrcCyl = {
-    {{0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     {~(AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 0x08, 0x407}, 0, 0},
+    {{0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+     {~(AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND),
+      0x111,
+      {0, 0x08, 0x407},
+      0,
+      CUT_DIR_NONE},
      {0xE9}},
     {40.0f, 60.0f}
 };

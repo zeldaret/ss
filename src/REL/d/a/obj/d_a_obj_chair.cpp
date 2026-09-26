@@ -33,13 +33,13 @@ char *CHAIR_FILES[9] = {
 
 static dCcD_SrcCyl sChairColData = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
      {~(AT_TYPE_BUGNET | AT_TYPE_GLITTERING_SPORES | AT_TYPE_BEETLE | AT_TYPE_WIND | AT_TYPE_0x8000),
       0x111,
       {0, 0x7, 0x407},
       0x0,
-      0x0},
+      CUT_DIR_NONE},
      /* mObjCo */ {0xE9}},
     /* mCylInf */
     {40.f, 50.f}
