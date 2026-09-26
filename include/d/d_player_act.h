@@ -468,19 +468,6 @@ public:
         ATTACK_FINAL_BLOW = 11,
     };
 
-    enum SpecificPlayerAttackDirection_e {
-        /* 0x000 */ ATTACK_DIRECTION_NONE = 0,
-        /* 0x001 */ ATTACK_DIRECTION_DOWN = 1 << 0,
-        /* 0x002 */ ATTACK_DIRECTION_DOWNRIGHT = 1 << 1,
-        /* 0x004 */ ATTACK_DIRECTION_RIGHT = 1 << 2,
-        /* 0x008 */ ATTACK_DIRECTION_UPRIGHT = 1 << 3,
-        /* 0x010 */ ATTACK_DIRECTION_UP = 1 << 4,
-        /* 0x020 */ ATTACK_DIRECTION_UPLEFT = 1 << 5,
-        /* 0x040 */ ATTACK_DIRECTION_LEFT = 1 << 6,
-        /* 0x080 */ ATTACK_DIRECTION_DOWNLEFT = 1 << 7,
-        /* 0x100 */ ATTACK_DIRECTION_STAB = 1 << 8,
-    };
-
     enum ModelUpdateFlags_e {
         UPDATE_MODEL_SWORD = 0x20,
         UPDATE_MODEL_SHIELD = 0x40,

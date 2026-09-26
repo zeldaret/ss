@@ -25,8 +25,8 @@ STATE_DEFINE(dAcOSeatSword_c, Get);
 
 dCcD_SrcCyl dAcOSeatSword_c::sCylSrc = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */ {0, 0x311, {0, 0, 0x407}, 0x0, 0x0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */ {0, 0x311, {0, 0, 0x407}, 0x0, CUT_DIR_NONE},
      /* mObjCo */ {0xE9}},
     /* mCylInf */
     {20.f, 100.f}

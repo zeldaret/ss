@@ -16,9 +16,8 @@ const f32 dAcOcloudDive_c::height = 40.0f;
 
 dCcD_SrcCyl dAcOcloudDive_c::sCylSrc = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */
-     {AT_TYPE_BOMB, 0x111, {0, 0, 0x407}, 0, 0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */ {AT_TYPE_BOMB, 0x111, {0, 0, 0x407}, 0, CUT_DIR_NONE},
      /* mObjCo */ {0}},
     /* mCylInf */
     {100.f, 10.f}
