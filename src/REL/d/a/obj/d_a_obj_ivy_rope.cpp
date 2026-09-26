@@ -41,14 +41,14 @@ InteractionTargetDef dAcOivyRope_c::sInteraction = {
 
 dCcD_SrcCps dAcOivyRope_c::sCpsSrc = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
      {AT_TYPE_0x800000 | AT_TYPE_BEETLE | AT_TYPE_CLAWSHOT | AT_TYPE_ARROW | AT_TYPE_WHIP | AT_TYPE_SLINGSHOT |
           AT_TYPE_BOMB | AT_TYPE_SWORD,
       0x111,
       {0, 0x19, 0x407},
       0,
-      0},
+      CUT_DIR_NONE},
      /* mObjCo */ {0x4029}},
     /* mCpsInf */
     {10.f}
@@ -56,9 +56,9 @@ dCcD_SrcCps dAcOivyRope_c::sCpsSrc = {
 
 dCcD_SrcSph dAcOivyRope_c::sSphSrc = {
     /* mObjInf */
-    {/* mObjAt */ {AT_TYPE_DAMAGE, 0x11, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
+    {/* mObjAt */ {AT_TYPE_DAMAGE, 0x11, {0, 0, 0}, 1, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
-     {~AT_TYPE_COMMON0, 0x111, {0, 0, 0x407}, 0, 0},
+     {~AT_TYPE_COMMON0, 0x111, {0, 0, 0x407}, 0, CUT_DIR_NONE},
      /* mObjCo */ {0x29}},
     /* mSphInf */
     {100.f}
@@ -66,9 +66,9 @@ dCcD_SrcSph dAcOivyRope_c::sSphSrc = {
 
 dCcD_SrcCyl dAcOivyRope_c::sCylSrc = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
-     {AT_TYPE_BELLOWS, 0x311, {0, 0, 8}, 8, 0},
+     {AT_TYPE_BELLOWS, 0x311, {0, 0, 8}, 8, CUT_DIR_NONE},
      /* mObjCo */ {0x109}},
     /* mCylInf */
     {10.f, 750.f}

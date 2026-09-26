@@ -47,8 +47,9 @@ SPECIAL_ACTOR_PROFILE(E_SM, dAcEsm_c, fProfile::E_SM, 0xEB, 0, 4098);
 
 static dCcD_SrcSph sSphSrc = {
     /* mObjInf */
-    {/* mObjAt */ {AT_TYPE_DAMAGE, 0xD, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x3303, {0, 3, 0x40F}, 8, 0},
+    {/* mObjAt */ {AT_TYPE_DAMAGE, 0xD, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */
+     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x3303, {0, 3, 0x40F}, 8, CUT_DIR_NONE},
      /* mObjCo */ {0xC5}},
     /* mSphInf */
     {50.f},

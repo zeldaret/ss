@@ -21,14 +21,14 @@ STATE_DEFINE(dAcOgrassCoil_c, Wait);
 
 dCcD_SrcCyl dAcOgrassCoil_c::sCylSrc = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
      {AT_TYPE_SWORD | AT_TYPE_BOMB | AT_TYPE_0x40 | AT_TYPE_SLINGSHOT | AT_TYPE_WHIP | AT_TYPE_ARROW |
           AT_TYPE_CLAWSHOT | AT_TYPE_0x800000,
       0x200111,
       {0, 0xb, 0x407},
       0x0,
-      0x0},
+      CUT_DIR_NONE},
      /* mObjCo */ {0x29}},
     /* mCylInf */
     {50.f, 130.f}

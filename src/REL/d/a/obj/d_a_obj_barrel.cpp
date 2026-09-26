@@ -90,13 +90,13 @@ STATE_DEFINE(dAcOBarrel_c, Rebirth);
 namespace {
 static dCcD_SrcCyl sSrcCyl = {
     {
-     /* mObjAt */ {AT_TYPE_PHYSICS, 0x10013, {0, 0, 0}, 4, 0, 0, 0, 0, 0},
+     /* mObjAt */ {AT_TYPE_PHYSICS, 0x10013, {0, 0, 0}, 4, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
         {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000),
          0x2000111,
          {0, 0xF, 0x407},
          0,
-         0},
+         CUT_DIR_NONE},
      /* mObjCo*/ {0xE9},
      },
     {
@@ -105,13 +105,13 @@ static dCcD_SrcCyl sSrcCyl = {
 };
 static dCcD_SrcSph sSrcSph = {
     {
-     /* mObjAt */ {AT_TYPE_PHYSICS, 0x10003, {0, 0, 0}, 4, 0, 0, 0, 0, 0},
+     /* mObjAt */ {AT_TYPE_PHYSICS, 0x10003, {0, 0, 0}, 4, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
         {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND),
          0x2000111,
          {0, 0xF, 0x407},
          0,
-         0},
+         CUT_DIR_NONE},
      /* mObjCo*/ {0xE9},
      },
     {55.f}

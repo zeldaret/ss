@@ -86,9 +86,13 @@ STATE_DEFINE(dAcBomb_c, WindCarry);
 
 dCcD_SrcSph sSphSrc = {
     /* mObjInf */
-    {/* mObjAt */ {AT_TYPE_BOMB, 0x1803E, {0, 0, 0}, sHIO.getSomething(), 0, 0, 0, 0, 0},
+    {/* mObjAt */ {AT_TYPE_BOMB, 0x1803E, {0, 0, 0}, sHIO.getSomething(), 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
-     {~(AT_TYPE_BUGNET | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_0x10), 0x800111, {0, 0x0A, 0x40F}, 0, 0},
+     {~(AT_TYPE_BUGNET | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_0x10),
+      0x800111,
+      {0, 0x0A, 0x40F},
+      0,
+      CUT_DIR_NONE},
      /* mObjCo */ {0xE9}},
     /* mSphInf */
     {sHIO.getBombScale()}

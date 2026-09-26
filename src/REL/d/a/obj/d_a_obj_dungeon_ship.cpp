@@ -29,13 +29,12 @@ SPECIAL_ACTOR_PROFILE(OBJ_DUNGEON_SHIP, dAcODungeonShip_c, fProfile::OBJ_DUNGEON
 
 dCcD_SrcCps dAcODungeonShip_c::sCcSrc = {
     {
-
-     {0, 0x1003E, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
+     {0, 0x1003E, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
      {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND),
          0x111,
          {0, 0, 0x407},
          0,
-         0},
+         CUT_DIR_NONE},
      {0xE8},
      },
     {1000.0f},

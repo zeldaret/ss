@@ -3,6 +3,7 @@
 #include "c/c_lib.h"
 #include "d/a/d_a_player.h"
 #include "d/a/npc/d_a_npc_talk_kensei.h"
+#include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_sc_game.h"
 #include "d/d_vec.h"
@@ -13,9 +14,13 @@ SPECIAL_ACTOR_PROFILE(OBJ_WARP_HOLE, dAcOwarpHole_c, fProfile::OBJ_WARP_HOLE, 0x
 
 dCcD_SrcCyl dAcOwarpHole_c::sCylSrc = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
-     {~(AT_TYPE_BUGNET | AT_TYPE_GLITTERING_SPORES | AT_TYPE_BEETLE | AT_TYPE_WIND | AT_TYPE_0x8000), 0x111, {0, 0, 0x407}, 0, 0},
+     {~(AT_TYPE_BUGNET | AT_TYPE_GLITTERING_SPORES | AT_TYPE_BEETLE | AT_TYPE_WIND | AT_TYPE_0x8000),
+      0x111,
+      {0, 0, 0x407},
+      0,
+      CUT_DIR_NONE},
      /* mObjCo */ {0x29}},
     /* mCylInf */
     {320.f, 300.f}

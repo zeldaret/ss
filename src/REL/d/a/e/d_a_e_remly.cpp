@@ -51,8 +51,8 @@
 SPECIAL_ACTOR_PROFILE(E_REMLY, dAcEremly_c, fProfile::E_REMLY, 0xE1, 0, 3);
 
 static dCcD_SrcSph sSphSrc = {
-    {{AT_TYPE_DAMAGE, 0xD, {0, 0, 0}, 2, 0, 0, 0, 0},
-     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x303, {0, 0, 0x40F}, 8, 0},
+    {{AT_TYPE_DAMAGE, 0xD, {0, 0, 0}, 2, 0, 0, CUT_DIR_NONE, 0},
+     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x303, {0, 0, 0x40F}, 8, CUT_DIR_NONE},
      {0xE5}},
     {50.f},
 };

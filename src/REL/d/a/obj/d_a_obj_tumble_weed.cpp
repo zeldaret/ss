@@ -33,8 +33,9 @@ STATE_DEFINE(dAcOTumbleWeed_c, Slope);
 
 dCcD_SrcSph dAcOTumbleWeed_c::sSphSrc = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */ {~(AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000), 0x111, {0, 8, 0x40F}, 0, 0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */
+     {~(AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000), 0x111, {0, 8, 0x40F}, 0, CUT_DIR_NONE},
      /* mObjCo */ {0xE9}},
     /* mSphInf */
     {60.f},

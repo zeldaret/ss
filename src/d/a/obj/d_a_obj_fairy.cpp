@@ -31,8 +31,8 @@ SPECIAL_ACTOR_PROFILE(OBJ_FAIRY, dAcOFairy_c, fProfile::OBJ_FAIRY, 0x22D, 0, 0x2
 
 static dCcD_SrcSph sSphSrc1 = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */ {AT_TYPE_BUGNET | AT_TYPE_BELLOWS | AT_TYPE_WIND, 0x200311, {0, 0, 0x40F}, 0, 0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */ {AT_TYPE_BUGNET | AT_TYPE_BELLOWS | AT_TYPE_WIND, 0x200311, {0, 0, 0x40F}, 0, CUT_DIR_NONE},
      /* mObjCo */ {0}},
     /* mSphInf */
     {30.f},
@@ -40,8 +40,8 @@ static dCcD_SrcSph sSphSrc1 = {
 
 static dCcD_SrcSph sSphSrc2 = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0x0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */ {0, 0x0, {0, 0, 0x40F}, 0, 0},
+    {/* mObjAt */ {0, 0x0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */ {0, 0x0, {0, 0, 0x40F}, 0, CUT_DIR_NONE},
      /* mObjCo */ {0x29}},
     /* mSphInf */
     {10.f},
