@@ -35,8 +35,8 @@ protected:
 class LookAtCamera : public BaseCamera {
 public:
     LookAtCamera() : mPos(0.0f, 10.0f, 0.0f), mAt(0.0f, 0.0f, 0.0f), mUp(0.0f, 1.0f, 0.0f) {}
-    
-    LookAtCamera& operator=(const LookAtCamera &other) {
+
+    LookAtCamera &operator=(const LookAtCamera &other) {
         mViewMtx.copyFrom(other.mViewMtx);
         mOtherMtx.copyFrom(other.mOtherMtx);
         mPos = other.mPos;
@@ -79,6 +79,7 @@ public:
 class OrthoCamera : public LookAtCamera {
 public:
     OrthoCamera();
+    ~OrthoCamera() {}
 
     virtual void doUpdateMatrix() override;
 

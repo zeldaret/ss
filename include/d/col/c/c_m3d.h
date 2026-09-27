@@ -55,7 +55,7 @@ bool cM3d_Cross_LinTri(
 bool cM3d_Cross_LinTri_Easy(const cM3dGTri *, const nw4r::math::VEC3 *);
 bool cM3d_Cross_SphPnt(const cM3dGSph &, const nw4r::math::VEC3 *);
 bool cM3d_Cross_LinSph(const cM3dGLin &, const cM3dGSph &, nw4r::math::VEC3 *);
-bool cM3d_Cross_LinSph_CrossPos(const cM3dGSph &, const cM3dGLin &, nw4r::math::VEC3 *, nw4r::math::VEC3 *);
+BOOL cM3d_Cross_LinSph_CrossPos(const cM3dGSph &, const cM3dGLin &, nw4r::math::VEC3 *, nw4r::math::VEC3 *);
 bool cM3d_Cross_CylSph(const cM3dGCyl &, const cM3dGSph &, f32 *);
 bool cM3d_Cross_CylSph(const cM3dGCyl &, const cM3dGSph &, nw4r::math::VEC3 *, f32 *);
 bool cM3d_Cross_SphSph(const cM3dGSph &, const cM3dGSph &, f32 *);

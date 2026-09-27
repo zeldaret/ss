@@ -724,11 +724,11 @@ ExecCallback_CALC_MAT__Q34nw4r3g3d15IScnObjCallbackFQ44nw4r3g3d6ScnObj6TimingPQ3
 fn_8001F700 = .text:0x8001F700; // type:function size:0xA8
 fn_8001F7B0 = .text:0x8001F7B0; // type:function size:0x64
 sprintf__15SizedString<32>FPCce = .text:0x8001F820; // type:function size:0xD0
-fn_8001F8F0 = .text:0x8001F8F0; // type:function size:0x14
-fn_8001F910 = .text:0x8001F910; // type:function size:0xD4
+setLODDistance__6dLOD_cFlf = .text:0x8001F8F0; // type:function size:0x14
+getMdl__6dLOD_cFRQ23m3d6smdl_c = .text:0x8001F910; // type:function size:0xD4
 fn_8001F9F0 = .text:0x8001F9F0; // type:function size:0xB4
 fn_8001FAB0 = .text:0x8001FAB0; // type:function size:0x140
-fn_8001FBF0 = .text:0x8001FBF0; // type:function size:0xA4
+create__9dMdlLOD_cFPvPCcP16mHeapAllocator_cUl = .text:0x8001FBF0; // type:function size:0xA4
 fn_8001FCA0 = .text:0x8001FCA0; // type:function size:0x60
 fn_8001FD00 = .text:0x8001FD00; // type:function size:0x64
 fn_8001FD70 = .text:0x8001FD70; // type:function size:0xA8
