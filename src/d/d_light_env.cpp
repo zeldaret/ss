@@ -944,6 +944,7 @@ void ActorLighting::reset() {
 
 const mColor &ActorLighting::getLightTev2Color() {
     if (dObjLight_c::GetInstance() == nullptr) {
+        // UB: Returning reference to local temporary object
         return mColor(0, 0, 0, 0);
     } else {
         return dObjLight_c::GetInstance()->GetColor0x68();
@@ -952,6 +953,7 @@ const mColor &ActorLighting::getLightTev2Color() {
 
 const mColor &ActorLighting::getLightTev1Color() {
     if (dObjLight_c::GetInstance() == nullptr) {
+        // UB: Returning reference to local temporary object
         return mColor(0, 0, 0, 0);
     } else {
         return dObjLight_c::GetInstance()->GetColor0x6C();
@@ -960,6 +962,7 @@ const mColor &ActorLighting::getLightTev1Color() {
 
 const mColor &ActorLighting::getLightTev0Color() {
     if (dObjLight_c::GetInstance() == nullptr) {
+        // UB: Returning reference to local temporary object
         return mColor(0, 0, 0, 0);
     } else {
         return dObjLight_c::GetInstance()->GetColor0x100();
@@ -968,6 +971,7 @@ const mColor &ActorLighting::getLightTev0Color() {
 
 const mColor &ActorLighting::getLightTevKColor() {
     if (dObjLight_c::GetInstance() == nullptr) {
+        // UB: Returning reference to local temporary object
         return mColor(0, 0, 0, 0);
     } else {
         return dObjLight_c::GetInstance()->GetColor0x104();
