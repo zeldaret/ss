@@ -203,7 +203,7 @@ public:
         const mVec3_c *scale, u32 params2, u32 roomId
     );
 
-    static dAcObjBase_c *findObject(fProfile::PROFILE_NAME_e actorId, fLiNdBa_c *refList, dAcObjBase_c *parent);
+    static dAcObjBase_c *findObject(fProfile::PROFILE_NAME_e actorId, fLiMgBa_c *refList, dAcObjBase_c *parent);
     static dAcObjBase_c *getNextObject(fLiMgBa_c *ref, dAcObjBase_c *parent);
     bool isPlayer();
     void calcVelocity(mVec3_c &pos, f32 speed);

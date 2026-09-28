@@ -572,6 +572,9 @@ public:
     void SetInfo_0x0(u8 val) {
         mSrc.mInfo.field_0x0 = val;
     }
+    void SetSrc_0xE(u8 val) {
+        mSrc.field_0xE = val;
+    }
 
     const cCcD_SrcGObjAt &GetSrc() const {
         return mSrc;
@@ -881,6 +884,10 @@ public:
     void SetAtFlag(u32 flag) {
         mAt.SetSPrm(flag);
     }
+    
+    void SetAtFlag2(u32 flag) {
+        mAt.SetAtFlag(flag);
+    }
     void SetAtGrp(u32 grp) {
         mAt.SetAtFlag(GetAtGrp() | grp);
     }
@@ -1037,13 +1044,16 @@ public:
     void SetAtInfo_0x0(u8 amount) {
         mAt.SetInfo_0x0(amount);
     }
+    void SetAt_0xE(u8 val) {
+        mAt.SetSrc_0xE(val);
+    }
 
     void SetAtDamage(u8 amount) {
         mAt.SetAtDamage(amount);
     }
     void SetAtModifier(u16 modifier) {
         mAt.SetSrcModifer(modifier);
-    }
+    } 
 
     // Tg
 

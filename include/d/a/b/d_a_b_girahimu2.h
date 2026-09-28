@@ -9,8 +9,14 @@ public:
     dAcGirahimu2_c() : mStateMgr(*this) {}
     virtual ~dAcGirahimu2_c() {}
 
+    void setField_0xD52(u16 val) {
+        field_0xD52 = val;
+    }
+
 private:
     /* 0x??? */ STATE_MGR_DECLARE(dAcGirahimu2_c);
+
+    /* 0xD52 */ u16 field_0xD52;
 };
 
 #endif
