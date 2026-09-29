@@ -24,6 +24,7 @@
 #include "m/m3d/m_fanm.h"
 #include "m/m3d/m_scnleaf.h"
 #include "m/m_mtx.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resanmchr.h"
 #include "nw4r/g3d/res/g3d_resanmtexpat.h"
@@ -1511,14 +1512,14 @@ int dAcTbox_c::draw() {
         drawModelType1(&mOpenFxMdl);
     }
 
-    static mQuat_c shadowDirs[4] = {
-        mQuat_c(0.0f, 45.0f, 0.0f, 100.0f),
-        mQuat_c(0.0f, 25.0f, 0.0f, 80.0f),
-        mQuat_c(0.0f, 55.0f, 0.0f, 120.0f),
-        mQuat_c(0.0f, 45.0f, 0.0f, 100.0f),
+    static mSphere_c shadowSphs[4] = {
+        mSphere_c(mVec3_c(0.0f, 45.0f, 0.0f), 100.0f),
+        mSphere_c(mVec3_c(0.0f, 25.0f, 0.0f), 80.0f),
+        mSphere_c(mVec3_c(0.0f, 55.0f, 0.0f), 120.0f),
+        mSphere_c(mVec3_c(0.0f, 45.0f, 0.0f), 100.0f),
     };
 
-    drawShadow(mShadowCircle, nullptr, mWorldMtx, &shadowDirs[mVariant], -1, -1, -1, -1, -1, 0.0f);
+    drawShadow(mShadowCircle, nullptr, mWorldMtx, &shadowSphs[mVariant], -1, -1, -1, -1, -1, 0.0f);
 
     return SUCCEEDED;
 }

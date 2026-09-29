@@ -6,7 +6,7 @@
 #include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
 #include "m/m_mtx.h"
-#include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
@@ -61,8 +61,8 @@ int dAcOpaint_c::actorExecute() {
 
 int dAcOpaint_c::draw() {
     drawModelType1(&mMdl);
-    static mQuat_c rot(0.0f, 0.0f, 0.0f, 100.0f);
-    fn_8002edb0(mShadow, mMdl, &rot, -1, -1, 0.0f);
+    static mSphere_c sph(mVec3_c(0.0f, 0.0f, 0.0f), 100.0f);
+    fn_8002edb0(mShadow, mMdl, &sph, -1, -1, 0.0f);
     return SUCCEEDED;
 }
 

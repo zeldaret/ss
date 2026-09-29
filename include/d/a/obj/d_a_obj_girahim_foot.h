@@ -27,7 +27,7 @@ private:
     /* 0x334 */ m3d::smdl_c mMdl;
     /* 0x350 */ dShadowCircle_c mShadow;
     /* 0x358 */ STATE_MGR_DECLARE(dAcOgirahimFoot_c);
-    /* 0x394 */ bool field_0x394;
+    /* 0x394 */ u8 field_0x394;
 };
 
 #endif

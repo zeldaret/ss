@@ -20,6 +20,7 @@ struct mAng;
 class mAng3_c;
 class mVec3_c;
 class mFrustum_c;
+class mSphere_c;
 
 namespace m2d {
 class Layout_c;

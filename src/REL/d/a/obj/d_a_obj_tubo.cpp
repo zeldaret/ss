@@ -28,6 +28,7 @@
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/math/math_arithmetic.h"
 #include "rvl/MTX/mtxvec.h"
@@ -201,10 +202,10 @@ void dAcOtubo_c::registerInEvent() {
 int dAcOtubo_c::draw() {
     drawModelType1(&mMdl);
 
-    static mQuat_c quat(0.f, 30.f, 0.f, 40.f);
+    static mSphere_c sph(mVec3_c(0.f, 30.f, 0.f), 40.f);
 
     if (mYOffset >= 0.f) {
-        drawShadow(mShdw, nullptr, mWorldMtx, &quat, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
+        drawShadow(mShdw, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     }
     return SUCCEEDED;
 }

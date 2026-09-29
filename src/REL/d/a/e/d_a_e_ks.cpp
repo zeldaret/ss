@@ -31,7 +31,6 @@
 #include "m/m_angle.h"
 #include "m/m_color.h"
 #include "m/m_mtx.h"
-#include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resanmtexpat.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
@@ -108,6 +107,10 @@ struct dAcEKs_HIO_c {
     f32 _0xC4; // -0.5
 
     const s32 getZero() const {
+        s32 _weird_zero = 0;
+        return _0x04;
+    }
+    const s32 getZero1() const {
         s32 _weird_zero = 0;
         return _0x04;
     }
@@ -1748,13 +1751,13 @@ int dAcEKs_c::draw() {
 
     if (!isState(StateID_Wait)) {
         field_0xD18 = mPosition.y - mAcch.GetGroundH();
-        // I hate this xD
-        mQuat_c shadowRot(
-            mVec3_c(0.f + dAcEKs_HIO_c::sInstance.getZero(), 5, 0.f + dAcEKs_HIO_c::sInstance.getZero()),
-            50.f + dAcEKs_HIO_c::sInstance.getZero()
+
+        mSphere_c sph(
+            mVec3_c(0.f + dAcEKs_HIO_c::sInstance.getZero(), 5.0f, 0.f + dAcEKs_HIO_c::sInstance.getZero()),
+            50.f + dAcEKs_HIO_c::sInstance.getZero1()
         );
         field_0xAE4.transS(mPosition);
-        drawShadow(mShadow, nullptr, field_0xAE4, &shadowRot, -1, -1, -1, -1, -1, field_0xD18);
+        drawShadow(mShadow, nullptr, field_0xAE4, &sph, -1, -1, -1, -1, -1, field_0xD18);
     }
 
     return SUCCEEDED;

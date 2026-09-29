@@ -21,6 +21,7 @@
 #include "f/f_base.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m_mtx.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/math/math_arithmetic.h"
 #include "s/s_Math.h"
@@ -257,9 +258,9 @@ int dAcOFairy_c::draw() {
         drawModelType1(&mModel.getModel());
 
         if (!isCuring()) {
-            static mQuat_c rot(0.0f, 0.0f, 0.0f, 10.0f);
+            static mSphere_c sph(mVec3_c(0.0f, 0.0f, 0.0f), 10.0f);
             f32 f = mObjAcch.GetGroundH();
-            drawShadow(mShadow, nullptr, mWorldMtx, &rot, -1, -1, -1, -1, -1, mPosition.y - f);
+            drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - f);
         }
     }
 

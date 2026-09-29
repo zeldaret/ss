@@ -1297,10 +1297,10 @@ int dAcItem_c::draw() {
             (mId == ITEM_STAMINA_FRUIT && getParams2Lower_shift1_0x7()) || isLightFruit() || (mItemFlags & 0x10) == 0) {
             /* nothing */
         } else if (mMdlScaleType == 2) {
-            mQuat_c v(mVec3_c(0.0f, 0.0f, 0.0f), getItemFlagStruct(getItemId())->field_0x02);
+            mSphere_c v(mVec3_c(0.0f, 0.0f, 0.0f), getItemFlagStruct(getItemId())->field_0x02);
             drawShadow(mShdw, nullptr, mWorldMtx, &v, -1, -1, -1, -1, -1, field_0xD18);
         } else {
-            mQuat_c v(
+            mSphere_c v(
                 mVec3_c(0.0f, field_0xCD8 * 0.5f * getItemFlagStruct(getItemId())->field_0x01, 0.0f),
                 field_0xCD8 * getItemFlagStruct(getItemId())->field_0x02
             );

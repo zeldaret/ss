@@ -9,7 +9,7 @@
 #include "d/d_shadow.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_mtx.h"
-#include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/dowsing_target.h"
@@ -169,7 +169,7 @@ protected:
 
     /* 0x334 */ m3d::smdl_c *mpMdl;
     /* 0x338 */ dShadowCircle_c mShadow;
-    /* 0x340 */ mQuat_c mShadowRot;
+    /* 0x340 */ mSphere_c mShadowSph;
     /* 0x350 */ dBgS_AcchCir mBgAcchCir;
     /* 0x3AC */ dBgS_ObjAcch mBgObjAcch;
     /* 0x75C */ dCcD_Cyl mCcCyl;

@@ -6,6 +6,8 @@
 
 class mQuat_c : public EGG::Quatf {
 public:
+    using EGG::Quatf::slerpTo;
+
     mQuat_c() {}
     mQuat_c(f32 x, f32 y, f32 z, f32 w) : EGG::Quatf(w, x, y, z) {}
     mQuat_c(const mQuat_c &other) : EGG::Quatf(other.w, other.v) {}
@@ -23,9 +25,9 @@ public:
         return *this;
     }
 
-    bool Set(const mVec3_c &, const mVec3_c &);
-    void fn_802F2780(const mQuat_c &other);
-    bool fn_802F2450(const mVec3_c &, const mVec3_c &, f32);
+    bool Set(const mVec3_c &from, const mVec3_c &to);
+    bool slerp(const mVec3_c &from, const mVec3_c &to, f32 interp);
+    bool slerpTo(const mVec3_c &from, const mVec3_c &to, f32 maxStep);
 };
 
 #endif

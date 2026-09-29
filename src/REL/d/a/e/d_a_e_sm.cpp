@@ -28,7 +28,6 @@
 #include "m/m_angle.h"
 #include "m/m_color.h"
 #include "m/m_mtx.h"
-#include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resanmclr.h"
 #include "nw4r/g3d/res/g3d_resanmtexpat.h"
@@ -725,8 +724,8 @@ int dAcEsm_c::draw() {
     }
 
     s8 var = 0;
-    mQuat_c q(mVec3_c(0.f, 50.f, 0.f), mScale.x * (var + 240.f));
-    drawShadow(mShadowCircle, nullptr, mWorldMtx, &q, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
+    mSphere_c sph(mVec3_c(0.f, 50.f, 0.f), mScale.x * (var + 240.f));
+    drawShadow(mShadowCircle, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     return SUCCEEDED;
 }
 

@@ -1,7 +1,6 @@
 #include "d/a/obj/d_a_obj_chair.h"
 
 #include "common.h"
-#include "d/a/d_a_base.h"
 #include "d/a/d_a_item.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
@@ -11,7 +10,7 @@
 #include "d/flag/sceneflag_manager.h"
 #include "f/f_base.h"
 #include "m/m_angle.h"
-#include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/math/math_arithmetic.h"
@@ -189,8 +188,8 @@ int dAcOChair_c::actorExecute() {
 int dAcOChair_c::draw() {
     if (!isBench()) {
         drawModelType1(&mMdl);
-        static mQuat_c shadowRot(0.f, 40.f, 0.f, 80.f);
-        drawShadow(mShadow, nullptr, mWorldMtx, &shadowRot, -1, -1, -1, -1, -1, 0.f);
+        static mSphere_c sph(mVec3_c(0.f, 40.f, 0.f), 80.f);
+        drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, 0.f);
     }
     return SUCCEEDED;
 }

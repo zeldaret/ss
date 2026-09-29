@@ -101,7 +101,7 @@ int dAcOFlyingClawshotTarget_c::actorExecute() {
         f32 f = 0.16f;
 
         mQuat_c q;
-        if (!q.fn_802F2450(v2, vec, f)) {
+        if (!q.slerp(v2, vec, f)) {
             q.set(1.f, 0.f, 0.f, 0.f);
         }
 
@@ -116,7 +116,7 @@ int dAcOFlyingClawshotTarget_c::actorExecute() {
         f32 f = 0.1f;
 
         mQuat_c q;
-        if (!q.fn_802F2450(v2, vec, f)) {
+        if (!q.slerp(v2, vec, f)) {
             q.set(1.f, 0.f, 0.f, 0.f);
         }
 

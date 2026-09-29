@@ -33,7 +33,7 @@
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
-#include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resanmtexpat.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
@@ -577,9 +577,8 @@ int dAcEremly_c::draw() {
     m3d::smdl_c &mdl = mMdl.getModel();
     drawModelType1(&mdl);
 
-    // elp
-    static mQuat_c shadow(0.f, getValue0(), 0.f, _weird_zero + 290.f);
-    fn_8002edb0(mShadow, mdl, &shadow, -1, -1, mPosition.y - mAcch.GetGroundH());
+    static mSphere_c sph(mVec3_c(0.f, getValue0(), 0.f), _weird_zero + 290.f);
+    fn_8002edb0(mShadow, mdl, &sph, -1, -1, mPosition.y - mAcch.GetGroundH());
 
     return SUCCEEDED;
 }

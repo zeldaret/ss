@@ -116,7 +116,7 @@ int dAcSalbageObj_c::preDraw() {
 
 int dAcSalbageObj_c::draw() {
     drawModelType1(mpMdl);
-    fn_8002edb0(mShadow, *mpMdl, &mShadowRot, -1, -1, field_0x900);
+    fn_8002edb0(mShadow, *mpMdl, &mShadowSph, -1, -1, field_0x900);
     return SUCCEEDED;
 }
 
@@ -140,8 +140,7 @@ void dAcSalbageObj_c::executeInternal() {
 }
 
 void dAcSalbageObj_c::initSalbageObj() {
-    mShadowRot.v = mVec3_c(0.0f, 90.0f, 0.0f);
-    mShadowRot.w = 180.0f;
+    mShadowSph.set(mVec3_c(0.0f, 90.0f, 0.0f), 180.0f);
     mScale.set(1.0f, 1.0f, 1.0f);
     mBehavior = getFromParams(4, 0xF);
     mpSalvageIf = &mSalvageIf;

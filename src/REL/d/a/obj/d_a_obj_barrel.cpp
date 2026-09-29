@@ -28,6 +28,7 @@
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/math/math_arithmetic.h"
@@ -391,10 +392,10 @@ void dAcOBarrel_c::doInteraction(s32 i) {
 int dAcOBarrel_c::draw() {
     drawModelType1(&mMdl);
 
-    static mQuat_c shadow(0.f, 50.f, 0.f, 80.f);
+    static mSphere_c sph(mVec3_c(0.f, 50.f, 0.f), 80.f);
 
     if (mYOffset >= 0.f) {
-        drawShadow(mShadow, nullptr, mWorldMtx, &shadow, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
+        drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     }
 
     return SUCCEEDED;

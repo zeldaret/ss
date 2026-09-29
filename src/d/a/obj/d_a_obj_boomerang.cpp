@@ -18,7 +18,7 @@
 #include "m/m_color.h"
 #include "m/m_fader_base.h"
 #include "m/m_mtx.h"
-#include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/g3d_anmchr.h"
 #include "nw4r/g3d/res/g3d_resanmchr.h"
@@ -544,9 +544,7 @@ int dAcBoomerang_c::actorExecute() {
     }
 
     if (field_0x8B1 == 0 && (mStateMgr.isState(StateID_Move) || mStateMgr.isState(StateID_MoveCancelWait))) {
-        mEff2.holdEffect(
-            PARTICLE_RESOURCE_ID_MAPPING_5_, player->getPosition(), nullptr, nullptr, nullptr, nullptr
-        );
+        mEff2.holdEffect(PARTICLE_RESOURCE_ID_MAPPING_5_, player->getPosition(), nullptr, nullptr, nullptr, nullptr);
     } else {
         mEff2.remove(true);
     }
@@ -570,8 +568,8 @@ int dAcBoomerang_c::draw() {
     drawModelType1(&mMdl);
     if (!mStateMgr.isState(StateID_Wait)) {
         mProc.entry();
-        static mQuat_c shadow(mVec3_c::Zero, 50.f);
-        drawShadow(mShadow, nullptr, mWorldMtx, &shadow, -1, -1, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
+        static mSphere_c sph(mVec3_c::Zero, 50.f);
+        drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
     }
     return SUCCEEDED;
 }
