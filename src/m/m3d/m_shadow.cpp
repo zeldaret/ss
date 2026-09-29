@@ -2,7 +2,7 @@
 
 #include "c/c_math.h"
 #include "m/m_mtx.h"
-#include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/g3d_calcview.h"
 #include "nw4r/g3d/g3d_draw.h"
@@ -186,7 +186,7 @@ bool mShadow_c::addCircle(mShadowCircle_c *circle, u32 priority, u32 isMdl) {
 }
 
 bool mShadow_c::drawMdl(
-    mShadowCircle_c *circle, u32 priority, scnLeaf_c &mdl, const mQuat_c &quat, mVec3_c &pos, mColor color, u32 param9,
+    mShadowCircle_c *circle, u32 priority, scnLeaf_c &mdl, const mSphere_c &sph, mVec3_c &pos, mColor color, u32 param9,
     f32 dist
 ) {
     if (!addCircle(circle, priority, 1)) {
@@ -196,14 +196,14 @@ bool mShadow_c::drawMdl(
     mShadowChild_c *child = circle->mpChild;
     child->set(pos, dist, color);
     child->set0x154(param9);
-    return child->addMdl(mdl, quat);
+    return child->addMdl(mdl, sph);
 }
 
-bool mShadow_c::addMdlToCircle(mShadowCircle_c *circle, scnLeaf_c &mdl, const mQuat_c &quat) {
+bool mShadow_c::addMdlToCircle(mShadowCircle_c *circle, scnLeaf_c &mdl, const mSphere_c &sph) {
     if (circle->mpChild == nullptr) {
         return false;
     }
-    return circle->mpChild->addMdl(mdl, quat);
+    return circle->mpChild->addMdl(mdl, sph);
 }
 
 void mShadow_c::removeCircle(mShadowCircle_c *circle) {
@@ -231,8 +231,8 @@ static GXColor sColors[] = {
 };
 
 bool mShadow_c::drawTexObj(
-    mShadowCircle_c *circle, u32 priority, const GXTexObj *texObj, const mMtx_c &mtx, const mQuat_c &quat, mVec3_c &pos,
-    mColor color, u32 param9, f32 dist
+    mShadowCircle_c *circle, u32 priority, const GXTexObj *texObj, const mMtx_c &mtx, const mSphere_c &sph,
+    mVec3_c &pos, mColor color, u32 param9, f32 dist
 ) {
     if (!addCircle(circle, priority, 0)) {
         return false;
@@ -241,7 +241,7 @@ bool mShadow_c::drawTexObj(
     mShadowChild_c *child = circle->mpChild;
     child->set(pos, dist, color);
     child->set0x154(param9);
-    return child->setGeom(texObj, mtx, quat);
+    return child->setGeom(texObj, mtx, sph);
 }
 
 static void drawSub2(void *data, u8 i) {
@@ -478,7 +478,7 @@ void mShadowChild_c::set(const mVec3_c &pos, f32 dist, mColor color) {
     mShadowColor = color;
 }
 
-bool mShadowChild_c::addMdl(scnLeaf_c &mdl, const mQuat_c &quat) {
+bool mShadowChild_c::addMdl(scnLeaf_c &mdl, const mSphere_c &sph) {
     if (!(mNumLeaves < mMaxNumLeaves)) {
         return false;
     }
@@ -490,21 +490,21 @@ bool mShadowChild_c::addMdl(scnLeaf_c &mdl, const mQuat_c &quat) {
         mtx.copyFrom(static_cast<mCustomShadow_c &>(mdl).mMtx);
     }
 
-    mQuat_c q = quat;
-    mtx.applyQuat(q);
+    mSphere_c tempSph = sph;
+    MTXMultVec(mtx, tempSph.mCenter, tempSph.mCenter);
 
     if (mNumLeaves == 0) {
-        mQuat = q;
+        mBoundSph = tempSph;
     } else {
-        mQuat.fn_802F2780(q);
+        mBoundSph.merge(tempSph);
     }
     mpLeaves[mNumLeaves++] = &mdl;
     return true;
 }
 
-bool mShadowChild_c::setGeom(const GXTexObj *texObj, const mMtx_c &mtx, const mQuat_c &quat) {
-    mQuat = quat;
-    MTXMultVec(mtx.m, mQuat.v, mQuat.v);
+bool mShadowChild_c::setGeom(const GXTexObj *texObj, const mMtx_c &mtx, const mSphere_c &sph) {
+    mBoundSph = sph;
+    MTXMultVec(mtx.m, mBoundSph.mCenter, mBoundSph.mCenter);
     if (texObj == nullptr) {
         mTexObj = *mShadow_c::sTexObj;
     } else {
@@ -513,25 +513,18 @@ bool mShadowChild_c::setGeom(const GXTexObj *texObj, const mMtx_c &mtx, const mQ
     return true;
 }
 
+// NONMATCHING
 void mShadowChild_c::updateMtx() {
-    // NONMATCHING
-    field_0x13C = mQuat.w;
+    field_0x13C = mBoundSph.getRadius();
 
-    mVec3_c a(mQuat.v.x, mQuat.v.y, mQuat.v.z);
-    a += mPositionMaybe * GetOffset();
+    mVec3_c pos = mBoundSph.getCenter();
+    pos -= (mPositionMaybe * GetOffset());
+    mVec3_c target = mBoundSph.getCenter();
+    target += (mPositionMaybe * mBoundSph.getRadius());
 
-    mVec3_c b(mQuat.v.x, mQuat.v.y, mQuat.v.z);
-    b -= mPositionMaybe * field_0x13C;
-
-    const mVec3_c *up;
-    if (cM::isZero((a - b).squareMagXZ())) {
-        up = &mVec3_c::Ez;
-    } else {
-        up = &mVec3_c::Ey;
-    }
-
+    f32 diff = target.squareDistanceToXZ(pos);
     mMtx_c mtx;
-    C_MTXLookAt(mtx.m, a, *up, b);
+    C_MTXLookAt(mtx, pos, cM::isZero(diff) ? mVec3_c::Ez : mVec3_c::Ey, target);
 
     f32 f = field_0x13C;
     mFrustum.set(f, -f, -f, f, f, f + GetOffset(), mtx, true);

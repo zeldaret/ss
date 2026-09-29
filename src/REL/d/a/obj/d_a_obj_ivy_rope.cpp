@@ -12,10 +12,9 @@
 #include "d/flag/sceneflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "egg/math/eggMath.h"
-#include "m/m3d/m3d.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
-#include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/math/math_arithmetic.h"
 #include "nw4r/math/math_triangular.h"
@@ -912,7 +911,7 @@ void dAcOivyRope_c::fn_256_D850() {
     }
 
     if (draw_shadow) {
-        static mQuat_c shadow_q = mQuat_c(0.f, 0.f, 0.f, 30.f);
+        static mSphere_c sph(mVec3_c(0.0f, 0.0f, 0.0f), 30.0f);
         if (mSubtype == 7) {
             // This section is just weird
             int idk;
@@ -931,12 +930,12 @@ void dAcOivyRope_c::fn_256_D850() {
                 }
                 mMtx_c m;
                 m.transS(field_0xF68);
-                drawShadow(mShadow, nullptr, m, &shadow_q, -1, idk, -1, -1, -1, val);
+                drawShadow(mShadow, nullptr, m, &sph, -1, idk, -1, -1, -1, val);
             }
         } else {
             mMtx_c m;
             m.transS(fn_256_D730(mSegmentCount - 1));
-            drawShadow(mShadow, nullptr, m, &shadow_q, -1, -1, -1, -1, -1, 175.f);
+            drawShadow(mShadow, nullptr, m, &sph, -1, -1, -1, -1, -1, 175.f);
         }
     }
 }

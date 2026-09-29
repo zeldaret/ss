@@ -6,9 +6,8 @@
 #include "m/m3d/m_proc.h"
 #include "m/m_color.h"
 #include "m/m_frustum.h"
-#include "m/m_heap.h"
 #include "m/m_mtx.h"
-#include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 
 namespace m3d {
@@ -55,19 +54,19 @@ public:
 
     bool create(u8, EGG::Heap *);
     void set(const mVec3_c &pos, f32 dist, mColor color);
-    bool setGeom(const GXTexObj *texObj, const mMtx_c &mtx, const mQuat_c &quat);
+    bool setGeom(const GXTexObj *texObj, const mMtx_c &mtx, const mSphere_c &sph);
     void draw();
     void updateMtx();
     void drawMdl();
 
-    bool addMdl(scnLeaf_c &mdl, const mQuat_c &quat);
+    bool addMdl(scnLeaf_c &mdl, const mSphere_c &sph);
 
     void set0x154(UNKWORD arg) {
         field_0x154 = arg;
     }
 
-    const mQuat_c &GetQuat() const {
-        return mQuat;
+    const mSphere_c &GetBoundSph() const {
+        return mBoundSph;
     }
     const mVec3_c &GetPosition() const {
         return mPositionMaybe;
@@ -92,7 +91,7 @@ private:
     /* 0x014 */ u32 mPriorityMaybe;
     /* 0x018 */ GXTexObj mTexObj;
     /* 0x038 */ mColor mShadowColor;
-    /* 0x03C */ mQuat_c mQuat;
+    /* 0x03C */ mSphere_c mBoundSph;
     /* 0x04C */ mFrustum_c mFrustum;
     /* 0x13C */ f32 field_0x13C;
     /* 0x140 */ scnLeaf_c **mpLeaves;
@@ -143,15 +142,15 @@ public:
     virtual void drawOpa() override;
 
     bool drawMdl(
-        mShadowCircle_c *circle, u32 priority, scnLeaf_c &mdl, const mQuat_c &quat, mVec3_c &pos, mColor color,
+        mShadowCircle_c *circle, u32 priority, scnLeaf_c &mdl, const mSphere_c &sph, mVec3_c &pos, mColor color,
         u32 param9, f32 dist
     );
     bool drawTexObj(
-        mShadowCircle_c *circle, u32 priority, const GXTexObj *texObj, const mMtx_c &mtx, const mQuat_c &quat,
+        mShadowCircle_c *circle, u32 priority, const GXTexObj *texObj, const mMtx_c &mtx, const mSphere_c &sph,
         mVec3_c &pos, mColor color, u32 param9, f32 dist
     );
 
-    bool addMdlToCircle(mShadowCircle_c *circle, scnLeaf_c &mdl, const mQuat_c &quat);
+    bool addMdlToCircle(mShadowCircle_c *circle, scnLeaf_c &mdl, const mSphere_c &sph);
 
     void beforeDraw();
     void draw(const mMtx_c &, u32);

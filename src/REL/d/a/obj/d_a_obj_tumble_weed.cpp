@@ -17,6 +17,7 @@
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/d_emitter.h"
@@ -154,9 +155,9 @@ int dAcOTumbleWeed_c::actorExecute() {
 int dAcOTumbleWeed_c::draw() {
     drawModelType1(&mMdl);
 
-    static mQuat_c shadowRot(0.f, 30.f, 0.f, 50.f);
+    static mSphere_c sph(mVec3_c(0.f, 30.f, 0.f), 50.f);
     if (0.f < mScale.x) {
-        drawShadow(mShdw, nullptr, mShadowMtx, &shadowRot, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
+        drawShadow(mShdw, nullptr, mShadowMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     }
 
     return SUCCEEDED;

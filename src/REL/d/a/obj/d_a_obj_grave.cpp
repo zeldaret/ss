@@ -13,6 +13,7 @@
 #include "d/flag/sceneflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
 #include "nw4r/g3d/res/g3d_resanmclr.h"
@@ -29,7 +30,11 @@ STATE_DEFINE(dAcOGrave_c, Move);
 dCcD_SrcUnk dAcOGrave_c::sUnkSrc = {
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
      /* mObjTg */
-     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 6, 0x407}, 0, 0},
+     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_GLITTERING_SPORES | AT_TYPE_0x8000 | AT_TYPE_WIND),
+      0x111,
+      {0, 6, 0x407},
+      0,
+      0},
      /* mObjCo */ {0}},
     {-65.0f, 0.0f, -25.0f, 65.0f, 156.0f, 25.0f},
 };
@@ -142,8 +147,8 @@ int dAcOGrave_c::actorExecute() {
 
 int dAcOGrave_c::draw() {
     drawModelType1(&mMdl);
-    static mQuat_c shadowRot(0.f, 50.f, 0.f, 50.f);
-    drawShadow(mShadow, nullptr, mWorldMtx, &shadowRot, -1, -1, -1, -1, -1, 0.f);
+    static mSphere_c sph(mVec3_c(0.f, 50.f, 0.f), 50.f);
+    drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, 0.f);
     return SUCCEEDED;
 }
 

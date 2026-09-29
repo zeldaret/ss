@@ -897,9 +897,9 @@ config.libs = [
             Object(NonMatching, "m/m_frustum.cpp"),
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
-            Object(Matching, "m/m_pad.cpp"),
-            # probably two files due to sdata2 float duplication and gap
-            Object(NonMatching, "m/m_quat.cpp"),
+            Object(Matching, "m/m_pad.cpp"), 
+            Object(Matching, "m/m_quat.cpp"),
+            Object(NonMatching, "m/m_sphere.cpp"),
             Object(Matching, "m/m_thread.cpp"),
             Object(NonMatching, "m/m_vec.cpp"),
             Object(NonMatching, "m/m_video.cpp"),

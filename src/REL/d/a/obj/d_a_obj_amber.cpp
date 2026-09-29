@@ -3,7 +3,6 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "f/f_base.h"
-#include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
@@ -45,8 +44,8 @@ int dAcOAmber_c::actorPostCreate() {
     }
     mMdl.getBounds(&mMin, &mMax);
     mBoundingBox.Set(mMin, mMax);
-    mShadowRot.v = (mMin + mMax) * 0.5f;
-    mShadowRot.w = ((mMax - mMin) * 0.5f).mag();
+    mShadowSph.mCenter = (mMin + mMax) * 0.5f;
+    mShadowSph.mRadius = ((mMax - mMin) * 0.5f).mag();
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     mVec3_c chkPos = mPosition + mVec3_c::Ey * mMax.y;
@@ -62,7 +61,7 @@ int dAcOAmber_c::actorPostCreate() {
 int dAcOAmber_c::draw() {
     drawModelType1(&mMdl);
     if (field_0x37c != 1.0e+9f) {
-        drawShadow(mShadowCircle, nullptr, mWorldMtx, &mShadowRot, -1, -1, -1, -1, -1, field_0x37c);
+        drawShadow(mShadowCircle, nullptr, mWorldMtx, &mShadowSph, -1, -1, -1, -1, -1, field_0x37c);
     }
     return SUCCEEDED;
 }

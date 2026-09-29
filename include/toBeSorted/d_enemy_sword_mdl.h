@@ -10,7 +10,7 @@
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
-#include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/types_nw4r.h"
 #include "toBeSorted/d_sword_swing_effect_mgr.h"
@@ -53,7 +53,7 @@ public:
         mVec3_c v1 = mVec3_c(angle.sin(), 0.0f, angle.cos());
         calc(mtx, v1, mass);
     }
-    bool entry(dAcObjBase_c *obj, dShadowCircle_c *shadow, mQuat_c *quat);
+    bool entry(dAcObjBase_c *obj, dShadowCircle_c *shadow, mSphere_c *sph);
 
     void enableAttack();
     void fn_8006B660(UNKWORD, UNKWORD, UNKWORD, UNKWORD, UNKWORD, UNKWORD, UNKWORD, UNKWORD, UNKWORD, f32);

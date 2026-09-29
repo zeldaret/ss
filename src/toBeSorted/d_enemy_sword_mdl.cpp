@@ -4,6 +4,7 @@
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_sc_game.h"
 #include "m/m3d/m_shadow.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
@@ -117,15 +118,15 @@ void dEnemySwordMdl_c::calc(const mMtx_c &mtx, const mVec3_c &v1, bool mass) {
     mProc.calc(field_0x098, field_0x08C);
 }
 
-bool dEnemySwordMdl_c::entry(dAcObjBase_c *obj, dShadowCircle_c *shadow, mQuat_c *quat) {
+bool dEnemySwordMdl_c::entry(dAcObjBase_c *obj, dShadowCircle_c *shadow, mSphere_c *sph) {
     if (dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL) {
         obj->fn_8002ECD0(&mMdl, 7);
     } else {
         obj->drawModelType1(&mMdl);
     }
     mProc.entry();
-    if (shadow != nullptr && quat != nullptr) {
-        m3d::mShadow_c::GetInstance()->addMdlToCircle(shadow, mMdl, *quat);
+    if (shadow != nullptr && sph != nullptr) {
+        m3d::mShadow_c::GetInstance()->addMdlToCircle(shadow, mMdl, *sph);
     }
     return true;
 }

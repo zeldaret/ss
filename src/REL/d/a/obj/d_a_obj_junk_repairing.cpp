@@ -1,6 +1,8 @@
 #include "d/a/obj/d_a_obj_junk_repairing.h"
 
 #include "d/flag/storyflag_manager.h"
+#include "m/m_sphere.h"
+#include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_JUNK_REPAIR, dAcOJunkRep_c, fProfile::OBJ_JUNK_REPAIR, 0x027B, 0, 3);
@@ -57,8 +59,8 @@ int dAcOJunkRep_c::actorExecute() {
 
 int dAcOJunkRep_c::draw() {
     drawModelType1(mpModelToUse);
-    static mQuat_c rot(0.0f, 37.5f, 0.0f, 75.0f);
-    fn_8002edb0(mShadow, *mpModelToUse, &rot, -1, -1, sSomeFloat);
+    static mSphere_c sph(mVec3_c(0.0f, 37.5f, 0.0f), 75.0f);
+    fn_8002edb0(mShadow, *mpModelToUse, &sph, -1, -1, sSomeFloat);
     return SUCCEEDED;
 }
 

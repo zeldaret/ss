@@ -220,9 +220,9 @@ public:
     // Disabling make Lava and other objects Disappear
     void drawModel2();
     void fn_8002ed20();
-    void fn_8002edb0(m3d::mShadowCircle_c &shadow, m3d::smdl_c &smdl, const mQuat_c *rot, s32, s32, f32);
+    void fn_8002edb0(m3d::mShadowCircle_c &shadow, m3d::smdl_c &smdl, const mSphere_c *sph, s32, s32, f32);
     void drawShadow(
-        m3d::mShadowCircle_c &shadow, void *, const mMtx_c &mtx, const mQuat_c *rot, s32, s32, s32, s32, s32, f32
+        m3d::mShadowCircle_c &shadow, void *, const mMtx_c &mtx, const mSphere_c *sph, s32, s32, s32, s32, s32, f32
     );
     void createChildAttached(
         fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,

@@ -2168,8 +2168,12 @@ m/m_pad.cpp:
 	.bss        start:0x805CB0B8 end:0x805CB1F8
 
 m/m_quat.cpp:
-	.text       start:0x802F2330 end:0x802F2918 align:16
-	.sdata2     start:0x8057CE00 end:0x8057CE28
+	.text       start:0x802F2330 end:0x802F277C align:16
+	.sdata2     start:0x8057CE00 end:0x8057CE18
+
+m/m_sphere.cpp:
+	.text       start:0x802F2780 end:0x802F2918 align:16
+	.sdata2     start:0x8057CE18 end:0x8057CE28
 
 m/m_thread.cpp:
 	.text       start:0x802F2920 end:0x802F2968 align:16

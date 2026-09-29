@@ -29,7 +29,6 @@
 #include "m/m_angle.h"
 #include "m/m_color.h"
 #include "m/m_mtx.h"
-#include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
@@ -1249,10 +1248,10 @@ int dAcBomb_c::draw() {
 
     drawModelType1(&mMdl);
 
-    mQuat_c rot(0.0f, mScale.x * sHIO.getBombScale(), 0.0f, mScale.x * sHIO.getBombScale());
+    mSphere_c sph(mVec3_c(0.0f, mScale.x * sHIO.getBombScale(), 0.0f), mScale.x * sHIO.getBombScale());
 
     if (!isState(StateID_FlowerWait)) {
-        drawShadow(mShdw, nullptr, mWorldMtx, &rot, -1, -1, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
+        drawShadow(mShdw, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
     }
     return SUCCEEDED;
 }
