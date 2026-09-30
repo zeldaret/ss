@@ -87,7 +87,7 @@ public:
     f32 getUnscaledRadiusX();
     f32 getUnscaledRadiusY();
     f32 getRadiusX();
-    f32 getRadiusY();
+    f32 getShadowOffsetY();
     f32 getRadiusZ();
 
     void initCc();

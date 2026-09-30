@@ -27,7 +27,7 @@
 #include "m/m3d/m3d.h"
 #include "m/m_color.h"
 #include "m/m_mtx.h"
-#include "m/m_quat.h"
+#include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/g3d_camera.h"
 #include "nw4r/g3d/g3d_dcc.h"
@@ -307,11 +307,11 @@ int dAcOMushRoom_c::actorExecute() {
 
 int dAcOMushRoom_c::draw() {
     drawModelType1(mMdl.getMdl());
-    mQuat_c rot(mVec3_c(0.0f, getRadiusY(), 0.0f), getRadiusX() * 2.0f);
+    mSphere_c sph(mVec3_c(0.0f, getShadowOffsetY(), 0.0f), getRadiusX() * 2.0f);
     if (getType() == TYPE_MushroomD) {
-        drawShadow(mShadow, nullptr, mWorldMtx, &rot, -1, 0xC8, 0xB4, 0xE6, 0xFF, 0.0f);
+        drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, 0xC8, 0xB4, 0xE6, 0xFF, 0.0f);
     } else {
-        drawShadow(mShadow, nullptr, mWorldMtx, &rot, -1, -1, -1, -1, -1, 0.0f);
+        drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, 0.0f);
     }
 
     if (mCameraIdx >= 0) {
@@ -528,7 +528,7 @@ f32 dAcOMushRoom_c::getRadiusX() {
     return getUnscaledRadiusX() * mScale.x;
 }
 
-f32 dAcOMushRoom_c::getRadiusY() {
+f32 dAcOMushRoom_c::getShadowOffsetY() {
     return getUnscaledRadiusY() * mScale.x;
 }
 
