@@ -45,18 +45,18 @@ static mVec3_c sArrVecs[5] = {
 
 /* clang-format off */
 static dCcD_SrcSph sCcSrcHead = {
-    {{AT_TYPE_DAMAGE,0x1D, {0, 0, 0}, 4, 0, 0, 0}, 
-    {~(AT_TYPE_COMMON0 | AT_TYPE_PHYSICS), 0x303, {0, 0x18, 0x407}, 0, 0}, 
+    {{AT_TYPE_DAMAGE,0x1D, {0, 0, 0}, 4, 0, CUT_DIR_NONE, 0}, 
+    {~(AT_TYPE_COMMON0 | AT_TYPE_PHYSICS), 0x303, {0, 0x18, 0x407}, 0, CUT_DIR_NONE}, 
     {0xC5}},
     {180.0f},};
 static dCcD_SrcSph sCcSrcSpine = {
-    {{AT_TYPE_DAMAGE,0x1D, {0, 0, 0}, 4, 0, 0, 0}, 
-    {~(AT_TYPE_COMMON0 | AT_TYPE_PHYSICS), 0x303, {0, 0x18, 0x407}, 0, 0}, 
+    {{AT_TYPE_DAMAGE,0x1D, {0, 0, 0}, 4, 0, CUT_DIR_NONE, 0}, 
+    {~(AT_TYPE_COMMON0 | AT_TYPE_PHYSICS), 0x303, {0, 0x18, 0x407}, 0, CUT_DIR_NONE}, 
     {0xC5}},
     {170.0f},};
 static dCcD_SrcSph sCcSrcRear = {
-    {{0, 0, {0, 0, 0}, 0, 0, 0, 0}, 
-    {~(AT_TYPE_COMMON0 | AT_TYPE_PHYSICS), 0x303, {0, 0, 0x407}, 0, 0}, 
+    {{0, 0, {0, 0, 0}, 0, 0, CUT_DIR_NONE, 0}, 
+    {~(AT_TYPE_COMMON0 | AT_TYPE_PHYSICS), 0x303, {0, 0, 0x407}, 0, CUT_DIR_NONE}, 
     {0xC5}},
     {200.0f},};
 /* clang-format on */

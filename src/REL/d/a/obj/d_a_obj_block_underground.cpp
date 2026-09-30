@@ -43,8 +43,8 @@ const char *const dAcOBlockUnderground::sDzbPlcNames[4] = {
 
 const dCcD_SrcCyl dAcOBlockUnderground::sCylSrc = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */ {AT_TYPE_BOMB, 0x11, {0, 8, 0x407}, 0x0, 0x0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */ {AT_TYPE_BOMB, 0x11, {0, 8, 0x407}, 0x0, CUT_DIR_NONE},
      /* mObjCo */ {0}},
     /* mCylInf */
     {50.f, 100.f}

@@ -55,13 +55,6 @@ public:
     void foreachCc(ccCbFunc f, void *cbArg) const;
     void foreachCc2(ccCbFunc f, void *cbArg) const;
 
-    // This find function is used by a lot of other
-    // TUs, all of which own the function passed as
-    // a ptmf. It's not immediately clear how this works,
-    // does every actor subclass the LinkedCollider___,
-    // or are the functions all added here for the other
-    // files to implement? d_a_b_lastboss commits a typing crime here
-    // to make it work...
     typedef bool (cCcD_Obj::*ccPtmf)();
     cCcD_Obj *find(ccPtmf f) const;
 

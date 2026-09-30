@@ -41,8 +41,9 @@
 SPECIAL_ACTOR_PROFILE(NPC_BEE, dAcNpcBee_c, fProfile::NPC_BEE, 0x123, 0, 0);
 
 static dCcD_SrcSph beeColliderSrc = {
-    /* mObjInf */ {/* mObjAt */ {AT_TYPE_0x2000000, 0x20000F, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
-                   /* mObjTg */ {AT_TYPE_BUGNET | AT_TYPE_BELLOWS | AT_TYPE_BOMB, 0x00004011, {0, 00, 0x40F}, 8, 0},
+    /* mObjInf */
+    {/* mObjAt */ {AT_TYPE_0x2000000, 0x20000F, {0, 0, 0}, 1, 0, 0, 0, CUT_DIR_NONE, 0},
+     /* mObjTg */ {AT_TYPE_BUGNET | AT_TYPE_BELLOWS | AT_TYPE_BOMB, 0x00004011, {0, 00, 0x40F}, 8, CUT_DIR_NONE},
                    /* mObjCo */ {0}},
     /* mSphInf */
     {15.0f}
@@ -381,10 +382,8 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee *bee) {
                 dodgedSword = false;
                 local_98 = dAcPy_c::GetLink()->getPosition() - bee->mPos;
                 if (local_98.squareMagXZ() < 90000.f) {
-                    if (dAcPy_c::GetLink()->getSpecificAttackDirection() ==
-                            (s16)daPlayerActBase_c::ATTACK_DIRECTION_LEFT ||
-                        dAcPy_c::GetLink()->getSpecificAttackDirection() ==
-                            (s16)daPlayerActBase_c::ATTACK_DIRECTION_RIGHT) {
+                    if (dAcPy_c::GetLink()->getSpecificAttackDirection() == (s16)CUT_DIR_R ||
+                        dAcPy_c::GetLink()->getSpecificAttackDirection() == (s16)CUT_DIR_L) {
                         local_98.y += 150.f;
                         if (std::fabsf(local_98.y) < 50.f) {
                             if (local_98.y < 0.f) {

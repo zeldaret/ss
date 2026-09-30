@@ -10,6 +10,7 @@
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
+#include "nw4r/math/math_arithmetic.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/d_enemy_sword_mdl.h"
@@ -42,6 +43,10 @@ struct UnkLastBossCcSph2 {
     /* 0x08C */ mVec3_c field_0x08C[10];
     /* 0x104 */ mVec3_c field_0x104[10];
     /* 0x17C */ dCcD_Linked<dCcD_Sph> mCc;
+
+    f32 getAbs_0x010() const {
+        return nw4r::math::FAbs(field_0x010);
+    }
 };
 
 class dAcBlastboss_c : public dAcEnBase_c {
@@ -296,6 +301,11 @@ public:
     STATE_FUNC_DECLARE(dAcBlastboss_c, Down);
     STATE_FUNC_DECLARE(dAcBlastboss_c, Stun);
     STATE_FUNC_DECLARE(dAcBlastboss_c, ThunderWait);
+
+    STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dAcBlastboss_c);
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dAcBlastboss_c);
+    STATE_MGR_DEFINE_UTIL_ISSTATE(dAcBlastboss_c);
+    STATE_MGR_DEFINE_UTIL_GETSTATEID(dAcBlastboss_c);
 
 private:
     void setAnm(const char *anim, f32 blend);

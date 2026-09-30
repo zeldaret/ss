@@ -26,9 +26,9 @@ STATE_DEFINE(dAcSalbageObj_c, Kill);
 
 static dCcD_SrcCyl sCylSrc = {
     /* mObjInf */
-    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
+    {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
-     {~0, 0x111, {0, 0x02, 0x407}, 0, 0},
+     {~0, 0x111, {0, 0x02, 0x407}, 0, CUT_DIR_NONE},
      /* mObjCo */ {0xE9}},
     /* mCylInf */
     {0.0f, 0.0f}
