@@ -684,7 +684,8 @@ public:
 
     static s32 getCurrentTunicType();
     static s32 getCurrentSwordType();
-    static const char *getSwordName(s32);
+
+    static const char *getSwordName(s32 = sCurrentSword);
     static s32 getCurrentlyEquippedShieldType();
 
     static const mColor &getEarringsColor();

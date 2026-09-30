@@ -43,7 +43,7 @@ public:
         cCcD_Stts &stts, EGG::ResTIMG *pImg, int nView, u32 *pSize
     );
     bool create(
-        mAllocator_c *alloc, nw4r::g3d::ResFile resFile, const char *mdlName, u32 bufferOption, const mVec3_c &v1,
+        mAllocator_c *alloc, nw4r::g3d::ResFile &resFile, const char *mdlName, u32 bufferOption, const mVec3_c &v1,
         const mVec3_c &v2, cCcD_Stts &stts, EGG::ResTIMG *pImg, int nView, u32 *pSize
     );
 
@@ -60,14 +60,18 @@ public:
     void setDamageMaybe(u8 damage);
     void fn_8006B7A0(u32);
     void fn_8006B800(u32);
+    void SetGrp(u32);
 
     void enable() {
         enableAttack();
         mProc.setActive(true);
     }
 
-    void disable() {
+    void setInactive() {
         mIsActive = false;
+    }
+    void disable() {
+        setInactive();
         mProc.setActive(false);
     }
 };
