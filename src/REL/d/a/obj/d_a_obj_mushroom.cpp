@@ -83,15 +83,17 @@ public:
 
 const dAcOMushRoom_HIO_c dAcOMushRoom_HIO_c::sInstance = {
     0.0f, 4500.0f, 0.0f, 10,   30, 200.0f, 100.0f, 100.0f, 100.0f, 200.0f, 100.0f, 1.25f, 0.5f, 0.5f, 0.5f,
-    0.0f, 0.0f,    0.0f, 0.1f, 30, 6.5f,   300.0f, 180,    160,    255,    200,    12,    79,   56,   255,
+    0.0f, 0.0f,    0.0f, 0.1f, 30, 6.5f,   300.0f, 180,    230,    255,    200,    12,    79,   56,   255,
 };
 
-static const mVec3_c sRadius[4] = {
-    mVec3_c(105.0f, 90.0f, 210.0f),
-    mVec3_c(105.0f, 90.0f, 205.0f),
-    mVec3_c(105.0f, 135.0f, 312.0f),
-    mVec3_c(105.0f, 135.0f, 312.0f),
+static const Vec sRadius[4] = {
+    {105.0f, 90.0f, 210.0f},
+    {105.0f, 90.0f, 205.0f},
+    {105.0f, 135.0f, 312.0f},
+    {105.0f, 135.0f, 312.0f},
 };
+
+extern const f32 unused_ = 0.3f; // TODO - maybe still part of HIO
 
 SPECIAL_ACTOR_PROFILE(OBJ_MUSHROOM, dAcOMushRoom_c, fProfile::OBJ_MUSHROOM, 0x141, 0, 7);
 
@@ -136,7 +138,7 @@ static mMtx_c fn_328_830(s8 camIdx, s8 camSubIdx) {
     nw4r::g3d::Camera cam = m3d::getCamera(10);
     cam.SetOrtho(
         dGfx_c::getCurrentScreenTopF(), dGfx_c::getCurrentScreenBottomF(), dGfx_c::getCurrentScreenLeftF(),
-        dGfx_c::getCurrentScreenRightF(), 0.01f, 1000.0f
+        dGfx_c::getCurrentScreenRightF(), 0.1f, 1000.0f
     );
 
     dAcOMushRoom_c::camera_c &sCam = dAcOMushRoom_c::sCameras[camIdx];
@@ -440,7 +442,7 @@ void dAcOMushRoom_c::executeState_Wait() {
             if (!checkUnderWater()) {
                 u32 p1 = getSporeParams1();
                 static mVec3_c sOffsets[] = {
-                    mVec3_c(0.0f, 700.0f, 0.0f),
+                    mVec3_c(0.0f, 70.0f, 0.0f),
                     mVec3_c(0.0f, 80.0f, 0.0f),
                     mVec3_c(0.0f, 120.0f, 0.0f),
                     mVec3_c(0.0f, 120.0f, 0.0f),
