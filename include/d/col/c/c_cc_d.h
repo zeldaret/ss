@@ -332,6 +332,7 @@ struct cCcD_SrcGObjTg {
 };
 
 enum dCcD_ObjAtType {
+    AT_TYPE_NONE = 0,
     /* 0x 0000 0001 */ AT_TYPE_0x1 = (1 << 0),
     /* 0x 0000 0002 */ AT_TYPE_SWORD = (1 << 1),
     /* 0x 0000 0004 */ AT_TYPE_0x4 = (1 << 2),
@@ -399,7 +400,8 @@ enum cCcD_CutDir {
     CUT_DIR_STAB = (1 << 8), // 0x0100
 
     CUT_DIR_ALL =
-        (CUT_DIR_U | CUT_DIR_LU | CUT_DIR_L | CUT_DIR_LD | CUT_DIR_D | CUT_DIR_RD | CUT_DIR_R | CUT_DIR_RU | CUT_DIR_STAB)
+        (CUT_DIR_U | CUT_DIR_LU | CUT_DIR_L | CUT_DIR_LD | CUT_DIR_D | CUT_DIR_RD | CUT_DIR_R | CUT_DIR_RU |
+         CUT_DIR_STAB)
 };
 struct cCcD_SrcGObjAt {
     /* 0x00 */ u32 mType;

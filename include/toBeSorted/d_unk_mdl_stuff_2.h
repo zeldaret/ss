@@ -3,13 +3,14 @@
 
 #include "common.h"
 #include "m/m3d/m_proc.h"
+#include "m/m3d/m_smdl.h"
 #include "m/m_allocator.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmat.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resshp.h"
+#include "toBeSorted/raii_ptr.h"
 
 /** a process for drawing shapes directly */
 class dShpProcBase_c : public m3d::proc_c {
@@ -72,6 +73,39 @@ public:
 
 protected:
     /* 0x30 */ mMtx_c *mpTransforms;
+};
+
+class dLOD_c {
+public:
+    class mdl_c {
+    public:
+        mdl_c() : mLODDistance(0.0f) {}
+
+        RaiiPtr<m3d::smdl_c> mMdl;
+        f32 mLODDistance;
+    };
+
+    void setLODDistance(s32 idx, f32 dist);
+    m3d::smdl_c *getMdl(m3d::smdl_c &parent);
+
+    // 0 - _M (Medium Detail ?)
+    // 1 - _L (Low Detail ?)
+    mdl_c mMdls[2];
+};
+
+class dMdlLOD_c : public m3d::smdl_c {
+public:
+    dMdlLOD_c() {}
+    virtual ~dMdlLOD_c() {}
+
+    bool create(void *res, const char *mdlName, mHeapAllocator_c *alloc, u32 bufferOption);
+    m3d::smdl_c *getMdl() {
+        return mLod.getMdl(*this);
+    }
+    void setLODDistance(s32 idx, f32 dist) {
+        mLod.setLODDistance(idx, dist);
+    }
+    dLOD_c mLod;
 };
 
 #endif

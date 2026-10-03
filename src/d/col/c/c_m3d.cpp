@@ -12,8 +12,10 @@
 #include "egg/math/eggMath.h"
 #include "m/m_vec.h"
 #include "nw4r/math/math_types.h"
-#include "rvl/MTX.h" // IWYU pragma: export
 #include "rvl/MTX/vec.h"
+
+#include "rvl/MTX.h" // IWYU pragma: export
+
 
 using namespace nw4r::math;
 using namespace EGG;
@@ -141,7 +143,7 @@ bool cM3d_Cross_LinSph(const cM3dGLin *, const cM3dGSph *, VEC3 *) {
     // TODO - returns false to satisfy warning
     return false;
 }
-bool cM3d_Cross_LinSph_CrossPos(const cM3dGSph &, const cM3dGLin &, VEC3 *, VEC3 *) {
+BOOL cM3d_Cross_LinSph_CrossPos(const cM3dGSph &, const cM3dGLin &, VEC3 *, VEC3 *) {
     // TODO - returns false to satisfy warning
     return false;
 }
