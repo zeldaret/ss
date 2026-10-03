@@ -70,6 +70,9 @@ public:
     void setInactive() {
         mIsActive = false;
     }
+    void setProcActive(bool b) {
+        mProc.setActive(b);
+    }
     void disable() {
         setInactive();
         mProc.setActive(false);
