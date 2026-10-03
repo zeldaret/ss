@@ -143,6 +143,9 @@ public:
     const math::VEC3 &GetTranslate() const {
         return *(const math::VEC3 *)&ref().translate;
     }
+    const math::VEC3 &GetScale() const {
+        return *(const math::VEC3 *)&ref().scale;
+    }
 
     // not in the dwarf
     const math::VEC3 &GetBoundsMin() const {
