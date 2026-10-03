@@ -203,16 +203,17 @@ public:
         const mVec3_c *scale, u32 params2, u32 roomId
     );
 
-    static dAcObjBase_c *findObject(fProfile::PROFILE_NAME_e actorId, fLiNdBa_c *refList, dAcObjBase_c *parent);
+    static dAcObjBase_c *findObject(fProfile::PROFILE_NAME_e actorId, fLiMgBa_c *refList, dAcObjBase_c *parent);
     static dAcObjBase_c *getNextObject(fLiMgBa_c *ref, dAcObjBase_c *parent);
     bool isPlayer();
-    void calcVelocity(mVec3_c &pos, f32 speed);
+    void calcVelocity(const mVec3_c &pos, f32 speed);
     void calcVelocity();
     void updateMatrix();
     void setDefaultCullDistance();
     void fn_8002EA30(f32, f32, f32, f32, f32, void *);
     void fn_8002EA60(void *);
     void fn_8002EB30(void *);
+
     void putInODesert(f32 depth, mVec3_c *position);
     void fn_8002ECD0(m3d::smdl_c *smdl, UNKWORD);
     // Disabling makes Items and Link Disappear

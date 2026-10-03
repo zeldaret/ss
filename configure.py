@@ -2521,7 +2521,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_fruit_tree", "REL/d/a/obj/d_a_obj_fruit_tree.cpp"),
     Rel(NonMatching, "d_a_obj_gear", "REL/d/a/obj/d_a_obj_gear.cpp"),
     Rel(
-        NonMatching, "d_a_obj_girahimu_floor", "REL/d/a/obj/d_a_obj_girahimu_floor.cpp"
+        Matching, "d_a_obj_girahimu_floor", "REL/d/a/obj/d_a_obj_girahimu_floor.cpp"
     ),
     Rel(
         NonMatching, "d_a_obj_girahimu_knife", "REL/d/a/obj/d_a_obj_girahimu_knife.cpp"

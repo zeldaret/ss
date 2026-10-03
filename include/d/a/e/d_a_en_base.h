@@ -100,6 +100,9 @@ public:
     static dAcEnBase_c *GetNextEnemy(dAcEnBase_c *pParent) {
         return static_cast<dAcEnBase_c *>(getNextObject(&sEnemyList, pParent));
     }
+    static dAcEnBase_c *FindEnemy(fProfile::PROFILE_NAME_e profile, dAcEnBase_c *pParent = nullptr) {
+        return static_cast<dAcEnBase_c *>(findObject(profile, &sEnemyList, pParent));
+    }
 
 protected:
     // TODO: Make accessors for this list to auto-convert to dAcEnBase?

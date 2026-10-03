@@ -112,6 +112,9 @@ public:
     f32 radian_c() const {
         return mVal * sAngToRad;
     }
+    f32 normal_c() const {
+        return mVal * sAngToNorm;
+    }
 
 public:
     static s16 d2s(f32 deg) {

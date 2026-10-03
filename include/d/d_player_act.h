@@ -664,6 +664,12 @@ public:
     bool isAttackingSpin() const {
         return isAttackingSpinHorizontal() || isAttackingSpinVertical();
     }
+    bool isAttackingHorizontal() const {
+        return isAttackingLeft() || isAttackingRight();
+    }
+    bool isAttackingVertical() const {
+        return isAttackingUp() || isAttackingDown();
+    }
     void setBonkRelatedAnimFlag(bool b);
     void setPosYRot(const mVec3_c &pos, mAng rot, bool force = false, UNKWORD = 0, UNKWORD = 0);
     void setTransform(const mMtx_c &mtx, bool force, UNKWORD, UNKWORD);
@@ -678,7 +684,8 @@ public:
 
     static s32 getCurrentTunicType();
     static s32 getCurrentSwordType();
-    static const char *getSwordName(s32);
+
+    static const char *getSwordName(s32 = sCurrentSword);
     static s32 getCurrentlyEquippedShieldType();
 
     static const mColor &getEarringsColor();

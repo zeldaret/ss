@@ -47,7 +47,7 @@ bool dEnemySwordMdl_c::create(
 }
 
 bool dEnemySwordMdl_c::create(
-    mAllocator_c *alloc, nw4r::g3d::ResFile resFile, const char *mdlName, u32 bufferOption, const mVec3_c &v1,
+    mAllocator_c *alloc, nw4r::g3d::ResFile &resFile, const char *mdlName, u32 bufferOption, const mVec3_c &v1,
     const mVec3_c &v2, cCcD_Stts &stts, EGG::ResTIMG *pImg, int nView, u32 *pSize
 ) {
     nw4r::g3d::ResMdl mdl = resFile.GetResMdl(mdlName);
