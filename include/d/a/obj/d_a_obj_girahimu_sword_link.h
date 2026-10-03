@@ -37,6 +37,10 @@ public:
     void reflect(const mVec3_c &rot, f32 gravity, f32, f32 force);
     bool lineCheck();
 
+    dEnemySwordMdl_c &getMdl() {
+        return mMdl;
+    }
+
     STATE_FUNC_DECLARE(dAcObjGirahimuSwordLink_c, Hide);
     STATE_FUNC_DECLARE(dAcObjGirahimuSwordLink_c, Equip);
     STATE_FUNC_DECLARE(dAcObjGirahimuSwordLink_c, GetSword);
