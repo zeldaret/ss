@@ -196,7 +196,7 @@ void dAcObjGirahimuSwordLink_c::finalizeState_AtThrow() {
 }
 
 void dAcObjGirahimuSwordLink_c::initializeState_Stick() {
-    holdSound(SE_OGhSwL_BOUND);
+    startSound(SE_OGhSwL_BOUND);
     mMdl.setInactive();
     mAcceleration = 0.0f;
     mVelocity.set(0.0f, 0.0f, 0.0f);
