@@ -41,6 +41,7 @@
 #define JUT_WARN_DEVICE(...)
 #define JUT_LOG(...)
 #define JUT_CONFIRM(...)
+#define JUT_EXPECT(...)
 #endif
 
 namespace JUTAssertion {
