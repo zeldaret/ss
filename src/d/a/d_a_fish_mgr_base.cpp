@@ -9,16 +9,15 @@ int dAcFishMgrBase_c::actorCreate() {
 }
 
 int dAcFishMgrBase_c::actorPostCreate() {
-    // TODO - FPR regswaps
-    field_0x148 = 1000.0f;
+    f32 f = 1000.0f; // Temp needed for reg alloc?
+    field_0x148 = f;
     mVec3_c v = mPosition;
     v.y += 20000.0f;
-
     if (dBgS_WtrLinChk::SetIsWater(&v, &mPosition, nullptr)) {
         field_0x14C = dBgS_WtrLinChk::GetInstance().GetLinEnd().y;
         if (mPosition.y + field_0x148 > field_0x14C) {
             field_0x150 = true;
-            field_0x148 = nw4r::math::FAbs(field_0x14C -  mPosition.y);
+            field_0x148 = nw4r::math::FAbs(field_0x14C - mPosition.y);
         } else {
             field_0x150 = false;
         }
@@ -27,7 +26,8 @@ int dAcFishMgrBase_c::actorPostCreate() {
     }
 
     f32 offset = 200.0f;
-    if (field_0x14C - field_0x148 - mPosition.y < offset) {
+    f32 f0 = field_0x14C - field_0x148 - mPosition.y;
+    if (f0 < offset) {
         f32 t = field_0x14C - mPosition.y - offset;
         if (t > offset) {
             field_0x148 = t;
@@ -39,7 +39,7 @@ int dAcFishMgrBase_c::actorPostCreate() {
     } else {
         field_0x151 = false;
     }
-    
+
     return SUCCEEDED;
 }
 
