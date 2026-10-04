@@ -1313,9 +1313,11 @@ d/d_pouch.cpp:
 	.text       start:0x80189FA0 end:0x8018B4A4 align:16
 	.rodata     start:0x804E9CB0 end:0x804E9CD8
 	.data       start:0x8052A880 end:0x8052A890
+	.sdata2     start:0x8057ACF0 end:0x8057AD00
 
 toBeSorted/d_beacon.cpp:
 	.text       start:0x8018B4B0 end:0x8018B800 align:16
+	.sdata2     start:0x8057AD00 end:0x8057AD18
 
 toBeSorted/d_underground.cpp:
 	.text       start:0x8018B800 end:0x8018B874 align:16
@@ -1326,12 +1328,14 @@ d/a/d_a_fish_mgr_base.cpp:
 	.text       start:0x8018B880 end:0x8018BFC8 align:16
 	.ctors      start:0x804DB7E4 end:0x804DB7E8
 	.data       start:0x8052A890 end:0x8052A9C0
+	.sdata2     start:0x8057AD18 end:0x8057AD28
 	.bss        start:0x805B2068 end:0x805B20A8
 
 d/a/d_a_fish_base.cpp:
 	.text       start:0x8018BFD0 end:0x8018E378 align:16
 	.ctors      start:0x804DB7E8 end:0x804DB7EC
 	.data       start:0x8052A9C0 end:0x8052ABD8
+	.sdata2     start:0x8057AD28 end:0x8057ADA8
 	.bss        start:0x805B20A8 end:0x805B2128
 
 toBeSorted/sword_proj_effect_list.cpp:

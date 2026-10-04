@@ -612,7 +612,7 @@ config.libs = [
             Object(NonMatching, "d/d_pouch.cpp"),
             Object(NonMatching, "toBeSorted/d_beacon.cpp"),
             Object(NonMatching, "toBeSorted/d_underground.cpp"),
-            Object(NonMatching, "d/a/d_a_fish_mgr_base.cpp"),
+            Object(Matching, "d/a/d_a_fish_mgr_base.cpp"),
             Object(NonMatching, "d/a/d_a_fish_base.cpp"),
             Object(NonMatching, "toBeSorted/sword_proj_effect_list.cpp"),
             Object(NonMatching, "d/a/d_a_insect.cpp"),
