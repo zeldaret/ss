@@ -347,6 +347,7 @@ public:
     void fn_226_9260(const char *, s32 anmId, m3d::playMode_e, f32, f32);
 
     void fn_226_A070(mAng);
+    bool fn_226_A120(mAng, f32);
     void fn_226_AAD0(f32, f32);
     void fn_226_AFB0();
 
@@ -423,6 +424,7 @@ private:
     /* 0xD81 */ bool field_0xD81;
     /* 0xD82 */ bool field_0xD82;
 
+    /* 0xD8C */ bool field_0xD8C;
     /* 0xD8D */ bool field_0xD8D;
     /* 0xD8E */ s16 field_0xD8E;
 
@@ -433,7 +435,8 @@ private:
     /* 0x1838 */ f32 field_0x1838;
     /* 0x183A */ mAng field_0x183A;
     /* 0x183E */ mAng field_0x183E;
-
+    /* 0x1840 */ mVec3_c field_0x1840;
+    /* 0x184C */ mVec3_c field_0x184C;
     /* 0x1858 */ f32 field_0x1858;
 
     /* 0x1868 */ f32 field_0x1868;

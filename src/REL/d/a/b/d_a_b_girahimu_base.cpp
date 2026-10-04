@@ -5,7 +5,9 @@
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_girahimu_sword_link.h"
+#include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/col/c/c_cc_d.h"
+#include "d/d_stage_mgr.h"
 #include "d/d_vec.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/snd/d_snd_wzsound.h"
@@ -19,6 +21,7 @@
 #include "rvl/MTX/mtx.h"
 #include "rvl/VI/vi.h"
 #include "s/s_Math.h"
+#include "toBeSorted/d_emitter.h"
 
 #include <cstdint>
 
@@ -1388,7 +1391,52 @@ void dAcGirahimuBase_c::initializeState_BackStep() {
     mCallback.field_0x088 = true;
     field_0xD46 = 3;
 }
-void dAcGirahimuBase_c::executeState_BackStep() {}
+void dAcGirahimuBase_c::executeState_BackStep() {
+    s32 _weird_zero = 0;
+
+    field_0xD7C = false;
+    mCyl2.ClrAtSet();
+    mSph0.ClrAtSet();
+
+    switch (field_0xD44) {
+        case 0: {
+            field_0xD7D = false;
+            if (mAng(mRotation.y - field_0x183E).abs() < 0x4000 && field_0xD56 <= 0) {
+                fn_226_D070();
+                fn_226_8B70("StepStart", ANM_StepStart, false, m3d::PLAY_MODE_4, 2.0f, 1.0f);
+                field_0xD44++;
+            }
+        } break;
+        case 1: {
+            field_0xD7D = false;
+            if (mAnmChrs[0].checkFrame(1.0f)) {
+                fn_226_AAD0(600.0f, _weird_zero + 15.0f);
+                fn_226_8B70("StepLoop", ANM_StepLoop, false, m3d::PLAY_MODE_4, 2.0f, 1.0f);
+                field_0xD44++;
+            }
+        } break;
+        case 2: {
+            field_0xD7D = false;
+            if (mVelocity.y <= 0.0f && mAcch.ChkGndHit() && mPosition.y <= mStartingPos.y + 100.0f) {
+                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0);
+                mAngle.y = mVelocity.atan2sX_Z();
+                field_0x1834 = 0.0f;
+                mSpeed = mVelocity.absXZ();
+                mVelocity.set(0.0f, 0.0f, 0.0f);
+                fn_226_8B70("StepEnd", ANM_StepEnd, false, m3d::PLAY_MODE_4, 2.0f, 1.0f);
+                field_0xD44++;
+            }
+        } break;
+        case 3: {
+            field_0x1838 = 0.1f;
+            if (mAnmChrs[0].isStop()) {
+                vt_0x220();
+            }
+        } break;
+    }
+
+    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x2000);
+}
 void dAcGirahimuBase_c::finalizeState_BackStep() {
     field_0xD44 = 0;
     mSpeed = 0.0f;
@@ -1415,7 +1463,31 @@ void dAcGirahimuBase_c::initializeState_Escape() {
     field_0xD6C = 8;
     field_0xD60 = 2;
 }
-void dAcGirahimuBase_c::executeState_Escape() {}
+void dAcGirahimuBase_c::executeState_Escape() {
+    field_0xD81 = true;
+    field_0xD60 = 2;
+    fn_226_CC40();
+    mCyl2.ClrTgSet();
+    mSph0.ClrTgSet();
+    mCallback.field_0x04E = false;
+    if (mAnmChrs[0].getFrame() >= 15.0f) {
+        if (dAcPy_c::GetLinkM()->isUsingSword()) {
+            mCallback.field_0x2D4 = 0.8f;
+            mCallback.field_0x2D0 = 0.8f;
+        } else {
+            mCallback.field_0x2D4 = 1.0f;
+        }
+    }
+
+    if (mAnmChrs[0].isStop()) {
+        vt_0x220();
+    }
+
+    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x2000);
+    field_0xD58 = 60;
+    field_0xD68 = 0;
+    mCallback.field_0x2BC = 0;
+}
 void dAcGirahimuBase_c::finalizeState_Escape() {
     field_0xD44 = 0;
     mSpeed = 0.0f;
@@ -1468,7 +1540,53 @@ void dAcGirahimuBase_c::initializeState_FrontWarp() {
     field_0x1834 = 0.0f;
     field_0xD6C = 0;
 }
-void dAcGirahimuBase_c::executeState_FrontWarp() {}
+void dAcGirahimuBase_c::executeState_FrontWarp() {
+    mCyl2.ClrTgSet();
+    switch (field_0xD44) {
+        case 0: {
+            if (mAnmChrs[0].getFrame() >= 18.0f) {
+                mCollider.ClrCo();
+                if (sLib::chase(&field_0x8B0.x, 0.0f, 0.2f) != 0) {
+                    field_0xD44++;
+                    field_0x8B0.set(0.0f, 0.0f, 0.0f);
+                    field_0xD46 = 20 + cM::rndInt(30);
+                    vt_0x1F8();
+                }
+            }
+        } break;
+        case 1: {
+            mRotation.y = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
+            if (field_0xD46 <= 0) {
+                mVec3_c start = mPosition;
+                mVec3_c end = mPosition;
+                for (int i = 0; i < 4; ++i) {
+                    mAng yRot = (i * 0x4000) + dAcPy_c::GetLink()->mRotation.y;
+                    start.set(dAcPy_c::GetLink()->mPosition);
+                    start.y += 100.0f;
+                    end.set(0.0f, 0.0f, 130.0f);
+                    end.rotY(yRot);
+                    end += start;
+                    if (!dBgS_ObjLinChk::LineCross(&start, &end, nullptr)) {
+                        break;
+                    }
+                }
+                end.y = mPosition.y;
+                setPosition(end);
+                setOldPosition(end);
+                mRotation.y = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
+                field_0x8B0.set(0.0f, 1.05f, 1.05f);
+                field_0xD44++;
+                vt_0x20C();
+                return;
+            }
+
+            if (!turn(field_0x183E)) {
+                vt_0x228();
+            }
+        } break;
+    }
+    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+}
 void dAcGirahimuBase_c::finalizeState_FrontWarp() {
     mCollider.CoSet();
     field_0xD44 = 0;
@@ -1486,7 +1604,35 @@ void dAcGirahimuBase_c::initializeState_FrontAttack() {
         field_0xD46 = 50;
     }
 }
-void dAcGirahimuBase_c::executeState_FrontAttack() {}
+void dAcGirahimuBase_c::executeState_FrontAttack() {
+    mCollider.ClrCo();
+    if (field_0x8B0.x >= 0.5f) {
+        mCollider.CoSet();
+    }
+    if (field_0xD8C) {
+        if (!fn_226_A120(field_0x183E, 200.0f)) {
+            vt_0x228();
+        }
+        sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+    } else {
+        if (!turn(field_0x183E)) {
+            vt_0x228();
+        }
+    }
+
+    if (sLib::chase(&field_0x8B0.x, 1.05f, 0.2f) != FALSE) {
+        field_0xD6C = 5;
+    }
+
+    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+    if (field_0xD46 <= 0) {
+        if (field_0x1838 <= 350.0f) {
+            changeState(StateID_Counter);
+        } else {
+            vt_0x220();
+        }
+    }
+}
 void dAcGirahimuBase_c::finalizeState_FrontAttack() {}
 
 void dAcGirahimuBase_c::initializeState_BackWarp() {
@@ -1498,7 +1644,53 @@ void dAcGirahimuBase_c::initializeState_BackWarp() {
     field_0x1834 = 0.0f;
     field_0xD6C = 0;
 }
-void dAcGirahimuBase_c::executeState_BackWarp() {}
+void dAcGirahimuBase_c::executeState_BackWarp() {
+    mCyl2.ClrTgSet();
+
+    switch (field_0xD44) {
+        case 0: {
+            if (mAnmChrs[0].getFrame() >= 18.0f) {
+                mCollider.ClrCo();
+                if (sLib::chase(&field_0x8B0.x, 0.0, 0.2f)) {
+                    field_0xD44++;
+                    field_0x8B0.set(0.0f, 0.0f, 0.0f);
+                    field_0xD46 = 20 + cM::rndInt(30);
+                    if (vt_0x218()) {
+                        field_0xD46 /= 2;
+                    }
+                    vt_0x1F8();
+                }
+            }
+        } break;
+        case 1: {
+            mRotation.y = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
+            if (field_0xD46 <= 0) {
+                mVec3_c start = mPosition;
+                mVec3_c end = mPosition;
+                for (int i = 0; i < 4; ++i) {
+                    mAng yRot = dAcPy_c::GetLink()->mRotation.y + 0x8000 + (i * 0x4000);
+                    start.set(dAcPy_c::GetLink()->mPosition);
+                    start.y += 100.0f;
+                    end.set(0.0f, 0.0f, 130.0f);
+                    end.rotY(yRot);
+                    end += start;
+                    if (!dBgS_ObjLinChk::LineCross(&start, &end, nullptr)) {
+                        break;
+                    }
+                }
+                end.y = mPosition.y;
+                setPosition(end);
+                setOldPosition(end);
+                mRotation.y = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
+                field_0x8B0.set(0.0f, 1.05f, 1.05f);
+                field_0xD44++;
+                changeState(StateID_BackAttack);
+                return;
+            }
+        } break;
+    }
+    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+}
 void dAcGirahimuBase_c::finalizeState_BackWarp() {
     mCollider.CoSet();
     field_0xD44 = 0;
@@ -1513,7 +1705,31 @@ void dAcGirahimuBase_c::initializeState_BackAttack() {
     field_0xD6C = 0;
     field_0xD46 = 50;
 }
-void dAcGirahimuBase_c::executeState_BackAttack() {}
+void dAcGirahimuBase_c::executeState_BackAttack() {
+    mCollider.ClrCo();
+    if (field_0x8B0.x >= 0.5f) {
+        mCollider.CoSet();
+    }
+
+    if (!turn(field_0x183E)) {
+        vt_0x228();
+    }
+    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+
+    if (sLib::chase(&field_0x8B0.x, 1.05f, 0.2f) != FALSE) {
+        field_0xD6C = 5;
+    } else {
+        field_0xD6C = 0;
+    }
+
+    if (field_0xD46 <= 0) {
+        if (field_0x1838 <= 350.0f) {
+            changeState(StateID_Counter);
+        } else {
+            vt_0x220();
+        }
+    }
+}
 void dAcGirahimuBase_c::finalizeState_BackAttack() {}
 
 void dAcGirahimuBase_c::initializeState_Counter() {
@@ -1542,7 +1758,26 @@ void dAcGirahimuBase_c::initializeState_Counter() {
     mCallback.field_0x088 = true;
     field_0xD6C = 5;
 }
-void dAcGirahimuBase_c::executeState_Counter() {}
+void dAcGirahimuBase_c::executeState_Counter() {
+    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+    if (16.0f <= mAnmChrs[0].getFrame() && mAnmChrs[0].getFrame() <= 20.0f) {
+        mMdlSwordA.enableAttack();
+        mMdlSwordA.setProcActive(true);
+    } else {
+        mMdlSwordA.setInactive();
+        mMdlSwordA.setProcActive(false);
+    }
+
+    if (mAnmChrs[0].isStop()) {
+        vt_0x220();
+    }
+
+    if (mAnmChrs[0].getFrame() <= 16.0f) {
+        field_0xD6C = 5;
+    } else {
+        field_0xD6C = 6;
+    }
+}
 void dAcGirahimuBase_c::finalizeState_Counter() {
     mMdlSwordA.setInactive();
     mMdlSwordA.setProcActive(false);
@@ -1563,7 +1798,94 @@ void dAcGirahimuBase_c::initializeState_Run() {
     mCallback.field_0x088 = false;
     field_0x1834 = 0.0f;
 }
-void dAcGirahimuBase_c::executeState_Run() {}
+void dAcGirahimuBase_c::executeState_Run() {
+    s32 _weird_zero = 0;
+
+    fn_226_CC40();
+    switch (field_0xD44) {
+        case 0: {
+            field_0xD81 = true;
+            field_0x1858 = 0.1f;
+            if (mAnmChrs[0].getFrame() >= 40.0f) {
+                field_0xD46 = 0;
+                field_0xD44++;
+                field_0xD81 = false;
+            }
+            sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+        } break;
+        case 1: {
+            if (field_0xD46 <= 0 || field_0x1838 <= 500.0f) {
+                if (fn_226_CC80()) {
+                    fn_226_8B70("AttackLRun", ANM_AttackLRun, false, m3d::PLAY_MODE_4, 5.0f, 1.0f);
+
+                } else {
+                    fn_226_8B70("AttackRRun", ANM_AttackRRun, false, m3d::PLAY_MODE_4, 5.0f, 1.0f);
+                }
+
+                field_0xD44++;
+                if (vt_0x218()) {
+                    field_0x1834 = _weird_zero + 52.0f;
+                } else {
+                    field_0x1834 = _weird_zero + 45.0f;
+                }
+                field_0x1840.set(mPosition);
+                mMtx_c m;
+                MTXIdentity(m);
+                dStageMgr_c::GetInstance()->procfn_800192F0(0xDC, m, 0x14);
+            }
+            sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+        } break;
+        case 2: {
+            mVec3_c v1;
+            mVec3_c v0 = dAcPy_c::GetLink()->mPosition - field_0x1840;
+            if (fn_226_CC80()) {
+                v1.set(-100.0f, 0.0f, 50.0f);
+                v1.rotY(v0.atan2sX_Z());
+                v1 += dAcPy_c::GetLink()->mPosition;
+                sLib::chaseAngle(mRotation.y.ref(), cLib::targetAngleY(mPosition, v1), 0x2000);
+            } else {
+                v1.set(100.0f, 0.0f, 50.0f);
+                v1.rotY(v0.atan2sX_Z());
+                v1 += dAcPy_c::GetLink()->mPosition;
+                sLib::chaseAngle(mRotation.y.ref(), cLib::targetAngleY(mPosition, v1), 0x2000);
+            }
+            v0 = v1 - mPosition;
+
+            f32 dir = v0.absXZ();
+            if (dir <= 200.0f || mAcch.ChkWallHit(nullptr)) {
+                field_0xD44++;
+                field_0x184C.set(dAcPy_c::GetLink()->mPosition);
+            } else if ((dAcPy_c::GetLink()->getCurrentAction() == 98 /* BACKFLIP */ ||
+                        dAcPy_c::GetLink()->checkFlags0x350(0x80000)) &&
+                       dir <= 500.0f) {
+                field_0xD44++;
+                field_0x184C.set(dAcPy_c::GetLink()->mPosition);
+            }
+        } break;
+        case 3: {
+            mVec3_c v1;
+            mVec3_c v0 = field_0x184C - field_0x1840;
+            if (fn_226_CC80()) {
+                v1.set(-100.0f, 0.0f, 50.0f);
+                v1.rotY(v0.atan2sX_Z());
+                v1 += field_0x184C;
+                sLib::chaseAngle(mRotation.y.ref(), cLib::targetAngleY(mPosition, v1), 0x2000);
+            } else {
+                v1.set(100.0f, 0.0f, 50.0f);
+                v1.rotY(v0.atan2sX_Z());
+                v1 += field_0x184C;
+                s16 target = cLib::targetAngleY(mPosition, v1);
+                sLib::chaseAngle(mRotation.y.ref(), target, 0x2000);
+            }
+            v0 = v1 - mPosition;
+
+            f32 dir = v0.absXZ();
+            if (dir <= 150.0f || mAcch.ChkWallHit(nullptr)) {
+                changeState(StateID_RunAttack);
+            }
+        } break;
+    }
+}
 void dAcGirahimuBase_c::finalizeState_Run() {
     field_0x1834 = 0.0f;
     field_0xD81 = false;
@@ -1580,7 +1902,25 @@ void dAcGirahimuBase_c::initializeState_RunAttack() {
     field_0x1834 = 0.0f;
     field_0x1838 = 0.2f;
 }
-void dAcGirahimuBase_c::executeState_RunAttack() {}
+void dAcGirahimuBase_c::executeState_RunAttack() {
+    if (mAnmChrs[0].getFrame() > 20.0f) {
+        field_0xD6C = 8;
+        field_0xD81 = true;
+    }
+
+    if (mAnmChrs[0].checkFrame(4.0f)) {
+        mMdlSwordA.enableAttack();
+    }
+
+    if (mAnmChrs[0].checkFrame(5.0f)) {
+        mMdlSwordA.setProcActive(true);
+    } else if (mAnmChrs[0].checkFrame(15.0f)) {
+        mMdlSwordA.setInactive();
+        mMdlSwordA.setProcActive(false);
+    } else if (mAnmChrs[0].isStop()) {
+        vt_0x220();
+    }
+}
 void dAcGirahimuBase_c::finalizeState_RunAttack() {
     mMdlSwordA.setInactive();
     mMdlSwordA.setProcActive(false);
