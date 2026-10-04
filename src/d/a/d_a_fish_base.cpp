@@ -7,6 +7,7 @@
 #include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_vec.h"
+#include "f/f_profile_name.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "s/s_Math.h"
@@ -55,6 +56,14 @@ int dAcFishBase_c::doDelete() {
 
 int dAcFishBase_c::draw() {
     return dAcObjBase_c::draw();
+}
+
+bool dAcFishBase_c::cohitCallback(
+    dAcObjBase_c *i_actorA, cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB
+) {
+    // Double check of EEL was required to force the comparison
+    return fProfile::FISH == i_actorB->mProfileName || fProfile::EEL == i_actorB->mProfileName ||
+           fProfile::EEL == i_actorB->mProfileName;
 }
 
 void dAcFishBase_c::vt_0x8C() {
@@ -217,7 +226,6 @@ void dAcFishBase_c::fn_8018C870() {
 }
 
 void dAcFishBase_c::fn_8018CCA0() {
-    // NONMATCHING
     dBgS_LinChk chk;
     chk.Set(&mPosition, &field_0xA60, this);
     if (dBgS::GetInstance()->LineCross(&chk)) {
@@ -231,16 +239,15 @@ void dAcFishBase_c::fn_8018CCA0() {
         }
     }
     dAcFishMgrBase_c *mgr = getFishMgr();
-    f32 f2 = mgr->getPosition().absXZTo(field_0xA60);
-    if (f2 > mgr->getField_0x144()) {
-        // TODO FPR Regswaps
-        f2 = mgr->getField_0x144() / f2;
 
+    f32 f2 = mgr->getPosition().absXZTo(field_0xA60);
+    f32 f0 = mgr->getField_0x144();
+    if (f2 > f0) {
         field_0xA60.x -= mgr->getPosition().x;
         field_0xA60.z -= mgr->getPosition().z;
 
-        field_0xA60.x *= f2;
-        field_0xA60.z *= f2;
+        field_0xA60.x *= f0 / f2;
+        field_0xA60.z *= f0 / f2;
 
         field_0xA60.x += mgr->getPosition().x;
         field_0xA60.z += mgr->getPosition().z;
@@ -353,10 +360,9 @@ void dAcFishBase_c::fn_8018D5A0() {
 }
 
 bool dAcFishBase_c::fn_8018D600() {
-    // NINMATCHING
     dAcFishMgrBase_c *mgr = getFishMgr();
-    // TODO
-    f32 lim = mgr->getPosition().y + mgr->getField_0x148();
+    f32 yPos = mgr->getPosition().y;
+    f32 lim = mgr->getField_0x148() + yPos;
     if (mPosition.y >= lim && mAngle.x < 0) {
         return false;
     } else {
@@ -440,7 +446,7 @@ void dAcFishBase_c::executeState_Escape() {
     }
 
     if (field_0xA7E == 0 || field_0xA78 != 0 || field_0xA79 != 0) {
-        fn_8018C250();
+        fn_8018C5A0();
     }
     vt_0xC8();
     sLib::addCalcScaledDiff(&mSpeed, field_0xA90 * mScale.y, 0.5f, vt_0xD0());

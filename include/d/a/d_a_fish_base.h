@@ -21,6 +21,8 @@ public:
     virtual int doDelete() override;
     virtual int draw() override;
 
+    static bool cohitCallback(dAcObjBase_c *i_actorA, cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB);
+
 protected:
     /* vt 0x80 */ virtual const char *getResFileName() = 0;
     /* vt 0x84 */ virtual const char *getMdlName() = 0;
