@@ -10,6 +10,7 @@ int dAcFishMgrBase_c::actorCreate() {
 
 int dAcFishMgrBase_c::actorPostCreate() {
     f32 f = 1000.0f; // Temp needed for reg alloc?
+    (void)200.0f;
     field_0x148 = f;
     mVec3_c v = mPosition;
     v.y += 20000.0f;
