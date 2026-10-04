@@ -836,7 +836,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
             dAcPy_c *pPlayer = dAcPy_c::GetLinkM();
 
             if (mFramesInEvent > 30) {
-                pPlayer->setPosYRot(pos, rot);
+                pPlayer->setPosYRot(&pos, rot);
                 mEventRelated.advanceNext();
             } else {
                 mVec3_c tmp = pPlayer->mPosition;
@@ -846,10 +846,10 @@ int dAcOdoor_c::actorExecuteInEvent() {
                 sLib::addCalcAngle(ang.ref(), rot, 4, 0x7FFF, 0);
 
                 if (pos.squareDistanceToXZ(tmp) < 25.f && mAng::abs(ang - mAng((s32)rot)) < 182) {
-                    pPlayer->setPosYRot(pos, rot);
+                    pPlayer->setPosYRot(&pos, rot);
                     mEventRelated.advanceNext();
                 } else {
-                    pPlayer->setPosYRot(tmp, ang);
+                    pPlayer->setPosYRot(&tmp, ang);
                 }
             }
         } break;
@@ -873,7 +873,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
                 }
                 stepTowards(pos);
                 dAcPy_c *pPlayer = dAcPy_c::GetLinkM();
-                pPlayer->setPosYRot(pos, rot);
+                pPlayer->setPosYRot(&pos, rot);
                 mEventRelated.advanceNext();
             }
         } break;

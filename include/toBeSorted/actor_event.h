@@ -24,6 +24,8 @@ public:
     int getSingleFloatData(f32 *result, u32 code, u32);
     int getSingleVecData(mVec3_c *result, u32 code, u32);
 
+    bool isInEvent(char *eventName);
+
 private:
     u8 field_0x00[0x50 - 0x00];
 };

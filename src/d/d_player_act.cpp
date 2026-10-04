@@ -89,9 +89,9 @@ void daPlayerActBase_c::setPosRot(const mVec3_c *pos, const mAng3_c *rot, bool f
     }
 }
 
-void daPlayerActBase_c::setPosYRot(const mVec3_c &pos, mAng rot, bool force, UNKWORD a4, UNKWORD a5) {
+void daPlayerActBase_c::setPosYRot(const mVec3_c *pos, mAng rot, bool force, UNKWORD a4, UNKWORD a5) {
     mAng3_c ang(0, rot, 0);
-    setPosRot(&pos, &ang, force, a4, a5);
+    setPosRot(pos, &ang, force, a4, a5);
 }
 
 void daPlayerActBase_c::setTransform(const mMtx_c &mtx, bool force, UNKWORD a4, UNKWORD a5) {
