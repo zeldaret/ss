@@ -76,10 +76,6 @@ dAcFishMgrBase_c *dAcFishBase_c::getFishMgr() {
     return static_cast<dAcFishMgrBase_c *>(mActorNode.get());
 }
 
-extern "C" s32 fn_800406D0(s32, s32);
-extern "C" f32 fn_800408B0(f32, f32);
-extern "C" s32 fn_800408F0(s32, s32);
-
 void dAcFishBase_c::fn_8018C250() {
     dAcFishBase_c *fish = getFishMgr()->getFish();
     if (fish == nullptr) {
@@ -106,10 +102,10 @@ void dAcFishBase_c::fn_8018C250() {
         field_0xA90 = vt_0xDC();
         field_0xA7E = vt_0xF4();
     } else {
-        s32 t1, t2;
+        int t1, t2;
         t1 = vt_0xD8();
         t2 = vt_0xDC();
-        field_0xA90 = fn_800406D0(t1, t2);
+        field_0xA90 = cM::rndRange(t1, t2);
         if (field_0xA58 != 0) {
             t1 = vt_0xE0();
             t2 = vt_0xE4();
@@ -117,7 +113,7 @@ void dAcFishBase_c::fn_8018C250() {
             t1 = vt_0xF4();
             t2 = vt_0xF8();
         }
-        field_0xA7E = fn_800406D0(t1, t2);
+        field_0xA7E = cM::rndRange(t1, t2);
 
         if (field_0xA58 != 0) {
             field_0xA7E *= (s16)(getFishMgr()->getField_0x144() / 1000.0f);
@@ -139,11 +135,11 @@ void dAcFishBase_c::fn_8018C5A0() {
         field_0xA88 = -0x1800;
     }
 
-    field_0xA90 = fn_800408B0(vt_0x104(), vt_0x108());
+    field_0xA90 = cM::rndRange(vt_0x104(), vt_0x108());
     if (field_0xA78 != 0 || field_0xA79 != 0) {
-        field_0xA7E = fn_800406D0(vt_0xE0(), vt_0xE4());
+        field_0xA7E = cM::rndRange(vt_0xE0(), vt_0xE4());
     } else {
-        field_0xA7E = fn_800406D0(vt_0x114(), vt_0x118());
+        field_0xA7E = cM::rndRange(vt_0x114(), vt_0x118());
     }
 
     field_0xA78 = 0;
@@ -187,18 +183,21 @@ void dAcFishBase_c::fn_8018C870() {
         b2 = true;
     }
 
+    static const s16 low = 1820;
+    static const s16 high = 8192;
+
     mMtx_c mtx;
     if ((field_0xA78 != 0 || field_0xA79 != 0) && b1 && b2) {
         mtx.YrotS(cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition));
     } else if ((field_0xA78 != 0 || field_0xA79 != 0) && b1 && !b2) {
-        mtx.YrotS(cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition) + fn_800408F0(1820, 8192));
+        mtx.YrotS(cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition) + cM::rndRange(low, high));
     } else if ((field_0xA78 != 0 || field_0xA79 != 0) && !b1 && b2) {
-        mtx.YrotS(cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition) + fn_800406D0(-8192, -1820));
+        mtx.YrotS(cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition) + cM::rndRange(-high, -low));
     } else if ((field_0xA78 != 0 || field_0xA79 != 0) && !b1 && !b2) {
         if (cM::rndF(1.0f) < 0.5f) {
-            mtx.YrotS(cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition) + fn_800408F0(1820, 8192));
+            mtx.YrotS(cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition) + cM::rndRange(low, high));
         } else {
-            mtx.YrotS(cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition) + fn_800406D0(-8192, -1820));
+            mtx.YrotS(cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition) + cM::rndRange(-high, -low));
         }
     } else {
         mtx.YrotS(cLib::targetAngleY(dAcPy_c::GetLink()->mPosition, mPosition));
@@ -435,7 +434,7 @@ void dAcFishBase_c::finalizeState_Swim() {}
 void dAcFishBase_c::initializeState_Escape() {
     vt_0xAC();
     field_0xA7E = 0;
-    field_0xA7C = fn_800406D0(vt_0x10C(), vt_0x110());
+    field_0xA7C = cM::rndRange(vt_0x10C(), vt_0x110());
     field_0xA84 = vt_0x11C();
 }
 

@@ -56,10 +56,10 @@ protected:
     /* vt 0xDC */ virtual f32 vt_0xDC() const {
         return 5.0f;
     }
-    /* vt 0xE0 */ virtual s32 vt_0xE0() const {
+    /* vt 0xE0 */ virtual int vt_0xE0() const {
         return 90;
     }
-    /* vt 0xE4 */ virtual s32 vt_0xE4() const {
+    /* vt 0xE4 */ virtual int vt_0xE4() const {
         return 180;
     }
     /* vt 0xE8 */ virtual s16 vt_0xE8() const {
@@ -71,10 +71,10 @@ protected:
     /* vt 0xF0 */ virtual f32 vt_0xF0() const {
         return 100.0f;
     }
-    /* vt 0xF4 */ virtual s32 vt_0xF4() const {
+    /* vt 0xF4 */ virtual int vt_0xF4() const {
         return 30;
     }
-    /* vt 0xF8 */ virtual s32 vt_0xF8() const {
+    /* vt 0xF8 */ virtual int vt_0xF8() const {
         return 45;
     }
     /* vt 0xFC */ virtual f32 vt_0xFC() const {
@@ -89,16 +89,16 @@ protected:
     /* vt 0x108 */ virtual f32 vt_0x108() const {
         return 20.0f;
     }
-    /* vt 0x10C */ virtual s32 vt_0x10C() const {
+    /* vt 0x10C */ virtual int vt_0x10C() const {
         return 30;
     }
-    /* vt 0x110 */ virtual s32 vt_0x110() const {
+    /* vt 0x110 */ virtual int vt_0x110() const {
         return 60;
     }
-    /* vt 0x114 */ virtual s32 vt_0x114() const {
+    /* vt 0x114 */ virtual int vt_0x114() const {
         return 10;
     }
-    /* vt 0x118 */ virtual s32 vt_0x118() const {
+    /* vt 0x118 */ virtual int vt_0x118() const {
         return 20;
     }
     /* vt 0x11C */ virtual s16 vt_0x11C() const {
