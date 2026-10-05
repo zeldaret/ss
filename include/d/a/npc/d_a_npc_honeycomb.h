@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/a/e/d_a_en_base.h"
 #include "d/col/bg/d_bg_s_acch.h"
+#include "d/col/cc/d_cc_d.h"
 #include "d/d_cc.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_vec.h"
@@ -36,7 +37,7 @@ private:
     /* 0x378 */ m3d::smdl_c mModel;
     /* 0x398 */ dBgS_AcchCir mAcchCir;
     /* 0x3F4 */ dBgS_ObjAcch mObjAcch;
-    /* 0x7A4 */ dCcD_Linked_Sph mSph;
+    /* 0x7A4 */ dCcD_Linked<dCcD_Sph> mSph;
     /* 0x904 */ dColliderLinkedList mCollider;
     /* 0x910 */ u8 mNoCollisionTimer;
     /* 0x911 */ bool mIsBlown;
