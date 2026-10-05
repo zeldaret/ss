@@ -11,7 +11,7 @@
 
 class dAcNpcHc_c : public dAcEnBase_c {
 public:
-    dAcNpcHc_c() : mRes(nullptr) {}
+    dAcNpcHc_c() {}
     virtual ~dAcNpcHc_c() {}
     virtual bool createHeap() override;
     virtual int create() override;

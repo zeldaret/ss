@@ -144,7 +144,7 @@ int dAcNpcHc_c::actorExecute() {
         mGustBellowsTimer--;
     }
     if (player->checkFlags0x350(0x2000) && getSquareDistanceTo(player->mPosition) < 160000.f &&
-        getHeightDifference(*player) < 800.f) {
+        mPosition.y - player->mPosition.y < 800.f) {
         mBeeAngerTimer = 10;
         mIsBlown = false;
         mVec3_c local_11c(0.f, 0.f, -100.f);
@@ -172,11 +172,9 @@ int dAcNpcHc_c::actorExecute() {
         if (beetle != nullptr) {
             mRotation.y = beetle->mRotation.y;
             f32 fVar11 = nw4r::math::SinIdx((s16)(mRandomnessTimer * 2048));
-            s32 speed = beetle->mSpeed;
-            s32 temp = fVar11 * 1000.f;
-            // regalloc
-            s16 temp2 = speed * 0x96 + temp;
-            sLib::addCalcAngle(mRotation.x.ref(), temp2 + beetle->mRotation.x, 8, 0x400);
+            s32 speed = (s32)beetle->mSpeed * 150;
+            s16 temp = speed + (s32)(fVar11 * 1000.f);
+            sLib::addCalcAngle(mRotation.x.ref(), beetle->mRotation.x + temp, 8, 0x400);
             sLib::addCalcAngle(mRotation.z.ref(), (beetle->mRotation.z * 2) / 3, 8, 0x400);
         }
         mWorldMtx.transS(mPosition);
@@ -218,30 +216,20 @@ int dAcNpcHc_c::actorExecute() {
         f32 fVar1 = field_0x934.z - mStartingPos.z;
         f32 twoHundred = 200.f;
         if (mIsBlown == true) {
-            field_0x920 = (field_0x920 - fVar11 * 0.02f) * 0.9f;
-            field_0x924 = (field_0x924 - fVar1 * 0.02f) * 0.9f;
+            field_0x920 = (field_0x920 - fVar11 * 0.02f);
+            field_0x924 = (field_0x924 - fVar1 * 0.02f);
+            field_0x920 *= 0.9f;
+            field_0x924 *= 0.9f;
         } else {
-            field_0x920 = (field_0x920 - fVar11 * 0.1f) * 0.9f;
-            field_0x924 = (field_0x924 - fVar1 * 0.1f) * 0.9f;
+            field_0x920 = (field_0x920 - fVar11 * 0.1f);
+            field_0x924 = (field_0x924 - fVar1 * 0.1f);
+            field_0x920 *= 0.9f;
+            field_0x924 *= 0.9f;
         }
         field_0x934.x += field_0x920;
         field_0x934.z += field_0x924;
         s16 sVar8 = -cM::atan2s(twoHundred, fVar1);
-        // f32 fVar12;
-        // // f32 fVar2 = twoHundred * twoHundred + fVar1 * fVar1;
-        // if (twoHundred * twoHundred + fVar1 * fVar1 <= 0.f) {
-        //     fVar12 = (twoHundred * twoHundred + fVar1 * fVar1);
-        // } else {
-        //     fVar12 = (twoHundred * twoHundred + fVar1 * fVar1) * nw4r::math::FrSqrt(twoHundred * twoHundred + fVar1 *
-        //     fVar1);
-        // }
-        // wtf
-        s16 sVar9 = cM::atan2s(
-            fVar11, (twoHundred * twoHundred + fVar1 * fVar1 <= 0.f ?
-                         twoHundred * twoHundred + fVar1 * fVar1 :
-                         (twoHundred * twoHundred + fVar1 * fVar1) *
-                             nw4r::math::FrSqrt(twoHundred * twoHundred + fVar1 * fVar1))
-        );
+        s16 sVar9 = cM::atan2s(fVar11, nw4r::math::FSqrt(twoHundred * twoHundred + fVar1 * fVar1));
         mWorldMtx.transS(mPosition);
         mWorldMtx.XrotM(sVar8);
         mWorldMtx.YrotM(sVar9);
