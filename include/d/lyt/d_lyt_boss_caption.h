@@ -16,6 +16,10 @@ public:
         field_0x645 = 0;
         field_0x646 = 0;
     }
+    void unk_inline1() {
+        field_0x645 = 0;
+        field_0x646 = 1;
+    }
 
     static void unk_inline2() {
         if (sInstance != nullptr) {
