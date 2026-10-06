@@ -168,7 +168,7 @@ void dAcObjGirahimuKnife_c::executeState_Wait() {
 void dAcObjGirahimuKnife_c::finalizeState_Wait() {
     mSph0.OnTgSet();
     field_0x714.toQuat(field_0x704);
-    mSph0.SetTg_0x4C(0);
+    mSph0.SetTgShieldType(AT_TYPE_NONE);
 }
 
 void dAcObjGirahimuKnife_c::initializeState_Attack() {
@@ -305,7 +305,7 @@ void dAcObjGirahimuKnife_c::initializeState_SpinWait() {
     field_0x6F6.x = cM::rndInt(64000);
     field_0x6F6.z = cM::rndInt(64000);
     field_0x778 = cM::rndInt(32000);
-    mSph0.SetTg_0x4C(-1);
+    mSph0.SetTgShieldType(~AT_TYPE_NONE);
     field_0x774 = 10.0f;
 }
 void dAcObjGirahimuKnife_c::executeState_SpinWait() {
@@ -336,11 +336,11 @@ void dAcObjGirahimuKnife_c::executeState_SpinWait() {
 void dAcObjGirahimuKnife_c::finalizeState_SpinWait() {
     mSph0.OnTgSet();
     field_0x714.toQuat(field_0x704);
-    mSph0.SetTg_0x4C(0);
+    mSph0.SetTgShieldType(AT_TYPE_NONE);
 }
 
 void dAcObjGirahimuKnife_c::initializeState_SpinWaitPreAttack() {
-    mSph0.SetTg_0x4C(-1);
+    mSph0.SetTgShieldType(~AT_TYPE_NONE);
     field_0x744.x *= 1.5f;
     field_0x744.z = 50.0f;
     field_0x792 = false;
@@ -371,13 +371,13 @@ void dAcObjGirahimuKnife_c::executeState_SpinWaitPreAttack() {
 void dAcObjGirahimuKnife_c::finalizeState_SpinWaitPreAttack() {
     mSph0.OnTgSet();
     field_0x714.toQuat(field_0x704);
-    mSph0.SetTg_0x4C(0);
+    mSph0.SetTgShieldType(AT_TYPE_NONE);
 }
 
 void dAcObjGirahimuKnife_c::initializeState_SpinFreeWait() {
     sSomething0++;
     field_0x778 = cM::rndInt(32000);
-    mSph0.SetTg_0x4C(-1);
+    mSph0.SetTgShieldType(~AT_TYPE_NONE);
     // NOTE - This is needed to force the rodata pool loading despite not emitting anything
     field_0x774 = 20.0f;
     field_0x774 = 0.0f;
@@ -398,7 +398,7 @@ void dAcObjGirahimuKnife_c::finalizeState_SpinFreeWait() {
     sSomething1 = mAng(0);
     mSph0.OnTgSet();
     field_0x714.toQuat(field_0x704);
-    mSph0.SetTg_0x4C(0);
+    mSph0.SetTgShieldType(AT_TYPE_NONE);
 }
 
 void dAcObjGirahimuKnife_c::initializeState_FreeWait() {
@@ -419,12 +419,12 @@ void dAcObjGirahimuKnife_c::executeState_FreeWait() {
 void dAcObjGirahimuKnife_c::finalizeState_FreeWait() {
     mSph0.OnTgSet();
     field_0x714.toQuat(field_0x704);
-    mSph0.SetTg_0x4C(0);
+    mSph0.SetTgShieldType(AT_TYPE_NONE);
 }
 
 // NONMATCHING
 void dAcObjGirahimuKnife_c::initializeState_CircleWait() {
-    mSph0.SetTg_0x4C(-1);
+    mSph0.SetTgShieldType(~AT_TYPE_NONE);
     field_0x774 = 0.0f;
     // Dont think about it
     mAng som = sSomething1;
@@ -456,7 +456,7 @@ void dAcObjGirahimuKnife_c::executeState_CircleWait() {
 void dAcObjGirahimuKnife_c::finalizeState_CircleWait() {
     mSph0.OnTgSet();
     field_0x714.toQuat(field_0x704);
-    mSph0.SetTg_0x4C(0);
+    mSph0.SetTgShieldType(AT_TYPE_NONE);
     sSomething1 = mAng(0);
 }
 
@@ -708,7 +708,7 @@ void dAcObjGirahimuKnife_c::fn_239_2B10() {
 
     cCcD_Obj *pAtCc = mCollider.findAtHit();
     if (pAtCc != nullptr) {
-        if (pAtCc->GetAtFlag0x8()) {
+        if (pAtCc->ChkAtShieldReflect()) {
             if (mState == 8) {
                 mVec3_c force = mPosition - dAcPy_c::GetLink()->mPosition;
                 force.y = 0.0f;
@@ -719,7 +719,7 @@ void dAcObjGirahimuKnife_c::fn_239_2B10() {
                 field_0x78D = true;
                 changeState(StateID_Return);
             }
-        } else if (pAtCc->GetAtFlag0x2()) {
+        } else if (pAtCc->ChkAtShieldHit()) {
             const dAcPy_c *pPlayer = dAcPy_c::GetLink();
             s16 angY = cLib::targetAngleY(pPlayer->mPosition, mPosition);
             s16 diff = pPlayer->mRotation.y - angY;

@@ -154,7 +154,7 @@ void dAcObjGirahimuSwordLink_c::executeState_AtThrow() {
 
     cCcD_Obj *pCcAt = mMdl.mCcList.findAtHit();
     if (pCcAt != nullptr) {
-        if (pCcAt->GetAtActor()->isActorPlayer() && pCcAt->GetAtFlag0x2()) {
+        if (pCcAt->GetAtActor()->isActorPlayer() && pCcAt->ChkAtShieldHit()) {
             field_0xD14.set(0.0f, 0.0f, 1.0f);
             field_0xD14.rotY(dAcPy_c::GetLink()->mRotation.y);
 

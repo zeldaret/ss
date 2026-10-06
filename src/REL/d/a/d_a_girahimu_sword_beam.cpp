@@ -234,7 +234,7 @@ void dAcGirahimuSwordBeam_c::initializeState_BulletMove() {
     m.multVec(vel, mVelocity);
 }
 void dAcGirahimuSwordBeam_c::executeState_BulletMove() {
-    if ((mCps0.ChkAtHit() && !mCps0.GetAtFlag0x8()) || mAcch.ChkGndHit() || mAcch.ChkWallHit(nullptr) ||
+    if ((mCps0.ChkAtHit() && !mCps0.ChkAtShieldReflect()) || mAcch.ChkGndHit() || mAcch.ChkWallHit(nullptr) ||
         mAcch.ChkWaterIn()) {
         mCps0.SetAtRpm(0);
         mCps0.ClrAtActorInfo();
@@ -328,7 +328,7 @@ void dAcGirahimuSwordBeam_c::fn_240_11F0() {
         }
     }
 
-    if (mCps0.ChkAtHit() && mCps0.GetAtFlag0x8()) {
+    if (mCps0.ChkAtHit() && mCps0.ChkAtShieldReflect()) {
         mAng3_c a0;
         a0.x = a0.z = 0;
         if (field_0xAF4.isLinked()) {

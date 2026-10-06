@@ -200,7 +200,7 @@ int dAcBlastboss_c::create() {
     mCc4.SetStts(mStts);
 
     mLightningCc.Set(sSrcSph2);
-    mLightningCc.mTg.Set_0x4C(-1);
+    mLightningCc.SetTgShieldType(~AT_TYPE_NONE);
     mLightningCc.SetStts(mStts);
 
     mAcceleration = -5.0f;
@@ -2041,7 +2041,7 @@ bool dAcBlastboss_c::checkDamage() {
 
     mHealth = 400;
     cCcD_Obj *atHit = mSwordMdl.mCcList.findAtHit();
-    if (atHit != nullptr && atHit->GetAtFlag0x8()) {
+    if (atHit != nullptr && atHit->ChkAtShieldReflect()) {
         field_0x113E = 20;
     }
 

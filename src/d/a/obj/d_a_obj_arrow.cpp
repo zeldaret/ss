@@ -145,7 +145,7 @@ void dAcArrow_c::hitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_O
     dJntCol_c *col = i_actorB->getLinkage().getJntCol();
     if (col != nullptr) {
         mBoundJntIdx = col->getArrowOffsetPosAndAngle(
-            &i_objInfA->GetAtHitPos(), &mRotation, &field_0x6B0, &field_0x6BC, i_objInfB->ChkTg_0x4C(0x2000)
+            &i_objInfA->GetAtHitPos(), &mRotation, &field_0x6B0, &field_0x6BC, i_objInfB->ChkTgShieldType(0x2000)
         );
 
         if (mBoundJntIdx >= 0) {
@@ -533,7 +533,7 @@ void dAcArrow_c::executeState_Move() {
                 bool b = false;
                 if (atActor != mRef1.get()) {
                     mBoundJntIdx = atActor->getLinkage().getArrowOffsetPosAndAngle(
-                        &mCcCps.GetAtHitPos(), &mRotation, &field_0x6B0, &field_0x6BC, mCcCps.GetAtFlag0x2()
+                        &mCcCps.GetAtHitPos(), &mRotation, &field_0x6B0, &field_0x6BC, mCcCps.ChkAtShieldHit()
                     );
                     b = true;
                 }
@@ -543,11 +543,11 @@ void dAcArrow_c::executeState_Move() {
                     if (b) {
                         mRef1.link(atActor);
                     }
-                } else if (mBoundJntIdx == -2 || mCcCps.GetAtFlag0x2()) {
+                } else if (mBoundJntIdx == -2 || mCcCps.ChkAtShieldHit()) {
                     what = 2;
                 }
             } else {
-                if (mCcCps.GetAtFlag0x2()) {
+                if (mCcCps.ChkAtShieldHit()) {
                     what = 2;
                 } else if (mCcCps.ChkAtArrowStick()) {
                     fn_8025E720(atActor, mCcCps.GetAtHitPos());

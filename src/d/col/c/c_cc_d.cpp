@@ -363,15 +363,15 @@ const mVec3_c &cCcD_Obj::GetAtHitPos() const {
     return mAt.mHitPos;
 }
 
-bool cCcD_Obj::GetAtFlag0x2() const {
+bool cCcD_Obj::ChkAtShieldHit() const {
     return mAt.MskRPrm(2);
 }
 
-bool cCcD_Obj::GetAtFlag0x4() const {
+bool cCcD_Obj::ChkAtCutHit() const {
     return mAt.MskRPrm(4);
 }
 
-bool cCcD_Obj::GetAtFlag0x8() const {
+bool cCcD_Obj::ChkAtShieldReflect() const {
     return mAt.MskRPrm(8);
 }
 
@@ -383,11 +383,11 @@ const mVec3_c &cCcD_Obj::GetTgHitPos() const {
     return mTg.mHitPos;
 }
 
-bool cCcD_Obj::GetTgFlag0x4() const {
+bool cCcD_Obj::ChkTgCutHit() const {
     return mTg.MskRPrm(4);
 }
 
-bool cCcD_Obj::GetTgFlag0x8() const {
+bool cCcD_Obj::ChkTgShieldReflect() const {
     return mTg.MskRPrm(0x8);
 }
 
@@ -1452,7 +1452,7 @@ cCcD_ObjTg::cCcD_ObjTg()
     : mShieldFrontRangeYAngle(nullptr),
       field_0x4A(0),
       field_0x4B(0),
-      field_0x4C(0),
+      mShieldType(0),
       field_0x50(0),
       field_0x54(0),
       field_0x6C(0.f, 0.f, 0.f),
@@ -1463,7 +1463,7 @@ cCcD_ObjTg::~cCcD_ObjTg() {}
 void cCcD_ObjTg::Set(const cCcD_SrcGObjTg &src) {
     mEffCounter = 0;
     mSrc = src;
-    field_0x4C = 0;
+    mShieldType = 0;
     mHitPos = mVec3_c::Zero;
     mShieldFrontRangeYAngle = nullptr;
     mShieldRange = 0x4000;
