@@ -1161,7 +1161,7 @@ bool dAcOBarrel_c::fn_293_45A0() {
 
     // Amos -> Armos. A Barrel hitting a Armos will break it
     if (mCyl.ChkAtHit()) {
-        if (mCyl.GetAtFlag0x2() || mCyl.GetAtFlag0x4() || mCyl.GetAtActor()->mProfileName == fProfile::E_AM) {
+        if (mCyl.ChkAtShieldHit() || mCyl.ChkAtCutHit() || mCyl.GetAtActor()->mProfileName == fProfile::E_AM) {
             return true;
         }
     }

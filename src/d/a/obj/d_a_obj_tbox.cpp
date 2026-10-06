@@ -9,6 +9,7 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/c/c_bg_s_poly_info.h"
+#include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_light_env.h"
@@ -1100,8 +1101,8 @@ int dAcTbox_c::create() {
         field_0x0D48.addCc(mCcD2, s4);
     }
     field_0x0D48.SetStts(mStts);
-    mCcD1.SetTg_0x4C(-1);
-    mCcD2.SetTg_0x4C(-1);
+    mCcD1.SetTgShieldType(~AT_TYPE_NONE);
+    mCcD2.SetTgShieldType(~AT_TYPE_NONE);
     mMdl1.setAnm(sAnmNames[mVariant], m3d::PLAY_MODE_4);
     if (mHasBeenOpened == true) {
         mMdl1.setFrame(mMdl1.getAnm().getEndFrame());

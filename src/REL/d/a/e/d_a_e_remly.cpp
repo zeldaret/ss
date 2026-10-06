@@ -1910,14 +1910,14 @@ void dAcEremly_c::initializeState_NightJumpAttack() {
 void dAcEremly_c::executeState_NightJumpAttack() {
     resetHeadRotation(false);
     if (mSph.ChkAtHit()) {
-        if (mSph.GetAtFlag0x8()) {
+        if (mSph.ChkAtShieldReflect()) {
             setBattleBgmRelated(0);
             mSpeed = -20.f;
             changeState(StateID_Stun);
             return;
         }
 
-        if (mSph.GetAtFlag0x2()) {
+        if (mSph.ChkAtShieldHit()) {
             changeState(StateID_NightReflectionFoo);
             return;
         }

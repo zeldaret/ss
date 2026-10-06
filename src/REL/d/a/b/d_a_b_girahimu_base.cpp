@@ -2161,8 +2161,8 @@ void dAcGirahimuBase_c::createCollision() {
     mCollider.addCc(mCps1, sSrcCps);
     mCollider.addCc(mCyl2, sSrcCyl);
 
-    mCps0.SetTg_0x4C(-1);
-    mCps1.SetTg_0x4C(-1);
+    mCps0.SetTgShieldType(~AT_TYPE_NONE);
+    mCps1.SetTgShieldType(~AT_TYPE_NONE);
 
     mCyl1.Set(sSrcCyl);
     mCyl1.ClrTgSet();
@@ -2274,7 +2274,7 @@ void dAcGirahimuBase_c::vt_0x1DC() {
     }
 
     mCyl2.SetR(30.0f);
-    mCyl2.OffTg_0x4C(0x400 | 0x2);
+    mCyl2.OffTgShieldType(AT_TYPE_DAMAGE | AT_TYPE_SWORD);
     mCyl2.SetTgType(~AT_TYPE_COMMON0);
 
     mCyl0.SetR(200.0f);
@@ -3036,7 +3036,7 @@ void dAcGirahimuBase_c::vt_0x1E4() {
     if (pCc != nullptr) {
         switch (pCc->GetTgAtHitType()) {
             case AT_TYPE_SWORD: {
-                if (pCc->GetTg_0x4C() != 0) {
+                if (pCc->GetTgShieldType() != 0) {
                     changeState(StateID_Catch);
                 } else {
                     fn_226_A400(pCc);
@@ -3071,18 +3071,18 @@ void dAcGirahimuBase_c::vt_0x1E4() {
     }
 
     if (b0) {
-        mSph0.SetTg_0x4C(~0x400);
-        mCyl2.SetTg_0x4C(~0x400);
+        mSph0.SetTgShieldType(~AT_TYPE_DAMAGE);
+        mCyl2.SetTgShieldType(~AT_TYPE_DAMAGE);
     } else {
-        mSph0.SetTg_0x4C(0);
-        mCyl2.OffTg_0x4C(0x400 | 0x2);
+        mSph0.SetTgShieldType(AT_TYPE_NONE);
+        mCyl2.OffTgShieldType(AT_TYPE_DAMAGE | AT_TYPE_SWORD);
     }
 
     if (field_0xD50 <= 0 && !isState(StateID_Panch)) {
         return;
     }
 
-    mSph0.SetTg_0x4C(~0);
+    mSph0.SetTgShieldType(~AT_TYPE_NONE);
 }
 
 void dAcGirahimuBase_c::vt_0x1F0() {}
@@ -3090,7 +3090,7 @@ void dAcGirahimuBase_c::vt_0x1F0() {}
 void dAcGirahimuBase_c::vt_0x1E8() {
     cCcD_Obj *pCc = mSwordLink.get()->mMdl.mCcList.findAtHit();
     if (pCc != nullptr) {
-        if (pCc->GetAtFlag0x8()) {
+        if (pCc->ChkAtShieldReflect()) {
             changeState(StateID_LinkSwordGuardJust);
         }
     }
@@ -3109,7 +3109,7 @@ void dAcGirahimuBase_c::vt_0x1E8() {
 
 void dAcGirahimuBase_c::vt_0x1EC() {
     someEnemyDamageCollisionStuffMaybe(mCollider, nullptr);
-    mCyl2.OffTg_0x4C(AT_TYPE_DAMAGE | AT_TYPE_SWORD);
+    mCyl2.OffTgShieldType(AT_TYPE_DAMAGE | AT_TYPE_SWORD);
     cCcD_Obj *pCc = mCollider.findTgHit();
     if (pCc != nullptr) {
         u32 hitType = pCc->GetTgAtHitType();
@@ -3295,7 +3295,7 @@ void dAcGirahimuBase_c::fn_226_C1C0() {
     }
 
     pCc = mMdlSwordA.mCcList.findAtHit();
-    if (pCc != nullptr && pCc->GetAtFlag0x8()) {
+    if (pCc != nullptr && pCc->ChkAtShieldReflect()) {
         changeState(StateID_G_SwordDamage);
         fn_226_D070();
         setAnm("GuardLSwordA", ANM_DamageHit, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
@@ -3308,7 +3308,7 @@ void dAcGirahimuBase_c::fn_226_C1C0() {
 void dAcGirahimuBase_c::fn_226_C320() {
     vt_0x1F4();
     cCcD_Obj *pCc = mMdlSwordA.mCcList.findAtHit();
-    if (pCc != nullptr && pCc->GetAtFlag0x8()) {
+    if (pCc != nullptr && pCc->ChkAtShieldReflect()) {
         changeState(StateID_G_SwordDamage);
         fn_226_D070();
         setAnm("GuardLSwordA", ANM_DamageHit, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
@@ -3344,25 +3344,25 @@ void dAcGirahimuBase_c::fn_226_C560() {
 
     s32 cutDir = mPlayerAttackDir;
     if (mAnmIDBody != ANM_AttackPoseL && mAnmIDBody != ANM_AttackPoseR) {
-        mCyl2.SetTg_0x4C(~2);
+        mCyl2.SetTgShieldType(~AT_TYPE_SWORD);
         mCyl0.ClrTgSet();
     }
     if (fn_226_CC80()) {
         if (cutDir == CUT_DIR_LU || cutDir == CUT_DIR_L || cutDir == CUT_DIR_LD || cutDir == CUT_DIR_RU ||
             cutDir == CUT_DIR_U || cutDir == CUT_DIR_D) {
-            mCyl2.SetTg_0x4C(~2);
+            mCyl2.SetTgShieldType(~AT_TYPE_SWORD);
             mCyl0.ClrTgSet();
         } else {
-            mCyl2.SetTg_0x4C(~0);
+            mCyl2.SetTgShieldType(~AT_TYPE_NONE);
             mCyl2.SetTgType(~(AT_TYPE_COMMON0 | AT_TYPE_SWORD));
         }
     } else {
         if (cutDir == CUT_DIR_RU || cutDir == CUT_DIR_R || cutDir == CUT_DIR_RD || cutDir == CUT_DIR_LU ||
             cutDir == CUT_DIR_U || cutDir == CUT_DIR_D) {
             mCyl0.ClrTgSet();
-            mCyl2.SetTg_0x4C(~2);
+            mCyl2.SetTgShieldType(~AT_TYPE_SWORD);
         } else {
-            mCyl2.SetTg_0x4C(~0);
+            mCyl2.SetTgShieldType(~AT_TYPE_NONE);
             mCyl2.SetTgType(~(AT_TYPE_COMMON0 | AT_TYPE_SWORD));
         }
     }
@@ -3374,18 +3374,18 @@ void dAcGirahimuBase_c::fn_226_C6A0() {
         if (cutDir == CUT_DIR_NONE || cutDir == CUT_DIR_U || cutDir == CUT_DIR_LU || cutDir == CUT_DIR_L ||
             cutDir == CUT_DIR_LD || cutDir == CUT_DIR_RU || cutDir == CUT_DIR_D) {
             mCyl0.ClrTgSet();
-            mCyl2.SetTg_0x4C(~2);
+            mCyl2.SetTgShieldType(~AT_TYPE_SWORD);
         } else {
-            mCyl2.SetTg_0x4C(~0);
+            mCyl2.SetTgShieldType(~AT_TYPE_NONE);
             mCyl2.SetTgType(~(AT_TYPE_COMMON0 | AT_TYPE_SWORD));
         }
     } else {
         if (cutDir == CUT_DIR_NONE || cutDir == CUT_DIR_U || cutDir == CUT_DIR_LU || cutDir == CUT_DIR_RU ||
             cutDir == CUT_DIR_R || cutDir == CUT_DIR_RD || cutDir == CUT_DIR_D) {
             mCyl0.ClrTgSet();
-            mCyl2.SetTg_0x4C(~2);
+            mCyl2.SetTgShieldType(~AT_TYPE_SWORD);
         } else {
-            mCyl2.SetTg_0x4C(~0);
+            mCyl2.SetTgShieldType(~AT_TYPE_NONE);
             mCyl2.SetTgType(~(AT_TYPE_COMMON0 | AT_TYPE_SWORD));
         }
     }
