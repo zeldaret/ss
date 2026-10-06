@@ -631,6 +631,12 @@ public:
     void Set_0x4C(u32 f) {
         field_0x4C = f;
     }
+    u32 Get_0x4C() const {
+        return field_0x4C;
+    }
+    void Off_0x4C(u32 f) {
+        field_0x4C &= ~f;
+    }
     bool Chk_0x4C(u32 f) const {
         return field_0x4C & f;
     }
@@ -714,7 +720,7 @@ public:
     /* 0x48 */ s16 mShieldRange;
     /* 0x4A */ u8 field_0x4A;
     /* 0x4B */ u8 field_0x4B;
-    /* 0x4C */ u32 field_0x4C;
+    /* 0x4C */ u32 field_0x4C; // Blocks?
     /* 0x50 */ u32 field_0x50;
     /* 0x54 */ cCcD_ShieldChkCallback field_0x54;
     /* 0x58 */ cCcD_SrcGObjAt mAtHitSrc;
@@ -963,8 +969,13 @@ public:
 
     void SetTg_0x4C(u32 f) {
         mTg.Set_0x4C(f);
+    } 
+    u32 GetTg_0x4C() const {
+        return mTg.Get_0x4C();
+    } 
+    void OffTg_0x4C(u32 f) {
+        mTg.Off_0x4C(f);
     }
-
     bool ChkTg_0x4C(u32 f) const {
         return mTg.Chk_0x4C(f);
     }
@@ -1058,9 +1069,12 @@ public:
     } 
 
     // Tg
-
+ 
     void OnTgSet() {
         mTg.OnSPrm(1);
+    }
+    void OnTg_0x40() {
+        mTg.OnSPrm(0x40);
     }
     u32 GetTgGrp() const {
         return mTg.MskSPrm(0x3E);

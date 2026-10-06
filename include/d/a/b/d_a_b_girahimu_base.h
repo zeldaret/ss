@@ -6,6 +6,7 @@
 #include "d/a/e/d_a_en_base.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s_acch.h"
+#include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_cc.h"
 #include "d/d_message.h"
@@ -24,6 +25,7 @@
 #include "nw4r/g3d/g3d_calcworld.h"
 #include "nw4r/g3d/g3d_scnobj.h"
 #include "nw4r/g3d/res/g3d_resanmchr.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/d_emitter.h"
@@ -40,6 +42,9 @@ class dNpcEyeMdlCallback_c : public nw4r::g3d::IScnObjCallback {
 public:
     dNpcEyeMdlCallback_c() {}
     virtual ~dNpcEyeMdlCallback_c() {}
+
+    void create(m3d::smdl_c &mdl, u16 eyeMatL, u16 eyeMatR, u8, u8, dAcObjBase_c *);
+
     /* 0x04 */ u8 mBlendWeight;
     /* 0x05 */ u8 mInterpTimer;
     /* 0x06 */ u8 nTexCoordMask[2];
@@ -108,14 +113,20 @@ public:
         /* 0x04E */ bool field_0x04E;
         /* 0x04F */ bool field_0x04F;
         /* 0x050 */ bool field_0x050;
-        /* 0x052 */ mAng3_c field_0x052;
-        /* 0x058 */ mAng3_c field_0x058;
+        /* 0x052 */ mAng field_0x052;
+        /* 0x054 */ mAng field_0x054;
+        /* 0x056 */ mAng field_0x056;
+        /* 0x058 */ mAng field_0x058;
+        /* 0x05A */ mAng field_0x05A;
+        /* 0x05C */ mAng field_0x05C;
         /* 0x05E */ mAng field_0x05E;
         /* 0x060 */ mAng field_0x060;
         /* 0x062 */ mAng3_c field_0x062;
-
-        /* 0x068*/ u8 _0x068[0x07C - 0x068];
-
+        /* 0x068 */ mAng field_0x068;
+        /* 0x06A */ mAng field_0x06A;
+        /* 0x06C */ mAng field_0x06C;
+        /* 0x06E */ mAng field_0x06E;
+        /* 0x070 */ mVec3_c field_0x070;
         /* 0x07C */ mAng field_0x07C;
         /* 0x07E */ mAng field_0x07E;
         /* 0x080 */ mAng field_0x080;
@@ -125,7 +136,7 @@ public:
         /* 0x086*/ u8 _0x086[0x088 - 0x086];
 
         /* 0x088 */ bool field_0x088;
-        /* 0x08C */ mVec3_c field_0x08C;
+        /* 0x08C */ mVec3_c field_0x08C; // Head Translation
         /* 0x098 */ f32 field_0x098;
 
         /* 0x09C*/ u8 _0x09C[0x0B4 - 0x09C];
@@ -145,7 +156,6 @@ public:
         /* 0x170*/ u8 _0x170[0x17C - 0x170];
 
         /* 0x17C */ mVec3_c field_0x17C; // ElbowR Scale
-        /* 0x188*/ u8 _0x188[0x18C - 0x188];
         /* 0x18C */ f32 field_0x188;     // ElbowR distance to HandR?
         /* 0x18C */ mVec3_c field_0x18C; // ElbowR Translation from ArmR?
         /* 0x198 */ bool field_0x198;    // ElbowR first Retrieve
@@ -191,6 +201,7 @@ public:
     };
 
     enum AnmID_e {
+        ANM_NONE = -1,
         ANM_WaitA = 0x00,
         ANM_Walk = 0x01,
         ANM_Catch = 0x02,
@@ -262,6 +273,14 @@ public:
         ANM_KnifeDamage = 0x45,
     };
 
+    enum AnmIdx_e {
+        ANMIDX_Body = 0,
+        ANMIDX_Hip = 1,
+        ANMIDX_Head = 2,
+        ANMIDX_ShoulderR = 3,
+        ANMIDX_ShoulderL = 4,
+    };
+
     virtual int doDelete() override;
     virtual int preExecute() override;
     virtual int draw() override;
@@ -303,7 +322,7 @@ public:
     STATE_MGR_DEFINE_UTIL_GETSTATEID(dAcGirahimuBase_c);
 
     /* vt 0x1DC */ virtual void vt_0x1DC();
-    /* vt 0x1E0 */ virtual void vt_0x1E0();
+    /* vt 0x1E0 */ virtual bool vt_0x1E0();
     /* vt 0x1E4 */ virtual void vt_0x1E4();
     /* vt 0x1E8 */ virtual void vt_0x1E8();
     /* vt 0x1EC */ virtual void vt_0x1EC();
@@ -322,72 +341,113 @@ public:
     /* vt 0x218 */ virtual bool vt_0x218() {
         return false;
     }
-    /* vt 0x21C */ virtual void vt_0x21C();
+    /* vt 0x21C */ virtual bool vt_0x21C(bool);
     /* vt 0x220 */ virtual void vt_0x220();
     /* vt 0x224 */ virtual void vt_0x224() {
-        fn_226_8B70("PoseC", ANM_PoseC2, false, m3d::PLAY_MODE_4, 5.0f, 1.0f);
+        setAnm("PoseC", ANM_PoseC2, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     }
     /* vt 0x228 */ virtual void vt_0x228();
     /* vt 0x22C */ virtual void vt_0x22C();
     /* vt 0x230 */ virtual void vt_0x230() {
-        5.0f;
-        1.0f;
-        "WalkBt";
+        setAnm("WalkBt", ANM_Walk, m3d::PLAY_MODE_4, 5.0f, 1.0f);
+    }
+
+    nw4r::g3d::ResAnmChr GetResAnmChr(const char *name) const {
+        nw4r::g3d::ResAnmChr res = mResAnmChr1.GetResAnmChr(name);
+        if (!res.IsValid()) {
+            res = mResAnmChr0.GetResAnmChr(name);
+        }
+
+        return res;
     }
 
     void initNodeData();
+    void createCollision();
 
-    void fn_226_8B70(const char *, s32 anmId, bool, m3d::playMode_e, f32, f32);
-    void fn_226_8C90(
-        const char *, s32 anmId0, const char *, s32 anmId1, const char *, s32 anmId2, m3d::playMode_e, f32, f32
+    static s32 getPlayerSwordType();
+
+    // Set Anm Functions
+    bool
+    setAnm(const char *anmName, s32 anmId, const char *anmNameShoulderL, m3d::playMode_e playMode, f32 f0, f32 rate);
+    bool setAnm(
+        const char *anmName, s32 anmId, const char *anmNameHip, s32 anmIdHip, const char *anmNameShoulderL,
+        s32 anmIdShoulderL, m3d::playMode_e playMode, f32 f0, f32 rate
     );
-    void fn_226_8FF0(const char *, s32 anmId, m3d::playMode_e, f32, f32);
-    void fn_226_90C0(const char *, s32 anmId, m3d::playMode_e, f32, f32);
-    void fn_226_9190(const char *, s32 anmId, m3d::playMode_e, f32, f32);
-    void fn_226_9260(const char *, s32 anmId, m3d::playMode_e, f32, f32);
+    bool setAnm(const char *anmName, s32 anmId, m3d::playMode_e playMode, f32 f0, f32 rate);
+    bool setAnmBody(const char *anmName, s32 anmId, m3d::playMode_e playMode, f32 f0, f32 rate);
+    bool setAnmHip(const char *anmName, s32 anmId, m3d::playMode_e playMode, f32 f0, f32 rate);
+    bool setAnmShoulderR(const char *anmName, s32 anmId, m3d::playMode_e playMode, f32 f0, f32 rate);
+    bool setAnmShoulderL(const char *anmName, s32 anmId, m3d::playMode_e playMode, f32 f0, f32 rate);
+    bool setAnmHead(const char *anmName, s32 anmId, m3d::playMode_e playMode, f32 f0, f32 rate);
 
-    void fn_226_A070(mAng);
+    void bindAnmHead();
+    void bindAnmBody();
+    void bindAnmHip();
+    void bindAnmShoulderR();
+    void bindAnmShoulderL();
+
+    void fn_226_9620();
+    void fn_226_9690(); // Head/Hair and Attention related
+    void fn_256_99F0();
+    void fn_256_9C90();
+    bool fn_226_A070(mAng);
     bool fn_226_A120(mAng, f32);
-    void fn_226_AAD0(f32, f32);
+    bool fn_226_A280(mAng);
+    bool turn(mAng);
+    void fn_226_A400(cCcD_Obj *pObj);
+    bool fn_226_A570();
+    mVec3_c getPlayerHeadOffset();
+    void executeEarringTransform();
+    void calcJumpMovement(f32, f32);
+    void fn_226_ADC0(cCcD_Obj *pObj);
+    void setSwordLinkTransform();
+    void setSwordLinkTransformPlayer();
     void fn_226_AFB0();
 
     void fn_226_B960(f32);
     void fn_226_BC00();
+    void setFrame(f32);
+
+    bool fn_226_BE90(const char *soundName);
 
     void fn_226_CC40();
+    void fn_226_CC50();
     bool fn_226_CC80();
+    void fn_226_CDA0();
+    void fn_226_CE00();
 
     void fn_226_D070();
-
-    bool turn(mAng);
 
 private:
     /* 0x0378 */ STATE_MGR_DECLARE(dAcGirahimuBase_c);
     /* 0x03B4 */ m3d::mdl_c mMdlBody;
     /* 0x03D8 */ m3d::anmChrBlend_c mAnmChrBlend;
-    /* 0x0400 */ nw4r::g3d::ResAnmChr mResAnmChr0;
-    /* 0x0404 */ nw4r::g3d::ResAnmChr mResAnmChr1;
+    /* 0x0400 */ nw4r::g3d::ResFile mResAnmChr0;
+    /* 0x0404 */ nw4r::g3d::ResFile mResAnmChr1;
     /* 0x0408 */ m3d::anmChr_c mAnmChrs[5];
     /* 0x0520 */ dSoundSourceIf_c *pSoundIface;
-    /* 0x0524 */ UNKWORD field_0x534;
+    /* 0x0524 */ void *mpSoundBrasd;
     /* 0x0528 */ m3d::anmTexPat_c mAnmTexPatWink;
     /* 0x0554 */ dNpcEyeMdlCallback_c mEyeMdlCallback;
-    /* 0x0584 */
+    /* 0x0584 */ u8 _0x584[0x594 - 0x584];
     /* 0x0594 */ callback_c mCallback;
     /* 0x088C */ mVec3_c field_0x88C;
-
-    /* 0x08B0*/ mVec3_c field_0x8B0;
+    /* 0x0898 */ mVec3_c field_0x898;
+    /* 0x08A4 */ mVec3_c field_0x8A4;
+    /* 0x08B0 */ mVec3_c field_0x8B0;
     /* 0x08BC */ mVec3_c field_0x8BC;
-    /* 0x08C8 */ s16 field_0x8C8;
-
-    /* 0x08CE */ s16 field_0x8CE;
+    /* 0x08C8 */ s16 mAnmIDBody;
+    /* 0x08CA */ s16 mAnmIDHip;
+    /* 0x08CC */ s16 mAnmIDShoulderR;
+    /* 0x08CE */ s16 mAnmIDShoulderL;
+    /* 0x08D0 */ s16 mAnmIDHead;
     /* 0x08D4 */ dShadowCircle_c mShadow;
     /* 0x08DC */ s32 field_0x8DC;
     /* 0x08E0 */ m3d::smdl_c mMdlPias; // Earring
-
+    /* 0x08FC */ mMtx_c field_0x8FC;
+    /* 0x092C */ mVec3_c field_0x92C;
     /* 0x0938 */ dBgS_AcchCir mAcchCir;
     /* 0x0994 */ dBgS_ObjAcch mAcch;
-
     /* 0x0D44 */ s16 field_0xD44;
     /* 0x0D46 */ s16 field_0xD46;
     /* 0x0D48 */ s16 field_0xD48;
@@ -409,40 +469,56 @@ private:
     /* 0x0D68 */ s16 field_0xD68;
     /* 0x0D6A */ s16 field_0xD6A;
     /* 0x0D6C */ s32 field_0xD6C;
+    /* 0x0D70 */ bool field_0xD70;
+    /* 0x0D71 */ bool field_0xD71;
+    /* 0x0D72 */ bool field_0xD72;
 
-    /* 0xD71 */ bool field_0xD71;
-    /* 0xD72 */ bool field_0xD72;
+    /* 0x0D73 */ u8 _0xD73[0xD79 - 0x0D73];
 
-    /* 0xD79 */ bool mbLinkSwordWaitFirstComplete;
+    /* 0x0D79 */ bool mbLinkSwordWaitFirstComplete;
+    /* 0x0D7A */ bool field_0xD7A;
+    /* 0x0D7B */ bool field_0xD7B;
+    /* 0x0D7C */ bool field_0xD7C;
+    /* 0x0D7D */ bool field_0xD7D;
+    /* 0x0D7E */ bool field_0xD7E;
 
-    /* 0xD7B */ bool field_0xD7B;
-    /* 0xD7C */ bool field_0xD7C;
-    /* 0xD7D */ bool field_0xD7D;
-    /* 0xD7E */ bool field_0xD7E;
+    /* 0x0D7F */ u8 _0xD7F;
 
-    /* 0xD80 */ bool field_0xD80;
-    /* 0xD81 */ bool field_0xD81;
-    /* 0xD82 */ bool field_0xD82;
+    /* 0x0D80 */ bool field_0xD80;
+    /* 0x0D81 */ bool field_0xD81;
+    /* 0x0D82 */ bool field_0xD82;
 
-    /* 0xD8C */ bool field_0xD8C;
-    /* 0xD8D */ bool field_0xD8D;
-    /* 0xD8E */ s16 field_0xD8E;
+    /* 0x0D83 */ u8 _0xD83[0xD88 - 0xD83];
 
+    /* 0x0D88 */ u32 mPlayerAttackDir;
+    /* 0x0D8C */ bool field_0xD8C;
+    /* 0x0D8D */ bool field_0xD8D;
+    /* 0x0D8E */ s16 field_0xD8E;
+    /* 0x0D90 */ s32 mPreviousHitCutDir;
     /* 0x0D94 */ dEnemySwordMdl_c mMdlSwordA;
+    /* 0x12D0 */ mVec3_c field_0x12D0; // SwordA Translation
+    /* 0x12DC */ f32 field_0x12DC;
+    /* 0x12E0 */ bool field_0x12E0;
     /* 0x12E4 */ dEnemySwordMdl_c mMdlSwordB;
+    /* 0x1820 */ mVec3_c field_0x1820; // SwordB Translation
+
+    /* 0x182C */ u8 _0x182C[0x1834 - 0x182C];
 
     /* 0x1834 */ f32 field_0x1834;
     /* 0x1838 */ f32 field_0x1838;
-    /* 0x183A */ mAng field_0x183A;
+    /* 0x183C */ mAng field_0x183C;
     /* 0x183E */ mAng field_0x183E;
     /* 0x1840 */ mVec3_c field_0x1840;
     /* 0x184C */ mVec3_c field_0x184C;
     /* 0x1858 */ f32 field_0x1858;
-
+    /* 0x185C */ mVec3_c field_0x185C;
     /* 0x1868 */ f32 field_0x1868;
-
+    /* 0x186C */ f32 field_0x186C;
+    /* 0x1870 */ bool field_0x1870;
     /* 0x1871 */ bool field_0x1871;
     /* 0x1872 */ bool field_0x1872;
+
+    /* 0x1873 */ u8 _0x1873[0x1878 - 0x1873];
 
     /* 0x1878 */ dCcD_Cyl mCyl0;
     /* 0x19C8 */ dCcD_Cyl mCyl1;
@@ -451,6 +527,10 @@ private:
     /* 0x1DD8 */ dCcD_Linked<dCcD_Cps> mCps0;
     /* 0x1F58 */ dCcD_Linked<dCcD_Cps> mCps1;
     /* 0x20D8 */ dColliderLinkedList mCollider;
+    /* 0x20E4 */ f32 field_0x20E4;
+    /* 0x20E8 */ f32 field_0x20E8;
+
+    /* 0x20EC */ u8 _0x20EC[0x2104 - 0x20EC];
 
     /* 0x2104 */ dAcObjRef_c mRef0;
     /* 0x2110 */ dAcRef_c<dAcObjGirahimuSwordLink_c> mSwordLink;

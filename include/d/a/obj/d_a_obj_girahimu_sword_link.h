@@ -14,6 +14,7 @@
 
 class dAcObjGirahimuSwordLink_c : public dAcObjBase_c {
 public:
+    friend class dAcGirahimuBase_c;
     dAcObjGirahimuSwordLink_c() : mEmitter(this), mStateMgr(*this) {}
     virtual ~dAcObjGirahimuSwordLink_c() {}
 
