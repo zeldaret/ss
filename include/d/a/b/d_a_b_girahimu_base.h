@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/e/d_a_en_base.h"
+#include "d/a/npc/d_a_npc.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/c/c_cc_d.h"
@@ -23,7 +24,6 @@
 #include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/g3d_calcworld.h"
-#include "nw4r/g3d/g3d_scnobj.h"
 #include "nw4r/g3d/res/g3d_resanmchr.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
@@ -38,22 +38,6 @@ class dAcObjGirahimuSwordLink_c;
 struct LinkSph {
     dCcD_Linked<dCcD_Sph> mSph;
 };
-class dNpcEyeMdlCallback_c : public nw4r::g3d::IScnObjCallback {
-public:
-    dNpcEyeMdlCallback_c() {}
-    virtual ~dNpcEyeMdlCallback_c() {}
-
-    void create(m3d::smdl_c &mdl, u16 eyeMatL, u16 eyeMatR, u8, u8, dAcObjBase_c *);
-
-    /* 0x04 */ u8 mBlendWeight;
-    /* 0x05 */ u8 mInterpTimer;
-    /* 0x06 */ u8 nTexCoordMask[2];
-    /* 0x08 */ u16 mEyeballMatID[2];
-    /* 0x0C */ mVec2_c mTargetOffset[2];
-    /* 0x1C */ mVec2_c mCurrentOffset[2];
-    /* 0x2C */ dAcObjBase_c *mpOwner;
-};
-
 class dAcGirahimuBase_c : public dAcEnBase_c {
 public:
     dAcGirahimuBase_c() : mStateMgr(*this), mFlowMgr(&mFlow) {}
@@ -229,13 +213,13 @@ public:
         ANM_AttackPoseR = 0x18,
         ANM_AttackRRun = 0x19,
         ANM_AttackSwordR = 0x1A,
-        ANM_PoseR = 0x1B,
-        ANM_PoseL = 0x1C,
+        ANM_PoseL = 0x1B,
+        ANM_PoseR = 0x1C,
         ANM_PoseC = 0x1D,
         ANM_PoseC2 = 0x1E,
         ANM_PoseLR = 0x1F,
         ANM_PoseLU = 0x20,
-        AMM_PoseRU = 0x21,
+        ANM_PoseRU = 0x21,
         ANM_PoseUD = 0x22,
         ANM_PoseLAttack = 0x23,
         ANM_PoseRAttack = 0x24,
@@ -349,7 +333,7 @@ public:
     /* vt 0x228 */ virtual void vt_0x228();
     /* vt 0x22C */ virtual void vt_0x22C();
     /* vt 0x230 */ virtual void vt_0x230() {
-        setAnm("WalkBt", ANM_Walk, m3d::PLAY_MODE_4, 5.0f, 1.0f);
+        setAnmHip("WalkBt", ANM_Walk, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     }
 
     nw4r::g3d::ResAnmChr GetResAnmChr(const char *name) const {
@@ -409,7 +393,12 @@ public:
     void setFrame(f32);
 
     bool fn_226_BE90(const char *soundName);
-
+    void fn_226_C060();
+    void fn_226_C1C0();
+    void fn_226_C320();
+    void fn_226_C560();
+    void fn_226_C6A0();
+    void fn_226_C790(cCcD_Obj &cc, s16 anm);
     void fn_226_CC40();
     void fn_226_CC50();
     bool fn_226_CC80();
@@ -417,6 +406,10 @@ public:
     void fn_226_CE00();
 
     void fn_226_D070();
+    void fn_226_D090();
+    void fn_226_D2C0();
+    void fn_226_D2D0();
+    void fn_226_D5A0();
 
 private:
     /* 0x0378 */ STATE_MGR_DECLARE(dAcGirahimuBase_c);
@@ -428,8 +421,11 @@ private:
     /* 0x0520 */ dSoundSourceIf_c *pSoundIface;
     /* 0x0524 */ void *mpSoundBrasd;
     /* 0x0528 */ m3d::anmTexPat_c mAnmTexPatWink;
-    /* 0x0554 */ dNpcEyeMdlCallback_c mEyeMdlCallback;
-    /* 0x0584 */ u8 _0x584[0x594 - 0x584];
+    /* 0x0554 */ dNpcMdlCallbackEye_c mEyeMdlCallback;
+    /* 0x0584 */ f32 field_0x584;
+    /* 0x0588 */ f32 field_0x588;
+    /* 0x058C */ f32 field_0x58C;
+    /* 0x0590 */ f32 field_0x590;
     /* 0x0594 */ callback_c mCallback;
     /* 0x088C */ mVec3_c field_0x88C;
     /* 0x0898 */ mVec3_c field_0x898;
@@ -472,9 +468,8 @@ private:
     /* 0x0D70 */ bool field_0xD70;
     /* 0x0D71 */ bool field_0xD71;
     /* 0x0D72 */ bool field_0xD72;
-
-    /* 0x0D73 */ u8 _0xD73[0xD79 - 0x0D73];
-
+    /* 0x0D74 */ s32 field_0xD74;
+    /* 0x0D78 */ bool field_0xD78;
     /* 0x0D79 */ bool mbLinkSwordWaitFirstComplete;
     /* 0x0D7A */ bool field_0xD7A;
     /* 0x0D7B */ bool field_0xD7B;

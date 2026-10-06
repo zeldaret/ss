@@ -25,6 +25,23 @@
 class dAcNpc_c;
 
 // NPC-specific mdl callback stuff
+
+class dNpcMdlCallbackEye_c : public nw4r::g3d::IScnObjCallback {
+public:
+    dNpcMdlCallbackEye_c() {}
+    virtual ~dNpcMdlCallbackEye_c() {}
+
+    void create(m3d::smdl_c &mdl, u16 eyeMatL, u16 eyeMatR, u8, u8, dAcObjBase_c *);
+
+    /* 0x04 */ u8 mBlendWeight;
+    /* 0x05 */ u8 mInterpTimer;
+    /* 0x06 */ u8 nTexCoordMask[2];
+    /* 0x08 */ u16 mEyeballMatID[2];
+    /* 0x0C */ mVec2_c mTargetOffset[2];
+    /* 0x1C */ mVec2_c mCurrentOffset[2];
+    /* 0x2C */ dAcObjBase_c *mpOwner;
+};
+
 class dNpcMdlCallbackBase_c {
 protected:
     /* 0x00 */ u32 mNodeId;
