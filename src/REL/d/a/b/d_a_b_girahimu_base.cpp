@@ -23,6 +23,7 @@
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
 #include "m/m3d/m3d.h"
+#include "m/m3d/m_anmchr.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m3d/m_shadow.h"
 #include "m/m_angle.h"
@@ -257,8 +258,8 @@ void dAcGirahimuBase_c::callback_c::init(dAcGirahimuBase_c *pGhirahim) {
     m0.toQuat(field_0x118);
     m0.toQuat(field_0x1CC);
     mpGhirahim = pGhirahim;
-    field_0x2D4 = -1.0f;
-    field_0x2D0 = -1.0f;
+    field_0x2D4 = 1.0f;
+    field_0x2D0 = 1.0f;
 }
 
 void dAcGirahimuBase_c::callback_c::fn_226_1580(u32 node, nw4r::g3d::WorldMtxManip *result, nw4r::g3d::ResMdl) {
@@ -1060,7 +1061,7 @@ void dAcGirahimuBase_c::initializeState_KnifeDamage() {
     setAnm("KnifeDamage", ANM_KnifeDamage, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     mVec3_c pos = mPosition;
     pos.y += 100.0f;
-    getSoundSource()->holdSoundAtPosition(SE_Girahim_DMG_KNIFE, pos);
+    getSoundSource()->startSoundAtPosition(SE_Girahim_DMG_KNIFE, pos);
 
     mCallback.field_0x088 = false;
     field_0xD44 = 0;
@@ -1145,7 +1146,7 @@ void dAcGirahimuBase_c::executeState_GetSword() {
         if (dAcPy_c::GetLinkM()->vt_0x084(this, 0xA9 /* ??? */)) {
             mCallback.field_0x04E = false;
             field_0xD71 = false;
-            fn_226_AFB0();
+            setSwordLinkTransformPlayer();
             mSwordLink.get()->setGetSword();
         } else {
             fn_226_D070();
@@ -1374,14 +1375,13 @@ void dAcGirahimuBase_c::executeState_Link_SwordWalk() {
     }
 
     sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
-    s32 f = field_0x183E - mRotation.y;
 
-    f32 f0 = 1.0f - std::abs(mAng(f).normal_c());
+    f32 f0 = 1.0f - std::abs(mAng::s2n_c(field_0x183E - mRotation.y));
     mAngle.y = mRotation.y;
 
     if (f0 <= 0.6f) {
-        fn_226_A070(field_0x183E);
-        f0 = 2.0f;
+        fn_226_A070(field_0x183E.mVal);
+        f0 = 0.0f;
     } else if (mAnmIDBody != ANM_Walk) {
         setAnm("WalkBt", ANM_Walk, nullptr, m3d::PLAY_MODE_4, 15.0f, 1.2f);
     }
@@ -1475,7 +1475,7 @@ void dAcGirahimuBase_c::initializeState_BackStep() {
         setAnm("StepLoop", ANM_StepLoop, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
         field_0xD44 = 2;
     } else {
-        setAnm("StepStart", ANM_StepStart, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
+        setAnm("StepStart", ANM_StepStart, nullptr, m3d::PLAY_MODE_4, 2.0f, 0.0f);
         field_0xD44 = 0;
     }
 
@@ -1491,13 +1491,13 @@ void dAcGirahimuBase_c::executeState_BackStep() {
     s32 _weird_zero = 0;
 
     field_0xD7C = false;
-    mCyl2.ClrAtSet();
-    mSph0.ClrAtSet();
+    mCyl2.ClrTgSet();
+    mSph0.ClrTgSet();
 
     switch (field_0xD44) {
         case 0: {
             field_0xD7D = false;
-            if (mAng(mRotation.y - field_0x183E).abs() < 0x4000 && field_0xD56 <= 0) {
+            if (mAng(mRotation.y - field_0x183E).abs() < 0x4000 && field_0xD46 <= 0) {
                 fn_226_D070();
                 setAnm("StepStart", ANM_StepStart, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
                 field_0xD44++;
@@ -1524,7 +1524,7 @@ void dAcGirahimuBase_c::executeState_BackStep() {
             }
         } break;
         case 3: {
-            field_0x1838 = 0.1f;
+            field_0x1858 = 0.1f;
             if (mAnmChrs[ANMIDX_Body].isStop()) {
                 vt_0x220();
             }
@@ -1619,7 +1619,7 @@ void dAcGirahimuBase_c::executeState_EscapeBack() {
     if (field_0xD46 <= 0) {
         vt_0x220();
     }
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x2000);
 }
 void dAcGirahimuBase_c::finalizeState_EscapeBack() {
     field_0xD44 = 0;
@@ -1834,9 +1834,9 @@ void dAcGirahimuBase_c::initializeState_Counter() {
         setAnm("PoseLAttack", ANM_PoseLAttack, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     } else if (mAnmIDBody == ANM_PoseR) {
         setAnm("PoseRAttack", ANM_PoseRAttack, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
-    } else if (mAnmIDBody == ANM_PoseC) {
-        setAnm("PoseCAttack", ANM_PoseCAttack2, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     } else if (mAnmIDBody == ANM_PoseC2) {
+        setAnm("PoseCAttack", ANM_PoseCAttack2, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
+    } else if (mAnmIDBody == ANM_PoseC) {
         setAnm("PoseCAttack", ANM_PoseCAttack, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     } else {
         int rnd = cM::rndInt(90);
@@ -1845,7 +1845,7 @@ void dAcGirahimuBase_c::initializeState_Counter() {
         } else if (rnd > 30) {
             setAnm("PoseRAttack", ANM_PoseRAttack, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         } else {
-            setAnm("PoseCAttack", ANM_PoseC, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
+            setAnm("PoseCAttack", ANM_PoseCAttack, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         }
         field_0xD7E = true;
     }
@@ -1856,7 +1856,7 @@ void dAcGirahimuBase_c::initializeState_Counter() {
 }
 void dAcGirahimuBase_c::executeState_Counter() {
     sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
-    if (16.0f <= mAnmChrs[ANMIDX_Body].getFrame() && mAnmChrs[ANMIDX_Body].getFrame() <= 20.0f) {
+    if (mAnmChrs[ANMIDX_Body].getFrame() >= 16.0f && mAnmChrs[ANMIDX_Body].getFrame() <= 20.0f) {
         mMdlSwordA.enableAttack();
         mMdlSwordA.setProcActive(true);
     } else {
@@ -1996,7 +1996,7 @@ void dAcGirahimuBase_c::initializeState_RunAttack() {
     }
     mCallback.field_0x088 = true;
     field_0x1834 = 0.0f;
-    field_0x1838 = 0.2f;
+    field_0x1858 = 0.2f;
 }
 void dAcGirahimuBase_c::executeState_RunAttack() {
     if (mAnmChrs[ANMIDX_Body].getFrame() > 20.0f) {
@@ -2041,11 +2041,11 @@ void dAcGirahimuBase_c::executeState_BackWalk() {
 void dAcGirahimuBase_c::finalizeState_BackWalk() {}
 
 dAcGirahimuBase_c::~dAcGirahimuBase_c() {
-    if (mpSoundSource != nullptr) {
-        if (mpSoundSource->hasPlayingSounds()) {
+    if (pSoundIface != nullptr) {
+        if (pSoundIface->hasPlayingSounds()) {
             do {
                 VIWaitForRetrace();
-            } while (mpSoundSource->hasPlayingSounds());
+            } while (pSoundIface->hasPlayingSounds());
         }
     }
 }
