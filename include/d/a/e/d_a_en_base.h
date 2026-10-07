@@ -72,6 +72,10 @@ public:
         mFinalBlowPosition = v;
     }
 
+    s32 getHealth() const {
+        return mHealth;
+    }
+
     dAcBomb_c *getBombWithinRadius(f32 radius); // fn_8002f700
 
     void playDeathEffect0(const mVec3_c &pos, const mVec3_c *pScale, bool skipKill);

@@ -123,8 +123,9 @@ public:
         /* 0x08C */ mVec3_c field_0x08C; // Head Translation
         /* 0x098 */ f32 field_0x098;
 
-        /* 0x09C*/ u8 _0x09C[0x0B4 - 0x09C];
+        /* 0x09C*/ u8 _0x09C[0x0A8 - 0x09C];
 
+        /* 0x0A8 */ mVec3_c field_0x0A8;
         /* 0x0B4 */ mAng field_0x0B4;
 
         /* 0x0B6*/ u8 _0x0B6[0x0E8 - 0x0B6];
@@ -411,7 +412,7 @@ public:
     void fn_226_D2D0();
     void fn_226_D5A0();
 
-private:
+protected:
     /* 0x0378 */ STATE_MGR_DECLARE(dAcGirahimuBase_c);
     /* 0x03B4 */ m3d::mdl_c mMdlBody;
     /* 0x03D8 */ m3d::anmChrBlend_c mAnmChrBlend;
@@ -463,7 +464,7 @@ private:
     /* 0x0D64 */ s16 field_0xD64;
     /* 0x0D66 */ s16 field_0xD66;
     /* 0x0D68 */ s16 field_0xD68;
-    /* 0x0D6A */ s16 field_0xD6A;
+    /* 0x0D6A */ s16 mBossCaptionTimer;
     /* 0x0D6C */ s32 field_0xD6C;
     /* 0x0D70 */ bool field_0xD70;
     /* 0x0D71 */ bool field_0xD71;
@@ -482,8 +483,9 @@ private:
     /* 0x0D80 */ bool field_0xD80;
     /* 0x0D81 */ bool field_0xD81;
     /* 0x0D82 */ bool field_0xD82;
+    /* 0x0D83 */ bool mbShownBossCaption;
 
-    /* 0x0D83 */ u8 _0xD83[0xD88 - 0xD83];
+    /* 0x0D84 */ u8 _0xD84[0xD88 - 0xD84];
 
     /* 0x0D88 */ u32 mPlayerAttackDir;
     /* 0x0D8C */ bool field_0xD8C;
@@ -497,8 +499,9 @@ private:
     /* 0x12E4 */ dEnemySwordMdl_c mMdlSwordB;
     /* 0x1820 */ mVec3_c field_0x1820; // SwordB Translation
 
-    /* 0x182C */ u8 _0x182C[0x1834 - 0x182C];
+    /* 0x182C */ u8 _0x182C[0x1830 - 0x182C];
 
+    /* 0x1830 */ f32 field_0x1830;
     /* 0x1834 */ f32 field_0x1834;
     /* 0x1838 */ f32 field_0x1838;
     /* 0x183C */ mAng field_0x183C;

@@ -16,6 +16,9 @@
 
 class dAcObjGirahimuKnife_c : public dAcEnBase_c {
 public:
+    friend class dAcGirahimuBase_c;
+    friend class dAcGirahimu_c;
+
     dAcObjGirahimuKnife_c() : mGlowEmitter(this), mTrailEmitter(this), mStateMgr(*this) {}
     virtual ~dAcObjGirahimuKnife_c() {}
 
