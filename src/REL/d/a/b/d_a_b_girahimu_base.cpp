@@ -2226,8 +2226,8 @@ int dAcGirahimuBase_c::doDelete() {
 
 int dAcGirahimuBase_c::preExecute() {
     if ((dAcPy_c::GetLink()->getCurrentAction() == 74 /* DIE */ || dLytMsgWindow_c::getInstance()->isVisible()) &&
-        field_0xD6A > 0) {
-        field_0xD6A = 0;
+        mBossCaptionTimer > 0) {
+        mBossCaptionTimer = 0;
         dLytBossCaption_c::GetInstance()->unk_inline1();
     }
     dAcEnBase_c::preExecute();
@@ -2260,7 +2260,7 @@ void dAcGirahimuBase_c::vt_0x1DC() {
     if (--field_0xD54 <= 0) { field_0xD54 = 0; }
     if (--field_0xD4C <= 0) { field_0xD4C = 0; }
     if (--field_0xD5C <= 0) { field_0xD5C = 0; }
-    if (--field_0xD6A <= 0) { field_0xD6A = 0; }
+    if (--mBossCaptionTimer <= 0) { mBossCaptionTimer = 0; }
     if (--field_0xD68 <= 0) { field_0xD68 = 0; }
     if (--field_0xD58 <= 0) { field_0xD58 = 0; }
     // clang-format on

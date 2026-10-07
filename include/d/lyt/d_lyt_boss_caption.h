@@ -9,7 +9,7 @@ public:
         return sInstance;
     }
 
-    void show(const char *label, UNKWORD);
+    void show(const char *label, const char *);
 
     // I believe this is the inline that causes all the Rev0 -> Rev1 pain in RELs...
     void unk_inline() {

@@ -158,6 +158,10 @@ public:
         mFlags &= ~flag;
     }
 
+    bool isFadeComplete() const {
+        return checkFlag(EMITTER_Fading) && mFadeTimer == 0;
+    }
+
     void realizeAlpha();
     bool areAllEmittersDone();
 
