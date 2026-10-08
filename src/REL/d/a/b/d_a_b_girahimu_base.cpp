@@ -244,7 +244,7 @@ void dAcGirahimuBase_c::callback_c::fn_226_1160() {
         }
     }
     field_0x0E8.setTranslation(field_0x164);
-    field_0x19C.scaleM(mpGhirahim->field_0x8BC);
+    field_0x0E8.scaleM(mpGhirahim->field_0x8BC);
 }
 
 void dAcGirahimuBase_c::callback_c::init(dAcGirahimuBase_c *pGhirahim) {
@@ -2573,6 +2573,8 @@ void dAcGirahimuBase_c::fn_226_9690() {
 }
 
 void dAcGirahimuBase_c::fn_256_99F0() {
+    mVec3_c _v0 = field_0x12D0;
+    mVec3_c _v1(0.0f, 0.0f, 0.0f);
     mMtx_c swordRTransform;
     mMdlBody.getNodeWorldMtx(mMdlBody.getResMdl().GetResNode("SwordR_loc").GetID(), swordRTransform);
     swordRTransform.getTranslation(field_0x12D0);
@@ -2580,7 +2582,8 @@ void dAcGirahimuBase_c::fn_256_99F0() {
     if (field_0x8B0.x < 1.05f) {
         swordRTransform.scaleM(field_0x8B0);
     } else {
-        swordRTransform.scaleM(mVec3_c(1.05f, field_0x12DC, 1.05f));
+        mVec3_c scale(1.05f, field_0x12DC, 1.05f);
+        swordRTransform.scaleM(scale);
     }
 
     mVec3_c v0(0.0f, 0.0f, 1.0f);
@@ -2589,6 +2592,8 @@ void dAcGirahimuBase_c::fn_256_99F0() {
     swordRTransform.ZrotM(a);
     mMdlSwordA.calc(swordRTransform, v0, false);
 
+    mVec3_c _v2 = field_0x1820;
+    mVec3_c _v3(0.0f, 0.0f, 0.0f);
     mMtx_c swordLTransform;
     mMdlBody.getNodeWorldMtx(mMdlBody.getResMdl().GetResNode("SwordL_loc").GetID(), swordLTransform);
     swordLTransform.getTranslation(field_0x1820);
@@ -2596,13 +2601,14 @@ void dAcGirahimuBase_c::fn_256_99F0() {
     if (field_0x8B0.x < 1.05f) {
         swordLTransform.scaleM(field_0x8B0);
     } else {
-        swordLTransform.scaleM(mVec3_c(1.05f, field_0x12DC, 1.05f));
+        mVec3_c scale(1.05f, field_0x12DC, 1.05f);
+        swordLTransform.scaleM(scale);
     }
 
     mVec3_c v1(0.0f, 0.0f, 1.0f);
     v1.rotY(mRotation.y);
     swordLTransform.ZrotM(a);
-    mMdlSwordB.calc(swordLTransform, v0, false);
+    mMdlSwordB.calc(swordLTransform, v1, false);
 }
 
 void dAcGirahimuBase_c::fn_256_9C90() {

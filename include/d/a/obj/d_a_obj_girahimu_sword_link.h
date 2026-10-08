@@ -44,6 +44,13 @@ public:
         return mMdl;
     }
 
+    void setAngleCopy(const mAng3_c &ang) {
+        mAngleCopy.set(ang);
+    }
+    void setGhirahimPosition(const mVec3_c &pos) {
+        mGhirahimPos.set(pos);
+    }
+
     STATE_FUNC_DECLARE(dAcObjGirahimuSwordLink_c, Hide);
     STATE_FUNC_DECLARE(dAcObjGirahimuSwordLink_c, Equip);
     STATE_FUNC_DECLARE(dAcObjGirahimuSwordLink_c, GetSword);

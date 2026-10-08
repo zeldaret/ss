@@ -77,6 +77,9 @@ public:
         setInactive();
         mProc.setActive(false);
     }
+    void setField_0x080(const mVec3_c &v) {
+        field_0x080 = v;
+    }
 };
 
 #endif
