@@ -429,7 +429,7 @@ void dAcObjGirahimuKnife_c::initializeState_CircleWait() {
     // Dont think about it
     mAng som = sSomething1;
     mAng newval = som + 0x1000;
-    if (field_0x784 == 7) {
+    if (mKnifePattern == 7) {
         newval = som - 0x800;
     }
     sSomething1 = newval;
@@ -446,7 +446,7 @@ void dAcObjGirahimuKnife_c::executeState_CircleWait() {
     mSph0.SetR(50.0f);
     field_0x78F = true;
     fn_239_2B10();
-    if (field_0x784 == 7) {
+    if (mKnifePattern == 7) {
         fn_239_1F50(dAcPy_c::GetLink()->mPosition, 50.0f);
     } else {
         fn_239_2110(dAcPy_c::GetLink()->mPosition, 150.0f, 0);
@@ -740,12 +740,12 @@ bool dAcObjGirahimuKnife_c::checkCutDir(s32 cutDir) {
         return false;
     }
     if (dAcPy_c::GetLink()->isAttackingSpin() && dAcPy_c::GetLink()->isAttackingHorizontal()) {
-        if (field_0x784 == 0 || field_0x784 == 6) {
+        if (mKnifePattern == 0 || mKnifePattern == 6) {
             return true;
         }
     }
     if (dAcPy_c::GetLink()->isAttackingSpin() && dAcPy_c::GetLink()->isAttackingVertical()) {
-        if (field_0x784 == 3 || field_0x784 == 7) {
+        if (mKnifePattern == 3 || mKnifePattern == 7) {
             return true;
         }
     }
@@ -753,28 +753,28 @@ bool dAcObjGirahimuKnife_c::checkCutDir(s32 cutDir) {
     switch (cutDir) {
         case CUT_DIR_U:
         case CUT_DIR_D:
-            if (field_0x784 == 3) {
+            if (mKnifePattern == 3) {
                 return true;
             }
             break;
 
         case CUT_DIR_RD:
         case CUT_DIR_LU:
-            if (field_0x784 == 2) {
+            if (mKnifePattern == 2) {
                 return true;
             }
             break;
 
         case CUT_DIR_R:
         case CUT_DIR_L:
-            if (field_0x784 == 0) {
+            if (mKnifePattern == 0) {
                 return true;
             }
             break;
 
         case CUT_DIR_RU:
         case CUT_DIR_LD:
-            if (field_0x784 == 1) {
+            if (mKnifePattern == 1) {
                 return true;
             }
             break;

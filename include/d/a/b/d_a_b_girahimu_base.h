@@ -346,6 +346,12 @@ public:
         return res;
     }
 
+    void setAnmRate(f32 rate) {
+        for (int i = 0; i < 5; ++i) {
+            mAnmChrs[i].setRate(rate);
+        }
+    }
+
     void initNodeData();
     void createCollision();
 
@@ -484,9 +490,8 @@ protected:
     /* 0x0D81 */ bool field_0xD81;
     /* 0x0D82 */ bool field_0xD82;
     /* 0x0D83 */ bool mbShownBossCaption;
-
-    /* 0x0D84 */ u8 _0xD84[0xD88 - 0xD84];
-
+    /* 0x0D84 */ bool field_0xD84;
+    /* 0x0D85 */ bool field_0xD85;
     /* 0x0D88 */ u32 mPlayerAttackDir;
     /* 0x0D8C */ bool field_0xD8C;
     /* 0x0D8D */ bool field_0xD8D;
@@ -527,9 +532,8 @@ protected:
     /* 0x20D8 */ dColliderLinkedList mCollider;
     /* 0x20E4 */ f32 field_0x20E4;
     /* 0x20E8 */ f32 field_0x20E8;
-
-    /* 0x20EC */ u8 _0x20EC[0x2104 - 0x20EC];
-
+    /* 0x20EC */ mVec3_c field_0x20EC;
+    /* 0x20F8 */ mVec3_c field_0x20F8;
     /* 0x2104 */ dAcObjRef_c mRef0;
     /* 0x2110 */ dAcRef_c<dAcObjGirahimuSwordLink_c> mSwordLink;
     /* 0x211C */ dFlow_c mFlow;

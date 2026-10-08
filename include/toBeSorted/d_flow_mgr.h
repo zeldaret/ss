@@ -12,6 +12,7 @@ public:
 
     void triggerEntryPoint(s32 labelPart1, s32 labelPart2, u8 p4, u8 p5);
     bool checkFinished();
+    bool fn_800C40F0();
 
 private:
     /* 0x04 */ dFlow_c *mpFlow;
