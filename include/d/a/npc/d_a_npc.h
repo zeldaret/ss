@@ -29,7 +29,7 @@ class dAcNpc_c;
 class dNpcMdlCallbackEye_c : public nw4r::g3d::IScnObjCallback {
 public:
     dNpcMdlCallbackEye_c() {}
-    virtual ~dNpcMdlCallbackEye_c() {}
+    virtual ~dNpcMdlCallbackEye_c();
 
     void create(m3d::smdl_c &mdl, u16 eyeMatL, u16 eyeMatR, u8, u8, dAcObjBase_c *);
 
