@@ -3,7 +3,7 @@
 #include "c/c_lib.h"
 #include "c/c_math.h"
 #include "common.h"
-#include "d/a/b/d_a_b_girahimu2.h"
+#include "d/a/b/d_a_b_girahimu_base.h"
 #include "d/a/d_a_player.h"
 #include "d/a/e/d_a_en_base.h"
 #include "d/col/bg/d_bg_s.h"
@@ -323,7 +323,7 @@ void dAcObjGirahimuKnife_c::executeState_SpinWait() {
     if (mSph0.ChkTgHit()) {
         dAcEnBase_c *pEn = FindEnemy(fProfile::B_GIRAHIMU2);
         if (pEn != nullptr) {
-            static_cast<dAcGirahimu2_c *>(pEn)->setField_0xD52(120);
+            static_cast<dAcGirahimuBase_c *>(pEn)->field_0xD52 = 120;
         }
     }
     fn_239_1DB0(field_0x6D8, field_0x744);
