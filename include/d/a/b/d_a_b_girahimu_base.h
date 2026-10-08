@@ -40,6 +40,9 @@ struct LinkSph {
 };
 class dAcGirahimuBase_c : public dAcEnBase_c {
 public:
+    friend class dAcObjGirahimuSwordLink_c;
+    friend class dAcObjGirahimuKnife_c;
+
     dAcGirahimuBase_c() : mStateMgr(*this), mFlowMgr(&mFlow) {}
     virtual ~dAcGirahimuBase_c();
 
