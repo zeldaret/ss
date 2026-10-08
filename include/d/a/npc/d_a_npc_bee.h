@@ -8,10 +8,10 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_cc.h"
-#include "m/m3d/m_proc.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
+#include "toBeSorted/d_unk_mdl_stuff_2.h"
 
 class dAcOSpore_c;
 
