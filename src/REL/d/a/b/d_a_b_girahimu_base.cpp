@@ -556,27 +556,29 @@ void dAcGirahimuBase_c::callback_c::fn_226_24E0() {
 }
 
 void dAcGirahimuBase_c::callback_c::fn_226_24F0() {
+    mVec3_c v1;
+    mVec3_c v2;
     mVec3_c v3 = field_0x260;
     mVec3_c v4 = field_0x18C;
     mVec3_c v5 = v4 - v3;
     v5.normalizeRS();
-    v5 = v5 * field_0x188;
+    v5 *= field_0x188;
     v5 += v3;
 
-    mVec3_c v1 = field_0x21C - v3;
-    v4.set(v5);
+    v4 = v5;
+    v1 = field_0x21C - v3;
     v1.normalizeRS();
     v1 *= field_0x188;
     v1 += v3;
     if (v1.y <= v4.y) {
-        v4.y += v1.y - v4.y;
+        f32 f = v1.y - v4.y;
+        v4.y += f;
     }
     mVec3_c v6 = field_0x21C - v4;
     v6.normalizeRS();
     v6 *= field_0x234;
     v6 += v4;
 
-    mVec3_c v2;
     v1 = v6 - v3;
     v2 = field_0x21C - v3;
 
@@ -591,19 +593,21 @@ void dAcGirahimuBase_c::callback_c::fn_226_24F0() {
     m.multVec(v7, v7);
     v7 += v3;
 
-    v1 = v7 - field_0x21C;
-    v4.set(v7);
+    v4 = v7;
 
+    v1 = v4 - field_0x21C;
     v1.normalizeRS();
-    v4 = v1 * field_0x234;
-    v4 += field_0x21C;
+    v1 *= field_0x234;
+    v1 += field_0x21C;
 
-    v1.set(v4);
-    v1 -= field_0x260;
+    v4 = v1;
+
+    v1 = v4 - field_0x260;
     v1.normalizeRS();
-    v4 = v1 * field_0x188;
-    v4 += field_0x260;
-    v1.set(v4);
+    v1 *= field_0x188;
+    v1 += field_0x260;
+
+    v4 = v1;
     cLib::addCalcPos2(&field_0x164, v4, 0.5f, 100.0f);
 }
 
