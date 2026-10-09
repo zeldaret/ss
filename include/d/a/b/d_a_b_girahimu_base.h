@@ -165,8 +165,10 @@ public:
         /* 0x23E */ mAng field_0x23E;
         /* 0x240 */ mAng field_0x240;
         /* 0x242 */ mAng field_0x242;
+        /* 0x244 */ bool field_0x244;
+        /* 0x244 */ bool field_0x245;
 
-        /* 0x244*/ u8 _0x244[0x254 - 0x244];
+        /* 0x246*/ u8 _0x246[0x254 - 0x246];
 
         /* 0x254 */ mVec3_c field_0x254;
         /* 0x260 */ mVec3_c field_0x260; // HandR Translation
@@ -240,7 +242,7 @@ public:
         ANM_Call = 0x30,
 
         ANM_AttackKnife = 0x32,
-        ANM_FaceTonuge = 0x33,
+        ANM_FaceTongue = 0x33,
         ANM_FaceSmaile = 0x34,
         ANM_LSwordReturn = 0x35,
         ANM_TurnL = 0x36,
@@ -251,7 +253,7 @@ public:
         ANM_StepEnd = 0x3B,
         ANM_PoseUpper = 0x3C,
         ANM_PoseFree = 0x3D,
-
+        ANM_PoseUpperAttack = 0x3E,
         ANM_GuardTwoSword = 0x3F,
         ANM_EndA = 0x40,
         ANM_EndBLoop = 0x41,

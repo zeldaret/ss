@@ -959,7 +959,7 @@ void dAcGirahimuBase_c::initializeState_Catch() {
     if (!field_0x1871 || cM::rndInt(100) > 50) {
         field_0x1871 = true;
         field_0xD7E = true;
-        setAnm("Catch", ANM_Catch, "Catch", ANM_Catch, "FaceTongue", ANM_FaceTonuge, m3d::PLAY_MODE_4, 5.0f, 1.0f);
+        setAnm("Catch", ANM_Catch, "Catch", ANM_Catch, "FaceTongue", ANM_FaceTongue, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     } else {
         setAnm("Catch", ANM_Catch, "Catch", ANM_Catch, "FaceSmaile", ANM_FaceSmaile, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     }
@@ -999,7 +999,7 @@ void dAcGirahimuBase_c::executeState_Catch() {
     if (mAnmChrs[ANMIDX_Body].isStop()) {
         if (field_0xD7E) {
             setAnm(
-                "CatchLoop", ANM_CatchLoop, "CatchLoop", ANM_CatchLoop, "FaceTongue", ANM_FaceTonuge, m3d::PLAY_MODE_4,
+                "CatchLoop", ANM_CatchLoop, "CatchLoop", ANM_CatchLoop, "FaceTongue", ANM_FaceTongue, m3d::PLAY_MODE_4,
                 5.0f, 1.0f
             );
         } else {
@@ -1102,7 +1102,7 @@ void dAcGirahimuBase_c::initializeState_LinkSwordGuardJust() {
     } else {
         setAnm("GuardLSwordB", ANM_GuardLSwordB, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     }
-    mCallback.field_0x088 = 0;
+    mCallback.field_0x088 = false;
     field_0xD72 = false;
 
     mVec3_c throwForce(0.0f, 0.0f, 600.0f);
