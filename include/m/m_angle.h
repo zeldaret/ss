@@ -54,10 +54,11 @@ public:
         return *this;
     }
 
-    template <typename T>
-    bool operator==(const T other) {
-        return mVal == other;
-    }
+    // Commented Out Due to some cases of reg swaps
+    // template <typename T>
+    // bool operator==(const T other) {
+    //     return mVal == other;
+    // }
 
 public:
     static s32 abs(const mAng b) {
