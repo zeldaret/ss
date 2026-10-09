@@ -16,8 +16,22 @@
 
 class dAcObjGirahimuKnife_c : public dAcEnBase_c {
 public:
+    friend class dAcGirahimuBase_c;
+    friend class dAcGirahimu2_c;
+    friend class dAcGirahimu_c;
+
     dAcObjGirahimuKnife_c() : mGlowEmitter(this), mTrailEmitter(this), mStateMgr(*this) {}
     virtual ~dAcObjGirahimuKnife_c() {}
+
+    enum Pattern_e {
+        PATTERN_R_L = 0,        // Horizontal
+        PATTERN_RU_LD = 1,      // Diagonal
+        PATTERN_RD_LU = 2,      // Diagonal
+        PATTERN_U_D = 3,        // Vertical
+        PATTERN_VOLLEY = 4,     // Ghirahim 3 Dart attack - 8 darts 1 by 1
+        PATTERN_SURROUND_H = 6, // Surround Player Horizontally
+        PATTERN_SURROUND_V = 7  // Surround Player Vertically
+    };
 
     virtual int create() override;
     virtual int draw() override;
@@ -61,6 +75,16 @@ public:
     void getReflectForce(cCcD_Obj &cc, f32 forceMult, mVec3_c &outforce);
     void adjustVelocity(const mVec3_c &force, f32 yVel, f32 forwardVel);
 
+    bool isCirclingPlayer() const {
+        return mKnifePattern == PATTERN_SURROUND_H || mKnifePattern == PATTERN_SURROUND_V;
+    }
+    void setPattern(Pattern_e pattern) {
+        mKnifePattern = pattern;
+    }
+    void setState(s32 state) {
+        mState = state;
+    }
+
 private:
     /* 0x378 */ m3d::smdl_c mMdl;
     /* 0x394 */ dShadowCircle_c mShadow;
@@ -88,7 +112,7 @@ private:
     /* 0x778 */ s16 field_0x778;
     /* 0x77C */ f32 field_0x77C;
     /* 0x780 */ mAng field_0x780;
-    /* 0x784 */ s32 field_0x784;
+    /* 0x784 */ s32 mKnifePattern;
     /* 0x788 */ s32 mState;
     /* 0x78C */ bool field_0x78C;
     /* 0x78D */ bool field_0x78D;

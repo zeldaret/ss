@@ -1,22 +1,95 @@
 #ifndef D_A_B_GIRAHIMU2_H
 #define D_A_B_GIRAHIMU2_H
 
-#include "d/a/e/d_a_en_base.h"
+#include "common.h"
+#include "d/a/b/d_a_b_girahimu_base.h"
+#include "d/a/d_a_base.h"
+#include "m/m3d/m_fanm.h"
 #include "s/s_State.hpp"
 
-class dAcGirahimu2_c : public dAcEnBase_c {
+class dAcObjGirahimuKnife_c;
+
+class dAcGirahimu2_c : public dAcGirahimuBase_c {
 public:
-    dAcGirahimu2_c() : mStateMgr(*this) {}
+    dAcGirahimu2_c() : field_0x221E(false) {}
     virtual ~dAcGirahimu2_c() {}
 
-    void setField_0xD52(u16 val) {
-        field_0xD52 = val;
+    virtual int doDelete() override;
+    virtual bool createHeap() override;
+    virtual int actorCreate() override;
+    virtual int actorExecute() override;
+
+    STATE_VIRTUAL_OVERRIDE_FUNC_DECLARE(dAcGirahimu2_c, dAcGirahimuBase_c, Walk);
+    STATE_VIRTUAL_OVERRIDE_FUNC_DECLARE(dAcGirahimu2_c, dAcGirahimuBase_c, Catch);
+    STATE_VIRTUAL_OVERRIDE_FUNC_DECLARE(dAcGirahimu2_c, dAcGirahimuBase_c, CatchDamage);
+    STATE_VIRTUAL_OVERRIDE_FUNC_DECLARE(dAcGirahimu2_c, dAcGirahimuBase_c, Counter);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, G_SwordDamage); // Non virtual override?? (still virtual)
+
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, CreateSpinKnife);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, WaitKnifeAttack);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, KnifeAttack);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, KnifePreAttack);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, G_SwordDemo);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, G_SwordWait);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, G_SwordPiyori);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, Death);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, DeathMiniGame);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, UpWarp);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, UpAttack);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, CreateKnife);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, ComeOn);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, ComeOnGuard);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, GuardJustCounter);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, TwoSwordAttack);
+    STATE_FUNC_DECLARE(dAcGirahimu2_c, HitAction);
+
+    STATE_MGR_DEFINE_UTIL_ISSTATE(dAcGirahimu2_c);
+    using dAcGirahimuBase_c::isState;
+
+    virtual void vt_0x1DC() override;
+    virtual void vt_0x1F4() override;
+    virtual void vt_0x1F8() override;
+    virtual void vt_0x1FC() override;
+    virtual void vt_0x200() override;
+    virtual void vt_0x204() override;
+    virtual void vt_0x20C() override;
+    virtual bool vt_0x210() override;
+    virtual void vt_0x214() override;
+    virtual bool vt_0x218() override;
+    virtual void vt_0x220() override;
+    virtual void vt_0x224() override {
+        setAnm("PoseLR", ANM_PoseLR, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     }
+    virtual void vt_0x228() override;
+    virtual void vt_0x22C() override;
+    virtual void vt_0x230() override;
+    virtual void vt_0x234();
+
+    void fn_228_4550(int idxStart, int idxEnd);
+    void fn_228_47F0(bool);
+    void fn_228_4A30();
+    void fn_228_4C20();
+    bool fn_228_4CD0(s32 cutDir);
+    bool fn_228_5110();
+    void fn_228_5400();
+    void fn_228_5740();
+    bool fn_228_5770(s32 cutDir);
+    bool fn_228_5E90();
+    bool fn_228_5EC0();
+    void fn_228_80A0();
+    void fn_228_80E0();
+    void fn_228_82C0();
 
 private:
-    /* 0x??? */ STATE_MGR_DECLARE(dAcGirahimu2_c);
-
-    /* 0xD52 */ u16 field_0xD52;
+    /* 0x220C */ u8 field_0x220C;
+    /* 0x2210 */ s32 field_0x2210;
+    /* 0x2214 */ s32 field_0x2214;
+    /* 0x2218 */ s32 field_0x2218;
+    /* 0x221C */ bool field_0x221C;
+    /* 0x221D */ bool field_0x221D;
+    /* 0x221E */ bool field_0x221E;
+    /* 0x2220 */ s16 field_0x2220;
+    /* 0x2224 */ dAcRef_c<dAcObjGirahimuKnife_c> mKnives[15];
 };
 
 #endif

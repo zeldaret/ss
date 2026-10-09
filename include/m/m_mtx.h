@@ -183,6 +183,12 @@ public:
     void fn_802F1C40(s32, s32);
     void makeRotationFromVecs(const mVec3_c &, const mVec3_c &, f32);
 
+    static mMtx_c fromIdentity() {
+        mMtx_c m;
+        MTXIdentity(m);
+        return m;
+    }
+
 public:
     static mMtx_c Identity;
 };

@@ -3,7 +3,7 @@
 #include "c/c_lib.h"
 #include "c/c_math.h"
 #include "common.h"
-#include "d/a/b/d_a_b_girahimu2.h"
+#include "d/a/b/d_a_b_girahimu_base.h"
 #include "d/a/d_a_player.h"
 #include "d/a/e/d_a_en_base.h"
 #include "d/col/bg/d_bg_s.h"
@@ -168,7 +168,7 @@ void dAcObjGirahimuKnife_c::executeState_Wait() {
 void dAcObjGirahimuKnife_c::finalizeState_Wait() {
     mSph0.OnTgSet();
     field_0x714.toQuat(field_0x704);
-    mSph0.SetTg_0x4C(0);
+    mSph0.SetTgShieldType(AT_TYPE_NONE);
 }
 
 void dAcObjGirahimuKnife_c::initializeState_Attack() {
@@ -305,7 +305,7 @@ void dAcObjGirahimuKnife_c::initializeState_SpinWait() {
     field_0x6F6.x = cM::rndInt(64000);
     field_0x6F6.z = cM::rndInt(64000);
     field_0x778 = cM::rndInt(32000);
-    mSph0.SetTg_0x4C(-1);
+    mSph0.SetTgShieldType(~AT_TYPE_NONE);
     field_0x774 = 10.0f;
 }
 void dAcObjGirahimuKnife_c::executeState_SpinWait() {
@@ -323,7 +323,7 @@ void dAcObjGirahimuKnife_c::executeState_SpinWait() {
     if (mSph0.ChkTgHit()) {
         dAcEnBase_c *pEn = FindEnemy(fProfile::B_GIRAHIMU2);
         if (pEn != nullptr) {
-            static_cast<dAcGirahimu2_c *>(pEn)->setField_0xD52(120);
+            static_cast<dAcGirahimuBase_c *>(pEn)->field_0xD52 = 120;
         }
     }
     fn_239_1DB0(field_0x6D8, field_0x744);
@@ -336,11 +336,11 @@ void dAcObjGirahimuKnife_c::executeState_SpinWait() {
 void dAcObjGirahimuKnife_c::finalizeState_SpinWait() {
     mSph0.OnTgSet();
     field_0x714.toQuat(field_0x704);
-    mSph0.SetTg_0x4C(0);
+    mSph0.SetTgShieldType(AT_TYPE_NONE);
 }
 
 void dAcObjGirahimuKnife_c::initializeState_SpinWaitPreAttack() {
-    mSph0.SetTg_0x4C(-1);
+    mSph0.SetTgShieldType(~AT_TYPE_NONE);
     field_0x744.x *= 1.5f;
     field_0x744.z = 50.0f;
     field_0x792 = false;
@@ -371,13 +371,13 @@ void dAcObjGirahimuKnife_c::executeState_SpinWaitPreAttack() {
 void dAcObjGirahimuKnife_c::finalizeState_SpinWaitPreAttack() {
     mSph0.OnTgSet();
     field_0x714.toQuat(field_0x704);
-    mSph0.SetTg_0x4C(0);
+    mSph0.SetTgShieldType(AT_TYPE_NONE);
 }
 
 void dAcObjGirahimuKnife_c::initializeState_SpinFreeWait() {
     sSomething0++;
     field_0x778 = cM::rndInt(32000);
-    mSph0.SetTg_0x4C(-1);
+    mSph0.SetTgShieldType(~AT_TYPE_NONE);
     // NOTE - This is needed to force the rodata pool loading despite not emitting anything
     field_0x774 = 20.0f;
     field_0x774 = 0.0f;
@@ -398,7 +398,7 @@ void dAcObjGirahimuKnife_c::finalizeState_SpinFreeWait() {
     sSomething1 = mAng(0);
     mSph0.OnTgSet();
     field_0x714.toQuat(field_0x704);
-    mSph0.SetTg_0x4C(0);
+    mSph0.SetTgShieldType(AT_TYPE_NONE);
 }
 
 void dAcObjGirahimuKnife_c::initializeState_FreeWait() {
@@ -419,17 +419,17 @@ void dAcObjGirahimuKnife_c::executeState_FreeWait() {
 void dAcObjGirahimuKnife_c::finalizeState_FreeWait() {
     mSph0.OnTgSet();
     field_0x714.toQuat(field_0x704);
-    mSph0.SetTg_0x4C(0);
+    mSph0.SetTgShieldType(AT_TYPE_NONE);
 }
 
 // NONMATCHING
 void dAcObjGirahimuKnife_c::initializeState_CircleWait() {
-    mSph0.SetTg_0x4C(-1);
+    mSph0.SetTgShieldType(~AT_TYPE_NONE);
     field_0x774 = 0.0f;
     // Dont think about it
     mAng som = sSomething1;
     mAng newval = som + 0x1000;
-    if (field_0x784 == 7) {
+    if (mKnifePattern == 7) {
         newval = som - 0x800;
     }
     sSomething1 = newval;
@@ -446,7 +446,7 @@ void dAcObjGirahimuKnife_c::executeState_CircleWait() {
     mSph0.SetR(50.0f);
     field_0x78F = true;
     fn_239_2B10();
-    if (field_0x784 == 7) {
+    if (mKnifePattern == 7) {
         fn_239_1F50(dAcPy_c::GetLink()->mPosition, 50.0f);
     } else {
         fn_239_2110(dAcPy_c::GetLink()->mPosition, 150.0f, 0);
@@ -456,7 +456,7 @@ void dAcObjGirahimuKnife_c::executeState_CircleWait() {
 void dAcObjGirahimuKnife_c::finalizeState_CircleWait() {
     mSph0.OnTgSet();
     field_0x714.toQuat(field_0x704);
-    mSph0.SetTg_0x4C(0);
+    mSph0.SetTgShieldType(AT_TYPE_NONE);
     sSomething1 = mAng(0);
 }
 
@@ -708,7 +708,7 @@ void dAcObjGirahimuKnife_c::fn_239_2B10() {
 
     cCcD_Obj *pAtCc = mCollider.findAtHit();
     if (pAtCc != nullptr) {
-        if (pAtCc->GetAtFlag0x8()) {
+        if (pAtCc->ChkAtShieldReflect()) {
             if (mState == 8) {
                 mVec3_c force = mPosition - dAcPy_c::GetLink()->mPosition;
                 force.y = 0.0f;
@@ -719,7 +719,7 @@ void dAcObjGirahimuKnife_c::fn_239_2B10() {
                 field_0x78D = true;
                 changeState(StateID_Return);
             }
-        } else if (pAtCc->GetAtFlag0x2()) {
+        } else if (pAtCc->ChkAtShieldHit()) {
             const dAcPy_c *pPlayer = dAcPy_c::GetLink();
             s16 angY = cLib::targetAngleY(pPlayer->mPosition, mPosition);
             s16 diff = pPlayer->mRotation.y - angY;
@@ -740,12 +740,12 @@ bool dAcObjGirahimuKnife_c::checkCutDir(s32 cutDir) {
         return false;
     }
     if (dAcPy_c::GetLink()->isAttackingSpin() && dAcPy_c::GetLink()->isAttackingHorizontal()) {
-        if (field_0x784 == 0 || field_0x784 == 6) {
+        if (mKnifePattern == 0 || mKnifePattern == 6) {
             return true;
         }
     }
     if (dAcPy_c::GetLink()->isAttackingSpin() && dAcPy_c::GetLink()->isAttackingVertical()) {
-        if (field_0x784 == 3 || field_0x784 == 7) {
+        if (mKnifePattern == 3 || mKnifePattern == 7) {
             return true;
         }
     }
@@ -753,28 +753,28 @@ bool dAcObjGirahimuKnife_c::checkCutDir(s32 cutDir) {
     switch (cutDir) {
         case CUT_DIR_U:
         case CUT_DIR_D:
-            if (field_0x784 == 3) {
+            if (mKnifePattern == 3) {
                 return true;
             }
             break;
 
         case CUT_DIR_RD:
         case CUT_DIR_LU:
-            if (field_0x784 == 2) {
+            if (mKnifePattern == 2) {
                 return true;
             }
             break;
 
         case CUT_DIR_R:
         case CUT_DIR_L:
-            if (field_0x784 == 0) {
+            if (mKnifePattern == 0) {
                 return true;
             }
             break;
 
         case CUT_DIR_RU:
         case CUT_DIR_LD:
-            if (field_0x784 == 1) {
+            if (mKnifePattern == 1) {
                 return true;
             }
             break;

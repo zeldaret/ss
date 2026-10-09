@@ -41,7 +41,7 @@ int dAcOtriforce_c::create() {
     mCollision.ClrCoSet();
     mStartingOffset = cM::rndInt(sStartingOffsetRange);
     mEffects.init(this);
-    mCollision.SetTg_0x4C(0x2000);
+    mCollision.SetTgShieldType(AT_TYPE_ARROW);
     updateMatrix();
     mScale.x = sScale;
     mScale.y = sScale;

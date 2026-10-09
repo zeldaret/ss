@@ -70,9 +70,15 @@ public:
     void setInactive() {
         mIsActive = false;
     }
+    void setProcActive(bool b) {
+        mProc.setActive(b);
+    }
     void disable() {
         setInactive();
         mProc.setActive(false);
+    }
+    void setField_0x080(const mVec3_c &v) {
+        field_0x080 = v;
     }
 };
 

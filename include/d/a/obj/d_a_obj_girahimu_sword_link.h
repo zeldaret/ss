@@ -14,6 +14,10 @@
 
 class dAcObjGirahimuSwordLink_c : public dAcObjBase_c {
 public:
+    friend class dAcGirahimuBase_c;
+    friend class dAcGirahimu_c;
+    friend class dAcGirahimu2_c;
+
     dAcObjGirahimuSwordLink_c() : mEmitter(this), mStateMgr(*this) {}
     virtual ~dAcObjGirahimuSwordLink_c() {}
 
@@ -36,6 +40,17 @@ public:
     bool isStick();
     void reflect(const mVec3_c &rot, f32 gravity, f32, f32 force);
     bool lineCheck();
+
+    dEnemySwordMdl_c &getMdl() {
+        return mMdl;
+    }
+
+    void setAngleCopy(const mAng3_c &ang) {
+        mAngleCopy.set(ang);
+    }
+    void setGhirahimPosition(const mVec3_c &pos) {
+        mGhirahimPos.set(pos);
+    }
 
     STATE_FUNC_DECLARE(dAcObjGirahimuSwordLink_c, Hide);
     STATE_FUNC_DECLARE(dAcObjGirahimuSwordLink_c, Equip);

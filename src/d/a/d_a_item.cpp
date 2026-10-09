@@ -8,6 +8,7 @@
 #include "d/a/obj/d_a_obj_boomerang.h"
 #include "d/a/obj/d_a_obj_warp.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_camera.h"
@@ -752,11 +753,13 @@ int dAcItem_c::create() {
     }
 
     if (isHeartPiece()) {
-        mCyl.SetTg_0x4C(0x6CC0);
+        mCyl.SetTgShieldType(
+            AT_TYPE_CLAWSHOT | AT_TYPE_ARROW | AT_TYPE_WHIP | AT_TYPE_DAMAGE | AT_TYPE_SLINGSHOT | AT_TYPE_0x40
+        );
     } else if (isBabyRattle()) {
-        mCyl.SetTg_0x4C(0x6480);
+        mCyl.SetTgShieldType(AT_TYPE_CLAWSHOT | AT_TYPE_ARROW | AT_TYPE_DAMAGE | AT_TYPE_SLINGSHOT);
     } else if (!isAnyRupee() && !isHeartV() && mId != ITEM_STAMINA_FRUIT) {
-        mCyl.SetTg_0x4C(0x6480);
+        mCyl.SetTgShieldType(AT_TYPE_CLAWSHOT | AT_TYPE_ARROW | AT_TYPE_DAMAGE | AT_TYPE_SLINGSHOT);
     }
 
     if (isBabyRattle()) {

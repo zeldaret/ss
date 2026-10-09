@@ -2,6 +2,7 @@
 
 #include "d/a/d_a_item.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_sc_game.h"
 #include "d/flag/storyflag_manager.h"
@@ -67,7 +68,7 @@ int dAcOtoD3StoneFigure_c::create() {
     mPositionCopy3.y = b;
     mPositionCopy3.z = c;
     // mPositionCopy3 = mPositionCopy2;
-    mCollision.SetTg_0x4C(0x2000);
+    mCollision.SetTgShieldType(AT_TYPE_ARROW);
 
     if (!mIsSkyKeepAlreadyOpen) {
         mStateMgr.changeState(StateID_OneEye);
