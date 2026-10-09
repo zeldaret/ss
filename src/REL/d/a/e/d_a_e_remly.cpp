@@ -2058,7 +2058,7 @@ void dAcEremly_c::calcHeadPitch(bool b) {
         mHeadTiltTimer = 100.f + cM::rndF(100.f);
         if (cM::rnd() < 0.3f) {
             mHeadTiltTarget = 0;
-        } else if (mHeadTiltTarget == 0) {
+        } else if (mHeadTiltTarget.mVal == 0) {
             if (cM::rnd() < 0.5f) {
                 mHeadTiltTarget = 5000;
             } else {
