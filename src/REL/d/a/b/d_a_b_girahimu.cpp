@@ -592,7 +592,7 @@ void dAcGirahimu_c::initializeState_Death() {
     field_0x1834 = 0.0f;
     mSpeed = 0.0f;
     field_0x1830 = 200.0f;
-    mCallback.field_0x088 = 0;
+    mCallback.field_0x088 = false;
     field_0xD6C = 0;
     mCollider.ClrTg();
     mMdlSwordA.setField_0x080(mVec3_c(0.0f, -150.0f, 0.0f));

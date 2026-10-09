@@ -17,6 +17,7 @@
 class dAcObjGirahimuKnife_c : public dAcEnBase_c {
 public:
     friend class dAcGirahimuBase_c;
+    friend class dAcGirahimu2_c;
     friend class dAcGirahimu_c;
 
     dAcObjGirahimuKnife_c() : mGlowEmitter(this), mTrailEmitter(this), mStateMgr(*this) {}
@@ -79,6 +80,9 @@ public:
     }
     void setPattern(Pattern_e pattern) {
         mKnifePattern = pattern;
+    }
+    void setState(s32 state) {
+        mState = state;
     }
 
 private:

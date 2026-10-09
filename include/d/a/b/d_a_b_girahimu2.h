@@ -1,8 +1,10 @@
 #ifndef D_A_B_GIRAHIMU2_H
 #define D_A_B_GIRAHIMU2_H
 
+#include "common.h"
 #include "d/a/b/d_a_b_girahimu_base.h"
 #include "d/a/d_a_base.h"
+#include "m/m3d/m_fanm.h"
 #include "s/s_State.hpp"
 
 class dAcObjGirahimuKnife_c;
@@ -41,6 +43,9 @@ public:
     STATE_FUNC_DECLARE(dAcGirahimu2_c, TwoSwordAttack);
     STATE_FUNC_DECLARE(dAcGirahimu2_c, HitAction);
 
+    STATE_MGR_DEFINE_UTIL_ISSTATE(dAcGirahimu2_c);
+    using dAcGirahimuBase_c::isState;
+
     virtual void vt_0x1DC() override;
     virtual void vt_0x1F4() override;
     virtual void vt_0x1F8() override;
@@ -52,7 +57,9 @@ public:
     virtual void vt_0x214() override;
     virtual bool vt_0x218() override;
     virtual void vt_0x220() override;
-    virtual void vt_0x224() override {}
+    virtual void vt_0x224() override {
+        setAnm("PoseLR", ANM_PoseLR, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
+    }
     virtual void vt_0x228() override;
     virtual void vt_0x22C() override;
     virtual void vt_0x230() override;
@@ -74,9 +81,15 @@ public:
     void fn_228_82C0();
 
 private:
-    /* 0x220C */
+    /* 0x220C */ u8 field_0x220C;
+    /* 0x2210 */ s32 field_0x2210;
+    /* 0x2214 */ s32 field_0x2214;
+    /* 0x2218 */ s32 field_0x2218;
+    /* 0x221C */ bool field_0x221C;
+    /* 0x221D */ bool field_0x221D;
     /* 0x221E */ bool field_0x221E;
-    /* 0x2210 */ dAcRef_c<dAcObjGirahimuKnife_c> mKnives[15];
+    /* 0x2220 */ s16 field_0x2220;
+    /* 0x2224 */ dAcRef_c<dAcObjGirahimuKnife_c> mKnives[15];
 };
 
 #endif
