@@ -2940,7 +2940,7 @@ config.libs = [
     Rel(NonMatching, "d_t_musou", "REL/d/t/d_t_musou.cpp"),
     Rel(Matching, "d_t_noeffect_area", "REL/d/t/d_t_noeffect_area.cpp"),
     Rel(NonMatching, "d_t_player_restart", "REL/d/t/d_t_player_restart.cpp"),
-    Rel(NonMatching, "d_t_plight", "REL/d/t/d_t_plight.cpp"),
+    Rel(Matching, "d_t_plight", "REL/d/t/d_t_plight.cpp"),
     Rel(NonMatching, "d_t_pltchg", "REL/d/t/d_t_pltchg.cpp"),
     Rel(NonMatching, "d_t_pumpkin_clay", "REL/d/t/d_t_pumpkin_clay.cpp"),
     Rel(NonMatching, "d_t_reaction", "REL/d/t/d_t_reaction.cpp"),
