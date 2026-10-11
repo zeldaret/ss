@@ -2925,7 +2925,7 @@ config.libs = [
     Rel(NonMatching, "d_t_lb_thunder", "REL/d/t/d_t_lb_thunder.cpp"),
     Rel(Matching, "d_t_light_shaft_eff", "REL/d/t/d_t_light_shaft_eff.cpp"),
     Rel(Matching, "d_t_map_inst", "REL/d/t/d_t_map_inst.cpp"),
-    Rel(NonMatching, "d_t_map_mark", "REL/d/t/d_t_map_mark.cpp"),
+    Rel(Matching, "d_t_map_mark", "REL/d/t/d_t_map_mark.cpp"),
     Rel(NonMatching, "d_t_megami_diving", "REL/d/t/d_t_megami_diving.cpp"),
     Rel(NonMatching, "d_t_miechan", "REL/d/t/d_t_miechan.cpp"),
     Rel(
