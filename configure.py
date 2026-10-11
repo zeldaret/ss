@@ -2899,7 +2899,7 @@ config.libs = [
     Rel(NonMatching, "d_t_bcal_tag", "REL/d/t/d_t_bcal_tag.cpp"),
     Rel(NonMatching, "d_t_bcz", "REL/d/t/d_t_bcz.cpp"),
     Rel(NonMatching, "d_t_beetle", "REL/d/t/d_t_beetle.cpp"),
-    Rel(NonMatching, "d_t_belt_obstacle", "REL/d/t/d_t_belt_obstacle.cpp"),
+    Rel(Matching, "d_t_belt_obstacle", "REL/d/t/d_t_belt_obstacle.cpp"),
     Rel(NonMatching, "d_t_clef_game", "REL/d/t/d_t_clef_game.cpp"),
     Rel(NonMatching, "d_t_clef_manager", "REL/d/t/d_t_clef_manager.cpp"),
     Rel(Matching, "d_t_col_bomb_shield", "REL/d/t/d_t_col_bomb_shield.cpp"),
