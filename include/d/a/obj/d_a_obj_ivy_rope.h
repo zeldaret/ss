@@ -175,7 +175,6 @@ private:
     /* 0x DCC */ dSkinMat_c mCoilMdl;
     /* 0x E24 */ dMultiMat_c mRopeMdl2;
     /* 0x E70 */ ActorOnRail3 mPath;
-    /* 0x E88 */ u8 _E88[0xE94 - 0xE88];
     /* 0x E94 */ cCcD_Stts mStts2;
     /* 0x ED0 */ ActorEventRelated mEvent;
     /* 0x F20 */ mVec3_c mTightropeEnd;
