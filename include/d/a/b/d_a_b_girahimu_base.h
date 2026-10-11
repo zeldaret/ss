@@ -31,6 +31,8 @@
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/d_enemy_sword_mdl.h"
 #include "toBeSorted/d_flow_mgr.h"
+#include "toBeSorted/event.h"
+#include "toBeSorted/event_manager.h"
 
 class dAcObjGirahimuSwordLink_c;
 
@@ -235,12 +237,12 @@ public:
         ANM_PoseUDAttack = 0x28,
         ANM_PoseLUAttack = 0x29,
         ANM_PoseRUAttack = 0x2A,
-
+        ANM_AttackTwoSword = 0x2B,
         ANM_DamageHit = 0x2C,
         ANM_DamageWait = 0x2D,
 
         ANM_Call = 0x30,
-
+        ANM_CallWalk = 0x31,
         ANM_AttackKnife = 0x32,
         ANM_FaceTongue = 0x33,
         ANM_FaceSmaile = 0x34,
@@ -497,7 +499,7 @@ protected:
     /* 0x0D83 */ bool mbShownBossCaption;
     /* 0x0D84 */ bool field_0xD84;
     /* 0x0D85 */ bool field_0xD85;
-    /* 0x0D88 */ u32 mPlayerAttackDir;
+    /* 0x0D88 */ s32 mPlayerAttackDir;
     /* 0x0D8C */ bool field_0xD8C;
     /* 0x0D8D */ bool field_0xD8D;
     /* 0x0D8E */ s16 field_0xD8E;

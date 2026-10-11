@@ -3542,7 +3542,10 @@ void dAcGirahimuBase_c::vt_0x220() {
 }
 
 bool dAcGirahimuBase_c::fn_226_CC80() {
-    return mAnmIDBody == ANM_AttackPoseL || mAnmIDBody == ANM_AttackLRun || mAnmIDBody == ANM_AttackSwordL;
+    if (mAnmIDBody == ANM_AttackPoseL || mAnmIDBody == ANM_AttackLRun || mAnmIDBody == ANM_AttackSwordL) {
+        return true;
+    }
+    return false;
 }
 
 void dAcGirahimuBase_c::vt_0x200() {

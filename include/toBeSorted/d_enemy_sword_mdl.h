@@ -32,6 +32,9 @@ private:
     /* 0x0AC */ dCcD_Linked<dCcD_Cps> mCcs[3];
 
 public:
+    dColliderLinkedList &getCollider() {
+        return mCcList;
+    }
     /* 0x52C */ dColliderLinkedList mCcList;
 
 public:

@@ -85,10 +85,11 @@ private:
     /* 0x2210 */ s32 field_0x2210;
     /* 0x2214 */ s32 field_0x2214;
     /* 0x2218 */ s32 field_0x2218;
-    /* 0x221C */ bool field_0x221C;
+    /* 0x221C */ u8 field_0x221C;
     /* 0x221D */ bool field_0x221D;
     /* 0x221E */ bool field_0x221E;
     /* 0x2220 */ s16 field_0x2220;
+    /* 0x2222 */ s16 field_0x2222;
     /* 0x2224 */ dAcRef_c<dAcObjGirahimuKnife_c> mKnives[15];
 };
 
