@@ -2623,7 +2623,7 @@ config.libs = [
     Rel(Matching, "d_a_obj_pumpkin_leaf", "REL/d/a/obj/d_a_obj_pumpkin_leaf.cpp"),
     Rel(NonMatching, "d_a_obj_push_block", "REL/d/a/obj/d_a_obj_push_block.cpp"),
     Rel(Matching, "d_a_obj_puzzle_island", "REL/d/a/obj/d_a_obj_puzzle_island.cpp"),
-    Rel(NonMatching, "d_a_obj_rail_end", "REL/d/a/obj/d_a_obj_rail_end.cpp"),
+    Rel(Matching, "d_a_obj_rail_end", "REL/d/a/obj/d_a_obj_rail_end.cpp"),
     Rel(Matching, "d_a_obj_rail_post", "REL/d/a/obj/d_a_obj_rail_post.cpp"),
     Rel(NonMatching, "d_a_obj_ride_rock", "REL/d/a/obj/d_a_obj_ride_rock.cpp"),
     Rel(Matching, "d_a_obj_ring", "REL/d/a/obj/d_a_obj_ring.cpp"),
