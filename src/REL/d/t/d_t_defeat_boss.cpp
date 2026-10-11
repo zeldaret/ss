@@ -7,6 +7,10 @@
 
 SPECIAL_ACTOR_PROFILE(TAG_DEFEAT_BOSS, dTgDefeatBoss_c, fProfile::TAG_DEFEAT_BOSS, 0x29E, 0, 0);
 
+// Taking the index before the manager is needed for regalloc in checkDungeonFlag
+static inline u16 getDungeonFlag(u32 idx, const DungeonflagManager *mgr) {
+    return mgr->getCounterOrFlag(idx, 8);
+}
 
 void dTgDefeatBoss_c::getDungeonFlagIndex(u32 &outFlagIdx) {
     outFlagIdx = 0x3;
@@ -15,7 +19,7 @@ void dTgDefeatBoss_c::getDungeonFlagIndex(u32 &outFlagIdx) {
 bool dTgDefeatBoss_c::checkDungeonFlag() {
     u32 dungeonFlagIdx;
     getDungeonFlagIndex(dungeonFlagIdx);
-    return DungeonflagManager::sInstance->getCounterOrFlag(dungeonFlagIdx, 8) != 0;
+    return getDungeonFlag(dungeonFlagIdx, DungeonflagManager::sInstance) != 0;
 }
 
 int dTgDefeatBoss_c::create() {
@@ -39,7 +43,6 @@ int dTgDefeatBoss_c::create() {
 
     return SUCCEEDED;
 }
-
 
 int dTgDefeatBoss_c::actorExecute() {
     if (checkDungeonFlag()) {
@@ -70,10 +73,8 @@ u16 dTgDefeatBoss_c::getSceneflag() {
     return mParams & 0xff;
 }
 
-
 s32 dTgDefeatBoss_c::getSceneflagPolarity() {
     return mParams >> 0x8 & 0x1;
-
 }
 
 u32 dTgDefeatBoss_c::getStoryflag() {
@@ -81,8 +82,5 @@ u32 dTgDefeatBoss_c::getStoryflag() {
 }
 
 s32 dTgDefeatBoss_c::getStoryflagPolarity() {
-
     return (mParams >> 0x19) & 0x1;
-
 }
-
