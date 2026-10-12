@@ -70,8 +70,8 @@ public:
         void fn_226_3130();
         void fn_226_3150(mMtx_c &);
 
-        /* 0x004 */ mQuat_c field_0x004;
-        /* 0x014 */ f32 field_0x014;
+        /* 0x004 */ mQuat_c field_0x004; // Set, never used
+        /* 0x014 */ f32 field_0x014;     // Set, never used
         /* 0x018 */ u16 mNodeID_ShoulderR;
         /* 0x01A */ u16 mNodeID_ShoulderL;
         /* 0x01C */ u16 mNodeID_Hip;
@@ -100,96 +100,96 @@ public:
         /* 0x04A */ u16 mNodeID_KneeR;
         /* 0x04C */ u16 mNodeID_KneeL;
         /* 0x04E */ bool field_0x04E;
-        /* 0x04F */ bool field_0x04F;
-        /* 0x050 */ bool field_0x050;
-        /* 0x052 */ mAng field_0x052;
-        /* 0x054 */ mAng field_0x054;
-        /* 0x056 */ mAng field_0x056;
-        /* 0x058 */ mAng field_0x058;
-        /* 0x05A */ mAng field_0x05A;
-        /* 0x05C */ mAng field_0x05C;
-        /* 0x05E */ mAng field_0x05E;
-        /* 0x060 */ mAng field_0x060;
-        /* 0x062 */ mAng3_c field_0x062;
-        /* 0x068 */ mAng field_0x068;
-        /* 0x06A */ mAng field_0x06A;
-        /* 0x06C */ mAng field_0x06C;
-        /* 0x06E */ mAng field_0x06E;
-        /* 0x070 */ mVec3_c field_0x070;
-        /* 0x07C */ mAng field_0x07C;
-        /* 0x07E */ mAng field_0x07E;
-        /* 0x080 */ mAng field_0x080;
-        /* 0x082 */ mAng field_0x082;
-        /* 0x084 */ mAng field_0x084;
+        /* 0x04F */ bool field_0x04F;               // ??
+        /* 0x050 */ bool field_0x050;               // ??
+        /* 0x052 */ mAng field_0x052;               // unused
+        /* 0x054 */ mAng mLegRotationY;             // Leg RotY
+        /* 0x056 */ mAng mLegRotationYTarget;       // Leg RotY Target
+        /* 0x058 */ mAng mSpineRotationY;           // Spine RotY
+        /* 0x05A */ mAng mSpineRotationX;           // Spine RotX
+        /* 0x05C */ mAng mSpineRotationYTarget;     // Spine RotY Target
+        /* 0x05E */ mAng mSpineRotationXTarget;     // Spine RotX Target
+        /* 0x060 */ mAng mSpineRotationYCorrection; // Spine RotY Correction?
+        /* 0x062 */ mAng3_c field_0x062;            // Used on Hair and Spine rots
+        /* 0x068 */ mAng field_0x068;               // field_0x062 Y Target Adjusted
+        /* 0x06A */ mAng field_0x06A;               // field_0x062 Z Target Adjusted
+        /* 0x06C */ mAng field_0x06C;               // field_0x062 Z Target
+        /* 0x06E */ mAng field_0x06E;               // field_0x062 Y Target
+        /* 0x070 */ mVec3_c mHairTranslation;       // Hair translation
+        /* 0x07C */ mAng mHeadRotationY;            // Head RotY
+        /* 0x07E */ mAng mHeadRotationX;            // Head RotX
+        /* 0x080 */ mAng mHeadRotationYTarget;      // Head RotY Target
+        /* 0x082 */ mAng mHeadRotationXTarget;      // Head RotX Target
+        /* 0x084 */ mAng mHeadRotationYCorrection;  // Head RotY Correction?
 
         /* 0x086*/ u8 _0x086[0x088 - 0x086];
 
         /* 0x088 */ bool field_0x088;
-        /* 0x08C */ mVec3_c field_0x08C; // Head Translation
-        /* 0x098 */ f32 field_0x098;
+        /* 0x08C */ mVec3_c mHeadTranslation; // Head Translation
+        /* 0x098 */ f32 field_0x098;          // ??
 
         /* 0x09C*/ u8 _0x09C[0x0A8 - 0x09C];
 
-        /* 0x0A8 */ mVec3_c field_0x0A8;
-        /* 0x0B4 */ mAng field_0x0B4;
+        /* 0x0A8 */ mVec3_c field_0x0A8; // Set, never used
+        /* 0x0B4 */ mAng field_0x0B4;    // Set, never used
 
         /* 0x0B6*/ u8 _0x0B6[0x0E8 - 0x0B6];
 
-        /* 0x0E8 */ mMtx_c field_0x0E8;  // ElbowR Transform
-        /* 0x118 */ mQuat_c field_0x118; // EbowR Rotation
-        /* 0x128 */ mVec3_c field_0x128;
+        /* 0x0E8 */ mMtx_c mElbowRTransform; // ElbowR Transform
+        /* 0x118 */ mQuat_c mElbowRRotation; // EbowR Rotation
+        /* 0x128 */ mVec3_c field_0x128;     // Set, never used
 
         /* 0x134*/ u8 _0x134[0x164 - 0x134];
 
-        /* 0x164 */ mVec3_c field_0x164; // ElbowR Translation
+        /* 0x164 */ mVec3_c mElblowRTranslation; // ElbowR Translation
 
         /* 0x170*/ u8 _0x170[0x17C - 0x170];
 
-        /* 0x17C */ mVec3_c field_0x17C; // ElbowR Scale
-        /* 0x18C */ f32 field_0x188;     // ElbowR distance to HandR?
-        /* 0x18C */ mVec3_c field_0x18C; // ElbowR Translation from ArmR?
-        /* 0x198 */ bool field_0x198;    // ElbowR first Retrieve
-        /* 0x19C */ mMtx_c field_0x19C;  // ArmR Transform
-        /* 0x1CC */ mQuat_c field_0x1CC; // ArmR Rotation
+        /* 0x17C */ mVec3_c mElbowRScale;        // ElbowR Scale
+        /* 0x18C */ f32 mArmRForearmLength;      // ElbowR distance to HandR?
+        /* 0x18C */ mVec3_c mArmRUpperArmVector; // ElbowR Translation from ArmR?
+        /* 0x198 */ bool mbElbowRTransformGet;   // ElbowR first Retrieve
+        /* 0x19C */ mMtx_c mArmRTransform;       // ArmR Transform
+        /* 0x1CC */ mQuat_c mArmRRotation;       // ArmR Rotation
 
         /* 0x1DC*/ u8 _0x1DC[0x1E8 - 0x1DC];
 
-        /* 0x1E8 */ bool field_0x1E8; // ArmR first Retrieve
+        /* 0x1E8 */ bool mbArmRTransformGet; // ArmR first Retrieve
 
         /* 0x1E9*/ u8 _0x1E9[0x21C - 0x1E9];
 
-        /* 0x21C */ mVec3_c field_0x21C; // ArmR Translation
-        /* 0x228*/ mVec3_c field_0x228;  // ArmR Scale
-        /* 0x234 */ f32 field_0x234;     // ArmR Distance to Elbow?
-        /* 0x238 */ mAng field_0x238;
-        /* 0x23A */ mAng field_0x23A;
-        /* 0x23C */ mAng field_0x23C;
-        /* 0x23E */ mAng field_0x23E;
-        /* 0x240 */ mAng field_0x240;
-        /* 0x242 */ mAng field_0x242;
-        /* 0x244 */ bool field_0x244;
-        /* 0x244 */ bool field_0x245;
+        /* 0x21C */ mVec3_c mArmRTranslation;       // ArmR Translation
+        /* 0x228*/ mVec3_c mArmRScale;              // ArmR Scale
+        /* 0x234 */ f32 mArmRUpperArmLength;        // ArmR Distance to Elbow?
+        /* 0x238 */ mAng mElbowRRotationY;          // ElbowR Y Rot
+        /* 0x23A */ mAng mElbowLRotation;           // ElbowL Y Rot
+        /* 0x23C */ mAng mElbowRRotationYAmplitude; // ElbowR Y Rot Amp
+        /* 0x23E */ mAng mElbowLRotationYAmplitude; // ElbowL Y Rot Amp
+        /* 0x240 */ mAng mElbowRRotationYPhase;     // ElbowR Y Rot Phase
+        /* 0x242 */ mAng mElbowLRotationYPhase;     // ElbowL Y Rot Phase
+        /* 0x244 */ bool field_0x244;               // Set, never used
+        /* 0x244 */ bool field_0x245;               // Set, never used
 
         /* 0x246*/ u8 _0x246[0x254 - 0x246];
 
-        /* 0x254 */ mVec3_c field_0x254;
-        /* 0x260 */ mVec3_c field_0x260; // HandR Translation
+        /* 0x254 */ mVec3_c mHandRAdjustedPosition;
+        /* 0x260 */ mVec3_c mHandRTranslation; // HandR Translation
         /* 0x26C */ mVec3_c field_0x26C;
-        /* 0x278 */ mMtx_c field_0x278;  // HandR Transform
-        /* 0x2A8 */ mQuat_c field_0x2A8; // HandR Rotation
-        /* 0x2B8 */ bool field_0x2B8;    // HandR First Retrieve
-        /* 0x2BA */ mAng field_0x2BA;    // HandR Pitch
+        /* 0x278 */ mMtx_c mHandRTransform;   // HandR Transform
+        /* 0x2A8 */ mQuat_c mHandRRotation;   // HandR Rotation
+        /* 0x2B8 */ bool mbHandRTransformGet; // HandR First Retrieve
+        /* 0x2BA */ mAng mHandRRotationY;     // HandR Rot Y
         /* 0x2BC */ s16 field_0x2BC;
-        /* 0x2C0 */ nw4r::g3d::WorldMtxManip *field_0x2C0;
-        /* 0x2C4 */ nw4r::g3d::WorldMtxManip *field_0x2C4;
+        /* 0x2C0 */ nw4r::g3d::WorldMtxManip *mpArmRManip;   // ArmR Manip
+        /* 0x2C4 */ nw4r::g3d::WorldMtxManip *mpElbowRManip; // ElbowR Manip
         /* 0x2C8 */ dAcGirahimuBase_c *mpGhirahim;
-        /* 0x2CC */ f32 field_0x2CC;
-        /* 0x2D0 */ f32 field_0x2D0; // slerp interpolation
-        /* 0x2D4 */ f32 field_0x2D4;
+        /* 0x2CC */ f32 mHandRPositionMaxStep;
+        /* 0x2D0 */ f32 mSlerpFactor; // slerp interpolation
+        /* 0x2D4 */ f32 mSlerpFactorTarget;
         /* 0x2D8 */ f32 field_0x2D8;
-        /* 0x2DC */ f32 field_0x2DC;
+        /* 0x2DC */ f32 field_0x2DC; // unused
         /* 0x2E0 */ mVec3_c field_0x2E0;
-        /* 0x2EC */ mVec3_c field_0x2EC;
+        /* 0x2EC */ mVec3_c field_0x2EC; // Set, never used
     };
 
     enum AnmID_e {
@@ -322,7 +322,7 @@ public:
     /* vt 0x1F4 */ virtual void vt_0x1F4();
     /* vt 0x1F8 */ virtual void vt_0x1F8();
     /* vt 0x1FC */ virtual void vt_0x1FC() {}
-    /* vt 0x200 */ virtual void vt_0x200();
+    /* vt 0x200 */ virtual void loadMainResFile();
     /* vt 0x204 */ virtual void vt_0x204();
     /* vt 0x208 */ virtual bool vt_0x208();
     /* vt 0x20C */ virtual void vt_0x20C();
@@ -392,7 +392,7 @@ public:
     bool fn_226_A120(mAng, f32);
     bool fn_226_A280(mAng);
     bool turn(mAng);
-    void fn_226_A400(cCcD_Obj *pObj);
+    void adjustSpineHitRotation(cCcD_Obj *pObj);
     bool fn_226_A570();
     mVec3_c getPlayerHeadOffset();
     void executeEarringTransform();
@@ -406,24 +406,24 @@ public:
     void fn_226_BC00();
     void setFrame(f32);
 
-    bool fn_226_BE90(const char *soundName);
+    bool setSound(const char *soundName);
     void fn_226_C060();
     void fn_226_C1C0();
     void fn_226_C320();
     void fn_226_C560();
-    void fn_226_C6A0();
-    void fn_226_C790(cCcD_Obj &cc, s16 anm);
-    void fn_226_CC40();
-    void fn_226_CC50();
-    bool fn_226_CC80();
-    void fn_226_CDA0();
-    void fn_226_CE00();
+    void configureBodyShield();
+    void configureSwordShield(cCcD_Obj &cc, s16 anm);
+    void setTgVulnerable();
+    void setTgInvulnerable();
+    bool isAttackingLeft();
+    void simplifyShoulderLAnmID();
+    void simplifyShoulderRAnmID();
 
-    void fn_226_D070();
-    void fn_226_D090();
+    void clearAnms();
+    void handleEnterExitEffect();
     void fn_226_D2C0();
     void fn_226_D2D0();
-    void fn_226_D5A0();
+    void notifyTgSwordBattleGame();
 
 protected:
     /* 0x0378 */ STATE_MGR_DECLARE(dAcGirahimuBase_c);
@@ -432,7 +432,7 @@ protected:
     /* 0x0400 */ nw4r::g3d::ResFile mResAnmChr0;
     /* 0x0404 */ nw4r::g3d::ResFile mResAnmChr1;
     /* 0x0408 */ m3d::anmChr_c mAnmChrs[5];
-    /* 0x0520 */ dSoundSourceIf_c *pSoundIface;
+    /* 0x0520 */ dSoundSourceIf_c *mpSound;
     /* 0x0524 */ void *mpSoundBrasd;
     /* 0x0528 */ m3d::anmTexPat_c mAnmTexPatWink;
     /* 0x0554 */ dNpcMdlCallbackEye_c mEyeMdlCallback;

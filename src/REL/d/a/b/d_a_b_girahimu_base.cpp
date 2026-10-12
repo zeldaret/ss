@@ -163,15 +163,15 @@ void dAcGirahimuBase_c::callback_c::fn_226_DC0(mMtx_c &out, const mAng3_c &rot, 
 }
 
 void dAcGirahimuBase_c::callback_c::fn_226_E80() {
-    mVec3_c v0 = field_0x164;
+    mVec3_c v0 = mElblowRTranslation;
 
-    mVec3_c v1 = v0 - field_0x21C;
+    mVec3_c v1 = v0 - mArmRTranslation;
     v1.normalizeRS();
 
-    mVec3_c v2 = field_0x260 - v0;
+    mVec3_c v2 = mHandRTranslation - v0;
     v2.normalizeRS();
 
-    mVec3_c v3 = field_0x21C - v0;
+    mVec3_c v3 = mArmRTranslation - v0;
     v3.normalizeRS();
 
     mVec3_c v4;
@@ -193,24 +193,24 @@ void dAcGirahimuBase_c::callback_c::fn_226_E80() {
 
     mQuat_c q0;
     m0.toQuat(q0);
-    field_0x1CC.slerpTo(q0, 1.0f, field_0x1CC);
-    field_0x19C.fromQuat(field_0x1CC);
-    field_0x19C.setTranslation(field_0x21C);
+    mArmRRotation.slerpTo(q0, 1.0f, mArmRRotation);
+    mArmRTransform.fromQuat(mArmRRotation);
+    mArmRTransform.setTranslation(mArmRTranslation);
 
-    field_0x19C.scaleM(mpGhirahim->field_0x8BC);
+    mArmRTransform.scaleM(mpGhirahim->field_0x8BC);
 }
 
 void dAcGirahimuBase_c::callback_c::fn_226_1160() {
-    mVec3_c v0 = field_0x164;
+    mVec3_c v0 = mElblowRTranslation;
 
-    mVec3_c v1 = field_0x260 - v0;
+    mVec3_c v1 = mHandRTranslation - v0;
     v1.normalizeRS();
 
-    mVec3_c v2 = field_0x260 - v0;
+    mVec3_c v2 = mHandRTranslation - v0;
     v2.normalizeRS();
 
     mVec3_c v3;
-    v3 = field_0x21C - v0;
+    v3 = mArmRTranslation - v0;
     v3.normalizeRS();
 
     mVec3_c v4;
@@ -232,19 +232,19 @@ void dAcGirahimuBase_c::callback_c::fn_226_1160() {
 
     mQuat_c q0;
     m0.toQuat(q0);
-    field_0x118.slerpTo(q0, 1.0f, field_0x118);
-    field_0x0E8.fromQuat(field_0x118);
+    mElbowRRotation.slerpTo(q0, 1.0f, mElbowRRotation);
+    mElbowRTransform.fromQuat(mElbowRRotation);
 
     if (mpGhirahim != nullptr && mpGhirahim->field_0xD71) {
-        mVec3_c diff = field_0x260 - field_0x21C;
+        mVec3_c diff = mHandRTranslation - mArmRTranslation;
         mAng ang = (s32)diff.atan2sX_Z();
-        ang = ang - field_0x084;
+        ang = ang - mHeadRotationYCorrection;
         if (ang > 0) {
-            field_0x0E8.XrotM(-ang);
+            mElbowRTransform.XrotM(-ang);
         }
     }
-    field_0x0E8.setTranslation(field_0x164);
-    field_0x0E8.scaleM(mpGhirahim->field_0x8BC);
+    mElbowRTransform.setTranslation(mElblowRTranslation);
+    mElbowRTransform.scaleM(mpGhirahim->field_0x8BC);
 }
 
 void dAcGirahimuBase_c::callback_c::init(dAcGirahimuBase_c *pGhirahim) {
@@ -255,24 +255,24 @@ void dAcGirahimuBase_c::callback_c::init(dAcGirahimuBase_c *pGhirahim) {
     (void)mVec3_c(0.0f, 0.0f, -1.0f);
     (void)mVec3_c(0.0f, 1.0f, 0.0f);
     m0.toQuat(field_0x004);
-    m0.toQuat(field_0x118);
-    m0.toQuat(field_0x1CC);
+    m0.toQuat(mElbowRRotation);
+    m0.toQuat(mArmRRotation);
     mpGhirahim = pGhirahim;
-    field_0x2D4 = 1.0f;
-    field_0x2D0 = 1.0f;
+    mSlerpFactorTarget = 1.0f;
+    mSlerpFactor = 1.0f;
 }
 
 void dAcGirahimuBase_c::callback_c::fn_226_1580(u32 node, nw4r::g3d::WorldMtxManip *result, nw4r::g3d::ResMdl) {
     if (node == mNodeID_ArmR) {
-        field_0x2C0 = result;
-        result->GetMtx(field_0x19C);
-        field_0x19C.getTranslation(field_0x21C);
+        mpArmRManip = result;
+        result->GetMtx(mArmRTransform);
+        mArmRTransform.getTranslation(mArmRTranslation);
         mVec3_c v0(-40.0f, -20.0f, -15.0f);
-        v0.rotY(field_0x084);
-        v0 += field_0x21C;
-        field_0x18C.set(v0);
-        if (!field_0x1E8) {
-            field_0x1E8 = true;
+        v0.rotY(mHeadRotationYCorrection);
+        v0 += mArmRTranslation;
+        mArmRUpperArmVector.set(v0);
+        if (!mbArmRTransformGet) {
+            mbArmRTransformGet = true;
         } else {
             if (field_0x04E) {
                 fn_226_1DD0();
@@ -281,29 +281,29 @@ void dAcGirahimuBase_c::callback_c::fn_226_1580(u32 node, nw4r::g3d::WorldMtxMan
                 fn_226_1160();
                 fn_226_E80();
             } else {
-                field_0x2BA = 0;
+                mHandRRotationY = 0;
                 sLib::chaseAngle(field_0x0B4.ref(), 0, 0x1000);
                 mQuat_c q0;
-                field_0x19C.toQuat(q0);
-                field_0x1CC.slerpTo(q0, field_0x2D0, field_0x1CC);
-                if (field_0x2D0 < 1.0f) {
+                mArmRTransform.toQuat(q0);
+                mArmRRotation.slerpTo(q0, mSlerpFactor, mArmRRotation);
+                if (mSlerpFactor < 1.0f) {
                     mMtx_c m0;
-                    field_0x19C.fromQuat(field_0x1CC);
+                    mArmRTransform.fromQuat(mArmRRotation);
                     m0.scaleS(mpGhirahim->field_0x8BC);
-                    MTXConcat(m0, field_0x19C, field_0x19C);
-                    field_0x19C.setTranslation(field_0x21C);
+                    MTXConcat(m0, mArmRTransform, mArmRTransform);
+                    mArmRTransform.setTranslation(mArmRTranslation);
                 }
             }
-            result->SetMtx(field_0x19C);
+            result->SetMtx(mArmRTransform);
         }
     } else if (node == mNodeID_ElbowR) {
-        field_0x2C4 = result;
-        if (!field_0x198) {
-            result->GetMtx(field_0x0E8);
-            field_0x0E8.getTranslation(field_0x164);
+        mpElbowRManip = result;
+        if (!mbElbowRTransformGet) {
+            result->GetMtx(mElbowRTransform);
+            mElbowRTransform.getTranslation(mElblowRTranslation);
             field_0x128.set(1.0f, 0.0f, 0.0f);
-            field_0x198 = true;
-            field_0x0E8.getTranslation(field_0x18C);
+            mbElbowRTransformGet = true;
+            mElbowRTransform.getTranslation(mArmRUpperArmVector);
         }
 
         if (!field_0x04E) {
@@ -312,70 +312,70 @@ void dAcGirahimuBase_c::callback_c::fn_226_1580(u32 node, nw4r::g3d::WorldMtxMan
             result->GetMtx(m0);
             m0.toQuat(q0);
 
-            if (field_0x2D0 < 1.0f) {
-                field_0x118.slerpTo(q0, field_0x2D0, field_0x118);
-                field_0x0E8.fromQuat(field_0x118);
+            if (mSlerpFactor < 1.0f) {
+                mElbowRRotation.slerpTo(q0, mSlerpFactor, mElbowRRotation);
+                mElbowRTransform.fromQuat(mElbowRRotation);
                 mMtx_c m1;
                 m1.scaleS(mpGhirahim->field_0x8BC);
-                MTXConcat(m1, field_0x0E8, field_0x0E8);
-                mVec3_c v0(field_0x234, 0.0f, 0.0f);
-                field_0x19C.multVec(v0, v0);
-                field_0x164.set(v0);
-                field_0x0E8.setTranslation(field_0x164);
+                MTXConcat(m1, mElbowRTransform, mElbowRTransform);
+                mVec3_c v0(mArmRUpperArmLength, 0.0f, 0.0f);
+                mArmRTransform.multVec(v0, v0);
+                mElblowRTranslation.set(v0);
+                mElbowRTransform.setTranslation(mElblowRTranslation);
             } else {
-                field_0x118.slerpTo(q0, field_0x2D0, field_0x118);
-                result->GetMtx(field_0x0E8);
-                field_0x0E8.getTranslation(field_0x164);
+                mElbowRRotation.slerpTo(q0, mSlerpFactor, mElbowRRotation);
+                result->GetMtx(mElbowRTransform);
+                mElbowRTransform.getTranslation(mElblowRTranslation);
             }
         }
-        result->SetMtx(field_0x0E8);
+        result->SetMtx(mElbowRTransform);
     } else if (node == mNodeID_HandR) {
-        if (!field_0x2B8) {
-            field_0x2B8 = true;
-            result->GetMtx(field_0x278);
+        if (!mbHandRTransformGet) {
+            mbHandRTransformGet = true;
+            result->GetMtx(mHandRTransform);
         }
         if (field_0x04E) {
             if (mpGhirahim && !mpGhirahim->field_0xD71) {
                 mMtx_c m0;
                 result->GetMtx(m0);
-                m0.setTranslation(field_0x260);
-                sLib::chaseAngle(field_0x2BA.ref(), 0x2000, 0x200);
-                m0.YrotM(field_0x2BA);
+                m0.setTranslation(mHandRTranslation);
+                sLib::chaseAngle(mHandRRotationY.ref(), 0x2000, 0x200);
+                m0.YrotM(mHandRRotationY);
                 mQuat_c q0;
                 m0.toQuat(q0);
-                field_0x2A8.slerpTo(q0, field_0x2D0, field_0x2A8);
-                field_0x278.fromQuat(field_0x2A8);
-                field_0x278.setTranslation(field_0x260);
+                mHandRRotation.slerpTo(q0, mSlerpFactor, mHandRRotation);
+                mHandRTransform.fromQuat(mHandRRotation);
+                mHandRTransform.setTranslation(mHandRTranslation);
             }
         } else {
-            field_0x2BA = 0;
-            if (field_0x2D0 < 1.0f) {
+            mHandRRotationY = 0;
+            if (mSlerpFactor < 1.0f) {
                 mMtx_c m0;
                 mQuat_c q0;
                 result->GetMtx(m0);
                 m0.toQuat(q0);
-                field_0x2A8.slerpTo(q0, 1.0f, field_0x2A8);
-                field_0x278.fromQuat(field_0x2A8);
+                mHandRRotation.slerpTo(q0, 1.0f, mHandRRotation);
+                mHandRTransform.fromQuat(mHandRRotation);
 
                 mMtx_c scale;
                 scale.scaleS(mpGhirahim->field_0x8BC);
-                MTXConcat(scale, field_0x278, field_0x278);
-                mVec3_c v0(field_0x188, 0.0f, 0.0f);
-                field_0x0E8.multVec(v0, v0);
-                field_0x260.set(v0);
-                field_0x278.setTranslation(field_0x260);
+                MTXConcat(scale, mHandRTransform, mHandRTransform);
+                mVec3_c v0(mArmRForearmLength, 0.0f, 0.0f);
+                mElbowRTransform.multVec(v0, v0);
+                mHandRTranslation.set(v0);
+                mHandRTransform.setTranslation(mHandRTranslation);
             } else {
-                result->GetMtx(field_0x278);
-                field_0x278.getTranslation(field_0x260);
-                field_0x278.toQuat(field_0x2A8);
+                result->GetMtx(mHandRTransform);
+                mHandRTransform.getTranslation(mHandRTranslation);
+                mHandRTransform.toQuat(mHandRRotation);
             }
 
             if (mpGhirahim) {
-                field_0x254 = field_0x260 - field_0x21C;
-                field_0x254.rotY(-mpGhirahim->mRotation.y);
+                mHandRAdjustedPosition = mHandRTranslation - mArmRTranslation;
+                mHandRAdjustedPosition.rotY(-mpGhirahim->mRotation.y);
             }
         }
-        result->SetMtx(field_0x278);
+        result->SetMtx(mHandRTransform);
     }
 }
 
@@ -438,9 +438,9 @@ void dAcGirahimuBase_c::callback_c::fn_226_1DD0() {
 
     mVec3_c v4 = v3;
     mVec3_c v5;
-    v5 = v3 - field_0x21C;
+    v5 = v3 - mArmRTranslation;
 
-    if (v5.mag() >= (field_0x234 + field_0x188) * 0.9f) {
+    if (v5.mag() >= (mArmRUpperArmLength + mArmRForearmLength) * 0.9f) {
         field_0x050 = true;
     } else {
         field_0x050 = false;
@@ -448,12 +448,12 @@ void dAcGirahimuBase_c::callback_c::fn_226_1DD0() {
     field_0x0B4.set(0);
     if (mpGhirahim != nullptr && !mpGhirahim->field_0xD71) {
         if (field_0x050) {
-            v3 -= field_0x21C;
+            v3 -= mArmRTranslation;
             v3.normalizeRS();
-            v3 *= (field_0x234 + field_0x188) * 0.9f;
-            v3 += field_0x21C;
+            v3 *= (mArmRUpperArmLength + mArmRForearmLength) * 0.9f;
+            v3 += mArmRTranslation;
         }
-        mVec3_c v6 = v3 - field_0x21C;
+        mVec3_c v6 = v3 - mArmRTranslation;
 
         dAcGirahimuBase_c *pAc = mpGhirahim;
         mAng ang = mAng((s32)v6.atan2sX_Z());
@@ -463,7 +463,7 @@ void dAcGirahimuBase_c::callback_c::fn_226_1DD0() {
             case 0x2000 ... INT32_MAX: {
                 a = 0x2000 - ang;
                 v6.rotY(a);
-                v6 += field_0x21C;
+                v6 += mArmRTranslation;
                 v3 = v6;
             } break;
             case -0x1FFF ... 0x1FFF: {
@@ -472,12 +472,12 @@ void dAcGirahimuBase_c::callback_c::fn_226_1DD0() {
             default: {
                 a = -0x2000 - ang;
                 v6.rotY(a);
-                v6 += field_0x21C;
+                v6 += mArmRTranslation;
                 v3 = v6;
             } break;
         }
 
-        mVec3_c v7 = v3 - field_0x21C;
+        mVec3_c v7 = v3 - mArmRTranslation;
         v7.rotY(-mpGhirahim->mRotation.y);
 
         if (mpGhirahim->mHealth >= 100) {
@@ -493,15 +493,15 @@ void dAcGirahimuBase_c::callback_c::fn_226_1DD0() {
             v7.set(field_0x26C);
         }
         if (mpGhirahim->field_0xD50 > 0) {
-            cLib::addCalcPos2(&field_0x254, v7, 0.2f, 1000.0f);
+            cLib::addCalcPos2(&mHandRAdjustedPosition, v7, 0.2f, 1000.0f);
         } else {
-            cLib::addCalcPos2(&field_0x254, v7, 0.2f, field_0x2CC);
+            cLib::addCalcPos2(&mHandRAdjustedPosition, v7, 0.2f, mHandRPositionMaxStep);
         }
 
-        mVec3_c v8 = v7 - field_0x254;
+        mVec3_c v8 = v7 - mHandRAdjustedPosition;
         f32 magV8 = v8.mag();
 
-        mVec3_c v9 = field_0x21C;
+        mVec3_c v9 = mArmRTranslation;
         v9.y -= 10.0f;
 
         field_0x098 = magV8;
@@ -511,30 +511,30 @@ void dAcGirahimuBase_c::callback_c::fn_226_1DD0() {
         m0.YrotM(mpGhirahim->mRotation.y);
         m0.inverse();
 
-        mVec3_c v10 = field_0x260;
+        mVec3_c v10 = mHandRTranslation;
         m0.multVec(v10, v10);
         v10.z = 0.0f;
         field_0x2E0.set(v10);
 
         field_0x2D8 = v10.mag();
 
-        m0.transS(field_0x260);
+        m0.transS(mHandRTranslation);
         m0.YrotM(mpGhirahim->mRotation.y);
         m0.inverse();
         m0.multVec(v4, v4);
 
         v4.z = 0.0f;
         field_0x2EC.set(v4);
-        mVec3_c v11 = field_0x254;
+        mVec3_c v11 = mHandRAdjustedPosition;
         v11.rotY(mpGhirahim->mRotation.y);
-        v11 += field_0x21C;
-        cLib::addCalcPos2(&field_0x260, v11, 0.5f, 100.0f);
+        v11 += mArmRTranslation;
+        cLib::addCalcPos2(&mHandRTranslation, v11, 0.5f, 100.0f);
     } else {
-        field_0x2BA = 0;
-        field_0x260.set(v3);
+        mHandRRotationY = 0;
+        mHandRTranslation.set(v3);
         if (mpGhirahim != nullptr) {
-            field_0x254.set(field_0x260 - field_0x21C);
-            field_0x254.rotY(-mpGhirahim->mRotation.y);
+            mHandRAdjustedPosition.set(mHandRTranslation - mArmRTranslation);
+            mHandRAdjustedPosition.rotY(-mpGhirahim->mRotation.y);
         }
         mMtx_c m1;
         m1.setBase(0, v2);
@@ -544,10 +544,10 @@ void dAcGirahimuBase_c::callback_c::fn_226_1DD0() {
         mQuat_c q0;
         m1.toQuat(q0);
 
-        field_0x2A8.slerpTo(q0, field_0x2D0, field_0x2A8);
-        field_0x278.fromQuat(field_0x2A8);
-        field_0x278.setTranslation(field_0x260);
-        field_0x278.scaleM(1.05f, 1.05f, 1.05f);
+        mHandRRotation.slerpTo(q0, mSlerpFactor, mHandRRotation);
+        mHandRTransform.fromQuat(mHandRRotation);
+        mHandRTransform.setTranslation(mHandRTranslation);
+        mHandRTransform.scaleM(1.05f, 1.05f, 1.05f);
     }
 }
 
@@ -558,29 +558,29 @@ void dAcGirahimuBase_c::callback_c::fn_226_24E0() {
 void dAcGirahimuBase_c::callback_c::fn_226_24F0() {
     mVec3_c v1;
     mVec3_c v2;
-    mVec3_c v3 = field_0x260;
-    mVec3_c v4 = field_0x18C;
+    mVec3_c v3 = mHandRTranslation;
+    mVec3_c v4 = mArmRUpperArmVector;
     mVec3_c v5 = v4 - v3;
     v5.normalizeRS();
-    v5 *= field_0x188;
+    v5 *= mArmRForearmLength;
     v5 += v3;
 
     v4 = v5;
-    v1 = field_0x21C - v3;
+    v1 = mArmRTranslation - v3;
     v1.normalizeRS();
-    v1 *= field_0x188;
+    v1 *= mArmRForearmLength;
     v1 += v3;
     if (v1.y <= v4.y) {
         f32 f = v1.y - v4.y;
         v4.y += f;
     }
-    mVec3_c v6 = field_0x21C - v4;
+    mVec3_c v6 = mArmRTranslation - v4;
     v6.normalizeRS();
-    v6 *= field_0x234;
+    v6 *= mArmRUpperArmLength;
     v6 += v4;
 
     v1 = v6 - v3;
-    v2 = field_0x21C - v3;
+    v2 = mArmRTranslation - v3;
 
     v1.angle(v2);
 
@@ -595,20 +595,20 @@ void dAcGirahimuBase_c::callback_c::fn_226_24F0() {
 
     v4 = v7;
 
-    v1 = v4 - field_0x21C;
+    v1 = v4 - mArmRTranslation;
     v1.normalizeRS();
-    v1 *= field_0x234;
-    v1 += field_0x21C;
+    v1 *= mArmRUpperArmLength;
+    v1 += mArmRTranslation;
 
     v4 = v1;
 
-    v1 = v4 - field_0x260;
+    v1 = v4 - mHandRTranslation;
     v1.normalizeRS();
-    v1 *= field_0x188;
-    v1 += field_0x260;
+    v1 *= mArmRForearmLength;
+    v1 += mHandRTranslation;
 
     v4 = v1;
-    cLib::addCalcPos2(&field_0x164, v4, 0.5f, 100.0f);
+    cLib::addCalcPos2(&mElblowRTranslation, v4, 0.5f, 100.0f);
 }
 
 void dAcGirahimuBase_c::callback_c::timingB(u32 node, nw4r::g3d::WorldMtxManip *result, nw4r::g3d::ResMdl i_mdl) {
@@ -617,14 +617,14 @@ void dAcGirahimuBase_c::callback_c::timingB(u32 node, nw4r::g3d::WorldMtxManip *
     mMtx_c m0;
     if (node == mNodeID_Head) {
         result->GetMtx(m0);
-        m0.getTranslation(field_0x08C);
+        m0.getTranslation(mHeadTranslation);
 
         mMtx_c m1;
         result->GetMtx(m1);
         fn_226_3150(m1);
 
-        mAng3_c a0(field_0x07E, field_0x07C, 0);
-        fn_226_DC0(m0, a0, field_0x084);
+        mAng3_c a0(mHeadRotationX, mHeadRotationY, 0);
+        fn_226_DC0(m0, a0, mHeadRotationYCorrection);
         result->SetMtx(m0);
     } else if (node == mNodeID_Hair1) {
         mMtx_c m1;
@@ -663,63 +663,63 @@ void dAcGirahimuBase_c::callback_c::timingB(u32 node, nw4r::g3d::WorldMtxManip *
             sLib::chaseAngle(field_0x062.x.ref(), 0, 0x80);
         }
         result->GetMtx(m0);
-        mAng3_c a0(field_0x05A, field_0x058, 0);
-        fn_226_DC0(m0, a0, field_0x060);
+        mAng3_c a0(mSpineRotationX, mSpineRotationY, 0);
+        fn_226_DC0(m0, a0, mSpineRotationYCorrection);
         m0.XrotM(field_0x062.x);
         result->SetMtx(m0);
     } else if (node == mNodeID_Spine2) {
         result->GetMtx(m0);
-        mAng3_c a0(field_0x05A, field_0x058, 0);
-        fn_226_DC0(m0, a0, field_0x060);
+        mAng3_c a0(mSpineRotationX, mSpineRotationY, 0);
+        fn_226_DC0(m0, a0, mSpineRotationYCorrection);
         m0.XrotM(field_0x062.x);
         result->SetMtx(m0);
     } else if (node == mNodeID_ElbowR) {
         fn_226_2FD0();
         result->GetMtx(m0);
-        m0.YrotM(field_0x238);
+        m0.YrotM(mElbowRRotationY);
         result->SetMtx(m0);
     } else if (node == mNodeID_ElbowL) {
         fn_226_3080();
         result->GetMtx(m0);
-        m0.YrotM(field_0x23A);
+        m0.YrotM(mElbowLRotation);
         result->SetMtx(m0);
     } else if (node == mNodeID_KneeL) {
         result->GetMtx(m0);
-        mAng3_c a0(0, field_0x054 / 2, 0);
+        mAng3_c a0(0, mLegRotationY / 2, 0);
         fn_226_DC0(m0, a0, mpGhirahim->mRotation.y);
         result->SetMtx(m0);
     } else if (node == mNodeID_KneeR) {
         result->GetMtx(m0);
-        mAng3_c a0(0, field_0x054 / 2, 0);
+        mAng3_c a0(0, mLegRotationY / 2, 0);
         fn_226_DC0(m0, a0, mpGhirahim->mRotation.y);
         result->SetMtx(m0);
     } else if (node == mNodeID_LegL) {
         result->GetMtx(m0);
-        mAng3_c a0(0, field_0x054 / 2, 0);
+        mAng3_c a0(0, mLegRotationY / 2, 0);
         fn_226_DC0(m0, a0, mpGhirahim->mRotation.y);
         result->SetMtx(m0);
     } else if (node == mNodeID_LegR) {
         result->GetMtx(m0);
-        mAng3_c a0(0, field_0x054 / 2, 0);
+        mAng3_c a0(0, mLegRotationY / 2, 0);
         fn_226_DC0(m0, a0, mpGhirahim->mRotation.y);
         result->SetMtx(m0);
     }
 }
 
 void dAcGirahimuBase_c::callback_c::fn_226_2FD0() {
-    sLib::chaseAngle(field_0x23C.ref(), 0, 0x150);
-    field_0x240 += 0x3500;
-    field_0x238 = field_0x23C * field_0x240.sin();
+    sLib::chaseAngle(mElbowRRotationYAmplitude.ref(), 0, 0x150);
+    mElbowRRotationYPhase += 0x3500;
+    mElbowRRotationY = mElbowRRotationYAmplitude * mElbowRRotationYPhase.sin();
 }
 
 void dAcGirahimuBase_c::callback_c::fn_226_3080() {
-    sLib::chaseAngle(field_0x23E.ref(), 0, 0x150);
-    field_0x242 += 0x3500;
-    field_0x23A = field_0x23E * field_0x242.sin();
+    sLib::chaseAngle(mElbowLRotationYAmplitude.ref(), 0, 0x150);
+    mElbowLRotationYPhase += 0x3500;
+    mElbowLRotation = mElbowLRotationYAmplitude * mElbowLRotationYPhase.sin();
 }
 
 void dAcGirahimuBase_c::callback_c::fn_226_3130() {
-    sLib::chase(&field_0x2D0, field_0x2D4, 0.05f);
+    sLib::chase(&mSlerpFactor, mSlerpFactorTarget, 0.05f);
 }
 
 void dAcGirahimuBase_c::callback_c::fn_226_3150(mMtx_c &m) {
@@ -731,28 +731,28 @@ void dAcGirahimuBase_c::callback_c::fn_226_3150(mMtx_c &m) {
         m.multVec(v1, v1);
         s16 a0 = v1.atan2sX_Z();
         s16 a1 = v1.atan2sY_XZ();
-        field_0x080 = cLib::targetAngleY(v0, mpGhirahim->field_0x88C) - a0;
-        field_0x082 = -(cLib::targetAngleX(v0, mpGhirahim->field_0x88C) - a1);
+        mHeadRotationYTarget = cLib::targetAngleY(v0, mpGhirahim->field_0x88C) - a0;
+        mHeadRotationXTarget = -(cLib::targetAngleX(v0, mpGhirahim->field_0x88C) - a1);
     } else {
-        field_0x080 = 0;
-        field_0x082 = 0;
+        mHeadRotationYTarget = 0;
+        mHeadRotationXTarget = 0;
     }
 
-    if (field_0x080 > 0x3000) {
-        field_0x080.set(0x3000);
-    } else if (field_0x080 < -0x3000) {
-        field_0x080 = -0x3000;
+    if (mHeadRotationYTarget > 0x3000) {
+        mHeadRotationYTarget.set(0x3000);
+    } else if (mHeadRotationYTarget < -0x3000) {
+        mHeadRotationYTarget = -0x3000;
     }
 
-    sLib::addCalcAngle(field_0x07C.ref(), field_0x080, 2, 0x500);
-    sLib::addCalcAngle(field_0x07E.ref(), field_0x082, 2, 0x500);
+    sLib::addCalcAngle(mHeadRotationY.ref(), mHeadRotationYTarget, 2, 0x500);
+    sLib::addCalcAngle(mHeadRotationX.ref(), mHeadRotationXTarget, 2, 0x500);
 
-    if (field_0x07E < 0x2000) {
-        if (field_0x07E + 0x1FFF > 0x3FFEu) {
-            field_0x07E = -0x2000;
+    if (mHeadRotationX < 0x2000) {
+        if (mHeadRotationX + 0x1FFF > 0x3FFEu) {
+            mHeadRotationX = -0x2000;
         }
     } else {
-        field_0x07E.set(0x2000);
+        mHeadRotationX.set(0x2000);
     }
 }
 
@@ -769,11 +769,11 @@ void dAcGirahimuBase_c::initializeState_Wait() {
     mSpeed = 0.0f;
     if (dAcPy_c::GetLinkM()->isUsingSword()) {
         mCallback.field_0x04E = true;
-        mCallback.field_0x2D4 = 0.2f;
-        mCallback.field_0x2D0 = 0.2f;
+        mCallback.mSlerpFactorTarget = 0.2f;
+        mCallback.mSlerpFactor = 0.2f;
     } else {
         mCallback.field_0x04E = false;
-        mCallback.field_0x2D4 = 1.0f;
+        mCallback.mSlerpFactorTarget = 1.0f;
     }
 }
 void dAcGirahimuBase_c::executeState_Wait() {
@@ -849,7 +849,7 @@ void dAcGirahimuBase_c::executeState_Wait() {
 void dAcGirahimuBase_c::finalizeState_Wait() {
     field_0xD44 = 0;
     mCallback.field_0x04E = false;
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
 }
 
 void dAcGirahimuBase_c::initializeState_Walk() {
@@ -863,17 +863,17 @@ void dAcGirahimuBase_c::initializeState_Walk() {
 
     mCallback.field_0x088 = true;
     mCallback.field_0x04E = false;
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
 
     if (dAcPy_c::GetLinkM()->isUsingSword()) {
         mCallback.field_0x04E = true;
-        mCallback.field_0x2D4 = 0.5f;
-        mCallback.field_0x2D0 = 0.0f;
+        mCallback.mSlerpFactorTarget = 0.5f;
+        mCallback.mSlerpFactor = 0.0f;
     } else {
         mCallback.field_0x04E = false;
-        mCallback.field_0x2D4 = 1.0f;
+        mCallback.mSlerpFactorTarget = 1.0f;
     }
-    mCallback.field_0x2CC = 0.0f;
+    mCallback.mHandRPositionMaxStep = 0.0f;
 }
 void dAcGirahimuBase_c::executeState_Walk() {
     if (mSwordLink.get()->isStick()) {
@@ -967,7 +967,7 @@ void dAcGirahimuBase_c::initializeState_Catch() {
     mCallback.field_0x088 = true;
     dAcPy_c::GetLinkM()->set0x439F(this, 7);
     mCallback.field_0x014 = 1.0f;
-    mCallback.field_0x2D4 = 0.5f;
+    mCallback.mSlerpFactorTarget = 0.5f;
     field_0xD46 = 4;
     field_0xD5E = 300;
     if (!field_0x1872) {
@@ -1016,7 +1016,7 @@ void dAcGirahimuBase_c::finalizeState_Catch() {
     mCallback.field_0x04E = false;
     field_0xD71 = false;
     mCollider.CoSet();
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
     s32 flag = getFromParams(0, 0xFF);
     if (flag != 0xFF) {
         // 0xC0 -> zone temp flag: 0x1 01
@@ -1038,7 +1038,7 @@ void dAcGirahimuBase_c::initializeState_ReleaseSword() {
 }
 void dAcGirahimuBase_c::executeState_ReleaseSword() {
     field_0xD81 = true;
-    fn_226_CC40();
+    setTgVulnerable();
     mSph0.ClrTgSet();
 
     sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
@@ -1096,7 +1096,7 @@ void dAcGirahimuBase_c::finalizeState_CatchDamage() {}
 
 void dAcGirahimuBase_c::initializeState_LinkSwordGuardJust() {
     field_0xD6C = 1;
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
     if (mAnmIDBody == ANM_AttackLSwordA) {
         setAnm("GuardLSwordA", ANM_GuardLSwordA, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     } else {
@@ -1126,7 +1126,7 @@ void dAcGirahimuBase_c::initializeState_GetSword() {
 
     mCallback.field_0x014 = 1.0f;
     mCallback.field_0x088 = true;
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
     mCallback.field_0x04E = true;
 
     s32 flag = getFromParams(0, 0xFF);
@@ -1153,21 +1153,21 @@ void dAcGirahimuBase_c::executeState_GetSword() {
             setSwordLinkTransformPlayer();
             mSwordLink.get()->setGetSword();
         } else {
-            fn_226_D070();
+            clearAnms();
             setAnm("FreeUp", ANM_FreeUp, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
             changeState(StateID_ReleaseSword);
             return;
         }
     } else if (mAnmChrs[ANMIDX_Body].getFrame() < 8.0f &&
                !dAcPy_c::GetLinkM()->IfCurrentActionToActor(this, 0xA9 /* ??? */)) {
-        fn_226_D070();
+        clearAnms();
         setAnm("FreeUp", ANM_FreeUp, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
         changeState(StateID_ReleaseSword);
         return;
     }
 
     if (mAnmChrs[ANMIDX_Body].checkFrame(36.0f)) {
-        mVec3_c unused = mCallback.field_0x260 - mPosition;
+        mVec3_c unused = mCallback.mHandRTranslation - mPosition;
         unused.rotY(-mRotation.y);
 
         field_0xD72 = true;
@@ -1356,7 +1356,7 @@ void dAcGirahimuBase_c::executeState_Link_SwordWait() {
         return;
     }
 
-    if (mCallback.field_0x07C.abs() < 0x1500 && field_0x1838 < 200.0f) {
+    if (mCallback.mHeadRotationY.abs() < 0x1500 && field_0x1838 < 200.0f) {
         changeState(StateID_Link_SwordAttack);
     }
 }
@@ -1391,7 +1391,7 @@ void dAcGirahimuBase_c::executeState_Link_SwordWalk() {
     }
     field_0x1834 = f0 * 8.0f * mAnmChrs[ANMIDX_Body].getRate();
 
-    if (mCallback.field_0x07C.abs() < 0x1500 && field_0x1838 < 200.0f) {
+    if (mCallback.mHeadRotationY.abs() < 0x1500 && field_0x1838 < 200.0f) {
         changeState(StateID_Link_SwordAttack);
     }
 }
@@ -1409,8 +1409,8 @@ void dAcGirahimuBase_c::initializeState_Link_SwordAttack() {
     mCallback.field_0x088 = true;
     field_0xD72 = true;
     mSwordLink.get()->setEquip();
-    mCallback.field_0x2D4 = 1.0f;
-    mCallback.field_0x2D0 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
+    mCallback.mSlerpFactor = 1.0f;
     mSpeed = 0.0f;
     field_0x1834 = 0.0f;
 }
@@ -1461,7 +1461,7 @@ void dAcGirahimuBase_c::executeState_ReturnSword() {
         mVec3_c playerOffs(0.0f, 100.0f, 0.0f);
         playerOffs.rotY(dAcPy_c::GetLink()->mRotation.y);
         playerOffs += dAcPy_c::GetLink()->mPosition;
-        mVec3_c throwForce = playerOffs - mCallback.field_0x260;
+        mVec3_c throwForce = playerOffs - mCallback.mHandRTranslation;
         throwForce.normalizeRS();
         throwForce *= 100.0f;
         mSwordLink.get()->setAtThrow(throwForce);
@@ -1502,7 +1502,7 @@ void dAcGirahimuBase_c::executeState_BackStep() {
         case 0: {
             field_0xD7D = false;
             if (mAng(mRotation.y - field_0x183E).abs() < 0x4000 && field_0xD46 <= 0) {
-                fn_226_D070();
+                clearAnms();
                 setAnm("StepStart", ANM_StepStart, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
                 field_0xD44++;
             }
@@ -1548,15 +1548,15 @@ void dAcGirahimuBase_c::finalizeState_BackStep() {
 void dAcGirahimuBase_c::initializeState_Escape() {
     mSpeed = 0.0f;
     field_0x1834 = 0.0f;
-    fn_226_D070();
+    clearAnms();
     setAnm("StepEnd", ANM_StepEnd, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
 
     mCyl2.ClrTgSet();
     mSph0.ClrTgSet();
 
     mCallback.field_0x04E = true;
-    mCallback.field_0x2D4 = 0.8f;
-    mCallback.field_0x2D0 = 0.8f;
+    mCallback.mSlerpFactorTarget = 0.8f;
+    mCallback.mSlerpFactor = 0.8f;
 
     field_0xD44 = 0;
     field_0xD4E = 0;
@@ -1566,16 +1566,16 @@ void dAcGirahimuBase_c::initializeState_Escape() {
 void dAcGirahimuBase_c::executeState_Escape() {
     field_0xD81 = true;
     field_0xD60 = 2;
-    fn_226_CC40();
+    setTgVulnerable();
     mCyl2.ClrTgSet();
     mSph0.ClrTgSet();
     mCallback.field_0x04E = false;
     if (mAnmChrs[ANMIDX_Body].getFrame() >= 15.0f) {
         if (dAcPy_c::GetLinkM()->isUsingSword()) {
-            mCallback.field_0x2D4 = 0.8f;
-            mCallback.field_0x2D0 = 0.8f;
+            mCallback.mSlerpFactorTarget = 0.8f;
+            mCallback.mSlerpFactor = 0.8f;
         } else {
-            mCallback.field_0x2D4 = 1.0f;
+            mCallback.mSlerpFactorTarget = 1.0f;
         }
     }
 
@@ -1608,14 +1608,14 @@ void dAcGirahimuBase_c::initializeState_EscapeBack() {
     mCyl2.ClrTgSet();
     mSph0.ClrTgSet();
     mCallback.field_0x04E = true;
-    mCallback.field_0x2D4 = 0.8f;
-    mCallback.field_0x2D0 = 0.8f;
+    mCallback.mSlerpFactorTarget = 0.8f;
+    mCallback.mSlerpFactor = 0.8f;
 
     field_0xD44 = 0;
     field_0xD4E = 0;
     field_0xD6C = 1;
     field_0xD46 = 15;
-    mCallback.field_0x05E = 0xA80;
+    mCallback.mSpineRotationXTarget = 0xA80;
 }
 void dAcGirahimuBase_c::executeState_EscapeBack() {
     mCyl2.ClrTgSet();
@@ -1901,7 +1901,7 @@ void dAcGirahimuBase_c::initializeState_Run() {
 void dAcGirahimuBase_c::executeState_Run() {
     s32 _weird_zero = 0;
 
-    fn_226_CC40();
+    setTgVulnerable();
     switch (field_0xD44) {
         case 0: {
             field_0xD81 = true;
@@ -1915,7 +1915,7 @@ void dAcGirahimuBase_c::executeState_Run() {
         } break;
         case 1: {
             if (field_0xD46 <= 0 || field_0x1838 <= 500.0f) {
-                if (fn_226_CC80()) {
+                if (isAttackingLeft()) {
                     setAnm("AttackLRun", ANM_AttackLRun, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
 
                 } else {
@@ -1938,7 +1938,7 @@ void dAcGirahimuBase_c::executeState_Run() {
         case 2: {
             mVec3_c v1;
             mVec3_c v0 = dAcPy_c::GetLink()->mPosition - field_0x1840;
-            if (fn_226_CC80()) {
+            if (isAttackingLeft()) {
                 v1.set(-100.0f, 0.0f, 50.0f);
                 v1.rotY(v0.atan2sX_Z());
                 v1 += dAcPy_c::GetLink()->mPosition;
@@ -1965,7 +1965,7 @@ void dAcGirahimuBase_c::executeState_Run() {
         case 3: {
             mVec3_c v1;
             mVec3_c v0 = field_0x184C - field_0x1840;
-            if (fn_226_CC80()) {
+            if (isAttackingLeft()) {
                 v1.set(-100.0f, 0.0f, 50.0f);
                 v1.rotY(v0.atan2sX_Z());
                 v1 += field_0x184C;
@@ -1993,7 +1993,7 @@ void dAcGirahimuBase_c::finalizeState_Run() {
 
 void dAcGirahimuBase_c::initializeState_RunAttack() {
     field_0xD6C = 4;
-    if (fn_226_CC80()) {
+    if (isAttackingLeft()) {
         setAnm("AttackSwordL", ANM_AttackSwordL, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     } else {
         setAnm("AttackSwordR", ANM_AttackSwordR, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
@@ -2045,11 +2045,11 @@ void dAcGirahimuBase_c::executeState_BackWalk() {
 void dAcGirahimuBase_c::finalizeState_BackWalk() {}
 
 dAcGirahimuBase_c::~dAcGirahimuBase_c() {
-    if (pSoundIface != nullptr) {
-        if (pSoundIface->hasPlayingSounds()) {
+    if (mpSound != nullptr) {
+        if (mpSound->hasPlayingSounds()) {
             do {
                 VIWaitForRetrace();
-            } while (pSoundIface->hasPlayingSounds());
+            } while (mpSound->hasPlayingSounds());
         }
     }
 }
@@ -2085,19 +2085,19 @@ void dAcGirahimuBase_c::initNodeData() {
     mCallback.mNodeID_LegL = mdl.GetResNode("LegL").GetID();
 
     mVec3_c nodeTranslation = mdl.GetResNode("ElbowR").GetTranslate();
-    mCallback.field_0x234 = nodeTranslation.mag() * 1.05f;
-    mCallback.field_0x17C = mdl.GetResNode("ElbowR").GetScale();
+    mCallback.mArmRUpperArmLength = nodeTranslation.mag() * 1.05f;
+    mCallback.mElbowRScale = mdl.GetResNode("ElbowR").GetScale();
 
     nodeTranslation = mdl.GetResNode("HandR").GetTranslate();
-    mCallback.field_0x188 = nodeTranslation.mag() * 1.05f;
-    mCallback.field_0x228 = mdl.GetResNode("ArmR").GetScale();
+    mCallback.mArmRForearmLength = nodeTranslation.mag() * 1.05f;
+    mCallback.mArmRScale = mdl.GetResNode("ArmR").GetScale();
 }
 
 bool dAcGirahimuBase_c::createHeap() {
     nw4r::g3d::ResFile bodyRes;
     void *rawRes = getOarcResFile("GirahimBt");
     mResAnmChr0 = nw4r::g3d::ResFile(rawRes);
-    vt_0x200();
+    loadMainResFile();
     nw4r::g3d::ResMdl resMdl = mResAnmChr0.GetResMdl("GirahimBt");
     if (!mMdlBody.create(resMdl, &mAllocator, 0x137, 1, nullptr)) {
         return false;
@@ -2144,7 +2144,7 @@ bool dAcGirahimuBase_c::createHeap() {
     int id = m3d::getMatID(mMdlBody.getResMdl(), "m_Eyeball");
     mEyeMdlCallback.create(mMdlBody, id, id, 1, 1, nullptr);
     mEyeMdlCallback.mBlendWeight = 1;
-    pSoundIface = getSoundSource();
+    mpSound = getSoundSource();
 
     return true;
 }
@@ -2282,7 +2282,7 @@ void dAcGirahimuBase_c::vt_0x1DC() {
     mCyl2.SetTgType(~AT_TYPE_COMMON0);
 
     mCyl0.SetR(200.0f);
-    mCyl2.SetH(mCallback.field_0x08C.y - mPosition.y);
+    mCyl2.SetH(mCallback.mHeadTranslation.y - mPosition.y);
 
     mCps0.ClrTgSet();
     mCps1.ClrTgSet();
@@ -2296,7 +2296,7 @@ void dAcGirahimuBase_c::vt_0x1DC() {
     }
 
     if (!dAcPy_c::GetLinkM()->isAttacking()) {
-        field_0x898 = mCallback.field_0x260 - mCallback.field_0x21C;
+        field_0x898 = mCallback.mHandRTranslation - mCallback.mArmRTranslation;
         field_0x898.rotY(-mRotation.y);
         field_0x898.z = 0.0f;
     }
@@ -2324,8 +2324,8 @@ void dAcGirahimuBase_c::vt_0x1DC() {
     if (dAcPy_c::GetLink()->isAttacking()) {
         field_0xD54 = 20;
     }
-    sLib::chaseAngle(mCallback.field_0x056.ref(), 0, 0x200);
-    sLib::addCalcAngle(mCallback.field_0x054.ref(), mCallback.field_0x056, 2, 0x20C);
+    sLib::chaseAngle(mCallback.mLegRotationYTarget.ref(), 0, 0x200);
+    sLib::addCalcAngle(mCallback.mLegRotationY.ref(), mCallback.mLegRotationYTarget, 2, 0x20C);
 }
 
 s32 dAcGirahimuBase_c::getPlayerSwordType() {
@@ -2404,7 +2404,7 @@ bool dAcGirahimuBase_c::setAnmBody(const char *anmName, s32 anmId, m3d::playMode
         mMdlBody.setAnm(mAnmChrBlend, f0);
 
         ret = true;
-        fn_226_BE90(anmName);
+        setSound(anmName);
 
         for (int i = 0; i < 5; ++i) {
             mAnmChrs[i].setRate(rate);
@@ -2414,8 +2414,8 @@ bool dAcGirahimuBase_c::setAnmBody(const char *anmName, s32 anmId, m3d::playMode
             rate = -rate;
         }
 
-        if (pSoundIface != nullptr) {
-            pSoundIface->setRate(rate);
+        if (mpSound != nullptr) {
+            mpSound->setRate(rate);
         }
     }
     return ret;
@@ -2439,7 +2439,7 @@ bool dAcGirahimuBase_c::setAnmHip(const char *anmName, s32 anmId, m3d::playMode_
 bool dAcGirahimuBase_c::setAnmShoulderR(const char *anmName, s32 anmId, m3d::playMode_e playMode, f32 f0, f32 rate) {
     if (mAnmIDShoulderR != anmId) {
         mAnmIDShoulderR = anmId;
-        fn_226_CE00();
+        simplifyShoulderRAnmID();
         nw4r::g3d::ResAnmChr resAnm = mResAnmChr1.GetResAnmChr(anmName);
         if (!resAnm.IsValid()) {
             resAnm = mResAnmChr0.GetResAnmChr(anmName);
@@ -2455,7 +2455,7 @@ bool dAcGirahimuBase_c::setAnmShoulderR(const char *anmName, s32 anmId, m3d::pla
 bool dAcGirahimuBase_c::setAnmShoulderL(const char *anmName, s32 anmId, m3d::playMode_e playMode, f32 f0, f32 rate) {
     if (mAnmIDShoulderL != anmId) {
         mAnmIDShoulderL = anmId;
-        fn_226_CDA0();
+        simplifyShoulderLAnmID();
         nw4r::g3d::ResAnmChr resAnm = mResAnmChr1.GetResAnmChr(anmName);
         if (!resAnm.IsValid()) {
             resAnm = mResAnmChr0.GetResAnmChr(anmName);
@@ -2517,10 +2517,10 @@ void dAcGirahimuBase_c::bindAnmShoulderL() {
 }
 
 void dAcGirahimuBase_c::fn_226_9620() {
-    sLib::addCalcAngle(mCallback.field_0x058.ref(), mCallback.field_0x05C, 2, 0x1000);
-    sLib::chaseAngle(mCallback.field_0x05C.ref(), 0, 0x100);
-    sLib::addCalcAngle(mCallback.field_0x05A.ref(), mCallback.field_0x05E, 2, 0x1000);
-    sLib::chaseAngle(mCallback.field_0x05E.ref(), 0, 0x100);
+    sLib::addCalcAngle(mCallback.mSpineRotationY.ref(), mCallback.mSpineRotationYTarget, 2, 0x1000);
+    sLib::chaseAngle(mCallback.mSpineRotationYTarget.ref(), 0, 0x100);
+    sLib::addCalcAngle(mCallback.mSpineRotationX.ref(), mCallback.mSpineRotationXTarget, 2, 0x1000);
+    sLib::chaseAngle(mCallback.mSpineRotationXTarget.ref(), 0, 0x100);
 }
 
 void dAcGirahimuBase_c::fn_226_9690() {
@@ -2540,7 +2540,7 @@ void dAcGirahimuBase_c::fn_226_9690() {
     mMdlBody.getNodeWorldMtx(mdl.GetResNode("Hair1").GetID(), transform);
     transform.getTranslation(hairTranslation);
 
-    mVec3_c v1 = mCallback.field_0x070 - headTranslation;
+    mVec3_c v1 = mCallback.mHairTranslation - headTranslation;
     mVec3_c v0 = hairTranslation - headTranslation;
 
     s16 a1 = (s32)(v1.atan2sX_Z() - v0.atan2sX_Z());
@@ -2573,7 +2573,7 @@ void dAcGirahimuBase_c::fn_226_9690() {
     sLib::addCalcAngle(mCallback.field_0x062.y.ref(), mCallback.field_0x06E + mCallback.field_0x068, 2, 0x1000);
     sLib::addCalcAngle(mCallback.field_0x062.z.ref(), mCallback.field_0x06C + mCallback.field_0x06A, 2, 0x1000);
 
-    mCallback.field_0x070.set(hairTranslation);
+    mCallback.mHairTranslation.set(hairTranslation);
 }
 
 void dAcGirahimuBase_c::fn_256_99F0() {
@@ -2617,9 +2617,9 @@ void dAcGirahimuBase_c::fn_256_99F0() {
 
 void dAcGirahimuBase_c::fn_256_9C90() {
     if (field_0xD81) {
-        fn_226_CC40();
+        setTgVulnerable();
     } else {
-        fn_226_CC50();
+        setTgInvulnerable();
     }
     mVec3_c v0(0.0f, 0.0f, 40.0f);
     v0.rotY(mRotation.y);
@@ -2631,7 +2631,7 @@ void dAcGirahimuBase_c::fn_256_9C90() {
     mCyl0.SetC(mPosition);
     mCyl2.SetC(mPosition);
 
-    mVec3_c v1 = mCallback.field_0x260;
+    mVec3_c v1 = mCallback.mHandRTranslation;
     if (dAcPy_c::GetLink()->isAttackingSpin()) {
         if (v1.y > mPosition.y + 150.0f) {
             v1.y = mPosition.y + 150.0f;
@@ -2736,16 +2736,16 @@ bool dAcGirahimuBase_c::fn_226_A280(mAng rot) {
     mAng roty = mRotation.y;
     s32 diff = rot - mRotation.y;
     mAng diff0 = roty - field_0x183E;
-    if (mCallback.field_0x056 == 0) {
+    if (mCallback.mLegRotationYTarget == 0) {
         if (diff0.abs() != 0) {
             if ((s16)diff > 0) {
-                mCallback.field_0x056 = mAng(0x3000);
+                mCallback.mLegRotationYTarget = mAng(0x3000);
             } else {
-                mCallback.field_0x056 = mAng(-0x3000);
+                mCallback.mLegRotationYTarget = mAng(-0x3000);
             }
         }
     }
-    return mCallback.field_0x056 != 0;
+    return mCallback.mLegRotationYTarget != 0;
 }
 
 bool dAcGirahimuBase_c::turn(mAng rotTarget) {
@@ -2775,48 +2775,48 @@ bool dAcGirahimuBase_c::turn(mAng rotTarget) {
     return true;
 }
 
-void dAcGirahimuBase_c::fn_226_A400(cCcD_Obj *pObj) {
+void dAcGirahimuBase_c::adjustSpineHitRotation(cCcD_Obj *pObj) {
     switch (pObj->GetTgAtCutDir()) {
         case CUT_DIR_U: {
-            mCallback.field_0x05E = mAng(0x1500);
-            mCallback.field_0x05C = 0;
+            mCallback.mSpineRotationXTarget = mAng(0x1500);
+            mCallback.mSpineRotationYTarget = 0;
         } break;
         case CUT_DIR_D: {
-            mCallback.field_0x05E = -0x1500;
-            mCallback.field_0x05C = 0;
+            mCallback.mSpineRotationXTarget = -0x1500;
+            mCallback.mSpineRotationYTarget = 0;
         } break;
         case CUT_DIR_LU: {
-            mCallback.field_0x05E = mAng(0x1500);
-            mCallback.field_0x05C = mAng(0x1500);
+            mCallback.mSpineRotationXTarget = mAng(0x1500);
+            mCallback.mSpineRotationYTarget = mAng(0x1500);
         } break;
         case CUT_DIR_RD: {
-            mCallback.field_0x05E = -0x1500;
-            mCallback.field_0x05C = -0x1500;
+            mCallback.mSpineRotationXTarget = -0x1500;
+            mCallback.mSpineRotationYTarget = -0x1500;
         } break;
         case CUT_DIR_L: {
-            mCallback.field_0x05C = mAng(0x1500);
+            mCallback.mSpineRotationYTarget = mAng(0x1500);
         } break;
         case CUT_DIR_R: {
-            mCallback.field_0x05C = -0x1500;
+            mCallback.mSpineRotationYTarget = -0x1500;
         } break;
         case CUT_DIR_LD: {
-            mCallback.field_0x05E = -0x1500;
-            mCallback.field_0x05C = mAng(0x1500);
+            mCallback.mSpineRotationXTarget = -0x1500;
+            mCallback.mSpineRotationYTarget = mAng(0x1500);
         } break;
         case CUT_DIR_RU: {
-            mCallback.field_0x05E = mAng(0x1500);
-            mCallback.field_0x05C = -0x1500;
+            mCallback.mSpineRotationXTarget = mAng(0x1500);
+            mCallback.mSpineRotationYTarget = -0x1500;
         } break;
         default: {
-            mCallback.field_0x05E = 0xA80;
-            mCallback.field_0x05C = 0;
+            mCallback.mSpineRotationXTarget = 0xA80;
+            mCallback.mSpineRotationYTarget = 0;
         } break;
     }
 
     if (mAng(mRotation.y - field_0x183E).abs() > 0x4000) {
-        mCallback.field_0x05C = -mCallback.field_0x05C;
+        mCallback.mSpineRotationYTarget = -mCallback.mSpineRotationYTarget;
     }
-    mCallback.field_0x060 = mRotation.y;
+    mCallback.mSpineRotationYCorrection = mRotation.y;
 }
 
 bool dAcGirahimuBase_c::fn_226_A570() {
@@ -3049,7 +3049,7 @@ void dAcGirahimuBase_c::vt_0x1E4() {
                 if (pCc->GetTgShieldType() != 0) {
                     changeState(StateID_Catch);
                 } else {
-                    fn_226_A400(pCc);
+                    adjustSpineHitRotation(pCc);
                     changeState(StateID_CatchDamage);
                     field_0xD68 = 0;
                 }
@@ -3126,9 +3126,9 @@ void dAcGirahimuBase_c::vt_0x1EC() {
         switch (hitType) {
             case AT_TYPE_SWORD: {
                 startSound(SE_BGh_V_DAMAGE);
-                fn_226_A400(pCc);
+                adjustSpineHitRotation(pCc);
                 fn_226_ADC0(pCc);
-                fn_226_D070();
+                clearAnms();
                 setAnm("DamageHit", ANM_DamageHit, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
             } break;
             case AT_TYPE_DAMAGE: {
@@ -3208,7 +3208,7 @@ void dAcGirahimuBase_c::fn_226_BC00() {
         b = false;
     }
     if (!b) {
-        mCallback.field_0x2CC = 0.0f;
+        mCallback.mHandRPositionMaxStep = 0.0f;
         field_0xD66 = 90;
         if (mHealth >= 100) {
             field_0xD66 = 120;
@@ -3219,7 +3219,7 @@ void dAcGirahimuBase_c::fn_226_BC00() {
         }
     } else if (--field_0xD66 <= 0) {
         field_0xD66 = 0;
-        sLib::chase(&mCallback.field_0x2CC, 30.0f, 5.0f);
+        sLib::chase(&mCallback.mHandRPositionMaxStep, 30.0f, 5.0f);
     }
 
     if (dAcPy_c::GetLinkM()->isUsingSword() && field_0x1838 <= 500.0f &&
@@ -3234,13 +3234,13 @@ void dAcGirahimuBase_c::fn_226_BC00() {
         field_0x88C += dAcPy_c::GetLink()->getSwordPos();
         field_0x88C *= 0.5f;
         field_0x88C.y = getPlayerHeadOffset().y;
-        mCallback.field_0x2D4 = 0.2f;
+        mCallback.mSlerpFactorTarget = 0.2f;
         return;
     }
 
     mCallback.field_0x04F = false;
     mCallback.field_0x04E = false;
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
 }
 
 void dAcGirahimuBase_c::setFrame(f32 frame) {
@@ -3248,13 +3248,13 @@ void dAcGirahimuBase_c::setFrame(f32 frame) {
         mAnmChrs[i].setFrameOnly(frame);
     }
 
-    if (pSoundIface != nullptr) {
-        pSoundIface->setFrame(mAnmChrs[ANMIDX_Body].getFrame());
+    if (mpSound != nullptr) {
+        mpSound->setFrame(mAnmChrs[ANMIDX_Body].getFrame());
     }
 }
 
-bool dAcGirahimuBase_c::fn_226_BE90(const char *soundName) {
-    if (pSoundIface == nullptr || !pSoundIface->hasAnimSound()) {
+bool dAcGirahimuBase_c::setSound(const char *soundName) {
+    if (mpSound == nullptr || !mpSound->hasAnimSound()) {
         return true;
     }
     SizedString<64> str;
@@ -3264,9 +3264,9 @@ bool dAcGirahimuBase_c::fn_226_BE90(const char *soundName) {
         mpSoundBrasd = mResAnmChr0.GetExternalData(str);
     }
 
-    pSoundIface->load(mpSoundBrasd, soundName);
-    if (pSoundIface != nullptr) {
-        pSoundIface->setFrame(mAnmChrs[ANMIDX_Body].getFrame());
+    mpSound->load(mpSoundBrasd, soundName);
+    if (mpSound != nullptr) {
+        mpSound->setFrame(mAnmChrs[ANMIDX_Body].getFrame());
     }
     return true;
 }
@@ -3288,7 +3288,7 @@ void dAcGirahimuBase_c::fn_226_C060() {
     } else {
         cCcD_Obj *pCc = mCollider.findTgHit();
         if (pCc != nullptr && pCc->GetTgAtHitType() == AT_TYPE_SWORD) {
-            fn_226_A400(pCc);
+            adjustSpineHitRotation(pCc);
             changeState(StateID_G_SwordDamage);
         }
     }
@@ -3296,18 +3296,18 @@ void dAcGirahimuBase_c::fn_226_C060() {
 
 void dAcGirahimuBase_c::fn_226_C1C0() {
     if (dAcPy_c::GetLink()->isAttacking()) {
-        fn_226_C6A0();
+        configureBodyShield();
     }
     cCcD_Obj *pCc = mCollider.findTgHit();
     if (pCc != nullptr && pCc->GetTgAtHitType() == AT_TYPE_SWORD) {
-        fn_226_A400(pCc);
+        adjustSpineHitRotation(pCc);
         changeState(StateID_G_SwordDamage);
     }
 
     pCc = mMdlSwordA.mCcList.findAtHit();
     if (pCc != nullptr && pCc->ChkAtShieldReflect()) {
         changeState(StateID_G_SwordDamage);
-        fn_226_D070();
+        clearAnms();
         setAnm("GuardLSwordA", ANM_DamageHit, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         field_0xD62 = 40;
         mCallback.field_0x088 = true;
@@ -3320,7 +3320,7 @@ void dAcGirahimuBase_c::fn_226_C320() {
     cCcD_Obj *pCc = mMdlSwordA.mCcList.findAtHit();
     if (pCc != nullptr && pCc->ChkAtShieldReflect()) {
         changeState(StateID_G_SwordDamage);
-        fn_226_D070();
+        clearAnms();
         setAnm("GuardLSwordA", ANM_DamageHit, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         field_0xD62 = 40;
         mCallback.field_0x088 = true;
@@ -3337,7 +3337,7 @@ void dAcGirahimuBase_c::fn_226_C320() {
                 setFrame(8.0f);
             }
         } else if (pTgCc == &mCyl2) {
-            fn_226_A400(pTgCc);
+            adjustSpineHitRotation(pTgCc);
             if (pTgCc->GetTgAtCutDir() == CUT_DIR_STAB) {
                 changeState(StateID_BackStep);
             } else {
@@ -3357,7 +3357,7 @@ void dAcGirahimuBase_c::fn_226_C560() {
         mCyl2.SetTgShieldType(~AT_TYPE_SWORD);
         mCyl0.ClrTgSet();
     }
-    if (fn_226_CC80()) {
+    if (isAttackingLeft()) {
         if (cutDir == CUT_DIR_LU || cutDir == CUT_DIR_L || cutDir == CUT_DIR_LD || cutDir == CUT_DIR_RU ||
             cutDir == CUT_DIR_U || cutDir == CUT_DIR_D) {
             mCyl2.SetTgShieldType(~AT_TYPE_SWORD);
@@ -3378,9 +3378,9 @@ void dAcGirahimuBase_c::fn_226_C560() {
     }
 }
 
-void dAcGirahimuBase_c::fn_226_C6A0() {
+void dAcGirahimuBase_c::configureBodyShield() {
     s32 cutDir = mPlayerAttackDir;
-    if (fn_226_CC80()) {
+    if (isAttackingLeft()) {
         if (cutDir == CUT_DIR_NONE || cutDir == CUT_DIR_U || cutDir == CUT_DIR_LU || cutDir == CUT_DIR_L ||
             cutDir == CUT_DIR_LD || cutDir == CUT_DIR_RU || cutDir == CUT_DIR_D) {
             mCyl0.ClrTgSet();
@@ -3401,7 +3401,7 @@ void dAcGirahimuBase_c::fn_226_C6A0() {
     }
 }
 
-void dAcGirahimuBase_c::fn_226_C790(cCcD_Obj &cc, s16 anm) {
+void dAcGirahimuBase_c::configureSwordShield(cCcD_Obj &cc, s16 anm) {
     if (field_0xD54 <= 0) {
         cc.ClrTgSet();
         return;
@@ -3489,7 +3489,7 @@ void dAcGirahimuBase_c::vt_0x1F4() {
         mAnmIDBody = ANM_PoseC;
     }
 
-    fn_226_C790(mCps0, mAnmIDBody);
+    configureSwordShield(mCps0, mAnmIDBody);
 
     if (mCps0.ChkTgSet()) {
         mCyl2.ClrTgSet();
@@ -3523,14 +3523,14 @@ void dAcGirahimuBase_c::vt_0x1F8() {
     }
 }
 
-void dAcGirahimuBase_c::fn_226_CC40() {
+void dAcGirahimuBase_c::setTgVulnerable() {
     mCyl0.SetTgType(
         ~(AT_TYPE_PHYSICS | AT_TYPE_0x40 | AT_TYPE_SLINGSHOT | AT_TYPE_WIND | AT_TYPE_DAMAGE | AT_TYPE_WHIP |
           AT_TYPE_0x8000 | AT_TYPE_BELLOWS | AT_TYPE_GLITTERING_SPORES | AT_TYPE_BEETLE | AT_TYPE_BUGNET)
     );
 }
 
-void dAcGirahimuBase_c::fn_226_CC50() {
+void dAcGirahimuBase_c::setTgInvulnerable() {
     mCyl0.SetTgType(~(
         AT_TYPE_PHYSICS | AT_TYPE_0x40 | AT_TYPE_SLINGSHOT | AT_TYPE_WIND | AT_TYPE_DAMAGE | AT_TYPE_WHIP |
         AT_TYPE_0x8000 | AT_TYPE_BELLOWS | AT_TYPE_GLITTERING_SPORES | AT_TYPE_BEETLE | AT_TYPE_BUGNET | AT_TYPE_SWORD
@@ -3541,14 +3541,14 @@ void dAcGirahimuBase_c::vt_0x220() {
     changeState(StateID_Wait);
 }
 
-bool dAcGirahimuBase_c::fn_226_CC80() {
+bool dAcGirahimuBase_c::isAttackingLeft() {
     if (mAnmIDBody == ANM_AttackPoseL || mAnmIDBody == ANM_AttackLRun || mAnmIDBody == ANM_AttackSwordL) {
         return true;
     }
     return false;
 }
 
-void dAcGirahimuBase_c::vt_0x200() {
+void dAcGirahimuBase_c::loadMainResFile() {
     mResAnmChr1 = nw4r::g3d::ResFile(getOarcResFile("GirahimBt"));
 }
 
@@ -3567,7 +3567,7 @@ void dAcGirahimuBase_c::vt_0x228() {
     }
 }
 
-void dAcGirahimuBase_c::fn_226_CDA0() {
+void dAcGirahimuBase_c::simplifyShoulderLAnmID() {
     switch (mAnmIDShoulderL) {
         case ANM_PoseLR: mAnmIDShoulderL = ANM_PoseL; break;
         case ANM_PoseUD: mAnmIDShoulderL = ANM_PoseC2; break;
@@ -3576,7 +3576,7 @@ void dAcGirahimuBase_c::fn_226_CDA0() {
     }
 }
 
-void dAcGirahimuBase_c::fn_226_CE00() {
+void dAcGirahimuBase_c::simplifyShoulderRAnmID() {
     switch (mAnmIDShoulderR) {
         case ANM_PoseLR: mAnmIDShoulderR = ANM_PoseR; break;
         case ANM_PoseUD: mAnmIDShoulderR = ANM_PoseC; break;
@@ -3617,14 +3617,14 @@ void dAcGirahimuBase_c::vt_0x22C() {
     changeState(StateID_GetSword);
 }
 
-void dAcGirahimuBase_c::fn_226_D070() {
+void dAcGirahimuBase_c::clearAnms() {
     mAnmIDShoulderL = ANM_NONE;
     mAnmIDShoulderR = ANM_NONE;
     mAnmIDHip = ANM_NONE;
     mAnmIDBody = ANM_NONE;
 }
 
-void dAcGirahimuBase_c::fn_226_D090() {
+void dAcGirahimuBase_c::handleEnterExitEffect() {
     mVec3_c v0(1.05f, 1.05f, 1.05f);
     mMtx_c hipTransform;
     mMdlBody.getNodeWorldMtx(mMdlBody.getResMdl().GetResNode("Hip").GetID(), hipTransform);
@@ -3699,7 +3699,7 @@ void dAcGirahimuBase_c::fn_226_D2D0() {
     mEyeMdlCallback.mTargetOffset[1].x = -field_0x58C;
 }
 
-void dAcGirahimuBase_c::fn_226_D5A0() {
+void dAcGirahimuBase_c::notifyTgSwordBattleGame() {
     StoryflagManager::sInstance->setFlagOrCounterToValue(STORYFLAG_692, 0);
     dTgSwordBattleGame_c *pSwordBattleGame =
         static_cast<dTgSwordBattleGame_c *>(fManager_c::searchBaseByProfName(fProfile::TAG_SWORD_BATTLE_GAME));

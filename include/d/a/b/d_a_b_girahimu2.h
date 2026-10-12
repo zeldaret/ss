@@ -50,7 +50,7 @@ public:
     virtual void vt_0x1F4() override;
     virtual void vt_0x1F8() override;
     virtual void vt_0x1FC() override;
-    virtual void vt_0x200() override;
+    virtual void loadMainResFile() override;
     virtual void vt_0x204() override;
     virtual void vt_0x20C() override;
     virtual bool vt_0x210() override;

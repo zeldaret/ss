@@ -72,9 +72,9 @@ void dAcGirahimu_c::initializeState_G_SwordDemo() {
         SceneflagManager::sInstance->setFlag(mRoomID, getFromParams(8, 0xFF));
     }
 
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
     field_0xD44 = 0;
-    mCallback.field_0x2D0 = 1.0f;
+    mCallback.mSlerpFactor = 1.0f;
     mCyl0.SetR(50.0f);
     mCyl2.OnTgSet();
     mSph0.ClrTgSet();
@@ -151,7 +151,7 @@ void dAcGirahimu_c::executeState_G_SwordDemo() {
 
             pCamera->setEventCamView(field_0x20F8, field_0x20EC, 35.0f, 0.0f);
             if (field_0xD46 <= 0) {
-                fn_226_D070();
+                clearAnms();
                 setAnm("WaitA", ANM_WaitA, "WaitA", ANM_WaitA, "FaceTongue", ANM_NONE, m3d::PLAY_MODE_4, 15.0f, 1.0f);
                 field_0xD46 = 50;
                 field_0xD44++;
@@ -423,7 +423,7 @@ void dAcGirahimu_c::fn_227_1EA0() {
     cCcD_Obj *pCc = mMdlSwordA.mCcList.findAtHit();
     if (pCc != nullptr && pCc->ChkAtShieldReflect()) {
         changeState(StateID_G_SwordDamage);
-        fn_226_D070();
+        clearAnms();
         setAnm("GuardLSwordA", ANM_DamageHit, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         field_0xD62 = 40;
         mCallback.field_0x088 = true;
@@ -485,8 +485,8 @@ void dAcGirahimu_c::initializeState_Knife() {
         if (mAnmChrs[ANMIDX_Body].getPlayMode() == m3d::PLAY_MODE_2) {
             rate = -rate;
         }
-        if (pSoundIface != nullptr) {
-            pSoundIface->setRate(rate);
+        if (mpSound != nullptr) {
+            mpSound->setRate(rate);
         }
         mSpeed = 0.0f;
         field_0x1834 = -8.0f * mAnmChrs[ANMIDX_Body].getRate();
@@ -588,7 +588,7 @@ void dAcGirahimu_c::finalizeState_Knife() {}
 
 void dAcGirahimu_c::initializeState_Death() {
     field_0xD44 = 0;
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
     field_0x1834 = 0.0f;
     mSpeed = 0.0f;
     field_0x1830 = 200.0f;
@@ -740,13 +740,13 @@ void dAcGirahimu_c::finalizeState_Death() {
 
 void dAcGirahimu_c::initializeState_DeathMiniGame() {
     mCollider.ClrTg();
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
     field_0xD44 = 0;
     field_0x1834 = 0.0f;
     mSpeed = 0.0f;
     field_0x1830 = 200.0f;
     mCallback.field_0x088 = false;
-    fn_226_D5A0();
+    notifyTgSwordBattleGame();
     setAnm("DamageHit", ANM_DamageHit, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     field_0xD6C = 0;
 }
@@ -822,8 +822,8 @@ int dAcGirahimu_c::actorExecute() {
             }
             mMdlBody.play();
 
-            if (pSoundIface != nullptr) {
-                pSoundIface->setFrame(mAnmChrs[ANMIDX_Body].getFrame());
+            if (mpSound != nullptr) {
+                mpSound->setFrame(mAnmChrs[ANMIDX_Body].getFrame());
             }
             mWorldMtx.transS(mPosition.x, mPosition.y + getYOffset(), mPosition.z);
             mWorldMtx.ZXYrotM(mRotation);
@@ -860,7 +860,7 @@ int dAcGirahimu_c::actorExecute() {
 
     mCallback.field_0x0A8.set(1.0f, 0.0f, 0.0f);
     mCallback.field_0x0A8.rotY(mRotation.y);
-    mCallback.field_0x084 = mRotation.y;
+    mCallback.mHeadRotationYCorrection = mRotation.y;
     mCallback.fn_226_3130();
 
     mSwordLink.get()->setAngleCopy(mRotation);
@@ -900,15 +900,15 @@ int dAcGirahimu_c::actorExecute() {
     }
     mMdlBody.play();
 
-    if (pSoundIface != nullptr) {
-        pSoundIface->setFrame(mAnmChrs[ANMIDX_Body].getFrame());
+    if (mpSound != nullptr) {
+        mpSound->setFrame(mAnmChrs[ANMIDX_Body].getFrame());
     }
     mWorldMtx.transS(mPosition.x, mPosition.y + getYOffset(), mPosition.z);
     mWorldMtx.ZXYrotM(mRotation);
     mWorldMtx.scaleM(field_0x8B0.x, field_0x8B0.y, field_0x8B0.z);
     mMdlBody.setLocalMtx(mWorldMtx);
     mMdlBody.calc(false);
-    fn_226_D090();
+    handleEnterExitEffect();
     fn_226_D2D0();
     mAnmTexPatWink.play();
     fn_226_9690();
@@ -986,8 +986,8 @@ int dAcGirahimu_c::actorExecute() {
 }
 
 void dAcGirahimu_c::initializeState_CatchDamage() {
-    mCallback.field_0x2D4 = 0.5f;
-    fn_226_D070();
+    mCallback.mSlerpFactorTarget = 0.5f;
+    clearAnms();
     setAnm("Damage", ANM_Damage, nullptr, m3d::PLAY_MODE_4, 5.0f, 0.5f);
     field_0xD6C = 1;
     mCallback.field_0x088 = false;
@@ -1006,7 +1006,7 @@ void dAcGirahimu_c::executeState_CatchDamage() {
     if (field_0xD81) {
         mCyl2.ClrTgSet();
         mSph0.ClrTgSet();
-        fn_226_CC40();
+        setTgVulnerable();
     }
 
     if (mAnmChrs[ANMIDX_Body].isStop()) {

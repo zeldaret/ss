@@ -216,7 +216,7 @@ void dAcGirahimu2_c::finalizeState_CreateKnife() {}
 
 void dAcGirahimu2_c::initializeState_KnifePreAttack() {
     mCallback.field_0x088 = true;
-    fn_226_D070();
+    clearAnms();
     if (field_0x1838 <= 1000.0f) {
         setAnm("CallWalk", ANM_Call, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.5f);
         setAnmHip("Walk", ANM_Walk, m3d::PLAY_MODE_2, 15.0f, 1.2f);
@@ -413,7 +413,7 @@ void dAcGirahimu2_c::initializeState_ComeOn() {
     field_0x221C = 0;
     field_0x1834 = 0.0f;
     mSpeed = 0.0f;
-    fn_226_D070();
+    clearAnms();
     setAnm("WalkBt", ANM_Walk, nullptr, m3d::PLAY_MODE_4, 15.0f, 1.0f);
     setAnm("PoseFree", ANM_PoseFree, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     field_0xD6C = 9;
@@ -483,9 +483,9 @@ void dAcGirahimu2_c::initializeState_G_SwordDemo() {
         SceneflagManager::sInstance->setFlag(mRoomID, getFromParams(8, 0xFF));
     }
 
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
     field_0xD44 = 0;
-    mCallback.field_0x2D0 = 1.0f;
+    mCallback.mSlerpFactor = 1.0f;
     mCyl0.SetR(30.0f);
     mCyl2.OnTgSet();
     mSph0.ClrTgSet();
@@ -986,7 +986,7 @@ void dAcGirahimu2_c::finalizeState_G_SwordPiyori() {
 
 void dAcGirahimu2_c::initializeState_Death() {
     field_0xD44 = 0;
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
     field_0x1834 = 0.0f;
     mSpeed = 0.0f;
     field_0x1830 = 200.0f;
@@ -1220,14 +1220,14 @@ void dAcGirahimu2_c::fn_228_47F0(bool bVertical) {
 
 void dAcGirahimu2_c::initializeState_DeathMiniGame() {
     field_0xD44 = 0;
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
     field_0x1834 = 0.0f;
     mSpeed = 0.0f;
     field_0x1830 = 200.0f;
     mCallback.field_0x088 = false;
     field_0xD6C = 0;
     mCollider.ClrTg();
-    fn_226_D5A0();
+    notifyTgSwordBattleGame();
     setAnm("End2A", ANM_EndA, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
 }
 void dAcGirahimu2_c::executeState_DeathMiniGame() {
@@ -1274,7 +1274,7 @@ void dAcGirahimu2_c::fn_228_4A30() {
     pCc = mCollider.findTgHit();
     if (pCc != nullptr) {
         if (pCc->GetTgAtHitType() == AT_TYPE_SWORD) {
-            fn_226_A400(pCc);
+            adjustSpineHitRotation(pCc);
         }
     }
 }
@@ -1476,7 +1476,7 @@ void dAcGirahimu2_c::fn_228_5400() {
                 getSoundSource()->startSoundAtPosition(SE_Girahim_SWORD_HIT_SWORD, pCc->GetTgHitPos());
                 changeState(StateID_Counter);
             } else {
-                fn_226_A400(pCc);
+                adjustSpineHitRotation(pCc);
                 changeState(StateID_G_SwordDamage);
             }
         } else if (field_0x221C == 1) {
@@ -1489,7 +1489,7 @@ void dAcGirahimu2_c::fn_228_5400() {
                 changeState(StateID_ComeOnGuard);
                 field_0x221C++;
             } else {
-                fn_226_A400(pCc);
+                adjustSpineHitRotation(pCc);
                 changeState(StateID_G_SwordDamage);
             }
         } else if (pCc->GetTgShieldType() != AT_TYPE_NONE) {
@@ -1498,7 +1498,7 @@ void dAcGirahimu2_c::fn_228_5400() {
             changeState(StateID_ComeOnGuard);
             field_0x221C++;
         } else {
-            fn_226_A400(pCc);
+            adjustSpineHitRotation(pCc);
             changeState(StateID_G_SwordDamage);
         }
     }
@@ -1634,46 +1634,46 @@ bool dAcGirahimu2_c::fn_228_5770(s32 cutDir) {
         switch (mAnmIDShoulderR) {
             case ANM_PoseC:
                 mCallback.field_0x245 = true;
-                mCallback.field_0x23C = mAng(0x1000);
-                mCallback.field_0x240 = 0;
+                mCallback.mElbowRRotationYAmplitude = mAng(0x1000);
+                mCallback.mElbowRRotationYPhase = 0;
                 break;
             case ANM_PoseL:
                 mCallback.field_0x245 = true;
-                mCallback.field_0x23C = mAng(0x1000);
-                mCallback.field_0x240 = 0;
+                mCallback.mElbowRRotationYAmplitude = mAng(0x1000);
+                mCallback.mElbowRRotationYPhase = 0;
                 break;
             case ANM_PoseR:
                 mCallback.field_0x245 = false;
-                mCallback.field_0x23C = mAng(0x1000);
-                mCallback.field_0x240 = 0;
+                mCallback.mElbowRRotationYAmplitude = mAng(0x1000);
+                mCallback.mElbowRRotationYPhase = 0;
                 break;
             case ANM_PoseC2:
                 mCallback.field_0x245 = true;
-                mCallback.field_0x23C = mAng(0x1000);
-                mCallback.field_0x240 = 0;
+                mCallback.mElbowRRotationYAmplitude = mAng(0x1000);
+                mCallback.mElbowRRotationYPhase = 0;
                 break;
         }
     } else {
         switch (mAnmIDShoulderL) {
             case ANM_PoseC:
                 mCallback.field_0x244 = true;
-                mCallback.field_0x23E = -0x1000;
-                mCallback.field_0x242 = 0;
+                mCallback.mElbowLRotationYAmplitude = -0x1000;
+                mCallback.mElbowLRotationYPhase = 0;
                 break;
             case ANM_PoseL:
                 mCallback.field_0x244 = false;
-                mCallback.field_0x23E = -0x1000;
-                mCallback.field_0x242 = 0;
+                mCallback.mElbowLRotationYAmplitude = -0x1000;
+                mCallback.mElbowLRotationYPhase = 0;
                 break;
             case ANM_PoseR:
                 mCallback.field_0x244 = true;
-                mCallback.field_0x23E = -0x1000;
-                mCallback.field_0x242 = 0;
+                mCallback.mElbowLRotationYAmplitude = -0x1000;
+                mCallback.mElbowLRotationYPhase = 0;
                 break;
             case ANM_PoseC2:
                 mCallback.field_0x244 = true;
-                mCallback.field_0x23E = -0x1000;
-                mCallback.field_0x242 = 0;
+                mCallback.mElbowLRotationYAmplitude = -0x1000;
+                mCallback.mElbowLRotationYPhase = 0;
                 break;
         }
     }
@@ -1704,8 +1704,8 @@ void dAcGirahimu2_c::vt_0x1F4() {
         mCps1.ClrTgSet();
 
     } else {
-        fn_226_C790(mCps0, mAnmIDShoulderR);
-        fn_226_C790(mCps1, mAnmIDShoulderL);
+        configureSwordShield(mCps0, mAnmIDShoulderR);
+        configureSwordShield(mCps1, mAnmIDShoulderL);
         if (mCps0.ChkTgSet()) {
             mCyl2.ClrTgSet();
         }
@@ -1778,7 +1778,7 @@ bool dAcGirahimu2_c::createHeap() {
     nw4r::g3d::ResFile bodyRes;
     void *rawRes = getOarcResFile("GirahimBt02");
     mResAnmChr0 = nw4r::g3d::ResFile(rawRes);
-    vt_0x200();
+    loadMainResFile();
     nw4r::g3d::ResMdl resMdl = mResAnmChr0.GetResMdl("GirahimBt02");
     if (!mMdlBody.create(resMdl, &mAllocator, 0x137, 1, nullptr)) {
         return false;
@@ -1826,7 +1826,7 @@ bool dAcGirahimu2_c::createHeap() {
     int id = m3d::getMatID(mMdlBody.getResMdl(), "m_Eyeball");
     mEyeMdlCallback.create(mMdlBody, id, id, 1, 1, nullptr);
     mEyeMdlCallback.mBlendWeight = 1;
-    pSoundIface = getSoundSource();
+    mpSound = getSoundSource();
 
     return true;
 }
@@ -1902,8 +1902,8 @@ int dAcGirahimu2_c::actorExecute() {
                 mAnmChrs[i].play();
             }
             mMdlBody.play();
-            if (pSoundIface != nullptr) {
-                pSoundIface->setFrame(mAnmChrs[ANMIDX_Body].getFrame());
+            if (mpSound != nullptr) {
+                mpSound->setFrame(mAnmChrs[ANMIDX_Body].getFrame());
             }
             mWorldMtx.transS(mPosition.x, mPosition.y + getYOffset(), mPosition.z);
             mWorldMtx.ZXYrotM(mRotation);
@@ -1940,7 +1940,7 @@ int dAcGirahimu2_c::actorExecute() {
 
     mCallback.field_0x0A8.set(1.0f, 0.0f, 0.0f);
     mCallback.field_0x0A8.rotY(mRotation.y);
-    mCallback.field_0x084 = mRotation.y;
+    mCallback.mHeadRotationYCorrection = mRotation.y;
     mCallback.fn_226_3130();
 
     mSwordLink.get()->setAngleCopy(mRotation);
@@ -1971,12 +1971,12 @@ int dAcGirahimu2_c::actorExecute() {
     }
     mMdlBody.play();
 
-    if (pSoundIface != nullptr) {
-        pSoundIface->setFrame(mAnmChrs[ANMIDX_Body].getFrame());
+    if (mpSound != nullptr) {
+        mpSound->setFrame(mAnmChrs[ANMIDX_Body].getFrame());
     }
     mMdlBody.calc(false);
     if (!isState(StateID_UpWarp)) {
-        fn_226_D090();
+        handleEnterExitEffect();
     }
     fn_226_D2D0();
     mAnmTexPatWink.play();
@@ -2018,7 +2018,7 @@ int dAcGirahimu2_c::actorExecute() {
 
         mKnives[i].get()->field_0x6F0.set(mRotation.x, mRotation.y, mRotation.z);
         mKnives[i].get()->field_0x6D8.set(mPosition);
-        mKnives[i].get()->field_0x6E4.set(mCallback.field_0x260);
+        mKnives[i].get()->field_0x6E4.set(mCallback.mHandRTranslation);
 
         if (mKnives[i].get()->isWaiting()) {
             playerSound1 = true;
@@ -2053,15 +2053,15 @@ void dAcGirahimu2_c::initializeState_Walk() {
     setAnm("Walk", ANM_Walk, nullptr, m3d::PLAY_MODE_4, 15.0f, 1.0f);
     mCallback.field_0x088 = true;
     mCallback.field_0x04E = false;
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
 
     if (dAcPy_c::GetLinkM()->isUsingSword()) {
         mCallback.field_0x04E = true;
-        mCallback.field_0x2D4 = 0.5f;
-        mCallback.field_0x2D0 = 0.0f;
+        mCallback.mSlerpFactorTarget = 0.5f;
+        mCallback.mSlerpFactor = 0.0f;
     } else {
         mCallback.field_0x04E = false;
-        mCallback.field_0x2D4 = 1.0f;
+        mCallback.mSlerpFactorTarget = 1.0f;
     }
     field_0xD46 = 100;
 }
@@ -2145,11 +2145,11 @@ void dAcGirahimu2_c::initializeState_CreateSpinKnife() {
     field_0xD81 = true;
     if (dAcPy_c::GetLinkM()->isUsingSword()) {
         mCallback.field_0x04E = true;
-        mCallback.field_0x2D4 = 0.2f;
-        mCallback.field_0x2D0 = 0.2f;
+        mCallback.mSlerpFactorTarget = 0.2f;
+        mCallback.mSlerpFactor = 0.2f;
     } else {
         mCallback.field_0x04E = false;
-        mCallback.field_0x2D4 = 1.0f;
+        mCallback.mSlerpFactorTarget = 1.0f;
     }
 }
 void dAcGirahimu2_c::executeState_CreateSpinKnife() {
@@ -2177,8 +2177,8 @@ void dAcGirahimu2_c::finalizeState_CreateSpinKnife() {
 }
 
 void dAcGirahimu2_c::initializeState_CatchDamage() {
-    mCallback.field_0x2D4 = 0.5f;
-    fn_226_D070();
+    mCallback.mSlerpFactorTarget = 0.5f;
+    clearAnms();
     setAnm("Damage", ANM_Damage, nullptr, m3d::PLAY_MODE_4, 5.0f, 0.5f);
     field_0xD6C = 1;
     mCallback.field_0x088 = false;
@@ -2197,7 +2197,7 @@ void dAcGirahimu2_c::executeState_CatchDamage() {
     if (field_0xD81) {
         mCyl2.ClrTgSet();
         mSph0.ClrTgSet();
-        fn_226_CC40();
+        setTgVulnerable();
     }
     if (mAnmChrs[ANMIDX_Body].isStop()) {
         if (getHealth() > 0) {
@@ -2264,7 +2264,7 @@ void dAcGirahimu2_c::initializeState_Catch() {
     mCallback.field_0x088 = true;
     dAcPy_c::GetLinkM()->set0x439F(this, 7);
     mCallback.field_0x014 = 1.0f;
-    mCallback.field_0x2D4 = 0.5f;
+    mCallback.mSlerpFactorTarget = 0.5f;
     field_0xD46 = 4;
     field_0xD5E = 100;
 }
@@ -2350,7 +2350,7 @@ void dAcGirahimu2_c::finalizeState_Catch() {
     mCallback.field_0x04E = false;
     field_0xD71 = false;
     mCollider.CoSet();
-    mCallback.field_0x2D4 = 1.0f;
+    mCallback.mSlerpFactorTarget = 1.0f;
     if ((s32)getFromParams(0, 0xFF) != 0xFF) {
         SceneflagManager::sInstance->unsetFlag(mRoomID, getFromParams(0, 0xFF));
     }
@@ -2410,7 +2410,7 @@ void dAcGirahimu2_c::fn_228_82C0() {
     mVec3_c v1(0.0f, 100.0f, 200.0f);
     v1.rotY(mRotation.y);
     v0 += v1;
-    v0.y = mCallback.field_0x21C.y;
+    v0.y = mCallback.mArmRTranslation.y;
 
     int rnd = cM::rndInt(90);
     mAng a0;
@@ -2552,7 +2552,7 @@ void dAcGirahimu2_c::vt_0x1FC() {
     }
 }
 
-void dAcGirahimu2_c::vt_0x200() {
+void dAcGirahimu2_c::loadMainResFile() {
     mResAnmChr1 = nw4r::g3d::ResFile(getOarcResFile("GirahimBt"));
 }
 
@@ -2629,7 +2629,7 @@ void dAcGirahimu2_c::vt_0x234() {
                 return;
             }
         } else if (pCc == &mCyl2) {
-            fn_226_A400(pCc);
+            adjustSpineHitRotation(pCc);
             if (pCc->GetTgAtCutDir() == CUT_DIR_STAB) {
                 changeState(StateID_BackStep);
             } else {
