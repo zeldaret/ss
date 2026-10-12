@@ -31,8 +31,6 @@
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/d_enemy_sword_mdl.h"
 #include "toBeSorted/d_flow_mgr.h"
-#include "toBeSorted/event.h"
-#include "toBeSorted/event_manager.h"
 
 class dAcObjGirahimuSwordLink_c;
 

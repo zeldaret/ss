@@ -190,16 +190,16 @@ void dAcGirahimu2_c::executeState_CreateKnife() {
                 int rnd = cM::rndInt(100);
                 if (rnd >= 60) {
                     startSound(SE_OGhKf_GROUP_APPEAR);
-                    field_0x2214 = 2;
-                    fn_228_4550(0, 5);
-                    fn_228_4550(5, 10);
-                    fn_228_4550(10, 15);
+                    mKnifeVolleyState = 2;
+                    spawnKnifeVolley(0, 5);
+                    spawnKnifeVolley(5, 10);
+                    spawnKnifeVolley(10, 15);
                 } else if (rnd >= 30) {
-                    field_0x2214 = 3;
-                    fn_228_47F0(false);
+                    mKnifeVolleyState = 3;
+                    spawnKnifeSurrond(false);
                 } else {
-                    field_0x2214 = 3;
-                    fn_228_47F0(true);
+                    mKnifeVolleyState = 3;
+                    spawnKnifeSurrond(true);
                 }
             }
             if (mAnmChrs[ANMIDX_Body].isStop()) {
@@ -229,27 +229,27 @@ void dAcGirahimu2_c::initializeState_KnifePreAttack() {
 
     mSubstate = 0;
     field_0xD6C = 6;
-    if (field_0x2218 > 10) {
-        field_0x2218 = 0;
+    if (mKnifeVolleyIdx > 10) {
+        mKnifeVolleyIdx = 0;
     }
 
-    for (int i = field_0x2218; i < field_0x2218 + 5; ++i) {
+    for (int i = mKnifeVolleyIdx; i < mKnifeVolleyIdx + 5; ++i) {
         if (mKnives[i].isLinked() && mKnives[i].get()->isWaiting()) {
             return;
         }
     }
-    field_0x2218 += 5;
-    if (field_0x2218 > 10) {
-        field_0x2218 = 0;
+    mKnifeVolleyIdx += 5;
+    if (mKnifeVolleyIdx > 10) {
+        mKnifeVolleyIdx = 0;
     }
-    for (int i = field_0x2218; i < field_0x2218 + 5; ++i) {
+    for (int i = mKnifeVolleyIdx; i < mKnifeVolleyIdx + 5; ++i) {
         if (mKnives[i].isLinked() && mKnives[i].get()->isWaiting()) {
             return;
         }
     }
-    field_0x2218 += 5;
-    if (field_0x2218 > 10) {
-        field_0x2218 = 0;
+    mKnifeVolleyIdx += 5;
+    if (mKnifeVolleyIdx > 10) {
+        mKnifeVolleyIdx = 0;
     }
     mSubstate = 0;
 }
@@ -280,17 +280,17 @@ void dAcGirahimu2_c::executeState_KnifePreAttack() {
     switch (mSubstate) {
         case 0: {
             if (mAnmChrs[ANMIDX_Body].checkFrame(15.0f)) {
-                if (field_0x2214 == 3) {
+                if (mKnifeVolleyState == 3) {
                     for (int i = 0; i < 15; ++i) {
                         if (mKnives[i].isLinked()) {
                             mKnives[i].get()->field_0x792 = false;
                         }
                     }
                 } else {
-                    if (field_0x2218 > 10) {
-                        field_0x2218 = 0;
+                    if (mKnifeVolleyIdx > 10) {
+                        mKnifeVolleyIdx = 0;
                     }
-                    for (int i = field_0x2218; i < field_0x2218 + 5; i++) {
+                    for (int i = mKnifeVolleyIdx; i < mKnifeVolleyIdx + 5; i++) {
                         if (mKnives[i].isLinked() && mKnives[i].get()->isWaiting()) {
                             mKnives[i].get()->setWait();
                         }
@@ -310,7 +310,7 @@ void dAcGirahimu2_c::executeState_KnifePreAttack() {
                 setAnm("WalkBt", ANM_Walk, m3d::PLAY_MODE_2, 15.0f, 1.0f);
             }
             if (mAnmIDHip != ANM_Walk || mSubstateTimer <= 0) {
-                if (field_0x2214 == 3) {
+                if (mKnifeVolleyState == 3) {
                     for (int i = 0; i < 15; ++i) {
                         if (mKnives[i].isLinked() && !mKnives[i].get()->isWaiting()) {
                             vt_0x220();
@@ -342,7 +342,7 @@ void dAcGirahimu2_c::executeState_KnifeAttack() {
     sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
 
     if (mAnmChrs[ANMIDX_Body].checkFrame(15.0f)) {
-        if (field_0x2214 == 3) {
+        if (mKnifeVolleyState == 3) {
             startSound(SE_OGhKf_GROUP_SHOT);
             for (int i = 0; i < 15; ++i) {
                 if (mKnives[i].isLinked()) {
@@ -350,23 +350,23 @@ void dAcGirahimu2_c::executeState_KnifeAttack() {
                 }
             }
         } else {
-            for (int i = field_0x2218; i < field_0x2218 + 5; ++i) {
+            for (int i = mKnifeVolleyIdx; i < mKnifeVolleyIdx + 5; ++i) {
                 if (mKnives[i].isLinked()) {
                     startSound(SE_OGhKf_SHOT);
                     mKnives[i].get()->fn_239_2360(true, true, 50.0f);
                 }
             }
-            field_0x2218 += 5;
+            mKnifeVolleyIdx += 5;
         }
         field_0xD6C = 6;
     }
 
     if (mAnmChrs[ANMIDX_Body].isStop()) {
-        if (field_0x2214 == 3) {
+        if (mKnifeVolleyState == 3) {
             vt_0x220();
             return;
         }
-        if (field_0x2218 >= 15) {
+        if (mKnifeVolleyIdx >= 15) {
             vt_0x220();
             return;
         }
@@ -390,7 +390,7 @@ void dAcGirahimu2_c::initializeState_HitAction() {
     setAnm("PoseFree", ANM_PoseFree, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     field_0xD6C = 9;
     mCallback.field_0x088 = false;
-    field_0x221C = 0;
+    mConsecutiveSwordHitCount = 0;
 }
 void dAcGirahimu2_c::executeState_HitAction() {
     mCallback.field_0x088 = false;
@@ -410,7 +410,7 @@ void dAcGirahimu2_c::finalizeState_HitAction() {
 }
 
 void dAcGirahimu2_c::initializeState_ComeOn() {
-    field_0x221C = 0;
+    mConsecutiveSwordHitCount = 0;
     mSpeedTarget = 0.0f;
     mSpeed = 0.0f;
     clearAnms();
@@ -448,15 +448,15 @@ void dAcGirahimu2_c::initializeState_ComeOnGuard() {
     f32 f0 = 1.0f;
     setAnmHead("RarmU", ANM_PoseC, m3d::PLAY_MODE_4, f0, 1.0f);
     setAnmBody("RarmU", ANM_PoseC, m3d::PLAY_MODE_4, f0, 1.0f);
-    if (!fn_228_5E90()) {
+    if (!isRightArmPose()) {
         setAnmShoulderR("WaitBtD", ANM_WaitBtC, m3d::PLAY_MODE_4, f0, 1.0f);
-    } else if (!fn_228_5EC0()) {
+    } else if (!isLeftArmPose()) {
         setAnmShoulderL("WaitBtD", ANM_WaitBtC, m3d::PLAY_MODE_4, f0, 1.0f);
     }
     setAnmHip("WalkBt", ANM_Walk, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     mMdlBody.play();
-    if (fn_228_5E90()) {
-        fn_228_5EC0();
+    if (isRightArmPose()) {
+        isLeftArmPose();
     }
 }
 void dAcGirahimu2_c::executeState_ComeOnGuard() {
@@ -1145,7 +1145,7 @@ void dAcGirahimu2_c::finalizeState_Death() {
     mSubstate = 0;
 }
 
-void dAcGirahimu2_c::fn_228_4550(int idxStart, int idxEnd) {
+void dAcGirahimu2_c::spawnKnifeVolley(int idxStart, int idxEnd) {
     startSound(SE_OGhKf_GROUP_APPEAR);
     dAcObjGirahimuKnife_c::Pattern_e pattern;
     mVec3_c knifeOffset;
@@ -1195,7 +1195,7 @@ void dAcGirahimu2_c::fn_228_4550(int idxStart, int idxEnd) {
     }
 }
 
-void dAcGirahimu2_c::fn_228_47F0(bool bVertical) {
+void dAcGirahimu2_c::spawnKnifeSurrond(bool bVertical) {
     dAcObjGirahimuKnife_c::Pattern_e pattern = dAcObjGirahimuKnife_c::PATTERN_SURROUND_H;
     dAcPy_c::GetLinkM()->startSound(SE_OGhKf_GROUP_APPEAR);
     if (bVertical) {
@@ -1326,7 +1326,7 @@ bool dAcGirahimu2_c::fn_228_4CD0(s32 cutDir) {
 }
 
 void dAcGirahimu2_c::vt_0x220() {
-    field_0x221D = false;
+    mbPoseFreeRequest = false;
     if (mbSpawnedSwords) {
         for (int i = 0; i < 15; ++i) {
             if (mKnives[i].isLinked() && mKnives[i].get()->isCircleWait()) {
@@ -1393,7 +1393,7 @@ void dAcGirahimu2_c::vt_0x220() {
 }
 
 bool dAcGirahimu2_c::fn_228_5110() {
-    field_0x221D = false;
+    mbPoseFreeRequest = false;
     int rnd = cM::rndInt(100);
 
     if (mDistanceToPlayer >= 400.0f) {
@@ -1431,7 +1431,7 @@ bool dAcGirahimu2_c::fn_228_5110() {
         if (rnd >= 75 && mCurrentAttack != 2) {
             mCurrentAttack = 2;
             if (cM::rndInt(100) > 50) {
-                field_0x221D = true;
+                mbPoseFreeRequest = true;
                 changeState(StateID_ComeOn);
 
             } else {
@@ -1457,7 +1457,7 @@ bool dAcGirahimu2_c::fn_228_5110() {
 }
 
 void dAcGirahimu2_c::fn_228_5400() {
-    if (field_0x221C >= 2) {
+    if (mConsecutiveSwordHitCount >= 2) {
         mCcBody.SetR(15.0f);
     } else {
         mCcBody.SetR(45.0f);
@@ -1471,7 +1471,7 @@ void dAcGirahimu2_c::fn_228_5400() {
     if (pCc != nullptr && pCc->GetTgAtHitType() == AT_TYPE_SWORD) {
         if (pCc->GetTgAtCutDir() == CUT_DIR_STAB) {
             changeState(StateID_TwoSwordAttack);
-        } else if (field_0x221C >= 2) {
+        } else if (mConsecutiveSwordHitCount >= 2) {
             if (pCc == &mCcSwordR || pCc == &mCcSwordL) {
                 getSoundSource()->startSoundAtPosition(SE_Girahim_SWORD_HIT_SWORD, pCc->GetTgHitPos());
                 changeState(StateID_Counter);
@@ -1479,7 +1479,7 @@ void dAcGirahimu2_c::fn_228_5400() {
                 adjustSpineHitRotation(pCc);
                 changeState(StateID_G_SwordDamage);
             }
-        } else if (field_0x221C == 1) {
+        } else if (mConsecutiveSwordHitCount == 1) {
             if (pCc == &mCcSwordR || pCc == &mCcSwordL) {
                 getSoundSource()->startSoundAtPosition(SE_Girahim_SWORD_HIT_SWORD, pCc->GetTgHitPos());
                 changeState(StateID_Counter);
@@ -1487,7 +1487,7 @@ void dAcGirahimu2_c::fn_228_5400() {
                 getSoundSource()->startSoundAtPosition(SE_Girahim_SWORD_HIT_SWORD, pCc->GetTgHitPos());
                 fn_228_5770(pCc->GetTgAtCutDir());
                 changeState(StateID_ComeOnGuard);
-                field_0x221C++;
+                mConsecutiveSwordHitCount++;
             } else {
                 adjustSpineHitRotation(pCc);
                 changeState(StateID_G_SwordDamage);
@@ -1496,7 +1496,7 @@ void dAcGirahimu2_c::fn_228_5400() {
             getSoundSource()->startSoundAtPosition(SE_Girahim_SWORD_HIT_SWORD, pCc->GetTgHitPos());
             fn_228_5770(pCc->GetTgAtCutDir());
             changeState(StateID_ComeOnGuard);
-            field_0x221C++;
+            mConsecutiveSwordHitCount++;
         } else {
             adjustSpineHitRotation(pCc);
             changeState(StateID_G_SwordDamage);
@@ -1506,7 +1506,7 @@ void dAcGirahimu2_c::fn_228_5400() {
 
 void dAcGirahimu2_c::fn_228_5740() {
     s32 cutDir = mPlayerAttackDir;
-    if (field_0x221C < 2 && cutDir != CUT_DIR_STAB) {
+    if (mConsecutiveSwordHitCount < 2 && cutDir != CUT_DIR_STAB) {
         mCcBody.SetTgShieldType(~AT_TYPE_DAMAGE);
     }
 }
@@ -1519,7 +1519,7 @@ bool dAcGirahimu2_c::fn_228_5770(s32 cutDir) {
             if (mAnmIDShoulderR == ANM_PoseC || mAnmIDShoulderL == ANM_PoseC) {
                 return false;
             }
-            if (!fn_228_5E90()) {
+            if (!isRightArmPose()) {
                 bRightArm = true;
                 setAnmShoulderR("RarmU", ANM_PoseC, m3d::PLAY_MODE_4, rate, rate);
                 mAnmChrs[ANMIDX_ShoulderR].play();
@@ -1532,7 +1532,7 @@ bool dAcGirahimu2_c::fn_228_5770(s32 cutDir) {
             if (mAnmIDShoulderR == ANM_PoseC2 || mAnmIDShoulderL == ANM_PoseC2) {
                 return false;
             }
-            if (!fn_228_5E90()) {
+            if (!isRightArmPose()) {
                 bRightArm = true;
                 setAnmShoulderR("RarmD", ANM_PoseC2, m3d::PLAY_MODE_4, rate, rate);
                 mAnmChrs[ANMIDX_ShoulderR].play();
@@ -1548,7 +1548,7 @@ bool dAcGirahimu2_c::fn_228_5770(s32 cutDir) {
             if (mAnmIDShoulderR == ANM_PoseR || mAnmIDShoulderL == ANM_PoseR) {
                 return false;
             }
-            if (!fn_228_5E90()) {
+            if (!isRightArmPose()) {
                 bRightArm = true;
                 setAnmShoulderR("RarmR", ANM_PoseR, m3d::PLAY_MODE_4, rate, rate);
                 mAnmChrs[ANMIDX_ShoulderR].play();
@@ -1564,7 +1564,7 @@ bool dAcGirahimu2_c::fn_228_5770(s32 cutDir) {
             if (mAnmIDShoulderR == ANM_PoseL || mAnmIDShoulderL == ANM_PoseL) {
                 return false;
             }
-            if (!fn_228_5E90()) {
+            if (!isRightArmPose()) {
                 setAnmShoulderL("LarmL", ANM_PoseL, m3d::PLAY_MODE_4, rate, rate);
                 mAnmChrs[ANMIDX_ShoulderL].play();
             } else {
@@ -1576,7 +1576,7 @@ bool dAcGirahimu2_c::fn_228_5770(s32 cutDir) {
             if (mAnmIDShoulderR == ANM_PoseR || mAnmIDShoulderL == ANM_PoseR) {
                 return false;
             }
-            if (!fn_228_5E90()) {
+            if (!isRightArmPose()) {
                 bRightArm = true;
                 setAnmShoulderR("RarmR", ANM_PoseR, m3d::PLAY_MODE_4, rate, rate);
                 mAnmChrs[ANMIDX_ShoulderR].play();
@@ -1589,7 +1589,7 @@ bool dAcGirahimu2_c::fn_228_5770(s32 cutDir) {
             if (mAnmIDShoulderR == ANM_PoseL || mAnmIDShoulderL == ANM_PoseL) {
                 return false;
             }
-            if (!fn_228_5E90()) {
+            if (!isRightArmPose()) {
                 setAnmShoulderL("LarmL", ANM_PoseL, m3d::PLAY_MODE_4, rate, rate);
                 mAnmChrs[ANMIDX_ShoulderL].play();
             } else {
@@ -1604,7 +1604,7 @@ bool dAcGirahimu2_c::fn_228_5770(s32 cutDir) {
             if (mAnmIDShoulderR == ANM_PoseR || mAnmIDShoulderL == ANM_PoseR) {
                 return false;
             }
-            if (!fn_228_5E90()) {
+            if (!isRightArmPose()) {
                 bRightArm = true;
                 setAnmShoulderR("RarmR", ANM_PoseR, m3d::PLAY_MODE_4, rate, rate);
                 mAnmChrs[ANMIDX_ShoulderR].play();
@@ -1620,7 +1620,7 @@ bool dAcGirahimu2_c::fn_228_5770(s32 cutDir) {
             if (mAnmIDShoulderR == ANM_PoseL || mAnmIDShoulderL == ANM_PoseL) {
                 return false;
             }
-            if (!fn_228_5E90()) {
+            if (!isRightArmPose()) {
                 setAnmShoulderL("LarmL", ANM_PoseL, m3d::PLAY_MODE_4, rate, rate);
                 mAnmChrs[ANMIDX_ShoulderL].play();
             } else {
@@ -1682,7 +1682,7 @@ bool dAcGirahimu2_c::fn_228_5770(s32 cutDir) {
     return true;
 }
 
-bool dAcGirahimu2_c::fn_228_5E90() {
+bool dAcGirahimu2_c::isRightArmPose() {
     if (mAnmIDShoulderR == ANM_PoseL || mAnmIDShoulderR == ANM_PoseR || mAnmIDShoulderR == ANM_PoseC ||
         mAnmIDShoulderR == ANM_PoseC2) {
         return true;
@@ -1690,7 +1690,7 @@ bool dAcGirahimu2_c::fn_228_5E90() {
     return false;
 }
 
-bool dAcGirahimu2_c::fn_228_5EC0() {
+bool dAcGirahimu2_c::isLeftArmPose() {
     if (mAnmIDShoulderL == ANM_PoseL || mAnmIDShoulderL == ANM_PoseR || mAnmIDShoulderL == ANM_PoseC ||
         mAnmIDShoulderL == ANM_PoseC2) {
         return true;
@@ -1716,9 +1716,9 @@ void dAcGirahimu2_c::vt_0x1F4() {
 }
 
 void dAcGirahimu2_c::vt_0x1F8() {
-    if (field_0x221D) {
+    if (mbPoseFreeRequest) {
         setAnm("PoseFree", ANM_PoseFree, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
-        field_0x221D = false;
+        mbPoseFreeRequest = false;
         return;
     }
 
@@ -2421,13 +2421,13 @@ void dAcGirahimu2_c::fn_228_82C0() {
         case 0: {
             mAng a0;
             a1 = 0x8000;
-            if (rnd >= 60 && field_0x2214 == 2) {
+            if (rnd >= 60 && mKnifeVolleyState == 2) {
                 a0 = 0;
                 spacing.set(100.0f, 65.0f, 0.0f);
                 pattern = dAcObjGirahimuKnife_c::PATTERN_U_D;
                 field_0x2210 = 8;
-                field_0x2214 = 2;
-            } else if (rnd >= 30 && field_0x2214 == 1) {
+                mKnifeVolleyState = 2;
+            } else if (rnd >= 30 && mKnifeVolleyState == 1) {
                 if (cM::rndInt(100) >= 50) {
                     a0 = 0x2000;
                     spacing.set(100.0f, 65.0f, 0.0f);
@@ -2439,19 +2439,19 @@ void dAcGirahimu2_c::fn_228_82C0() {
                     pattern = dAcObjGirahimuKnife_c::PATTERN_RU_LD;
                     field_0x2210 = 2;
                 }
-                field_0x2214 = 1;
-            } else if (field_0x2214 != 0) {
+                mKnifeVolleyState = 1;
+            } else if (mKnifeVolleyState != 0) {
                 a0 = 0x4000;
                 spacing.set(100.0f, 65.0f, 0.0f);
                 pattern = dAcObjGirahimuKnife_c::PATTERN_R_L;
                 field_0x2210 = 1;
-                field_0x2214 = 0;
+                mKnifeVolleyState = 0;
             } else {
                 a0 = 0;
                 spacing.set(100.0f, 65.0f, 0.0f);
                 pattern = dAcObjGirahimuKnife_c::PATTERN_U_D;
                 field_0x2210 = 8;
-                field_0x2214 = 2;
+                mKnifeVolleyState = 2;
             }
             startSound(SE_Girahim_MAGIC_KNIFE_APPEAR);
 
@@ -2485,21 +2485,21 @@ void dAcGirahimu2_c::fn_228_82C0() {
         case 1: {
             mAng a0, a1;
             a1 = 0x4000;
-            if (rnd >= 50 && field_0x2214 != 2) {
+            if (rnd >= 50 && mKnifeVolleyState != 2) {
                 field_0x2210 = 9;
                 a0 = 0;
                 spacing.set(0.0f, 65.0f, 100.0f);
-                field_0x2214 = 2;
-            } else if (field_0x2214 != 1) {
+                mKnifeVolleyState = 2;
+            } else if (mKnifeVolleyState != 1) {
                 field_0x2210 = 6;
                 a0 = 0x2000;
                 spacing.set(0.0f, 65.0f, 100.0f);
-                field_0x2214 = 1;
+                mKnifeVolleyState = 1;
             } else {
                 field_0x2210 = 9;
                 a0 = 0;
                 spacing.set(0.0f, 65.0f, 100.0f);
-                field_0x2214 = 2;
+                mKnifeVolleyState = 2;
             }
             startSound(SE_Girahim_MAGIC_KNIFE_APPEAR);
 
@@ -2524,7 +2524,7 @@ void dAcGirahimu2_c::fn_228_82C0() {
                 if (pKnife != nullptr) {
                     spawnPos.y += v0.y;
                     mKnives[i].get()->setTarget(spawnPos);
-                    if (field_0x2214 != 1) {
+                    if (mKnifeVolleyState != 1) {
                         if (i % 2 == 0) {
                             pKnife->setPattern(dAcObjGirahimuKnife_c::PATTERN_U_D);
                         } else {

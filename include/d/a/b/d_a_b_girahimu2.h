@@ -65,31 +65,31 @@ public:
     virtual void vt_0x230() override;
     virtual void vt_0x234();
 
-    void fn_228_4550(int idxStart, int idxEnd);
-    void fn_228_47F0(bool);
+    void spawnKnifeVolley(int idxStart, int idxEnd);
+    void spawnKnifeSurrond(bool);
     void fn_228_4A30();
     void fn_228_4C20();
     bool fn_228_4CD0(s32 cutDir);
     bool fn_228_5110();
     void fn_228_5400();
-    void fn_228_5740();
+    void fn_228_5740(); // Related to setting link to be hit by sword?
     bool fn_228_5770(s32 cutDir);
-    bool fn_228_5E90();
-    bool fn_228_5EC0();
+    bool isRightArmPose();
+    bool isLeftArmPose();
     void fn_228_80A0();
     void fn_228_80E0();
     void fn_228_82C0();
 
 private:
     /* 0x220C */ u8 field_0x220C;
-    /* 0x2210 */ s32 field_0x2210;
-    /* 0x2214 */ s32 field_0x2214;
-    /* 0x2218 */ s32 field_0x2218;
-    /* 0x221C */ u8 field_0x221C;
-    /* 0x221D */ bool field_0x221D;
-    /* 0x221E */ bool field_0x221E;
-    /* 0x2220 */ s16 field_0x2220;
-    /* 0x2222 */ s16 field_0x2222;
+    /* 0x2210 */ s32 field_0x2210; // no clue
+    /* 0x2214 */ s32 mKnifeVolleyState;
+    /* 0x2218 */ s32 mKnifeVolleyIdx;
+    /* 0x221C */ u8 mConsecutiveSwordHitCount;
+    /* 0x221D */ bool mbPoseFreeRequest;
+    /* 0x221E */ bool field_0x221E; // Set, Never used
+    /* 0x2220 */ s16 field_0x2220;  // Set, Never used
+    /* 0x2222 */ s16 field_0x2222;  // Timer, Unused
     /* 0x2224 */ dAcRef_c<dAcObjGirahimuKnife_c> mKnives[15];
 };
 
