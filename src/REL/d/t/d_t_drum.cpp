@@ -18,10 +18,10 @@ int dTgDrum_c::create() {
     if (mSpawnInterval == 0xFFFF || mSpawnInterval == 0) {
         mSpawnInterval = 1;
     }
-    mDrumParam0 = getFromParams(0, 0xF);
-    mDrumParam1 = getFromParams(4, 0xFF);
-    mDrumParam2 = getFromParams(12, 0x1);
-    mDrumParam3 = getFromParams(13, 0x1);
+    mDrumGroupId = getFromParams(0, 0xF);
+    mDrumSceneflag = getFromParams(4, 0xFF);
+    mDrumSceneflagInverted = getFromParams(12, 0x1);
+    mDrumCheckPastState = getFromParams(13, 0x1);
     mSpawnTimer = mFirstSpawnDelay;
     return SUCCEEDED;
 }
@@ -32,17 +32,18 @@ int dTgDrum_c::doDelete() {
 
 int dTgDrum_c::actorExecute() {
     mPastState =
-        dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(mRoomID, mPosition, nullptr, lbl_447_rodata_0);
-    if (mPastState > lbl_447_rodata_4) {
+        dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(mRoomID, mPosition, nullptr, sPastStateRadius);
+    if (mPastState > sPastStateThreshold) {
         if (mCanSpawn && sLib::calcTimer(&mSpawnTimer) == 0) {
-            mVec3_c scale(mScale.x * lbl_447_rodata_8, mScale.y * lbl_447_rodata_8, mScale.z * lbl_447_rodata_8);
-            u32 params = ((mDrumParam3 << 13) | ((mDrumParam2 & 1) << 12)) | ((mDrumParam0 & 0xF) | (mDrumParam1 << 4));
+            mVec3_c scale(mScale.x * sDrumScaleFactor, mScale.y * sDrumScaleFactor, mScale.z * sDrumScaleFactor);
+            u32 params = ((mDrumCheckPastState << 13) | ((mDrumSceneflagInverted & 1) << 12)) |
+                         ((mDrumGroupId & 0xF) | (mDrumSceneflag << 4));
             dAcObjBase_c *drum =
                 dAcObjBase_c::create(fProfile::OBJ_DRUM, mRoomID, params, &mPosition, &mRotation, &scale, -1);
             mDrum.link(static_cast<dAcOdrum_c *>(drum));
             mSpawnTimer = mSpawnInterval;
         }
-        if (mDrum.get() != nullptr && !mDrum.get()->getField_0xC48()) {
+        if (mDrum.get() != nullptr && !mDrum.get()->isOnBelt()) {
             mCanSpawn = false;
         } else {
             mCanSpawn = true;
@@ -56,6 +57,6 @@ int dTgDrum_c::draw() {
 }
 
 // Defined after use so that actorExecute does not load them through a rodata pool base register
-const f32 dTgDrum_c::lbl_447_rodata_0 = 100.0f;
-const f32 dTgDrum_c::lbl_447_rodata_4 = 0.0f;
-const f32 dTgDrum_c::lbl_447_rodata_8 = 0.01f;
+const f32 dTgDrum_c::sPastStateRadius = 100.0f;
+const f32 dTgDrum_c::sPastStateThreshold = 0.0f;
+const f32 dTgDrum_c::sDrumScaleFactor = 0.01f;

@@ -5,26 +5,26 @@
 SPECIAL_ACTOR_PROFILE(T_MAP_MARK, dTgMapMark_c, fProfile::T_MAP_MARK, 0x294, 0, 4);
 
 int dTgMapMark_c::actorCreate() {
-    shift4_0x8 = getFromParams(4, 0xFF);
-    shift23_0x8 = getFromParams(23, 0xFF);
+    mSceneflag = getFromParams(4, 0xFF);
+    mToggleSceneflag = getFromParams(23, 0xFF);
     mTriggerStoryFlag = getFromParams(12, 0x7FF);
-    shift0_0x3 = getFromParams(0, 0x3);
-    shift2_0x3 = getFromParams(2, 0x3);
-    shift4_0x3f = (mRotation.x >> 4) & 0x3F;
-    rotz_shift8_0xff = (mRotation.z >> 8) & 0xFF;
-    if (rotz_shift8_0xff > 0xFF) {
-        rotz_shift8_0xff = 0xFF;
+    mSceneflagCondition = getFromParams(0, 0x3);
+    mStoryflagCondition = getFromParams(2, 0x3);
+    field_0x104 = (mRotation.x >> 4) & 0x3F;
+    field_0x0FE = (mRotation.z >> 8) & 0xFF;
+    if (field_0x0FE > 0xFF) {
+        field_0x0FE = 0xFF;
     }
-    rotz_shift0_0xff = mRotation.z;
-    rotz_shift10_0x3 = ((mRotation.x >> 10) & 0x3) == 0;
-    rotz_shift12_0x3 = ((mRotation.x >> 12) & 0x3) == 0;
-    rotz_shift0_0xf = mRotation.x & 0xF;
-    if (rotz_shift0_0xf >= 5) {
-        rotz_shift0_0xf = 0;
+    field_0x105 = mRotation.z;
+    mShowPlusBtnHint = ((mRotation.x >> 10) & 0x3) == 0;
+    mDisableOnToggle = ((mRotation.x >> 12) & 0x3) == 0;
+    mMarkType = mRotation.x & 0xF;
+    if (mMarkType >= 5) {
+        mMarkType = 0;
     }
     mRotation.x.set(0);
     mRotation.z.set(0);
-    field_0x10E = true;
+    mIsActive = true;
     return SUCCEEDED;
 }
 

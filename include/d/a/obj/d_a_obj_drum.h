@@ -17,15 +17,15 @@ public:
     STATE_FUNC_DECLARE(dAcOdrum_c, BeltMove);
     STATE_FUNC_DECLARE(dAcOdrum_c, TeniN);
 
-    bool getField_0xC48() const {
-        return field_0xC48;
+    bool isOnBelt() const {
+        return mIsOnBelt;
     }
 
 private:
     /* 0x330 */ u8 _0x330[0xB7C - 0x330];
     /* 0xB7C */ STATE_MGR_DECLARE(dAcOdrum_c);
     /* 0xBB8 */ u8 _0xBB8[0xC48 - 0xBB8];
-    /* 0xC48 */ bool field_0xC48;
+    /* 0xC48 */ bool mIsOnBelt;
 };
 
 #endif

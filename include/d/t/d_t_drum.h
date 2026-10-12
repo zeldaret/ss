@@ -20,15 +20,16 @@ private:
     /* 0x10C */ s16 mSpawnTimer;
     /* 0x10E */ u16 mFirstSpawnDelay;
     /* 0x110 */ u16 mSpawnInterval;
-    /* 0x112 */ u8 mDrumParam0;
-    /* 0x113 */ u8 mDrumParam1;
-    /* 0x114 */ u8 mDrumParam2;
-    /* 0x115 */ u8 mDrumParam3;
+    // Copied into the spawned dAcOdrum_c's params (same bit layout as read by the drum)
+    /* 0x112 */ u8 mDrumGroupId;
+    /* 0x113 */ u8 mDrumSceneflag;
+    /* 0x114 */ u8 mDrumSceneflagInverted;
+    /* 0x115 */ u8 mDrumCheckPastState;
     /* 0x116 */ bool mCanSpawn;
 
-    static const f32 lbl_447_rodata_0;
-    static const f32 lbl_447_rodata_4;
-    static const f32 lbl_447_rodata_8;
+    static const f32 sPastStateRadius;
+    static const f32 sPastStateThreshold;
+    static const f32 sDrumScaleFactor;
 };
 
 #endif
