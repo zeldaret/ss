@@ -323,7 +323,7 @@ void dAcObjGirahimuKnife_c::executeState_SpinWait() {
     if (mSph0.ChkTgHit()) {
         dAcEnBase_c *pEn = FindEnemy(fProfile::B_GIRAHIMU2);
         if (pEn != nullptr) {
-            static_cast<dAcGirahimuBase_c *>(pEn)->field_0xD52 = 120;
+            static_cast<dAcGirahimuBase_c *>(pEn)->mCreateKnifeTimer = 120;
         }
     }
     fn_239_1DB0(field_0x6D8, field_0x744);

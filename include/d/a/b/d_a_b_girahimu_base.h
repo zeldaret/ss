@@ -323,23 +323,23 @@ public:
     /* vt 0x1F8 */ virtual void vt_0x1F8();
     /* vt 0x1FC */ virtual void vt_0x1FC() {}
     /* vt 0x200 */ virtual void loadMainResFile();
-    /* vt 0x204 */ virtual void vt_0x204();
-    /* vt 0x208 */ virtual bool vt_0x208();
+    /* vt 0x204 */ virtual void setStateIdleAttack();
+    /* vt 0x208 */ virtual bool updateSwordGrabAnim();
     /* vt 0x20C */ virtual void vt_0x20C();
     /* vt 0x210 */ virtual bool vt_0x210() {
-        return 0;
-    }
-    /* vt 0x214 */ virtual void vt_0x214();
-    /* vt 0x218 */ virtual bool vt_0x218() {
         return false;
     }
-    /* vt 0x21C */ virtual bool vt_0x21C(bool);
+    /* vt 0x214 */ virtual void changeStateEscape();
+    /* vt 0x218 */ virtual bool isNearHalfHealth() {
+        return false;
+    }
+    /* vt 0x21C */ virtual bool reactToItemHit(bool);
     /* vt 0x220 */ virtual void vt_0x220();
-    /* vt 0x224 */ virtual void vt_0x224() {
+    /* vt 0x224 */ virtual void setBackAttackPose() {
         setAnm("PoseC", ANM_PoseC2, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     }
-    /* vt 0x228 */ virtual void vt_0x228();
-    /* vt 0x22C */ virtual void vt_0x22C();
+    /* vt 0x228 */ virtual void correctPoseHip();
+    /* vt 0x22C */ virtual void changeStateGetPlayerSword();
     /* vt 0x230 */ virtual void vt_0x230() {
         setAnmHip("WalkBt", ANM_Walk, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     }
@@ -384,24 +384,22 @@ public:
     void bindAnmShoulderR();
     void bindAnmShoulderL();
 
-    void fn_226_9620();
-    void fn_226_9690(); // Head/Hair and Attention related
-    void fn_256_99F0();
-    void fn_256_9C90();
-    bool fn_226_A070(mAng);
-    bool fn_226_A120(mAng, f32);
-    bool fn_226_A280(mAng);
+    void updateSpineMovement();
+    void updateHeadMovement();
+    void updateSwordLocations();
+    void updateCollision();
+    bool setTurnAnimation(mAng);
+    bool adjustHipAngle(mAng, f32);
+    bool adjustLegAngle(mAng);
     bool turn(mAng);
     void adjustSpineHitRotation(cCcD_Obj *pObj);
-    bool fn_226_A570();
+    bool checkCatchPlayerSword();
     mVec3_c getPlayerHeadOffset();
     void executeEarringTransform();
     void calcJumpMovement(f32, f32);
-    void fn_226_ADC0(cCcD_Obj *pObj);
+    void updateConsecutiveHits(cCcD_Obj *pObj);
     void setSwordLinkTransform();
     void setSwordLinkTransformPlayer();
-    void fn_226_AFB0();
-
     void fn_226_B960(f32);
     void fn_226_BC00();
     void setFrame(f32);
@@ -422,7 +420,7 @@ public:
     void clearAnms();
     void handleEnterExitEffect();
     void fn_226_D2C0();
-    void fn_226_D2D0();
+    void executeHeadMovement();
     void notifyTgSwordBattleGame();
 
 protected:
@@ -436,116 +434,197 @@ protected:
     /* 0x0524 */ void *mpSoundBrasd;
     /* 0x0528 */ m3d::anmTexPat_c mAnmTexPatWink;
     /* 0x0554 */ dNpcMdlCallbackEye_c mEyeMdlCallback;
-    /* 0x0584 */ f32 field_0x584;
-    /* 0x0588 */ f32 field_0x588;
-    /* 0x058C */ f32 field_0x58C;
-    /* 0x0590 */ f32 field_0x590;
+    /* 0x0584 */ f32 mEyeTargetOffsetXTarget;
+    /* 0x0588 */ f32 mEyeTargetOffsetYTarget;
+    /* 0x058C */ f32 mEyeTargetOffsetX;
+    /* 0x0590 */ f32 mEyeTargetOffsetY;
     /* 0x0594 */ callback_c mCallback;
-    /* 0x088C */ mVec3_c field_0x88C;
-    /* 0x0898 */ mVec3_c field_0x898;
+    /* 0x088C */ mVec3_c mLookAtTarget;
+    /* 0x0898 */ mVec3_c mRelativeHandCatch;
     /* 0x08A4 */ mVec3_c field_0x8A4;
-    /* 0x08B0 */ mVec3_c field_0x8B0;
-    /* 0x08BC */ mVec3_c field_0x8BC;
+    /* 0x08B0 */ mVec3_c mWarpScale;
+    /* 0x08BC */ mVec3_c mWarpScaleSnapshot;
     /* 0x08C8 */ s16 mAnmIDBody;
     /* 0x08CA */ s16 mAnmIDHip;
     /* 0x08CC */ s16 mAnmIDShoulderR;
     /* 0x08CE */ s16 mAnmIDShoulderL;
     /* 0x08D0 */ s16 mAnmIDHead;
     /* 0x08D4 */ dShadowCircle_c mShadow;
-    /* 0x08DC */ s32 field_0x8DC;
+    /* 0x08DC */ s32 mCurrentAttack;   // Currently not sure how to describe values
     /* 0x08E0 */ m3d::smdl_c mMdlPias; // Earring
-    /* 0x08FC */ mMtx_c field_0x8FC;
-    /* 0x092C */ mVec3_c field_0x92C;
+    /* 0x08FC */ mMtx_c mEarringTransform;
+    /* 0x092C */ mVec3_c mEarringTranslation;
     /* 0x0938 */ dBgS_AcchCir mAcchCir;
     /* 0x0994 */ dBgS_ObjAcch mAcch;
-    /* 0x0D44 */ s16 field_0xD44;
-    /* 0x0D46 */ s16 field_0xD46;
-    /* 0x0D48 */ s16 field_0xD48;
-    /* 0x0D4A */ s16 field_0xD4A;
-    /* 0x0D4C */ s16 field_0xD4C;
-    /* 0x0D4E */ s16 field_0xD4E;
+    /* 0x0D44 */ s16 mSubstate;
+    /* 0x0D46 */ s16 mSubstateTimer;
+    /* 0x0D48 */ s16 mMovePoseTimer;
+    /* 0x0D4A */ s16 mIdleAttackTimer;
+    /* 0x0D4C */ s16 mHoldPlayerSwordTimer;
+    /* 0x0D4E */ s16 mConsecutiveCatchDamageCount;
     /* 0x0D50 */ s16 field_0xD50;
-    /* 0x0D52 */ s16 field_0xD52;
-    /* 0x0D54 */ s16 field_0xD54;
-    /* 0x0D56 */ s16 field_0xD56;
+    /* 0x0D52 */ s16 mCreateKnifeTimer;
+    /* 0x0D54 */ s16 mShieldTimer;
+    /* 0x0D56 */ s16 field_0xD56; // Set, Never used
     /* 0x0D58 */ s16 field_0xD58;
     /* 0x0D5A */ s16 field_0xD5A;
     /* 0x0D5C */ s16 field_0xD5C;
     /* 0x0D5E */ s16 field_0xD5E;
-    /* 0x0D60 */ s16 field_0xD60;
-    /* 0x0D62 */ s16 field_0xD62;
-    /* 0x0D64 */ s16 field_0xD64;
+    /* 0x0D60 */ s16 field_0xD60;         // Slight delay in re-enabling some colliders?
+    /* 0x0D62 */ s16 mRecoverDamageTimer; // When timer hits zero, Ghiramim will recover even if you did not hit him
+    /* 0x0D64 */ s16 mBlinkTimer;
     /* 0x0D66 */ s16 field_0xD66;
-    /* 0x0D68 */ s16 field_0xD68;
+    /* 0x0D68 */ s16 mCatchBlockTimer;
     /* 0x0D6A */ s16 mBossCaptionTimer;
-    /* 0x0D6C */ s32 field_0xD6C;
-    /* 0x0D70 */ bool field_0xD70;
-    /* 0x0D71 */ bool field_0xD71;
-    /* 0x0D72 */ bool field_0xD72;
-    /* 0x0D74 */ s32 field_0xD74;
+    /* 0x0D6C */ s32 field_0xD6C; // See Notes at bottom
+    /* 0x0D70 */ bool mbSpawnedSwords;
+    /* 0x0D71 */ bool mbCatchingPlayerSword;
+    /* 0x0D72 */ bool mbUsingPlayerSword;
+    /* 0x0D74 */ s32 mSwordGrabType;
     /* 0x0D78 */ bool field_0xD78;
     /* 0x0D79 */ bool mbLinkSwordWaitFirstComplete;
-    /* 0x0D7A */ bool field_0xD7A;
-    /* 0x0D7B */ bool field_0xD7B;
+    /* 0x0D7A */ bool mbPlayerAttackUpdated;
+    /* 0x0D7B */ bool mbHoldingSwordA;
     /* 0x0D7C */ bool field_0xD7C;
-    /* 0x0D7D */ bool field_0xD7D;
-    /* 0x0D7E */ bool field_0xD7E;
+    /* 0x0D7D */ bool mbOnGround;
+    /* 0x0D7E */ bool field_0xD7E; // Tongue related
 
     /* 0x0D7F */ u8 _0xD7F;
 
-    /* 0x0D80 */ bool field_0xD80;
-    /* 0x0D81 */ bool field_0xD81;
-    /* 0x0D82 */ bool field_0xD82;
+    /* 0x0D80 */ bool mbSwordAtHit;
+    /* 0x0D81 */ bool mbVulnerable;
+    /* 0x0D82 */ bool mbShortStun;
     /* 0x0D83 */ bool mbShownBossCaption;
-    /* 0x0D84 */ bool field_0xD84;
-    /* 0x0D85 */ bool field_0xD85;
+    /* 0x0D84 */ bool mbRequestRun;
+    /* 0x0D85 */ bool mbRequestKnife;
     /* 0x0D88 */ s32 mPlayerAttackDir;
-    /* 0x0D8C */ bool field_0xD8C;
-    /* 0x0D8D */ bool field_0xD8D;
-    /* 0x0D8E */ s16 field_0xD8E;
+    /* 0x0D8C */ bool mbFirstSwordWaitEntered;
+    /* 0x0D8D */ bool mbStandardDamage;
+    /* 0x0D8E */ s16 mConsecutiveHitCount;
     /* 0x0D90 */ s32 mPreviousHitCutDir;
     /* 0x0D94 */ dEnemySwordMdl_c mMdlSwordA;
-    /* 0x12D0 */ mVec3_c field_0x12D0; // SwordA Translation
-    /* 0x12DC */ f32 field_0x12DC;
-    /* 0x12E0 */ bool field_0x12E0;
+    /* 0x12D0 */ mVec3_c mSwordATranslation;
+    /* 0x12DC */ f32 mSwordScaleY;
+    /* 0x12E0 */ bool mbHoldingSwordB;
     /* 0x12E4 */ dEnemySwordMdl_c mMdlSwordB;
-    /* 0x1820 */ mVec3_c field_0x1820; // SwordB Translation
+    /* 0x1820 */ mVec3_c mSwordBTranslation;
 
     /* 0x182C */ u8 _0x182C[0x1830 - 0x182C];
 
-    /* 0x1830 */ f32 field_0x1830;
-    /* 0x1834 */ f32 field_0x1834;
-    /* 0x1838 */ f32 field_0x1838;
-    /* 0x183C */ mAng field_0x183C;
-    /* 0x183E */ mAng field_0x183E;
-    /* 0x1840 */ mVec3_c field_0x1840;
-    /* 0x184C */ mVec3_c field_0x184C;
-    /* 0x1858 */ f32 field_0x1858;
-    /* 0x185C */ mVec3_c field_0x185C;
-    /* 0x1868 */ f32 field_0x1868;
-    /* 0x186C */ f32 field_0x186C;
-    /* 0x1870 */ bool field_0x1870;
-    /* 0x1871 */ bool field_0x1871;
-    /* 0x1872 */ bool field_0x1872;
+    /* 0x1830 */ f32 field_0x1830; // Set, not used
+    /* 0x1834 */ f32 mSpeedTarget;
+    /* 0x1838 */ f32 mDistanceToPlayer;
+    /* 0x183C */ mAng field_0x183C; // unused
+    /* 0x183E */ mAng mAngleToPlayer;
+    /* 0x1840 */ mVec3_c mTargetPlayerPos;
+    /* 0x184C */ mVec3_c mRunPlayerInRangePosition;
+    /* 0x1858 */ f32 mSpeedChangeFactor;
+    /* 0x185C */ mVec3_c mTeleportDodgeAmount;
+    /* 0x1868 */ f32 mDistanceFromStart;
+    /* 0x186C */ f32 field_0x186C;  // Set, not used
+    /* 0x1870 */ bool field_0x1870; // unused
+    /* 0x1871 */ bool mbFirstTongue;
+    /* 0x1872 */ bool mbFirstLinkSwordWaitEnter;
 
     /* 0x1873 */ u8 _0x1873[0x1878 - 0x1873];
 
-    /* 0x1878 */ dCcD_Cyl mCyl0;
-    /* 0x19C8 */ dCcD_Cyl mCyl1;
-    /* 0x1B18 */ dCcD_Linked<dCcD_Cyl> mCyl2;
-    /* 0x1C78 */ dCcD_Linked<dCcD_Sph> mSph0;
-    /* 0x1DD8 */ dCcD_Linked<dCcD_Cps> mCps0;
-    /* 0x1F58 */ dCcD_Linked<dCcD_Cps> mCps1;
+    /* 0x1878 */ dCcD_Cyl mCyl0; // IDK
+    /* 0x19C8 */ dCcD_Cyl mCyl1; // Doesnt do much?
+    /* 0x1B18 */ dCcD_Linked<dCcD_Cyl> mCcBody;
+    /* 0x1C78 */ dCcD_Linked<dCcD_Sph> mCcHand;
+    /* 0x1DD8 */ dCcD_Linked<dCcD_Cps> mCcSwordR;
+    /* 0x1F58 */ dCcD_Linked<dCcD_Cps> mCcSwordL;
     /* 0x20D8 */ dColliderLinkedList mCollider;
-    /* 0x20E4 */ f32 field_0x20E4;
-    /* 0x20E8 */ f32 field_0x20E8;
-    /* 0x20EC */ mVec3_c field_0x20EC;
-    /* 0x20F8 */ mVec3_c field_0x20F8;
-    /* 0x2104 */ dAcObjRef_c mRef0;
+    /* 0x20E4 */ f32 mCyl1Radius;
+    /* 0x20E8 */ f32 mCyl1RadiusTarget;
+    /* 0x20EC */ mVec3_c mCameraPosition;
+    /* 0x20F8 */ mVec3_c mCameraTarget;
+    /* 0x2104 */ dAcObjRef_c mRef0; // Unused
     /* 0x2110 */ dAcRef_c<dAcObjGirahimuSwordLink_c> mSwordLink;
     /* 0x211C */ dFlow_c mFlow;
     /* 0x2180 */ dFlowMgrBase_c mFlowMgr;
     /* 0x21D8 */ dEmitter_c mEmitter;
 };
+
+// NOTES:
+// field_0xD6C
+//          case 0:
+//                  initializeState_HomeWarp;       // Base
+//                  initializeState_BackWarp        // Base
+//                  initializeState_FrontWarp;      // Base
+//                  initializeState_BackStep;       // Base
+//                  initializeState_FrontAttack;    // Base
+//                  initializeState_BackAttack;     // Base
+//                  executeState_BackAttack;        // Base
+//                  initializeState_KnifeAttack;    // G1
+//                  initializeState_Death;          // G1, G2
+//                  initializeState_DeathMiniGame;  // G1, G2
+//                  executeState_CreateKnife;       // G2
+//                  initializeState_UpWarp;         // G2
+//                  initializeState_WaitKnifeAttack;// G2
+
+// case 1: vt_0x1E4(); // Hit by Sword? -> Try changing to Catch. Knife? -> Catch Damage
+//         initializeState_Wait;                   // Base
+//         initializeState_Walk;                   // Base, G1
+//         initializeState_ReleaseSword;           // Base
+//         initializeState_LinkSwordGuardJust;     // Base
+//         initializeState_ReturnSword:            // Base
+//         initializeState_EscapeBack;             // Base
+//         initializeState_CatchDamage;            // G1, G2
+//         initializeState_CreateSpinKnife;        // G2
+//         executeState_WaitKnifeAttack;           // G2
+
+// case 2: vt_0x1E8()
+//         initializeState_GetSword;               // Base
+//         initializeState_Link_SwordWait;         // Base
+//         initializeState_Link_SwordWalk;         // Base
+
+// case 3: fn_226_C060()
+//         initializeState_Run; // Base
+
+// case 4: fn_226_C1C0()
+//         initializeState_RunAttack; // Base
+
+// case 5: fn_226_C320() / vt_0x234()
+//         executeState_FrontAttack; // Base
+//         executeState_BackAttack; // Base
+//         initializeState_Counter; // Base
+//         executeState_Counter; // Base, G2
+//         executeState_UpAttack; // G2
+
+// case 6: fn_227_1EA0() / fn_228_4C20()
+//         executeState_Counter; // Base, G2
+//         initializeState_BackWalk; // Base
+//         initializeState_G_SwordWait; // G1, G2
+//         executeState_KnifeAttack; // G1, G2
+//         initializeState_Knife; // G1
+//         initializeState_CreateKnife; // g2
+//         initializeState_KnifePreAttack; // g2
+//         initializeState_KnifeAttack; // g2
+//         initializeState_UpAttack; // G2
+//         executeState_UpAttack; // G2
+//         initializeState_Counter; // G2
+//         initializeState_GuardJustCounter; // G2
+//         executeState_TwoSwordAttack; // G2
+
+// case 7: vt_0x1EC()
+//         initializeState_G_SwordDamage; // G1, G2
+//         initializeState_G_SwordPiyori; // G1, G2
+
+// case 8: vt_0x1F0()
+//         initializeState_KnifeDamage; // Base
+//         initializeState_Escape; // Base
+//         executeState_RunAttack; // Base
+
+// case 9: fn_228_5400()
+//         initializeState_HitAction; // G2
+//         initializeState_ComeOn; // G2
+//         initializeState_ComeOnGuard; // G2
+
+// case 10:
+//         // None
+
+// case 11: fn_228_4A30()
+//         initializeState_TwoSwordAttack; // G2
 
 #endif

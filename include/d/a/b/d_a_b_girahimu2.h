@@ -51,17 +51,17 @@ public:
     virtual void vt_0x1F8() override;
     virtual void vt_0x1FC() override;
     virtual void loadMainResFile() override;
-    virtual void vt_0x204() override;
+    virtual void setStateIdleAttack() override;
     virtual void vt_0x20C() override;
     virtual bool vt_0x210() override;
-    virtual void vt_0x214() override;
-    virtual bool vt_0x218() override;
+    virtual void changeStateEscape() override;
+    virtual bool isNearHalfHealth() override;
     virtual void vt_0x220() override;
-    virtual void vt_0x224() override {
+    virtual void setBackAttackPose() override {
         setAnm("PoseLR", ANM_PoseLR, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     }
-    virtual void vt_0x228() override;
-    virtual void vt_0x22C() override;
+    virtual void correctPoseHip() override;
+    virtual void changeStateGetPlayerSword() override;
     virtual void vt_0x230() override;
     virtual void vt_0x234();
 

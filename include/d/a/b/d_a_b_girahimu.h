@@ -28,7 +28,7 @@ public:
     STATE_FUNC_DECLARE(dAcGirahimu_c, DeathMiniGame);
 
     virtual void vt_0x1DC() override;
-    virtual bool vt_0x218() override;
+    virtual bool isNearHalfHealth() override;
     virtual void vt_0x220() override;
 
     void determineNextMove();

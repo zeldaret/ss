@@ -197,7 +197,7 @@ void dAcGirahimuBase_c::callback_c::fn_226_E80() {
     mArmRTransform.fromQuat(mArmRRotation);
     mArmRTransform.setTranslation(mArmRTranslation);
 
-    mArmRTransform.scaleM(mpGhirahim->field_0x8BC);
+    mArmRTransform.scaleM(mpGhirahim->mWarpScaleSnapshot);
 }
 
 void dAcGirahimuBase_c::callback_c::fn_226_1160() {
@@ -235,7 +235,7 @@ void dAcGirahimuBase_c::callback_c::fn_226_1160() {
     mElbowRRotation.slerpTo(q0, 1.0f, mElbowRRotation);
     mElbowRTransform.fromQuat(mElbowRRotation);
 
-    if (mpGhirahim != nullptr && mpGhirahim->field_0xD71) {
+    if (mpGhirahim != nullptr && mpGhirahim->mbCatchingPlayerSword) {
         mVec3_c diff = mHandRTranslation - mArmRTranslation;
         mAng ang = (s32)diff.atan2sX_Z();
         ang = ang - mHeadRotationYCorrection;
@@ -244,7 +244,7 @@ void dAcGirahimuBase_c::callback_c::fn_226_1160() {
         }
     }
     mElbowRTransform.setTranslation(mElblowRTranslation);
-    mElbowRTransform.scaleM(mpGhirahim->field_0x8BC);
+    mElbowRTransform.scaleM(mpGhirahim->mWarpScaleSnapshot);
 }
 
 void dAcGirahimuBase_c::callback_c::init(dAcGirahimuBase_c *pGhirahim) {
@@ -289,7 +289,7 @@ void dAcGirahimuBase_c::callback_c::fn_226_1580(u32 node, nw4r::g3d::WorldMtxMan
                 if (mSlerpFactor < 1.0f) {
                     mMtx_c m0;
                     mArmRTransform.fromQuat(mArmRRotation);
-                    m0.scaleS(mpGhirahim->field_0x8BC);
+                    m0.scaleS(mpGhirahim->mWarpScaleSnapshot);
                     MTXConcat(m0, mArmRTransform, mArmRTransform);
                     mArmRTransform.setTranslation(mArmRTranslation);
                 }
@@ -316,7 +316,7 @@ void dAcGirahimuBase_c::callback_c::fn_226_1580(u32 node, nw4r::g3d::WorldMtxMan
                 mElbowRRotation.slerpTo(q0, mSlerpFactor, mElbowRRotation);
                 mElbowRTransform.fromQuat(mElbowRRotation);
                 mMtx_c m1;
-                m1.scaleS(mpGhirahim->field_0x8BC);
+                m1.scaleS(mpGhirahim->mWarpScaleSnapshot);
                 MTXConcat(m1, mElbowRTransform, mElbowRTransform);
                 mVec3_c v0(mArmRUpperArmLength, 0.0f, 0.0f);
                 mArmRTransform.multVec(v0, v0);
@@ -335,7 +335,7 @@ void dAcGirahimuBase_c::callback_c::fn_226_1580(u32 node, nw4r::g3d::WorldMtxMan
             result->GetMtx(mHandRTransform);
         }
         if (field_0x04E) {
-            if (mpGhirahim && !mpGhirahim->field_0xD71) {
+            if (mpGhirahim && !mpGhirahim->mbCatchingPlayerSword) {
                 mMtx_c m0;
                 result->GetMtx(m0);
                 m0.setTranslation(mHandRTranslation);
@@ -358,7 +358,7 @@ void dAcGirahimuBase_c::callback_c::fn_226_1580(u32 node, nw4r::g3d::WorldMtxMan
                 mHandRTransform.fromQuat(mHandRRotation);
 
                 mMtx_c scale;
-                scale.scaleS(mpGhirahim->field_0x8BC);
+                scale.scaleS(mpGhirahim->mWarpScaleSnapshot);
                 MTXConcat(scale, mHandRTransform, mHandRTransform);
                 mVec3_c v0(mArmRForearmLength, 0.0f, 0.0f);
                 mElbowRTransform.multVec(v0, v0);
@@ -396,13 +396,13 @@ void dAcGirahimuBase_c::callback_c::fn_226_1B60(mVec3_c &out) {
     (void)v2.atan2sX_Z();
 
     mVec3_c v4(-5.0f, -2.0f, 15.0f);
-    if (mpGhirahim != nullptr && !mpGhirahim->field_0xD71) {
+    if (mpGhirahim != nullptr && !mpGhirahim->mbCatchingPlayerSword) {
         v4.z = 0.0f;
     }
     swordMtx.multVec(v4, v4);
 
     mVec3_c v5 = dAcPy_c::GetLinkM()->getSwordPos() - dAcPy_c::GetLinkM()->vt_0x278();
-    if (mpGhirahim != nullptr && !mpGhirahim->field_0xD71) {
+    if (mpGhirahim != nullptr && !mpGhirahim->mbCatchingPlayerSword) {
         v5 *= 1.0f;
     } else {
         v5 *= 0.9f;
@@ -411,7 +411,7 @@ void dAcGirahimuBase_c::callback_c::fn_226_1B60(mVec3_c &out) {
 
     v5 += vt278;
     v5 += v4;
-    if (mpGhirahim != nullptr && !mpGhirahim->field_0xD71) {
+    if (mpGhirahim != nullptr && !mpGhirahim->mbCatchingPlayerSword) {
         v5.y -= 5.0f;
     }
 
@@ -446,7 +446,7 @@ void dAcGirahimuBase_c::callback_c::fn_226_1DD0() {
         field_0x050 = false;
     }
     field_0x0B4.set(0);
-    if (mpGhirahim != nullptr && !mpGhirahim->field_0xD71) {
+    if (mpGhirahim != nullptr && !mpGhirahim->mbCatchingPlayerSword) {
         if (field_0x050) {
             v3 -= mArmRTranslation;
             v3.normalizeRS();
@@ -731,8 +731,8 @@ void dAcGirahimuBase_c::callback_c::fn_226_3150(mMtx_c &m) {
         m.multVec(v1, v1);
         s16 a0 = v1.atan2sX_Z();
         s16 a1 = v1.atan2sY_XZ();
-        mHeadRotationYTarget = cLib::targetAngleY(v0, mpGhirahim->field_0x88C) - a0;
-        mHeadRotationXTarget = -(cLib::targetAngleX(v0, mpGhirahim->field_0x88C) - a1);
+        mHeadRotationYTarget = cLib::targetAngleY(v0, mpGhirahim->mLookAtTarget) - a0;
+        mHeadRotationXTarget = -(cLib::targetAngleX(v0, mpGhirahim->mLookAtTarget) - a1);
     } else {
         mHeadRotationYTarget = 0;
         mHeadRotationXTarget = 0;
@@ -761,11 +761,11 @@ void dAcGirahimuBase_c::initializeState_Wait() {
     setAnm("WaitA", 0, nullptr, m3d::PLAY_MODE_4, 30.0f, 1.0f);
     mCallback.field_0x088 = true;
 
-    field_0xD46 = 200;
-    field_0xD48 = 400;
-    field_0xD4A = 300;
+    mSubstateTimer = 200;
+    mMovePoseTimer = 400;
+    mIdleAttackTimer = 300;
 
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     mSpeed = 0.0f;
     if (dAcPy_c::GetLinkM()->isUsingSword()) {
         mCallback.field_0x04E = true;
@@ -778,11 +778,11 @@ void dAcGirahimuBase_c::initializeState_Wait() {
 }
 void dAcGirahimuBase_c::executeState_Wait() {
     bool b0 = false;
-    if (dAcPy_c::GetLinkM()->isUsingSword() && field_0x1838 <= 250.0f) {
+    if (dAcPy_c::GetLinkM()->isUsingSword() && mDistanceToPlayer <= 250.0f) {
         b0 = true;
     }
 
-    if (dAcPy_c::GetLinkM()->isUsingSword() && field_0x1838 <= 370.0f) {
+    if (dAcPy_c::GetLinkM()->isUsingSword() && mDistanceToPlayer <= 370.0f) {
         fn_226_BC00();
     } else {
         mCallback.field_0x04F = false;
@@ -795,12 +795,12 @@ void dAcGirahimuBase_c::executeState_Wait() {
     mVec3_c distanceFromStart = mPosition - mStartingPos;
     mVec3_c v1(0.0f, 0.0f, 1.0f);
     v1.rotY(mRotation.y);
-    if (field_0x1868 >= 1500.0f && distanceFromStart.dot(v1) < 0.0f) {
-        field_0x8DC = 0;
+    if (mDistanceFromStart >= 1500.0f && distanceFromStart.dot(v1) < 0.0f) {
+        mCurrentAttack = 0;
         changeState(StateID_HomeWarp);
         return;
     }
-    if (field_0xD46 <= 0 && mSwordLink.get()->isStick()) {
+    if (mSubstateTimer <= 0 && mSwordLink.get()->isStick()) {
         changeState(StateID_SearchSword);
         return;
     }
@@ -810,14 +810,14 @@ void dAcGirahimuBase_c::executeState_Wait() {
     }
 
     if (mSwordLink.get()->isStick()) {
-        if (field_0xD46 % 100 > 50) {
-            field_0x88C = mSwordLink.get()->mPosition;
+        if (mSubstateTimer % 100 > 50) {
+            mLookAtTarget = mSwordLink.get()->mPosition;
         }
         return;
     }
 
-    if (field_0xD4A <= 0) {
-        vt_0x204();
+    if (mIdleAttackTimer <= 0) {
+        setStateIdleAttack();
         return;
     }
 
@@ -825,9 +825,9 @@ void dAcGirahimuBase_c::executeState_Wait() {
         changeState(StateID_Walk);
         return;
     }
-    if (!(mSwordLink.get()->isStick() || turn(field_0x183E))) {
-        if (field_0x1838 <= 215.0f && --field_0xD4A <= 0) {
-            field_0xD4A = 0;
+    if (!(mSwordLink.get()->isStick() || turn(mAngleToPlayer))) {
+        if (mDistanceToPlayer <= 215.0f && --mIdleAttackTimer <= 0) {
+            mIdleAttackTimer = 0;
         }
 
         setAnmHip("WaitA", ANM_WaitA, m3d::PLAY_MODE_4, 5.0f, 1.0f);
@@ -837,17 +837,17 @@ void dAcGirahimuBase_c::executeState_Wait() {
         setAnmShoulderL("WaitA", ANM_WaitA, m3d::PLAY_MODE_4, 15.0f, 1.0f);
         setAnmHead("WaitA", ANM_WaitA, m3d::PLAY_MODE_4, 15.0f, 1.0f);
     }
-    if (field_0xD48 <= 0) {
+    if (mMovePoseTimer <= 0) {
         setAnmShoulderL("MovePose", ANM_MovePose, m3d::PLAY_MODE_4, 15.0f, 1.0f);
         setAnmHead("MovePose", ANM_MovePose, m3d::PLAY_MODE_4, 15.0f, 1.0f);
 
-        field_0xD48 = 400 + cM::rndInt(100);
+        mMovePoseTimer = 400 + cM::rndInt(100);
     }
 
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
 }
 void dAcGirahimuBase_c::finalizeState_Wait() {
-    field_0xD44 = 0;
+    mSubstate = 0;
     mCallback.field_0x04E = false;
     mCallback.mSlerpFactorTarget = 1.0f;
 }
@@ -892,12 +892,12 @@ void dAcGirahimuBase_c::executeState_Walk() {
     }
 
     if (dAcPy_c::GetLinkM()->isUsingSword()) {
-        if (field_0x1838 <= 200.0f) {
+        if (mDistanceToPlayer <= 200.0f) {
             changeState(StateID_Wait);
             return;
         }
     } else {
-        if (field_0x1838 <= 150.0f) {
+        if (mDistanceToPlayer <= 150.0f) {
             changeState(StateID_Panch);
             return;
         }
@@ -909,23 +909,23 @@ void dAcGirahimuBase_c::finalizeState_Walk() {}
 void dAcGirahimuBase_c::initializeState_Panch() {
     setAnm("AttackBinta", ANM_AttackBinta, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     mCallback.field_0x088 = true;
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     mSpeed = 0.0f;
 }
 void dAcGirahimuBase_c::executeState_Panch() {
     field_0xD58 = 60;
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
     if (mAnmChrs[ANMIDX_Body].checkFrame(18.0f)) {
-        mSph0.SetR(100.0f);
-        mSph0.ClrCoSet();
-        mSph0.OnAtSet();
-        mSph0.SetAtFlagsUpper(0x40000);
+        mCcHand.SetR(100.0f);
+        mCcHand.ClrCoSet();
+        mCcHand.OnAtSet();
+        mCcHand.SetAtFlagsUpper(0x40000);
         return;
     }
     if (mAnmChrs[ANMIDX_Body].checkFrame(22.0f)) {
-        mSph0.SetR(40.0f);
-        mSph0.ClrAtSet();
-        mSph0.SetAtFlagsUpper(0);
+        mCcHand.SetR(40.0f);
+        mCcHand.ClrAtSet();
+        mCcHand.SetAtFlagsUpper(0);
         return;
     }
 
@@ -935,10 +935,10 @@ void dAcGirahimuBase_c::executeState_Panch() {
     }
 }
 void dAcGirahimuBase_c::finalizeState_Panch() {
-    mSph0.OnCoSet();
-    mSph0.SetR(40.0f);
-    mSph0.ClrAtSet();
-    mSph0.SetAtFlagsUpper(0);
+    mCcHand.OnCoSet();
+    mCcHand.SetR(40.0f);
+    mCcHand.ClrAtSet();
+    mCcHand.SetAtFlagsUpper(0);
     field_0xD66 = 0;
     field_0xD58 = 60;
 }
@@ -952,12 +952,12 @@ void dAcGirahimuBase_c::initializeState_Catch() {
     vt_0x1FC();
 
     mCollider.ClrCo();
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     mSpeed = 0.0f;
 
     field_0xD7E = false;
-    if (!field_0x1871 || cM::rndInt(100) > 50) {
-        field_0x1871 = true;
+    if (!mbFirstTongue || cM::rndInt(100) > 50) {
+        mbFirstTongue = true;
         field_0xD7E = true;
         setAnm("Catch", ANM_Catch, "Catch", ANM_Catch, "FaceTongue", ANM_FaceTongue, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     } else {
@@ -968,31 +968,31 @@ void dAcGirahimuBase_c::initializeState_Catch() {
     dAcPy_c::GetLinkM()->set0x439F(this, 7);
     mCallback.field_0x014 = 1.0f;
     mCallback.mSlerpFactorTarget = 0.5f;
-    field_0xD46 = 4;
+    mSubstateTimer = 4;
     field_0xD5E = 300;
-    if (!field_0x1872) {
+    if (!mbFirstLinkSwordWaitEnter) {
         field_0xD5E = 75;
     }
 }
 void dAcGirahimuBase_c::executeState_Catch() {
-    if (field_0xD46 <= 0) {
-        field_0xD71 = true;
+    if (mSubstateTimer <= 0) {
+        mbCatchingPlayerSword = true;
         mCallback.field_0x04E = true;
 
-        if (vt_0x208()) {
+        if (updateSwordGrabAnim()) {
             return;
         }
     }
 
-    if (field_0xD46 <= 0 && !dAcPy_c::GetLinkM()->IfCurrentActionToActor(this, 0xA9 /* ??? */)) {
+    if (mSubstateTimer <= 0 && !dAcPy_c::GetLinkM()->IfCurrentActionToActor(this, 0xA9 /* ??? */)) {
         vt_0x220();
         return;
     }
 
-    field_0x88C += dAcPy_c::GetLink()->getSwordPos();
-    field_0x88C *= 0.5f;
+    mLookAtTarget += dAcPy_c::GetLink()->getSwordPos();
+    mLookAtTarget *= 0.5f;
     if (--field_0xD5E <= 0) {
-        vt_0x22C();
+        changeStateGetPlayerSword();
         return;
     }
 
@@ -1014,7 +1014,7 @@ void dAcGirahimuBase_c::executeState_Catch() {
 }
 void dAcGirahimuBase_c::finalizeState_Catch() {
     mCallback.field_0x04E = false;
-    field_0xD71 = false;
+    mbCatchingPlayerSword = false;
     mCollider.CoSet();
     mCallback.mSlerpFactorTarget = 1.0f;
     s32 flag = getFromParams(0, 0xFF);
@@ -1030,18 +1030,18 @@ void dAcGirahimuBase_c::initializeState_ReleaseSword() {
 
     mCallback.field_0x088 = false;
     field_0xD6C = 1;
-    mSph0.ClrTgSet();
+    mCcHand.ClrTgSet();
     mCyl0.OnTgSet();
 
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     mSpeed = 0.0f;
 }
 void dAcGirahimuBase_c::executeState_ReleaseSword() {
-    field_0xD81 = true;
+    mbVulnerable = true;
     setTgVulnerable();
-    mSph0.ClrTgSet();
+    mCcHand.ClrTgSet();
 
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
     mCallback.field_0x04E = false;
 
     if (mAnmChrs[ANMIDX_Body].checkFrame(35.0f)) {
@@ -1053,7 +1053,7 @@ void dAcGirahimuBase_c::executeState_ReleaseSword() {
 }
 void dAcGirahimuBase_c::finalizeState_ReleaseSword() {
     mCallback.field_0x2BC = 0;
-    mSph0.OnTgSet();
+    mCcHand.OnTgSet();
 }
 
 void dAcGirahimuBase_c::initializeState_G_SwordDamage() {}
@@ -1061,25 +1061,25 @@ void dAcGirahimuBase_c::executeState_G_SwordDamage() {}
 void dAcGirahimuBase_c::finalizeState_G_SwordDamage() {}
 
 void dAcGirahimuBase_c::initializeState_KnifeDamage() {
-    mCyl2.OnTgSet();
+    mCcBody.OnTgSet();
     setAnm("KnifeDamage", ANM_KnifeDamage, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     mVec3_c pos = mPosition;
     pos.y += 100.0f;
     getSoundSource()->startSoundAtPosition(SE_Girahim_DMG_KNIFE, pos);
 
     mCallback.field_0x088 = false;
-    field_0xD44 = 0;
+    mSubstate = 0;
     mSpeed = 0.0f;
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     field_0xD6C = 8;
-    field_0xD8E = false;
+    mConsecutiveHitCount = 0;
 }
 void dAcGirahimuBase_c::executeState_KnifeDamage() {
-    field_0xD8D = true;
+    mbStandardDamage = true;
     if (mAnmChrs[ANMIDX_Body].isStop()) {
-        field_0xD8E = false;
+        mConsecutiveHitCount = 0;
 
-        if (field_0x1838 < 500.0f) {
+        if (mDistanceToPlayer < 500.0f) {
             changeState(StateID_BackStep);
         } else {
             vt_0x220();
@@ -1087,7 +1087,7 @@ void dAcGirahimuBase_c::executeState_KnifeDamage() {
     }
 }
 void dAcGirahimuBase_c::finalizeState_KnifeDamage() {
-    field_0xD8E = false;
+    mConsecutiveHitCount = 0;
 }
 
 void dAcGirahimuBase_c::initializeState_CatchDamage() {}
@@ -1103,7 +1103,7 @@ void dAcGirahimuBase_c::initializeState_LinkSwordGuardJust() {
         setAnm("GuardLSwordB", ANM_GuardLSwordB, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     }
     mCallback.field_0x088 = false;
-    field_0xD72 = false;
+    mbUsingPlayerSword = false;
 
     mVec3_c throwForce(0.0f, 0.0f, 600.0f);
     throwForce.rotY(mRotation.y - 0x7500);
@@ -1120,7 +1120,7 @@ void dAcGirahimuBase_c::finalizeState_LinkSwordGuardJust() {}
 void dAcGirahimuBase_c::initializeState_GetSword() {
     field_0xD6C = 2;
     field_0xD66 = 0;
-    field_0xD71 = true;
+    mbCatchingPlayerSword = true;
 
     setAnm("GetSword", ANM_GetSword, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
 
@@ -1136,20 +1136,20 @@ void dAcGirahimuBase_c::initializeState_GetSword() {
     }
 }
 void dAcGirahimuBase_c::executeState_GetSword() {
-    if (vt_0x208()) {
+    if (updateSwordGrabAnim()) {
         field_0xD5A = 0;
         mSwordLink.get()->setHide();
         return;
     }
 
     if (mAnmChrs[ANMIDX_Body].getFrame() >= 8.0f) {
-        field_0x88C = mSwordLink.get()->mPosition;
+        mLookAtTarget = mSwordLink.get()->mPosition;
     }
 
     if (dAcPy_c::GetLinkM()->IfCurrentActionToActor(this, 0xA9 /* ??? */) && mAnmChrs[ANMIDX_Body].checkFrame(8.0f)) {
         if (dAcPy_c::GetLinkM()->vt_0x084(this, 0xA9 /* ??? */)) {
             mCallback.field_0x04E = false;
-            field_0xD71 = false;
+            mbCatchingPlayerSword = false;
             setSwordLinkTransformPlayer();
             mSwordLink.get()->setGetSword();
         } else {
@@ -1170,9 +1170,9 @@ void dAcGirahimuBase_c::executeState_GetSword() {
         mVec3_c unused = mCallback.mHandRTranslation - mPosition;
         unused.rotY(-mRotation.y);
 
-        field_0xD72 = true;
+        mbUsingPlayerSword = true;
         mSwordLink.get()->setEquip();
-        field_0xD4C = 250;
+        mHoldPlayerSwordTimer = 250;
     }
     if (mAnmChrs[ANMIDX_Body].isStop()) {
         changeState(StateID_Link_SwordWait);
@@ -1180,13 +1180,13 @@ void dAcGirahimuBase_c::executeState_GetSword() {
 }
 void dAcGirahimuBase_c::finalizeState_GetSword() {
     field_0xD5A = 0;
-    field_0xD71 = false;
+    mbCatchingPlayerSword = false;
 }
 
 void dAcGirahimuBase_c::initializeState_SearchSword() {
     mCallback.field_0x088 = true;
     setAnm("Walk", ANM_Walk, nullptr, m3d::PLAY_MODE_4, 15.0f, 1.2f);
-    mCyl2.OnTgSet();
+    mCcBody.OnTgSet();
 }
 void dAcGirahimuBase_c::executeState_SearchSword() {
     field_0xD7C = false;
@@ -1201,7 +1201,7 @@ void dAcGirahimuBase_c::executeState_SearchSword() {
         return;
     }
 
-    field_0x88C = mSwordLink.get()->mPosition;
+    mLookAtTarget = mSwordLink.get()->mPosition;
     s16 yTarget = cLib::targetAngleY(mPosition, mSwordLink.get()->mPosition);
     sLib::chaseAngle(mRotation.y.ref(), yTarget, 0x200);
     sLib::chaseAngle(mAngle.y.ref(), yTarget, 0x200);
@@ -1210,11 +1210,11 @@ void dAcGirahimuBase_c::executeState_SearchSword() {
     f32 f = 1.f - std::abs(mAng(f0).normal_c());
     if (f <= 0.9f) {
         f = 0.0f;
-        fn_226_A070(yTarget);
+        setTurnAnimation(yTarget);
     } else {
         setAnm("Walk", ANM_Walk, nullptr, m3d::PLAY_MODE_4, 15.0f, 1.2f);
     }
-    field_0x1834 = f * 8.0f * mAnmChrs[ANMIDX_Body].getRate();
+    mSpeedTarget = f * 8.0f * mAnmChrs[ANMIDX_Body].getRate();
     mVec3_c v = mSwordLink.get()->mPosition - mPosition;
     mAng a0 = (s32)v.atan2sX_Z();
     a0 = a0 - mRotation.y;
@@ -1225,29 +1225,29 @@ void dAcGirahimuBase_c::executeState_SearchSword() {
 void dAcGirahimuBase_c::finalizeState_SearchSword() {
     field_0xD7C = true;
     mSpeed = 0.0f;
-    field_0x1834 = 0.0f;
-    mCyl2.ClrTgSet();
+    mSpeedTarget = 0.0f;
+    mCcBody.ClrTgSet();
 }
 
 void dAcGirahimuBase_c::initializeState_HomeWarp() {
     mSpeed = 0.0f;
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     setAnm("MovePose", ANM_MovePose, nullptr, m3d::PLAY_MODE_4, 15.0f, 1.5f);
     mCallback.field_0x088 = true;
-    field_0xD44 = 0;
+    mSubstate = 0;
     field_0xD6C = 0;
 }
 void dAcGirahimuBase_c::executeState_HomeWarp() {
-    mSph0.ClrTgSet();
-    mCyl2.ClrTgSet();
+    mCcHand.ClrTgSet();
+    mCcBody.ClrTgSet();
     mCollider.ClrCo();
 
     fn_226_BC00();
 
-    switch (field_0xD44) {
+    switch (mSubstate) {
         case 0: {
-            if (mAnmChrs[ANMIDX_Body].getFrame() >= 10.0f && sLib::chase(&field_0x8B0.x, 0.0f, 0.2f)) {
-                field_0xD44++;
+            if (mAnmChrs[ANMIDX_Body].getFrame() >= 10.0f && sLib::chase(&mWarpScale.x, 0.0f, 0.2f)) {
+                mSubstate++;
                 mVec3_c v0 = dAcPy_c::GetLink()->mPosition - mStartingPos;
                 if (v0.absXZ() - 500.0f > 1000.0f) {
                     f32 f = 1000.0f;
@@ -1262,20 +1262,20 @@ void dAcGirahimuBase_c::executeState_HomeWarp() {
                     setOldPosition(mStartingPos);
                 }
                 mRotation.y = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
-                field_0x8B0.set(0.0f, 0.0f, 0.0f);
-                field_0xD46 = 20;
+                mWarpScale.set(0.0f, 0.0f, 0.0f);
+                mSubstateTimer = 20;
             }
         } break;
         case 1: {
-            if (field_0xD46 <= 0) {
-                field_0xD44++;
-                field_0x8B0.set(0.0f, 1.05f, 1.05f);
+            if (mSubstateTimer <= 0) {
+                mSubstate++;
+                mWarpScale.set(0.0f, 1.05f, 1.05f);
             }
         } break;
         case 2: {
             mCollider.CoSet();
-            if (sLib::chase(&field_0x8B0.x, 1.05f, 0.2f)) {
-                if (field_0xD72) {
+            if (sLib::chase(&mWarpScale.x, 1.05f, 0.2f)) {
+                if (mbUsingPlayerSword) {
                     changeState(StateID_Link_SwordWait);
                 } else {
                     vt_0x220();
@@ -1286,16 +1286,16 @@ void dAcGirahimuBase_c::executeState_HomeWarp() {
 }
 void dAcGirahimuBase_c::finalizeState_HomeWarp() {
     mCallback.field_0x2BC = 0;
-    field_0xD44 = 0;
+    mSubstate = 0;
 }
 
 void dAcGirahimuBase_c::initializeState_PickUpSword() {
-    field_0xD4C = 250;
+    mHoldPlayerSwordTimer = 250;
 
     setAnm("PickUp02", ANM_PickUp02, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     mCallback.field_0x088 = true;
 
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     mSpeed = 0.0f;
 }
 void dAcGirahimuBase_c::executeState_PickUpSword() {
@@ -1304,10 +1304,10 @@ void dAcGirahimuBase_c::executeState_PickUpSword() {
         return;
     }
 
-    field_0x88C = mSwordLink.get()->mPosition;
+    mLookAtTarget = mSwordLink.get()->mPosition;
 
     if (mAnmChrs[ANMIDX_Body].checkFrame(16.0f)) {
-        field_0xD72 = true;
+        mbUsingPlayerSword = true;
         mSwordLink.get()->setEquip();
     }
 
@@ -1319,7 +1319,7 @@ void dAcGirahimuBase_c::finalizeState_PickUpSword() {}
 
 void dAcGirahimuBase_c::initializeState_Link_SwordWait() {
     field_0xD6C = 2;
-    field_0x1872 = true;
+    mbFirstLinkSwordWaitEnter = true;
     if (!mbLinkSwordWaitFirstComplete) {
         // Hah, quite the sword you have here. ...
         mFlowMgr.triggerEntryPoint(201, 0x39, 0, 0);
@@ -1329,10 +1329,10 @@ void dAcGirahimuBase_c::initializeState_Link_SwordWait() {
         setAnm("WaitBtB", ANM_WaitBtB, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         mCallback.field_0x088 = true;
     }
-    field_0xD72 = true;
+    mbUsingPlayerSword = true;
     mSwordLink.get()->setEquip();
-    field_0xD46 = 10;
-    field_0x1834 = 0.0f;
+    mSubstateTimer = 10;
+    mSpeedTarget = 0.0f;
     mSpeed = 0.0f;
 }
 void dAcGirahimuBase_c::executeState_Link_SwordWait() {
@@ -1340,8 +1340,8 @@ void dAcGirahimuBase_c::executeState_Link_SwordWait() {
         mFlowMgr.checkFinished();
     }
 
-    mCyl2.SetR(40.0f);
-    if (field_0xD4C <= 0) {
+    mCcBody.SetR(40.0f);
+    if (mHoldPlayerSwordTimer <= 0) {
         changeState(StateID_ReturnSword);
         return;
     }
@@ -1351,12 +1351,12 @@ void dAcGirahimuBase_c::executeState_Link_SwordWait() {
             changeState(StateID_Link_SwordWait);
             return;
         }
-    } else if (field_0xD46 <= 0) {
+    } else if (mSubstateTimer <= 0) {
         changeState(StateID_Link_SwordWalk);
         return;
     }
 
-    if (mCallback.mHeadRotationY.abs() < 0x1500 && field_0x1838 < 200.0f) {
+    if (mCallback.mHeadRotationY.abs() < 0x1500 && mDistanceToPlayer < 200.0f) {
         changeState(StateID_Link_SwordAttack);
     }
 }
@@ -1367,37 +1367,37 @@ void dAcGirahimuBase_c::finalizeState_Link_SwordWait() {
 void dAcGirahimuBase_c::initializeState_Link_SwordWalk() {
     setAnm("WalkBt", ANM_Walk, nullptr, m3d::PLAY_MODE_4, 15.0f, 1.2f);
     mCallback.field_0x088 = true;
-    field_0xD72 = true;
+    mbUsingPlayerSword = true;
     mSwordLink.get()->setEquip();
     field_0xD6C = 2;
 }
 void dAcGirahimuBase_c::executeState_Link_SwordWalk() {
-    mCyl2.SetR(60.0f);
-    if (field_0xD4C <= 0) {
+    mCcBody.SetR(60.0f);
+    if (mHoldPlayerSwordTimer <= 0) {
         changeState(StateID_ReturnSword);
         return;
     }
 
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
 
-    f32 f0 = 1.0f - std::abs(mAng::s2n_c(field_0x183E - mRotation.y));
+    f32 f0 = 1.0f - std::abs(mAng::s2n_c(mAngleToPlayer - mRotation.y));
     mAngle.y = mRotation.y;
 
     if (f0 <= 0.6f) {
-        fn_226_A070(field_0x183E.mVal);
+        setTurnAnimation(mAngleToPlayer.mVal);
         f0 = 0.0f;
     } else if (mAnmIDBody != ANM_Walk) {
         setAnm("WalkBt", ANM_Walk, nullptr, m3d::PLAY_MODE_4, 15.0f, 1.2f);
     }
-    field_0x1834 = f0 * 8.0f * mAnmChrs[ANMIDX_Body].getRate();
+    mSpeedTarget = f0 * 8.0f * mAnmChrs[ANMIDX_Body].getRate();
 
-    if (mCallback.mHeadRotationY.abs() < 0x1500 && field_0x1838 < 200.0f) {
+    if (mCallback.mHeadRotationY.abs() < 0x1500 && mDistanceToPlayer < 200.0f) {
         changeState(StateID_Link_SwordAttack);
     }
 }
 void dAcGirahimuBase_c::finalizeState_Link_SwordWalk() {
     mSpeed = 0.0f;
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
 }
 
 void dAcGirahimuBase_c::initializeState_Link_SwordAttack() {
@@ -1407,18 +1407,18 @@ void dAcGirahimuBase_c::initializeState_Link_SwordAttack() {
         setAnm("AttackLSwordB", ANM_AttackLSwordB, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     }
     mCallback.field_0x088 = true;
-    field_0xD72 = true;
+    mbUsingPlayerSword = true;
     mSwordLink.get()->setEquip();
     mCallback.mSlerpFactorTarget = 1.0f;
     mCallback.mSlerpFactor = 1.0f;
     mSpeed = 0.0f;
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
 }
 void dAcGirahimuBase_c::executeState_Link_SwordAttack() {
-    mCyl2.SetR(90.0f);
-    sLib::chase(&field_0x8B0.x, 1.05f, 0.2f);
+    mCcBody.SetR(90.0f);
+    sLib::chase(&mWarpScale.x, 1.05f, 0.2f);
     if (mAnmChrs[ANMIDX_Body].getFrame() < 29.0f) {
-        sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+        sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
     }
 
     if (mAnmChrs[ANMIDX_Body].checkFrame(30.0f)) {
@@ -1446,18 +1446,18 @@ void dAcGirahimuBase_c::initializeState_ReturnSword() {
     field_0xD6C = 1;
     setAnm("LSwordReturn", ANM_LSwordReturn, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     mCallback.field_0x088 = true;
-    field_0xD72 = true;
+    mbUsingPlayerSword = true;
     mSwordLink.get()->setEquip();
     mSpeed = 0.0f;
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
 }
 void dAcGirahimuBase_c::executeState_ReturnSword() {
-    mCyl2.SetR(60.0f);
+    mCcBody.SetR(60.0f);
     if (mAnmChrs[ANMIDX_Body].getFrame() < 37.0f) {
-        sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+        sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
     }
     if (mAnmChrs[ANMIDX_Body].checkFrame(37.0f)) {
-        field_0xD72 = false;
+        mbUsingPlayerSword = false;
         mVec3_c playerOffs(0.0f, 100.0f, 0.0f);
         playerOffs.rotY(dAcPy_c::GetLink()->mRotation.y);
         playerOffs += dAcPy_c::GetLink()->mPosition;
@@ -1474,101 +1474,101 @@ void dAcGirahimuBase_c::finalizeState_ReturnSword() {}
 
 void dAcGirahimuBase_c::initializeState_BackStep() {
     if (mAnmIDBody == ANM_StepEnd) {
-        field_0xD7D = false;
+        mbOnGround = false;
         calcJumpMovement(600.0f, 15.0f);
         setAnm("StepLoop", ANM_StepLoop, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
-        field_0xD44 = 2;
+        mSubstate = 2;
     } else {
         setAnm("StepStart", ANM_StepStart, nullptr, m3d::PLAY_MODE_4, 2.0f, 0.0f);
-        field_0xD44 = 0;
+        mSubstate = 0;
     }
 
-    mCyl2.ClrTgSet();
-    mSph0.ClrTgSet();
+    mCcBody.ClrTgSet();
+    mCcHand.ClrTgSet();
 
     mCallback.field_0x04E = false;
     field_0xD6C = 0;
     mCallback.field_0x088 = true;
-    field_0xD46 = 3;
+    mSubstateTimer = 3;
 }
 void dAcGirahimuBase_c::executeState_BackStep() {
     s32 _weird_zero = 0;
 
     field_0xD7C = false;
-    mCyl2.ClrTgSet();
-    mSph0.ClrTgSet();
+    mCcBody.ClrTgSet();
+    mCcHand.ClrTgSet();
 
-    switch (field_0xD44) {
+    switch (mSubstate) {
         case 0: {
-            field_0xD7D = false;
-            if (mAng(mRotation.y - field_0x183E).abs() < 0x4000 && field_0xD46 <= 0) {
+            mbOnGround = false;
+            if (mAng(mRotation.y - mAngleToPlayer).abs() < 0x4000 && mSubstateTimer <= 0) {
                 clearAnms();
                 setAnm("StepStart", ANM_StepStart, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
-                field_0xD44++;
+                mSubstate++;
             }
         } break;
         case 1: {
-            field_0xD7D = false;
+            mbOnGround = false;
             if (mAnmChrs[ANMIDX_Body].checkFrame(1.0f)) {
                 calcJumpMovement(600.0f, _weird_zero + 15.0f);
                 setAnm("StepLoop", ANM_StepLoop, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
-                field_0xD44++;
+                mSubstate++;
             }
         } break;
         case 2: {
-            field_0xD7D = false;
+            mbOnGround = false;
             if (mVelocity.y <= 0.0f && mAcch.ChkGndHit() && mPosition.y <= mStartingPos.y + 100.0f) {
                 dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0);
                 mAngle.y = mVelocity.atan2sX_Z();
-                field_0x1834 = 0.0f;
+                mSpeedTarget = 0.0f;
                 mSpeed = mVelocity.absXZ();
                 mVelocity.set(0.0f, 0.0f, 0.0f);
                 setAnm("StepEnd", ANM_StepEnd, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
-                field_0xD44++;
+                mSubstate++;
             }
         } break;
         case 3: {
-            field_0x1858 = 0.1f;
+            mSpeedChangeFactor = 0.1f;
             if (mAnmChrs[ANMIDX_Body].isStop()) {
                 vt_0x220();
             }
         } break;
     }
 
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x2000);
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x2000);
 }
 void dAcGirahimuBase_c::finalizeState_BackStep() {
-    field_0xD44 = 0;
+    mSubstate = 0;
     mSpeed = 0.0f;
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     field_0xD7C = true;
-    mSph0.OnTgSet();
+    mCcHand.OnTgSet();
 }
 
 void dAcGirahimuBase_c::initializeState_Escape() {
     mSpeed = 0.0f;
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     clearAnms();
     setAnm("StepEnd", ANM_StepEnd, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
 
-    mCyl2.ClrTgSet();
-    mSph0.ClrTgSet();
+    mCcBody.ClrTgSet();
+    mCcHand.ClrTgSet();
 
     mCallback.field_0x04E = true;
     mCallback.mSlerpFactorTarget = 0.8f;
     mCallback.mSlerpFactor = 0.8f;
 
-    field_0xD44 = 0;
-    field_0xD4E = 0;
+    mSubstate = 0;
+    mConsecutiveCatchDamageCount = 0;
     field_0xD6C = 8;
     field_0xD60 = 2;
 }
 void dAcGirahimuBase_c::executeState_Escape() {
-    field_0xD81 = true;
+    mbVulnerable = true;
     field_0xD60 = 2;
     setTgVulnerable();
-    mCyl2.ClrTgSet();
-    mSph0.ClrTgSet();
+    mCcBody.ClrTgSet();
+    mCcHand.ClrTgSet();
     mCallback.field_0x04E = false;
     if (mAnmChrs[ANMIDX_Body].getFrame() >= 15.0f) {
         if (dAcPy_c::GetLinkM()->isUsingSword()) {
@@ -1583,80 +1583,80 @@ void dAcGirahimuBase_c::executeState_Escape() {
         vt_0x220();
     }
 
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x2000);
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x2000);
     field_0xD58 = 60;
-    field_0xD68 = 0;
+    mCatchBlockTimer = 0;
     mCallback.field_0x2BC = 0;
 }
 void dAcGirahimuBase_c::finalizeState_Escape() {
-    field_0xD44 = 0;
+    mSubstate = 0;
     mSpeed = 0.0f;
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     field_0xD7C = true;
-    field_0xD81 = false;
-    mSph0.OnTgSet();
+    mbVulnerable = false;
+    mCcHand.OnTgSet();
     field_0xD66 = 0;
 }
 
 void dAcGirahimuBase_c::initializeState_EscapeBack() {
-    if (field_0xD7B) {
+    if (mbHoldingSwordA) {
         setAnm("WaitBtC", ANM_WaitBtC, nullptr, m3d::PLAY_MODE_4, 15.0f, 1.0f);
     } else {
         setAnm("WaitA", ANM_WaitA, nullptr, m3d::PLAY_MODE_4, 15.0f, 1.0f);
     }
 
-    mCyl2.ClrTgSet();
-    mSph0.ClrTgSet();
+    mCcBody.ClrTgSet();
+    mCcHand.ClrTgSet();
     mCallback.field_0x04E = true;
     mCallback.mSlerpFactorTarget = 0.8f;
     mCallback.mSlerpFactor = 0.8f;
 
-    field_0xD44 = 0;
-    field_0xD4E = 0;
+    mSubstate = 0;
+    mConsecutiveCatchDamageCount = 0;
     field_0xD6C = 1;
-    field_0xD46 = 15;
+    mSubstateTimer = 15;
     mCallback.mSpineRotationXTarget = 0xA80;
 }
 void dAcGirahimuBase_c::executeState_EscapeBack() {
-    mCyl2.ClrTgSet();
-    mSph0.ClrTgSet();
-    if (field_0xD46 <= 0) {
+    mCcBody.ClrTgSet();
+    mCcHand.ClrTgSet();
+    if (mSubstateTimer <= 0) {
         vt_0x220();
     }
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x2000);
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x2000);
 }
 void dAcGirahimuBase_c::finalizeState_EscapeBack() {
-    field_0xD44 = 0;
+    mSubstate = 0;
     mSpeed = 0.0f;
-    field_0x1834 = 0.0f;
-    mSph0.OnTgSet();
+    mSpeedTarget = 0.0f;
+    mCcHand.OnTgSet();
 }
 
 void dAcGirahimuBase_c::initializeState_FrontWarp() {
     setAnm("MovePose", ANM_MovePose, nullptr, m3d::PLAY_MODE_4, 15.0f, 2.0f);
     mCallback.field_0x088 = true;
-    field_0xD44 = 0;
+    mSubstate = 0;
     mSpeed = 0.0f;
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     field_0xD6C = 0;
 }
 void dAcGirahimuBase_c::executeState_FrontWarp() {
-    mCyl2.ClrTgSet();
-    switch (field_0xD44) {
+    mCcBody.ClrTgSet();
+    switch (mSubstate) {
         case 0: {
             if (mAnmChrs[ANMIDX_Body].getFrame() >= 18.0f) {
                 mCollider.ClrCo();
-                if (sLib::chase(&field_0x8B0.x, 0.0f, 0.2f) != 0) {
-                    field_0xD44++;
-                    field_0x8B0.set(0.0f, 0.0f, 0.0f);
-                    field_0xD46 = 20 + cM::rndInt(30);
+                if (sLib::chase(&mWarpScale.x, 0.0f, 0.2f) != 0) {
+                    mSubstate++;
+                    mWarpScale.set(0.0f, 0.0f, 0.0f);
+                    mSubstateTimer = 20 + cM::rndInt(30);
                     vt_0x1F8();
                 }
             }
         } break;
         case 1: {
             mRotation.y = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
-            if (field_0xD46 <= 0) {
+            if (mSubstateTimer <= 0) {
                 mVec3_c start = mPosition;
                 mVec3_c end = mPosition;
                 for (int i = 0; i < 4; ++i) {
@@ -1674,59 +1674,59 @@ void dAcGirahimuBase_c::executeState_FrontWarp() {
                 setPosition(end);
                 setOldPosition(end);
                 mRotation.y = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
-                field_0x8B0.set(0.0f, 1.05f, 1.05f);
-                field_0xD44++;
+                mWarpScale.set(0.0f, 1.05f, 1.05f);
+                mSubstate++;
                 vt_0x20C();
                 return;
             }
 
-            if (!turn(field_0x183E)) {
-                vt_0x228();
+            if (!turn(mAngleToPlayer)) {
+                correctPoseHip();
             }
         } break;
     }
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
 }
 void dAcGirahimuBase_c::finalizeState_FrontWarp() {
     mCollider.CoSet();
-    field_0xD44 = 0;
-    mCyl2.OnTgSet();
+    mSubstate = 0;
+    mCcBody.OnTgSet();
 }
 
 void dAcGirahimuBase_c::initializeState_FrontAttack() {
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     mSpeed = 0.0f;
     mCallback.field_0x088 = true;
     field_0xD6C = 0;
-    if (vt_0x218()) {
-        field_0xD46 = 40;
+    if (isNearHalfHealth()) {
+        mSubstateTimer = 40;
     } else {
-        field_0xD46 = 50;
+        mSubstateTimer = 50;
     }
 }
 void dAcGirahimuBase_c::executeState_FrontAttack() {
     mCollider.ClrCo();
-    if (field_0x8B0.x >= 0.5f) {
+    if (mWarpScale.x >= 0.5f) {
         mCollider.CoSet();
     }
-    if (field_0xD8C) {
-        if (!fn_226_A120(field_0x183E, 200.0f)) {
-            vt_0x228();
+    if (mbFirstSwordWaitEntered) {
+        if (!adjustHipAngle(mAngleToPlayer, 200.0f)) {
+            correctPoseHip();
         }
-        sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+        sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
     } else {
-        if (!turn(field_0x183E)) {
-            vt_0x228();
+        if (!turn(mAngleToPlayer)) {
+            correctPoseHip();
         }
     }
 
-    if (sLib::chase(&field_0x8B0.x, 1.05f, 0.2f) != FALSE) {
+    if (sLib::chase(&mWarpScale.x, 1.05f, 0.2f) != FALSE) {
         field_0xD6C = 5;
     }
 
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
-    if (field_0xD46 <= 0) {
-        if (field_0x1838 <= 350.0f) {
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
+    if (mSubstateTimer <= 0) {
+        if (mDistanceToPlayer <= 350.0f) {
             changeState(StateID_Counter);
         } else {
             vt_0x220();
@@ -1738,25 +1738,25 @@ void dAcGirahimuBase_c::finalizeState_FrontAttack() {}
 void dAcGirahimuBase_c::initializeState_BackWarp() {
     setAnm("MovePose", ANM_MovePose, nullptr, m3d::PLAY_MODE_4, 15.0f, 2.0f);
     mCallback.field_0x088 = true;
-    field_0xD44 = 0;
-    mCyl2.ClrTgSet();
+    mSubstate = 0;
+    mCcBody.ClrTgSet();
     mSpeed = 0.0f;
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     field_0xD6C = 0;
 }
 void dAcGirahimuBase_c::executeState_BackWarp() {
-    mCyl2.ClrTgSet();
+    mCcBody.ClrTgSet();
 
-    switch (field_0xD44) {
+    switch (mSubstate) {
         case 0: {
             if (mAnmChrs[ANMIDX_Body].getFrame() >= 18.0f) {
                 mCollider.ClrCo();
-                if (sLib::chase(&field_0x8B0.x, 0.0, 0.2f)) {
-                    field_0xD44++;
-                    field_0x8B0.set(0.0f, 0.0f, 0.0f);
-                    field_0xD46 = 20 + cM::rndInt(30);
-                    if (vt_0x218()) {
-                        field_0xD46 /= 2;
+                if (sLib::chase(&mWarpScale.x, 0.0, 0.2f)) {
+                    mSubstate++;
+                    mWarpScale.set(0.0f, 0.0f, 0.0f);
+                    mSubstateTimer = 20 + cM::rndInt(30);
+                    if (isNearHalfHealth()) {
+                        mSubstateTimer /= 2;
                     }
                     vt_0x1F8();
                 }
@@ -1764,7 +1764,7 @@ void dAcGirahimuBase_c::executeState_BackWarp() {
         } break;
         case 1: {
             mRotation.y = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
-            if (field_0xD46 <= 0) {
+            if (mSubstateTimer <= 0) {
                 mVec3_c start = mPosition;
                 mVec3_c end = mPosition;
                 for (int i = 0; i < 4; ++i) {
@@ -1782,48 +1782,48 @@ void dAcGirahimuBase_c::executeState_BackWarp() {
                 setPosition(end);
                 setOldPosition(end);
                 mRotation.y = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
-                field_0x8B0.set(0.0f, 1.05f, 1.05f);
-                field_0xD44++;
+                mWarpScale.set(0.0f, 1.05f, 1.05f);
+                mSubstate++;
                 changeState(StateID_BackAttack);
                 return;
             }
         } break;
     }
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
 }
 void dAcGirahimuBase_c::finalizeState_BackWarp() {
     mCollider.CoSet();
-    field_0xD44 = 0;
-    mCyl2.OnTgSet();
+    mSubstate = 0;
+    mCcBody.OnTgSet();
 }
 
 void dAcGirahimuBase_c::initializeState_BackAttack() {
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     mSpeed = 0.0f;
-    vt_0x224();
+    setBackAttackPose();
     mCallback.field_0x088 = true;
     field_0xD6C = 0;
-    field_0xD46 = 50;
+    mSubstateTimer = 50;
 }
 void dAcGirahimuBase_c::executeState_BackAttack() {
     mCollider.ClrCo();
-    if (field_0x8B0.x >= 0.5f) {
+    if (mWarpScale.x >= 0.5f) {
         mCollider.CoSet();
     }
 
-    if (!turn(field_0x183E)) {
-        vt_0x228();
+    if (!turn(mAngleToPlayer)) {
+        correctPoseHip();
     }
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
 
-    if (sLib::chase(&field_0x8B0.x, 1.05f, 0.2f) != FALSE) {
+    if (sLib::chase(&mWarpScale.x, 1.05f, 0.2f) != FALSE) {
         field_0xD6C = 5;
     } else {
         field_0xD6C = 0;
     }
 
-    if (field_0xD46 <= 0) {
-        if (field_0x1838 <= 350.0f) {
+    if (mSubstateTimer <= 0) {
+        if (mDistanceToPlayer <= 350.0f) {
             changeState(StateID_Counter);
         } else {
             vt_0x220();
@@ -1853,13 +1853,13 @@ void dAcGirahimuBase_c::initializeState_Counter() {
         }
         field_0xD7E = true;
     }
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
     mSpeed = 0.0f;
     mCallback.field_0x088 = true;
     field_0xD6C = 5;
 }
 void dAcGirahimuBase_c::executeState_Counter() {
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
     if (mAnmChrs[ANMIDX_Body].getFrame() >= 16.0f && mAnmChrs[ANMIDX_Body].getFrame() <= 20.0f) {
         mMdlSwordA.enableAttack();
         mMdlSwordA.setProcActive(true);
@@ -1882,13 +1882,13 @@ void dAcGirahimuBase_c::finalizeState_Counter() {
     mMdlSwordA.setInactive();
     mMdlSwordA.setProcActive(false);
 
-    mCyl2.OnTgSet();
-    field_0xD82 = false;
+    mCcBody.OnTgSet();
+    mbShortStun = false;
 }
 
 void dAcGirahimuBase_c::initializeState_Run() {
     field_0xD6C = 3;
-    field_0xD44 = 0;
+    mSubstate = 0;
 
     if (cM::rndInt(100) > 50) {
         setAnm("AttackPoseL", ANM_AttackPoseL, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
@@ -1896,25 +1896,25 @@ void dAcGirahimuBase_c::initializeState_Run() {
         setAnm("AttackPoseR", ANM_AttackPoseR, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     }
     mCallback.field_0x088 = false;
-    field_0x1834 = 0.0f;
+    mSpeedTarget = 0.0f;
 }
 void dAcGirahimuBase_c::executeState_Run() {
     s32 _weird_zero = 0;
 
     setTgVulnerable();
-    switch (field_0xD44) {
+    switch (mSubstate) {
         case 0: {
-            field_0xD81 = true;
-            field_0x1858 = 0.1f;
+            mbVulnerable = true;
+            mSpeedChangeFactor = 0.1f;
             if (mAnmChrs[ANMIDX_Body].getFrame() >= 40.0f) {
-                field_0xD46 = 0;
-                field_0xD44++;
-                field_0xD81 = false;
+                mSubstateTimer = 0;
+                mSubstate++;
+                mbVulnerable = false;
             }
-            sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+            sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
         } break;
         case 1: {
-            if (field_0xD46 <= 0 || field_0x1838 <= 500.0f) {
+            if (mSubstateTimer <= 0 || mDistanceToPlayer <= 500.0f) {
                 if (isAttackingLeft()) {
                     setAnm("AttackLRun", ANM_AttackLRun, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
 
@@ -1922,22 +1922,22 @@ void dAcGirahimuBase_c::executeState_Run() {
                     setAnm("AttackRRun", ANM_AttackRRun, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
                 }
 
-                field_0xD44++;
-                if (vt_0x218()) {
-                    field_0x1834 = _weird_zero + 52.0f;
+                mSubstate++;
+                if (isNearHalfHealth()) {
+                    mSpeedTarget = _weird_zero + 52.0f;
                 } else {
-                    field_0x1834 = _weird_zero + 45.0f;
+                    mSpeedTarget = _weird_zero + 45.0f;
                 }
-                field_0x1840.set(mPosition);
+                mTargetPlayerPos.set(mPosition);
                 mMtx_c m;
                 MTXIdentity(m);
                 dStageMgr_c::GetInstance()->procfn_800192F0(0xDC, m, 0x14);
             }
-            sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
+            sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
         } break;
         case 2: {
             mVec3_c v1;
-            mVec3_c v0 = dAcPy_c::GetLink()->mPosition - field_0x1840;
+            mVec3_c v0 = dAcPy_c::GetLink()->mPosition - mTargetPlayerPos;
             if (isAttackingLeft()) {
                 v1.set(-100.0f, 0.0f, 50.0f);
                 v1.rotY(v0.atan2sX_Z());
@@ -1953,27 +1953,27 @@ void dAcGirahimuBase_c::executeState_Run() {
 
             f32 dir = v0.absXZ();
             if (dir <= 200.0f || mAcch.ChkWallHit(nullptr)) {
-                field_0xD44++;
-                field_0x184C.set(dAcPy_c::GetLink()->mPosition);
+                mSubstate++;
+                mRunPlayerInRangePosition.set(dAcPy_c::GetLink()->mPosition);
             } else if ((dAcPy_c::GetLink()->getCurrentAction() == 98 /* BACKFLIP */ ||
                         dAcPy_c::GetLink()->checkFlags0x350(0x80000)) &&
                        dir <= 500.0f) {
-                field_0xD44++;
-                field_0x184C.set(dAcPy_c::GetLink()->mPosition);
+                mSubstate++;
+                mRunPlayerInRangePosition.set(dAcPy_c::GetLink()->mPosition);
             }
         } break;
         case 3: {
             mVec3_c v1;
-            mVec3_c v0 = field_0x184C - field_0x1840;
+            mVec3_c v0 = mRunPlayerInRangePosition - mTargetPlayerPos;
             if (isAttackingLeft()) {
                 v1.set(-100.0f, 0.0f, 50.0f);
                 v1.rotY(v0.atan2sX_Z());
-                v1 += field_0x184C;
+                v1 += mRunPlayerInRangePosition;
                 sLib::chaseAngle(mRotation.y.ref(), cLib::targetAngleY(mPosition, v1), 0x2000);
             } else {
                 v1.set(100.0f, 0.0f, 50.0f);
                 v1.rotY(v0.atan2sX_Z());
-                v1 += field_0x184C;
+                v1 += mRunPlayerInRangePosition;
                 s16 target = cLib::targetAngleY(mPosition, v1);
                 sLib::chaseAngle(mRotation.y.ref(), target, 0x2000);
             }
@@ -1987,8 +1987,8 @@ void dAcGirahimuBase_c::executeState_Run() {
     }
 }
 void dAcGirahimuBase_c::finalizeState_Run() {
-    field_0x1834 = 0.0f;
-    field_0xD81 = false;
+    mSpeedTarget = 0.0f;
+    mbVulnerable = false;
 }
 
 void dAcGirahimuBase_c::initializeState_RunAttack() {
@@ -1999,13 +1999,13 @@ void dAcGirahimuBase_c::initializeState_RunAttack() {
         setAnm("AttackSwordR", ANM_AttackSwordR, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     }
     mCallback.field_0x088 = true;
-    field_0x1834 = 0.0f;
-    field_0x1858 = 0.2f;
+    mSpeedTarget = 0.0f;
+    mSpeedChangeFactor = 0.2f;
 }
 void dAcGirahimuBase_c::executeState_RunAttack() {
     if (mAnmChrs[ANMIDX_Body].getFrame() > 20.0f) {
         field_0xD6C = 8;
-        field_0xD81 = true;
+        mbVulnerable = true;
     }
 
     if (mAnmChrs[ANMIDX_Body].checkFrame(4.0f)) {
@@ -2024,19 +2024,19 @@ void dAcGirahimuBase_c::executeState_RunAttack() {
 void dAcGirahimuBase_c::finalizeState_RunAttack() {
     mMdlSwordA.setInactive();
     mMdlSwordA.setProcActive(false);
-    field_0x1858 = 0.5f;
+    mSpeedChangeFactor = 0.5f;
 }
 
 void dAcGirahimuBase_c::initializeState_BackWalk() {
-    field_0xD80 = false;
+    mbSwordAtHit = false;
     field_0xD6C = 6;
     setAnm("WalkBt", ANM_Walk, nullptr, m3d::PLAY_MODE_2, 15.0f, 1.0f);
     mCallback.field_0x088 = true;
-    field_0xD46 = 50;
-    field_0x1834 = mAnmChrs[ANMIDX_Body].getRate() * -8.0f;
+    mSubstateTimer = 50;
+    mSpeedTarget = mAnmChrs[ANMIDX_Body].getRate() * -8.0f;
 }
 void dAcGirahimuBase_c::executeState_BackWalk() {
-    if (field_0xD46 <= 0) {
+    if (mSubstateTimer <= 0) {
         vt_0x220();
         return;
     }
@@ -2160,13 +2160,13 @@ void dAcGirahimuBase_c::createCollision() {
     mMdlSwordA.setDamageMaybe(4);
     mMdlSwordB.setDamageMaybe(4);
 
-    mCollider.addCc(mSph0, sSrcSph);
-    mCollider.addCc(mCps0, sSrcCps);
-    mCollider.addCc(mCps1, sSrcCps);
-    mCollider.addCc(mCyl2, sSrcCyl);
+    mCollider.addCc(mCcHand, sSrcSph);
+    mCollider.addCc(mCcSwordR, sSrcCps);
+    mCollider.addCc(mCcSwordL, sSrcCps);
+    mCollider.addCc(mCcBody, sSrcCyl);
 
-    mCps0.SetTgShieldType(~AT_TYPE_NONE);
-    mCps1.SetTgShieldType(~AT_TYPE_NONE);
+    mCcSwordR.SetTgShieldType(~AT_TYPE_NONE);
+    mCcSwordL.SetTgShieldType(~AT_TYPE_NONE);
 
     mCyl1.Set(sSrcCyl);
     mCyl1.ClrTgSet();
@@ -2178,16 +2178,16 @@ void dAcGirahimuBase_c::createCollision() {
     mCyl0.ClrCoSet();
     mCyl0.OnTg_0x40();
 
-    mCyl2.SetR(30.0f);
+    mCcBody.SetR(30.0f);
 
     mCyl0.SetStts(mStts);
 
-    field_0x20E4 = 30.0f;
-    field_0x20E8 = 30.0f;
+    mCyl1Radius = 30.0f;
+    mCyl1RadiusTarget = 30.0f;
 
     mCollider.SetStts(mStts);
     field_0xD56 = 30;
-    mCyl2.ClrTgSet();
+    mCcBody.ClrTgSet();
 
     mCallback.init(this);
 
@@ -2196,12 +2196,12 @@ void dAcGirahimuBase_c::createCollision() {
     mAnmIDBody = ANM_NONE;
     mAcceleration = -6.0f;
     mMaxSpeed = -80.0f;
-    field_0x1858 = 0.5f;
+    mSpeedChangeFactor = 0.5f;
     field_0xD7C = true;
-    field_0x8B0.set(1.05f, 1.05f, 1.05f);
+    mWarpScale.set(1.05f, 1.05f, 1.05f);
     mHealth = 100;
 
-    field_0x8FC.ZrotS(-0x4000);
+    mEarringTransform.ZrotS(-0x4000);
     mMdlSwordA.fn_8006B7A0(0x10000);
     mMdlSwordB.fn_8006B7A0(0x10000);
     field_0x186C = 40.0f;
@@ -2238,67 +2238,67 @@ int dAcGirahimuBase_c::preExecute() {
 }
 
 void dAcGirahimuBase_c::vt_0x1DC() {
-    mSph0.SetTgType(AT_TYPE_DAMAGE | AT_TYPE_SWORD);
-    field_0x8A4.set(field_0x8B0);
+    mCcHand.SetTgType(AT_TYPE_DAMAGE | AT_TYPE_SWORD);
+    field_0x8A4.set(mWarpScale);
 
-    field_0xD8D = false;
+    mbStandardDamage = false;
     field_0xD7C = true;
-    field_0xD7D = true;
+    mbOnGround = true;
 
-    field_0x1858 = 0.5f;
+    mSpeedChangeFactor = 0.5f;
 
     mVec3_c diffToLink = mPosition - dAcPy_c::GetLink()->mPosition;
-    field_0x1838 = diffToLink.absXZ();
+    mDistanceToPlayer = diffToLink.absXZ();
 
-    field_0x183E = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
+    mAngleToPlayer = cLib::targetAngleY(mPosition, dAcPy_c::GetLink()->mPosition);
 
-    sLib::chase(&field_0x20E4, field_0x20E4, 10.0f);
+    sLib::chase(&mCyl1Radius, mCyl1RadiusTarget, 10.0f);
 
     mVec3_c diffFromHome = mPosition - mStartingPos;
-    field_0x1868 = diffFromHome.absXZ();
+    mDistanceFromStart = diffFromHome.absXZ();
 
     // clang-format off
-    if (--field_0xD46 <= 0) { field_0xD46 = 0; }
-    if (--field_0xD48 <= 0) { field_0xD48 = 0; }
+    if (--mSubstateTimer <= 0) { mSubstateTimer = 0; }
+    if (--mMovePoseTimer <= 0) { mMovePoseTimer = 0; }
     if (--field_0xD50 <= 0) { field_0xD50 = 0; }
-    if (--field_0xD54 <= 0) { field_0xD54 = 0; }
-    if (--field_0xD4C <= 0) { field_0xD4C = 0; }
+    if (--mShieldTimer <= 0) { mShieldTimer = 0; }
+    if (--mHoldPlayerSwordTimer <= 0) { mHoldPlayerSwordTimer = 0; }
     if (--field_0xD5C <= 0) { field_0xD5C = 0; }
     if (--mBossCaptionTimer <= 0) { mBossCaptionTimer = 0; }
-    if (--field_0xD68 <= 0) { field_0xD68 = 0; }
+    if (--mCatchBlockTimer <= 0) { mCatchBlockTimer = 0; }
     if (--field_0xD58 <= 0) { field_0xD58 = 0; }
     // clang-format on
     if (--field_0xD60 <= 0) {
         field_0xD60 = 0;
-        mSph0.OnTgSet();
-        mCyl2.OnTgSet();
+        mCcHand.OnTgSet();
+        mCcBody.OnTgSet();
     } else {
-        mSph0.ClrTgSet();
-        mCyl2.ClrTgSet();
+        mCcHand.ClrTgSet();
+        mCcBody.ClrTgSet();
     }
 
-    mCyl2.SetR(30.0f);
-    mCyl2.OffTgShieldType(AT_TYPE_DAMAGE | AT_TYPE_SWORD);
-    mCyl2.SetTgType(~AT_TYPE_COMMON0);
+    mCcBody.SetR(30.0f);
+    mCcBody.OffTgShieldType(AT_TYPE_DAMAGE | AT_TYPE_SWORD);
+    mCcBody.SetTgType(~AT_TYPE_COMMON0);
 
     mCyl0.SetR(200.0f);
-    mCyl2.SetH(mCallback.mHeadTranslation.y - mPosition.y);
+    mCcBody.SetH(mCallback.mHeadTranslation.y - mPosition.y);
 
-    mCps0.ClrTgSet();
-    mCps1.ClrTgSet();
+    mCcSwordR.ClrTgSet();
+    mCcSwordL.ClrTgSet();
     if (field_0xD5C <= 0) {
         dAcObjBase_c *pObj = dAcPy_c::GetLink()->getBeetleInFlight();
         if (pObj != nullptr) {
-            field_0x88C.set(pObj->mPosition);
+            mLookAtTarget.set(pObj->mPosition);
         } else {
-            field_0x88C.set(getPlayerHeadOffset());
+            mLookAtTarget.set(getPlayerHeadOffset());
         }
     }
 
     if (!dAcPy_c::GetLinkM()->isAttacking()) {
-        field_0x898 = mCallback.mHandRTranslation - mCallback.mArmRTranslation;
-        field_0x898.rotY(-mRotation.y);
-        field_0x898.z = 0.0f;
+        mRelativeHandCatch = mCallback.mHandRTranslation - mCallback.mArmRTranslation;
+        mRelativeHandCatch.rotY(-mRotation.y);
+        mRelativeHandCatch.z = 0.0f;
     }
 
     f32 swordLen = 120.0f;
@@ -2308,21 +2308,21 @@ void dAcGirahimuBase_c::vt_0x1DC() {
         if (swordType == 4 || swordType == 5) {
             swordLen *= 1.4f;
         }
-        field_0x20E8 = swordLen;
+        mCyl1RadiusTarget = swordLen;
     } else {
-        field_0x20E8 = 30.0f;
+        mCyl1RadiusTarget = 30.0f;
     }
 
     mCyl0.OnTgSet();
-    if (dAcPy_c::GetLinkM()->isAttacking() && !field_0xD7A) {
-        field_0xD7A = true;
+    if (dAcPy_c::GetLinkM()->isAttacking() && !mbPlayerAttackUpdated) {
+        mbPlayerAttackUpdated = true;
         mPlayerAttackDir = dAcPy_c::GetLink()->getSpecificAttackDirection();
     } else if (!dAcPy_c::GetLinkM()->isAttacking()) {
-        field_0xD7A = false;
+        mbPlayerAttackUpdated = false;
     }
 
     if (dAcPy_c::GetLink()->isAttacking()) {
-        field_0xD54 = 20;
+        mShieldTimer = 20;
     }
     sLib::chaseAngle(mCallback.mLegRotationYTarget.ref(), 0, 0x200);
     sLib::addCalcAngle(mCallback.mLegRotationY.ref(), mCallback.mLegRotationYTarget, 2, 0x20C);
@@ -2516,21 +2516,21 @@ void dAcGirahimuBase_c::bindAnmShoulderL() {
     pAnmObj->Bind(mMdlBody.getResMdl(), mCallback.mNodeID_ShoulderL, nw4r::g3d::AnmObjChr::BIND_PARTIAL);
 }
 
-void dAcGirahimuBase_c::fn_226_9620() {
+void dAcGirahimuBase_c::updateSpineMovement() {
     sLib::addCalcAngle(mCallback.mSpineRotationY.ref(), mCallback.mSpineRotationYTarget, 2, 0x1000);
     sLib::chaseAngle(mCallback.mSpineRotationYTarget.ref(), 0, 0x100);
     sLib::addCalcAngle(mCallback.mSpineRotationX.ref(), mCallback.mSpineRotationXTarget, 2, 0x1000);
     sLib::chaseAngle(mCallback.mSpineRotationXTarget.ref(), 0, 0x100);
 }
 
-void dAcGirahimuBase_c::fn_226_9690() {
+void dAcGirahimuBase_c::updateHeadMovement() {
     mVec3_c headTranslation(0.0f, 0.0f, 0.0f);
     mMtx_c transform;
     nw4r::g3d::ResMdl mdl = mMdlBody.getResMdl();
     mMdlBody.getNodeWorldMtx(mdl.GetResNode("Head").GetID(), transform);
 
     transform.getTranslation(headTranslation);
-    if (field_0x8B0.x > 0.0f && cM::isZero(nw4r::math::VEC3LenSq(field_0x185C))) {
+    if (mWarpScale.x > 0.0f && cM::isZero(nw4r::math::VEC3LenSq(mTeleportDodgeAmount))) {
         mPositionCopy3.set(headTranslation);
         mPositionCopy3.y += 30.0f;
         mPositionCopy2.set(mPositionCopy3);
@@ -2576,17 +2576,17 @@ void dAcGirahimuBase_c::fn_226_9690() {
     mCallback.mHairTranslation.set(hairTranslation);
 }
 
-void dAcGirahimuBase_c::fn_256_99F0() {
-    mVec3_c _v0 = field_0x12D0;
+void dAcGirahimuBase_c::updateSwordLocations() {
+    mVec3_c _v0 = mSwordATranslation;
     mVec3_c _v1(0.0f, 0.0f, 0.0f);
     mMtx_c swordRTransform;
     mMdlBody.getNodeWorldMtx(mMdlBody.getResMdl().GetResNode("SwordR_loc").GetID(), swordRTransform);
-    swordRTransform.getTranslation(field_0x12D0);
+    swordRTransform.getTranslation(mSwordATranslation);
 
-    if (field_0x8B0.x < 1.05f) {
-        swordRTransform.scaleM(field_0x8B0);
+    if (mWarpScale.x < 1.05f) {
+        swordRTransform.scaleM(mWarpScale);
     } else {
-        mVec3_c scale(1.05f, field_0x12DC, 1.05f);
+        mVec3_c scale(1.05f, mSwordScaleY, 1.05f);
         swordRTransform.scaleM(scale);
     }
 
@@ -2596,16 +2596,16 @@ void dAcGirahimuBase_c::fn_256_99F0() {
     swordRTransform.ZrotM(a);
     mMdlSwordA.calc(swordRTransform, v0, false);
 
-    mVec3_c _v2 = field_0x1820;
+    mVec3_c _v2 = mSwordBTranslation;
     mVec3_c _v3(0.0f, 0.0f, 0.0f);
     mMtx_c swordLTransform;
     mMdlBody.getNodeWorldMtx(mMdlBody.getResMdl().GetResNode("SwordL_loc").GetID(), swordLTransform);
-    swordLTransform.getTranslation(field_0x1820);
+    swordLTransform.getTranslation(mSwordBTranslation);
 
-    if (field_0x8B0.x < 1.05f) {
-        swordLTransform.scaleM(field_0x8B0);
+    if (mWarpScale.x < 1.05f) {
+        swordLTransform.scaleM(mWarpScale);
     } else {
-        mVec3_c scale(1.05f, field_0x12DC, 1.05f);
+        mVec3_c scale(1.05f, mSwordScaleY, 1.05f);
         swordLTransform.scaleM(scale);
     }
 
@@ -2615,8 +2615,8 @@ void dAcGirahimuBase_c::fn_256_99F0() {
     mMdlSwordB.calc(swordLTransform, v1, false);
 }
 
-void dAcGirahimuBase_c::fn_256_9C90() {
-    if (field_0xD81) {
+void dAcGirahimuBase_c::updateCollision() {
+    if (mbVulnerable) {
         setTgVulnerable();
     } else {
         setTgInvulnerable();
@@ -2624,12 +2624,12 @@ void dAcGirahimuBase_c::fn_256_9C90() {
     mVec3_c v0(0.0f, 0.0f, 40.0f);
     v0.rotY(mRotation.y);
 
-    mCps0.ClrCoSet();
-    mCps1.ClrCoSet();
+    mCcSwordR.ClrCoSet();
+    mCcSwordL.ClrCoSet();
 
     mCyl1.SetC(mPosition);
     mCyl0.SetC(mPosition);
-    mCyl2.SetC(mPosition);
+    mCcBody.SetC(mPosition);
 
     mVec3_c v1 = mCallback.mHandRTranslation;
     if (dAcPy_c::GetLink()->isAttackingSpin()) {
@@ -2637,7 +2637,7 @@ void dAcGirahimuBase_c::fn_256_9C90() {
             v1.y = mPosition.y + 150.0f;
         }
     }
-    mSph0.SetC(v1);
+    mCcHand.SetC(v1);
 
     mVec3_c cpsStart(0.0f, 0.0f, 0.0f);
     mVec3_c cpsEnd(0.0f, 0.0f, 0.0f);
@@ -2659,7 +2659,7 @@ void dAcGirahimuBase_c::fn_256_9C90() {
         cpsStart.y -= 50.0f;
         cpsEnd.y -= 50.0f;
     }
-    mCps0.Set(cpsStart, cpsEnd);
+    mCcSwordR.Set(cpsStart, cpsEnd);
 
     mMdlBody.getNodeWorldMtx(mdl.GetResNode("SwordL_loc").GetID(), swordTransform);
     swordTransform.getTranslation(cpsStart);
@@ -2674,15 +2674,15 @@ void dAcGirahimuBase_c::fn_256_9C90() {
         cpsStart.y -= 50.0f;
         cpsEnd.y -= 50.0f;
     }
-    mCps1.Set(cpsStart, cpsEnd);
+    mCcSwordL.Set(cpsStart, cpsEnd);
 
     mCollider.registerColliders();
     dCcS::GetInstance()->Set(&mCyl0);
-    mCyl1.SetR(field_0x20E4);
+    mCyl1.SetR(mCyl1Radius);
     dCcS::GetInstance()->Set(&mCyl1);
 }
 
-bool dAcGirahimuBase_c::fn_226_A070(mAng rotTarget) {
+bool dAcGirahimuBase_c::setTurnAnimation(mAng rotTarget) {
     mAng rot = mRotation.y;
     s32 angDiff = rotTarget - mRotation.y;
     if (rot == rotTarget) {
@@ -2701,41 +2701,41 @@ bool dAcGirahimuBase_c::fn_226_A070(mAng rotTarget) {
     return true;
 }
 
-bool dAcGirahimuBase_c::fn_226_A120(mAng rot, f32 f0) {
+bool dAcGirahimuBase_c::adjustHipAngle(mAng rot, f32 f0) {
     if (mAnmIDHip == ANM_Walk) {
         if (mAnmChrs[ANMIDX_Hip].getPlayMode() != m3d::PLAY_MODE_2) {
-            field_0x1834 = mAnmChrs[ANMIDX_Body].getRate() * 8.0f;
-            mSpeed = field_0x1834;
+            mSpeedTarget = mAnmChrs[ANMIDX_Body].getRate() * 8.0f;
+            mSpeed = mSpeedTarget;
         } else {
-            field_0x1834 = mAnmChrs[ANMIDX_Body].getRate() * -8.0f;
-            mSpeed = field_0x1834;
+            mSpeedTarget = mAnmChrs[ANMIDX_Body].getRate() * -8.0f;
+            mSpeed = mSpeedTarget;
         }
     }
 
-    if (mRotation.y == rot && field_0x1838 <= f0) {
-        field_0x1834 = 0.0f;
+    if (mRotation.y == rot && mDistanceToPlayer <= f0) {
+        mSpeedTarget = 0.0f;
         return false;
     }
 
-    if (field_0x1838 > f0 + 100.0f) {
+    if (mDistanceToPlayer > f0 + 100.0f) {
         if (mAnmIDHip != ANM_Walk) {
             setAnmHip("WalkBt", ANM_Walk, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         }
     } else {
-        if (field_0x1838 <= f0) {
-            return turn(field_0x183E);
+        if (mDistanceToPlayer <= f0) {
+            return turn(mAngleToPlayer);
         }
         if (mAnmIDHip != ANM_Walk) {
-            turn(field_0x183E);
+            turn(mAngleToPlayer);
         }
     }
     return true;
 }
 
-bool dAcGirahimuBase_c::fn_226_A280(mAng rot) {
+bool dAcGirahimuBase_c::adjustLegAngle(mAng rot) {
     mAng roty = mRotation.y;
     s32 diff = rot - mRotation.y;
-    mAng diff0 = roty - field_0x183E;
+    mAng diff0 = roty - mAngleToPlayer;
     if (mCallback.mLegRotationYTarget == 0) {
         if (diff0.abs() != 0) {
             if ((s16)diff > 0) {
@@ -2751,7 +2751,7 @@ bool dAcGirahimuBase_c::fn_226_A280(mAng rot) {
 bool dAcGirahimuBase_c::turn(mAng rotTarget) {
     s32 angDiff = angleDiff(rotTarget, mRotation.y);
     s16 rot = mRotation.y;
-    if (rot == field_0x183E) {
+    if (rot == mAngleToPlayer) {
         return false;
     }
 
@@ -2762,13 +2762,13 @@ bool dAcGirahimuBase_c::turn(mAng rotTarget) {
     if ((s16)angDiff > 0) {
         if (mAnmIDHip != ANM_TurnL) {
             setAnmHip("TurnL", ANM_TurnL, m3d::PLAY_MODE_4, 5.0f, 1.0f);
-            field_0x1834 = 0.0f;
+            mSpeedTarget = 0.0f;
             mSpeed = 0.0f;
         }
     } else {
         if (mAnmIDHip != ANM_TurnR) {
             setAnmHip("TurnR", ANM_TurnR, m3d::PLAY_MODE_4, 5.0f, 1.0f);
-            field_0x1834 = 0.0f;
+            mSpeedTarget = 0.0f;
             mSpeed = 0.0f;
         }
     }
@@ -2813,13 +2813,13 @@ void dAcGirahimuBase_c::adjustSpineHitRotation(cCcD_Obj *pObj) {
         } break;
     }
 
-    if (mAng(mRotation.y - field_0x183E).abs() > 0x4000) {
+    if (mAng(mRotation.y - mAngleToPlayer).abs() > 0x4000) {
         mCallback.mSpineRotationYTarget = -mCallback.mSpineRotationYTarget;
     }
     mCallback.mSpineRotationYCorrection = mRotation.y;
 }
 
-bool dAcGirahimuBase_c::fn_226_A570() {
+bool dAcGirahimuBase_c::checkCatchPlayerSword() {
     bool ret = false;
     mVec3_c v0;
     switch (mPlayerAttackDir) {
@@ -2836,12 +2836,12 @@ bool dAcGirahimuBase_c::fn_226_A570() {
         } break;
     }
     v0.normalizeRS();
-    if (field_0xD68 <= 0) {
+    if (mCatchBlockTimer <= 0) {
         return true;
     }
 
     if (dAcPy_c::GetLink()->isAttackingSpin()) {
-        f32 ang = field_0x898.angle(v0);
+        f32 ang = mRelativeHandCatch.angle(v0);
         if (mAng::fromRad(ang) > 0x2000) {
             ret = true;
         }
@@ -2863,26 +2863,26 @@ mVec3_c dAcGirahimuBase_c::getPlayerHeadOffset() {
 
 void dAcGirahimuBase_c::executeEarringTransform() {
     mVec3_c v0(8.0f, 0.0f, 0.0f);
-    field_0x8FC.multVec(v0, v0);
-    v0 += field_0x92C;
+    mEarringTransform.multVec(v0, v0);
+    v0 += mEarringTranslation;
 
     mMtx_c earringTransform;
     nw4r::g3d::ResMdl mdl = mMdlBody.getResMdl();
     mMdlBody.getNodeWorldMtx(mdl.GetResNode("Earring").GetID(), earringTransform);
-    earringTransform.getTranslation(field_0x92C);
+    earringTransform.getTranslation(mEarringTranslation);
 
-    mVec3_c diff = v0 - field_0x92C;
+    mVec3_c diff = v0 - mEarringTranslation;
     diff.y -= 3.0f;
     diff.normalizeRS();
 
     mVec3_c from(1.0f, 0.0f, 0.0f);
     mQuat_c q0;
     q0.slerp(from, diff, 1.0f);
-    field_0x8FC.fromQuat(q0);
+    mEarringTransform.fromQuat(q0);
     mMtx_c transform;
-    transform.transS(field_0x92C);
-    transform.concat(field_0x8FC);
-    transform.scaleM(field_0x8B0);
+    transform.transS(mEarringTranslation);
+    transform.concat(mEarringTransform);
+    transform.scaleM(mWarpScale);
     mMdlPias.setLocalMtx(transform);
 }
 
@@ -2890,7 +2890,7 @@ void dAcGirahimuBase_c::calcJumpMovement(f32 f0, f32 f1) {
     s32 _weird_zero = 0;
     mVec3_c diff = mPosition - mStartingPos;
     (void)diff.absXZ();
-    mAngle.y = field_0x183E + 0x8000;
+    mAngle.y = mAngleToPlayer + 0x8000;
 
     mVec3_c v0(0.0f, 0.0f, f0);
     v0.rotY(mAngle.y);
@@ -2902,7 +2902,7 @@ void dAcGirahimuBase_c::calcJumpMovement(f32 f0, f32 f1) {
 }
 
 int dAcGirahimuBase_c::draw() {
-    if (field_0x8B0.x <= 0.0f) {
+    if (mWarpScale.x <= 0.0f) {
         return SUCCEEDED;
     }
 
@@ -2912,11 +2912,11 @@ int dAcGirahimuBase_c::draw() {
     static mSphere_c swordSph(mVec3_c(0.0f, 0.0f, 0.0f), 0.0f);
 
     fn_8002edb0(mShadow, mMdlBody, &bodySph, -1, -1, 0.0f);
-    if (field_0xD7B) {
+    if (mbHoldingSwordA) {
         mMdlSwordA.entry(this, nullptr, nullptr);
         m3d::mShadow_c::GetInstance()->addMdlToCircle(&mShadow, mMdlSwordA.mMdl, swordSph);
 
-        if (field_0x12E0) {
+        if (mbHoldingSwordB) {
             mMdlSwordB.entry(this, nullptr, nullptr);
             m3d::mShadow_c::GetInstance()->addMdlToCircle(&mShadow, mMdlSwordB.mMdl, swordSph);
         }
@@ -2925,36 +2925,36 @@ int dAcGirahimuBase_c::draw() {
     return SUCCEEDED;
 }
 
-void dAcGirahimuBase_c::fn_226_ADC0(cCcD_Obj *pObj) {
+void dAcGirahimuBase_c::updateConsecutiveHits(cCcD_Obj *pObj) {
     s32 currentCutDir = pObj->GetTgAtCutDir();
     s32 previousCutDir = mPreviousHitCutDir;
 
     if (previousCutDir == CUT_DIR_U || previousCutDir == CUT_DIR_D) {
         if (currentCutDir == CUT_DIR_U || currentCutDir == CUT_DIR_D) {
-            field_0xD8E++;
+            mConsecutiveHitCount++;
         } else {
-            field_0xD8E = 1;
+            mConsecutiveHitCount = 1;
         }
     } else if (previousCutDir == CUT_DIR_LU || previousCutDir == CUT_DIR_RD) {
         if (currentCutDir == CUT_DIR_LU || currentCutDir == CUT_DIR_RD) {
-            field_0xD8E++;
+            mConsecutiveHitCount++;
         } else {
-            field_0xD8E = 1;
+            mConsecutiveHitCount = 1;
         }
     } else if (previousCutDir == CUT_DIR_LD || previousCutDir == CUT_DIR_RU) {
         if (currentCutDir == CUT_DIR_LD || currentCutDir == CUT_DIR_RU) {
-            field_0xD8E++;
+            mConsecutiveHitCount++;
         } else {
-            field_0xD8E = 1;
+            mConsecutiveHitCount = 1;
         }
-    } else if (field_0xD8E <= 0) {
-        field_0xD8E = 1;
+    } else if (mConsecutiveHitCount <= 0) {
+        mConsecutiveHitCount = 1;
     }
     mPreviousHitCutDir = currentCutDir;
 }
 
 void dAcGirahimuBase_c::setSwordLinkTransform() {
-    if (!field_0xD72) {
+    if (!mbUsingPlayerSword) {
         return;
     }
 
@@ -2988,7 +2988,7 @@ bool dAcGirahimuBase_c::vt_0x1E0() {
     if (mCyl0.ChkTgHit()) {
         u32 hitType = mCyl0.GetTgAtHitType();
 
-        if (field_0xD81) {
+        if (mbVulnerable) {
             if (hitType == AT_TYPE_SWORD) {
                 if (isState(StateID_Run)) {
                     changeState(StateID_BackStep);
@@ -2997,8 +2997,8 @@ bool dAcGirahimuBase_c::vt_0x1E0() {
                 mVec3_c v0 = mPosition - mStartingPos;
                 mVec3_c v1(0.0f, 0.0f, 1.0f);
                 v1.rotY(mRotation.y);
-                if (field_0x1868 >= 1500.0f && v0.dot(v1) < 0.0f) {
-                    field_0x8DC = 0;
+                if (mDistanceFromStart >= 1500.0f && v0.dot(v1) < 0.0f) {
+                    mCurrentAttack = 0;
                     changeState(StateID_HomeWarp);
                     return true;
                 }
@@ -3010,7 +3010,7 @@ bool dAcGirahimuBase_c::vt_0x1E0() {
                         return true;
                     }
 
-                    vt_0x214();
+                    changeStateEscape();
                     return true;
                 } else {
                     changeState(StateID_BackStep);
@@ -3021,24 +3021,24 @@ bool dAcGirahimuBase_c::vt_0x1E0() {
                     mCallback.field_0x06C = -0x2000;
                 } else if (hitType == AT_TYPE_ARROW || hitType == AT_TYPE_CLAWSHOT || hitType == AT_TYPE_0x800000 ||
                            hitType == AT_TYPE_BOMB) {
-                    vt_0x21C(true);
+                    reactToItemHit(true);
                 }
                 return false;
             }
         }
         if (hitType == AT_TYPE_ARROW || hitType == AT_TYPE_CLAWSHOT || hitType == AT_TYPE_0x800000 ||
             hitType == AT_TYPE_BOMB) {
-            vt_0x21C(true);
+            reactToItemHit(true);
         }
     }
-    if (mCyl2.ChkTgHit() && mCyl2.GetTgAtHitType() == AT_TYPE_BELLOWS) {
+    if (mCcBody.ChkTgHit() && mCcBody.GetTgAtHitType() == AT_TYPE_BELLOWS) {
         mCallback.field_0x06C = -0x2000;
     }
     return false;
 }
 
 void dAcGirahimuBase_c::vt_0x1E4() {
-    if (field_0xD81) {
+    if (mbVulnerable) {
         return;
     }
 
@@ -3051,7 +3051,7 @@ void dAcGirahimuBase_c::vt_0x1E4() {
                 } else {
                     adjustSpineHitRotation(pCc);
                     changeState(StateID_CatchDamage);
-                    field_0xD68 = 0;
+                    mCatchBlockTimer = 0;
                 }
             } break;
             case AT_TYPE_DAMAGE: {
@@ -3069,11 +3069,11 @@ void dAcGirahimuBase_c::vt_0x1E4() {
         }
     }
 
-    bool b0 = fn_226_A570();
+    bool b0 = checkCatchPlayerSword();
     if (mAnmIDBody == ANM_Damage) {
         b0 = false;
     } else {
-        field_0xD4E = 0;
+        mConsecutiveCatchDamageCount = 0;
     }
 
     if (field_0xD58 > 0) {
@@ -3081,18 +3081,18 @@ void dAcGirahimuBase_c::vt_0x1E4() {
     }
 
     if (b0) {
-        mSph0.SetTgShieldType(~AT_TYPE_DAMAGE);
-        mCyl2.SetTgShieldType(~AT_TYPE_DAMAGE);
+        mCcHand.SetTgShieldType(~AT_TYPE_DAMAGE);
+        mCcBody.SetTgShieldType(~AT_TYPE_DAMAGE);
     } else {
-        mSph0.SetTgShieldType(AT_TYPE_NONE);
-        mCyl2.OffTgShieldType(AT_TYPE_DAMAGE | AT_TYPE_SWORD);
+        mCcHand.SetTgShieldType(AT_TYPE_NONE);
+        mCcBody.OffTgShieldType(AT_TYPE_DAMAGE | AT_TYPE_SWORD);
     }
 
     if (field_0xD50 <= 0 && !isState(StateID_Panch)) {
         return;
     }
 
-    mSph0.SetTgShieldType(~AT_TYPE_NONE);
+    mCcHand.SetTgShieldType(~AT_TYPE_NONE);
 }
 
 void dAcGirahimuBase_c::vt_0x1F0() {}
@@ -3105,13 +3105,13 @@ void dAcGirahimuBase_c::vt_0x1E8() {
         }
     }
 
-    if (mCyl2.ChkTgHit()) {
-        u32 hitType = mCyl2.GetTgAtHitType();
+    if (mCcBody.ChkTgHit()) {
+        u32 hitType = mCcBody.GetTgAtHitType();
 
         if (hitType == AT_TYPE_BELLOWS) {
             mCallback.field_0x06C = -0x2000;
         } else if (hitType != AT_TYPE_SWORD && hitType != AT_TYPE_DAMAGE) {
-            field_0x88C.set(const_cast<const dCcD_Linked<dCcD_Cyl> &>(mCyl2).GetTgHitPos());
+            mLookAtTarget.set(const_cast<const dCcD_Linked<dCcD_Cyl> &>(mCcBody).GetTgHitPos());
             field_0xD5C = 20;
         }
     }
@@ -3119,7 +3119,7 @@ void dAcGirahimuBase_c::vt_0x1E8() {
 
 void dAcGirahimuBase_c::vt_0x1EC() {
     someEnemyDamageCollisionStuffMaybe(mCollider, nullptr);
-    mCyl2.OffTgShieldType(AT_TYPE_DAMAGE | AT_TYPE_SWORD);
+    mCcBody.OffTgShieldType(AT_TYPE_DAMAGE | AT_TYPE_SWORD);
     cCcD_Obj *pCc = mCollider.findTgHit();
     if (pCc != nullptr) {
         u32 hitType = pCc->GetTgAtHitType();
@@ -3127,12 +3127,12 @@ void dAcGirahimuBase_c::vt_0x1EC() {
             case AT_TYPE_SWORD: {
                 startSound(SE_BGh_V_DAMAGE);
                 adjustSpineHitRotation(pCc);
-                fn_226_ADC0(pCc);
+                updateConsecutiveHits(pCc);
                 clearAnms();
                 setAnm("DamageHit", ANM_DamageHit, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
             } break;
             case AT_TYPE_DAMAGE: {
-                u16 health = mHealth;
+                u16 health = getHealth();
                 if (health != 0) {
                     health--;
                 }
@@ -3141,7 +3141,7 @@ void dAcGirahimuBase_c::vt_0x1EC() {
                 mVec3_c v0 = mPosition;
                 v0.y += 100.0f;
                 getSoundSource()->startSoundAtPosition(SE_Girahim_DMG_KNIFE, v0);
-                field_0xD62 += 50;
+                mRecoverDamageTimer += 50;
             } break;
         }
     }
@@ -3153,8 +3153,8 @@ void dAcGirahimuBase_c::fn_226_B960(f32 f0) {
     }
 
     field_0xD7C = false;
-    sLib::chaseAngle(mRotation.y.ref(), field_0x183E, 0x500);
-    s32 f = field_0x183E - mRotation.y;
+    sLib::chaseAngle(mRotation.y.ref(), mAngleToPlayer, 0x500);
+    s32 f = mAngleToPlayer - mRotation.y;
     f32 f1 = 1.0f - std::abs(mAng(f).normal_c());
     if (f1 <= 0.6f) {
         f1 = 0.0f;
@@ -3163,34 +3163,34 @@ void dAcGirahimuBase_c::fn_226_B960(f32 f0) {
     if (mAnmChrs[ANMIDX_Hip].getPlayMode() == m3d::PLAY_MODE_2) {
         f32 rate = mAnmChrs[ANMIDX_Hip].getRate();
         mAngle.y = mRotation.y;
-        field_0x1834 = -f0 * rate;
+        mSpeedTarget = -f0 * rate;
     } else {
         f32 rate = mAnmChrs[ANMIDX_Hip].getRate();
         mAngle.y = mRotation.y;
-        field_0x1834 = f0 * f1;
-        field_0x1834 *= rate;
+        mSpeedTarget = f0 * f1;
+        mSpeedTarget *= rate;
     }
 
     if (dAcPy_c::GetLinkM()->isUsingSword()) {
-        field_0x20E8 = 120.0f;
+        mCyl1RadiusTarget = 120.0f;
     } else {
-        field_0x20E8 = 30.0f;
+        mCyl1RadiusTarget = 30.0f;
     }
 }
 
-bool dAcGirahimuBase_c::vt_0x21C(bool bStartSound) {
-    if (!cM::isZero(nw4r::math::VEC3LenSq(field_0x185C))) {
+bool dAcGirahimuBase_c::reactToItemHit(bool bStartSound) {
+    if (!cM::isZero(nw4r::math::VEC3LenSq(mTeleportDodgeAmount))) {
         return false;
     }
 
     field_0xD60 = 0;
     int rnd = cM::rndInt(100);
     if (rnd > 50) {
-        field_0x185C.set(0.0f, 0.0f, 50.0f);
-        field_0x185C.rotY(field_0x183E + 0x4000);
+        mTeleportDodgeAmount.set(0.0f, 0.0f, 50.0f);
+        mTeleportDodgeAmount.rotY(mAngleToPlayer + 0x4000);
     } else {
-        field_0x185C.set(0.0f, 0.0f, 50.0f);
-        field_0x185C.rotY(field_0x183E - 0x4000);
+        mTeleportDodgeAmount.set(0.0f, 0.0f, 50.0f);
+        mTeleportDodgeAmount.rotY(mAngleToPlayer - 0x4000);
     }
 
     if (bStartSound) {
@@ -3213,16 +3213,16 @@ void dAcGirahimuBase_c::fn_226_BC00() {
         if (mHealth >= 100) {
             field_0xD66 = 120;
         }
-        field_0xD68 = 150;
+        mCatchBlockTimer = 150;
         if (mHealth >= 100) {
-            field_0xD68 = 190;
+            mCatchBlockTimer = 190;
         }
     } else if (--field_0xD66 <= 0) {
         field_0xD66 = 0;
         sLib::chase(&mCallback.mHandRPositionMaxStep, 30.0f, 5.0f);
     }
 
-    if (dAcPy_c::GetLinkM()->isUsingSword() && field_0x1838 <= 500.0f &&
+    if (dAcPy_c::GetLinkM()->isUsingSword() && mDistanceToPlayer <= 500.0f &&
         ((u16)(s16)mAnmIDBody == ANM_WaitA || (u16)(s16)mAnmIDBody == ANM_Walk)) {
         if (!mCallback.field_0x04E) {
             mCallback.field_0x04F = true;
@@ -3231,9 +3231,9 @@ void dAcGirahimuBase_c::fn_226_BC00() {
             mCallback.field_0x04F = false;
         }
         mCallback.field_0x04E = true;
-        field_0x88C += dAcPy_c::GetLink()->getSwordPos();
-        field_0x88C *= 0.5f;
-        field_0x88C.y = getPlayerHeadOffset().y;
+        mLookAtTarget += dAcPy_c::GetLink()->getSwordPos();
+        mLookAtTarget *= 0.5f;
+        mLookAtTarget.y = getPlayerHeadOffset().y;
         mCallback.mSlerpFactorTarget = 0.2f;
         return;
     }
@@ -3309,9 +3309,10 @@ void dAcGirahimuBase_c::fn_226_C1C0() {
         changeState(StateID_G_SwordDamage);
         clearAnms();
         setAnm("GuardLSwordA", ANM_DamageHit, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
-        field_0xD62 = 40;
+        mRecoverDamageTimer = 40;
         mCallback.field_0x088 = true;
-        mRotation.y = field_0x183E;
+        mRotation.y = mAngleToPlayer;
+        return;
     }
 }
 
@@ -3322,21 +3323,21 @@ void dAcGirahimuBase_c::fn_226_C320() {
         changeState(StateID_G_SwordDamage);
         clearAnms();
         setAnm("GuardLSwordA", ANM_DamageHit, nullptr, m3d::PLAY_MODE_4, 5.0f, 1.0f);
-        field_0xD62 = 40;
+        mRecoverDamageTimer = 40;
         mCallback.field_0x088 = true;
-        mRotation.y = field_0x183E;
+        mRotation.y = mAngleToPlayer;
         return;
     }
     cCcD_Obj *pTgCc = mCollider.findTgHit();
     if (pTgCc != nullptr && pTgCc->GetTgAtHitType() == AT_TYPE_SWORD) {
-        if (pTgCc == &mCps0 || pTgCc == &mCps1) {
+        if (pTgCc == &mCcSwordR || pTgCc == &mCcSwordL) {
             const mVec3_c &hitPos = pTgCc->GetTgHitPos();
             getSoundSource()->startSoundAtPosition(SE_Girahim_SWORD_HIT_SWORD, hitPos);
             if (!getStateID().isEqual(StateID_Counter)) {
                 changeState(StateID_Counter);
                 setFrame(8.0f);
             }
-        } else if (pTgCc == &mCyl2) {
+        } else if (pTgCc == &mCcBody) {
             adjustSpineHitRotation(pTgCc);
             if (pTgCc->GetTgAtCutDir() == CUT_DIR_STAB) {
                 changeState(StateID_BackStep);
@@ -3348,32 +3349,32 @@ void dAcGirahimuBase_c::fn_226_C320() {
 }
 
 void dAcGirahimuBase_c::fn_226_C560() {
-    if (field_0xD81) {
+    if (mbVulnerable) {
         return;
     }
 
     s32 cutDir = mPlayerAttackDir;
     if (mAnmIDBody != ANM_AttackPoseL && mAnmIDBody != ANM_AttackPoseR) {
-        mCyl2.SetTgShieldType(~AT_TYPE_SWORD);
+        mCcBody.SetTgShieldType(~AT_TYPE_SWORD);
         mCyl0.ClrTgSet();
     }
     if (isAttackingLeft()) {
         if (cutDir == CUT_DIR_LU || cutDir == CUT_DIR_L || cutDir == CUT_DIR_LD || cutDir == CUT_DIR_RU ||
             cutDir == CUT_DIR_U || cutDir == CUT_DIR_D) {
-            mCyl2.SetTgShieldType(~AT_TYPE_SWORD);
+            mCcBody.SetTgShieldType(~AT_TYPE_SWORD);
             mCyl0.ClrTgSet();
         } else {
-            mCyl2.SetTgShieldType(~AT_TYPE_NONE);
-            mCyl2.SetTgType(~(AT_TYPE_COMMON0 | AT_TYPE_SWORD));
+            mCcBody.SetTgShieldType(~AT_TYPE_NONE);
+            mCcBody.SetTgType(~(AT_TYPE_COMMON0 | AT_TYPE_SWORD));
         }
     } else {
         if (cutDir == CUT_DIR_RU || cutDir == CUT_DIR_R || cutDir == CUT_DIR_RD || cutDir == CUT_DIR_LU ||
             cutDir == CUT_DIR_U || cutDir == CUT_DIR_D) {
             mCyl0.ClrTgSet();
-            mCyl2.SetTgShieldType(~AT_TYPE_SWORD);
+            mCcBody.SetTgShieldType(~AT_TYPE_SWORD);
         } else {
-            mCyl2.SetTgShieldType(~AT_TYPE_NONE);
-            mCyl2.SetTgType(~(AT_TYPE_COMMON0 | AT_TYPE_SWORD));
+            mCcBody.SetTgShieldType(~AT_TYPE_NONE);
+            mCcBody.SetTgType(~(AT_TYPE_COMMON0 | AT_TYPE_SWORD));
         }
     }
 }
@@ -3384,25 +3385,25 @@ void dAcGirahimuBase_c::configureBodyShield() {
         if (cutDir == CUT_DIR_NONE || cutDir == CUT_DIR_U || cutDir == CUT_DIR_LU || cutDir == CUT_DIR_L ||
             cutDir == CUT_DIR_LD || cutDir == CUT_DIR_RU || cutDir == CUT_DIR_D) {
             mCyl0.ClrTgSet();
-            mCyl2.SetTgShieldType(~AT_TYPE_SWORD);
+            mCcBody.SetTgShieldType(~AT_TYPE_SWORD);
         } else {
-            mCyl2.SetTgShieldType(~AT_TYPE_NONE);
-            mCyl2.SetTgType(~(AT_TYPE_COMMON0 | AT_TYPE_SWORD));
+            mCcBody.SetTgShieldType(~AT_TYPE_NONE);
+            mCcBody.SetTgType(~(AT_TYPE_COMMON0 | AT_TYPE_SWORD));
         }
     } else {
         if (cutDir == CUT_DIR_NONE || cutDir == CUT_DIR_U || cutDir == CUT_DIR_LU || cutDir == CUT_DIR_RU ||
             cutDir == CUT_DIR_R || cutDir == CUT_DIR_RD || cutDir == CUT_DIR_D) {
             mCyl0.ClrTgSet();
-            mCyl2.SetTgShieldType(~AT_TYPE_SWORD);
+            mCcBody.SetTgShieldType(~AT_TYPE_SWORD);
         } else {
-            mCyl2.SetTgShieldType(~AT_TYPE_NONE);
-            mCyl2.SetTgType(~(AT_TYPE_COMMON0 | AT_TYPE_SWORD));
+            mCcBody.SetTgShieldType(~AT_TYPE_NONE);
+            mCcBody.SetTgType(~(AT_TYPE_COMMON0 | AT_TYPE_SWORD));
         }
     }
 }
 
 void dAcGirahimuBase_c::configureSwordShield(cCcD_Obj &cc, s16 anm) {
-    if (field_0xD54 <= 0) {
+    if (mShieldTimer <= 0) {
         cc.ClrTgSet();
         return;
     }
@@ -3484,15 +3485,15 @@ void dAcGirahimuBase_c::configureSwordShield(cCcD_Obj &cc, s16 anm) {
 }
 
 void dAcGirahimuBase_c::vt_0x1F4() {
-    mCyl2.OnTgSet();
-    if (!field_0x12E0 && mAnmIDBody == ANM_PoseC2) {
+    mCcBody.OnTgSet();
+    if (!mbHoldingSwordB && mAnmIDBody == ANM_PoseC2) {
         mAnmIDBody = ANM_PoseC;
     }
 
-    configureSwordShield(mCps0, mAnmIDBody);
+    configureSwordShield(mCcSwordR, mAnmIDBody);
 
-    if (mCps0.ChkTgSet()) {
-        mCyl2.ClrTgSet();
+    if (mCcSwordR.ChkTgSet()) {
+        mCcBody.ClrTgSet();
     }
 }
 
@@ -3552,12 +3553,12 @@ void dAcGirahimuBase_c::loadMainResFile() {
     mResAnmChr1 = nw4r::g3d::ResFile(getOarcResFile("GirahimBt"));
 }
 
-void dAcGirahimuBase_c::vt_0x204() {
+void dAcGirahimuBase_c::setStateIdleAttack() {
     mCallback.field_0x098 = 10.0f;
     changeState(StateID_Panch);
 }
 
-void dAcGirahimuBase_c::vt_0x228() {
+void dAcGirahimuBase_c::correctPoseHip() {
     if (mAnmIDBody == ANM_PoseL) {
         setAnmHip("PoseL", ANM_PoseL, m3d::PLAY_MODE_4, 5.0f, 1.0f);
     } else if (mAnmIDBody == ANM_PoseR) {
@@ -3585,22 +3586,22 @@ void dAcGirahimuBase_c::simplifyShoulderRAnmID() {
     }
 }
 
-bool dAcGirahimuBase_c::vt_0x208() {
-    if (field_0xD74 == 1) {
+bool dAcGirahimuBase_c::updateSwordGrabAnim() {
+    if (mSwordGrabType == 1) {
         setAnmBody("PullCenter", ANM_PullCenter, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         setAnmHip("PullCenter", ANM_PullCenter, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         setAnmHead("PullCenter", ANM_PullCenter, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         setAnmShoulderR("PullCenter", ANM_PullCenter, m3d::PLAY_MODE_4, 5.0f, 1.0f);
-    } else if (field_0xD74 == 2) {
+    } else if (mSwordGrabType == 2) {
         setAnmBody("PullUp", ANM_PullUp, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         setAnmHip("PullUp", ANM_PullUp, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         setAnmHead("PullUp", ANM_PullUp, m3d::PLAY_MODE_4, 5.0f, 1.0f);
         setAnmShoulderR("PullUp", ANM_PullUp, m3d::PLAY_MODE_4, 5.0f, 1.0f);
-    } else if (field_0xD74 == 3) {
+    } else if (mSwordGrabType == 3) {
         setAnm("FreeCenter", ANM_FreeCenter, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
         changeState(StateID_ReleaseSword);
         return true;
-    } else if (field_0xD74 == 4) {
+    } else if (mSwordGrabType == 4) {
         setAnm("FreeUp", ANM_FreeUp, nullptr, m3d::PLAY_MODE_4, 2.0f, 1.0f);
         changeState(StateID_ReleaseSword);
         return true;
@@ -3613,7 +3614,7 @@ void dAcGirahimuBase_c::vt_0x20C() {
     changeState(StateID_FrontAttack);
 }
 
-void dAcGirahimuBase_c::vt_0x22C() {
+void dAcGirahimuBase_c::changeStateGetPlayerSword() {
     changeState(StateID_GetSword);
 }
 
@@ -3631,28 +3632,28 @@ void dAcGirahimuBase_c::handleEnterExitEffect() {
     mVec3_c v1;
     hipTransform.multVec(v1, v1);
 
-    if (field_0x8A4 == v0 && field_0x8B0 != v0) {
-        if (field_0xD70 && mHealth == 0) {
+    if (field_0x8A4 == v0 && mWarpScale != v0) {
+        if (mbSpawnedSwords && mHealth == 0) {
             startSound(SE_Girahim_MAGIC_DISAPPEAR_STAGE);
         } else {
             startSound(SE_Girahim_MAGIC_DISAPPEAR);
         }
         dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_684_, v1, nullptr, nullptr, nullptr, nullptr, 0, 0);
-    } else if (cM::isZero(nw4r::math::VEC3LenSq(field_0x8A4)) && !cM::isZero(nw4r::math::VEC3LenSq(field_0x8B0))) {
+    } else if (cM::isZero(nw4r::math::VEC3LenSq(field_0x8A4)) && !cM::isZero(nw4r::math::VEC3LenSq(mWarpScale))) {
         startSound(SE_Girahim_MAGIC_APPEAR);
         dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_684_, v1, nullptr, nullptr, nullptr, nullptr, 0, 0);
     }
 }
 
-void dAcGirahimuBase_c::vt_0x214() {
+void dAcGirahimuBase_c::changeStateEscape() {
     changeState(StateID_Escape);
 }
 
 void dAcGirahimuBase_c::fn_226_D2C0() {}
 
-void dAcGirahimuBase_c::fn_226_D2D0() {
-    if (--field_0xD64 <= 0) {
-        field_0xD64 = 50 + cM::rndInt(50);
+void dAcGirahimuBase_c::executeHeadMovement() {
+    if (--mBlinkTimer <= 0) {
+        mBlinkTimer = 50 + cM::rndInt(50);
         mAnmTexPatWink.setFrame(1.0f, 0);
     }
 
@@ -3666,37 +3667,37 @@ void dAcGirahimuBase_c::fn_226_D2D0() {
     mVec3_c v0(0.0f, 1.0f, 0.0f);
     headTransform.multVec(v0, v0);
 
-    mAng a0 = (s16)(s32)v0.atan2sX_Z() - (s16)cLib::targetAngleY(headTranslation, field_0x88C);
+    mAng a0 = (s16)(s32)v0.atan2sX_Z() - (s16)cLib::targetAngleY(headTranslation, mLookAtTarget);
 
-    mVec3_c v1 = field_0x88C;
+    mVec3_c v1 = mLookAtTarget;
     mVec3_c v2 = v1 - headTranslation;
 
     mAng a23 = (s16)(s32)v0.atan2sY_XZ() - (s16)(s32)v2.atan2sY_XZ();
 
-    field_0x584 = mAng::s2n_c(a0) * 0.5f;
-    if (field_0x584 > 0.5f) {
-        field_0x584 = 0.5f;
-    } else if (field_0x584 < -0.5f) {
-        field_0x584 = -0.5f;
+    mEyeTargetOffsetXTarget = mAng::s2n_c(a0) * 0.5f;
+    if (mEyeTargetOffsetXTarget > 0.5f) {
+        mEyeTargetOffsetXTarget = 0.5f;
+    } else if (mEyeTargetOffsetXTarget < -0.5f) {
+        mEyeTargetOffsetXTarget = -0.5f;
     }
 
-    field_0x588 = mAng::s2n_c(a23) * -1.0f;
-    if (field_0x588 > 1.0f) {
-        field_0x588 = 1.0f;
-    } else if (field_0x588 < -1.0f) {
-        field_0x588 = -1.0f;
+    mEyeTargetOffsetYTarget = mAng::s2n_c(a23) * -1.0f;
+    if (mEyeTargetOffsetYTarget > 1.0f) {
+        mEyeTargetOffsetYTarget = 1.0f;
+    } else if (mEyeTargetOffsetYTarget < -1.0f) {
+        mEyeTargetOffsetYTarget = -1.0f;
     }
 
-    if (field_0xD78 || field_0xD8D) {
-        field_0x584 = 0.0f;
-        field_0x588 = 0.0f;
+    if (field_0xD78 || mbStandardDamage) {
+        mEyeTargetOffsetXTarget = 0.0f;
+        mEyeTargetOffsetYTarget = 0.0f;
     }
 
-    sLib::addCalcScaledDiff(&field_0x58C, field_0x584, 1.0f, 0.02f);
-    sLib::addCalcScaledDiff(&field_0x590, field_0x588, 1.0f, 0.02f);
+    sLib::addCalcScaledDiff(&mEyeTargetOffsetX, mEyeTargetOffsetXTarget, 1.0f, 0.02f);
+    sLib::addCalcScaledDiff(&mEyeTargetOffsetY, mEyeTargetOffsetYTarget, 1.0f, 0.02f);
 
-    mEyeMdlCallback.mTargetOffset[1].y = field_0x590;
-    mEyeMdlCallback.mTargetOffset[1].x = -field_0x58C;
+    mEyeMdlCallback.mTargetOffset[1].y = mEyeTargetOffsetY;
+    mEyeMdlCallback.mTargetOffset[1].x = -mEyeTargetOffsetX;
 }
 
 void dAcGirahimuBase_c::notifyTgSwordBattleGame() {
