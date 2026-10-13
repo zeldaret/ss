@@ -2639,7 +2639,7 @@ config.libs = [
     ),
     Rel(NonMatching, "d_a_obj_roulette", "REL/d/a/obj/d_a_obj_roulette.cpp"),
     Rel(
-        NonMatching,
+        Matching,
         "d_a_obj_roulette_island_c",
         "REL/d/a/obj/d_a_obj_roulette_island_c.cpp",
     ),
