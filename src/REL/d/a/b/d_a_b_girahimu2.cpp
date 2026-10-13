@@ -1780,17 +1780,17 @@ bool dAcGirahimu2_c::createHeap() {
     mResAnmChr0 = nw4r::g3d::ResFile(rawRes);
     loadMainResFile();
     nw4r::g3d::ResMdl resMdl = mResAnmChr0.GetResMdl("GirahimBt02");
-    if (!mMdlBody.create(resMdl, &mAllocator, 0x137, 1, nullptr)) {
+    if (!mMdlBody.create(resMdl, &mAllocator, 0x137, 1)) {
         return false;
     }
-    TRY_CREATE(mAnmChrBlend.create(resMdl, 10, &mAllocator, nullptr));
+    TRY_CREATE(mAnmChrBlend.create(resMdl, 10, &mAllocator));
 
     nw4r::g3d::ResAnmChr resAnm = mResAnmChr1.GetResAnmChr("WaitA");
     if (!resAnm.IsValid()) {
         resAnm = mResAnmChr0.GetResAnmChr("WaitA");
     }
     for (int i = 0; i < 5; ++i) {
-        if (!mAnmChrs[i].create(resMdl, resAnm, &mAllocator, nullptr)) {
+        if (!mAnmChrs[i].create2(resMdl, resAnm, &mAllocator)) {
             mMdlBody.remove();
             return false;
         }
@@ -1812,15 +1812,15 @@ bool dAcGirahimu2_c::createHeap() {
     bodyRes = nw4r::g3d::ResFile(rawRes);
     mMdlPias.create(bodyRes.GetResMdl("GirahimBt02Pias"), &mAllocator, 0x20);
 
-    void *swordRes(getOarcResFile("GirahimBt"));
+    rawRes = getOarcResFile("GirahimBt");
     mVec3_c v0(0.0f, -200.0f, 0.0f);
     TRY_CREATE(
-        mMdlSwordA.create(&mAllocator, swordRes, "GirahimSwordA", 0x130, mVec3_c::Zero, v0, mStts, nullptr, 1, nullptr)
+        mMdlSwordA.create(&mAllocator, rawRes, "GirahimSwordA", 0x130, mVec3_c::Zero, v0, mStts, nullptr, 1, nullptr)
     );
 
     mVec3_c v1(0.0f, -200.0f, 0.0f);
     TRY_CREATE(
-        mMdlSwordB.create(&mAllocator, swordRes, "GirahimSwordB", 0x130, mVec3_c::Zero, v1, mStts, nullptr, 1, nullptr)
+        mMdlSwordB.create(&mAllocator, rawRes, "GirahimSwordB", 0x130, mVec3_c::Zero, v1, mStts, nullptr, 1, nullptr)
     );
 
     int id = m3d::getMatID(mMdlBody.getResMdl(), "m_Eyeball");
