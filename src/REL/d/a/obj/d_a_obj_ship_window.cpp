@@ -3,6 +3,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/flag/sceneflag_manager.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
@@ -137,7 +138,7 @@ void dAcOshipWindow_c::executeState_Close() {
     }
 }
 void dAcOshipWindow_c::finalizeState_Close() {
-    startSound(0xC86);
+    startSound(SE_ShipWin_Open);
 }
 
 void dAcOshipWindow_c::initializeState_Move() {
@@ -191,5 +192,5 @@ void dAcOshipWindow_c::executeState_Open() {
     }
 }
 void dAcOshipWindow_c::finalizeState_Open() {
-    startSound(0xC87);
+    startSound(SE_ShipWin_Close);
 }
