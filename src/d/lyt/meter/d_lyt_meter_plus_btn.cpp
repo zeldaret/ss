@@ -247,52 +247,53 @@ bool dLytMeterPlusBtn_c::hasSpecificMapMark() {
     dTgMapMark_c *mark = nullptr;
     while ((mark = static_cast<dTgMapMark_c *>(fManager_c::searchBaseByGroupType(fBase_c::STAGE, mark))) != nullptr) {
         if (mark->checkActorProperty(dAcBase_c::AC_PROP_0x100) || mark->mProfileName != fProfile::T_MAP_MARK ||
-            mark->rotz_shift0_0xf == 1) {
+            mark->mMarkType == 1) {
             continue;
         }
 
-        switch (mark->shift0_0x3) {
-            case 0: {
-                mark->field_0x10D = mark->shift4_0x8 < 0xFF &&
-                                    SceneflagManager::sInstance->checkBoolFlag(mark->mRoomID, mark->shift4_0x8);
+        switch (mark->mSceneflagCondition) {
+            case dTgMapMark_c::FLAG_COND_SET: {
+                mark->mSceneflagOk = mark->mSceneflag < 0xFF &&
+                                     SceneflagManager::sInstance->checkBoolFlag(mark->mRoomID, mark->mSceneflag);
                 break;
             }
-            case 1: {
-                mark->field_0x10D = mark->shift4_0x8 < 0xFF &&
-                                    !SceneflagManager::sInstance->checkBoolFlag(mark->mRoomID, mark->shift4_0x8);
+            case dTgMapMark_c::FLAG_COND_UNSET: {
+                mark->mSceneflagOk = mark->mSceneflag < 0xFF &&
+                                     !SceneflagManager::sInstance->checkBoolFlag(mark->mRoomID, mark->mSceneflag);
                 break;
             }
-            case 3: {
-                mark->field_0x10D = true;
-                break;
-            }
-        }
-
-        switch (mark->shift2_0x3) {
-            case 0: {
-                mark->field_0x10C = StoryflagManager::sInstance->getCounterOrFlag(mark->mTriggerStoryFlag) != 0;
-                break;
-            }
-            case 1: {
-                mark->field_0x10C = StoryflagManager::sInstance->getCounterOrFlag(mark->mTriggerStoryFlag) == 0;
-                break;
-            }
-            case 3: {
-                mark->field_0x10C = true;
+            case dTgMapMark_c::FLAG_COND_ALWAYS: {
+                mark->mSceneflagOk = true;
                 break;
             }
         }
 
-        mark->field_0x10E = mark->field_0x10C && mark->field_0x10D;
-
-        if (mark->shift23_0x8 < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mark->mRoomID, mark->shift23_0x8)) {
-            mark->field_0x10E = !mark->field_0x10E;
-            if (mark->rotz_shift12_0x3 != 0) {
-                mark->field_0x10E = false;
+        switch (mark->mStoryflagCondition) {
+            case dTgMapMark_c::FLAG_COND_SET: {
+                mark->mStoryflagOk = StoryflagManager::sInstance->getCounterOrFlag(mark->mTriggerStoryFlag) != 0;
+                break;
+            }
+            case dTgMapMark_c::FLAG_COND_UNSET: {
+                mark->mStoryflagOk = StoryflagManager::sInstance->getCounterOrFlag(mark->mTriggerStoryFlag) == 0;
+                break;
+            }
+            case dTgMapMark_c::FLAG_COND_ALWAYS: {
+                mark->mStoryflagOk = true;
+                break;
             }
         }
 
-        if (mark->field_0x10E && mark->rotz_shift10_0x3 != 0) {
+        mark->mIsActive = mark->mStoryflagOk && mark->mSceneflagOk;
+
+        if (mark->mToggleSceneflag < 0xFF &&
+            SceneflagManager::sInstance->checkBoolFlag(mark->mRoomID, mark->mToggleSceneflag)) {
+            mark->mIsActive = !mark->mIsActive;
+            if (mark->mDisableOnToggle != 0) {
+                mark->mIsActive = false;
+            }
+        }
+
+        if (mark->mIsActive && mark->mShowPlusBtnHint != 0) {
             return true;
         }
     }

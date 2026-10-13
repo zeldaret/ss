@@ -178,9 +178,16 @@ class ActorOnRail3 {
     /* 0x00 */ dPath_c mPath;
     /* 0x10 */ u16 mSomePntIdx;
     /* 0x14 */ u32 mFlags;
+    /* 0x18 */ u8 _18[0xC];
 
 public:
     ActorOnRail3() : mSomePntIdx(0), mFlags(0) {}
+
+    bool init(s32 pathIndex, s32 roomId, u32 flags, u16 pntIdx, bool pathSubtype);
+
+    const dPath_c &getPath() const {
+        return mPath;
+    }
 };
 
 #endif

@@ -557,15 +557,17 @@ void dLytControlGame_c::openMapEvent(s32 mapEvent, s32 arg1, s32 arg2) {
         // Forced descent to Sealed Grounds with Groose
         exitId = 15;
         showStatueSelect = false;
-    } else if (mMapEventArg1 == dLytMapMain_c::SURFACE_PROVINCE_ELDIN &&
-               checkStoryflag(STORYFLAG_ELDIN_VOLCANO_CAN_ERUPT) && !checkStoryflag(STORYFLAG_BOKO_BASE_BEATEN)) {
+    } else if (
+        mMapEventArg1 == dLytMapMain_c::SURFACE_PROVINCE_ELDIN && checkStoryflag(STORYFLAG_ELDIN_VOLCANO_CAN_ERUPT) &&
+        !checkStoryflag(STORYFLAG_BOKO_BASE_BEATEN)
+    ) {
         // Forced descent to Boko Base
         exitId = 8;
         showStatueSelect = false;
-    } else if (mMapEventArg1 == dLytMapMain_c::SURFACE_PROVINCE_ELDIN &&
-               checkStoryflag(STORYFLAG_SCRAPPER_HAS_WATER_BASIN) &&
-               !checkStoryflag(STORYFLAG_SUMMIT_BIG_FROG_WATERED) &&
-               !checkStoryflag(STORYFLAG_WATER_BASIN_ESCORT_STARTED)) {
+    } else if (
+        mMapEventArg1 == dLytMapMain_c::SURFACE_PROVINCE_ELDIN && checkStoryflag(STORYFLAG_SCRAPPER_HAS_WATER_BASIN) &&
+        !checkStoryflag(STORYFLAG_SUMMIT_BIG_FROG_WATERED) && !checkStoryflag(STORYFLAG_WATER_BASIN_ESCORT_STARTED)
+    ) {
         // Forced descent to Eldin entry with Scrapper and the water basin
         exitId = 1;
         showStatueSelect = false;
@@ -681,7 +683,7 @@ void dLytControlGame_c::checkForBeaconNextToMark() {
     while ((base = fManager_c::searchBaseByGroupType(STAGE, base)) != nullptr) {
         if (base->mProfileName == fProfile::T_MAP_MARK) {
             dTgMapMark_c *mark = static_cast<dTgMapMark_c *>(base);
-            if (!mark->checkActorProperty(dAcBase_c::AC_PROP_0x100) && mark->rotz_shift0_0xf == 0) {
+            if (!mark->checkActorProperty(dAcBase_c::AC_PROP_0x100) && mark->mMarkType == 0) {
                 found = true;
                 markPos = mark->mPosition;
             }
