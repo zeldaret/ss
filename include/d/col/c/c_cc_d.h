@@ -628,11 +628,17 @@ public:
         return MskSPrm(1);
     }
 
-    void Set_0x4C(u32 f) {
-        field_0x4C = f;
+    void SetShieldType(u32 f) {
+        mShieldType = f;
     }
-    bool Chk_0x4C(u32 f) const {
-        return field_0x4C & f;
+    u32 GetShieldType() const {
+        return mShieldType;
+    }
+    void OffShieldType(u32 f) {
+        mShieldType &= ~f;
+    }
+    bool ChkShieldType(u32 f) const {
+        return mShieldType & f;
     }
 
     u32 MskType(u32 mask) const {
@@ -714,7 +720,7 @@ public:
     /* 0x48 */ s16 mShieldRange;
     /* 0x4A */ u8 field_0x4A;
     /* 0x4B */ u8 field_0x4B;
-    /* 0x4C */ u32 field_0x4C;
+    /* 0x4C */ u32 mShieldType;
     /* 0x50 */ u32 field_0x50;
     /* 0x54 */ cCcD_ShieldChkCallback field_0x54;
     /* 0x58 */ cCcD_SrcGObjAt mAtHitSrc;
@@ -799,14 +805,14 @@ public:
     mVec3_c &GetAtHitPosInline() {
         return mAt.mHitPos;
     }
-    bool GetAtFlag0x2() const;
-    bool GetAtFlag0x4() const;
-    bool GetAtFlag0x8() const;
+    bool ChkAtShieldHit() const;
+    bool ChkAtCutHit() const;
+    bool ChkAtShieldReflect() const;
 
     const mVec3_c &GetTgHitPos() const;
     mVec3_c &GetTgHitPos();
-    bool GetTgFlag0x4() const;
-    bool GetTgFlag0x8() const;
+    bool ChkTgCutHit() const;
+    bool ChkTgShieldReflect() const;
 
     bool ChkAtClawshot() const;
     bool ChkAtClawshotDebug() const;
@@ -961,12 +967,17 @@ public:
     void SubtractTgEffCounter() { mTg.SubtractEffCounter(); }
     void SubtractCoEffCounter() { mCo.SubtractEffCounter(); }
 
-    void SetTg_0x4C(u32 f) {
-        mTg.Set_0x4C(f);
+    void SetTgShieldType(u32 f) {
+        mTg.SetShieldType(f);
+    } 
+    u32 GetTgShieldType() const {
+        return mTg.GetShieldType();
+    } 
+    void OffTgShieldType(u32 f) {
+        mTg.OffShieldType(f);
     }
-
-    bool ChkTg_0x4C(u32 f) const {
-        return mTg.Chk_0x4C(f);
+    bool ChkTgShieldType(u32 f) const {
+        return mTg.ChkShieldType(f);
     }
 
     void SetAtCallback(cCcD_HitCallback cb) {
@@ -1058,9 +1069,12 @@ public:
     } 
 
     // Tg
-
+ 
     void OnTgSet() {
         mTg.OnSPrm(1);
+    }
+    void OnTg_0x40() {
+        mTg.OnSPrm(0x40);
     }
     u32 GetTgGrp() const {
         return mTg.MskSPrm(0x3E);

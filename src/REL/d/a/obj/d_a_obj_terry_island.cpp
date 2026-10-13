@@ -67,7 +67,7 @@ bool dAcOterryIsland_c::createHeap() {
     PLC *pPlc = static_cast<PLC *>(getOarcFile("IslTerry", "dat/IslTerry.plc"));
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
-    TRY_CREATE(!mBgW.Set(pDzb, pPlc, 1, &mWorldMtx, &mScale));
+    TRY_CREATE(!mBgW.Set(pDzb, pPlc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mBgW.Lock();
 
     return true;

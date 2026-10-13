@@ -1910,14 +1910,14 @@ void dAcEremly_c::initializeState_NightJumpAttack() {
 void dAcEremly_c::executeState_NightJumpAttack() {
     resetHeadRotation(false);
     if (mSph.ChkAtHit()) {
-        if (mSph.GetAtFlag0x8()) {
+        if (mSph.ChkAtShieldReflect()) {
             setBattleBgmRelated(0);
             mSpeed = -20.f;
             changeState(StateID_Stun);
             return;
         }
 
-        if (mSph.GetAtFlag0x2()) {
+        if (mSph.ChkAtShieldHit()) {
             changeState(StateID_NightReflectionFoo);
             return;
         }
@@ -2058,7 +2058,7 @@ void dAcEremly_c::calcHeadPitch(bool b) {
         mHeadTiltTimer = 100.f + cM::rndF(100.f);
         if (cM::rnd() < 0.3f) {
             mHeadTiltTarget = 0;
-        } else if (mHeadTiltTarget == 0) {
+        } else if (mHeadTiltTarget.mVal == 0) {
             if (cM::rnd() < 0.5f) {
                 mHeadTiltTarget = 5000;
             } else {

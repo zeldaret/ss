@@ -7,6 +7,7 @@
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_light_env.h"
+#include "d/d_shadow.h"
 #include "m/m3d/m_anmtexpat.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"

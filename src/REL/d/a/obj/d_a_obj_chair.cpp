@@ -69,7 +69,7 @@ int dAcOChair_c::create() {
         mCyl.Set(sChairColData);
 
         mCyl.SetStts(mStts);
-        mCyl.SetTg_0x4C(0x2000);
+        mCyl.SetTgShieldType(0x2000);
 
         if (mChairType == CHAIR_H) {
             mCyl.SetTgInfo_0x1(6);

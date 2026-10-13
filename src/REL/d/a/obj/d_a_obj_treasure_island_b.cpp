@@ -52,7 +52,7 @@ bool dAcOtreasureIslandB_c::createHeap() {
         pPLC = static_cast<PLC *>(getOarcFile("IslTreI", "dat/IslTreI.plc"));
         updateMatrix();
         mMdl[ISLAND].setLocalMtx(mWorldMtx);
-        TRY_CREATE(!mBgW[ISLAND].Set(pDzb, pPLC, 1, &mWorldMtx, &mScale));
+        TRY_CREATE(!mBgW[ISLAND].Set(pDzb, pPLC, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
         mBgW[ISLAND].Lock();
     }
     {
@@ -64,7 +64,7 @@ bool dAcOtreasureIslandB_c::createHeap() {
         pPLC = static_cast<PLC *>(getOarcFile("IslTreIRock", "dat/IslTreIRock.plc"));
         updateMatrix();
         mMdl[ROCK].setLocalMtx(mWorldMtx);
-        TRY_CREATE(!mBgW[ROCK].Set(pDzb, pPLC, 1, &mWorldMtx, &mScale));
+        TRY_CREATE(!mBgW[ROCK].Set(pDzb, pPLC, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
         mBgW[ROCK].Lock();
     }
 

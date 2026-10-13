@@ -2555,7 +2555,7 @@ void dAcEKs_c::executeState_Attack() {
 
     sLib::addCalcAngle(mRotation.x.ref(), mPitch_0xC34, 12, 0x38E);
     if (mSph.ChkAtHit()) {
-        if (mSph.GetAtFlag0x8() != 0) {
+        if (mSph.ChkAtShieldReflect() != 0) {
             changeState(StateID_Stun);
             return;
         }

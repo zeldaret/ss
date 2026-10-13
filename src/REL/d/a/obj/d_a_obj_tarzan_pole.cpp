@@ -39,7 +39,7 @@ bool dAcOTarzanPole_c::createHeap() {
     void *dzb = getOarcDZB("WhipBar", "WhipBar");
     void *plc = getOarcPLC("WhipBar", "WhipBar");
     updateMatrix();
-    if (mBgCollider.Set((cBgD_t *)dzb, (PLC *)plc, 1, &mWorldMtx, &mScale)) {
+    if (mBgCollider.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale)) {
         return false;
     }
 

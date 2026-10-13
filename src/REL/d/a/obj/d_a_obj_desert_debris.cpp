@@ -21,7 +21,7 @@ bool dAcOdesertDebris_c::createHeap() {
     void *plc = CurrentStageArcManager::GetInstance()->getData("dat/StageF300_4Gareki.plc");
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
-    TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, 1, &mWorldMtx, &mScale));
+    TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mBgW.Lock();
     return mBgW.InitMapStuff(&mAllocator);
 }
