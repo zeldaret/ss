@@ -23,11 +23,11 @@ int dTgBeltObstacle_c::create() {
     if (mSpawnType == 0xF) {
         mSpawnType = SPAWN_BELT_OBSTACLE;
     }
-    mObstacleParam0 = getFromParams(0, 0xF);
-    mObstacleParam1 = getFromParams(4, 0xFF);
-    mObstacleParam2 = getFromParams(12, 0x1);
-    mObstacleParam3 = getFromParams(13, 0xF);
-    mObstacleParam4 = getFromParams(17, 0x1);
+    mObstacleGroupId = getFromParams(0, 0xF);
+    mObstacleSceneflag = getFromParams(4, 0xFF);
+    mObstacleSceneflagInverted = getFromParams(12, 0x1);
+    mObstacleTimeVariant = getFromParams(13, 0xF);
+    mObstacleCheckPastState = getFromParams(17, 0x1);
     mSpawnTimer = mFirstSpawnDelay;
     return SUCCEEDED;
 }
@@ -37,9 +37,8 @@ int dTgBeltObstacle_c::doDelete() {
 }
 
 int dTgBeltObstacle_c::actorExecute() {
-    mPastState =
-        dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(mRoomID, mPosition, nullptr, lbl_446_rodata_0);
-    if (mPastState > lbl_446_rodata_4 && sLib::calcTimer(&mSpawnTimer) == 0) {
+    mPastState = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(mRoomID, mPosition, nullptr, 100.0f);
+    if (mPastState > 0.0f && sLib::calcTimer(&mSpawnTimer) == 0) {
         if (mSpawnType == SPAWN_BELT_OBSTACLE) {
             spawnBeltObstacle();
         } else if (mSpawnType == SPAWN_STAMINA_FRUIT) {
@@ -55,9 +54,9 @@ int dTgBeltObstacle_c::draw() {
 }
 
 void dTgBeltObstacle_c::spawnBeltObstacle() {
-    mVec3_c scale(mScale.x * lbl_446_rodata_8, mScale.y * lbl_446_rodata_8, mScale.z * lbl_446_rodata_8);
-    u32 params = (mObstacleParam4 << 17 | (mObstacleParam3 & 0xF) << 13) |
-                 ((mObstacleParam0 & 0xF) | (mObstacleParam1 << 4) | ((mObstacleParam2 & 1) << 12));
+    mVec3_c scale = mScale * 0.01f;
+    u32 params = (mObstacleCheckPastState << 17 | (mObstacleTimeVariant & 0xF) << 13) |
+                 ((mObstacleGroupId & 0xF) | (mObstacleSceneflag << 4) | ((mObstacleSceneflagInverted & 1) << 12));
     dAcObjBase_c *obstacle =
         dAcObjBase_c::create(fProfile::OBJ_BELT_OBSTACLE, mRoomID, params, &mPosition, &mRotation, &scale, -1);
     mObstacle.link(static_cast<dAcObeltObstacle_c *>(obstacle));
@@ -67,8 +66,3 @@ void dTgBeltObstacle_c::spawnStaminaFruit() {
     u32 params2 = dAcBase_c::buildParams2(-1, dAcItem_c::fn_8024A2A0(0, 0));
     dAcItem_c::spawnItem(ITEM_STAMINA_FRUIT, mRoomID, mPosition, mRotation, params2, 1);
 }
-
-// Defined after use so that actorExecute does not load them through a rodata pool base register
-const f32 dTgBeltObstacle_c::lbl_446_rodata_0 = 100.0f;
-const f32 dTgBeltObstacle_c::lbl_446_rodata_4 = 0.0f;
-const f32 dTgBeltObstacle_c::lbl_446_rodata_8 = 0.01f;

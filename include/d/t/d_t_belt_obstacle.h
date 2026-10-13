@@ -29,16 +29,13 @@ private:
     /* 0x10E */ u16 mFirstSpawnDelay;
     /* 0x110 */ u16 mSpawnInterval;
     /* 0x112 */ u8 mSpawnType;
-    /* 0x113 */ u8 mObstacleParam0;
-    /* 0x114 */ u8 mObstacleParam1;
-    /* 0x115 */ u8 mObstacleParam2;
-    /* 0x116 */ u8 mObstacleParam3;
-    /* 0x117 */ u8 mObstacleParam4;
+    // Copied into the spawned dAcObeltObstacle_c's params (same bit layout as read by the obstacle)
+    /* 0x113 */ u8 mObstacleGroupId;
+    /* 0x114 */ u8 mObstacleSceneflag;
+    /* 0x115 */ u8 mObstacleSceneflagInverted;
+    /* 0x116 */ u8 mObstacleTimeVariant;
+    /* 0x117 */ u8 mObstacleCheckPastState;
     /* 0x118 */ u8 _0x118[0x11C - 0x118];
-
-    static const f32 lbl_446_rodata_0;
-    static const f32 lbl_446_rodata_4;
-    static const f32 lbl_446_rodata_8;
 };
 
 #endif
