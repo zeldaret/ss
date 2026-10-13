@@ -66,6 +66,7 @@ public:
     virtual ~dCcD_Sph();
 
     virtual cCcD_ShapeAttr *GetShapeAttr() override;
+    using cM3dGSph::Set;
     void Set(const dCcD_SrcSph &src);
     void setCenter(const mVec3_c &);
     void moveCenter(const mVec3_c &);

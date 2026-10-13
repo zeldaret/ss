@@ -16,7 +16,7 @@ public:
     virtual int actorExecute() override;
 
 private:
-    // Unknown 0x14-byte element; only its ctor/dtor are emitted in this REL
+    // Unknown 0x14-byte element (its ctor/dtor are emitted here, but it may be a shared type)
     struct UnkEntry {
         UnkEntry() {}
         ~UnkEntry() {}

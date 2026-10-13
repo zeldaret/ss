@@ -31,9 +31,8 @@ int dTgDrum_c::doDelete() {
 }
 
 int dTgDrum_c::actorExecute() {
-    mPastState =
-        dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(mRoomID, mPosition, nullptr, sPastStateRadius);
-    if (mPastState > sPastStateThreshold) {
+    mPastState = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(mRoomID, mPosition, nullptr, 100.0f);
+    if (mPastState > 0.0f) {
         if (mCanSpawn && sLib::calcTimer(&mSpawnTimer) == 0) {
             mVec3_c scale(mScale.x * sDrumScaleFactor, mScale.y * sDrumScaleFactor, mScale.z * sDrumScaleFactor);
             u32 params = ((mDrumCheckPastState << 13) | ((mDrumSceneflagInverted & 1) << 12)) |
@@ -56,7 +55,5 @@ int dTgDrum_c::draw() {
     return SUCCEEDED;
 }
 
-// Defined after use so that actorExecute does not load them through a rodata pool base register
-const f32 dTgDrum_c::sPastStateRadius = 100.0f;
-const f32 dTgDrum_c::sPastStateThreshold = 0.0f;
+// Only matches when defined after use (written as a literal or defined above, it ends up in the rodata pool)
 const f32 dTgDrum_c::sDrumScaleFactor = 0.01f;

@@ -27,8 +27,6 @@ private:
     /* 0x115 */ u8 mDrumCheckPastState;
     /* 0x116 */ bool mCanSpawn;
 
-    static const f32 sPastStateRadius;
-    static const f32 sPastStateThreshold;
     static const f32 sDrumScaleFactor;
 };
 

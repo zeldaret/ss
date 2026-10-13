@@ -59,7 +59,7 @@ int dAcORailEnd_c::create() {
 
     mVec3_c center(0.0f, 0.0f, 240.0f);
     mWorldMtx.multVec(center, center);
-    mSph.cM3dGSph::Set(&center, 70.0f);
+    mSph.Set(&center, 70.0f);
     return SUCCEEDED;
 }
 
