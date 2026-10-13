@@ -4,7 +4,6 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/e/d_a_en_base.h"
-#include "d/a/npc/d_a_npc_honeycomb.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_cc.h"
@@ -14,6 +13,7 @@
 #include "toBeSorted/d_unk_mdl_stuff_2.h"
 
 class dAcOSpore_c;
+class dAcNpcHc_c;
 
 class dAcNpcBeeSingleBee {
 public:
