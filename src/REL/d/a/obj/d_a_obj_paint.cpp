@@ -29,7 +29,7 @@ bool dAcOpaint_c::createHeap() {
 
     void *dzb = OarcManager::GetInstance()->getDzbFromArc(oarcName, modelName);
     void *plc = OarcManager::GetInstance()->getPlcFromArc(oarcName, modelName);
-    TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, 1, &mWorldMtx, &mScale));
+    TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     return SUCCEEDED;
 }
 

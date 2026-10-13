@@ -53,7 +53,7 @@ bool dAcOrouletteIslandR_c::createHeap() {
     updateMatrix();
     mMdl.setScale(mScale);
     mMdl_s.setScale(mScale);
-    TRY_CREATE(!mBgW.Set(pDzb, pPLC, 1, &mWorldMtx, &mScale));
+    TRY_CREATE(!mBgW.Set(pDzb, pPLC, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
 
     return true;
 }

@@ -75,9 +75,9 @@ bool dAcOGirahimuFloor_c::createHeap() {
 
     mScaleBg0.set(0.5f, 0.5f, 0.5f);
     mScaleBg1.set(0.735f, 0.735f, 0.735f);
-    TRY_CREATE(!mBg[0].Set(dzb, plc, 1, &mWorldMtx, &mScaleBg0));
-    TRY_CREATE(!mBg[1].Set(dzb, plc, 1, &mWorldMtx, &mScaleBg1));
-    TRY_CREATE(!mBg[2].Set(dzb, plc, 1, &mWorldMtx, &mScale));
+    TRY_CREATE(!mBg[0].Set(dzb, plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScaleBg0));
+    TRY_CREATE(!mBg[1].Set(dzb, plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScaleBg1));
+    TRY_CREATE(!mBg[2].Set(dzb, plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
 
     return true;
 }

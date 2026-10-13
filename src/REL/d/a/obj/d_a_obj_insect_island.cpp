@@ -57,7 +57,7 @@ bool dAcOinsectIsland_c::createHeap() {
 
     pDzb = static_cast<cBgD_t *>(getOarcFile("IslIns", "dzb/IslIns_Bird.dzb"));
     pPLC = static_cast<PLC *>(getOarcFile("IslIns", "dat/IslIns_Bird.plc"));
-    TRY_CREATE(!mBgWBird.Set(pDzb, pPLC, 1, &mWorldMtx, &mScale));
+    TRY_CREATE(!mBgWBird.Set(pDzb, pPLC, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mBgWBird.Lock();
 
     return true;

@@ -19,7 +19,7 @@ bool dAcOStoppingRope_c::createHeap() {
     void *plc = getOarcFile("Crane", "dat/Crane.plc");
     updateMatrix();
     mMdl.setScale(mScale);
-    return !mBgW.Set((cBgD_t *)dzb, (PLC *)plc, 1, &mWorldMtx, &mScale);
+    return !mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale);
 }
 
 int dAcOStoppingRope_c::create() {

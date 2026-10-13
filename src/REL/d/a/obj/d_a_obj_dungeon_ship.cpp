@@ -90,7 +90,7 @@ bool dAcODungeonShip_c::createHeap() {
     void *dzb = getOarcDZB(arcName, dzbPlcName);
     void *plc = getOarcPLC(arcName, dzbPlcName);
     updateMatrix();
-    if (mBg.Set((cBgD_t *)dzb, (PLC *)plc, 1, &mWorldMtx, &mScale)) {
+    if (mBg.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale)) {
         return false;
     }
 

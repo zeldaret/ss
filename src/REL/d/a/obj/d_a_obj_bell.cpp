@@ -36,7 +36,7 @@ bool dAcObell_c::createHeap() {
     PLC *plc = (PLC *)CurrentStageArcManager::GetInstance()->getData("dat/StageF000Bell.plc");
     updateMatrix();
 
-    TRY_CREATE(!(BOOL)mBgW.Set(dzb, plc, 1, &mWorldMtx, &mScale));
+    TRY_CREATE(!(BOOL)mBgW.Set(dzb, plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
 
     return true;
 }

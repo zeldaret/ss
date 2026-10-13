@@ -32,7 +32,7 @@ bool dAcORailPost::createHeap() {
     mMdl.setLocalMtx(mWorldMtx);
     void *dzb = getOarcDZB("RailPost", "RailPost");
     void *plc = getOarcPLC("RailPost", "RailPost");
-    TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, 0x81, &mWorldMtx, &mScale));
+    TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::LOCK_e | cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
 
     dBgS::GetInstance()->Regist(&mBgW, this);
 

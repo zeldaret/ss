@@ -2316,7 +2316,7 @@ bool dAcTbox_c::initBgW(dBgW &bg, const char *arcName, const char *fileName) {
         return false;
     }
     // TODO return types
-    bool ok = !(BOOL)bg.Set((cBgD_t *)dzb, (PLC *)plc, 0x81, &mWorldMtx, &mScale);
+    bool ok = !(BOOL)bg.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::LOCK_e | cBgW::MOVE_BG_e, &mWorldMtx, &mScale);
     if (!ok) {
         return false;
     }

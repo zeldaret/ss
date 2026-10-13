@@ -64,7 +64,7 @@ bool dAcODormitoryGate_c::createHeap() {
         }
 
         // TODO: Return Type
-        s32 tmp = !(BOOL)mCollision[i].Set(dzb, plc, 1, &mDoorMtx[i], &mScale);
+        s32 tmp = !(BOOL)mCollision[i].Set(dzb, plc, cBgW::MOVE_BG_e, &mDoorMtx[i], &mScale);
         if (tmp != 0) {
             return false;
         }

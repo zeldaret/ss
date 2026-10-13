@@ -59,7 +59,7 @@ bool dAcOSeatSword_c::createHeap() {
     void *plc = getOarcPLC(SwordSeatNames[mSubtype], SwordSeatNames[mSubtype]);
     updateMatrix();
     mSwordMtx.copyFrom(mWorldMtx);
-    TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, 1, &mWorldMtx, &mScale));
+    TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     if (mSubtype == 1) {
         TRY_CREATE(mPedestalMdl_s.create(mPedRes.GetResMdl("SwordGrd_s"), &mAllocator, 0x120, 1, nullptr));
     }
