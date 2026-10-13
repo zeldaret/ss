@@ -20,13 +20,13 @@ static dCcD_SrcUnk sSrcUnk = {
 
 // Emitted but never read: the code below repeats these values as literals
 struct dAcOMoveElec_HIO_c {
-    /* 0x00 */ f32 field_0x00;
-    /* 0x04 */ f32 field_0x04;
-    /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ f32 field_0x0C;
-    /* 0x10 */ u8 field_0x10;
-    /* 0x14 */ f32 field_0x14;
-    /* 0x18 */ f32 field_0x18;
+    /* 0x00 */ f32 mMoveSpeed;
+    /* 0x04 */ f32 mMoveDist1;
+    /* 0x08 */ f32 mMoveDist2;
+    /* 0x0C */ f32 mAnmRate;
+    /* 0x10 */ u8 mEventDelay;
+    /* 0x14 */ f32 mShortMoveDist1;
+    /* 0x18 */ f32 mShortMoveDist2;
 
     static const dAcOMoveElec_HIO_c sHio;
 };
@@ -103,7 +103,7 @@ int dAcOMoveElec_c::actorExecute() {
             mVec3_c dir = mVec3_c::Ez;
             dir.rotY(mRotation.y);
             mCc.SetAtVec(dir);
-            mCc.cM3dGUnk::Set(mPosition, mRotation.y);
+            mCc.Set(mPosition, mRotation.y);
             mCcTimer = 0xF;
         }
         dCcS::GetInstance()->Set(&mCc);
