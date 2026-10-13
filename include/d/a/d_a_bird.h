@@ -50,10 +50,16 @@ public:
         return field_0xEB8;
     }
 
+    s16 getCameraState() const {
+        return field_0x40E;
+    }
+
 private:
     static dBird_c *spInstance;
     /* 0x??? */ STATE_MGR_DECLARE(dBird_c);
-    u8 _0x36C[0xEB8 - 0x36C];
+    u8 _0x36C[0x40E - 0x36C];
+    /* 0x40E*/ s16 field_0x40E;
+    u8 _0x410[0xEB8 - 0x410];
     /* 0xEB8 */ dAcObjRef_c field_0xEB8;
     u8 _0xEC4[0xF8E - 0xEC4];
     /* 0xF8E */ s16 mNumDashes;

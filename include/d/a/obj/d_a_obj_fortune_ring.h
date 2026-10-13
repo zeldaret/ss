@@ -12,8 +12,14 @@ public:
     STATE_FUNC_DECLARE(dAcOfortuneRing_c, Wait);
     STATE_FUNC_DECLARE(dAcOfortuneRing_c, Play);
 
+    static dAcOfortuneRing_c *getInstance();
+
+    void endGame(s32 landingTile);
+
 private:
     /* 0x??? */ STATE_MGR_DECLARE(dAcOfortuneRing_c);
+
+    static dAcOfortuneRing_c *sInstance;
 };
 
 #endif
