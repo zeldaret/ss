@@ -203,7 +203,7 @@ void dAcESkytail_c::checkHit() {
 
         cCcD_Obj *pCcObj = mCollider.findTgHit();
         if (pCcObj != nullptr) {
-            if (pCcObj->GetTgAtHitType() == AT_TYPE_KOLOKTOS_SWORD) {
+            if (pCcObj->GetTgAtHitType() == AT_TYPE_SPIRAL_CHARGE) {
                 dJEffManager_c::spawnHitMarkEffect(7, *pCcObj, nullptr, true);
                 if (pCcObj == &mCc[COLLIDER_Rear]) {
                     startSound(SE_ESktl_DOWN);
