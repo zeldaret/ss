@@ -33,7 +33,7 @@ private:
     /* 0x5B8 */ ActorEventRelated mEvent;
     /* 0x608 */ f32 mPastState;
     /* 0x60C */ u8 mOpenSceneflag;
-    /* 0x60D */ u8 mEventSceneflag;
+    /* 0x60D */ u8 mEventDoneSceneflag; // Set after the open event, +1 after the close event
     /* 0x60E */ u8 mOpenEventId;
     /* 0x60F */ u8 mCloseEventId;
     /* 0x610 */ s16 mMoveTimer;

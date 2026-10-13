@@ -14,7 +14,7 @@
 
 SPECIAL_ACTOR_PROFILE(OBJ_SHIP_WINDOW, dAcOshipWindow_c, fProfile::OBJ_SHIP_WINDOW, 0x1EB, 0, 6);
 
-// Emitted but never read: the code below repeats these values as literals
+// mMoveDist is never read, the code repeats it as a literal
 struct dAcOshipWindow_HIO_c {
     /* 0x00 */ f32 mMoveDist;
     /* 0x04 */ s16 mMoveTime;
@@ -45,7 +45,7 @@ int dAcOshipWindow_c::actorCreate() {
     mBgW.SetCrrFunc(dBgS_MoveBGProc_Typical);
     dBgS::GetInstance()->Regist(&mBgW, this);
     mOpenSceneflag = getFromParams(0, 0xFF);
-    mEventSceneflag = mRotation.z;
+    mEventDoneSceneflag = mRotation.z;
     mOpenEventId = getFromParams(8, 0xFF);
     mCloseEventId = getFromParams(16, 0xFF);
     mEventOnce = getFromParams(24, 0x1);
@@ -114,7 +114,8 @@ int dAcOshipWindow_c::draw() {
 void dAcOshipWindow_c::initializeState_Close() {}
 void dAcOshipWindow_c::executeState_Close() {
     if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOpenSceneflag)) {
-        if ((!mOpenEventDone || !mEventOnce) && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEventSceneflag)) {
+        if ((!mOpenEventDone || !mEventOnce) &&
+            !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEventDoneSceneflag)) {
             if (mOpenEventId != 0xFF) {
                 static volatile u32 FLAGS_1 = 0x00000001;
                 static u32 FLAGS_2 = 0x00100001;
@@ -126,7 +127,7 @@ void dAcOshipWindow_c::executeState_Close() {
                 }
                 if (EventManager::isInEvent(this, nullptr)) {
                     mOpenEventDone = true;
-                    SceneflagManager::sInstance->setFlag(mRoomID, mEventSceneflag);
+                    SceneflagManager::sInstance->setFlag(mRoomID, mEventDoneSceneflag);
                     mStateMgr.changeState(StateID_Move);
                 }
             } else {
@@ -142,7 +143,7 @@ void dAcOshipWindow_c::finalizeState_Close() {
 }
 
 void dAcOshipWindow_c::initializeState_Move() {
-    mMoveTimer = 20;
+    mMoveTimer = dAcOshipWindow_HIO_c::sHio.mMoveTime;
     if (*mStateMgr.getOldStateID() == StateID_Close) {
         mVelocity.y = 300.0f / mMoveTimer;
     } else {
@@ -166,7 +167,8 @@ void dAcOshipWindow_c::initializeState_Open() {}
 void dAcOshipWindow_c::executeState_Open() {
     if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOpenSceneflag)) {
         if ((!mCloseEventDone || !mEventOnce) &&
-            (mEventSceneflag >= 0xFF || !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEventSceneflag + 1))) {
+            (mEventDoneSceneflag >= 0xFF ||
+             !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEventDoneSceneflag + 1))) {
             if (mCloseEventId != 0xFF) {
                 static volatile u32 FLAGS_1 = 0x00000001;
                 static u32 FLAGS_2 = 0x00100001;
@@ -178,8 +180,8 @@ void dAcOshipWindow_c::executeState_Open() {
                 }
                 if (EventManager::isInEvent(this, nullptr)) {
                     mCloseEventDone = true;
-                    if (mEventSceneflag < 0xFF) {
-                        SceneflagManager::sInstance->setFlag(mRoomID, mEventSceneflag + 1);
+                    if (mEventDoneSceneflag < 0xFF) {
+                        SceneflagManager::sInstance->setFlag(mRoomID, mEventDoneSceneflag + 1);
                     }
                     mStateMgr.changeState(StateID_Move);
                 }
