@@ -86,6 +86,10 @@ public:
         field_0x78 = val;
     }
 
+    bool isField0x7A() const {
+        return field_0x7A;
+    }
+
     void setField0x7A(bool val) {
         field_0x7A = val;
     }
