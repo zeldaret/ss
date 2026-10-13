@@ -153,6 +153,8 @@ public:
     STATE_FUNC_DECLARE(dAcItem_c, WaitSacredDewGetEffect);
 
     static u32 createItemParams(u16 itemId, u32 subType, u32 unk, u8 unk2, u8, u8);
+    // Builds the lower part of params2 (bit 0 and bits 1-3)
+    static u32 fn_8024A2A0(u32 firstBit, u32 shift1_0x7);
 
     static void spawnItem(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot, u32 params, u32 arg);
     static void spawnDrop(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot);
