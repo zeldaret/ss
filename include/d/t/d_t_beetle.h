@@ -15,8 +15,8 @@ public:
     virtual int create() override;
     virtual int doDelete() override;
     virtual int actorExecute() override;
-    u32 isWithinSphere(const mVec3_c &param) const;
-    u32 isWithinCylinder(const mVec3_c &param) const;
+    bool isWithinSphere(const mVec3_c &param) const;
+    bool isWithinCylinder(const mVec3_c &param) const;
     void updateBeetle(dAcBoomerang_c &boomerang);
     virtual int draw() override;
 
