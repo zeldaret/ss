@@ -2459,7 +2459,7 @@ config.libs = [
     Rel(Matching, "d_a_obj_desert_debris", "REL/d/a/obj/d_a_obj_desert_debris.cpp"),
     Rel(NonMatching, "d_a_obj_desert_meter", "REL/d/a/obj/d_a_obj_desert_meter.cpp"),
     Rel(
-        NonMatching,
+        Matching,
         "d_a_obj_display_only_nbs",
         "REL/d/a/obj/d_a_obj_display_only_nbs.cpp",
     ),
