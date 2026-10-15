@@ -1,8 +1,8 @@
 #ifndef D_T_TOUCH_H
 #define D_T_TOUCH_H
 
+#include "d/d_area.h"
 #include "d/t/d_tg.h"
-#include "m/m_mtx.h"
 #include "s/s_State.hpp"
 
 class dTgTouchTag : public dTg_c {
@@ -30,7 +30,7 @@ private:
     }
 
     STATE_MGR_DECLARE(dTgTouchTag);
-    mMtx_c mAreaOfEffect;
+    dArea_c mAreaOfEffect;
     u16 mFlagTimer;
     u8 mActivatorIndex;
     u8 mZoneFlag;

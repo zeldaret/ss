@@ -10,7 +10,6 @@
 #include "f/f_profile_name.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
-#include "toBeSorted/area_math.h"
 #include "toBeSorted/d_path.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
@@ -31,7 +30,7 @@ int dTgSceneChange_c::create() {
     mEnableSceneflag = getFromParams(24, 0xFF);
     mEnableStoryflag = (mRotation.x >> 0) & 0x7FF;
 
-    field_0x134 = ((mRotation.x >> 11) & 0x3) == 1;
+    mbAreaCyl = ((mRotation.x >> 11) & 0x3) == 1;
     mRotation.x = 0;
 
     mDisableStoryflag = mRotation.z & 0x7FF;
@@ -39,7 +38,7 @@ int dTgSceneChange_c::create() {
 
     mRotation.z = 0;
 
-    matrixCreateFromPosRotYScale(mArea, mPosition, mRotation.y, mScale, nullptr, 0.f);
+    mArea.set(mPosition, mRotation.y, mScale, nullptr, 0.f);
 
     return SUCCEEDED;
 }
@@ -71,8 +70,8 @@ int dTgSceneChange_c::actorExecute() {
     }
 
     dAcPy_c *pPlayer = dAcPy_c::GetLinkM();
-    if ((field_0x134 && checkAreaCyl(mArea, pPlayer->mPosition)) ||
-        (!field_0x134 && checkAreaBox(mArea, pPlayer->mPosition))) {
+    if ((mbAreaCyl && mArea.checkAreaCyl(pPlayer->mPosition)) ||
+        (!mbAreaCyl && mArea.checkAreaBox(pPlayer->mPosition))) {
         if (!(field_0x136 && checkScrapper())) {
             pPlayer->triggerExitRelated(mSceneLink, mPathId, mSceneType);
         }

@@ -366,8 +366,9 @@ toBeSorted/string_util.cpp:
 toBeSorted/cx_util.cpp:
 	.text       start:0x80066FB0 end:0x80067014 align:16
 
-toBeSorted/area_math.cpp:
+d/d_area.cpp:
 	.text       start:0x80067020 end:0x80067274 align:16
+	.sdata2     start:0x80577998 end:0x805779A8
 
 toBeSorted/deg_angle_util.cpp:
 	.text       start:0x80067280 end:0x80067B14 align:16

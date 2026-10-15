@@ -1,6 +1,7 @@
 #ifndef D_T_ALL_DIE_H
 #define D_T_ALL_DIE_H
 
+#include "d/d_area.h"
 #include "d/t/d_tg.h"
 #include "m/m_mtx.h"
 #include "toBeSorted/time_area_mgr.h"
@@ -18,7 +19,7 @@ public:
     static dTgAllDie_c *getNearestToPlayer(s32 roomId);
 
 private:
-    /* 0x0FC */ mMtx_c mArea;
+    /* 0x0FC */ dArea_c mArea;
     /* 0x12C */ TimeAreaStruct mTimeArea;
     /* 0x138 */ s32 mNumEnemiesInArea;
     /* 0x13C */ u16 mTimer0x13C;

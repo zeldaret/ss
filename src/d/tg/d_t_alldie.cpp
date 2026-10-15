@@ -3,14 +3,12 @@
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/a/e/d_a_en_base.h"
-#include "d/a/obj/d_a_obj_base.h"
 #include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
 #include "f/f_base.h"
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
 #include "s/s_Math.h"
-#include "toBeSorted/area_math.h"
 #include "toBeSorted/event_manager.h"
 
 SPECIAL_ACTOR_PROFILE(ALLDIE_TAG, dTgAllDie_c, fProfile::ALLDIE_TAG, 0x23, 0, 4);
@@ -22,7 +20,7 @@ int dTgAllDie_c::create() {
     field_0x148 = 0;
     field_0x144 = getFromParams(30, 0xFF);
     mRotation.x.set(0);
-    matrixCreateFromPosRotYScale(mArea, mPosition, mRotation.y, mScale, nullptr, 0.0f);
+    mArea.set(mPosition, mRotation.y, mScale, nullptr, 0.0f);
     return SUCCEEDED;
 }
 
@@ -55,7 +53,7 @@ int dTgAllDie_c::actorExecute() {
     while ((pEnemy = dAcEnBase_c::GetNextEnemy(pEnemy))) {
         if (pEnemy->mRoomID == mRoomID && !pEnemy->checkInteractionFlags(0x2)) {
             if (pEnemy->checkProcControl(DISABLE_EXECUTE) == 0 && pEnemy->mLifecycleState != TO_BE_DELETED) {
-                if (checkAreaBox(mArea, pEnemy->mPosition)) {
+                if (mArea.checkAreaBox(pEnemy->mPosition)) {
                     mNumEnemiesInArea++;
                 }
             }
