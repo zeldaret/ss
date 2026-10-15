@@ -10,7 +10,7 @@
 
 SPECIAL_ACTOR_PROFILE(BEETLE_TAG, dTgBeetle_c, fProfile::BEETLE_TAG, 0x297, 0, 0);
 
-extern "C" const f32 lbl_302_rodata_0 = 0.0f;
+extern const f32 unused_ = 0.0f;
 
 int dTgBeetle_c::create() {
     if (dScGame_c::currentSpawnInfo.stageName == "F103") { // flooded faron woods
@@ -81,51 +81,34 @@ int dTgBeetle_c::draw() {
     return SUCCEEDED;
 }
 
-u32 dTgBeetle_c::isWithinCylinder(
-    const mVec3_c &position
-) const { // is position within a really thin cylinder inside the zone
-
+bool dTgBeetle_c::isWithinCylinder(const mVec3_c &position) const {
     mVec3_c diff = (position - (mPosition + mVec3_c::Ey * mScale.y * 0.5f));
-
-    bool returnValue = 0;
-    bool returnCheck = 0;
 
     diff.x /= mScale.x;
     diff.y /= mScale.y;
     diff.z /= mScale.z;
 
-    if (diff.absXZ() <= 1.0f && diff.y <= 0.5f) {
-        returnCheck = 1;
-    }
-
-    if (returnCheck && diff.y >= -0.5f) {
-        returnValue = 1;
-    }
-
-    return returnValue;
+    return diff.absXZ() <= 1.0f && diff.y <= 0.5f && diff.y >= -0.5f;
 }
 
-u32 dTgBeetle_c::isWithinSphere(
-    const mVec3_c &position
-) const { // fn_302_520 is position within a sphere the size of the zone
-
+bool dTgBeetle_c::isWithinSphere(const mVec3_c &position) const {
     mVec3_c diff = position - (mPosition + mScale.y * mVec3_c::Ey * 1.0f);
 
     diff.x /= mScale.x;
     diff.y /= mScale.y;
     diff.z /= mScale.z;
 
-    return diff.mag() <= 1.0f; // is beetle within a certain distance from center
+    return diff.mag() <= 1.0f;
 }
 
-void dTgBeetle_c::updateBeetle(dAcBoomerang_c &boomerang) { // fn_302_620 update beetle based on zone type
-    if (mZoneType == LeafZone) {                            // leaf zone
-        return boomerang.setField_0x8CC(0x20);
-    } else if (mZoneType == BorderZone) { // border zone, reduce flight time
-        return boomerang.setRemainingFlightTime(0x3C);
-    } else if (mZoneType == UnknownZone) { //???
-        return boomerang.setField_0x8CC(0x80);
-    } else { // instant flashing red
-        return boomerang.setRemainingFlightTime(-1);
+void dTgBeetle_c::updateBeetle(dAcBoomerang_c &boomerang) {
+    if (mZoneType == LeafZone) {
+        boomerang.setField_0x8CC(0x20);
+    } else if (mZoneType == BorderZone) {
+        boomerang.setRemainingFlightTime(0x3C);
+    } else if (mZoneType == UnknownZone) {
+        boomerang.setField_0x8CC(0x80);
+    } else {
+        boomerang.setRemainingFlightTime(-1);
     }
 }
