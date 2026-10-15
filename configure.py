@@ -2956,7 +2956,7 @@ config.libs = [
     Rel(NonMatching, "d_t_ship_slope", "REL/d/t/d_t_ship_slope.cpp"),
     Rel(Matching, "d_t_ship_window", "REL/d/t/d_t_ship_window.cpp"),
     Rel(
-        NonMatching,
+        Matching,
         "d_t_shutter_fence_forbiddance",
         "REL/d/t/d_t_shutter_fence_forbiddance.cpp",
     ),
