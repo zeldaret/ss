@@ -14,8 +14,12 @@ public:
     STATE_FUNC_DECLARE(dAcOstageKraken_c, AroundMarkLight);
     STATE_FUNC_DECLARE(dAcOstageKraken_c, MarkVanish);
 
+    static dAcOstageKraken_c *getInstance();
+
 private:
     /* 0x??? */ STATE_MGR_DECLARE(dAcOstageKraken_c);
+
+    static dAcOstageKraken_c *sInstance;
 };
 
 #endif

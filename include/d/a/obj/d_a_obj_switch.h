@@ -67,6 +67,15 @@ public:
         return mOnSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOnSceneFlag);
     }
 
+    void addBox() {
+        mNumBoxesOn++;
+    }
+    void removeBox() {
+        if (mNumBoxesOn != 0) {
+            mNumBoxesOn--;
+        }
+    }
+
 private:
     /* 0x330 */ m3d::mdl_c mModel;
     /* 0x354 */ dBgW mCollision;
@@ -79,7 +88,7 @@ private:
     /* 0x5EE */ u8 mOffSceneFlag;
     /* 0x5EF */ u8 mOnSceneFlag;
     /* 0x5F0 */ u8 mSwitchType;
-    /* 0x5F1 */ u8 field_0x5F1;
+    /* 0x5F1 */ u8 mNumBoxesOn;
     /* 0x5F2 */ u8 field_0x5F2;
     /* 0x5F3 */ u8 field_0x5F3;
     /* 0x5F4 */ u8 mActivatedByPlayer;

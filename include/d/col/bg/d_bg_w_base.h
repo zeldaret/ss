@@ -185,9 +185,14 @@ public:
     void OnStickRoof() {
         field_0x24 |= 2;
     }
-
     void OnFlag0x20() {
         field_0x24 |= 0x20;
+    }
+    void OnFlag0x08() {
+        field_0x24 |= 0x8;
+    }
+    void OnFlag0x80() {
+        field_0x24 |= 0x80;
     }
 
     cPartition &GetPartition() {

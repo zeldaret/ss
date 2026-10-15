@@ -60,7 +60,7 @@ void dAcOsw_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *in
 
     if (!(link && link->checkActionFlags(0xC70852))) {
         if (!sw->someInteractCheck(link != nullptr)) {
-            if (!sw->checkOnFlag() && sw->mObjRef.get() == nullptr && link != nullptr && sw->field_0x5F1 == 0 &&
+            if (!sw->checkOnFlag() && sw->mObjRef.get() == nullptr && link != nullptr && sw->mNumBoxesOn == 0 &&
                 sw->mStateMgr.isState(StateID_On)) {
                 link->onFlags_0x360(0x8000);
             }
@@ -197,7 +197,7 @@ int dAcOsw_c::actorExecute() {
     mCollision.Move();
     field_0x5F3 = 0;
     mActivatedByPlayer = 0;
-    field_0x5F2 = field_0x5F1;
+    field_0x5F2 = mNumBoxesOn;
     return SUCCEEDED;
 }
 
@@ -224,7 +224,7 @@ void dAcOsw_c::initializeState_OnWait() {
 }
 void dAcOsw_c::executeState_OnWait() {
     sLib::chase(&mScale.y, 0.8f, 0.12f);
-    if (field_0x5F1 != 0) {
+    if (mNumBoxesOn != 0) {
         field_0x5F3 = 1;
     }
 
@@ -271,7 +271,7 @@ void dAcOsw_c::initializeState_OffWait() {
     mButtonCtrl.mElevation = -20.0f;
 }
 void dAcOsw_c::executeState_OffWait() {
-    if (field_0x5F1 != 0) {
+    if (mNumBoxesOn != 0) {
         field_0x5F3 = 1;
     }
     if (mSwitchType != 1 && sLib::calcTimer(&field_0x5EC) == 0 && field_0x5F3 == 0) {
