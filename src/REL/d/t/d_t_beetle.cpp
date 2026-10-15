@@ -10,6 +10,8 @@
 
 SPECIAL_ACTOR_PROFILE(BEETLE_TAG, dTgBeetle_c, fProfile::BEETLE_TAG, 0x297, 0, 0);
 
+extern "C" const f32 lbl_302_rodata_0 = 0.0f;
+
 int dTgBeetle_c::create() {
     if (dScGame_c::currentSpawnInfo.stageName == "F103") { // flooded faron woods
         if (mActorSubtype) {
@@ -37,7 +39,7 @@ int dTgBeetle_c::create() {
                 mZoneShape = SphereShape;
             }
         }
-        matrixCreateFromPosRotYScale(mMatrix1, mPosition, mRotation.y, mScale, nullptr, 0);
+        matrixCreateFromPosRotYScale(mMatrix1, mPosition, mRotation.y, mScale, nullptr, 0.0f);
         return SUCCEEDED;
     }
 }
@@ -48,7 +50,7 @@ int dTgBeetle_c::doDelete() {
 
 int dTgBeetle_c::actorExecute() {
     if (mPastOnly == 1 && !mActorSubtype) {
-        if (dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(mRoomID, mPosition, nullptr, 1.0f) == 0) {
+        if (dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(mRoomID, mPosition, nullptr, 1.0f) == 0.0f) {
             return SUCCEEDED;
         }
     }
@@ -75,17 +77,8 @@ int dTgBeetle_c::actorExecute() {
     return SUCCEEDED;
 }
 
-u32 dTgBeetle_c::isWithinSphere(
-    const mVec3_c &position
-) const { // fn_302_520 is position within a sphere the size of the zone
-
-    mVec3_c diff = position - (mPosition + mScale.y * mVec3_c::Ey * 1.0f);
-
-    diff.x /= mScale.x;
-    diff.y /= mScale.y;
-    diff.z /= mScale.z;
-
-    return diff.mag() <= 1.0f; // is beetle within a certain distance from center
+int dTgBeetle_c::draw() {
+    return SUCCEEDED;
 }
 
 u32 dTgBeetle_c::isWithinCylinder(
@@ -101,7 +94,7 @@ u32 dTgBeetle_c::isWithinCylinder(
     diff.y /= mScale.y;
     diff.z /= mScale.z;
 
-    if (diff.absXZ() <= 0.01f && diff.y <= 0.5f) {
+    if (diff.absXZ() <= 1.0f && diff.y <= 0.5f) {
         returnCheck = 1;
     }
 
@@ -110,6 +103,19 @@ u32 dTgBeetle_c::isWithinCylinder(
     }
 
     return returnValue;
+}
+
+u32 dTgBeetle_c::isWithinSphere(
+    const mVec3_c &position
+) const { // fn_302_520 is position within a sphere the size of the zone
+
+    mVec3_c diff = position - (mPosition + mScale.y * mVec3_c::Ey * 1.0f);
+
+    diff.x /= mScale.x;
+    diff.y /= mScale.y;
+    diff.z /= mScale.z;
+
+    return diff.mag() <= 1.0f; // is beetle within a certain distance from center
 }
 
 void dTgBeetle_c::updateBeetle(dAcBoomerang_c &boomerang) { // fn_302_620 update beetle based on zone type
@@ -122,8 +128,4 @@ void dTgBeetle_c::updateBeetle(dAcBoomerang_c &boomerang) { // fn_302_620 update
     } else { // instant flashing red
         return boomerang.setRemainingFlightTime(-1);
     }
-}
-
-int dTgBeetle_c::draw() {
-    return SUCCEEDED;
 }
