@@ -38,8 +38,8 @@ STATE_DEFINE(dAcOMoveElec_c, WaitOn);
 STATE_DEFINE(dAcOMoveElec_c, Move);
 
 bool dAcOMoveElec_c::createHeap() {
-    mResFile = getOarcFile("D301DamageWall", "g3d/model.brres");
-    TRY_CREATE(mMdl.create(mResFile, "D301DamageWall", "D301DamageWall", &mAllocator, 0x120));
+    mResFile = nw4r::g3d::ResFile(getOarcFile("D301DamageWall", "g3d/model.brres"));
+    TRY_CREATE(mMdl.create(mResFile.ptr(), "D301DamageWall", "D301DamageWall", &mAllocator, 0x120));
     void *dzb = getOarcDZB("D301DamageWall", "D301DamageWall");
     void *plc = getOarcPLC("D301DamageWall", "D301DamageWall");
     updateMatrix();
@@ -73,7 +73,7 @@ int dAcOMoveElec_c::create() {
     mCc.SetStts(mStts);
     mAcceleration = 0.0f;
     mMaxSpeed = -40.0f;
-    mCc.field_0xB4 = 1;
+    mCc.SetField_0xB4(1);
     mEffect.init(this);
     mMdl.setAnm("D301DamageWall", m3d::PLAY_MODE_4);
     mMdl.setRate(0.0f);

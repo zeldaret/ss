@@ -6,13 +6,14 @@
 #include "d/col/bg/d_bg_w.h"
 #include "d/col/cc/d_cc_d.h"
 #include "m/m3d/m_anmmdl.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/d_emitter.h"
 
 class dAcOMoveElec_c : public dAcObjBase_c {
 public:
-    dAcOMoveElec_c() : mEvent(*this, nullptr), mResFile(nullptr), mStateMgr(*this) {}
+    dAcOMoveElec_c() : mEvent(*this, nullptr), mStateMgr(*this) {}
     virtual ~dAcOMoveElec_c() {}
 
     virtual bool createHeap() override;
@@ -24,6 +25,9 @@ public:
     STATE_FUNC_DECLARE(dAcOMoveElec_c, WaitOff);
     STATE_FUNC_DECLARE(dAcOMoveElec_c, WaitOn);
     STATE_FUNC_DECLARE(dAcOMoveElec_c, Move);
+
+    STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dAcOMoveElec_c);
+    STATE_MGR_DEFINE_UTIL_ISSTATE(dAcOMoveElec_c);
 
 private:
     enum Phase_e {
@@ -37,7 +41,7 @@ private:
     void initPhase();
 
     /* 0x330 */ ActorEventRelated mEvent;
-    /* 0x380 */ void *mResFile;
+    /* 0x380 */ nw4r::g3d::ResFile mResFile;
     /* 0x384 */ m3d::mdlAnmChr mMdl;
     /* 0x3EC */ dBgW mBgW;
     /* 0x5FC */ dBgW mBgWGround;
@@ -45,8 +49,6 @@ private:
     /* 0xA14 */ dBgS_AcchCir mAcchCir;
     /* 0xA70 */ dBgS_ObjAcch mAcch;
     /* 0xE20 */ STATE_MGR_DECLARE(dAcOMoveElec_c);
-    STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dAcOMoveElec_c);
-    STATE_MGR_DEFINE_UTIL_ISSTATE(dAcOMoveElec_c);
     /* 0xE5C */ dEmitter_c mEffect;
     /* 0xE90 */ f32 mMoveDist;
     /* 0xE94 */ s32 mPhase;
