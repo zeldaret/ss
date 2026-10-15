@@ -124,10 +124,6 @@ def main() -> None:
 
     url = TOOLS[args.tool](args.tag)
     output = Path(args.output)
-    if output.exists():
-        print(f"{output} already exists, skipping download.")
-        output.touch()
-        return
 
     print(f"Downloading {url} to {output}")
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
