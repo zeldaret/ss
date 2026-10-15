@@ -26,6 +26,14 @@ public:
     STATE_FUNC_DECLARE(dAcOMoveElec_c, Move);
 
 private:
+    enum Phase_e {
+        PHASE_Start,    // On at its initial position, waits for mSceneflag + 1
+        PHASE_Moved1,   // Moved once, waits for mSceneflag + 2
+        PHASE_Moved2,   // Moved twice, waits for mEventSceneflag
+        PHASE_Off,      // Off until mSceneflag is set
+        PHASE_Finished, // Event played, off for good
+    };
+
     void initPhase();
 
     /* 0x330 */ ActorEventRelated mEvent;

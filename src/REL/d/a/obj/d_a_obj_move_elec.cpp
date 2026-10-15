@@ -18,7 +18,7 @@ static dCcD_SrcUnk sSrcUnk = {
     {-100.0f, -0.0f, -20.0f, 100.0f, 180.0f, 20.0f},
 };
 
-// Emitted but never read: the code below repeats these values as literals
+// Only mEventDelay is read, the code repeats the other values as literals
 struct dAcOMoveElec_HIO_c {
     /* 0x00 */ f32 mMoveSpeed;
     /* 0x04 */ f32 mMoveDist1;
@@ -45,6 +45,7 @@ bool dAcOMoveElec_c::createHeap() {
     updateMatrix();
     bool ok = !mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale);
     if (!ok) {
+        // Still reports success, without setting up the ground collision
         return true;
     }
     dzb = getOarcDZB("D301DamageWall", "D301DWGround");
@@ -57,7 +58,7 @@ int dAcOMoveElec_c::create() {
     mEventSceneflag = getFromParams(16, 0xFF);
     mSceneflag = getFromParams(8, 0xFF);
     mIsShort = getFromParams(24, 0x3) == 0;
-    mEventId = mParams;
+    mEventId = getFromParams(0, 0xFF);
     CREATE_ALLOCATOR(dAcOMoveElec_c);
     mAcch.Set(this, 1, &mAcchCir);
     mAcchCir.SetWall(20.0f, 50.0f);
@@ -67,7 +68,7 @@ int dAcOMoveElec_c::create() {
     initPhase();
     mBgW.SetCrrFunc(dBgS_MoveBGProc_Typical);
     dBgS::GetInstance()->Regist(&mBgW, this);
-    mStts.SetRank(0xD);
+    mStts.SetRank(13);
     mCc.Set(sSrcUnk);
     mCc.SetStts(mStts);
     mAcceleration = 0.0f;
@@ -76,7 +77,7 @@ int dAcOMoveElec_c::create() {
     mEffect.init(this);
     mMdl.setAnm("D301DamageWall", m3d::PLAY_MODE_4);
     mMdl.setRate(0.0f);
-    if (mPhase == 3 || mPhase == 4) {
+    if (mPhase == PHASE_Off || mPhase == PHASE_Finished) {
         mStateMgr.changeState(StateID_WaitOff);
     } else {
         mMdl.setFrame(mMdl.getAnm().getEndFrame() - 1.0f);
@@ -104,7 +105,7 @@ int dAcOMoveElec_c::actorExecute() {
             dir.rotY(mRotation.y);
             mCc.SetAtVec(dir);
             mCc.Set(mPosition, mRotation.y);
-            mCcTimer = 0xF;
+            mCcTimer = 15;
         }
         dCcS::GetInstance()->Set(&mCc);
     }
@@ -133,8 +134,8 @@ void dAcOMoveElec_c::initializeState_WaitOff() {
     dBgS::GetInstance()->Regist(&mBgWGround, this);
 }
 void dAcOMoveElec_c::executeState_WaitOff() {
-    if (mPhase == 3 && mSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag)) {
-        mPhase = 0;
+    if (mPhase == PHASE_Off && mSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag)) {
+        mPhase = PHASE_Start;
         mStateMgr.changeState(StateID_WaitOn);
         mMdl.setRate(10.0f);
     }
@@ -149,33 +150,33 @@ void dAcOMoveElec_c::initializeState_WaitOn() {
 }
 void dAcOMoveElec_c::executeState_WaitOn() {
     switch (mPhase) {
-        case 0:
+        case PHASE_Start:
             if ((u16)(mSceneflag + 1) < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag + 1)) {
-                mPhase = 1;
+                mPhase = PHASE_Moved1;
                 mMdl.setAnm("D301DamageWall_Move", m3d::PLAY_MODE_4);
                 mMdl.setRate(1.0f);
                 mMoveDist = mIsShort ? 800.0f : 1000.0f;
                 mStateMgr.changeState(StateID_Move);
             }
             break;
-        case 1:
+        case PHASE_Moved1:
             if ((u16)(mSceneflag + 2) < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag + 2)) {
-                mPhase = 2;
+                mPhase = PHASE_Moved2;
                 mMdl.setAnm("D301DamageWall_Move", m3d::PLAY_MODE_4);
                 mMdl.setRate(1.0f);
                 mMoveDist = mIsShort ? 800.0f : 1000.0f;
-                mEventTimer = 20;
+                mEventTimer = dAcOMoveElec_HIO_c::sHio.mEventDelay;
                 mStateMgr.changeState(StateID_Move);
             }
             break;
-        case 2:
+        case PHASE_Moved2:
             if (mEventSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEventSceneflag)) {
                 if (mEventId != 0xFF) {
                     Event event(mEventId, mRoomID, 0x100001, nullptr, nullptr);
                     mEvent.scheduleEvent(event, 0);
                 }
                 if (mEvent.isThisActorInEvent() && sLib::calcTimer(&mEventTimer) == 0) {
-                    mPhase = 4;
+                    mPhase = PHASE_Finished;
                     mMdl.setAnm("D301DamageWall", m3d::PLAY_MODE_4);
                     mMdl.setRate(-10.0f);
                     mMdl.setFrame(59.0f);
@@ -201,14 +202,14 @@ void dAcOMoveElec_c::finalizeState_Move() {}
 
 void dAcOMoveElec_c::initPhase() {
     if (mEventSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEventSceneflag)) {
-        mPhase = 4;
+        mPhase = PHASE_Finished;
     } else if ((u16)(mSceneflag + 2) < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag + 2)) {
-        mPhase = 2;
+        mPhase = PHASE_Moved2;
     } else if ((u16)(mSceneflag + 1) < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag + 1)) {
-        mPhase = 1;
+        mPhase = PHASE_Moved1;
     } else if (mSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag)) {
-        mPhase = 0;
+        mPhase = PHASE_Start;
     } else {
-        mPhase = 3;
+        mPhase = PHASE_Off;
     }
 }
