@@ -82,6 +82,9 @@ public:
     STATE_FUNC_DECLARE(dAcOtubo_c, Slope);
     STATE_FUNC_DECLARE(dAcOtubo_c, Rebirth);
 
+    STATE_MGR_DEFINE_UTIL_EXECUTESTATE(dAcOtubo_c);
+    STATE_MGR_DEFINE_UTIL_ISSTATE(dAcOtubo_c);
+
 private:
     /* 0x330 */ nw4r::g3d::ResFile mRes;
     /* 0x334 */ m3d::smdl_c mMdl;

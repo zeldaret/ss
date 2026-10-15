@@ -96,7 +96,7 @@ int dAcOtubo_c::actorCreate() {
     mbField_0x9ED = getParams_0x3000() == 0;
     mbField_0x9EF = getParams_0x3000() == 2;
     if (getParams_0x3000() == 1) {
-        mTimer_0x9F4 = 0xF;
+        mTimer_0x9F4 = 15;
         mSph.SetTgInfo_0x2(0);
     }
     mbField_0x9F0 = getParams_0xC000() == 0;
@@ -139,7 +139,7 @@ int dAcOtubo_c::doDelete() {
 }
 
 int dAcOtubo_c::actorExecute() {
-    mStateMgr.executeState();
+    executeState();
     bool bOffGround = false;
     if (mTimer_0x9F4 != 0) {
         field_0x9DC = 0.f;
@@ -172,7 +172,7 @@ int dAcOtubo_c::actorExecute() {
         getLinkage().bushTpFunc(mObjAcch);
     }
 
-    if (mStateMgr.isState(StateID_Wait) || mStateMgr.isState(StateID_Slope)) {
+    if (isState(StateID_Wait) || isState(StateID_Slope)) {
         attemptDestroy();
     }
     mSph.SetC(getCenter());
@@ -442,8 +442,6 @@ void dAcOtubo_c::finalizeState_Rebirth() {
     setActorProperty(AC_PROP_0x1);
 }
 
-extern "C" void fn_80022BE0(void *, const mVec3_c &);
-
 void dAcOtubo_c::destroy() {
     dAcNpcCeLady_c *lady = mCeLady.get();
     bool boolParam = true;
@@ -453,7 +451,7 @@ void dAcOtubo_c::destroy() {
     if (!boolParam) {
         return;
     }
-    fn_80022BE0(dLightEnv_c::GetPInstance(), mPosition);
+    dLightEnv_c::GetPInstance()->setBPM8_Type6_2(&mPosition);
     getLinkage().forceRemove(this);
 
     dEmitterBase_c *fx_thing = dJEffManager_c::spawnEffect(
@@ -786,7 +784,7 @@ bool dAcOtubo_c::checkSlope() {
 bool dAcOtubo_c::fn_272_3660() {
     int poly_code = dBgS::GetInstance()->GetSpecialCode(mObjAcch.GetGnd());
 
-    return field_0x9F6 == 2 && !mStateMgr.isState(StateID_Grab) && !checkSubmerged() && poly_code != POLY_ATTR_LAVA;
+    return field_0x9F6 == 2 && !isState(StateID_Grab) && !checkSubmerged() && poly_code != POLY_ATTR_LAVA;
 }
 
 bool dAcOtubo_c::checkInvalidGround() {
