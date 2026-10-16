@@ -2739,7 +2739,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_tenijima", "REL/d/a/obj/d_a_obj_tenijima.cpp"),
     Rel(NonMatching, "d_a_obj_teni_rail", "REL/d/a/obj/d_a_obj_teni_rail.cpp"),
     Rel(
-        NonMatching, "d_a_obj_teni_rail_post", "REL/d/a/obj/d_a_obj_teni_rail_post.cpp"
+        Matching, "d_a_obj_teni_rail_post", "REL/d/a/obj/d_a_obj_teni_rail_post.cpp"
     ),
     Rel(NonMatching, "d_a_obj_terry_bicycle", "REL/d/a/obj/d_a_obj_terry_bicycle.cpp"),
     Rel(NonMatching, "d_a_obj_terry_gimmick", "REL/d/a/obj/d_a_obj_terry_gimmick.cpp"),
