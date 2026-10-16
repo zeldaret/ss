@@ -38,6 +38,7 @@
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
+#include "toBeSorted/misc_actor.h"
 
 
 static const char* eventName = "ControlPanel";
@@ -215,10 +216,8 @@ int dAcOCtrlPnl_c::actorPostCreate() {
     return SUCCEEDED;
 }
 
-extern "C" bool IS_IN_SKYKEEP_PUZZLE;
-
 int dAcOCtrlPnl_c::doDelete() {
-    IS_IN_SKYKEEP_PUZZLE = false;
+    sIsInSkykeepPuzzle = false;
     return SUCCEEDED;
 }
 
@@ -294,12 +293,12 @@ void dAcOCtrlPnl_c::enterMove() {
     mHasMovedATile = false;
     mLeavePuzzle = false;
     updatePuzzleFromFile();
-    IS_IN_SKYKEEP_PUZZLE = true;
+    sIsInSkykeepPuzzle = true;
 }
 void dAcOCtrlPnl_c::finishMove() {
     handleLinkObjProp0x200(true);
     bool changed = changedPuzzle();
-    IS_IN_SKYKEEP_PUZZLE = false;
+    sIsInSkykeepPuzzle = false;
     savePuzzleState();
     if (mD3DummyRef.isLinked()) {
         mD3DummyRef.get()->setField_0x1570(1);
@@ -340,13 +339,12 @@ bool dAcOCtrlPnl_c::hasAdjacentEmptySpot(s32 idx) {
     s32 out = -1;
     return getAdjacentEmptySpot(idx, &out);
 }
-// this returns the tile id, TODO: rename
-extern "C" s32 isInSkyKeepPuzzleRoom();
+
 bool dAcOCtrlPnl_c::getAdjacentEmptySpot(s32 tileID, s32* pEmptySpot) {
     if (tileID < 0) {
         return false;
     }
-    if (tileID == isInSkyKeepPuzzleRoom()) {
+    if (tileID == getCurrentSkyKeepRoomTileId()) {
         return false;
     }
     s32 tileSpot = -1;
@@ -410,7 +408,7 @@ void dAcOCtrlPnl_c::setupNeighbors() {
     }
     updateSpotTilesFromPuzzle();
 }
-extern "C" void setEvent__12EventManagerFP9dAcBase_cP5EventP9dAcBase_c(dBase_c*, Event*, dBase_c*);
+
 void dAcOCtrlPnl_c::handleEvent() {
     u16 flow = getFromParams(0, 0xFFFF);
     switch (mEvent.getCurrentEventCommand()) {
@@ -450,10 +448,10 @@ void dAcOCtrlPnl_c::handleEvent() {
             if (changedPuzzle()) {
                 if (isFirstTime()) {
                     Event event(firstAfterEvent, zev, 100, 0x100001, nullptr, (void*)afterControlPanelFirstCb);
-                    setEvent__12EventManagerFP9dAcBase_cP5EventP9dAcBase_c(this, &event, nullptr);
+                    EventManager::setEvent(this, &event, nullptr);
                 } else {
                     Event event(afterEvent, zev, 100, 0x100001, nullptr, (void*)afterControlPanelCb);
-                    setEvent__12EventManagerFP9dAcBase_cP5EventP9dAcBase_c(this, &event, nullptr);
+                    EventManager::setEvent(this, &event, nullptr);
                 }
             }
             mEvent.advanceNext();
@@ -597,9 +595,6 @@ void dAcOCtrlPnl_c::handleControl() {
     }
 }
 
-extern "C" s32 getSKDoorSceneflag(s32, s32);
-extern "C" bool checkSKDoorHasSceneflag(s32, s32);
-
 void dAcOCtrlPnl_c::updateDoorSceneflags() {
     for (int spot = 0; spot < 9; spot++) {
         s32 tile = mSpots[spot].mCurrentTile;
@@ -608,7 +603,6 @@ void dAcOCtrlPnl_c::updateDoorSceneflags() {
                 if (checkSKDoorHasSceneflag(tile, direction)) {
                     s32 sceneflag = getSKDoorSceneflag(tile, direction);
                     if (spot == 7 && direction == 2 && checkSKDoorHasSceneflag(tile, direction)) {
-                        // TODO: inline for set/unset flag
                         setSceneflag(sceneflag);
                     } else {
                         dAcOCtrlPnl_c::Spot* neighbor = mSpots[spot].mNeighbors[direction];
@@ -873,7 +867,7 @@ void dAcOCtrlPnl_c::updateTileColors() {
         }
     }
     for (int i = 0; i < 8; i++) {
-        if (i == isInSkyKeepPuzzleRoom()) {
+        if (i == getCurrentSkyKeepRoomTileId()) {
             mModel.setTevColor(mTilePlateMatIDs[i], GX_TEVREG1, mColor(0,0,0,0), false);
         } else {
             mModel.setTevColor(mTilePlateMatIDs[i], GX_TEVREG1, mNormalPlateColor, false);
