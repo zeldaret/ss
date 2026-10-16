@@ -126,7 +126,7 @@ public:
         mValidChangeBtnMask |= flag;
     }
 
-    static void setFlowMgr(dFlowMgrBase_c * flowMgr) {
+    static void setFlowMgr(dFlowMgrBase_c *flowMgr) {
         sFlowMgr = flowMgr;
     }
 

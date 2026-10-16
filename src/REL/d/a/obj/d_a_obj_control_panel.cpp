@@ -1,4 +1,5 @@
 #include "d/a/obj/d_a_obj_control_panel.h"
+
 #include "c/c_lib.h"
 #include "common.h"
 #include "d/a/d_a_itembase.h"
@@ -40,67 +41,34 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/misc_actor.h"
 
+static const char *eventName = "ControlPanel";
+static const char *firstAfterEvent = "AfterControlPanelFirst";
+static const char *afterEvent = "AfterControlPanel";
 
-static const char* eventName = "ControlPanel";
-static const char* firstAfterEvent = "AfterControlPanelFirst";
-static const char* afterEvent = "AfterControlPanel";
+static const u8 unused[] = {0x00, 0xff, 0x00, 0xaa, 0x00, 0x50, 0x00, 0x00, 0x00, 0x50, 0x00, 0x3c, 0x00, 0x00,
+                            0x00, 0x00, 0x43, 0x70, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-static const u8 unused[] = { 0x00, 0xff, 0x00, 0xaa, 0x00, 0x50, 0x00, 0x00, 0x00, 0x50, 0x00, 0x3c, 0x00, 0x00, 0x00, 0x00, 0x43, 0x70, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-
-const void* getUnused() {
+const void *getUnused() {
     return unused;
 }
 
-static const char* sSkyKeepRooms[] = {
-    "D003_0",
-    "D003_1",
-    "D003_2",
-    "D003_3",
-    "D003_4",
-    "D003_5",
-    "D003_6",
-    "D003_7",
+static const char *sSkyKeepRooms[] = {
+    "D003_0", "D003_1", "D003_2", "D003_3", "D003_4", "D003_5", "D003_6", "D003_7",
 };
 
-const void* getUnused2() {
+const void *getUnused2() {
     return sSkyKeepRooms;
 }
 
-static InteractionTargetDef interactionTarget = {0,     3,     1,       EXAMINE_TALK,   0,    200.0f,
-                                                           60.0f, 60.0f, -100.0f, 100.0f, 50.0f, 1.0f};
-
-
+static InteractionTargetDef interactionTarget = {0,     3,     1,       EXAMINE_TALK, 0,     200.0f,
+                                                 60.0f, 60.0f, -100.0f, 100.0f,       50.0f, 1.0f};
 
 static mVec3_c sSpotPositions[9] = {
-   mVec3_c( -43.2,
-    14.78,
-    -40.59),
-    mVec3_c(0.0,
-    14.78,
-    -40.59),
-    mVec3_c(43.2,
-    14.78,
-    -40.59),
-    mVec3_c(-43.2,
-    0.0,
-    0.0),
-    mVec3_c(0.0,
-    0.0,
-    0.0),
-    mVec3_c(43.2,
-    0.0,
-    0.0),
-    mVec3_c(-43.2,
-    -14.78,
-    40.59),
-    mVec3_c(0.0,
-    -14.78,
-    40.59),
-    mVec3_c(43.2,
-    -14.78,
-    40.59),
+    mVec3_c(-43.2, 14.78, -40.59), mVec3_c(0.0, 14.78, -40.59), mVec3_c(43.2, 14.78, -40.59),
+    mVec3_c(-43.2, 0.0, 0.0),      mVec3_c(0.0, 0.0, 0.0),      mVec3_c(43.2, 0.0, 0.0),
+    mVec3_c(-43.2, -14.78, 40.59), mVec3_c(0.0, -14.78, 40.59), mVec3_c(43.2, -14.78, 40.59),
 };
-
 
 SPECIAL_ACTOR_PROFILE(OBJ_CONTROL_PANEL, dAcOCtrlPnl_c, fProfile::OBJ_CONTROL_PANEL, 0x159, 0, 3);
 
@@ -108,35 +76,43 @@ STATE_DEFINE(dAcOCtrlPnl_c, Wait);
 STATE_DEFINE(dAcOCtrlPnl_c, Control);
 STATE_DEFINE(dAcOCtrlPnl_c, EndEvent);
 
-void enterMoveCb(void* actor) {
-    if (actor == nullptr) return;
-    static_cast<dAcOCtrlPnl_c*>(actor)->enterMove();
+void enterMoveCb(void *actor) {
+    if (actor == nullptr) {
+        return;
+    }
+    static_cast<dAcOCtrlPnl_c *>(actor)->enterMove();
 }
 
-void finishMoveCb(void* actor) {
-    if (actor == nullptr) return;
-    static_cast<dAcOCtrlPnl_c*>(actor)->finishMove();
+void finishMoveCb(void *actor) {
+    if (actor == nullptr) {
+        return;
+    }
+    static_cast<dAcOCtrlPnl_c *>(actor)->finishMove();
 }
 
-void afterControlPanelFirstCb(void* actor) {
-    if (actor == nullptr) return;
-    static_cast<dAcOCtrlPnl_c*>(actor)->afterControlPanelFirst();
+void afterControlPanelFirstCb(void *actor) {
+    if (actor == nullptr) {
+        return;
+    }
+    static_cast<dAcOCtrlPnl_c *>(actor)->afterControlPanelFirst();
 }
 
-void afterControlPanelCb(void* actor) {
-    if (actor == nullptr) return;
-    static_cast<dAcOCtrlPnl_c*>(actor)->afterControlPanel();
+void afterControlPanelCb(void *actor) {
+    if (actor == nullptr) {
+        return;
+    }
+    static_cast<dAcOCtrlPnl_c *>(actor)->afterControlPanel();
 }
 
 bool dAcOCtrlPnl_c::createHeap() {
-    const char* oarcName = "ControlPanel";
+    const char *oarcName = "ControlPanel";
     mRes = nw4r::g3d::ResFile(getOarcResFile(oarcName));
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("ControlPanel");
     if (!mModel.create(mdl, &mAllocator, 0x120, 1, nullptr)) {
         return false;
     }
-    void* dzb = getOarcDZB(oarcName, "ControlPanel");
-    void* plc = getOarcPLC(oarcName, "ControlPanel");
+    void *dzb = getOarcDZB(oarcName, "ControlPanel");
+    void *plc = getOarcPLC(oarcName, "ControlPanel");
     updateMatrix();
     return !mBgW.Set((cBgD_t *)dzb, (PLC *)plc, 0x81, &mWorldMtx, &mScale);
 }
@@ -155,15 +131,8 @@ int dAcOCtrlPnl_c::actorCreate() {
     if ((s32)getFromParams(0x18, 3) == 1) {
         return FAILED;
     }
-    char* plateModels[] = {
-        "CPPlate1",
-        "CPPlate2",
-        "CPPlate3",
-        "CPPlate4",
-        "CPPlate5",
-        "CPPlate6",
-        "CPPlate7",
-        "CPPlate8",
+    char *plateModels[] = {
+        "CPPlate1", "CPPlate2", "CPPlate3", "CPPlate4", "CPPlate5", "CPPlate6", "CPPlate7", "CPPlate8",
     };
     nw4r::g3d::ResMdl resMdl = mModel.getResMdl();
     for (int i = 0; i < 8; i++) {
@@ -180,17 +149,10 @@ int dAcOCtrlPnl_c::actorCreate() {
 }
 
 int dAcOCtrlPnl_c::actorPostCreate() {
-    dAcOD3Dummy_c* ptr = static_cast<dAcOD3Dummy_c*>(fManager_c::searchBaseByProfName(fProfile::OBJ_D3_DUMMY));
+    dAcOD3Dummy_c *ptr = static_cast<dAcOD3Dummy_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_D3_DUMMY));
     mD3DummyRef.link(ptr);
-    static const char* plateModels[] = {
-        "m_CPPlate1",
-        "m_CPPlate2",
-        "m_CPPlate3",
-        "m_CPPlate4",
-        "m_CPPlate5",
-        "m_CPPlate6",
-        "m_CPPlate7",
-        "m_CPPlate8",
+    static const char *plateModels[] = {
+        "m_CPPlate1", "m_CPPlate2", "m_CPPlate3", "m_CPPlate4", "m_CPPlate5", "m_CPPlate6", "m_CPPlate7", "m_CPPlate8",
     };
     for (int i = 0; i < 8; i++) {
         mTilePlateMatIDs[i] = mModel.getMatID(plateModels[i]);
@@ -199,7 +161,7 @@ int dAcOCtrlPnl_c::actorPostCreate() {
         }
     }
     // just a guess
-    static const char* triforcePlates[] = {
+    static const char *triforcePlates[] = {
         "m_CPPlate1",
         "m_CPPlate3",
         "m_CPPlate4",
@@ -251,7 +213,7 @@ void dAcOCtrlPnl_c::finalizeState_Wait() {}
 void dAcOCtrlPnl_c::initializeState_Control() {}
 void dAcOCtrlPnl_c::executeState_Control() {
     handleEvent();
-    dCamera_c* camera = dScGame_c::getCamera();
+    dCamera_c *camera = dScGame_c::getCamera();
     if (camera != nullptr) {
         f32 camVal = 60.f;
         mVec3_c local48(0.f, 240.f, 0.f);
@@ -282,7 +244,7 @@ void dAcOCtrlPnl_c::finalizeState_EndEvent() {
 }
 
 void dAcOCtrlPnl_c::doInteraction(s32) {
-    Event event(eventName, getOarcZev("ControlPanel"), 100, 0x100001, (void*)enterMoveCb, (void*)finishMoveCb);
+    Event event(eventName, getOarcZev("ControlPanel"), 100, 0x100001, (void *)enterMoveCb, (void *)finishMoveCb);
     mEvent.scheduleEvent(event, 0);
 }
 
@@ -340,7 +302,7 @@ bool dAcOCtrlPnl_c::hasAdjacentEmptySpot(s32 idx) {
     return getAdjacentEmptySpot(idx, &out);
 }
 
-bool dAcOCtrlPnl_c::getAdjacentEmptySpot(s32 tileID, s32* pEmptySpot) {
+bool dAcOCtrlPnl_c::getAdjacentEmptySpot(s32 tileID, s32 *pEmptySpot) {
     if (tileID < 0) {
         return false;
     }
@@ -358,7 +320,7 @@ bool dAcOCtrlPnl_c::getAdjacentEmptySpot(s32 tileID, s32* pEmptySpot) {
         return false;
     }
     for (int direction = 0; direction < 4; direction++) {
-        dAcOCtrlPnl_c::Spot* adjacent = mSpots[tileSpot].getNeighbor(direction);
+        dAcOCtrlPnl_c::Spot *adjacent = mSpots[tileSpot].getNeighbor(direction);
         if (adjacent != nullptr && adjacent->mCurrentTile == 0xFF) {
             *pEmptySpot = adjacent->mSpot;
             return true;
@@ -412,9 +374,7 @@ void dAcOCtrlPnl_c::setupNeighbors() {
 void dAcOCtrlPnl_c::handleEvent() {
     u16 flow = getFromParams(0, 0xFFFF);
     switch (mEvent.getCurrentEventCommand()) {
-        case 'wait':
-            mEvent.advanceNext();
-            break;
+        case 'wait': mEvent.advanceNext(); break;
         case 'ctrl':
             handleControl();
             if (mLeavePuzzle) {
@@ -447,10 +407,10 @@ void dAcOCtrlPnl_c::handleEvent() {
             void *zev = getOarcZev("ControlPanel");
             if (changedPuzzle()) {
                 if (isFirstTime()) {
-                    Event event(firstAfterEvent, zev, 100, 0x100001, nullptr, (void*)afterControlPanelFirstCb);
+                    Event event(firstAfterEvent, zev, 100, 0x100001, nullptr, (void *)afterControlPanelFirstCb);
                     EventManager::setEvent(this, &event, nullptr);
                 } else {
-                    Event event(afterEvent, zev, 100, 0x100001, nullptr, (void*)afterControlPanelCb);
+                    Event event(afterEvent, zev, 100, 0x100001, nullptr, (void *)afterControlPanelCb);
                     EventManager::setEvent(this, &event, nullptr);
                 }
             }
@@ -493,7 +453,7 @@ void dAcOCtrlPnl_c::handleControl() {
     if (downPressed) {
         dPad::ex_c::m_current_ex->centerCursor(mPad::getCurrentCoreID(), true);
     }
-    dCsGame_c* game = dCsGame_c::GetInstance();
+    dCsGame_c *game = dCsGame_c::GetInstance();
     if (game != nullptr) {
         if (game != nullptr) {
             if (mIsGrabbing) {
@@ -516,7 +476,7 @@ void dAcOCtrlPnl_c::handleControl() {
                 setTileID(mGrabTargetSpot, tile0);
                 setTileID(mCurrentlyHoveredSpot, tile1);
                 updateDoorSceneflags();
-                dAcOD3Dummy_c* dummy = mD3DummyRef.get();
+                dAcOD3Dummy_c *dummy = mD3DummyRef.get();
                 if (dummy != nullptr) {
                     savePuzzleState();
                     dummy->setField_0x1570(1);
@@ -558,14 +518,15 @@ void dAcOCtrlPnl_c::handleControl() {
                 }
                 s32 emptyAdjacentSpot = -1;
                 // check if the player grabbed the tile
-                if (mCurrentlyHoveredTile >= 0 && dPad::getDownTrigA() && getAdjacentEmptySpot(mCurrentlyHoveredTile, &emptyAdjacentSpot)) {
+                if (mCurrentlyHoveredTile >= 0 && dPad::getDownTrigA() &&
+                    getAdjacentEmptySpot(mCurrentlyHoveredTile, &emptyAdjacentSpot)) {
                     mIsGrabbing = true;
                     mGrabTargetMoveDirection = getMoveDirection(mCurrentlyHoveredSpot, emptyAdjacentSpot);
                     mGrabStartCursorPos = cursorPos;
                     mGrabTargetSpot = emptyAdjacentSpot;
                     mGrabTargetPosition = sSpotPositions[emptyAdjacentSpot];
                 }
-            } else if(dPad::getUpTrigA()) {
+            } else if (dPad::getUpTrigA()) {
                 mIsGrabbing = false;
             } else {
                 mVec2_c diff = cursorPos - mGrabStartCursorPos;
@@ -605,7 +566,7 @@ void dAcOCtrlPnl_c::updateDoorSceneflags() {
                     if (spot == 7 && direction == 2 && checkSKDoorHasSceneflag(tile, direction)) {
                         setSceneflag(sceneflag);
                     } else {
-                        dAcOCtrlPnl_c::Spot* neighbor = mSpots[spot].mNeighbors[direction];
+                        dAcOCtrlPnl_c::Spot *neighbor = mSpots[spot].mNeighbors[direction];
                         if (neighbor == nullptr) {
                             unsetSceneflag(sceneflag);
                         } else {
@@ -638,14 +599,12 @@ void dAcOCtrlPnl_c::updateDoorSceneflags() {
     }
 }
 
-inline bool checkSpotBounds(f32* spotBounds, const mVec2_c& vec, mVec2_c& cursorPos) {
-    return vec.x + spotBounds[0] < cursorPos.x &&
-            cursorPos.x < vec.x + spotBounds[2] &&
-            vec.y + spotBounds[1] < cursorPos.y &&
-            cursorPos.y < vec.y + spotBounds[3];
+inline bool checkSpotBounds(f32 *spotBounds, const mVec2_c &vec, mVec2_c &cursorPos) {
+    return vec.x + spotBounds[0] < cursorPos.x && cursorPos.x < vec.x + spotBounds[2] &&
+           vec.y + spotBounds[1] < cursorPos.y && cursorPos.y < vec.y + spotBounds[3];
 }
 
-u8 dAcOCtrlPnl_c::getSpotForCursor(mVec2_c& cursorPos) {
+u8 dAcOCtrlPnl_c::getSpotForCursor(mVec2_c &cursorPos) {
     f32 spotBoundaries[9][4];
     mVec3_c vec;
     spotBoundaries[0][0] = -90.0;
@@ -685,16 +644,13 @@ u8 dAcOCtrlPnl_c::getSpotForCursor(mVec2_c& cursorPos) {
     spotBoundaries[8][2] = 90.0;
     spotBoundaries[8][3] = -40.0;
     getScreenCenter(vec);
-    f32 (*current)[4] = spotBoundaries;
+    f32(*current)[4] = spotBoundaries;
     s32 j = 0;
     for (s32 remaining = 9; remaining != 0; remaining--, j++) {
         current = spotBoundaries;
         current += j;
-        if (vec.x + (*current)[0] < cursorPos.x &&
-            cursorPos.x < vec.x + (*current)[2] &&
-            vec.y + (*current)[1] < cursorPos.y &&
-            cursorPos.y < vec.y + (*current)[3]
-        ) {
+        if (vec.x + (*current)[0] < cursorPos.x && cursorPos.x < vec.x + (*current)[2] &&
+            vec.y + (*current)[1] < cursorPos.y && cursorPos.y < vec.y + (*current)[3]) {
             return j;
         }
     }
@@ -802,7 +758,7 @@ bool dAcOCtrlPnl_c::changedPuzzle() {
     return false;
 }
 
-void dAcOCtrlPnl_c::getScreenCenter(mVec3_c& outVec) {
+void dAcOCtrlPnl_c::getScreenCenter(mVec3_c &outVec) {
     mVec3_c local = mPosition + sSpotPositions[4];
     s32 _weird_zero = 0;
     local.y += (146.f + _weird_zero);
@@ -820,7 +776,7 @@ void dAcOCtrlPnl_c::handleLinkObjProp0x200(bool shouldUnset) {
     }
 }
 
-void dAcOCtrlPnl_c::callback_c::timingB(u32 nodeID, nw4r::g3d::WorldMtxManip * result, nw4r::g3d::ResMdl) {
+void dAcOCtrlPnl_c::callback_c::timingB(u32 nodeID, nw4r::g3d::WorldMtxManip *result, nw4r::g3d::ResMdl) {
     bool isTileNode = false;
     for (int i = 0; i < 8; i++) {
         if (mNodeIDs[i] == nodeID) {
@@ -838,7 +794,7 @@ void dAcOCtrlPnl_c::callback_c::timingB(u32 nodeID, nw4r::g3d::WorldMtxManip * r
         mMtx_c mtx;
         result->GetMtx(mtx);
         mtx.transM(field_0x0[tileId]);
-        mtx.scaleM(field_0x20[tileId],field_0x20[tileId],field_0x20[tileId]);
+        mtx.scaleM(field_0x20[tileId], field_0x20[tileId], field_0x20[tileId]);
         result->SetMtx(mtx);
     }
 }
@@ -857,7 +813,7 @@ void dAcOCtrlPnl_c::updateTileColors() {
     mColor def;
     for (int i = 0; i < 3; i++) {
         if (ItemflagManager::sInstance->getFlagDirect(triforceItemflags[i])) {
-            mModel.setTevColor(mTriforceMatIDs[i], GX_TEVREG2, mColor(0,0,0,0), false);
+            mModel.setTevColor(mTriforceMatIDs[i], GX_TEVREG2, mColor(0, 0, 0, 0), false);
         } else {
             def.r = triforceColors[i].r * (nw4r::math::SinIdx(mTimer * 0xFFFF / 0x3C) + 1.f) * 0.5f;
             def.g = triforceColors[i].g * (nw4r::math::SinIdx(mTimer * 0xFFFF / 0x3C) + 1.f) * 0.5f;
@@ -868,7 +824,7 @@ void dAcOCtrlPnl_c::updateTileColors() {
     }
     for (int i = 0; i < 8; i++) {
         if (i == getCurrentSkyKeepRoomTileId()) {
-            mModel.setTevColor(mTilePlateMatIDs[i], GX_TEVREG1, mColor(0,0,0,0), false);
+            mModel.setTevColor(mTilePlateMatIDs[i], GX_TEVREG1, mColor(0, 0, 0, 0), false);
         } else {
             mModel.setTevColor(mTilePlateMatIDs[i], GX_TEVREG1, mNormalPlateColor, false);
         }

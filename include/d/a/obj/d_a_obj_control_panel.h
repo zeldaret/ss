@@ -20,30 +20,32 @@
 
 class dAcOCtrlPnl_c : public dAcObjBase_c {
     class callback_c : public m3d::callback_c {
-        public:
-            void timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) override;
-            void setPosAndScale(int i, const mVec3_c& vec, f32 f) {
-                field_0x0[i] = vec;
-                field_0x20[i] = f;
-            }
-            void setNodeID(int i, s32 nodeID) {
-                mNodeIDs[i] = nodeID;
-            }
-        private:
-            /* 0x00 */ mVec3_c field_0x0[8];
-            /* 0x20 */ f32 field_0x20[8];
-            /* 0x40 */ s32 mNodeIDs[8];
-        };
+    public:
+        void timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) override;
+        void setPosAndScale(int i, const mVec3_c &vec, f32 f) {
+            field_0x0[i] = vec;
+            field_0x20[i] = f;
+        }
+        void setNodeID(int i, s32 nodeID) {
+            mNodeIDs[i] = nodeID;
+        }
+
+    private:
+        /* 0x00 */ mVec3_c field_0x0[8];
+        /* 0x20 */ f32 field_0x20[8];
+        /* 0x40 */ s32 mNodeIDs[8];
+    };
     friend class callback_c;
     struct Spot {
-        /* 0x00 */ Spot* mNeighbors[4];
+        /* 0x00 */ Spot *mNeighbors[4];
         /* 0x10 */ u8 mSpot;
         /* 0x11 */ u8 mCurrentTile;
 
-        Spot* getNeighbor(s32 direction) {
+        Spot *getNeighbor(s32 direction) {
             return mNeighbors[direction];
         }
     };
+
 public:
     dAcOCtrlPnl_c() : mStateMgr(*this), mEvent(*this, nullptr), mFlowMgr(&mFlow) {}
     virtual ~dAcOCtrlPnl_c() {}
@@ -61,18 +63,18 @@ public:
     void setupNeighbors();
     void updateTileScales();
     bool hasAdjacentEmptySpot(s32);
-    bool getAdjacentEmptySpot(s32, s32*);
+    bool getAdjacentEmptySpot(s32, s32 *);
     void handleEvent();
     void handleControl();
     void updateDoorSceneflags();
-    u8 getSpotForCursor(mVec2_c&);
+    u8 getSpotForCursor(mVec2_c &);
     u8 getMoveDirection(s32, s32);
     void setTileID(u32, u32);
     u8 getTileID(u32);
     void resetPuzzleState();
     void updateTilePositions();
     void updateSpotTilesFromPuzzle();
-    void getScreenCenter(mVec3_c&);
+    void getScreenCenter(mVec3_c &);
     void handleLinkObjProp0x200(bool);
     void updateTileColors();
     void afterControlPanel();
