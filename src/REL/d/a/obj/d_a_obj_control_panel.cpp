@@ -249,7 +249,7 @@ void dAcOCtrlPnl_c::doInteraction(s32) {
 }
 
 void dAcOCtrlPnl_c::enterMove() {
-    handleLinkObjProp0x200(false);
+    setLinkVisibility(false);
     mCurrentlyHoveredSpot = 0xFF;
     mCurrentlyHoveredTile = -1;
     mHasMovedATile = false;
@@ -258,7 +258,7 @@ void dAcOCtrlPnl_c::enterMove() {
     sIsInSkykeepPuzzle = true;
 }
 void dAcOCtrlPnl_c::finishMove() {
-    handleLinkObjProp0x200(true);
+    setLinkVisibility(true);
     bool changed = changedPuzzle();
     sIsInSkykeepPuzzle = false;
     savePuzzleState();
@@ -378,7 +378,7 @@ void dAcOCtrlPnl_c::handleEvent() {
         case 'ctrl':
             handleControl();
             if (mLeavePuzzle) {
-                handleLinkObjProp0x200(true);
+                setLinkVisibility(true);
                 mCurrentlyHoveredSpot = 0xFF;
                 mCurrentlyHoveredTile = -1;
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_CtrlPnl_DECIDE);
@@ -742,11 +742,9 @@ void dAcOCtrlPnl_c::updateSpotTilesFromPuzzle() {
     }
 }
 
-// non matching
 bool dAcOCtrlPnl_c::isFirstTime() {
     u8 flag = getFromParams(0x10, 0xFF);
-    // non matching: first comparison is weird
-    return flag >= 0xFF || (flag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag));
+    return !(flag < 0xFF) || (flag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag));
 }
 
 bool dAcOCtrlPnl_c::changedPuzzle() {
@@ -765,11 +763,11 @@ void dAcOCtrlPnl_c::getScreenCenter(mVec3_c &outVec) {
     d3d::worldToScreen(outVec, local);
 }
 
-void dAcOCtrlPnl_c::handleLinkObjProp0x200(bool shouldUnset) {
+void dAcOCtrlPnl_c::setLinkVisibility(bool isVisible) {
     if (dAcPy_c::GetLinkM() == nullptr) {
         return;
     }
-    if (shouldUnset) {
+    if (isVisible) {
         dAcPy_c::GetLinkM()->unsetObjectProperty(OBJ_PROP_0x200);
     } else {
         dAcPy_c::GetLinkM()->setObjectProperty(OBJ_PROP_0x200);

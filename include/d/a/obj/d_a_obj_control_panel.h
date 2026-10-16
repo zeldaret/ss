@@ -75,7 +75,7 @@ public:
     void updateTilePositions();
     void updateSpotTilesFromPuzzle();
     void getScreenCenter(mVec3_c &);
-    void handleLinkObjProp0x200(bool);
+    void setLinkVisibility(bool);
     void updateTileColors();
     void afterControlPanel();
     void afterControlPanelFirst();
@@ -112,7 +112,6 @@ private:
     /* 0x664 */ s32 mCurrentlyHoveredTile;
     /* 0x668 */ s32 mCurrentlyHoveredSpot;
     /** The spots where tiles can be, in the following order:
-     * TODO check
      *  0 | 1 | 2
      * ---+---+---
      *  3 | 4 | 5
