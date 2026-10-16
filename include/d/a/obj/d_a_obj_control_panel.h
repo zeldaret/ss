@@ -39,6 +39,10 @@ class dAcOCtrlPnl_c : public dAcObjBase_c {
         /* 0x00 */ Spot* mNeighbors[4];
         /* 0x10 */ u8 mSpot;
         /* 0x11 */ u8 mCurrentTile;
+
+        Spot* getNeighbor(s32 direction) {
+            return mNeighbors[direction];
+        }
     };
 public:
     dAcOCtrlPnl_c() : mStateMgr(*this), mEvent(*this, nullptr), mFlowMgr(&mFlow) {}
@@ -88,6 +92,10 @@ public:
 
     void unsetSceneflag(u8 flag) {
         SceneflagManager::sInstance->unsetFlag(mRoomID, flag);
+    }
+
+    s32 hasNoFlag() {
+        return getFromParams(0x10, 0xFF) >= 0xFF;
     }
 
     STATE_FUNC_DECLARE(dAcOCtrlPnl_c, Wait);

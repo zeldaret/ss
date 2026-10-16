@@ -360,7 +360,7 @@ bool dAcOCtrlPnl_c::getAdjacentEmptySpot(s32 tileID, s32* pEmptySpot) {
         return false;
     }
     for (int direction = 0; direction < 4; direction++) {
-        dAcOCtrlPnl_c::Spot* adjacent = mSpots[tileSpot].mNeighbors[direction];
+        dAcOCtrlPnl_c::Spot* adjacent = mSpots[tileSpot].getNeighbor(direction);
         if (adjacent != nullptr && adjacent->mCurrentTile == 0xFF) {
             *pEmptySpot = adjacent->mSpot;
             return true;
@@ -461,6 +461,7 @@ void dAcOCtrlPnl_c::handleEvent() {
     }
 }
 
+// non matching
 void dAcOCtrlPnl_c::handleControl() {
     bool canGrabTile = hasAdjacentEmptySpot(mCurrentlyHoveredTile);
     if (mIsGrabbing) {
@@ -504,7 +505,7 @@ void dAcOCtrlPnl_c::handleControl() {
             }
         }
         mVec2_c cursorPos = game->getCursorIf()->getCursorPos();
-        // ??? weird branches here
+        // non matching: weird branches here
         bool allowInteraction = true;
         if (mMovingTile >= 0) {
             if (handleSlidingTile()) {
@@ -690,10 +691,9 @@ u8 dAcOCtrlPnl_c::getSpotForCursor(mVec2_c& cursorPos) {
     spotBoundaries[8][2] = 90.0;
     spotBoundaries[8][3] = -40.0;
     getScreenCenter(vec);
-    // loop unrollng
-
     f32 (*current)[4] = spotBoundaries;
-    for (s32 j = 0; j < 9; j++) {
+    s32 j = 0;
+    for (s32 remaining = 9; remaining != 0; remaining--, j++) {
         current = spotBoundaries;
         current += j;
         if (vec.x + (*current)[0] < cursorPos.x &&
@@ -707,17 +707,18 @@ u8 dAcOCtrlPnl_c::getSpotForCursor(mVec2_c& cursorPos) {
     return 0xFF;
 }
 
+// non matching
 u8 dAcOCtrlPnl_c::getMoveDirection(s32 currentSpot, s32 targetSpot) {
-    s32 y1 = currentSpot / 3;
-    s32 y2 = targetSpot / 3;
     s32 x1 = currentSpot % 3;
     s32 x2 = targetSpot % 3;
+    s32 y1 = currentSpot / 3;
+    s32 y2 = targetSpot / 3;
     if (x1 != x2 && y1 != y2) {
         return 0xFF;
     }
-    // nonmatching: regswap and instruction reordering
-    s32 xAbs = EGG::Math<s32>::abs(x1 - x2);
-    s32 yAbs = EGG::Math<s32>::abs(y1 - y2);
+    // non matching: regswap
+    s32 xAbs = EGG::Math<int>::abs(x1 - x2);
+    s32 yAbs = EGG::Math<int>::abs(y1 - y2);
     if (xAbs > 1 || yAbs > 1) {
         return 0xFF;
     }
@@ -791,13 +792,10 @@ void dAcOCtrlPnl_c::updateSpotTilesFromPuzzle() {
     }
 }
 
-inline bool isFF(s32 flag) {
-    return flag >= 0xFF;
-}
-
+// non matching
 bool dAcOCtrlPnl_c::isFirstTime() {
-    s32 flag = getFromParams(0x10, 0xFF);
-    // nonmatching: first comparison is weird
+    u8 flag = getFromParams(0x10, 0xFF);
+    // non matching: first comparison is weird
     return flag >= 0xFF || (flag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag));
 }
 
@@ -810,12 +808,7 @@ bool dAcOCtrlPnl_c::changedPuzzle() {
     return false;
 }
 
-inline int getNum() {
-    return 0;
-}
-
 void dAcOCtrlPnl_c::getScreenCenter(mVec3_c& outVec) {
-    // int to float???
     mVec3_c local = mPosition + sSpotPositions[4];
     s32 _weird_zero = 0;
     local.y += (146.f + _weird_zero);
