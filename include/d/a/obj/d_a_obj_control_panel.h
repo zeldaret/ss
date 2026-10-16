@@ -22,18 +22,18 @@ class dAcOCtrlPnl_c : public dAcObjBase_c {
     class callback_c : public m3d::callback_c {
     public:
         void timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) override;
-        void setPosAndScale(int i, const mVec3_c &vec, f32 f) {
-            field_0x0[i] = vec;
-            field_0x20[i] = f;
+        void setPosAndScale(int tileId, const mVec3_c &vec, f32 f) {
+            mTilePositions[tileId] = vec;
+            mTileScales[tileId] = f;
         }
         void setNodeID(int i, s32 nodeID) {
-            mNodeIDs[i] = nodeID;
+            mTileNodeIDs[i] = nodeID;
         }
 
     private:
-        /* 0x00 */ mVec3_c field_0x0[8];
-        /* 0x20 */ f32 field_0x20[8];
-        /* 0x40 */ s32 mNodeIDs[8];
+        /* 0x00 */ mVec3_c mTilePositions[8];
+        /* 0x20 */ f32 mTileScales[8];
+        /* 0x40 */ s32 mTileNodeIDs[8];
     };
     friend class callback_c;
     struct Spot {
@@ -84,7 +84,7 @@ public:
     bool changedPuzzle();
     bool isFirstTime();
 
-    inline bool doChaseTilePosToTarget() {
+    bool doChaseTilePosToTarget() {
         return cLib::chasePos(mTilePositions[mMovingTile], mGrabTargetPosition, 10.f) > 0;
     }
 
@@ -94,10 +94,6 @@ public:
 
     void unsetSceneflag(u8 flag) {
         SceneflagManager::sInstance->unsetFlag(mRoomID, flag);
-    }
-
-    s32 hasNoFlag() {
-        return getFromParams(0x10, 0xFF) >= 0xFF;
     }
 
     STATE_FUNC_DECLARE(dAcOCtrlPnl_c, Wait);

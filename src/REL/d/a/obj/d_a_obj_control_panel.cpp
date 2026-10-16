@@ -779,7 +779,7 @@ void dAcOCtrlPnl_c::handleLinkObjProp0x200(bool shouldUnset) {
 void dAcOCtrlPnl_c::callback_c::timingB(u32 nodeID, nw4r::g3d::WorldMtxManip *result, nw4r::g3d::ResMdl) {
     bool isTileNode = false;
     for (int i = 0; i < 8; i++) {
-        if (mNodeIDs[i] == nodeID) {
+        if (mTileNodeIDs[i] == nodeID) {
             isTileNode = true;
             break;
         }
@@ -787,14 +787,14 @@ void dAcOCtrlPnl_c::callback_c::timingB(u32 nodeID, nw4r::g3d::WorldMtxManip *re
     if (isTileNode) {
         int tileId = -1;
         for (int i = 0; i < 8; i++) {
-            if (mNodeIDs[i] == nodeID) {
+            if (mTileNodeIDs[i] == nodeID) {
                 tileId = i;
             }
         }
         mMtx_c mtx;
         result->GetMtx(mtx);
-        mtx.transM(field_0x0[tileId]);
-        mtx.scaleM(field_0x20[tileId], field_0x20[tileId], field_0x20[tileId]);
+        mtx.transM(mTilePositions[tileId]);
+        mtx.scaleM(mTileScales[tileId], mTileScales[tileId], mTileScales[tileId]);
         result->SetMtx(mtx);
     }
 }
