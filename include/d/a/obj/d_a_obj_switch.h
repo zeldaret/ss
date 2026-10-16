@@ -8,18 +8,7 @@
 #include "s/s_State.hpp"
 #include "toBeSorted/time_area_mgr.h"
 
-// OBJ_VSD?
-class dAcOScatterSand_tmp : public dAcObjBase_c {
-public:
-    /* 0x330 */ u8 field_0x330[0x6DC - 0x330];
-    /* 0x6DC */ u16 field_0x6DC;
-    /* 0x6DE */ u8 field_0x6DE[0x6E4 - 0x6DE];
-    /* 0x6E4 */ bool field_0x6E4;
-
-    inline f32 getSomeScale() {
-        return mScale.y * 41.65f / 100.0f;
-    }
-};
+class dAcOScatterSand;
 
 /**
  * A callback implementation that controls the button node in the switch model.
@@ -81,7 +70,7 @@ private:
     /* 0x354 */ dBgW mCollision;
     /* 0x564 */ STATE_MGR_DECLARE(dAcOsw_c);
     /* 0x5A0 */ TimeAreaStruct field_0x5A0;
-    /* 0x5AC */ dAcRef_c<dAcOScatterSand_tmp> mObjRef;
+    /* 0x5AC */ dAcRef_c<dAcOScatterSand> mObjRef;
     /* 0x5B8 */ mMtx_c field_0x5B8;
     /* 0x5E8 */ f32 field_0x5E8;
     /* 0x5EC */ u16 field_0x5EC;

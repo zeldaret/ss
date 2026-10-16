@@ -1,6 +1,7 @@
 #include "d/a/obj/d_a_obj_switch.h"
 
 #include "d/a/d_a_player.h"
+#include "d/a/obj/d_a_obj_scattersand.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_w.h"
 #include "d/d_linkage.h"
@@ -129,7 +130,7 @@ int dAcOsw_c::actorPostCreate() {
         parent = static_cast<dAcBase_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_VSD, parent));
         if (parent != nullptr && nw4r::math::FAbs(parent->mPosition.y - mPosition.y) < 30.0f) {
             if (getSquareDistanceTo(parent->mPosition) < 900.0f) {
-                mObjRef.link(static_cast<dAcOScatterSand_tmp *>(parent));
+                mObjRef.link(static_cast<dAcOScatterSand *>(parent));
                 break;
             }
         }
@@ -228,12 +229,12 @@ void dAcOsw_c::executeState_OnWait() {
         field_0x5F3 = 1;
     }
 
-    dAcOScatterSand_tmp *ac = mObjRef.get();
+    dAcOScatterSand *ac = mObjRef.get();
 
     if (ac != nullptr) {
-        if (ac != nullptr && (ac->getSomeScale() * 100.0f) <= 40.0f && !ac->field_0x6E4) {
-            ac->field_0x6E4 = true;
-            ac->field_0x6DC = 10;
+        if (ac != nullptr && (ac->getSomeScale() * 100.0f) <= 40.0f && !ac->getField_0x6E4()) {
+            ac->setField_0x6E4(true);
+            ac->setField_0x6DC(10);
         }
     } else {
         if (field_0x5F3 != 0) {
