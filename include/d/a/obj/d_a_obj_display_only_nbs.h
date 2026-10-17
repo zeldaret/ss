@@ -7,7 +7,7 @@
 
 class dAcOdisplayOnlyNbs_c : public dAcObjBase_c {
 public:
-    dAcOdisplayOnlyNbs_c() : mResFile(nullptr) {}
+    dAcOdisplayOnlyNbs_c() {}
     virtual ~dAcOdisplayOnlyNbs_c() {}
 
     virtual bool createHeap() override;

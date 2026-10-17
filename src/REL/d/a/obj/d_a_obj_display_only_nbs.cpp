@@ -9,7 +9,7 @@ static const char *const sMdlNames[] = {
 SPECIAL_ACTOR_PROFILE(OBJ_DISPLAY_ONLY_NBS, dAcOdisplayOnlyNbs_c, fProfile::OBJ_DISPLAY_ONLY_NBS, 0x21B, 0, 3);
 
 bool dAcOdisplayOnlyNbs_c::createHeap() {
-    mSubtype = mParams & 0xF;
+    mSubtype = getFromParams(0, 0xF);
     mResFile = nw4r::g3d::ResFile(CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(sMdlNames[mSubtype]);
     TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120));
