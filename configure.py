@@ -2682,7 +2682,7 @@ config.libs = [
     ),
     Rel(NonMatching, "d_a_obj_side_shutter", "REL/d/a/obj/d_a_obj_side_shutter.cpp"),
     Rel(NonMatching, "d_a_obj_sink_floor_f", "REL/d/a/obj/d_a_obj_sink_floor_f.cpp"),
-    Rel(NonMatching, "d_a_obj_siren_2dmap", "REL/d/a/obj/d_a_obj_siren_2dmap.cpp"),
+    Rel(Matching, "d_a_obj_siren_2dmap", "REL/d/a/obj/d_a_obj_siren_2dmap.cpp"),
     Rel(NonMatching, "d_a_obj_siren_barrier", "REL/d/a/obj/d_a_obj_siren_barrier.cpp"),
     Rel(NonMatching, "d_a_obj_skull", "REL/d/a/obj/d_a_obj_skull.cpp"),
     Rel(NonMatching, "d_a_obj_slice_log", "REL/d/a/obj/d_a_obj_slice_log.cpp"),
