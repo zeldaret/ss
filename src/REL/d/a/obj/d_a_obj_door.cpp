@@ -1267,10 +1267,10 @@ int dAcOdoor_c::actorExecute() {
 
 int dAcOdoor_c::draw() {
     if (isTimeEffected()) {
-        if (!mTimeBits.isPast()) {
+        if (!mTimeBits.getPast()) {
             drawModelType1(&mMdl1);
         }
-        if (!mTimeBits.isPresent()) {
+        if (!mTimeBits.getPresent()) {
             drawModelType1(&mMdl0);
         }
     } else {
