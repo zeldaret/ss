@@ -3,21 +3,20 @@
 #include "d/a/d_a_player.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
-#include "toBeSorted/area_math.h"
 
 SPECIAL_ACTOR_PROFILE(SW_AREA_TAG, dTgSwArea_c, fProfile::SW_AREA_TAG, 0x292, 0, 0);
 
 int dTgSwArea_c::create() {
-    setSceneflag = getSetSceneflag();
-    unsetSceneflag = getUnsetSceneflag();
-    isTemporary = !getIsPersistent();
+    mSetSceneflag = getFromParams(0, 0xFF);
+    mUnsetSceneflag = getFromParams(8, 0xFF);
+    mbTemporary = !getFromParams(16, 0x1);
 
-    setStoryflag = getSetStoryflag();
-    unsetStoryflag = getUnsetStoryflag();
+    mSetStoryflag = mRotation.x & 0x7FF;
+    mUnsetStoryflag = mRotation.z & 0x7FF;
     mRotation.x = 0;
     mRotation.z = 0;
 
-    matrixCreateFromPosRotYScale(area, mPosition, mRotation.y, mScale, nullptr, 0.0f);
+    mArea.set(mPosition, mRotation.y, mScale, nullptr, 0.0f);
     return SUCCEEDED;
 }
 
@@ -32,38 +31,38 @@ bool isValidStoryFlag(u16 storyflag) {
 }
 
 int dTgSwArea_c::actorExecute() {
-    if (checkAreaBox(area, dAcPy_c::LINK->mPosition)) {
-        SceneflagManager::sInstance->setFlag(mRoomID, setSceneflag);
-        SceneflagManager::sInstance->unsetFlag(mRoomID, unsetSceneflag);
+    if (mArea.checkAreaBox(dAcPy_c::GetLink()->mPosition)) {
+        SceneflagManager::sInstance->setFlag(mRoomID, mSetSceneflag);
+        SceneflagManager::sInstance->unsetFlag(mRoomID, mUnsetSceneflag);
 
-        if (isValidStoryFlag(setStoryflag)) {
-            StoryflagManager::sInstance->setFlag(setStoryflag);
+        if (isValidStoryFlag(mSetStoryflag)) {
+            StoryflagManager::sInstance->setFlag(mSetStoryflag);
         }
 
-        if (isValidStoryFlag(unsetStoryflag)) {
-            StoryflagManager::sInstance->unsetFlag(unsetStoryflag);
+        if (isValidStoryFlag(mUnsetStoryflag)) {
+            StoryflagManager::sInstance->unsetFlag(mUnsetStoryflag);
         }
 
-        if (scale < 1.0f) {
-            scale = 50.0f;
-            matrixCreateFromPosRotYScale(area, mPosition, mRotation.y, mScale, nullptr, scale);
+        if (mScaleModify < 1.0f) {
+            mScaleModify = 50.0f;
+            mArea.set(mPosition, mRotation.y, mScale, nullptr, mScaleModify);
         }
     } else {
-        if (scale > 1.0f) {
-            scale = 0.0f;
-            matrixCreateFromPosRotYScale(area, mPosition, mRotation.y, mScale, nullptr, scale);
+        if (mScaleModify > 1.0f) {
+            mScaleModify = 0.0f;
+            mArea.set(mPosition, mRotation.y, mScale, nullptr, mScaleModify);
         }
 
-        if (isTemporary) {
-            SceneflagManager::sInstance->unsetFlag(mRoomID, setSceneflag);
-            SceneflagManager::sInstance->setFlag(mRoomID, unsetSceneflag);
+        if (mbTemporary) {
+            SceneflagManager::sInstance->unsetFlag(mRoomID, mSetSceneflag);
+            SceneflagManager::sInstance->setFlag(mRoomID, mUnsetSceneflag);
 
-            if (isValidStoryFlag(setStoryflag)) {
-                StoryflagManager::sInstance->unsetFlag(setStoryflag);
+            if (isValidStoryFlag(mSetStoryflag)) {
+                StoryflagManager::sInstance->unsetFlag(mSetStoryflag);
             }
 
-            if (isValidStoryFlag(unsetStoryflag)) {
-                StoryflagManager::sInstance->setFlag(unsetStoryflag);
+            if (isValidStoryFlag(mUnsetStoryflag)) {
+                StoryflagManager::sInstance->setFlag(mUnsetStoryflag);
             }
         }
     }

@@ -47,6 +47,10 @@ public:
     bool Cross(const mVec3_c &);
     void Clamp(const mVec3_c &, mVec3_c &);
     void fn_80338f30(f32, f32);
+
+    void SetField_0xB4(u32 val) {
+        field_0xB4 = val;
+    }
 };
 
 #endif

@@ -2,14 +2,13 @@
 
 #include "d/a/d_a_player.h"
 #include "f/f_base.h"
-#include "toBeSorted/area_math.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_HEAT_RESIST, dTgHeatResist_c, fProfile::TAG_HEAT_RESIST, 0x223, 0, 4);
 
 int dTgHeatResist_c::create() {
-    mInverted = static_cast<u8>(mParams & 0x3);
+    mInverted = getFromParams(0, 0x3);
 
-    matrixCreateFromPosRotYScale(matrix, mPosition, mRotation.y, mScale, nullptr, 0.0f);
+    mArea.set(mPosition, mRotation.y, mScale, nullptr, 0.0f);
     return SUCCEEDED;
 }
 
@@ -18,14 +17,14 @@ int dTgHeatResist_c::doDelete() {
 }
 
 int dTgHeatResist_c::actorExecute() {
-    dAcPy_c *player = dAcPy_c::LINK;
+    dAcPy_c *player = dAcPy_c::GetLinkM();
 
     if (mInverted == 1) {
-        if (!checkAreaBox(matrix, player->mPosition)) {
+        if (!mArea.checkAreaBox(player->mPosition)) {
             player->onForceOrPreventActionFlags(0x8000000);
         }
     } else {
-        if (checkAreaBox(matrix, player->mPosition)) {
+        if (mArea.checkAreaBox(player->mPosition)) {
             player->onForceOrPreventActionFlags(0x8000000);
         }
     }

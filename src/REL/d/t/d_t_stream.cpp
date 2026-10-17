@@ -3,7 +3,6 @@
 #include "d/a/d_a_base.h"
 #include "f/f_base.h"
 #include "f/f_list_mg.h"
-#include "toBeSorted/area_math.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_STREAM, dTgStream_c, fProfile::TAG_STREAM, 0x29D, 0, 0);
 
@@ -47,7 +46,7 @@ int dTgStream_c::create() {
         addToList(sStreamList);
     }
 
-    matrixCreateFromPosRotYScale(mArea, mPosition, mRotation.y, mScale, nullptr, 0.f);
+    mArea.set(mPosition, mRotation.y, mScale, nullptr, 0.f);
 
     return SUCCEEDED;
 }

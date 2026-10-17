@@ -1,8 +1,8 @@
 #ifndef D_T_TIME_DOOR_BEAM_H
 #define D_T_TIME_DOOR_BEAM_H
 
+#include "d/d_area.h"
 #include "d/t/d_tg.h"
-#include "m/m_mtx.h"
 
 class dTgTimeDoorBeam_c : public dTg_c {
 public:
@@ -14,9 +14,10 @@ public:
     virtual int actorExecute() override;
     virtual int draw() override;
 
+    bool isPlayerInArea();
+
 private:
-    bool checkPlayerPosInMtx();
-    mMtx_c matrix;
+    dArea_c mArea;
 };
 
 #endif

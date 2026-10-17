@@ -1,8 +1,8 @@
 #ifndef D_T_VIEW_CLIP_H
 #define D_T_VIEW_CLIP_H
 
+#include "d/d_area.h"
 #include "d/t/d_tg.h"
-#include "m/m_mtx.h"
 
 class dTgViewClip_c : public dTg_c {
 public:
@@ -38,7 +38,7 @@ public:
     static void setViewClip(s32 idx, u8 value);
 
 private:
-    /* 0x0DC */ mMtx_c mArea;
+    /* 0x0DC */ dArea_c mArea;
     /* 0x12C */ u8 mIndex;
     /* 0x12D */ u8 mType;
     /* 0x12E */ u8 mAreaIndex;

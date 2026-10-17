@@ -1,10 +1,10 @@
 #ifndef D_T_STREAM_H
 #define D_T_STREAM_H
 
+#include "d/d_area.h"
 #include "d/t/d_tg.h"
 #include "f/f_list_mg.h"
 #include "f/f_list_nd.h"
-#include "m/m_mtx.h"
 #include "m/m_vec.h"
 
 class dTgStream_c : public dTg_c {
@@ -31,7 +31,7 @@ private:
     /* 0x0FF */ u8 mOrder;
     /* 0x100 */ u8 mIsSand;
     /* 0x101 */ u8 field_0x101;
-    /* 0x104 */ mMtx_c mArea;
+    /* 0x104 */ dArea_c mArea;
 
     /* 0x134 */ fLiNdBa_c mStreamNode;
 };

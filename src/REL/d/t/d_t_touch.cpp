@@ -1,9 +1,7 @@
 #include "d/t/d_t_touch.h"
 
-#include "c/c_math.h"
 #include "d/flag/sceneflag_manager.h"
 #include "s/s_Math.h"
-#include "toBeSorted/area_math.h"
 
 SPECIAL_ACTOR_PROFILE(TOUCH_TAG, dTgTouchTag, fProfile::TOUCH_TAG, 0x028E, 0, 0);
 
@@ -18,7 +16,7 @@ int dTgTouchTag::create() {
     mActivatorIndex = !(getActivatorIndex() == 0xF) ? getActivatorIndex() : 0;
     mZoneFlag = getZoneFlag();
     mChkFlag = getChkFlag();
-    matrixCreateFromPosRotYScale(mAreaOfEffect, mPosition, mRotation.y, mScale, nullptr, 0.0f);
+    mAreaOfEffect.set(mPosition, mRotation.y, mScale, nullptr, 0.0f);
     mStateMgr.changeState(StateID_Wait);
     return SUCCEEDED;
 }
@@ -48,7 +46,7 @@ void dTgTouchTag::executeState_Wait() {
     dAcBase_c *actor = static_cast<dAcBase_c *>(fManager_c::searchBaseByProfName(ACTIVATORS[mActivatorIndex], nullptr));
 
     while (actor != nullptr) {
-        if (actor->mRoomID == mRoomID && checkAreaBox(mAreaOfEffect, actor->mPosition)) {
+        if (actor->mRoomID == mRoomID && mAreaOfEffect.checkAreaBox(actor->mPosition)) {
             mFlagTimer = 5;
             if (mZoneFlag != 0xFF) {
                 SceneflagManager::sInstance->setFlag(mRoomID, mZoneFlag);

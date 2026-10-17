@@ -3,20 +3,19 @@
 #include "d/a/d_a_player.h"
 #include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
-#include "toBeSorted/area_math.h"
 
 SPECIAL_ACTOR_PROFILE(EVENTF_TAG, dTgEventF_c, fProfile::EVENTF_TAG, 0x14, 0, 0);
 
 int dTgEventF_c::create() {
-    matrixCreateFromPosRotYScale(mMatrix, mPosition, mRotation.y, mScale, 0x0, 0.0f);
+    mArea.set(mPosition, mRotation.y, mScale, 0x0, 0.0f);
     mEventId = getFromParams(0, 0xFF);
     mSetStoryflag = getFromParams(8, 0x7FF);
-    if ((s32)mSetStoryflag == 0x3FF) {
-        mSetStoryflag = 0xFFFFFFFF;
+    if (mSetStoryflag == 0x3FF) {
+        mSetStoryflag = -1;
     }
     mTrigStoryflag = getFromParams(19, 0x7FF);
-    if ((s32)mTrigStoryflag == 0x3FF) {
-        mTrigStoryflag = 0xFFFFFFFF;
+    if (mTrigStoryflag == 0x3FF) {
+        mTrigStoryflag = -1;
     }
     mSubtype = getFromParams(30, 0x3);
     return SUCCEEDED;
@@ -26,19 +25,19 @@ int dTgEventF_c::doDelete() {
     return SUCCEEDED;
 }
 
-int dTgEventF_c::checkStoryflagValid(u32 counterIdx) {
+int dTgEventF_c::checkStoryflagValid(s32 counterIdx) {
     return StoryflagManager::sInstance->checkFlagValid(counterIdx);
 }
 
-bool dTgEventF_c::checkUncommitedStoryFlagValue(u32 flag) {
+bool dTgEventF_c::checkUncommitedStoryFlagValue(s32 flag) {
     return StoryflagManager::sInstance->getUncommittedValue(flag);
 }
 
-void dTgEventF_c::setStoryFlag(StoryFlags_e flag) {
+void dTgEventF_c::setStoryFlag(s32 flag) {
     StoryflagManager::sInstance->setFlag(flag);
 }
 
-void dTgEventF_c::unsetStoryFlag(StoryFlags_e flag) {
+void dTgEventF_c::unsetStoryFlag(s32 flag) {
     StoryflagManager::sInstance->unsetFlag(flag);
 }
 
@@ -46,7 +45,7 @@ int dTgEventF_c::actorExecute() {
     if ((!checkStoryflagValid(mTrigStoryflag) || checkUncommitedStoryFlagValue(mTrigStoryflag))) {
         if ((mSubtype != 0 && !(checkStoryflagValid(mSetStoryflag) && checkUncommitedStoryFlagValue(mSetStoryflag))) ||
             (mSubtype == 0 && checkStoryflagValid(mSetStoryflag) && checkUncommitedStoryFlagValue(mSetStoryflag))) {
-            if (checkAreaBox(mMatrix, dAcPy_c::LINK->mPosition)) {
+            if (mArea.checkAreaBox(dAcPy_c::GetLink()->mPosition)) {
                 Event EStack_48 = Event(mEventId, (int)mRoomID, 0x100001, 0, 0);
                 mActorEvent.scheduleEvent(EStack_48, 0);
             }
@@ -58,10 +57,10 @@ int dTgEventF_c::actorExecuteInEvent() {
     if (mActorEvent.isThisActorInEvent()) {
         mActorEvent.advanceNext();
         if (!(mSubtype == 0 || !checkStoryflagValid(mSetStoryflag) || checkUncommitedStoryFlagValue(mSetStoryflag))) {
-            setStoryFlag((StoryFlags_e)mSetStoryflag);
+            setStoryFlag(mSetStoryflag);
         } else if ((mSubtype == 0 && checkStoryflagValid(mSetStoryflag)) &&
                    checkUncommitedStoryFlagValue(mSetStoryflag)) {
-            unsetStoryFlag((StoryFlags_e)mSetStoryflag);
+            unsetStoryFlag(mSetStoryflag);
         }
     }
     return SUCCEEDED;

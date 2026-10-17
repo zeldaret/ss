@@ -4,7 +4,6 @@
 #include "d/d_camera.h"
 #include "d/d_sc_game.h"
 #include "f/f_base.h"
-#include "toBeSorted/area_math.h"
 #include "toBeSorted/area_utils.h"
 
 SPECIAL_ACTOR_PROFILE(VIEW_CLIP_TAG, dTgViewClip_c, fProfile::VIEW_CLIP_TAG, 0xB, 0, 0);
@@ -19,7 +18,7 @@ int dTgViewClip_c::create() {
     }
 
     mAreaIndex = getFromParams(12, 0xFF);
-    matrixCreateFromPosRotYScale(mArea, mPosition, mRotation.y, mScale, nullptr, 0.0f);
+    mArea.set(mPosition, mRotation.y, mScale, nullptr, 0.0f);
 
     return SUCCEEDED;
 }
@@ -34,7 +33,7 @@ int dTgViewClip_c::actorExecute() {
 
 int dTgViewClip_c::draw() {
     dCamera_c *pCamera = dScGame_c::getCamera();
-    if (!checkAreaBox(mArea, pCamera->getPosition())) {
+    if (!mArea.checkAreaBox(pCamera->getPosition())) {
         if (mAreaIndex == 0xFF) {
             return SUCCEEDED;
         }

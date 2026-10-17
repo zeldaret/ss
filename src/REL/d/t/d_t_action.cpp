@@ -7,15 +7,14 @@
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "m/m_angle.h"
-#include "toBeSorted/area_math.h"
 
 SPECIAL_ACTOR_PROFILE(ACTION_TAG, dTgAction_c, fProfile::ACTION_TAG, 0x20, 0, 0);
 
 int dTgAction_c::create() {
-    mEnableFlag1 = (mParams >> 6) & 0xFF;
-    mEnableFlag2 = (mParams >> 14) & 0xFF;
-    mType = (mParams >> 0) & 0x3F;
-    matrixCreateFromPosRotYScale(mActiveMtx, mPosition, mRotation.y, mScale, nullptr, 0.f);
+    mEnableFlag1 = getFromParams(6, 0xFF);
+    mEnableFlag2 = getFromParams(14, 0xFF);
+    mType = getFromParams(0, 0x3F);
+    mArea.set(mPosition, mRotation.y, mScale, nullptr, 0.f);
     return SUCCEEDED;
 }
 
@@ -26,14 +25,14 @@ int dTgAction_c::doDelete() {
 void dTgAction_c::setActiveArea(f32 scale) {
     if (mScaleIncrease < 0.1f) {
         mScaleIncrease = scale;
-        matrixCreateFromPosRotYScale(mActiveMtx, mPosition, mRotation.y, mScale, nullptr, mScaleIncrease);
+        mArea.set(mPosition, mRotation.y, mScale, nullptr, mScaleIncrease);
     }
 }
 
 void dTgAction_c::resetActiveArea() {
     if (mScaleIncrease > 0.f) {
         mScaleIncrease = 0.f;
-        matrixCreateFromPosRotYScale(mActiveMtx, mPosition, mRotation.y, mScale, nullptr, 0.f);
+        mArea.set(mPosition, mRotation.y, mScale, nullptr, 0.f);
         field_0x134 = 0;
     }
 }
@@ -51,7 +50,7 @@ int dTgAction_c::actorExecute() {
                 break;
             }
             if (pObj->mProfileName == fProfile::BOMB) {
-                if (checkAreaBox(mActiveMtx, pObj->getPosition())) {
+                if (mArea.checkAreaBox(pObj->getPosition())) {
                     reinterpret_cast<dAcBomb_c *>(pObj)->setFlag(dAcBomb_c::FLAG_0x20000000);
                 }
             }
@@ -59,7 +58,7 @@ int dTgAction_c::actorExecute() {
     }
 
     // Check For Player Within Area
-    if (enabled && checkAreaBox(mActiveMtx, player->getPosition())) {
+    if (enabled && mArea.checkAreaBox(player->getPosition())) {
         if (mType == FORCE_FADE_RESTART) {
             player->onFlags_0x358(0x10000000);
             setActiveArea(50.f);
