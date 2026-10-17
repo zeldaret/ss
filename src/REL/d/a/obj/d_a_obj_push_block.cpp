@@ -172,7 +172,7 @@ int dAcOpushBlk_c::actorCreate() {
     }
 
     if (mRestrictSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mRestrictSceneflag)) {
-        field_0xF02 = 2;
+        mRestrictType = 2;
         mAcceleration = 0.0f;
     }
 
@@ -218,7 +218,7 @@ int dAcOpushBlk_c::actorPostCreate() {
         mBgW.Move();
     }
 
-    if (field_0xF02 == 2) {
+    if (mRestrictType == 2) {
         dAcObjBase_c *parent = nullptr;
         do {
             dAcObjBase_c *pVsd =
@@ -233,7 +233,7 @@ int dAcOpushBlk_c::actorPostCreate() {
         } while (parent != nullptr);
 
         if (parent == nullptr) {
-            field_0xF02 = 0;
+            mRestrictType = 0;
         }
     }
 
@@ -265,7 +265,7 @@ int dAcOpushBlk_c::actorExecute() {
     mPosition += mVelocity;
     mPosition += mStts.GetCcMove();
 
-    if (!(isState(StateID_RopeGrab) && mbOnRope) && field_0xF02 == 0) {
+    if (!(isState(StateID_RopeGrab) && mbOnRope) && mRestrictType == 0) {
         if (field_0xF08) {
             mVec3_c pos = mPosition;
             mAcch.CrrPos(*dBgS::GetInstance());
@@ -455,12 +455,12 @@ void dAcOpushBlk_c::executeState_Wait() {
     }
     fn_217_2400();
     fn_217_2360();
-    if (field_0xF02 == 1) {
+    if (mRestrictType == 1) {
         if (!mScatterSand.isLinked()) {
-            field_0xF02 = 0;
+            mRestrictType = 0;
             mAcceleration = -4.0f;
         }
-    } else if (field_0xF02 == 2) {
+    } else if (mRestrictType == 2) {
         dAcOScatterSand *pSand = mScatterSand.get();
         if (pSand != nullptr) {
             f32 maxScaleXZ = MAX(pSand->mScale.x, pSand->mScale.z);
@@ -475,7 +475,7 @@ void dAcOpushBlk_c::executeState_Wait() {
                 pSand->setField_0x6E4(true);
                 pSand->setField_0x6DC(10);
             }
-            field_0xF02 = 1;
+            mRestrictType = 1;
         } else {
             mBgW.ClrFlag0x4();
         }
@@ -711,7 +711,6 @@ void dAcOpushBlk_c::fn_217_2500() {
     }
     if (nw4r::math::FAbs(dAcPy_c::GetLink()->mPosition.y - mPosition.y) > 15.0f) {
         mBgW.ClrFlag0x4();
-
     } else {
         mBgW.OnFlag0x04();
     }

@@ -9,7 +9,6 @@
 #include "d/d_area.h"
 #include "d/d_shadow.h"
 #include "m/m3d/m_smdl.h"
-#include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
@@ -99,7 +98,7 @@ private:
     /* 0xEFF */ u8 mRestrictSceneflag;
     /* 0xF00 */ u8 mbGoalSwitch;
     /* 0xF01 */ u8 mTentalusFight;
-    /* 0xF02 */ u8 field_0xF02;
+    /* 0xF02 */ u8 mRestrictType;
     /* 0xF03 */ u8 mbLargerRadius;
     /* 0xF04 */ bool mbPlayerIsPushPull;
     /* 0xF05 */ bool field_0xF05;
