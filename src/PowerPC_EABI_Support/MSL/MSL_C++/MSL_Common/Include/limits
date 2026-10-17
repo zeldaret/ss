@@ -83,7 +83,7 @@ public:
     }
 };
 
-#if __REVOLUTION_SDK__
+#if PLATFORM_WII
 template <>
 class numeric_limits<double> {
 public:
