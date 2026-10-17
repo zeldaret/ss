@@ -33,7 +33,6 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/math/math_arithmetic.h"
 #include "s/s_Math.h"
-#include "toBeSorted/area_math.h"
 #include "toBeSorted/d_emitter.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_PUSH_BLOCK, dAcOpushBlk_c, fProfile::OBJ_PUSH_BLOCK, 0x12D, 0, 2);
@@ -761,13 +760,13 @@ bool dAcOpushBlk_c::isSwitchInArea(const mVec3_c &pos) {
     }
 
     mVec3_c extent(150.0f, 30.0f, 150.0f);
-    matrixCreateFromPosRotYScale(mArea, center, mRotation.y, extent, nullptr, 0.0f);
+    mArea.set(center, mRotation.y, extent, nullptr, 0.0f);
     f32 radius = (pSw->getField_0x5E8() - 10.f) * 1.4142135f * 0.5f;
     for (int i = 0; i < 4; ++i) {
         mVec3_c checkPos = pSw->mPosition;
         getXZCirclePoint(checkPos, sAngs[i] + pSw->mRotation.y, radius);
 
-        if (checkAreaBox(mArea, checkPos)) {
+        if (mArea.checkAreaBox(checkPos)) {
             return true;
         }
     }

@@ -6,6 +6,7 @@
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/bg/d_bg_w.h"
 #include "d/col/cc/d_cc_d.h"
+#include "d/d_area.h"
 #include "d/d_shadow.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_mtx.h"
@@ -81,7 +82,7 @@ private:
     /* 0xD80 */ dAcRef_c<dAcOsw_c> mSw;
     /* 0xD8C */ dAcRef_c<dAcOstageKraken_c> mStageKraken;
     /* 0xD98 */ dAcRef_c<dAcOScatterSand> mScatterSand;
-    /* 0xDA4 */ mMtx_c mArea;
+    /* 0xDA4 */ dArea_c mArea;
     /* 0xDD4 */ ActorOnRail3 mPath;
     /* 0xDF8 */ dPastPresent_c mTime;
     /* 0xDFC */ dEmitter_c mEmitter[4];
