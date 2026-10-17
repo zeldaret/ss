@@ -8,18 +8,7 @@
 #include "s/s_State.hpp"
 #include "toBeSorted/time_area_mgr.h"
 
-// OBJ_VSD?
-class dAcOScatterSand_tmp : public dAcObjBase_c {
-public:
-    /* 0x330 */ u8 field_0x330[0x6DC - 0x330];
-    /* 0x6DC */ u16 field_0x6DC;
-    /* 0x6DE */ u8 field_0x6DE[0x6E4 - 0x6DE];
-    /* 0x6E4 */ bool field_0x6E4;
-
-    inline f32 getSomeScale() {
-        return mScale.y * 41.65f / 100.0f;
-    }
-};
+class dAcOScatterSand;
 
 /**
  * A callback implementation that controls the button node in the switch model.
@@ -67,19 +56,32 @@ public:
         return mOnSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOnSceneFlag);
     }
 
+    void addBox() {
+        mNumBoxesOn++;
+    }
+    void removeBox() {
+        if (mNumBoxesOn != 0) {
+            mNumBoxesOn--;
+        }
+    }
+
+    f32 getField_0x5E8() const {
+        return field_0x5E8;
+    }
+
 private:
     /* 0x330 */ m3d::mdl_c mModel;
     /* 0x354 */ dBgW mCollision;
     /* 0x564 */ STATE_MGR_DECLARE(dAcOsw_c);
     /* 0x5A0 */ TimeAreaStruct field_0x5A0;
-    /* 0x5AC */ dAcRef_c<dAcOScatterSand_tmp> mObjRef;
+    /* 0x5AC */ dAcRef_c<dAcOScatterSand> mObjRef;
     /* 0x5B8 */ mMtx_c field_0x5B8;
     /* 0x5E8 */ f32 field_0x5E8;
     /* 0x5EC */ u16 field_0x5EC;
     /* 0x5EE */ u8 mOffSceneFlag;
     /* 0x5EF */ u8 mOnSceneFlag;
     /* 0x5F0 */ u8 mSwitchType;
-    /* 0x5F1 */ u8 field_0x5F1;
+    /* 0x5F1 */ u8 mNumBoxesOn;
     /* 0x5F2 */ u8 field_0x5F2;
     /* 0x5F3 */ u8 field_0x5F3;
     /* 0x5F4 */ u8 mActivatedByPlayer;

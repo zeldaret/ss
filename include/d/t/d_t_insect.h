@@ -48,11 +48,15 @@ public:
         mKillSignal = 1;
     }
 
-    void reveal(mVec3_c* pos) {
+    void reveal(mVec3_c *pos) {
         mRevealed = 1;
         if (pos != nullptr) {
             mRevealedSpawnPos = *pos;
         }
+    }
+    void reveal(const mVec3_c &pos) {
+        mRevealed = 1;
+        mRevealedSpawnPos = pos;
     }
 
     static const f32 SCALE_X;
@@ -69,7 +73,7 @@ private:
     /* 0x1F8 */ u8 field_0x1f8[16];
     /* 0x208 */ s32 mInsectRespawnTimers[16];
     /* 0x248 */ s32 mInsectCount;
-    /* 0x24C */ u8 mRevealed; // used by OBJ_SOIL and OBJ_VSD to signal that the insect should be spawned now
+    /* 0x24C */ u8 mRevealed;   // used by OBJ_SOIL and OBJ_VSD to signal that the insect should be spawned now
     /* 0x24D */ u8 mKillSignal; // used by goddess walls to signal that the insects should despawn
     /* 0x24E */ u8 field_0x24e;
     /* 0x24F */ u8 field_0x24f;
