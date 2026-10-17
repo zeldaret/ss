@@ -1,8 +1,12 @@
 #include "d/a/obj/d_a_obj_push_block.h"
 
+#include "c/c_lib.h"
+#include "c/c_math.h"
 #include "common.h"
+#include "d/a/d_a_base.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/a/obj/d_a_obj_scattersand.h"
 #include "d/a/obj/d_a_obj_stage_kraken.h"
 #include "d/a/obj/d_a_obj_switch.h"
 #include "d/col/bg/d_bg_s.h"
@@ -21,12 +25,15 @@
 #include "f/f_manager.h"
 #include "f/f_profile.h"
 #include "f/f_profile_name.h"
+#include "m/m_angle.h"
 #include "m/m_color.h"
 #include "m/m_mtx.h"
 #include "m/m_sphere.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/math/math_arithmetic.h"
+#include "s/s_Math.h"
+#include "toBeSorted/area_math.h"
 #include "toBeSorted/d_emitter.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_PUSH_BLOCK, dAcOpushBlk_c, fProfile::OBJ_PUSH_BLOCK, 0x12D, 0, 2);
@@ -35,8 +42,20 @@ STATE_DEFINE(dAcOpushBlk_c, Wait);
 STATE_DEFINE(dAcOpushBlk_c, Move);
 STATE_DEFINE(dAcOpushBlk_c, RopeGrab);
 
+struct dAcOpushBlk_HIO_c {
+    f32 field_0x00;
+    f32 field_0x04;
+    f32 field_0x08;
+    static const dAcOpushBlk_HIO_c sHio;
+};
+const dAcOpushBlk_HIO_c dAcOpushBlk_HIO_c::sHio = {
+    10.0f,
+    75.0f,
+    150.0f,
+};
+
 static dCcD_SrcCyl sSrcCyl = {
-    {/* mObjAt */ {AT_TYPE_PHYSICS, 0x91, {0, 0, 0}, 0, 2, 0, 0, CUT_DIR_NONE, 0},
+    {/* mObjAt */ {AT_TYPE_PHYSICS, 0x91, {0, 0, 0}, 2, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */
      {0, 0, {0, 0, 0x407}, 0, CUT_DIR_NONE},
      /* mObjCo */ {0}},
@@ -349,6 +368,7 @@ void dAcOpushBlk_c::executeState_Wait() {
         if (!mStageKraken.isLinked()) {
             mStageKraken.link(dAcOstageKraken_c::getInstance());
         }
+        dAcOstageKraken_c *pKraken = mStageKraken.get();
         if (mStageKraken.isLinked()) {
             if (field_0xEFA != 0) {
                 field_0xEFA--;
@@ -360,7 +380,7 @@ void dAcOpushBlk_c::executeState_Wait() {
                     mTentalusFight = 2;
                     // fall-through
                 case 2: {
-                    mRotation = mStageKraken.get()->mRotation;
+                    mRotation.set(pKraken->mRotation);
                     if (mPosition.y < -1000.0f) {
                         mPosition.y = -1000.0f;
                         mVelocity.y = 0.0f;
@@ -371,14 +391,14 @@ void dAcOpushBlk_c::executeState_Wait() {
                         mRotation.x = mRotation.x + 1500;
                     } else {
                         mVelocity.y = 0.0f;
-                        field_0xEE4.z += 0.1f * _weird_zero + 22.0f;
+                        field_0xEE4.z += 22.0f + 0.1f * _weird_zero;
                     }
                     mRotation.z = 1000.0f * mAng(field_0xEFA * 0xF00).sin();
                     if (mRotation.x >= 0x4000) {
                         mRotation.x = 0;
-                        mTentalusFight = 6;
                         field_0xEE4.z += _weird_zero + 60.0f;
-                        field_0xEE4.y += _weird_zero + 60.0f;
+                        mPosition.y -= _weird_zero + 60.0f;
+                        mTentalusFight = 6;
                     }
                 } break;
                 case 6: {
@@ -392,30 +412,435 @@ void dAcOpushBlk_c::executeState_Wait() {
                     }
                 } break;
                 case 7: {
-                    mRotation.x = field_0xEFA * 150.0f * mAng(field_0xEFA * 0x1C00).sin();
-                    mRotation.z = field_0xEFA * 150.0f * mAng(field_0xEFA * 0x1C00).sin();
+                    mRotation.x = field_0xEFA * mAng(field_0xEFA * 0x1C00).sin() * 150.0f;
+                    mRotation.z = field_0xEFA * mAng(field_0xEFA * 0x1900).sin() * 150.0f;
                     if (field_0xEFA == 0) {
                         mTentalusFight = 1;
                     }
 
                 } break;
             }
-            mVec3_c v0;
-            mStageKraken.get()->mWorldMtx.multVec(field_0xEE4, v0);
-            mPosition = v0;
-
             mMtx_c m0;
-            m0.ZrotS(-mStageKraken.get()->mRotation.z);
-            // ...
+            mVec3_c v0;
+            pKraken->mWorldMtx.multVec(field_0xEE4, v0);
+            mPosition.x = v0.x;
+            mPosition.z = v0.z;
+
+            v0 = mPosition - pKraken->mPosition;
+
+            m0.ZrotS(-pKraken->mRotation.z);
+            m0.XrotM(-pKraken->mRotation.x);
+            m0.YrotM(-pKraken->mRotation.y);
+            m0.multVec(v0, v0);
+
+            field_0xEE4.y = v0.y;
+            if (dAcPy_c::GetLink()->isRecovering()) {
+                if (!field_0xF10) {
+                    field_0xF10 = true;
+                    fBase_c *pObj = nullptr;
+                    do {
+                        pObj = fManager_c::searchBaseByProfName(fProfile::B_KR, pObj);
+                        if (pObj != nullptr) {
+                            mTentalusFight = 1;
+                            mPosition.set(mStartingPos);
+                            mOldPosition.set(mStartingPos);
+                            mRotation.set(mStartingRot);
+                            break;
+                        }
+                    } while (pObj != nullptr);
+                }
+            } else {
+                field_0xF10 = false;
+            }
+        }
+    }
+    fn_217_2400();
+    fn_217_2360();
+    if (field_0xF02 == 1) {
+        if (!mScatterSand.isLinked()) {
+            field_0xF02 = 0;
+            mAcceleration = -4.0f;
+        }
+    } else if (field_0xF02 == 2) {
+        dAcOScatterSand *pSand = mScatterSand.get();
+        if (pSand != nullptr) {
+            f32 maxScaleXZ = MAX(pSand->mScale.x, pSand->mScale.z);
+            if (maxScaleXZ * 50.0f <= 75.0f && !pSand->getField_0x6E4()) {
+                pSand->setField_0x6E4(true);
+                pSand->setField_0x6DC(10);
+            }
+        }
+
+        if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mRestrictSceneflag) || pSand == nullptr) {
+            if (pSand != nullptr && !pSand->getField_0x6E4()) {
+                pSand->setField_0x6E4(true);
+                pSand->setField_0x6DC(10);
+            }
+            field_0xF02 = 1;
+        } else {
+            mBgW.ClrFlag0x4();
+        }
+    } else {
+        fn_217_2500();
+    }
+
+    if (mbPlayerIsPushPull) {
+        mbPlayerIsPushPull = false;
+        if (!field_0xF0D) {
+            field_0xF0D = true;
+            mCcBox.OnCoSet();
+        } else if (!mCcBox.ChkCoHit() && fn_217_1F60(mAngle.y, true)) {
+            field_0xED8 = mPosition;
+            getXZCirclePoint(field_0xED8, mAngle.y, dAcPy_c::sPushRelatedConstant);
+            if (fn_217_2830()) {
+                changeState(StateID_Move);
+            }
+        }
+    } else {
+        field_0xF0D = false;
+        mCcBox.ClrCoSet();
+    }
+}
+void dAcOpushBlk_c::finalizeState_Wait() {
+    field_0xF0D = false;
+    mCcBox.ClrCoSet();
+}
+
+void dAcOpushBlk_c::initializeState_Move() {
+    dAcPy_c::GetLinkM()->onFlags_0x360(0x10000);
+    field_0xEF8 = s16(dAcPy_c::GetLink()->sPushRelatedConstant * 0.1f) + 1;
+    if (dAcPy_c::GetLink()->mRotation.y.absDiff(mAngle.y) > 0x4000) {
+        fn_217_2310();
+    }
+}
+
+void dAcOpushBlk_c::executeState_Move() {
+    static const s16 sAngs[4] = {0x2000, 0x6000, -0x6000, -0x2000};
+    holdSound(SE_PushBlk_MOVE_LV);
+    f32 radius = 75.0f;
+    for (int i = 0; i < 4; ++i) {
+        mVec3_c spawnPos = mPosition;
+        getXZCirclePoint(spawnPos, sAngs[i] + mRotation.y, radius * 1.4142135f);
+        mEmitter[i].holdEffect(PARTICLE_RESOURCE_ID_MAPPING_514_, spawnPos, nullptr, nullptr, nullptr, nullptr);
+    }
+
+    if (cLib::chasePosXZ(mPosition, field_0xED8, 10.0f)) {
+        updatePathGoalFlag();
+        if (field_0xF0E) {
+            startSound(SE_PushBlk_MOVE_LIMIT);
+        }
+        changeState(StateID_Wait);
+        return;
+    }
+
+    if (!mSw.isLinked()) {
+        if (mAcchCir[0].ChkWallHit()) {
+            s32 target = cLib::targetAngleY(field_0xED8, mPosition);
+            s32 wallAngle = mAcchCir[0].GetWallAngleY();
+            if (target == wallAngle) {
+                updatePathGoalFlag();
+                startSound(SE_PushBlk_MOVE_LIMIT);
+                changeState(StateID_Wait);
+            }
+        }
+    }
+    if (mAcchCir[1].ChkWallHit()) {
+        s32 target = cLib::targetAngleY(field_0xED8, mPosition);
+        s32 wallAngle = mAcchCir[1].GetWallAngleY();
+        if (target == wallAngle) {
+            updatePathGoalFlag();
+            changeState(StateID_Wait);
+        }
+    }
+
+    if (field_0xEF8 != 0) {
+        field_0xEF8--;
+    } else {
+        updatePathGoalFlag();
+        changeState(StateID_Wait);
+    }
+}
+void dAcOpushBlk_c::finalizeState_Move() {
+    dAcPy_c::GetLinkM()->offFlags_0x360(0x10000);
+    if (dAcPy_c::GetLink()->mRotation.y.absDiff(mAngle.y) < 0x4000) {
+        field_0xF07 = true;
+    }
+    field_0xF08 = false;
+}
+
+void dAcOpushBlk_c::initializeState_RopeGrab() {
+    field_0xF0F = true;
+    mAcceleration = 0.0f;
+    field_0xEFC = 3;
+}
+void dAcOpushBlk_c::executeState_RopeGrab() {
+    if (mbOnRope) {
+        return;
+    }
+
+    mAcceleration = -4.0f;
+    cLib::chasePosXZ(mPosition, mSpawnPosition, 5.0f);
+    if (field_0xEFC < 3) {
+        sLib::addCalcAngle(mRotation.x.ref(), 0, 5, 1820, 182);
+        sLib::addCalcAngle(mRotation.z.ref(), 0, 5, 1820, 182);
+    } else {
+        sLib::chaseAngle(mRotation.x.ref(), 3641, 350);
+        sLib::addCalcAngle(mRotation.z.ref(), 0, 5, 0x71c, 182);
+    }
+
+    if (mAcch.ChkGndHit() || (field_0xEFC == 3 && field_0xF0C)) {
+        if (field_0xEFC == 3) {
+            startSound(SE_PushBlk_LAND);
+        }
+        if (field_0xEFC == 2) {
+            dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.5f, field_0x1B0);
+        }
+
+        if (field_0xEFC == 0) {
+            changeState(StateID_Wait);
+        } else {
+            mVelocity.y = field_0xEFC * 4.0f;
+            field_0xEFC--;
         }
     }
 }
-void dAcOpushBlk_c::finalizeState_Wait() {}
+void dAcOpushBlk_c::finalizeState_RopeGrab() {
+    mPosition.x = mSpawnPosition.x;
+    mPosition.z = mSpawnPosition.z;
+    mRotation.x = 0;
+    mRotation.z = 0;
+    field_0xF0F = false;
+}
 
-void dAcOpushBlk_c::initializeState_Move() {}
-void dAcOpushBlk_c::executeState_Move() {}
-void dAcOpushBlk_c::finalizeState_Move() {}
+bool dAcOpushBlk_c::fn_217_1F60(s16 dir, bool set) {
+    static const s16 sAngs[3] = {0x4000, 0x0, -0x4000};
+    field_0xF0E = false;
 
-void dAcOpushBlk_c::initializeState_RopeGrab() {}
-void dAcOpushBlk_c::executeState_RopeGrab() {}
-void dAcOpushBlk_c::finalizeState_RopeGrab() {}
+    f32 f8 = 8.0f;
+    dAcOsw_c *pSw = mSw.get();
+    if (pSw && pSw->mProfileName == fProfile::OBJ_SW) {
+        f32 f2 = pSw->mPosition.y;
+        if (f8 - (mPosition.y - f2) < f8) {
+            f8 = 8.0f;
+        }
+    }
+
+    mVec3_c start = mPosition;
+    mVec3_c end = mPosition;
+    for (int i = 0; i < 3; ++i) {
+        start = mPosition;
+        f32 radius = 73.0f;
+        getXZCirclePoint(start, dir, radius);
+        if (i != 1) {
+            getXZCirclePoint(start, dir + sAngs[i], radius);
+        }
+
+        start.y += f8;
+        end = start;
+
+        getXZCirclePoint(end, dir, dAcPy_c::GetLink()->sPushRelatedConstant + 2.0f);
+
+        if (dBgS_ObjLinChk::LineCross(&start, &end, this)) {
+            f32 a = (dBgS_ObjLinChk::GetInstance().GetLinEnd() - start).absXZ();
+            f32 b = (end - start).absXZ();
+            if (b - a > 1.5f) {
+                bool bHitSwitch = false;
+                if (dBgS::GetInstance()->ChkMoveBG(dBgS_ObjLinChk::GetInstance(), false)) {
+                    const dAcObjBase_c *pObj = dBgS::GetInstance()->GetActorPointer(dBgS_ObjLinChk::GetInstance());
+                    if (pObj != nullptr && pObj->mProfileName == fProfile::OBJ_SW) {
+                        bHitSwitch = true;
+                    }
+                }
+
+                if (!bHitSwitch) {
+                    return false;
+                }
+
+            } else {
+                if (set) {
+                    field_0xF0E = true;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+void dAcOpushBlk_c::fn_217_22D0(s16 rot) {
+    dAcOpushBlk_c *pObj = checkBlockedByPushBlock(rot);
+    if (pObj != nullptr) {
+        pObj->field_0xF06 = false;
+    }
+}
+
+void dAcOpushBlk_c::fn_217_2310() {
+    dAcOpushBlk_c *pObj = checkBlockedByPushBlock(mAngle.y - 0x8000);
+    if (pObj != nullptr) {
+        pObj->mBgW.OnFlag0x04();
+        pObj->field_0xF0B = true;
+    }
+}
+
+void dAcOpushBlk_c::fn_217_2360() {
+    if (field_0xF07 && mAcch.ChkGndHit()) {
+        field_0xF07 = false;
+        fn_217_22D0(mRotation.y);
+        fn_217_22D0(mRotation.y - 0x4000);
+        fn_217_22D0(mRotation.y + 0x4000);
+        fn_217_22D0(mRotation.y - 0x8000);
+    }
+}
+
+void dAcOpushBlk_c::fn_217_2400() {
+    if (!field_0xF06 && mAcch.ChkGndHit()) {
+        field_0xF06 = true;
+
+        if (!(fn_217_1F60(mRotation.y, false) || fn_217_1F60(mRotation.y - 0x4000, false) ||
+              fn_217_1F60(mRotation.y + 0x4000, false) || fn_217_1F60(mRotation.y - 0x8000, false))) {
+            mBgW.ClrFlag0x4();
+            mbPlayerIsPushPull = false;
+            field_0xF0B = false;
+        } else {
+            mBgW.OnFlag0x04();
+            field_0xF0B = true;
+        }
+    }
+}
+void dAcOpushBlk_c::fn_217_2500() {
+    if (!field_0xF0B) {
+        return;
+    }
+    if (nw4r::math::FAbs(dAcPy_c::GetLink()->mPosition.y - mPosition.y) > 15.0f) {
+        mBgW.ClrFlag0x4();
+
+    } else {
+        mBgW.OnFlag0x04();
+    }
+}
+dAcOpushBlk_c *dAcOpushBlk_c::checkBlockedByPushBlock(s16 rot) {
+    if (!fn_217_1F60(rot, false)) {
+        if (dBgS::GetInstance()->ChkMoveBG(dBgS_ObjLinChk::GetInstance(), false)) {
+            const dAcObjBase_c *pObj = dBgS::GetInstance()->GetActorPointer(dBgS_ObjLinChk::GetInstance());
+            if (pObj != nullptr && pObj->mProfileName == fProfile::OBJ_PUSH_BLOCK) {
+                return (dAcOpushBlk_c *)(pObj); // Removes const qualifier
+            }
+        }
+    }
+    return nullptr;
+}
+
+dAcOsw_c *dAcOpushBlk_c::getSwitch(const mVec3_c &pos) {
+    mVec3_c start, end;
+
+    start = pos;
+    end = pos;
+
+    start.y += 30.0f;
+    end.y -= 5.0f;
+
+    if (dBgS_ObjLinChk::LineCross(&start, &end, this)) {
+        if (dBgS::GetInstance()->ChkMoveBG(dBgS_ObjLinChk::GetInstance(), false)) {
+            const dAcObjBase_c *pObj = dBgS::GetInstance()->GetActorPointer(dBgS_ObjLinChk::GetInstance());
+            if (pObj != nullptr && pObj->mProfileName == fProfile::OBJ_SW) {
+                return (dAcOsw_c *)(pObj); // Removes const qualifier
+            }
+        }
+    }
+    return nullptr;
+}
+
+bool dAcOpushBlk_c::isSwitchInArea(const mVec3_c &pos) {
+    static const s16 sAngs[4] = {0x2000, 0x6000, -0x6000, -0x2000};
+
+    mVec3_c center = pos;
+    center.y -= 10.0f;
+
+    dAcOsw_c *pSw = mSw.get();
+    if (pSw == nullptr) {
+        return true;
+    }
+
+    mVec3_c extent(150.0f, 30.0f, 150.0f);
+    matrixCreateFromPosRotYScale(mArea, center, mRotation.y, extent, nullptr, 0.0f);
+    f32 radius = (pSw->getField_0x5E8() - 10.f) * 1.4142135f * 0.5f;
+    for (int i = 0; i < 4; ++i) {
+        mVec3_c checkPos = pSw->mPosition;
+        getXZCirclePoint(checkPos, sAngs[i] + pSw->mRotation.y, radius);
+
+        if (checkAreaBox(mArea, checkPos)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool dAcOpushBlk_c::fn_217_2830() {
+    mVec3_c pos = field_0xED8;
+    f32 radius = 75.0f;
+    radius -= 20.0f;
+    getXZCirclePoint(pos, mAngle.y, radius);
+
+    if (mSw.isLinked() && !isSwitchInArea(pos)) {
+        mSw.get()->removeBox();
+        mSw.unlink();
+    }
+
+    mVec3_c checkPos = pos;
+    getXZCirclePoint(checkPos, mAngle.y + 0x4000, 15.0f);
+
+    dAcOsw_c *pSw = getSwitch(checkPos);
+    if (pSw == nullptr) {
+        mVec3_c checkPos = pos;
+        getXZCirclePoint(checkPos, mAngle.y - 0x4000, 15.0f);
+        pSw = getSwitch(checkPos);
+    }
+
+    if (pSw != nullptr) {
+        if (!mSw.isLinked()) {
+            mSw.link(pSw);
+            if (mSw.isLinked()) {
+                mSw.get()->addBox();
+                field_0xF08 = true;
+            }
+        } else if (mSw.get() != pSw) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void dAcOpushBlk_c::updatePathGoalFlag() {
+    if (!mbGoalSwitch && mbOnPath) {
+        const Vec *pPnt = mPath.getPath().getPoint(0);
+        if (pPnt != nullptr) {
+            f32 rad = !mbLargerRadius ? 100.0f : 6400.0f;
+            mVec3_c distToPnt(mPosition.x - pPnt->x, mPosition.y - pPnt->y, mPosition.z - pPnt->z);
+            if (distToPnt.squareMagXZ() < rad) {
+                SceneflagManager::sInstance->setFlag(mRoomID, mGoalSceneflag);
+                return;
+            }
+        }
+        SceneflagManager::sInstance->unsetFlag(mRoomID, mGoalSceneflag);
+    }
+}
+
+void dAcOpushBlk_c::calcFall() {
+    if (isState(StateID_Wait)) {
+        if (field_0xEF4 <= -300.0f && mAcch.ChkGndHit()) {
+            startSound(SE_PushBlk_LAND);
+            mCyl.OnAtSet();
+            field_0xEF4 = 0.0f;
+        }
+
+        f32 heightIncrement = mPosition.y - mOldPosition.y;
+        if (cM::isZero(heightIncrement)) {
+            field_0xEF4 = 0.0f;
+        } else {
+            field_0xEF4 += heightIncrement;
+            if (field_0xEF4 < -300.0f) {
+                field_0xEF4 = -300.0f;
+            }
+        }
+    }
+}

@@ -17,6 +17,13 @@ public:
         return !mPast || mPresent;
     }
 
+    bool getPast() const {
+        return mPast;
+    }
+    bool getPresent() const {
+        return mPresent;
+    }
+
 private:
     bool mPast;
     bool mPresent;

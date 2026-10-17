@@ -65,6 +65,10 @@ public:
         }
     }
 
+    f32 getField_0x5E8() const {
+        return field_0x5E8;
+    }
+
 private:
     /* 0x330 */ m3d::mdl_c mModel;
     /* 0x354 */ dBgW mCollision;

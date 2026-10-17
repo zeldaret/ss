@@ -185,6 +185,9 @@ public:
     void OnStickRoof() {
         field_0x24 |= 2;
     }
+    void OnFlag0x04() {
+        field_0x24 |= 0x4;
+    }
     void OnFlag0x20() {
         field_0x24 |= 0x20;
     }
@@ -214,6 +217,9 @@ public:
     }
     bool ChkStickRoof() const {
         return field_0x24 & 2;
+    }
+    void ClrFlag0x4() {
+        field_0x24 &= ~4;
     }
 
     bool Chk0x24_0x20() const {

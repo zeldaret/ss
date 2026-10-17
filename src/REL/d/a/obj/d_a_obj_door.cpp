@@ -367,8 +367,6 @@ int dAcOdoor_c::actorCreate() {
     return SUCCEEDED;
 }
 
-extern "C" void fn_80067290(dTimeBits *pBits, s32 roomId, const mVec3_c &pos, f32);
-
 int dAcOdoor_c::actorPostCreate() {
     if (mbDoubleDoor) {
         if (!isConnectedToOtherDoor()) {
@@ -536,7 +534,7 @@ int dAcOdoor_c::actorPostCreate() {
     }
 
     if (isTimeEffected()) {
-        fn_80067290(&mTimeBits, mRoomID, mPosition, 200.f);
+        mTimeBits.update(mRoomID, mPosition, 200.f);
     }
 
     mCullingDistance = EGG::Math<f32>::maxNumber();
@@ -551,7 +549,7 @@ int dAcOdoor_c::doDelete() {
 
 int dAcOdoor_c::actorExecuteInEvent() {
     if (isTimeEffected()) {
-        fn_80067290(&mTimeBits, mRoomID, mPosition, 200.f);
+        mTimeBits.update(mRoomID, mPosition, 200.f);
     }
 
     if (mEventRelated.isAdvance()) {
@@ -1106,7 +1104,7 @@ int dAcOdoor_c::actorExecuteInEvent() {
 
 int dAcOdoor_c::actorExecute() {
     if (isTimeEffected()) {
-        fn_80067290(&mTimeBits, mRoomID, mPosition, 200.f);
+        mTimeBits.update(mRoomID, mPosition, 200.f);
     }
     switch (mEventCallbackType) {
         case 0: {
@@ -1269,10 +1267,10 @@ int dAcOdoor_c::actorExecute() {
 
 int dAcOdoor_c::draw() {
     if (isTimeEffected()) {
-        if (!mTimeBits.field_0x00) {
+        if (!mTimeBits.isPast()) {
             drawModelType1(&mMdl1);
         }
-        if (!mTimeBits.field_0x01) {
+        if (!mTimeBits.isPresent()) {
             drawModelType1(&mMdl0);
         }
     } else {
