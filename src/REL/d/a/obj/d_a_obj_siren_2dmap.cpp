@@ -20,9 +20,9 @@ static const char *const sPlcNames[] = {
 SPECIAL_ACTOR_PROFILE(OBJ_SIREN_2DMAP, dAcOsiren2dmap_c, fProfile::OBJ_SIREN_2DMAP, 0x21A, 0, 0);
 
 bool dAcOsiren2dmap_c::createHeap() {
-    mSubtype = mParams & 0xF;
+    mSubtype = getFromParams(0, 0xF);
     if (mSubtype == 0xF) {
-        mSubtype = 0;
+        mSubtype = SUBTYPE_SIREN_MAIKI_MAP;
     }
 
     void *dzb = getOarcFile(sOarcNames[mSubtype], sDzbNames[mSubtype]);
@@ -39,7 +39,7 @@ int dAcOsiren2dmap_c::create() {
     CREATE_ALLOCATOR(dAcOsiren2dmap_c);
 
     dBgS::GetInstance()->Regist(&mBgW, this);
-    u8 roomId = mSubtype == 1;
+    u8 roomId = (mSubtype == SUBTYPE_F406_COL) ? 1 : 0;
     mBgW.SetRoomId(roomId);
     mRoomID = roomId;
     dBgS::GetInstance()->RegistBg(&mBgW, this);

@@ -6,6 +6,11 @@
 
 class dAcOsiren2dmap_c : public dAcObjBase_c {
 public:
+    enum Subtype {
+        SUBTYPE_SIREN_MAIKI_MAP = 0,
+        SUBTYPE_F406_COL = 1,
+    };
+
     dAcOsiren2dmap_c() {}
     virtual ~dAcOsiren2dmap_c() {}
 
