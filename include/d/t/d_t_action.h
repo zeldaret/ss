@@ -1,10 +1,10 @@
 #ifndef D_T_ACTION_H
 #define D_T_ACTION_H
 
+#include "d/d_area.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/t/d_tg.h"
 #include "m/m_angle.h"
-#include "m/m_mtx.h"
 
 class dTgAction_c : public dTg_c {
 public:
@@ -32,11 +32,11 @@ public:
         return SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEnableFlag1);
     }
     bool checkActive2() const {
-        return (!(mEnableFlag2 < 0xFF) || SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEnableFlag2));
+        return !(mEnableFlag2 < 0xFF) || SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEnableFlag2);
     }
 
 private:
-    /* 0x0FC */ mMtx_c mActiveMtx;
+    /* 0x0FC */ dArea_c mArea;
     /* 0x12C */ f32 mScaleIncrease;
     /* 0x130 */ u8 mEnableFlag1;
     /* 0x131 */ u8 mEnableFlag2;

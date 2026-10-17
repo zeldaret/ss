@@ -1,8 +1,8 @@
 #ifndef D_T_EVENT_H
 #define D_T_EVENT_H
 
+#include "d/d_area.h"
 #include "d/t/d_tg.h"
-#include "m/m_mtx.h"
 #include "toBeSorted/actor_event.h"
 
 class dTgEvent_c : public dTg_c {
@@ -21,7 +21,7 @@ public:
 
 private:
     /* 0x0FC */ ActorEventRelated mActorEvent;
-    /* 0x14C */ mMtx_c mMatrix;
+    /* 0x14C */ dArea_c mArea;
     /* 0x17C */ u32 mEventId;
     /* 0x180 */ u32 mSetSceneflag;
     /* 0x184 */ u32 mTrigSceneflag;

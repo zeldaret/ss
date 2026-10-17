@@ -2,8 +2,8 @@
 #define D_T_HEAT_RESIST_H
 
 #include "common.h"
+#include "d/d_area.h"
 #include "d/t/d_tg.h"
-#include "m/m_mtx.h"
 
 class dTgHeatResist_c : public dTg_c {
 public:
@@ -16,7 +16,7 @@ public:
     virtual int actorExecute() override;
 
 private:
-    /* 0x0FC */ mMtx_c matrix;
+    /* 0x0FC */ dArea_c mArea;
     /* 0x12C */ u8 mInverted;
 };
 

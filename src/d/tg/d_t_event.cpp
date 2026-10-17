@@ -3,13 +3,12 @@
 #include "d/a/d_a_player.h"
 #include "d/flag/sceneflag_manager.h"
 #include "f/f_base.h"
-#include "toBeSorted/area_math.h"
 #include "toBeSorted/event.h"
 
 SPECIAL_ACTOR_PROFILE(EVENT_TAG, dTgEvent_c, fProfile::EVENT_TAG, 0X13, 0, 0);
 
 int dTgEvent_c::create() {
-    matrixCreateFromPosRotYScale(mMatrix, mPosition, mRotation.y, mScale, 0x0, 0.0f);
+    mArea.set(mPosition, mRotation.y, mScale, 0x0, 0.0f);
     mEventId = getFromParams(0, 0xFF);
     mSetSceneflag = getFromParams(8, 0xFF);
     mTrigSceneflag = getFromParams(16, 0xFF);
@@ -42,7 +41,7 @@ int dTgEvent_c::actorExecute() {
     if (!isValidFlag(mTrigSceneflag) || checkUncommittedFlag(mTrigSceneflag)) {
         if ((mSubtype != 0 && !(isValidFlag(mSetSceneflag) && checkUncommittedFlag(mSetSceneflag))) ||
             (mSubtype == 0 && (isValidFlag(mSetSceneflag) && checkUncommittedFlag(mSetSceneflag)))) {
-            if (checkAreaBox(mMatrix, dAcPy_c::LINK->mPosition)) {
+            if (mArea.checkAreaBox(dAcPy_c::GetLink()->mPosition)) {
                 Event EStack_48 = Event(mEventId, mRoomID, fun(mUnkParamFlag, 0x1), 0, 0);
                 mActorEvent.scheduleEvent(EStack_48, 0);
             }

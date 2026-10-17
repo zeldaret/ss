@@ -7,15 +7,14 @@
 #include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
 #include "toBeSorted/actor_event.h"
-#include "toBeSorted/area_math.h"
 #include "toBeSorted/event.h"
 
 SPECIAL_ACTOR_PROFILE(GATE2GND_TAG, dTgGateToGround_c, fProfile::GATE2GND_TAG, 0x22, 0, 0);
 
 int dTgGateToGround_c::create() {
-    matrixCreateFromPosRotYScale(matrix, mPosition, mRotation.y, mScale, nullptr, 0.0f);
+    mArea.set(mPosition, mRotation.y, mScale, nullptr, 0.0f);
 
-    delayFrames = 0;
+    mDelayFrameCount = 0;
 
     union {
         u32 val;
@@ -26,9 +25,9 @@ int dTgGateToGround_c::create() {
         };
     } v;
     v.val = mParams;
-    params_FF_FF_00_00 = v.a;
-    params_00_00_FF_00 = v.b;
-    params_00_00_00_FF = v.c;
+    mStoryflag = v.a;
+    field_0x182 = v.b;
+    mCameraID = v.c;
 
     return SUCCEEDED;
 }
@@ -38,31 +37,29 @@ int dTgGateToGround_c::doDelete() {
 }
 
 int dTgGateToGround_c::actorExecute() {
-    dAcPy_c *player;
-
-    if (params_FF_FF_00_00 != -1 && StoryflagManager::sInstance->getCounterOrFlag(params_FF_FF_00_00) == 0) {
+    if (mStoryflag != -1 && StoryflagManager::sInstance->getCounterOrFlag(mStoryflag) == 0) {
         return SUCCEEDED;
     }
 
-    player = dAcPy_c::LINK;
+    dAcPy_c *player = dAcPy_c::GetLinkM();
 
-    if (checkAreaBox(matrix, player->mPosition)) {
+    if (mArea.checkAreaBox(player->mPosition)) {
         if (player->getRidingActorType() != dAcPy_c::RIDING_LOFTWING) {
-            if (delayFrames > 15) {
+            if (mDelayFrameCount > 15) {
                 Event e("CloudHole", 100, 0, nullptr, nullptr);
                 mEventRelated.scheduleEvent(e, 0);
             } else {
-                delayFrames++;
+                mDelayFrameCount++;
             }
         } else {
-            if (params_00_00_00_FF != -1) {
+            if (mCameraID != -1) {
                 // TODO Cast is maybe fake but I can't get overrideCam to match otherwise
-                dScGame_c::getCamera(0)->getGameCam1()->overrideCam(params_00_00_00_FF, 0, (u16)mRoomID, false);
+                dScGame_c::getCamera(0)->getGameCam1()->overrideCam(mCameraID, 0, (u16)mRoomID, false);
             }
-            delayFrames = 0;
+            mDelayFrameCount = 0;
         }
     } else {
-        delayFrames = 0;
+        mDelayFrameCount = 0;
     }
 
     return SUCCEEDED;

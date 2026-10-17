@@ -2,8 +2,8 @@
 #define D_T_BEETLE_H
 
 #include "d/a/obj/d_a_obj_boomerang.h"
+#include "d/d_area.h"
 #include "d/t/d_tg.h"
-#include "m/m_mtx.h"
 
 // This is a tag actor for controlling where the beetle can fly
 // BtlTgC is leaves (beetle plays leaf animation as it passes through)
@@ -40,7 +40,7 @@ public:
     };
 
 private:
-    /* 0xFC */ mMtx_c mMatrix1;
+    /* 0xFC */ dArea_c mArea;
     /* 0x12C*/ u8 mZoneType;  // defines what this object does
     /* 0x12D*/ u8 mZoneShape; // the shape created inside the object that it checks
     /* 0x12E*/ u8 mUnknown;   // unused
