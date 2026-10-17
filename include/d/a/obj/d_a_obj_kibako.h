@@ -52,18 +52,18 @@ public:
 
     dAcOsw_c *getSwitch(const mVec3_c &pos);
 
-    void checkBreakHeight(); // fn_261_1110
-    bool checkHitBomb();     // fn_561_1150
-    void fn_561_11C0(bool);  // idk
+    void checkBreakHeight();
+    bool checkHitBomb();
+    void updateGravity(bool isFree);
     void breakBox();
     void updatePathGoalFlag();
-    void calcFall(); // fn_261_14D0
+    void calcFall();
 
-    bool fn_561_1E10(s16 dir, bool set);
-    void fn_561_2150();
+    bool checkCanTryMove(s16 dir, bool set);
+    void checkPushPull();
     bool isSwitchInArea(const mVec3_c &pos);
-    bool fn_561_2530();
-    void fn_561_27A0();
+    bool checkNotHittingNewSwitch();
+    void crrPos();
 
 private:
     /* 0x330 */ m3d::smdl_c mMdl;
@@ -80,15 +80,15 @@ private:
     /* 0xD4C */ ActorEventRelated mEventRelated;
     /* 0xD9C */ ActorOnRail3 mPath;
     /* 0xDC0 */ mVec3_c mSpawnPosition;
-    /* 0xDCC */ mVec3_c field_0xDCC;
-    /* 0xDD8 */ f32 field_0xDD8;
-    /* 0xDDC */ f32 field_0xDDC;
-    /* 0xDE0 */ f32 field_0xDE0;
-    /* 0xDE4 */ u16 field_0xDE4;
-    /* 0xDE6 */ u16 field_0xDE6;
-    /* 0xDE8 */ u16 field_0xDE8;
+    /* 0xDCC */ mVec3_c mPreMovePosition;
+    /* 0xDD8 */ f32 mGroundHeight;
+    /* 0xDDC */ f32 field_0xDDC; // ??
+    /* 0xDE0 */ f32 mFallDistance;
+    /* 0xDE4 */ u16 mFireTimer;
+    /* 0xDE6 */ u16 mMoveCooldown;
+    /* 0xDE8 */ u16 mMoveTimer;
     /* 0xDEA */ u16 field_0xDEA;
-    /* 0xDEC */ s16 field_0xDEC;
+    /* 0xDEC */ s16 mGravityCheckTimer;
     /* 0xDEE */ u8 mType;
     /* 0xDEF */ u8 mRestrictSceneflag;
     /* 0xDF0 */ u8 mDestroySceneflag;
@@ -97,14 +97,14 @@ private:
     /* 0xDF3 */ u8 mRestrictType;
     /* 0xDF4 */ dEmitter_c mEmitters[4];
     /* 0xEC4 */ bool mbPlayerIsPushPull;
-    /* 0xEC5 */ bool field_0xEC5;
+    /* 0xEC5 */ bool mbExecuteThisFrame;
     /* 0xEC6 */ bool mbHitByBomb;
-    /* 0xEC7 */ bool field_0xEC7;
+    /* 0xEC7 */ bool mbOnlyChangeHeight;
     /* 0xEC8 */ bool mbOnRope;
-    /* 0xEC9 */ bool field_0xEC9;
+    /* 0xEC9 */ bool mbCoOn;
     /* 0xECA */ bool mbOnPath;
-    /* 0xECB */ bool field_0xECB;
-    /* 0xECC */ bool field_0xECC;
+    /* 0xECB */ bool mbAtLimit;
+    /* 0xECC */ bool mbDrawShadow;
 };
 
 #endif

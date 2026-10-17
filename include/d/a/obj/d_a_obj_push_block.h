@@ -48,21 +48,20 @@ public:
 
     dAcObjBase_c *PushPull_CallBack(dAcObjBase_c *, dBgW_Base::PushPullLabel);
 
-    bool fn_217_1F60(s16 dir, bool set); // checkCanMove
+    bool checkCanTryMove(s16 dir, bool set);
 
-    void fn_217_22D0(s16 rot); // sets field_0xF06 on colliding push block
-    void fn_217_2310();        // sets field_0xF0B on colliding push block
+    void recheckPushblockInDir(s16 rot);
+    void fn_217_2310();
 
-    void fn_217_2360(); // Checks for other pushblocks around it.
-
-    void fn_217_2400();
-    void fn_217_2500();
+    void recheckPushblockAround();
+    void checkMoveable();
+    void updateMoveBg();
 
     dAcOpushBlk_c *checkBlockedByPushBlock(s16 rot);
     dAcOsw_c *getSwitch(const mVec3_c &pos);
     bool isSwitchInArea(const mVec3_c &pos);
 
-    bool fn_217_2830();
+    bool checkNotHittingNewSwitch();
     void updatePathGoalFlag();
 
     void calcFall();
@@ -86,32 +85,32 @@ private:
     /* 0xDF8 */ dPastPresent_c mTime;
     /* 0xDFC */ dEmitter_c mEmitter[4];
     /* 0xECC */ mVec3_c mSpawnPosition;
-    /* 0xED8 */ mVec3_c field_0xED8;
-    /* 0xEE4 */ mVec3_c field_0xEE4;
-    /* 0xEF0 */ f32 field_0xEF0;
-    /* 0xEF4 */ f32 field_0xEF4;
-    /* 0xEF8 */ u16 field_0xEF8;
+    /* 0xED8 */ mVec3_c mPreMovePosition;
+    /* 0xEE4 */ mVec3_c mTentalusFightPosition;
+    /* 0xEF0 */ f32 field_0xEF0; // ??
+    /* 0xEF4 */ f32 mFallDistance;
+    /* 0xEF8 */ u16 mMoveTimer;
     /* 0xEFA */ s16 field_0xEFA;
-    /* 0xEFC */ u8 field_0xEFC;
+    /* 0xEFC */ u8 mLandSequenceState;
     /* 0xEFD */ u8 mType;
     /* 0xEFE */ u8 mGoalSceneflag;
     /* 0xEFF */ u8 mRestrictSceneflag;
     /* 0xF00 */ u8 mbGoalSwitch;
-    /* 0xF01 */ u8 mTentalusFight;
+    /* 0xF01 */ u8 mTentalusFightState;
     /* 0xF02 */ u8 mRestrictType;
     /* 0xF03 */ u8 mbLargerRadius;
     /* 0xF04 */ bool mbPlayerIsPushPull;
-    /* 0xF05 */ bool field_0xF05;
-    /* 0xF06 */ bool field_0xF06;
-    /* 0xF07 */ bool field_0xF07;
-    /* 0xF08 */ bool field_0xF08;
+    /* 0xF05 */ bool mbExecuteThisFrame;
+    /* 0xF06 */ bool mbCheckedMoveable;
+    /* 0xF07 */ bool mbPendingBlockCheck;
+    /* 0xF08 */ bool mbOnlyChangeHeight;
     /* 0xF09 */ bool mbOnPath;
     /* 0xF0A */ bool mbOnRope;
-    /* 0xF0B */ bool field_0xF0B;
-    /* 0xF0C */ bool field_0xF0C;
-    /* 0xF0D */ bool field_0xF0D;
-    /* 0xF0E */ bool field_0xF0E;
-    /* 0xF0F */ bool field_0xF0F;
+    /* 0xF0B */ bool mbCanMove;
+    /* 0xF0C */ bool mbIsFalling;
+    /* 0xF0D */ bool mbCoOn;
+    /* 0xF0E */ bool mbAtLimit;
+    /* 0xF0F */ bool mbDrawShadow;
     /* 0xF10 */ bool field_0xF10;
 };
 

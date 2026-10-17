@@ -160,7 +160,7 @@ int dAcOpushBlk_c::actorCreate() {
     mMaxSpeed = -80.0f;
 
     if (dScGame_c::isCurrentStage("B301")) {
-        mTentalusFight = 1;
+        mTentalusFightState = 1;
 
         mAcceleration = -5.0f;
         mMaxSpeed = -80.0f;
@@ -176,7 +176,7 @@ int dAcOpushBlk_c::actorCreate() {
         mAcceleration = 0.0f;
     }
 
-    field_0xF0F = false;
+    mbDrawShadow = false;
 
     if (mType == TYPE_HANG && !switchActive) {
         mAcch.CrrPos(*dBgS::GetInstance());
@@ -249,7 +249,7 @@ int dAcOpushBlk_c::doDelete() {
 }
 
 int dAcOpushBlk_c::actorExecute() {
-    field_0xF05 = true;
+    mbExecuteThisFrame = true;
 
     if (mManager.getExecuteOrder() != fProfile::OBJ_PUSH_BLOCK) {
         updateExecutePriority((*fProfile::sProfileList)[fProfile::OBJ_PUSH_BLOCK]->m_execute_order);
@@ -266,7 +266,7 @@ int dAcOpushBlk_c::actorExecute() {
     mPosition += mStts.GetCcMove();
 
     if (!(isState(StateID_RopeGrab) && mbOnRope) && mRestrictType == 0) {
-        if (field_0xF08) {
+        if (mbOnlyChangeHeight) {
             mVec3_c pos = mPosition;
             mAcch.CrrPos(*dBgS::GetInstance());
             mPosition.x = pos.x;
@@ -284,7 +284,7 @@ int dAcOpushBlk_c::actorExecute() {
         if (dBgS_ObjLinChk::LineCross(&start, &end, this)) {
             where = where - (start.y - dBgS_ObjLinChk::GetInstance().GetLinEnd().y);
             if (where > 0.0f) {
-                field_0xF0C = true;
+                mbIsFalling = true;
                 mPosition.y += where;
             }
         }
@@ -319,7 +319,7 @@ int dAcOpushBlk_c::actorExecute() {
     if (dBgS::GetInstance()->ChkMoveBG(mAcch.mGnd, true)) {
         const dAcObjBase_c *pObj = dBgS::GetInstance()->GetActorPointer(mAcch.mGnd);
         if (pObj != nullptr && pObj->mProfileName == fProfile::OBJ_PUSH_BLOCK) {
-            if (!static_cast<const dAcOpushBlk_c *>(pObj)->field_0xF05) {
+            if (!static_cast<const dAcOpushBlk_c *>(pObj)->mbExecuteThisFrame) {
                 updateExecutePriority((*fProfile::sProfileList)[fProfile::OBJ_PUSH_BLOCK]->m_execute_order + 1);
             }
         }
@@ -328,7 +328,7 @@ int dAcOpushBlk_c::actorExecute() {
 }
 
 int dAcOpushBlk_c::draw() {
-    field_0xF05 = false;
+    mbExecuteThisFrame = false;
     if (mType == TYPE_NORMAL) {
         if (mTime.isPast()) {
             drawModelType1(&mMdlPast);
@@ -340,7 +340,7 @@ int dAcOpushBlk_c::draw() {
         drawModelType1(&mMdlPresent);
     }
 
-    if (field_0xF0F) {
+    if (mbDrawShadow) {
         static mSphere_c sSph(mVec3_c(0.0f, 75.0f, 0.0f), 175.0f);
 
         f32 f = mPosition.y - mAcch.GetGroundH();
@@ -355,15 +355,15 @@ int dAcOpushBlk_c::draw() {
 }
 
 void dAcOpushBlk_c::initializeState_Wait() {
-    field_0xF06 = false;
-    if (mTentalusFight == 2) {
-        mTentalusFight = 1;
+    mbCheckedMoveable = false;
+    if (mTentalusFightState == 2) {
+        mTentalusFightState = 1;
     }
 }
 void dAcOpushBlk_c::executeState_Wait() {
     s32 _weird_zero = 0;
 
-    if (mTentalusFight != 0) {
+    if (mTentalusFightState != 0) {
         if (!mStageKraken.isLinked()) {
             mStageKraken.link(dAcOstageKraken_c::getInstance());
         }
@@ -373,10 +373,10 @@ void dAcOpushBlk_c::executeState_Wait() {
                 field_0xEFA--;
             }
 
-            switch (mTentalusFight) {
+            switch (mTentalusFightState) {
                 case 1:
-                    field_0xEE4.set(420.0f, 1540.0f, -570.0f);
-                    mTentalusFight = 2;
+                    mTentalusFightPosition.set(420.0f, 1540.0f, -570.0f);
+                    mTentalusFightState = 2;
                     // fall-through
                 case 2: {
                     mRotation.set(pKraken->mRotation);
@@ -390,14 +390,14 @@ void dAcOpushBlk_c::executeState_Wait() {
                         mRotation.x = mRotation.x + 1500;
                     } else {
                         mVelocity.y = 0.0f;
-                        field_0xEE4.z += 22.0f + 0.1f * _weird_zero;
+                        mTentalusFightPosition.z += 22.0f + 0.1f * _weird_zero;
                     }
                     mRotation.z = 1000.0f * mAng(field_0xEFA * 0xF00).sin();
                     if (mRotation.x >= 0x4000) {
                         mRotation.x = 0;
-                        field_0xEE4.z += _weird_zero + 60.0f;
+                        mTentalusFightPosition.z += _weird_zero + 60.0f;
                         mPosition.y -= _weird_zero + 60.0f;
-                        mTentalusFight = 6;
+                        mTentalusFightState = 6;
                     }
                 } break;
                 case 6: {
@@ -405,7 +405,7 @@ void dAcOpushBlk_c::executeState_Wait() {
                         dJEffManager_c::spawnGroundEffect(
                             mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.5f, field_0x1B0
                         );
-                        mTentalusFight = 7;
+                        mTentalusFightState = 7;
                         mVelocity.y = 25.0f;
                         field_0xEFA = 15;
                     }
@@ -414,14 +414,14 @@ void dAcOpushBlk_c::executeState_Wait() {
                     mRotation.x = field_0xEFA * mAng(field_0xEFA * 0x1C00).sin() * 150.0f;
                     mRotation.z = field_0xEFA * mAng(field_0xEFA * 0x1900).sin() * 150.0f;
                     if (field_0xEFA == 0) {
-                        mTentalusFight = 1;
+                        mTentalusFightState = 1;
                     }
 
                 } break;
             }
             mMtx_c m0;
             mVec3_c v0;
-            pKraken->mWorldMtx.multVec(field_0xEE4, v0);
+            pKraken->mWorldMtx.multVec(mTentalusFightPosition, v0);
             mPosition.x = v0.x;
             mPosition.z = v0.z;
 
@@ -432,7 +432,7 @@ void dAcOpushBlk_c::executeState_Wait() {
             m0.YrotM(-pKraken->mRotation.y);
             m0.multVec(v0, v0);
 
-            field_0xEE4.y = v0.y;
+            mTentalusFightPosition.y = v0.y;
             if (dAcPy_c::GetLink()->isRecovering()) {
                 if (!field_0xF10) {
                     field_0xF10 = true;
@@ -440,7 +440,7 @@ void dAcOpushBlk_c::executeState_Wait() {
                     do {
                         pObj = fManager_c::searchBaseByProfName(fProfile::B_KR, pObj);
                         if (pObj != nullptr) {
-                            mTentalusFight = 1;
+                            mTentalusFightState = 1;
                             mPosition.set(mStartingPos);
                             mOldPosition.set(mStartingPos);
                             mRotation.set(mStartingRot);
@@ -453,8 +453,8 @@ void dAcOpushBlk_c::executeState_Wait() {
             }
         }
     }
-    fn_217_2400();
-    fn_217_2360();
+    checkMoveable();
+    recheckPushblockAround();
     if (mRestrictType == 1) {
         if (!mScatterSand.isLinked()) {
             mRestrictType = 0;
@@ -480,34 +480,34 @@ void dAcOpushBlk_c::executeState_Wait() {
             mBgW.ClrFlag0x4();
         }
     } else {
-        fn_217_2500();
+        updateMoveBg();
     }
 
     if (mbPlayerIsPushPull) {
         mbPlayerIsPushPull = false;
-        if (!field_0xF0D) {
-            field_0xF0D = true;
+        if (!mbCoOn) {
+            mbCoOn = true;
             mCcBox.OnCoSet();
-        } else if (!mCcBox.ChkCoHit() && fn_217_1F60(mAngle.y, true)) {
-            field_0xED8 = mPosition;
-            getXZCirclePoint(field_0xED8, mAngle.y, dAcPy_c::sPushRelatedConstant);
-            if (fn_217_2830()) {
+        } else if (!mCcBox.ChkCoHit() && checkCanTryMove(mAngle.y, true)) {
+            mPreMovePosition = mPosition;
+            getXZCirclePoint(mPreMovePosition, mAngle.y, dAcPy_c::sPushRelatedConstant);
+            if (checkNotHittingNewSwitch()) {
                 changeState(StateID_Move);
             }
         }
     } else {
-        field_0xF0D = false;
+        mbCoOn = false;
         mCcBox.ClrCoSet();
     }
 }
 void dAcOpushBlk_c::finalizeState_Wait() {
-    field_0xF0D = false;
+    mbCoOn = false;
     mCcBox.ClrCoSet();
 }
 
 void dAcOpushBlk_c::initializeState_Move() {
     dAcPy_c::GetLinkM()->onFlags_0x360(0x10000);
-    field_0xEF8 = s16(dAcPy_c::GetLink()->sPushRelatedConstant * 0.1f) + 1;
+    mMoveTimer = s16(dAcPy_c::GetLink()->sPushRelatedConstant * 0.1f) + 1;
     if (dAcPy_c::GetLink()->mRotation.y.absDiff(mAngle.y) > 0x4000) {
         fn_217_2310();
     }
@@ -523,9 +523,9 @@ void dAcOpushBlk_c::executeState_Move() {
         mEmitter[i].holdEffect(PARTICLE_RESOURCE_ID_MAPPING_514_, spawnPos, nullptr, nullptr, nullptr, nullptr);
     }
 
-    if (cLib::chasePosXZ(mPosition, field_0xED8, 10.0f)) {
+    if (cLib::chasePosXZ(mPosition, mPreMovePosition, 10.0f)) {
         updatePathGoalFlag();
-        if (field_0xF0E) {
+        if (mbAtLimit) {
             startSound(SE_PushBlk_MOVE_LIMIT);
         }
         changeState(StateID_Wait);
@@ -534,7 +534,7 @@ void dAcOpushBlk_c::executeState_Move() {
 
     if (!mSw.isLinked()) {
         if (mAcchCir[0].ChkWallHit()) {
-            s32 target = cLib::targetAngleY(field_0xED8, mPosition);
+            s32 target = cLib::targetAngleY(mPreMovePosition, mPosition);
             s32 wallAngle = mAcchCir[0].GetWallAngleY();
             if (target == wallAngle) {
                 updatePathGoalFlag();
@@ -544,7 +544,7 @@ void dAcOpushBlk_c::executeState_Move() {
         }
     }
     if (mAcchCir[1].ChkWallHit()) {
-        s32 target = cLib::targetAngleY(field_0xED8, mPosition);
+        s32 target = cLib::targetAngleY(mPreMovePosition, mPosition);
         s32 wallAngle = mAcchCir[1].GetWallAngleY();
         if (target == wallAngle) {
             updatePathGoalFlag();
@@ -552,8 +552,8 @@ void dAcOpushBlk_c::executeState_Move() {
         }
     }
 
-    if (field_0xEF8 != 0) {
-        field_0xEF8--;
+    if (mMoveTimer != 0) {
+        mMoveTimer--;
     } else {
         updatePathGoalFlag();
         changeState(StateID_Wait);
@@ -562,15 +562,15 @@ void dAcOpushBlk_c::executeState_Move() {
 void dAcOpushBlk_c::finalizeState_Move() {
     dAcPy_c::GetLinkM()->offFlags_0x360(0x10000);
     if (dAcPy_c::GetLink()->mRotation.y.absDiff(mAngle.y) < 0x4000) {
-        field_0xF07 = true;
+        mbPendingBlockCheck = true;
     }
-    field_0xF08 = false;
+    mbOnlyChangeHeight = false;
 }
 
 void dAcOpushBlk_c::initializeState_RopeGrab() {
-    field_0xF0F = true;
+    mbDrawShadow = true;
     mAcceleration = 0.0f;
-    field_0xEFC = 3;
+    mLandSequenceState = 3;
 }
 void dAcOpushBlk_c::executeState_RopeGrab() {
     if (mbOnRope) {
@@ -579,7 +579,7 @@ void dAcOpushBlk_c::executeState_RopeGrab() {
 
     mAcceleration = -4.0f;
     cLib::chasePosXZ(mPosition, mSpawnPosition, 5.0f);
-    if (field_0xEFC < 3) {
+    if (mLandSequenceState < 3) {
         sLib::addCalcAngle(mRotation.x.ref(), 0, 5, 1820, 182);
         sLib::addCalcAngle(mRotation.z.ref(), 0, 5, 1820, 182);
     } else {
@@ -587,19 +587,19 @@ void dAcOpushBlk_c::executeState_RopeGrab() {
         sLib::addCalcAngle(mRotation.z.ref(), 0, 5, 0x71c, 182);
     }
 
-    if (mAcch.ChkGndHit() || (field_0xEFC == 3 && field_0xF0C)) {
-        if (field_0xEFC == 3) {
+    if (mAcch.ChkGndHit() || (mLandSequenceState == 3 && mbIsFalling)) {
+        if (mLandSequenceState == 3) {
             startSound(SE_PushBlk_LAND);
         }
-        if (field_0xEFC == 2) {
+        if (mLandSequenceState == 2) {
             dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.5f, field_0x1B0);
         }
 
-        if (field_0xEFC == 0) {
+        if (mLandSequenceState == 0) {
             changeState(StateID_Wait);
         } else {
-            mVelocity.y = field_0xEFC * 4.0f;
-            field_0xEFC--;
+            mVelocity.y = mLandSequenceState * 4.0f;
+            mLandSequenceState--;
         }
     }
 }
@@ -608,12 +608,12 @@ void dAcOpushBlk_c::finalizeState_RopeGrab() {
     mPosition.z = mSpawnPosition.z;
     mRotation.x = 0;
     mRotation.z = 0;
-    field_0xF0F = false;
+    mbDrawShadow = false;
 }
 
-bool dAcOpushBlk_c::fn_217_1F60(s16 dir, bool set) {
+bool dAcOpushBlk_c::checkCanTryMove(s16 dir, bool set) {
     static const s16 sAngs[3] = {0x4000, 0x0, -0x4000};
-    field_0xF0E = false;
+    mbAtLimit = false;
 
     f32 f8 = 8.0f;
     dAcOsw_c *pSw = mSw.get();
@@ -657,7 +657,7 @@ bool dAcOpushBlk_c::fn_217_1F60(s16 dir, bool set) {
 
             } else {
                 if (set) {
-                    field_0xF0E = true;
+                    mbAtLimit = true;
                 }
             }
         }
@@ -665,10 +665,10 @@ bool dAcOpushBlk_c::fn_217_1F60(s16 dir, bool set) {
     return true;
 }
 
-void dAcOpushBlk_c::fn_217_22D0(s16 rot) {
+void dAcOpushBlk_c::recheckPushblockInDir(s16 rot) {
     dAcOpushBlk_c *pObj = checkBlockedByPushBlock(rot);
     if (pObj != nullptr) {
-        pObj->field_0xF06 = false;
+        pObj->mbCheckedMoveable = false;
     }
 }
 
@@ -676,37 +676,37 @@ void dAcOpushBlk_c::fn_217_2310() {
     dAcOpushBlk_c *pObj = checkBlockedByPushBlock(mAngle.y - 0x8000);
     if (pObj != nullptr) {
         pObj->mBgW.OnFlag0x04();
-        pObj->field_0xF0B = true;
+        pObj->mbCanMove = true;
     }
 }
 
-void dAcOpushBlk_c::fn_217_2360() {
-    if (field_0xF07 && mAcch.ChkGndHit()) {
-        field_0xF07 = false;
-        fn_217_22D0(mRotation.y);
-        fn_217_22D0(mRotation.y - 0x4000);
-        fn_217_22D0(mRotation.y + 0x4000);
-        fn_217_22D0(mRotation.y - 0x8000);
+void dAcOpushBlk_c::recheckPushblockAround() {
+    if (mbPendingBlockCheck && mAcch.ChkGndHit()) {
+        mbPendingBlockCheck = false;
+        recheckPushblockInDir(mRotation.y);
+        recheckPushblockInDir(mRotation.y - 0x4000);
+        recheckPushblockInDir(mRotation.y + 0x4000);
+        recheckPushblockInDir(mRotation.y - 0x8000);
     }
 }
 
-void dAcOpushBlk_c::fn_217_2400() {
-    if (!field_0xF06 && mAcch.ChkGndHit()) {
-        field_0xF06 = true;
+void dAcOpushBlk_c::checkMoveable() {
+    if (!mbCheckedMoveable && mAcch.ChkGndHit()) {
+        mbCheckedMoveable = true;
 
-        if (!(fn_217_1F60(mRotation.y, false) || fn_217_1F60(mRotation.y - 0x4000, false) ||
-              fn_217_1F60(mRotation.y + 0x4000, false) || fn_217_1F60(mRotation.y - 0x8000, false))) {
+        if (!(checkCanTryMove(mRotation.y, false) || checkCanTryMove(mRotation.y - 0x4000, false) ||
+              checkCanTryMove(mRotation.y + 0x4000, false) || checkCanTryMove(mRotation.y - 0x8000, false))) {
             mBgW.ClrFlag0x4();
             mbPlayerIsPushPull = false;
-            field_0xF0B = false;
+            mbCanMove = false;
         } else {
             mBgW.OnFlag0x04();
-            field_0xF0B = true;
+            mbCanMove = true;
         }
     }
 }
-void dAcOpushBlk_c::fn_217_2500() {
-    if (!field_0xF0B) {
+void dAcOpushBlk_c::updateMoveBg() {
+    if (!mbCanMove) {
         return;
     }
     if (nw4r::math::FAbs(dAcPy_c::GetLink()->mPosition.y - mPosition.y) > 15.0f) {
@@ -716,7 +716,7 @@ void dAcOpushBlk_c::fn_217_2500() {
     }
 }
 dAcOpushBlk_c *dAcOpushBlk_c::checkBlockedByPushBlock(s16 rot) {
-    if (!fn_217_1F60(rot, false)) {
+    if (!checkCanTryMove(rot, false)) {
         if (dBgS::GetInstance()->ChkMoveBG(dBgS_ObjLinChk::GetInstance(), false)) {
             const dAcObjBase_c *pObj = dBgS::GetInstance()->GetActorPointer(dBgS_ObjLinChk::GetInstance());
             if (pObj != nullptr && pObj->mProfileName == fProfile::OBJ_PUSH_BLOCK) {
@@ -773,8 +773,8 @@ bool dAcOpushBlk_c::isSwitchInArea(const mVec3_c &pos) {
     return false;
 }
 
-bool dAcOpushBlk_c::fn_217_2830() {
-    mVec3_c pos = field_0xED8;
+bool dAcOpushBlk_c::checkNotHittingNewSwitch() {
+    mVec3_c pos = mPreMovePosition;
     f32 radius = 75.0f;
     radius -= 20.0f;
     getXZCirclePoint(pos, mAngle.y, radius);
@@ -799,7 +799,7 @@ bool dAcOpushBlk_c::fn_217_2830() {
             mSw.link(pSw);
             if (mSw.isLinked()) {
                 mSw.get()->addBox();
-                field_0xF08 = true;
+                mbOnlyChangeHeight = true;
             }
         } else if (mSw.get() != pSw) {
             return false;
@@ -825,19 +825,19 @@ void dAcOpushBlk_c::updatePathGoalFlag() {
 
 void dAcOpushBlk_c::calcFall() {
     if (isState(StateID_Wait)) {
-        if (field_0xEF4 <= -300.0f && mAcch.ChkGndHit()) {
+        if (mFallDistance <= -300.0f && mAcch.ChkGndHit()) {
             startSound(SE_PushBlk_LAND);
             mCyl.OnAtSet();
-            field_0xEF4 = 0.0f;
+            mFallDistance = 0.0f;
         }
 
         f32 heightIncrement = mPosition.y - mOldPosition.y;
         if (cM::isZero(heightIncrement)) {
-            field_0xEF4 = 0.0f;
+            mFallDistance = 0.0f;
         } else {
-            field_0xEF4 += heightIncrement;
-            if (field_0xEF4 < -300.0f) {
-                field_0xEF4 = -300.0f;
+            mFallDistance += heightIncrement;
+            if (mFallDistance < -300.0f) {
+                mFallDistance = -300.0f;
             }
         }
     }
