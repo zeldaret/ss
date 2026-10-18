@@ -66,7 +66,7 @@ public:
     void RegistBg(int id);
     void UnRegistBg();
     bool ChkReady() const;
-    void Set0x2F(u8);
+    void Set0x2F(s32);
 
     /* vt at 0x08 */
     /* 0x008 */ virtual ~dBgW_Base();
