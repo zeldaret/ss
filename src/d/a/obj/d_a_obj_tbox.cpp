@@ -1571,7 +1571,7 @@ bool dAcTbox_c::isValidVariant(int variant) {
     return 0 <= variant && variant <= 3;
 }
 
-void *dAcTbox_c::getObjectListEntry() {
+fLiNdBa_c *dAcTbox_c::getObjectListEntry() {
     return &mTboxListNode;
 }
 

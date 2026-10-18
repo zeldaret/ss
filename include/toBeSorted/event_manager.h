@@ -51,6 +51,13 @@ public:
         return strequals(getCurrentEventName(), name);
     }
 
+    static bool checkFlag(int flag) {
+        if (!isInEvent()) {
+            flag &= 0xFEC80000;
+        }
+        return (sInstance->mStateFlags & flag) != 0;
+    }
+
     static bool eventRelatedStateFlags_shift0x11_1();
 
     // Something like isActorInEvent maybe?
@@ -63,6 +70,7 @@ private:
     /* 0x084 */ Event mCurrentEvent;
     /* 0x0C4 */ u8 _0C4[0x184 - 0x0C4];
     /* 0x184 */ int mState;
+    /* 0x188 */ int mStateFlags;
     /* 0x18C */ u8 _18C[0x19C - 0x18C];
 };
 

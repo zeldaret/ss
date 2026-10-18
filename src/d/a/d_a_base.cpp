@@ -1,11 +1,13 @@
 #include "d/a/d_a_base.h"
 
 #include "c/c_lib.h"
+#include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
+#include "d/d_base.h"
 #include "d/d_heap.h"
 #include "d/d_room.h"
 #include "d/d_sc_game.h"
@@ -268,7 +270,26 @@ void dAcBase_c::postExecute(fBase_c::MAIN_STATE_e state) {
         it->calc();
     }
 
-    // TODO - ...
+    if (state != CANCELED) {
+        unsetActorProperty(AC_PROP_0x20000000);
+        unsetActorProperty(AC_PROP_0x4000000);
+        setActorProperty(AC_PROP_0x10000000);
+
+        // Kill Actors out of bounds, but keep player within bounds
+        if ((mPosition.x < -1000000.0f || mPosition.x > 1000000.0f) ||
+            (mPosition.y < -1000000.0f || mPosition.y > 1000000.0f) ||
+            (mPosition.z < -1000000.0f || mPosition.z > 1000000.0f)) {
+            if (mProfileName == fProfile::PLAYER) {
+                mPosition.x = cM::minMaxLimit(mPosition.x, -1000000.0f, 1000000.0f);
+                mPosition.y = cM::minMaxLimit(mPosition.y, -1000000.0f, 1000000.0f);
+                mPosition.z = cM::minMaxLimit(mPosition.z, -1000000.0f, 1000000.0f);
+            } else {
+                killNoItemDrop();
+            }
+        }
+    }
+
+    dBase_c::postExecute(state);
 }
 
 void dAcBase_c::unkVirtFunc_0x5C() {
@@ -381,7 +402,7 @@ void dAcBase_c::forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *p
 }
 
 mAng dAcBase_c::getXZAngleToPlayer() const {
-    return cLib::targetAngleY(this->mPosition, dAcPy_c::LINK->mPosition);
+    return cLib::targetAngleY(this->mPosition, dAcPy_c::GetLink()->mPosition);
 }
 
 bool dAcBase_c::getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDist) {

@@ -63,6 +63,10 @@ public:
         return mState == state;
     }
 
+    void setState(State_e state) {
+        mState = state;
+    }
+
     bool checkType_1_3_5_6_9() const {
         return mType == CONNECTION_1 || mType == CONNECTION_3 || mType == CONNECTION_5 || mType == CONNECTION_6 ||
                mType == CONNECTION_9;

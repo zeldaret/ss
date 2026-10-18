@@ -17,6 +17,8 @@
 #include "m/m_vec.h"
 #include "m/types_m.h"
 
+class dBgS_Acch;
+
 // Ghidra: ActorObjectBase
 //   size: 0x330
 // vtable: 0x805015b8
@@ -61,8 +63,10 @@ public:
 public:
     /* 0x0FC */ f32 mYOffset;
     /* 0x100 */ f32 field_0x100;
-    /* 0x104 */ f32 unkfloat;
-    /* 0x108 */ char field_0x108[12];
+    /* 0x104 */ f32 field_0x104;
+    /* 0x104 */ f32 field_0x108;
+    /* 0x104 */ f32 field_0x10C;
+    /* 0x104 */ f32 field_0x110;
     /* 0x114 */ u16 mTargetFiTextID;
     /* 0x116 */ u8 mTargetFiRelated;
     /* 0x118 */ mVec3_c mOldPosition;
@@ -174,8 +178,8 @@ public:
     static void *getOarcResFile(const char *oarcName);
     static void *getOarcModelFile(const char *oarcName);
     static void *getOarcZev(const char *oarcName);
-    static void *getOarcDZB(const char *dzbName, const char *dzbName2);
-    static void *getOarcPLC(const char *plcName, const char *plcName2);
+    static void *getOarcDZB(const char *oarcName, const char *dzbName);
+    static void *getOarcPLC(const char *oarcName, const char *plcName);
 
 public:
     dAcObjBase_c();
@@ -184,33 +188,33 @@ public:
     virtual int preExecute() override;
     virtual void postExecute(MAIN_STATE_e state) override;
     virtual int preDraw() override;
-    virtual void *getObjectListEntry();
+    virtual fLiNdBa_c *getObjectListEntry();
     virtual bool restorePosRotFromCopy() override;
     virtual bool canBeLinkedToWoodTag();
     virtual bool drop();
 
 public:
     static dAcObjBase_c *create(
-        fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot,
-        const mVec3_c *scale, u32 params2
+        ProfileName actorId, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
+        u32 params2
     );
     static dAcObjBase_c *create(
         const char *name, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
         u32 params2, u16 id, s8 viewclipId
     );
     static dAcObjBase_c *create(
-        dAcObjBase_c *, fProfile::PROFILE_NAME_e actorId, u32 params1, const mVec3_c *pos, const mAng3_c *rot,
-        const mVec3_c *scale, u32 params2, u32 roomId
+        dAcObjBase_c *, ProfileName actorId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
+        u32 params2, u32 roomId
     );
 
-    static dAcObjBase_c *findObject(fProfile::PROFILE_NAME_e actorId, fLiMgBa_c *refList, dAcObjBase_c *parent);
+    static dAcObjBase_c *findObject(ProfileName actorId, fLiMgBa_c *refList, dAcObjBase_c *parent);
     static dAcObjBase_c *getNextObject(fLiMgBa_c *ref, dAcObjBase_c *parent);
     bool isPlayer();
     void calcVelocity(const mVec3_c &pos, f32 speed);
     void calcVelocity();
     void updateMatrix();
     void setDefaultCullDistance();
-    void fn_8002EA30(f32, f32, f32, f32, f32, void *);
+    void fn_8002EA30(f32, f32, f32, f32, f32, dBgS_Acch *);
     void fn_8002EA60(void *);
     void fn_8002EB30(void *);
 
