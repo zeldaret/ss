@@ -114,7 +114,7 @@ bool dAcOCtrlPnl_c::createHeap() {
     void *dzb = getOarcDZB(oarcName, "ControlPanel");
     void *plc = getOarcPLC(oarcName, "ControlPanel");
     updateMatrix();
-    return !mBgW.Set((cBgD_t *)dzb, (PLC *)plc, 0x81, &mWorldMtx, &mScale);
+    return !mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::LOCK_e | cBgW::MOVE_BG_e, &mWorldMtx, &mScale);
 }
 
 int dAcOCtrlPnl_c::actorCreate() {
@@ -431,23 +431,23 @@ void dAcOCtrlPnl_c::handleControl() {
     }
     if (!mIsGrabbing) {
         if (canGrabTile) {
-            dLytMeter_c::GetInstance()->setFlags(0x200);
+            dLytMeter_c::GetInstance()->setFlags(METER_BTN_NUN_STK);
             LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_INFO_GRAB_2);
         } else {
-            dLytMeter_c::GetInstance()->clearFlags(0x200);
+            dLytMeter_c::GetInstance()->clearFlags(METER_BTN_NUN_STK);
         }
     }
-    dLytMeter_c::GetInstance()->setFlags(0x10);
+    dLytMeter_c::GetInstance()->setFlags(METER_BTN_B);
     LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::ACT_IE_ETC_DONE);
-    dLytMeter_c::GetInstance()->setFlags(0x400);
+    dLytMeter_c::GetInstance()->setFlags(METER_BTN_C);
     LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::ACT_IE_ETC_RESET_PANELS);
-    dLytMeter_c::GetInstance()->clearFlags(0x1);
-    dLytMeter_c::GetInstance()->clearFlags(0x4);
-    dLytMeter_c::GetInstance()->clearFlags(0x8);
-    dLytMeter_c::GetInstance()->clearFlags(0x40);
-    dLytMeter_c::GetInstance()->clearFlags(0x80);
-    dLytMeter_c::GetInstance()->clearFlags(0x800);
-    dLytMeter_c::GetInstance()->setFlags(0x2);
+    dLytMeter_c::GetInstance()->clearFlags(METER_BTN_CROSS_UP);
+    dLytMeter_c::GetInstance()->clearFlags(METER_BTN_CROSS_LEFT);
+    dLytMeter_c::GetInstance()->clearFlags(METER_BTN_CROSS_RIGHT);
+    dLytMeter_c::GetInstance()->clearFlags(METER_BTN_MINUS);
+    dLytMeter_c::GetInstance()->clearFlags(METER_BTN_1);
+    dLytMeter_c::GetInstance()->clearFlags(METER_BTN_Z);
+    dLytMeter_c::GetInstance()->setFlags(METER_BTN_CROSS_DOWN);
     LytDoButtonRelated::setCrossDown(LytDoButtonRelated::ACT_IE_ETC_CENTER, true);
     bool downPressed = dPad::getDownTrigDown();
     if (downPressed) {
