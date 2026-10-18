@@ -19,24 +19,24 @@ public:
 
     STATE_FUNC_DECLARE(dAcOD3Dummy_c, Wait);
 
-    void setField_0x1570(u8 val) {
-        field_0x1570 = val;
+    void setUpdateTilePositionsSignal(u8 val) {
+        mUpdateTilePositions = val;
     }
 
-    s32 fn_599_7A0();
-    void fn_599_810();
-    void fn_599_940();
+    s32 getCurrentSkyKeepRoomTileId();
+    void updateTileMtx();
+    void registerBgs();
+    // code is in the dol
+    s32 getSpotForTile(s32);
 
 private:
-    /* 0x0330 */ dBgW mBgWs[8];
-    /* 0x13B0 */ mMtx_c field_13B0[8];
+    /* 0x0330 */ dBgW mTileBgWs[8];
+    /* 0x13B0 */ mMtx_c mTileMtx[8];
     /* 0x1530 */ STATE_MGR_DECLARE(dAcOD3Dummy_c);
-    /* 0x156C */ s32 field_0x156C;
-    /* 0x1570 */ u8 field_0x1570;
-    /* 0x1571 */ u8 field_0x1571[3];
-    /* 0x1574 */ void *field_0x1574;
-    /* 0x1578 */ u8 field_0x1578;
-    /* 0x1579 */ u8 field_0x1579[0x157C - 0x1579];
+    /* 0x156C */ s32 mCurrentRoomTileId;
+    /* 0x1570 */ bool mUpdateTilePositions;
+    /* 0x1574 */ void *mIconData;
+    /* 0x1578 */ bool mHasBgsRegistered;
 };
 
 #endif

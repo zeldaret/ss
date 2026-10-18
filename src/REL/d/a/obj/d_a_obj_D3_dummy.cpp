@@ -22,27 +22,27 @@ bool dAcOD3Dummy_c::createHeap() {
     const char *names[8] = {
         "00", "01", "02", "03", "04", "05", "06", "07",
     };
-    field_0x156C = fn_599_7A0();
-    fn_599_810();
+    mCurrentRoomTileId = getCurrentSkyKeepRoomTileId();
+    updateTileMtx();
 
     for (int i = 0; i < 8; i++) {
-        if (i == field_0x156C) {
+        if (i == mCurrentRoomTileId) {
             continue;
         }
         void *dzb = getOarcDZB(oarcName, names[i]);
         void *plc = getOarcPLC(oarcName, names[i]);
-        if (mBgWs[i].Set((cBgD_t *)dzb, (PLC *)plc, 1, &field_13B0[i], &mScale)) {
+        if (mTileBgWs[i].Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mTileMtx[i], &mScale)) {
             return false;
         }
-        bool result = mBgWs[i].InitMapStuff(&mAllocator);
+        bool result = mTileBgWs[i].InitMapStuff(&mAllocator);
         if (!result) {
             return false;
         }
-        mBgWs[i].Set0x2F(i);
+        mTileBgWs[i].Set0x2F(i);
     }
 
-    field_0x1574 = getOarcFile(oarcName, iconName);
-    if (field_0x1574 == nullptr) {
+    mIconData = getOarcFile(oarcName, iconName);
+    if (mIconData == nullptr) {
         return false;
     }
 
@@ -51,8 +51,9 @@ bool dAcOD3Dummy_c::createHeap() {
 
 int dAcOD3Dummy_c::create() {
     CREATE_ALLOCATOR_SIZE(dAcOD3Dummy_c, 0x40000);
+    // check has map
     if (DungeonflagManager::sInstance->getCounterOrFlag(2, 8)) {
-        fn_599_940();
+        registerBgs();
     }
     mAcceleration = 0.f;
     mMaxSpeed = 0.f;
@@ -66,19 +67,20 @@ int dAcOD3Dummy_c::doDelete() {
 }
 
 int dAcOD3Dummy_c::actorExecute() {
+    // check has map
     if (DungeonflagManager::sInstance->getCounterOrFlag(2, 8)) {
-        fn_599_940();
+        registerBgs();
     }
     mStateMgr.executeState();
-    if (field_0x1570) {
-        fn_599_810();
+    if (mUpdateTilePositions) {
+        updateTileMtx();
         for (int i = 0; i < 8; i++) {
-            if (i != field_0x156C) {
-                mBgWs[i].Move();
+            if (i != mCurrentRoomTileId) {
+                mTileBgWs[i].Move();
             }
         }
     }
-    field_0x1570 = 0;
+    mUpdateTilePositions = false;
     return SUCCEEDED;
 }
 
@@ -90,7 +92,7 @@ void dAcOD3Dummy_c::initializeState_Wait() {}
 void dAcOD3Dummy_c::executeState_Wait() {}
 void dAcOD3Dummy_c::finalizeState_Wait() {}
 
-s32 dAcOD3Dummy_c::fn_599_7A0() {
+s32 dAcOD3Dummy_c::getCurrentSkyKeepRoomTileId() {
     for (int i = 0; i < 8; i++) {
         if (dScGame_c::isCurrentStage(d3Stages[i])) {
             return i;
@@ -99,35 +101,32 @@ s32 dAcOD3Dummy_c::fn_599_7A0() {
     return -1;
 }
 
-// get spot for tile
-extern "C" s32 fn_80195730(dAcOD3Dummy_c *, s32 tile);
-
-void dAcOD3Dummy_c::fn_599_810() {
-    s32 currentStageSpot = fn_80195730(this, field_0x156C);
+void dAcOD3Dummy_c::updateTileMtx() {
+    s32 currentStageSpot = getSpotForTile(mCurrentRoomTileId);
 
     for (int i = 0; i < 8; i++) {
-        if (i == field_0x156C) {
+        if (i == mCurrentRoomTileId) {
             continue;
         }
-        s32 spot = fn_80195730(this, i);
+        s32 spot = getSpotForTile(i);
         if (spot < 0) {
             continue;
         }
         mVec3_c vec(
             (spot % 3 - currentStageSpot % 3) * 7000.f, mPosition.y, (spot / 3 - currentStageSpot / 3) * 7000.f
         );
-        field_13B0[i].transS(vec);
+        mTileMtx[i].transS(vec);
     }
 }
 
-void dAcOD3Dummy_c::fn_599_940() {
-    if (field_0x1578 == 0) {
+void dAcOD3Dummy_c::registerBgs() {
+    if (!mHasBgsRegistered) {
         for (int i = 0; i < 8; i++) {
-            if (i == field_0x156C) {
+            if (i == mCurrentRoomTileId) {
                 continue;
             }
-            dBgS::GetInstance()->RegistBg(&mBgWs[i], this);
+            dBgS::GetInstance()->RegistBg(&mTileBgWs[i], this);
         }
-        field_0x1578 = 1;
+        mHasBgsRegistered = true;
     }
 }
