@@ -126,6 +126,10 @@ public:
         mValidChangeBtnMask |= flag;
     }
 
+    static void setFlowMgr(dFlowMgrBase_c *flowMgr) {
+        sFlowMgr = flowMgr;
+    }
+
 private:
     bool setTextToDisplay(const wchar_t *text);
     void createSubMsgManager(u8 type);
