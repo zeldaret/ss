@@ -76,7 +76,7 @@ int dAcObstonec::actorExecute() {
 
 int dAcObstonec::draw() {
     if (mVariant != 1 || mBg.ChkUsed()) {
-        drawModelType1(&mMdl);
+        drawModel(&mMdl);
     }
     return SUCCEEDED;
 }

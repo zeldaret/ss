@@ -72,6 +72,6 @@ int dAcOunderCloud_c::draw() {
     if (lightEnv.fn_80024770(6) && !lightEnv.fn_800247A0(6)) {
         return SUCCEEDED;
     }
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }

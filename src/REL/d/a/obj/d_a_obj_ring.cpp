@@ -47,7 +47,7 @@ int dAcOring_c::actorExecute() {
 }
 
 int dAcOring_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }
 

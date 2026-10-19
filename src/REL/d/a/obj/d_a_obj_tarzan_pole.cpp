@@ -102,6 +102,6 @@ int dAcOTarzanPole_c::actorExecute() {
 }
 
 int dAcOTarzanPole_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }

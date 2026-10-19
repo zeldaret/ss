@@ -209,7 +209,7 @@ int dAcODungeonShip_c::actorExecute() {
 int dAcODungeonShip_c::draw() {
     mMdl.mProc.mCallback.field_0x08 = field_0x862;
     mMdl.mProc.mCallback.field_0x09 = 1;
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

@@ -55,7 +55,7 @@ int dAcOruinedSave_c::actorExecuteInEvent() {
 }
 
 int dAcOruinedSave_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

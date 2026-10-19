@@ -50,9 +50,9 @@ int dAcOgirahimFoot_c::doDelete() {
 
 int dAcOgirahimFoot_c::draw() {
     if (*mStateMgr.getStateID() == StateID_Appear) {
-        drawModelType1(&mMdl);
+        drawModel(&mMdl);
         static mSphere_c sph(mVec3_c(0.0f, 25.0f, 0.0f), 200.0f);
-        fn_8002edb0(mShadow, mMdl, &sph, -1, -1, 0.0f);
+        drawShadow(mShadow, mMdl, sph, -1, -1, 0.0f);
     }
     return SUCCEEDED;
 }

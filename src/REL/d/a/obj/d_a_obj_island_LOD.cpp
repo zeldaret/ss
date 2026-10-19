@@ -50,6 +50,6 @@ int dAcOislandLOD_c::draw() {
     if (blurAndPaletteManager.fn_80024770(7) && !blurAndPaletteManager.fn_800247A0(7)) {
         return SUCCEEDED;
     }
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }

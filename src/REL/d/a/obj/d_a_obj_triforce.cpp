@@ -76,6 +76,6 @@ int dAcOtriforce_c::actorExecute() {
 }
 
 int dAcOtriforce_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return 1;
 }

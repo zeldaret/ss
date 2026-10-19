@@ -338,7 +338,7 @@ static void handleBzsStas(int roomid, const BzsSectionHead *section) {
         u16 flag = getEnemyDefeatFlagFromId(roomid, obj->id);
         s8 viewClipIdx = getViewClipIndexFromId(obj->id);
         if (stage->checkEnemyDefeatFlag(flag)) {
-            dAcObjBase_c::createActorUnkGroup3(
+            dAcObjBase_c::createStageActor(
                 obj->name, roomid, obj->params1, &obj->position, &obj->angle, &obj->scale, obj->params2, flag,
                 viewClipIdx
             );

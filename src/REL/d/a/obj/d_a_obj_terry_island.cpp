@@ -120,7 +120,7 @@ int dAcOterryIsland_c::actorExecute() {
 }
 
 int dAcOterryIsland_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

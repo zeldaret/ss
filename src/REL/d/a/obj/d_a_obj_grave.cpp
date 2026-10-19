@@ -146,9 +146,9 @@ int dAcOGrave_c::actorExecute() {
 }
 
 int dAcOGrave_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     static mSphere_c sph(mVec3_c(0.f, 50.f, 0.f), 50.f);
-    drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, 0.f);
+    drawShadow(mShadow, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, 0.f);
     return SUCCEEDED;
 }
 

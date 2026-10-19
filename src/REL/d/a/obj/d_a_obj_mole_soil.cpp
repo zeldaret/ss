@@ -64,7 +64,7 @@ int dAcOmoleSoil_c::actorExecute() {
 
 int dAcOmoleSoil_c::draw() {
     if (field_0x391) {
-        drawModelType1(&mModel);
+        drawModel(&mModel);
     }
     return SUCCEEDED;
 }

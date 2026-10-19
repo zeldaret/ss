@@ -179,12 +179,12 @@ void dAcOSeatSword_c::registerInEvent() {
 
 int dAcOSeatSword_c::draw() {
     if (!mStateMgr.isState(StateID_Get)) {
-        drawModelType1(&mSwordMdl);
+        drawModel(&mSwordMdl);
     }
 
-    drawModelType1(&mPedestalMdl);
+    drawModel(&mPedestalMdl);
     if (mSubtype == 1) {
-        drawModelType1(&mPedestalMdl_s);
+        drawModel(&mPedestalMdl_s);
     }
 
     return SUCCEEDED;

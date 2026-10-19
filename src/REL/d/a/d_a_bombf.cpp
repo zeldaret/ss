@@ -143,7 +143,7 @@ int dAcBombf_c::draw() {
     if (mIsUnderground != 0 && !dAcPy_c::LINK->checkActionFlagsCont(0x400000)) {
         return SUCCEEDED;
     }
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }
 

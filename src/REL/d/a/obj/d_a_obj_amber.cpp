@@ -59,9 +59,9 @@ int dAcOAmber_c::actorPostCreate() {
 }
 
 int dAcOAmber_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     if (field_0x37c != 1.0e+9f) {
-        drawShadow(mShadowCircle, nullptr, mWorldMtx, &mShadowSph, -1, -1, -1, -1, -1, field_0x37c);
+        drawShadow(mShadowCircle, nullptr, mWorldMtx, mShadowSph, -1, -1, -1, -1, -1, field_0x37c);
     }
     return SUCCEEDED;
 }

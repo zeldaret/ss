@@ -459,9 +459,9 @@ void dItemMdlItem_c::setLocalMtx(const mMtx_c &mtx) {
 
 void dItemMdlItem_c::draw() {
     if (mDrawMode == DrawMode_Get) {
-        mpItem->fn_8002ECD0(&mMdl, 6);
+        mpItem->drawModel(&mMdl, 6);
     } else {
-        mpItem->fn_8002ECD0(&mMdl, 7);
+        mpItem->drawModel(&mMdl, 7);
     }
 }
 

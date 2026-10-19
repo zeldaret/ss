@@ -268,7 +268,7 @@ int dAcNpcHc_c::actorExecute() {
 
 int dAcNpcHc_c::draw() {
     if (mDeathTimer == 0) {
-        drawModelType1(&mModel);
+        drawModel(&mModel);
     }
     return SUCCEEDED;
 }

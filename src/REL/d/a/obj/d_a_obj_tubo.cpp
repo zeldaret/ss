@@ -75,7 +75,7 @@ int dAcOtubo_c::actorCreate() {
     mEff_0x91C.setIsSmall(true);
     int unkParam = getParams_0x3000();
     if (unkParam != 1 && unkParam != 2) {
-        fn_8002EA30(-60.f, -20.f, 2.f, 1.f, 4.f, &mObjAcch);
+        setSinkDepths(-60.f, -20.f, 2.f, 1.f, 4.f, &mObjAcch);
     }
     mStts.SetRank(5);
     mSph.Set(sSphSrc);
@@ -201,12 +201,12 @@ void dAcOtubo_c::registerInEvent() {
 }
 
 int dAcOtubo_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
 
     static mSphere_c sph(mVec3_c(0.f, 30.f, 0.f), 40.f);
 
     if (mYOffset >= 0.f) {
-        drawShadow(mShdw, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
+        drawShadow(mShdw, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     }
     return SUCCEEDED;
 }
@@ -216,7 +216,7 @@ void dAcOtubo_c::executeState_Wait() {
     if (mObjAcch.ChkGroundLanding()) {
         if (!mbField_0x9EF || !EventManager::isInEvent()) {
             if (field_0x9F6 == 2) {
-                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0);
+                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.0f, field_0x1B0);
             }
             if (mbField_0x9F3) {
                 startSound(SE_Tubo_PUT);
@@ -225,7 +225,7 @@ void dAcOtubo_c::executeState_Wait() {
             if (checkOnLava()) {
                 if (field_0x9F6 != 2) {
                     dJEffManager_c::spawnGroundEffect(
-                        mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0
+                        mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.0f, field_0x1B0
                     );
                 }
                 startSound(SE_O_FALL_LAVA_S);
@@ -359,7 +359,7 @@ void dAcOtubo_c::initializeState_Slope() {
 }
 void dAcOtubo_c::executeState_Slope() {
     if (mObjAcch.ChkGroundLanding()) {
-        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.0f, field_0x1B0);
     } else if (mObjAcch.ChkGndHit()) {
         field_0x9DC = 0.f;
         addPickupTarget();
@@ -666,7 +666,7 @@ void dAcOtubo_c::attemptDestroy() {
 
     if (mObjAcch.ChkRoofHit()) {
         destroy();
-    } else if (!mbField_0x9EF && checkYOffsetField_0x100() && getParams_0x3000() != 1) {
+    } else if (!mbField_0x9EF && checkAtDeepSinkDepth() && getParams_0x3000() != 1) {
         killNoItemDrop();
     } else if (fn_272_38A0()) {
         destroy();

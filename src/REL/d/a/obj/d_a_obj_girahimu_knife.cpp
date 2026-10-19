@@ -131,8 +131,8 @@ int dAcObjGirahimuKnife_c::actorExecute() {
 int dAcObjGirahimuKnife_c::draw() {
     static mSphere_c sph(mVec3_c(0.0f, 60.0f, 0.0f), 100.0f);
     f32 f = mPosition.y;
-    drawModelType1(&mMdl);
-    fn_8002edb0(mShadow, mMdl, &sph, -1, -1, f);
+    drawModel(&mMdl);
+    drawShadow(mShadow, mMdl, sph, -1, -1, f);
     return SUCCEEDED;
 }
 

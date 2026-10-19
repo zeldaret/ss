@@ -76,8 +76,8 @@ int dAcOPoolCock_c::actorExecute() {
 
 int dAcOPoolCock_c::draw() {
     if (mOpenProgress < 400.0f) {
-        drawModelType1(&mModels[0]);
-        drawModelType1(&mModels[1]);
+        drawModel(&mModels[0]);
+        drawModel(&mModels[1]);
     }
     return SUCCEEDED;
 }

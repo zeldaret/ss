@@ -142,7 +142,7 @@ int dAcOropeIgaiga_c::actorExecute() {
 }
 
 int dAcOropeIgaiga_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

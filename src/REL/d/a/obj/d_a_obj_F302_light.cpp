@@ -92,7 +92,7 @@ int dAcOF302Light_c::actorExecuteInEvent() {
 }
 
 int dAcOF302Light_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

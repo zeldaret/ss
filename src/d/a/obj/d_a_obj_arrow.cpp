@@ -945,6 +945,6 @@ int dAcArrow_c::draw() {
         setInitialPosition();
         unsetArrowFlag(ARROW_INITIAL_SPAWN);
     }
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }

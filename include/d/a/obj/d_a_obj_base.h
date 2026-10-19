@@ -3,14 +3,11 @@
 
 #include "common.h"
 #include "d/a/d_a_base.h"
-#include "d/a/d_a_salbage_if.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
 #include "d/d_jnt_col.h"
 #include "d/d_light_env.h"
 #include "d/d_linkage.h"
-#include "egg/math/eggMath.h"
-#include "m/m3d/m_shadow.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
@@ -18,11 +15,9 @@
 #include "m/types_m.h"
 
 class dBgS_Acch;
+class dShadowCircle_c;
+class dSalvageIf_c;
 
-// Ghidra: ActorObjectBase
-//   size: 0x330
-// vtable: 0x805015b8
-// non-official name
 class dAcObjBase_c : public dAcBase_c {
 public:
     enum ObjProperties_e {
@@ -62,11 +57,11 @@ public:
 
 public:
     /* 0x0FC */ f32 mYOffset;
-    /* 0x100 */ f32 field_0x100;
-    /* 0x104 */ f32 field_0x104;
-    /* 0x104 */ f32 field_0x108;
-    /* 0x104 */ f32 field_0x10C;
-    /* 0x104 */ f32 field_0x110;
+    /* 0x100 */ f32 mDeepSinkTarget;
+    /* 0x104 */ f32 mShallowSinkTarget;
+    /* 0x104 */ f32 mDeepSinkRate;
+    /* 0x104 */ f32 mShallowSinkRate;
+    /* 0x104 */ f32 mDefaultSinkRate;
     /* 0x114 */ u16 mTargetFiTextID;
     /* 0x116 */ u8 mTargetFiRelated;
     /* 0x118 */ mVec3_c mOldPosition;
@@ -83,7 +78,7 @@ public:
     /* 0x1A8 */ f32 field_0x1A8;
     /* 0x1AC */ u32 mObjectActorFlags;
     /* 0x1B0 */ f32 field_0x1B0;
-    /* 0x1B4 */ mVec3_c field_0x1B4;
+    /* 0x1B4 */ mVec3_c mGndNormal;
     /* 0x1C0 */ cCcD_Stts mStts;
     /* 0x1FC */ mVec3_c mStartingPos;
     /* 0x208 */ mAng3_c mStartingRot;
@@ -143,8 +138,8 @@ public:
         return std::fabsf(mVelocity.y) <= speed;
     }
 
-    bool checkYOffsetField_0x100() const {
-        return mYOffset <= field_0x100;
+    bool checkAtDeepSinkDepth() const {
+        return mYOffset <= mDeepSinkTarget;
     }
 
     void unsetObjectProperty(u32 property) {
@@ -202,10 +197,6 @@ public:
         const char *name, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
         u32 params2, u16 id, s8 viewclipId
     );
-    static dAcObjBase_c *create(
-        dAcObjBase_c *, ProfileName actorId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
-        u32 params2, u32 roomId
-    );
 
     static dAcObjBase_c *findObject(ProfileName actorId, fLiMgBa_c *refList, dAcObjBase_c *parent);
     static dAcObjBase_c *getNextObject(fLiMgBa_c *ref, dAcObjBase_c *parent);
@@ -214,46 +205,38 @@ public:
     void calcVelocity();
     void updateMatrix();
     void setDefaultCullDistance();
-    void fn_8002EA30(f32, f32, f32, f32, f32, dBgS_Acch *);
-    void fn_8002EA60(void *);
-    void fn_8002EB30(void *);
+    void setSinkDepths(f32, f32, f32, f32, f32, dBgS_Acch *);
+    void calcSinkDepth(const cBgS_PolyInfo &);
+    void setGndNormal(const cBgS_PolyInfo &);
 
-    void putInODesert(f32 depth, mVec3_c *position);
-    void fn_8002ECD0(m3d::smdl_c *smdl, UNKWORD);
-    // Disabling makes Items and Link Disappear
-    void drawModelType1(m3d::smdl_c *smdl);
-    // Disabling make Lava and other objects Disappear
-    void drawModel2();
-    void fn_8002ed20();
-    void fn_8002edb0(m3d::mShadowCircle_c &shadow, m3d::smdl_c &smdl, const mSphere_c *sph, s32, s32, f32);
-    void drawShadow(
-        m3d::mShadowCircle_c &shadow, void *, const mMtx_c &mtx, const mSphere_c *sph, s32, s32, s32, s32, s32, f32
-    );
-    void createChildAttached(
-        fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
-        u32 roomId
-    );
-    void createChildNonAttached(
-        fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
-        u32 roomId
+    bool putInODesert(f32 depth, mVec3_c *position);
+    void drawModel(m3d::smdl_c *smdl);
+    void drawModel(m3d::smdl_c *smdl, int lightSetIdx);
+    bool drawShadowAlone(m3d::smdl_c &mdl);
+    bool drawShadow(dShadowCircle_c &shadow, m3d::smdl_c &smdl, const mSphere_c &sph, s32, s32, f32);
+    bool drawShadow(
+        dShadowCircle_c &shadow, const GXTexObj *pTex, const mMtx_c &mtx, const mSphere_c &sph, s32 priority, s32 alpha,
+        s32 red, s32 green, s32 blue, f32 height
     );
     void fn_8002efa0();
     bool fn_8002eff0(const f32 &, const s16 &, cCcD_Obj *, const f32 &, const f32 &);
-    void createChildAttached2(
-        fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
-        u32 roomId
+
+    dAcObjBase_c *createChildAttached(
+        ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u32 roomId
+    );
+    dAcObjBase_c *createChildDetached(
+        ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u32 roomId
     );
 
     // These may not belong here
     static dAcBase_c *createInsectActor(
-        dAcBase_c *parent, fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale,
-        u32 params2, s32 roomId
+        dAcBase_c *parent, ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
+        s32 roomId
     );
-    static dAcBase_c *createActorUnkGroup3(
-        fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale,
-        u32 params2
+    static dAcBase_c *createStageActor(
+        ProfileName actorId, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2
     );
-    static dAcBase_c *createActorUnkGroup3(
+    static dAcBase_c *createStageActor(
         const char *name, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
         u32 params2, u16 id, s8 viewclipId
     );

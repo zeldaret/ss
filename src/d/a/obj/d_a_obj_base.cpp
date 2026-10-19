@@ -3,6 +3,9 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_player.h"
+#include "d/col/bg/d_bg_pc.h"
+#include "d/col/c/c_bg_s_poly_info.h"
+#include "d/col/c/c_m3d_g_pla.h"
 #include "d/d_base.h"
 #include "d/d_bzs_types.h"
 #include "d/d_linkage.h"
@@ -13,14 +16,18 @@
 #include "f/f_base.h"
 #include "f/f_list_mg.h"
 #include "f/f_list_nd.h"
-#include "f/f_profile_name.h"
+#include "f/f_profile.h"
+#include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "nw4r/math/math_geometry.h"
+#include "s/s_Math.h"
 #include "toBeSorted/actor_info.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
+#include "toBeSorted/d_d3d.h"
 #include "toBeSorted/event_manager.h"
+#include "toBeSorted/time_area_mgr.h"
 
 void *dAcObjBase_c::getOarcFile(const char *oarcName, const char *fileName) {
     return OarcManager::GetInstance()->getData(oarcName, fileName);
@@ -55,7 +62,7 @@ dAcObjBase_c::dAcObjBase_c()
       mCullingDistance(8000.0f),
       field_0x1A8(400.0f),
       field_0x1B0(-1e9f),
-      field_0x1B4(0.0f, 1.0f, 0.0f),
+      mGndNormal(0.0f, 1.0f, 0.0f),
       mStts(this),
       mStartingPos(mPosition.x, mPosition.y, mPosition.z),
       mStartingRot(mRotation) {
@@ -87,7 +94,10 @@ int dAcObjBase_c::preCreate() {
 }
 
 int dAcObjBase_c::preExecute() {
-    bool notOk = fBase_c::preExecute() == NOT_READY;
+    bool notOk = false;
+    if (dAcBase_c::preExecute() == NOT_READY) {
+        notOk = true;
+    }
 
     mLinkage.fn_80051190(this);
 
@@ -97,7 +107,12 @@ int dAcObjBase_c::preExecute() {
         setObjectProperty(OBJ_PROP_0x80);
     } else if (checkObjectProperty(OBJ_PROP_0x1)) {
         if (checkActorProperty(AC_PROP_0x1) && checkActorProperty(AC_PROP_0x10000000)) {
-            // Event Manger Check
+            if (!(EventManager::checkFlag(0x10) || EventManager::FUN_800a0570(this) ||
+                  (checkActorProperty(AC_PROP_0x1000) && dTimeAreaMgr_c::fn_800BBE00()))) {
+                if (!dTimeAreaMgr_c::fn_800BBD40() || !dTgViewClip_c::checkForceOn(mViewClipIdx)) {
+                    return false;
+                }
+            }
         }
     }
 
@@ -143,7 +158,7 @@ int dAcObjBase_c::preDraw() {
 
     f32 cull = dTgViewClip_c::getCull(mViewClipIdx, mCullingDistance);
     if (EventManager::checkFlag(0x20)) {
-        cull = 3.402923e30f;
+        cull = FLT_MAX;
     }
     if (cull < 0.0f) {
         if (checkActorProperty(AC_PROP_0x1) && checkActorProperty(AC_PROP_0x2)) {
@@ -235,9 +250,12 @@ bool dAcObjBase_c::isPlayer() {
 }
 
 void dAcObjBase_c::calcVelocity(const mVec3_c &pos, f32 speed) {
-    // FIXME
-    mVelocity.set((pos.x - mPosition.x) / speed, (pos.y - mPosition.y) / speed, (pos.z - mPosition.z) / speed);
-    mVelocity.y += mAcceleration * speed / 2.0f;
+    mVec3_c v = pos - mPosition;
+
+    mVelocity.x = v.x / speed;
+    mVelocity.z = v.z / speed;
+    mVelocity.y = mAcceleration * speed * 0.5f;
+    mVelocity.y += v.y / speed;
 }
 
 void dAcObjBase_c::calcVelocity() {
@@ -262,6 +280,173 @@ bool dAcObjBase_c::drop() {
     return true;
 }
 
-void dAcObjBase_c::fn_8002EA30(f32 f0, f32 f1, f32 f2, f32 f3, f32 f4, dBgS_Acch *acch) {
-    acch->OnWallSort();
+void dAcObjBase_c::setSinkDepths(f32 f0, f32 f1, f32 f2, f32 f3, f32 f4, dBgS_Acch *acch) {
+    acch->SetGroundSink();
+    mDeepSinkTarget = f0;
+    mShallowSinkTarget = f1;
+    mDeepSinkRate = f2;
+    mShallowSinkRate = f3;
+    mDefaultSinkRate = f4;
+}
+
+void dAcObjBase_c::calcSinkDepth(const cBgS_PolyInfo &gnd) {
+    f32 target = 0.0f;
+    f32 step = mDefaultSinkRate;
+
+    if (!mLinkage.checkState(dLinkage_c::STATE_ACTIVE)) {
+        int attr = dBgS::GetInstance()->GetSpecialCode(gnd);
+
+        if (attr == POLY_ATTR_SAND_DEEP_INSTANT || attr == POLY_ATTR_LAVA || attr == POLY_ATTR_SAND_DEEP_SLOW ||
+            attr == POLY_ATTR_SAND_MED || attr == POLY_ATTR_CURSED_WATER) {
+            target = mDeepSinkTarget;
+            step = mDeepSinkRate;
+        } else if (attr == POLY_ATTR_SAND_SHALLOW || attr == POLY_ATTR_SAND_SHALLOW2) {
+            target = mShallowSinkTarget;
+            step = mShallowSinkRate;
+        }
+    }
+    sLib::chase(&mYOffset, target, step);
+}
+
+void dAcObjBase_c::setGndNormal(const cBgS_PolyInfo &gnd) {
+    cM3dGPla plane;
+    dBgS::GetInstance()->GetTriPla(gnd, &plane);
+    mGndNormal = plane.GetN();
+}
+
+bool dAcObjBase_c::putInODesert(f32 depth, mVec3_c *pos) {}
+
+void dAcObjBase_c::drawModel(m3d::smdl_c *pMdl) {
+    d3d::setLight(pMdl, mLightingInfo.mLightSetIdx >= 0 ? mLightingInfo.mLightSetIdx : -1, &mLightingInfo);
+    pMdl->entry();
+}
+
+void dAcObjBase_c::drawModel(m3d::smdl_c *pMdl, int lightSetIdx) {
+    d3d::setLight(pMdl, lightSetIdx, &mLightingInfo);
+    pMdl->entry();
+}
+
+bool dAcObjBase_c::drawShadowAlone(m3d::smdl_c &mdl) {
+    bool check;
+    if (dStageMgr_c::GetInstance()->checkFlag0x88A0(0x2)) {
+        check = false;
+    } else {
+        if (mLinkage.fn_800513C0()) {
+            if (mLinkage.getControllingActor()->isActorPlayer()) {
+                static_cast<dAcPy_c *>(mLinkage.getControllingActor())->updateShadow(mdl);
+            }
+            check = false;
+        } else {
+            check = true;
+        }
+    }
+    return check;
+}
+
+bool dAcObjBase_c::drawShadow(
+    dShadowCircle_c &shadow, m3d::smdl_c &mdl, const mSphere_c &sph, s32 priority, s32 alpha, f32 height
+) {
+    return drawShadowAlone(mdl) ? shadow.drawMdl(mdl, sph, mLightingInfo, priority, alpha, this, height) : false;
+}
+
+bool dAcObjBase_c::drawShadow(
+    dShadowCircle_c &shadow, const GXTexObj *pTex, const mMtx_c &mtx, const mSphere_c &sph, s32 priority, s32 alpha,
+    s32 red, s32 green, s32 blue, f32 height
+) {
+    bool check;
+    if (dStageMgr_c::GetInstance()->checkFlag0x88A0(0x2)) {
+        check = false;
+    } else {
+        if (mLinkage.fn_800513C0()) {
+            if (mLinkage.getControllingActor()->isActorPlayer()) {
+                static_cast<dAcPy_c *>(mLinkage.getControllingActor())->updateShadow(sph, mtx);
+            }
+            check = false;
+        } else {
+            check = true;
+        }
+    }
+
+    return check ? shadow.drawTexObj(pTex, mtx, sph, mLightingInfo, priority, alpha, red, green, blue, this, height) :
+                   false;
+}
+
+dAcObjBase_c *dAcObjBase_c::createChildAttached(
+    ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u32 roomId
+) {
+    return static_cast<dAcObjBase_c *>(createActor(actorId, params1, pos, rot, scale, params2, roomId, this));
+}
+dAcObjBase_c *dAcObjBase_c::createChildDetached(
+    ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u32 roomId
+) {
+    return static_cast<dAcObjBase_c *>(createActor(actorId, params1, pos, rot, scale, params2, roomId, nullptr));
+}
+
+void dAcObjBase_c::fn_8002efa0() {
+    if (isRoomFlags_0x6_Set()) {
+        setObjectProperty(OBJ_PROP_0x200);
+    } else {
+        unsetObjectProperty(OBJ_PROP_0x200);
+    }
+}
+bool dAcObjBase_c::fn_8002eff0(
+    const f32 &radius, const s16 &rollRotRange, cCcD_Obj *pCc, const f32 &heightMax, const f32 &heightMin
+) {
+    if (pCc == nullptr || pCc->ChkCoHit()) {
+        dAcPy_c *pPlayer = dAcPy_c::GetLinkM();
+
+        f32 rad = (radius + 40.0f);
+        f32 heightDiffToPlayer = dAcPy_c::GetLinkM()->mPosition.y - mPosition.y;
+
+        bool b = heightDiffToPlayer > heightMin;
+        if (b) {
+            b = heightDiffToPlayer < heightMax;
+        }
+        if (b) {
+            b = pPlayer->checkCurrentAction(12 /* ROLL */);
+        }
+        if (b) {
+            mVec3_c v = pPlayer->mPosition - mPosition;
+            b = v.squareMagXZ() < rad * rad;
+        }
+        if (b) {
+            // TODO: Find a better solution for ang bullsh*t
+            s32 a = getPostionDifference(*pPlayer).atan2sX_Z();
+            mAng b = (mAng)a - pPlayer->mAngle.y;
+            if (mAng(b).abs() < rollRotRange) {
+                pPlayer->setBonkRelatedAnimFlag(false);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// These may not belong here
+dAcBase_c *dAcObjBase_c::createInsectActor(
+    dAcBase_c *parent, ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
+    s32 roomId
+) {
+    return parent->createActor(actorId, params1, pos, rot, scale, params2, roomId, parent);
+}
+
+dAcBase_c *dAcObjBase_c::createStageActor(
+    ProfileName profile, u32 roomID, u32 params, mVec3_c *pPos, mAng3_c *pRot, mVec3_c *pScale, u32 params2
+) {
+    setTempCreateParams(
+        (mVec3_c *)pPos, (mAng3_c *)pRot, (mVec3_c *)pScale, roomID, params2, nullptr, 0, 0xFFFF, 0xFF, nullptr
+    );
+    return static_cast<dAcObjBase_c *>(createBase(profile, dStage_c::getParentForRoom(roomID), params, STAGE));
+}
+
+dAcBase_c *dAcObjBase_c::createStageActor(
+    const char *name, u32 roomID, u32 params, const mVec3_c *pPos, const mAng3_c *pRot, const mVec3_c *pScale,
+    u32 params2, u16 id, s8 viewclipId
+) {
+    const ActorInfo *pInfo = getActorInfoByName(name);
+    setTempCreateParams(
+        (mVec3_c *)pPos, (mAng3_c *)pRot, (mVec3_c *)pScale, roomID, params2, nullptr, pInfo->subtype, id, viewclipId,
+        pInfo
+    );
+    return static_cast<dAcObjBase_c *>(createBase(pInfo->profileId, dStage_c::getParentForRoom(roomID), params, STAGE));
 }

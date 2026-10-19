@@ -1049,8 +1049,9 @@ int dAcItem_c::create() {
         if (type == TEAR_MAX) {
             type = TEAR_FARON;
         }
-        dAcObjBase_c *forceSign =
-            dAcObjBase_c::create(this, fProfile::OBJ_FORCE_SIGN, type & 0xFF, nullptr, nullptr, nullptr, nullptr, 0x3F);
+        dAcObjBase_c *forceSign = dAcObjBase_c::createChildAttached(
+            fProfile::OBJ_FORCE_SIGN, type & 0xFF, nullptr, nullptr, nullptr, nullptr, 0x3F
+        );
         if (forceSign != nullptr) {
             mForceSignRef.link(forceSign);
         }
@@ -1253,7 +1254,7 @@ int dAcItem_c::actorExecute() {
     mCyl.ClrCoHit();
     field_0xD65 = 0;
     if ((isAnyRupeeV() || mId == ITEM_STAMINA_FRUIT) && field_0xD66 && mObjAcch.ChkGroundLanding()) {
-        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 0.7f, field_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 0.7f, field_0x1B0);
     }
 
     if (isStarryFireflyV() && !checkObjectProperty(OBJ_PROP_0x200)) {
@@ -1305,13 +1306,13 @@ int dAcItem_c::draw() {
             /* nothing */
         } else if (mMdlScaleType == 2) {
             mSphere_c v(mVec3_c(0.0f, 0.0f, 0.0f), getItemFlagStruct(getItemId())->field_0x02);
-            drawShadow(mShdw, nullptr, mWorldMtx, &v, -1, -1, -1, -1, -1, field_0xD18);
+            drawShadow(mShdw, nullptr, mWorldMtx, v, -1, -1, -1, -1, -1, field_0xD18);
         } else {
             mSphere_c v(
                 mVec3_c(0.0f, field_0xCD8 * 0.5f * getItemFlagStruct(getItemId())->field_0x01, 0.0f),
                 field_0xCD8 * getItemFlagStruct(getItemId())->field_0x02
             );
-            drawShadow(mShdw, nullptr, mWorldMtx, &v, -1, -1, -1, -1, -1, field_0xD18);
+            drawShadow(mShdw, nullptr, mWorldMtx, v, -1, -1, -1, -1, -1, field_0xD18);
         }
     }
     return SUCCEEDED;

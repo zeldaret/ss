@@ -44,7 +44,7 @@ int dAcOdistantShip_c::actorExecute() {
 
 int dAcOdistantShip_c::draw() {
     if (mIsVisible) {
-        drawModelType1(&mModel);
+        drawModel(&mModel);
     }
     return SUCCEEDED;
 }

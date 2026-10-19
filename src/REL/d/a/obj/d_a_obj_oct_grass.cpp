@@ -66,7 +66,7 @@ int dAcOOctGrass_c::actorExecute() {
 }
 
 int dAcOOctGrass_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

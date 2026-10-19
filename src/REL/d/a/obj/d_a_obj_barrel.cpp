@@ -176,7 +176,7 @@ int dAcOBarrel_c::actorCreate() {
     CREATE_ALLOCATOR(dAcOBarrel_c);
 
     if (!field_0xE08 && !isType_0()) {
-        fn_8002EA30(-100.f, 0.f, 2.f, 1.f, 4.f, &mObjAcch);
+        setSinkDepths(-100.f, 0.f, 2.f, 1.f, 4.f, &mObjAcch);
     }
 
     mObjAcch.Set(this, 1, &mAcchCir);
@@ -390,12 +390,12 @@ void dAcOBarrel_c::doInteraction(s32 i) {
 }
 
 int dAcOBarrel_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
 
     static mSphere_c sph(mVec3_c(0.f, 50.f, 0.f), 80.f);
 
     if (mYOffset >= 0.f) {
-        drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
+        drawShadow(mShadow, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     }
 
     return SUCCEEDED;
@@ -415,7 +415,7 @@ void dAcOBarrel_c::executeState_Wait() {
     if (mObjAcch.ChkGroundLanding() && !field_0xE0E) {
         fn_293_37B0();
         if (mVelocity.y > 0.f) {
-            dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.f, field_0x1B0);
+            dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.f, field_0x1B0);
         }
 
         if (field_0xE0A) {
@@ -445,7 +445,7 @@ void dAcOBarrel_c::executeState_Wait() {
             fn_293_5910();
         }
 
-        if (!field_0xE08 && !isType_0() && checkYOffsetField_0x100()) {
+        if (!field_0xE08 && !isType_0() && checkAtDeepSinkDepth()) {
             killNoItemDrop();
             return;
         }
@@ -637,7 +637,7 @@ void dAcOBarrel_c::initializeState_Slope() {
 void dAcOBarrel_c::executeState_Slope() {
     if (mObjAcch.ChkGroundLanding() && !field_0xE0E) {
         fn_293_37B0();
-        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.f, field_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.f, field_0x1B0);
         startSound(SE_Barrel_ROLL_GROUND);
     } else if (mObjAcch.ChkGndHit()) {
         field_0xDDC = 0.f;
@@ -679,7 +679,7 @@ void dAcOBarrel_c::executeState_Slope() {
             mCyl.ClrAtSet();
         }
 
-        if (!field_0xE08 && !isType_0() && checkYOffsetField_0x100()) {
+        if (!field_0xE08 && !isType_0() && checkAtDeepSinkDepth()) {
             killNoItemDrop();
             return;
         }
@@ -798,7 +798,7 @@ void dAcOBarrel_c::initializeState_KrakenBorn() {
 void dAcOBarrel_c::executeState_KrakenBorn() {
     if (mObjAcch.ChkGroundLanding()) {
         fn_293_37B0();
-        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.f, field_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.f, field_0x1B0);
         startSound(SE_Barrel_ROLL_GROUND);
     } else if (mObjAcch.ChkGndHit()) {
         field_0xDDC = 0.f;

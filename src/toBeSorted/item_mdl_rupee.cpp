@@ -99,7 +99,6 @@ bool dItemMdlRupee_c::init(u16 itemId, dAcItem_c *item, mAllocator_c *allocator)
         mGetMdl.setAnm(mGetAnmTexPat);
         mGetAnmTexPat.setFrame(sMdlConfig[i].texPatFrame, 0);
     }
-    
 
     mpItem = item;
     return true;
@@ -125,8 +124,8 @@ void dItemMdlRupee_c::setLocalMtx(const mMtx_c &mtx) {
 
 void dItemMdlRupee_c::draw() {
     switch (mDrawMode) {
-        case DrawMode_Put: mpItem->fn_8002ECD0(&mPutMdl, 7); break;
-        case DrawMode_Get: mpItem->fn_8002ECD0(&mGetMdl, 6); break;
+        case DrawMode_Put: mpItem->drawModel(&mPutMdl, 7); break;
+        case DrawMode_Get: mpItem->drawModel(&mGetMdl, 6); break;
     }
 }
 

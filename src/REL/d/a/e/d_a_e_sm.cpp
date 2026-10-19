@@ -718,7 +718,7 @@ int dAcEsm_c::draw() {
         return SUCCEEDED;
     }
 
-    drawModelType1(&mMdl.getModel());
+    drawModel(&mMdl.getModel());
 
     if (mHealth == 0) {
         return SUCCEEDED;
@@ -726,7 +726,7 @@ int dAcEsm_c::draw() {
 
     s8 var = 0;
     mSphere_c sph(mVec3_c(0.f, 50.f, 0.f), mScale.x * (var + 240.f));
-    drawShadow(mShadowCircle, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
+    drawShadow(mShadowCircle, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     return SUCCEEDED;
 }
 

@@ -1508,9 +1508,9 @@ int dAcTbox_c::draw() {
         return SUCCEEDED;
     }
 
-    drawModelType1(&mMdl1.getModel());
+    drawModel(&mMdl1.getModel());
     if (fn_8026D540()) {
-        drawModelType1(&mOpenFxMdl);
+        drawModel(&mOpenFxMdl);
     }
 
     static mSphere_c shadowSphs[4] = {
@@ -1520,7 +1520,7 @@ int dAcTbox_c::draw() {
         mSphere_c(mVec3_c(0.0f, 45.0f, 0.0f), 100.0f),
     };
 
-    drawShadow(mShadowCircle, nullptr, mWorldMtx, &shadowSphs[mVariant], -1, -1, -1, -1, -1, 0.0f);
+    drawShadow(mShadowCircle, nullptr, mWorldMtx, shadowSphs[mVariant], -1, -1, -1, -1, -1, 0.0f);
 
     return SUCCEEDED;
 }

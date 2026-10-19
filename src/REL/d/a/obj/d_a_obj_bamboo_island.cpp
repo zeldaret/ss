@@ -63,7 +63,7 @@ int dAcObambooIsland_c::actorExecute() {
 
 int dAcObambooIsland_c::draw() {
     for (int i = 0; i < 2; i++) {
-        drawModelType1(&mModels[i]);
+        drawModel(&mModels[i]);
     }
     return SUCCEEDED;
 }

@@ -37,6 +37,6 @@ int dAcOfenceBoko2_c::actorExecute() {
 }
 
 int dAcOfenceBoko2_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }

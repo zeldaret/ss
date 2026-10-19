@@ -42,7 +42,7 @@ int dAcODecoB_c::actorExecute() {
 }
 
 int dAcODecoB_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

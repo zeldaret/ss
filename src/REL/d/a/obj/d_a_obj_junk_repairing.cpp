@@ -58,9 +58,9 @@ int dAcOJunkRep_c::actorExecute() {
 }
 
 int dAcOJunkRep_c::draw() {
-    drawModelType1(mpModelToUse);
+    drawModel(mpModelToUse);
     static mSphere_c sph(mVec3_c(0.0f, 37.5f, 0.0f), 75.0f);
-    fn_8002edb0(mShadow, *mpModelToUse, &sph, -1, -1, sSomeFloat);
+    drawShadow(mShadow, *mpModelToUse, sph, -1, -1, sSomeFloat);
     return SUCCEEDED;
 }
 

@@ -524,9 +524,9 @@ int dAcESkytail_c::actorExecute() {
 }
 
 int dAcESkytail_c::draw() {
-    drawModelType1(&mBodyMdl.getModel());
+    drawModel(&mBodyMdl.getModel());
     for (int i = 0; i < (s32)ARRAY_LENGTH(mAntennaMdl); ++i) {
-        drawModelType1(&mAntennaMdl[i].getModel());
+        drawModel(&mAntennaMdl[i].getModel());
     }
     return SUCCEEDED;
 }

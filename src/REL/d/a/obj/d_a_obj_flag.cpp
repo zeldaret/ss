@@ -210,7 +210,7 @@ int dAcOFlag_c::actorExecute() {
 }
 
 int dAcOFlag_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

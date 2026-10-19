@@ -1747,7 +1747,7 @@ int dAcEKs_c::draw() {
         }
     }
 
-    drawModelType1(&mMdl.getModel());
+    drawModel(&mMdl.getModel());
 
     if (!isState(StateID_Wait)) {
         field_0xD18 = mPosition.y - mAcch.GetGroundH();
@@ -1757,7 +1757,7 @@ int dAcEKs_c::draw() {
             50.f + dAcEKs_HIO_c::sInstance.getZero1()
         );
         field_0xAE4.transS(mPosition);
-        drawShadow(mShadow, nullptr, field_0xAE4, &sph, -1, -1, -1, -1, -1, field_0xD18);
+        drawShadow(mShadow, nullptr, field_0xAE4, sph, -1, -1, -1, -1, -1, field_0xD18);
     }
 
     return SUCCEEDED;
@@ -2635,7 +2635,7 @@ void dAcEKs_c::executeState_Damage() {
         }
 
         if (mAcch.ChkGroundLanding() && field_0xDB5 != 0) {
-            dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 1, field_0x1B0);
+            dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 1, field_0x1B0);
             field_0xDB5 = 0;
         }
 
@@ -2729,17 +2729,13 @@ void dAcEKs_c::executeState_Stun() {
             }
             if (mAcch.ChkGndHit()) {
                 if (field_0xDB5 != 0) {
-                    dJEffManager_c::spawnGroundEffect(
-                        mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 1, field_0x1B0
-                    );
+                    dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 1, field_0x1B0);
                     field_0xDB5 = 0;
                 }
                 field_0xD5C = 0;
                 field_0xDA9 = 1;
                 if (dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd()) == POLY_ATTR_LAVA) {
-                    dJEffManager_c::spawnGroundEffect(
-                        mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 1, field_0x1B0
-                    );
+                    dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 1, field_0x1B0);
                     resetInteractionFlags(0x1);
                     startSound(SE_EKs_V_DEATH2);
                     unsetActorProperty(AC_PROP_0x1);
@@ -2869,7 +2865,7 @@ void dAcEKs_c::executeState_WindBlow() {
     }
 
     if (mAcch.ChkGroundLanding() && dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd()) == POLY_ATTR_LAVA) {
-        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 1, field_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 1, field_0x1B0);
         startSound(SE_EKs_V_DEATH2);
         unsetActorProperty(AC_PROP_0x1);
         kill(false);

@@ -58,7 +58,7 @@ int dAcOtrapRock1_c::actorExecute() {
 }
 
 int dAcOtrapRock1_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

@@ -77,7 +77,7 @@ int dAcOTowerGearD101_c::actorExecute() {
 }
 
 int dAcOTowerGearD101_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

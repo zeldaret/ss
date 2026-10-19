@@ -1518,7 +1518,7 @@ void dAcGirahimuBase_c::executeState_BackStep() {
         case 2: {
             mbOnGround = false;
             if (mVelocity.y <= 0.0f && mAcch.ChkGndHit() && mPosition.y <= mStartingPos.y + 100.0f) {
-                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0);
+                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.0f, field_0x1B0);
                 mAngle.y = mVelocity.atan2sX_Z();
                 mSpeedTarget = 0.0f;
                 mSpeed = mVelocity.absXZ();
@@ -2906,12 +2906,12 @@ int dAcGirahimuBase_c::draw() {
         return SUCCEEDED;
     }
 
-    drawModelType1(&mMdlBody);
-    drawModelType1(&mMdlPias);
+    drawModel(&mMdlBody);
+    drawModel(&mMdlPias);
     static mSphere_c bodySph(mVec3_c(0.0f, 100.0f, 0.0f), 300.0f);
     static mSphere_c swordSph(mVec3_c(0.0f, 0.0f, 0.0f), 0.0f);
 
-    fn_8002edb0(mShadow, mMdlBody, &bodySph, -1, -1, 0.0f);
+    drawShadow(mShadow, mMdlBody, bodySph, -1, -1, 0.0f);
     if (mbHoldingSwordA) {
         mMdlSwordA.entry(this, nullptr, nullptr);
         m3d::mShadow_c::GetInstance()->addMdlToCircle(&mShadow, mMdlSwordA.mMdl, swordSph);

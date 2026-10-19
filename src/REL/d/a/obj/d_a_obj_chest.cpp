@@ -161,9 +161,9 @@ int dAcOChest_c::actorExecute() {
 }
 
 int dAcOChest_c::draw() {
-    drawModelType1(&mAnmMdl.getModel());
+    drawModel(&mAnmMdl.getModel());
     if (hasInsideModel()) {
-        drawModelType1(&mInsideMdl);
+        drawModel(&mInsideMdl);
     }
     return SUCCEEDED;
 }

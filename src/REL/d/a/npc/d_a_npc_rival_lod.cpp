@@ -35,7 +35,7 @@ int dAcNpcRivalLOD_c::actorExecute() {
 }
 
 int dAcNpcRivalLOD_c::draw() {
-    drawModelType1(&mMdl.getModel());
+    drawModel(&mMdl.getModel());
     return SUCCEEDED;
 }
 

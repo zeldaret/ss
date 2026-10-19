@@ -2345,10 +2345,10 @@ void dAcBlastboss_c::setAnmRate(f32 rate) {
 }
 
 int dAcBlastboss_c::draw() {
-    drawModelType1(&mMdl.getModel());
+    drawModel(&mMdl.getModel());
     mSwordMdl.entry(this, nullptr, nullptr);
     if (field_0x114C) {
-        drawModelType1(&mThunderMdl);
+        drawModel(&mThunderMdl);
     }
     return SUCCEEDED;
 }

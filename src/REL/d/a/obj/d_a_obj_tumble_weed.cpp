@@ -154,11 +154,11 @@ int dAcOTumbleWeed_c::actorExecute() {
 }
 
 int dAcOTumbleWeed_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
 
     static mSphere_c sph(mVec3_c(0.f, 30.f, 0.f), 50.f);
     if (0.f < mScale.x) {
-        drawShadow(mShdw, nullptr, mShadowMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
+        drawShadow(mShdw, nullptr, mShadowMtx, sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     }
 
     return SUCCEEDED;

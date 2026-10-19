@@ -121,9 +121,9 @@ int dAcOtreasureIslandB_c::actorExecute() {
 }
 
 int dAcOtreasureIslandB_c::draw() {
-    drawModelType1(&mMdl[ISLAND]);
+    drawModel(&mMdl[ISLAND]);
     if (getStateID() != StateID_CoverBreak) {
-        drawModelType1(&mMdl[ROCK]);
+        drawModel(&mMdl[ROCK]);
     }
     return SUCCEEDED;
 }

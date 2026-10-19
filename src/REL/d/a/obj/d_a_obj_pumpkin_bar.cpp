@@ -61,7 +61,7 @@ int dAcOpumpkinBar_c::actorExecute() {
 }
 
 int dAcOpumpkinBar_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }
 

@@ -70,7 +70,7 @@ int dAcOShed_c::actorExecute() {
 }
 
 int dAcOShed_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

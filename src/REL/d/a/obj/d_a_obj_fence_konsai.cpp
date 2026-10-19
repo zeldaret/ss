@@ -34,6 +34,6 @@ int dAcOfenceKonsai_c::actorExecute() {
 }
 
 int dAcOfenceKonsai_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }

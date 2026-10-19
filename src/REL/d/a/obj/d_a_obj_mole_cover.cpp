@@ -46,6 +46,6 @@ int dAcOmoleCover_c::actorExecute() {
 }
 
 int dAcOmoleCover_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }

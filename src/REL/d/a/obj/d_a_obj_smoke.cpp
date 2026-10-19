@@ -47,7 +47,7 @@ int dAcOsmoke_c::actorExecute() {
 }
 
 int dAcOsmoke_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }
 

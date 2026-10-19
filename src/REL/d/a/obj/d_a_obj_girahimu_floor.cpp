@@ -220,7 +220,7 @@ int dAcOGirahimuFloor_c::actorExecute() {
 }
 
 int dAcOGirahimuFloor_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

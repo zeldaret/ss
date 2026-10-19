@@ -53,7 +53,7 @@ int dAcOshrineBefInside_c::actorExecute() {
 
 int dAcOshrineBefInside_c::draw() {
     for (int i = 0; i < 2; i++) {
-        drawModelType1(&mModel[i]);
+        drawModel(&mModel[i]);
     }
     return SUCCEEDED;
 }

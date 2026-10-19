@@ -575,10 +575,10 @@ int dAcEremly_c::draw() {
     }
 
     m3d::smdl_c &mdl = mMdl.getModel();
-    drawModelType1(&mdl);
+    drawModel(&mdl);
 
     static mSphere_c sph(mVec3_c(0.f, getValue0(), 0.f), _weird_zero + 290.f);
-    fn_8002edb0(mShadow, mdl, &sph, -1, -1, mPosition.y - mAcch.GetGroundH());
+    drawShadow(mShadow, mdl, sph, -1, -1, mPosition.y - mAcch.GetGroundH());
 
     return SUCCEEDED;
 }
@@ -2482,7 +2482,7 @@ void dAcEremly_c::spawnGroundEffect() {
     m.multVec(in, out);
     out += mPosition;
 
-    dJEffManager_c::spawnGroundEffect(out, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, mScale.x * 0.7f, field_0x1B0);
+    dJEffManager_c::spawnGroundEffect(out, mPolyAttr0, mPolyAttr1, mGndNormal, 1, mScale.x * 0.7f, field_0x1B0);
 }
 
 bool dAcEremly_c::fn_177_86C0() {

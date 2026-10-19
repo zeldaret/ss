@@ -115,8 +115,8 @@ int dAcSalbageObj_c::preDraw() {
 }
 
 int dAcSalbageObj_c::draw() {
-    drawModelType1(mpMdl);
-    fn_8002edb0(mShadow, *mpMdl, &mShadowSph, -1, -1, field_0x900);
+    drawModel(mpMdl);
+    drawShadow(mShadow, *mpMdl, mShadowSph, -1, -1, field_0x900);
     return SUCCEEDED;
 }
 

@@ -28,6 +28,6 @@ int dAcOshrineBefore_c::actorExecute() {
 }
 
 int dAcOshrineBefore_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }

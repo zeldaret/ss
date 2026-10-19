@@ -784,7 +784,7 @@ void dAcBomb_c::executeState_Wait() {
         if (prevVelocityY < -5.0f) {
             startSoundWithFloatParam(SE_BM_BOUND, prevVelocityY * -1.0f);
             if (dBgS::GetInstance()->GetPolyAtt0(mAcch.GetGnd()) != POLY_ATT_0_LAVA) {
-                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 0.8f, field_0x1B0);
+                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 0.8f, field_0x1B0);
             }
         }
 
@@ -1250,12 +1250,12 @@ int dAcBomb_c::draw() {
         return SUCCEEDED;
     }
 
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
 
     mSphere_c sph(mVec3_c(0.0f, mScale.x * sHIO.getBombScale(), 0.0f), mScale.x * sHIO.getBombScale());
 
     if (!isState(StateID_FlowerWait)) {
-        drawShadow(mShdw, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
+        drawShadow(mShdw, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
     }
     return SUCCEEDED;
 }
