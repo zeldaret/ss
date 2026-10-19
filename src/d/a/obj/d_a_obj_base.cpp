@@ -188,9 +188,8 @@ int dAcObjBase_c::preDraw() {
     }
 
     if ((notOk || checkObjectProperty(OBJ_PROP_0x200)) ||
-        (mLinkage.checkState(dLinkage_c::STATE_ACTIVE) &&
-         ((dAcObjBase_c *)mLinkage.getControllingActor())->isPlayer() && mLinkage.getControllingActor() &&
-         ((dAcObjBase_c *)mLinkage.getControllingActor())->checkObjectProperty(OBJ_PROP_0x200))) {
+        (mLinkage.checkState(dLinkage_c::STATE_ACTIVE) && mLinkage.getControllingActor()->isPlayer() &&
+         (mLinkage.getControllingActor() && mLinkage.getControllingActor()->checkObjectProperty(OBJ_PROP_0x200)))) {
         return NOT_READY;
     }
 
@@ -215,9 +214,7 @@ dAcObjBase_c *dAcObjBase_c::create(
     ProfileName profile, u32 roomID, u32 params, const mVec3_c *pPos, const mAng3_c *pRot, const mVec3_c *pScale,
     u32 params2
 ) {
-    setTempCreateParams(
-        (mVec3_c *)pPos, (mAng3_c *)pRot, (mVec3_c *)pScale, roomID, params2, nullptr, 0, 0xFFFF, 0xFF, nullptr
-    );
+    setTempCreateParams(pPos, pRot, pScale, roomID, params2, nullptr, 0, 0xFFFF, 0xFF, nullptr);
     return static_cast<dAcObjBase_c *>(createBase(profile, dStage_c::getParentForRoom(roomID), params, ACTOR));
 }
 
@@ -226,10 +223,7 @@ dAcObjBase_c *dAcObjBase_c::create(
     u32 params2, u16 id, s8 viewclipId
 ) {
     const ActorInfo *pInfo = getActorInfoByName(name);
-    setTempCreateParams(
-        (mVec3_c *)pPos, (mAng3_c *)pRot, (mVec3_c *)pScale, roomID, params2, nullptr, pInfo->subtype, id, viewclipId,
-        pInfo
-    );
+    setTempCreateParams(pPos, pRot, pScale, roomID, params2, nullptr, pInfo->subtype, id, viewclipId, pInfo);
     return static_cast<dAcObjBase_c *>(createBase(pInfo->profileId, dStage_c::getParentForRoom(roomID), params, ACTOR));
 }
 
@@ -423,30 +417,25 @@ bool dAcObjBase_c::fn_8002eff0(
 }
 
 // These may not belong here
-dAcBase_c *dAcObjBase_c::createInsectActor(
+dAcObjBase_c *dAcObjBase_c::createInsectActor(
     dAcBase_c *parent, ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
     s32 roomId
 ) {
-    return parent->createActor(actorId, params1, pos, rot, scale, params2, roomId, parent);
+    return static_cast<dAcObjBase_c *>(parent->createActor(actorId, params1, pos, rot, scale, params2, roomId, parent));
 }
 
-dAcBase_c *dAcObjBase_c::createStageActor(
+dAcObjBase_c *dAcObjBase_c::createStageActor(
     ProfileName profile, u32 roomID, u32 params, mVec3_c *pPos, mAng3_c *pRot, mVec3_c *pScale, u32 params2
 ) {
-    setTempCreateParams(
-        (mVec3_c *)pPos, (mAng3_c *)pRot, (mVec3_c *)pScale, roomID, params2, nullptr, 0, 0xFFFF, 0xFF, nullptr
-    );
+    setTempCreateParams(pPos, pRot, pScale, roomID, params2, nullptr, 0, 0xFFFF, 0xFF, nullptr);
     return static_cast<dAcObjBase_c *>(createBase(profile, dStage_c::getParentForRoom(roomID), params, STAGE));
 }
 
-dAcBase_c *dAcObjBase_c::createStageActor(
+dAcObjBase_c *dAcObjBase_c::createStageActor(
     const char *name, u32 roomID, u32 params, const mVec3_c *pPos, const mAng3_c *pRot, const mVec3_c *pScale,
     u32 params2, u16 id, s8 viewclipId
 ) {
     const ActorInfo *pInfo = getActorInfoByName(name);
-    setTempCreateParams(
-        (mVec3_c *)pPos, (mAng3_c *)pRot, (mVec3_c *)pScale, roomID, params2, nullptr, pInfo->subtype, id, viewclipId,
-        pInfo
-    );
+    setTempCreateParams(pPos, pRot, pScale, roomID, params2, nullptr, pInfo->subtype, id, viewclipId, pInfo);
     return static_cast<dAcObjBase_c *>(createBase(pInfo->profileId, dStage_c::getParentForRoom(roomID), params, STAGE));
 }

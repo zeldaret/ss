@@ -228,15 +228,14 @@ public:
         ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u32 roomId
     );
 
-    // These may not belong here
-    static dAcBase_c *createInsectActor(
+    static dAcObjBase_c *createInsectActor(
         dAcBase_c *parent, ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
         s32 roomId
     );
-    static dAcBase_c *createStageActor(
+    static dAcObjBase_c *createStageActor(
         ProfileName actorId, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2
     );
-    static dAcBase_c *createStageActor(
+    static dAcObjBase_c *createStageActor(
         const char *name, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
         u32 params2, u16 id, s8 viewclipId
     );

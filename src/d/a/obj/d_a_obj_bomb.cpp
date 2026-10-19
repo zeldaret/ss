@@ -994,8 +994,8 @@ void dAcBomb_c::setBombColor() {
             if ( 
             // Is controlled - and by player
             // And Controlling Actor (player) as objprop 0x200 set
-               (mLinkage.checkState(dLinkage_c::STATE_ACTIVE) && static_cast<dAcObjBase_c *>(mLinkage.getControllingActor())->isPlayer()) 
-               && ((pObj = static_cast<dAcObjBase_c *>(mLinkage.getControllingActor())) && pObj->checkObjectProperty(OBJ_PROP_0x200)) 
+               (mLinkage.checkState(dLinkage_c::STATE_ACTIVE) &&mLinkage.getControllingActor()->isPlayer()) 
+               && ((pObj = mLinkage.getControllingActor()) && pObj->checkObjectProperty(OBJ_PROP_0x200)) 
             // OOOOR this bomb has it set.
                || checkObjectProperty(OBJ_PROP_0x200)
             ) {

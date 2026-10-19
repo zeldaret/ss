@@ -32,9 +32,9 @@ u32 dAcBase_c::s_Create_Params2 = -1;
 u16 dAcBase_c::s_Create_UnkFlags = -1;
 u8 dAcBase_c::s_Create_ViewClipIdx = -1;
 
-mVec3_c *dAcBase_c::s_Create_Position;
-mAng3_c *dAcBase_c::s_Create_Rotation;
-mVec3_c *dAcBase_c::s_Create_Scale;
+const mVec3_c *dAcBase_c::s_Create_Position;
+const mAng3_c *dAcBase_c::s_Create_Rotation;
+const mVec3_c *dAcBase_c::s_Create_Scale;
 dAcBase_c *dAcBase_c::s_Create_Parent;
 const ActorInfo *dAcBase_c::s_Create_ActorInfo;
 u8 dAcBase_c::s_Create_Subtype;
@@ -86,8 +86,8 @@ dAcBase_c::dAcBase_c()
 dAcBase_c::~dAcBase_c() {}
 
 void dAcBase_c::setTempCreateParams(
-    mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent, u8 subtype, u16 unkFlag,
-    s8 viewClipIdx, const ActorInfo *actorInfo
+    const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent,
+    u8 subtype, u16 unkFlag, s8 viewClipIdx, const ActorInfo *actorInfo
 ) {
     s_Create_Position = pos;
     s_Create_Rotation = rot;

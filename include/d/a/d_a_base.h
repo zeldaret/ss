@@ -224,8 +224,8 @@ public:
 
 public:
     static void setTempCreateParams(
-        mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent, u8 subtype, u16 unkFlag,
-        s8 viewClipIdx, const ActorInfo *actorInfo
+        const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent,
+        u8 subtype, u16 unkFlag, s8 viewClipIdx, const ActorInfo *actorInfo
     );
 
     dSoundSourceIf_c *createSoundSource();
@@ -313,9 +313,9 @@ public:
     static u32 s_Create_Params2;
     static u16 s_Create_UnkFlags;
     static u8 s_Create_ViewClipIdx;
-    static mVec3_c *s_Create_Position;
-    static mAng3_c *s_Create_Rotation;
-    static mVec3_c *s_Create_Scale;
+    static const mVec3_c *s_Create_Position;
+    static const mAng3_c *s_Create_Rotation;
+    static const mVec3_c *s_Create_Scale;
     static dAcBase_c *s_Create_Parent;
     static const ActorInfo *s_Create_ActorInfo;
     static u8 s_Create_Subtype;
