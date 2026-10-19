@@ -3,6 +3,7 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_player.h"
+#include "d/a/obj/d_a_obj_desert.h"
 #include "d/col/bg/d_bg_pc.h"
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/col/c/c_m3d_g_pla.h"
@@ -16,7 +17,9 @@
 #include "f/f_base.h"
 #include "f/f_list_mg.h"
 #include "f/f_list_nd.h"
+#include "f/f_manager.h"
 #include "f/f_profile.h"
+#include "f/f_profile_name.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
@@ -245,11 +248,7 @@ bool dAcObjBase_c::isPlayer() {
 
 void dAcObjBase_c::calcVelocity(const mVec3_c &pos, f32 speed) {
     mVec3_c v = pos - mPosition;
-
-    mVelocity.x = v.x / speed;
-    mVelocity.z = v.z / speed;
-    mVelocity.y = mGravity * speed * 0.5f;
-    mVelocity.y += v.y / speed;
+    mVelocity.set((v.x / speed), (mGravity * speed * 0.5f) + (v.y / speed), (v.z / speed));
 }
 
 void dAcObjBase_c::calcVelocity() {
@@ -308,7 +307,20 @@ void dAcObjBase_c::setGndNormal(const cBgS_PolyInfo &gnd) {
     mGndNormal = plane.GetN();
 }
 
-bool dAcObjBase_c::putInODesert(f32 depth, mVec3_c *pos) {}
+bool dAcObjBase_c::putInODesert(f32 depth, mVec3_c *pos) {
+    dAcODesert *pDesert = static_cast<dAcODesert *>(fManager_c::searchBaseByProfName(fProfile::OBJ_DESERT));
+    if (pDesert != nullptr) {
+        dAcODesert::Entry entry;
+        entry.mIsSet = 1;
+        entry.mPosition = *pos;
+        // entry.field_0x10 = ???
+        entry.field_0x14 = depth;
+        pDesert->addEntry(entry);
+        return true;
+    } else {
+        return false;
+    }
+}
 
 void dAcObjBase_c::drawModel(m3d::smdl_c *pMdl) {
     d3d::setLight(pMdl, mLightingInfo.mLightSetIdx >= 0 ? mLightingInfo.mLightSetIdx : -1, &mLightingInfo);
