@@ -12,6 +12,11 @@
 
 bool checkIsInSkykeepPuzzle();
 void restoreSkykeepPuzzleFromGlobal();
+s32 getSKDoorSceneflag(s32, s32);
+bool checkSKDoorHasSceneflag(s32, s32);
+s32 getCurrentSkyKeepRoomTileId();
+
+extern bool sIsInSkykeepPuzzle;
 
 extern const u8 sTadtoneSceneflags[];
 extern const u8 sTadtoneGroupSizes[];
