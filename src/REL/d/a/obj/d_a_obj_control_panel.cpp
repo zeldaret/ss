@@ -1,13 +1,11 @@
 #include "d/a/obj/d_a_obj_control_panel.h"
 
-#include "c/c_lib.h"
 #include "common.h"
 #include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_D3_dummy.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
-#include "d/d_base.h"
 #include "d/d_camera.h"
 #include "d/d_cs_game.h"
 #include "d/d_pad.h"
@@ -120,8 +118,8 @@ bool dAcOCtrlPnl_c::createHeap() {
 int dAcOCtrlPnl_c::actorCreate() {
     CREATE_ALLOCATOR_SIZE(dAcOCtrlPnl_c, 0x8000);
     dBgS::GetInstance()->Regist(&mBgW, this);
-    mAcceleration = 0.f;
-    mMaxSpeed = 0.f;
+    mGravity = 0.f;
+    mMaxFallSpeed = 0.f;
     mBoundingBox.Set(mVec3_c(-200.f, -0.f, -200.f), mVec3_c(200.f, 200.f, 200.f));
     updatePuzzleFromFile();
     updateTilePositions();
@@ -197,7 +195,7 @@ int dAcOCtrlPnl_c::actorExecute() {
 }
 
 int dAcOCtrlPnl_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }
 
