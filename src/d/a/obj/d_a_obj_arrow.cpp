@@ -647,13 +647,13 @@ void dAcArrow_c::executeState_Move() {
                     }
                 } else {
                     f32 diff = mPosition.distance(field_0x6C8);
-                    if (diff > field_0x6A4 || mAcceleration < 0.0f) {
+                    if (diff > field_0x6A4 || mGravity < 0.0f) {
                         if (isSlingshotProjectile()) {
-                            mAcceleration = -5.0f;
+                            mGravity = -5.0f;
                         } else {
-                            mAcceleration = -2.0f;
+                            mGravity = -2.0f;
                         }
-                        mVelocity.y += mAcceleration;
+                        mVelocity.y += mGravity;
                         if (isSlingshotProjectile()) {
                             dAcPy_c *link = dAcPy_c::GetLink2();
                             f32 xz = mVelocity.absXZ();

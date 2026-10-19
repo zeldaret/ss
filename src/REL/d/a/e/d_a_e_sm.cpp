@@ -166,7 +166,7 @@ int dAcEsm_c::actorCreate() {
     mObjAcch.SetGndThinCellingOff();
     mObjAcch.SetWtrChkMode(1);
 
-    mMaxSpeed = -40.f;
+    mMaxFallSpeed = -40.f;
 
     mSph.Set(sSphSrc);
 
@@ -220,7 +220,7 @@ int dAcEsm_c::actorCreate() {
     mHealth = 100;
 
     if (field_0xBBF != 1) {
-        mAcceleration = -3.f;
+        mGravity = -3.f;
     }
     calcVelocity();
     mPosition += mVelocity;
@@ -772,7 +772,7 @@ void dAcEsm_c::initializeState_Walk() {
     field_0xBAA = mAngle.y;
     field_0xBA8 = 0;
     field_0xBCB = 0;
-    mAcceleration = -3.f;
+    mGravity = -3.f;
 }
 void dAcEsm_c::executeState_Walk() {
     field_0xBA6 += (s16)(1000.f + field_0xB70 / mScaleTarget.x);

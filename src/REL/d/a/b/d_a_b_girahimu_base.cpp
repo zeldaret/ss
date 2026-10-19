@@ -2194,8 +2194,8 @@ void dAcGirahimuBase_c::createCollision() {
     mBoundingBox.Set(mVec3_c(-100.0f, -500.0f, -100.0f), mVec3_c(100.0f, 1000.0f, 100.0f));
 
     mAnmIDBody = ANM_NONE;
-    mAcceleration = -6.0f;
-    mMaxSpeed = -80.0f;
+    mGravity = -6.0f;
+    mMaxFallSpeed = -80.0f;
     mSpeedChangeFactor = 0.5f;
     field_0xD7C = true;
     mWarpScale.set(1.05f, 1.05f, 1.05f);
@@ -2895,10 +2895,10 @@ void dAcGirahimuBase_c::calcJumpMovement(f32 f0, f32 f1) {
     mVec3_c v0(0.0f, 0.0f, f0);
     v0.rotY(mAngle.y);
     v0 += mPosition;
-    { mAcceleration = 5.0f; } // used to force rodata pool in preamble
-    mAcceleration = _weird_zero + 6.0f;
+    { mGravity = 5.0f; } // used to force rodata pool in preamble
+    mGravity = _weird_zero + 6.0f;
     calcVelocity(v0, f1);
-    mAcceleration = -mAcceleration;
+    mGravity = -mGravity;
 }
 
 int dAcGirahimuBase_c::draw() {

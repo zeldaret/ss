@@ -784,8 +784,8 @@ int dAcItem_c::create() {
     mObjAcch.SetRoofCrrHeight(50.0f);
     mObjAcch.SetClrSpeedY();
     mObjAcch.SetField_0xC(4);
-    mAcceleration = -2.0f;
-    mMaxSpeed = -80.0f;
+    mGravity = -2.0f;
+    mMaxFallSpeed = -80.0f;
 
     mGetItemPouchSlot = sGetItemPouchSlot;
     mItemQuantity = sGetItemQuantity;
@@ -1367,7 +1367,7 @@ void dAcItem_c::initializeState_Wait() {
     }
     mMdlScaleType = 0;
     mSinkOffset = 0.0f;
-    mYOffset = 0.0f;
+    mSinkDepth = 0.0f;
 }
 
 void dAcItem_c::executeState_Wait() {
@@ -1595,33 +1595,33 @@ void dAcItem_c::executeState_Wait() {
                 }
 
                 switch (which) {
-                    case 1: mAcceleration = (this->*mFnGetRupeeGravity)(); break;
-                    case 2: mAcceleration = (this->*mFnGetGravity1)(); break;
+                    case 1: mGravity = (this->*mFnGetRupeeGravity)(); break;
+                    case 2: mGravity = (this->*mFnGetGravity1)(); break;
                 }
             } else if (isHeartV()) {
                 if (field_0xD52) {
                     if (mFnGetHeartGravity != nullptr) {
-                        mAcceleration = (this->*mFnGetHeartGravity)();
+                        mGravity = (this->*mFnGetHeartGravity)();
                     }
                 } else {
                     if (mFnGetGravity1 != nullptr) {
-                        mAcceleration = (this->*mFnGetGravity1)();
+                        mGravity = (this->*mFnGetGravity1)();
                     }
                 }
             } else {
                 if (mFnGetRupeeGravity == nullptr || !field_0xD62) {
                     if (mFnGetGravity1 != nullptr) {
-                        mAcceleration = (this->*mFnGetGravity1)();
+                        mGravity = (this->*mFnGetGravity1)();
                     }
                 } else {
                     if (mFnGetRupeeGravity != nullptr) {
-                        mAcceleration = (this->*mFnGetRupeeGravity)();
+                        mGravity = (this->*mFnGetRupeeGravity)();
                     }
                 }
             }
 
             if (mFnGetGravity4 != nullptr) {
-                mMaxSpeed = (this->*mFnGetGravity4)();
+                mMaxFallSpeed = (this->*mFnGetGravity4)();
             }
 
             fn_80256F20();
@@ -1659,7 +1659,7 @@ void dAcItem_c::executeState_Wait() {
                 mSinkOffset = 0.0f;
             }
 
-            mYOffset = mSinkOffset;
+            mSinkDepth = mSinkOffset;
             if (isAnyTear() && mObjAcch.ChkGroundLanding()) {
                 startSoundWithFloatParam(SE_Item_A43_FALL, mVelocity.y);
             }
@@ -1726,7 +1726,7 @@ void dAcItem_c::finalizeState_Wait() {
     mObjAcch.SetRoofNone();
     mObjAcch.Clr_0x2000000();
     mSinkOffset = 0.0f;
-    mYOffset = 0.0f;
+    mSinkDepth = 0.0f;
     if (isTriforce() && mEff_0x928.hasEmitters()) {
         mEff_0x928.remove(true);
     }

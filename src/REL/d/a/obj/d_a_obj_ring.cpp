@@ -25,8 +25,8 @@ int dAcOring_c::create() {
     updateMatrix();
     mModel.setScale(mScale);
     mModel.setLocalMtx(mWorldMtx);
-    mAcceleration = -5.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = -5.0f;
+    mMaxFallSpeed = -40.0f;
     field_0x38C = dAcPy_c::LINK->mPosition.y;
     mStateMgr.changeState(StateID_Move);
     return SUCCEEDED;

@@ -46,9 +46,9 @@ int dAcObjGirahimuSwordLink_c::create() {
 }
 
 void dAcObjGirahimuSwordLink_c::init() {
-    mAcceleration = 0.0f;
+    mGravity = 0.0f;
     mStts.SetRank(12);
-    mMaxSpeed = -6000.0f;
+    mMaxFallSpeed = -6000.0f;
     mBoundingBox.Set(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
     mAcch.Set(&mPosition, &mOldPosition, this, 1, &mAcchCir, nullptr, nullptr, nullptr);
     mAcchCir.SetWall(0.0f, 50.0f);
@@ -89,7 +89,7 @@ void dAcObjGirahimuSwordLink_c::executeState_Hide() {}
 void dAcObjGirahimuSwordLink_c::finalizeState_Hide() {}
 
 void dAcObjGirahimuSwordLink_c::initializeState_Equip() {
-    mAcceleration = 0.0f;
+    mGravity = 0.0f;
     mVelocity.set(0.0f, 0.0f, 0.0f);
     mRotation.set(mAng(0), mAng(0), mAng(0));
     mMdl.SetGrp(0xC);
@@ -98,7 +98,7 @@ void dAcObjGirahimuSwordLink_c::executeState_Equip() {}
 void dAcObjGirahimuSwordLink_c::finalizeState_Equip() {}
 
 void dAcObjGirahimuSwordLink_c::initializeState_GetSword() {
-    mAcceleration = 3.0f;
+    mGravity = 3.0f;
     mVec3_c v(-7.0f, 112.0f, 36.0f);
     v.rotY(mAngleCopy.y);
     v += mGhirahimPos;
@@ -108,7 +108,7 @@ void dAcObjGirahimuSwordLink_c::initializeState_GetSword() {
 }
 void dAcObjGirahimuSwordLink_c::executeState_GetSword() {
     mRotation.z -= 0x2000;
-    mVelocity.y -= mAcceleration;
+    mVelocity.y -= mGravity;
     mPosition += mVelocity;
 }
 void dAcObjGirahimuSwordLink_c::finalizeState_GetSword() {
@@ -127,7 +127,7 @@ void dAcObjGirahimuSwordLink_c::executeState_Throw() {
     field_0xD00.slerpTo(q, 0.2f, field_0xD00);
     field_0x8B0.fromQuat(field_0xD00);
 
-    mVelocity.y -= mAcceleration;
+    mVelocity.y -= mGravity;
     mRotation.z += field_0xD10;
     mPosition += mVelocity;
 
@@ -173,7 +173,7 @@ void dAcObjGirahimuSwordLink_c::executeState_AtThrow() {
     field_0xD00.slerpTo(q, 0.5f, field_0xD00);
     field_0x8B0.fromQuat(field_0xD00);
 
-    mVelocity.y -= mAcceleration;
+    mVelocity.y -= mGravity;
     mPosition += mVelocity;
     if (lineCheck()) {
         changeState(StateID_Reflect);
@@ -198,7 +198,7 @@ void dAcObjGirahimuSwordLink_c::finalizeState_AtThrow() {
 void dAcObjGirahimuSwordLink_c::initializeState_Stick() {
     startSound(SE_OGhSwL_BOUND);
     mMdl.setInactive();
-    mAcceleration = 0.0f;
+    mGravity = 0.0f;
     mVelocity.set(0.0f, 0.0f, 0.0f);
 }
 void dAcObjGirahimuSwordLink_c::executeState_Stick() {
@@ -260,7 +260,7 @@ void dAcObjGirahimuSwordLink_c::executeState_Reflect() {
     field_0xD00.slerpTo(q, 0.5f, field_0xD00);
     field_0x8B0.fromQuat(field_0xD00);
 
-    mVelocity.y -= mAcceleration;
+    mVelocity.y -= mGravity;
     mPosition += mVelocity;
     if (lineCheck()) {
         if (mPosition.y < 40.0f) {
@@ -319,14 +319,14 @@ void dAcObjGirahimuSwordLink_c::setHide() {
 }
 
 void dAcObjGirahimuSwordLink_c::setThrow(const mVec3_c &force, mAng angle, f32 rate) {
-    mAcceleration = 3.0f;
+    mGravity = 3.0f;
     field_0xD10 = angle;
     calcVelocity(force, rate);
     changeState(StateID_Throw);
 }
 
 void dAcObjGirahimuSwordLink_c::setAtThrow(const mVec3_c &velocity) {
-    mAcceleration = 0.0f;
+    mGravity = 0.0f;
     field_0xD10 = 0;
     mVelocity.set(velocity);
     changeState(StateID_AtThrow);
@@ -390,7 +390,7 @@ void dAcObjGirahimuSwordLink_c::reflect(const mVec3_c &rot, f32 gravity, f32, f3
     if (gravity < 0.0f) {
         gravity = -gravity;
     }
-    mAcceleration = gravity;
+    mGravity = gravity;
 }
 
 bool dAcObjGirahimuSwordLink_c::lineCheck() {

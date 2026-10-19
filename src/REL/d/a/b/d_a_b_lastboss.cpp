@@ -203,8 +203,8 @@ int dAcBlastboss_c::create() {
     mLightningCc.SetTgShieldType(~AT_TYPE_NONE);
     mLightningCc.SetStts(mStts);
 
-    mAcceleration = -5.0f;
-    mMaxSpeed = -80.0f;
+    mGravity = -5.0f;
+    mMaxFallSpeed = -80.0f;
 
     mBoundingBox.Set(mVec3_c(-200.0f, -300.0f, -200.0f), mVec3_c(200.0f, 300.0f, 200.0f));
     changeState(StateID_Fight);
@@ -1727,7 +1727,7 @@ void dAcBlastboss_c::initializeState_Down() {
     setAnm("DownBStart", 5.0f);
     mSubState = SUB_STATE_0;
     mSpeed = -20.0f;
-    mAcceleration = -5.0f;
+    mGravity = -5.0f;
     mVelocity.y = 60.0f;
     mIsSwordEmpowered = false;
     mCc1.ClrTg_0x8000000();

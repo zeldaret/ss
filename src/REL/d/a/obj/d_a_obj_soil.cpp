@@ -32,7 +32,6 @@
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
 
-
 SPECIAL_ACTOR_PROFILE(OBJ_SOIL, dAcOsoil_c, fProfile::OBJ_SOIL, 0x268, 0, 7);
 
 STATE_DEFINE(dAcOsoil_c, Soil);
@@ -140,8 +139,8 @@ int dAcOsoil_c::actorCreate() {
     mStts.SetRank(0);
     mCollider.Set(sCylSrc);
     mCollider.SetStts(mStts);
-    mAcceleration = 0.f;
-    mMaxSpeed = -40.f;
+    mGravity = 0.f;
+    mMaxFallSpeed = -40.f;
     updateMatrix();
     if (isSubtypeVentOrDrop()) {
         mModels[MODEL_DUG_UP].setLocalMtx(mWorldMtx);

@@ -43,8 +43,8 @@ int dAcBombf_c::actorCreate() {
     }
 
     mStts.SetDefaultRank();
-    mAcceleration = -2.0f;
-    mMaxSpeed = -80.0f;
+    mGravity = -2.0f;
+    mMaxFallSpeed = -80.0f;
     mStateMgr.changeState(StateID_Wait);
     mBoundingBox.Set(mVec3_c(-80.0, -50.0f, -80.0f), mVec3_c(80.0, 60.0f, 80.0f));
     mAngle = mRotation;

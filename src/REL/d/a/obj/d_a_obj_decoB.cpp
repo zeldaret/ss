@@ -22,8 +22,8 @@ bool dAcODecoB_c::createHeap() {
 
 int dAcODecoB_c::create() {
     CREATE_ALLOCATOR_SIZE(dAcODecoB_c, 0x1000);
-    mAcceleration = 0.0f;
-    mMaxSpeed = 0.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = 0.0f;
     mStateMgr.changeState(StateID_Wait);
     mBoundingBox.Set(mVec3_c(-350.0f, 100.0f, -100.0f), mVec3_c(350.0f, -300.0f, 100.0f));
     return SUCCEEDED;

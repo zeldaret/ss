@@ -18,8 +18,8 @@ bool dAcOPumpkinLeaf_c::createHeap() {
 int dAcOPumpkinLeaf_c::create() {
     CREATE_ALLOCATOR_SIZE(dAcOPumpkinLeaf_c, 0x1000);
 
-    mAcceleration = -1.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = -1.0f;
+    mMaxFallSpeed = -40.0f;
     updateMatrix();
     mStateMgr.changeState(StateID_Wait);
     mBoundingBox.Set(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 50.0f, 50.0f));

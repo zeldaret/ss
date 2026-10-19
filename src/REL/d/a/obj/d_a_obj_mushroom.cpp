@@ -230,8 +230,8 @@ int dAcOMushRoom_c::create() {
 
     CREATE_ALLOCATOR_SIZE(dAcOMushRoom_c, 0x2000);
     initCc();
-    mAcceleration = 0.0f;
-    mMaxSpeed = 0.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = 0.0f;
     changeState(StateID_Init);
     mBoundingBox.Set(sBboxMin[getType()], sBboxMax[getType()]);
     field_0x7BC = 0.0f;

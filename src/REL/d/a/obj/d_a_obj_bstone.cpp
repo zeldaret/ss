@@ -43,8 +43,8 @@ int dAcObstonec::create() {
         mBg.SetUnkBase(1);
     }
 
-    mAcceleration = -1.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = -1.0f;
+    mMaxFallSpeed = -40.0f;
     mBoundingBox.Set(mVec3_c(-350.0f, -60.0f, -240.0f), mVec3_c(350.0f, 600.0f, 240.0f));
     return SUCCEEDED;
 }

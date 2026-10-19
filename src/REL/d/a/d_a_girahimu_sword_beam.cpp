@@ -80,7 +80,7 @@ int dAcGirahimuSwordBeam_c::create() {
         mRotation.z -= 0x4000;
     }
     transformMatrix();
-    mMaxSpeed = -60.0f;
+    mMaxFallSpeed = -60.0f;
 
     mEmitter0.init(this);
     mEmitter1.init(this);

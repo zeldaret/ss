@@ -22,8 +22,8 @@ bool dAcOPoolCock_c::createHeap() {
 int dAcOPoolCock_c::actorCreate() {
     CREATE_ALLOCATOR(dAcOPoolCock_c);
 
-    mAcceleration = -0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = -0.0f;
+    mMaxFallSpeed = -40.0f;
     mOpenSceneflag = mParams & 0xFF;
     mOpenDirection = mVec3_c::Ez;
     mOpenDirection.rotY(mRotation.y);

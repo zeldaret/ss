@@ -194,7 +194,7 @@ private:
     /* 0xB32 */ mAng field_0xB32;
     /* 0xB34 */ mAng field_0xB34;
     /* 0xB38 */ f32 mYPosition;
-    /* 0xB3C */ f32 mYOffset;
+    /* 0xB3C */ f32 mSinkDepth;
     /* 0xB40 */ f32 mScaleFTarget;
     /* 0xB44 */ u16 field_0xB44;
     /* 0xB46 */ u16 field_0xB46;

@@ -78,8 +78,8 @@ int dAcOFairy_c::create() {
     mAcchCir.SetWall(20.0f, 150.0f);
     mObjAcch.SetWaterNone();
     mObjAcch.SetGndThinCellingOff();
-    mAcceleration = 0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = -40.0f;
 
     setPosYWaveParams();
     int rnd = cM::rndInt(40);

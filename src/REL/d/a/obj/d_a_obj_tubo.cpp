@@ -82,8 +82,8 @@ int dAcOtubo_c::actorCreate() {
     mSph.SetStts(mStts);
     mSph.ClrAtSet();
 
-    mAcceleration = -4.f;
-    mMaxSpeed = -40.f;
+    mGravity = -4.f;
+    mMaxFallSpeed = -40.f;
     mbMovingForward = 0;
     field_0x9D8 = 2.f;
 
@@ -205,7 +205,7 @@ int dAcOtubo_c::draw() {
 
     static mSphere_c sph(mVec3_c(0.f, 30.f, 0.f), 40.f);
 
-    if (mYOffset >= 0.f) {
+    if (mSinkDepth >= 0.f) {
         drawShadow(mShdw, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     }
     return SUCCEEDED;
@@ -580,7 +580,7 @@ void dAcOtubo_c::fn_272_2670() {
     }
 
     if (mObjAcch.ChkGndHit()) {
-        if (mYOffset >= 0.f && !checkCarryType()) {
+        if (mSinkDepth >= 0.f && !checkCarryType()) {
             field_0x9DC = 0.f;
         } else if (checkInvalidGround()) {
             mSpeed = 0.0f;
@@ -603,8 +603,8 @@ void dAcOtubo_c::fn_272_2670() {
     mEff_0x91C.execute(waterH, groundH);
 
     if (checkSubmerged()) {
-        mAcceleration = -0.8f;
-        mMaxSpeed = -7.f;
+        mGravity = -0.8f;
+        mMaxFallSpeed = -7.f;
         field_0x9DC = 0.f;
         cLib::addCalcPosXZ(&mVelocity, mVec3_c::Zero, 0.05f, 1.0f, 0.2f);
         mSpeed = EGG::Math<f32>::sqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z);
@@ -613,8 +613,8 @@ void dAcOtubo_c::fn_272_2670() {
         }
         mbSubmerged = true;
     } else {
-        mAcceleration = -4.f;
-        mMaxSpeed = -40.f;
+        mGravity = -4.f;
+        mMaxFallSpeed = -40.f;
         mbSubmerged = false;
         if (checkCarryType()) {
             mStateMgr.changeState(StateID_Grab);
@@ -641,7 +641,7 @@ void dAcOtubo_c::attemptDestroy() {
         return;
     }
 
-    if (mObjAcch.ChkGndHit() && mYOffset >= 0.f && !checkCarryType()) {
+    if (mObjAcch.ChkGndHit() && mSinkDepth >= 0.f && !checkCarryType()) {
         if ((field_0x9DC < -100.f && !mbField_0x9EE) || fn_272_3660()) {
             destroy();
             return;
@@ -763,7 +763,7 @@ void dAcOtubo_c::adjustSpeed() {
     step *= gndAngle.cos();
 
     if (gndAngle < mAng::d2s(5) || mAng::fromVec(pla.GetN()).absDiff(mAngle.y) > mAng::d2s(90)) {
-        f32 stepSize = mYOffset;
+        f32 stepSize = mSinkDepth;
         sLib::chase(&mSpeed, 0.f, step + stepSize * -0.05f);
     } else {
         if (!mbMovingForward) {

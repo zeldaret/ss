@@ -164,8 +164,8 @@ int dAcEremly_c::actorCreate() {
 
     mBoundingBox.Set(mVec3_c(-150.f, -700.f, -150.f), mVec3_c(150.f, 150.f, 150.f));
 
-    mAcceleration = -3.f;
-    mMaxSpeed = -60.f;
+    mGravity = -3.f;
+    mMaxFallSpeed = -60.f;
     mScale.set(1.f, 1.f, 1.f);
 
     mScaleF = 1.f;
@@ -477,7 +477,7 @@ int dAcEremly_c::actorExecute() {
         }
     } else {
         mSlopeXTarget = mSlopeZTarget = 0;
-        mYPosition = mPosition.y + mYOffset;
+        mYPosition = mPosition.y + mSinkDepth;
     }
 
     if (!isUnderWater() && isState(StateID_Water)) {
@@ -585,7 +585,7 @@ int dAcEremly_c::draw() {
 
 void dAcEremly_c::initializeState_Wait() {
     mSomeCounter = 0;
-    mAcceleration = -3.f;
+    mGravity = -3.f;
 
     checkSlope(true);
 
@@ -833,7 +833,7 @@ void dAcEremly_c::finalizeState_Run() {}
 
 void dAcEremly_c::initializeState_Escape() {
     field_0xB6E = 0;
-    mAcceleration = -3.f;
+    mGravity = -3.f;
     mMdl.setAnm("RemlyRun", m3d::PLAY_MODE_4, 4.f);
     mAnimation = ANM_Run;
     mMdl.setRate(2.f);
@@ -965,7 +965,7 @@ void dAcEremly_c::initializeState_Hold() {
     mAnimation = ANM_Hold;
 
     mSph.ClrCoSet();
-    mYOffset = 0.f;
+    mSinkDepth = 0.f;
     mYPosition = mPosition.y;
 
     field_0xB6A = 0;
@@ -993,7 +993,7 @@ void dAcEremly_c::initializeState_Hold() {
         mLinkage.field_0x8C = 13.f + _weird_zero;
     }
 
-    mAcceleration = -1.75f + _weird_zero;
+    mGravity = -1.75f + _weird_zero;
     mAnimTimer = 64.f + cM::rndF(64.f);
     mAnimSafeTimer = 90;
 }
@@ -1028,14 +1028,14 @@ void dAcEremly_c::executeState_Hold() {
     }
 
     if (isScary()) {
-        mAcceleration = -3.f;
+        mGravity = -3.f;
         changeState(StateID_NightFoo);
     } else if (field_0xB68 == 0) {
-        mAcceleration = -3.f;
+        mGravity = -3.f;
         mAnimTimer = 0;
         changeState(StateID_Wait);
     } else {
-        mAcceleration = -3.f;
+        mGravity = -3.f;
         changeState(StateID_EscapeDash);
     }
 }
@@ -1068,7 +1068,7 @@ void dAcEremly_c::executeState_Jump() {
     if (mAcch.ChkGndHit() && mMdl.getAnm().isStop()) {
         mAngle.y = mRotation.y;
         setActorProperty(AC_PROP_0x1);
-        mAcceleration = -3.f;
+        mGravity = -3.f;
 
         if (isScary()) {
             changeState(StateID_NightFoo);
@@ -1109,7 +1109,7 @@ void dAcEremly_c::initializeState_Fly() {
 
     f32 f = 200.f + _weird_zero;
 
-    mYOffset = 0.f;
+    mSinkDepth = 0.f;
     mAnmStep = 0;
 
     mAcch.SetRoofCrrHeight(f);
@@ -1157,11 +1157,11 @@ void dAcEremly_c::executeState_Fly() {
     switch (mAnmStep) {
         default: {
             sLib::addCalcScaledDiff(&mVelocity.y, 8.f, 0.7f, 2.f);
-            sLib::addCalcScaled(&mAcceleration, 0.7f, 2.f);
+            sLib::addCalcScaled(&mGravity, 0.7f, 2.f);
             sLib::addCalcAngle(mAngle.y.ref(), getXZAngleToPlayer(), 2, 0x800);
             sLib::addCalcAngle(mRotation.y.ref(), mAngle.y, 2, 0x800);
             if (mStartingPos.y + 300.f < mPosition.y) {
-                mAcceleration = 0.f;
+                mGravity = 0.f;
                 mVelocity.y = 0.f;
                 mAnmStep++;
             }
@@ -1180,7 +1180,7 @@ void dAcEremly_c::executeState_Fly() {
             } else {
                 targetSpeed = 0.f;
             }
-            sLib::addCalcScaledDiff(&mYOffset, targetSpeed, 0.5f, 10.f);
+            sLib::addCalcScaledDiff(&mSinkDepth, targetSpeed, 0.5f, 10.f);
 
             if (mSomeCounter < 120 && mStartingPos.squareDistanceToXZ(mPosition) > 2500.f) {
                 s32 angle = ++mFlyAngleCounter * 300;
@@ -1196,7 +1196,7 @@ void dAcEremly_c::executeState_Fly() {
                         mSomeCounter++;
                     }
                 } else {
-                    mAcceleration = 0.f;
+                    mGravity = 0.f;
                     mVelocity.y = 0.f;
                     mSomeCounter = 0;
                 }
@@ -1211,8 +1211,8 @@ void dAcEremly_c::executeState_Fly() {
                     return;
                 }
                 if (mAcch.ChkGndHit()) {
-                    mYOffset = 0.f;
-                    mAcceleration = -3.f;
+                    mSinkDepth = 0.f;
+                    mGravity = -3.f;
                     mSpeed = 0.f;
                     mAnmStep++;
                     mAcch.SetRoofNone();
@@ -1250,7 +1250,7 @@ void dAcEremly_c::finalizeState_Fly() {}
 
 void dAcEremly_c::initializeState_Damage() {
     mSomeCounter = 0;
-    mAcceleration = -3.f;
+    mGravity = -3.f;
     if (mAnimation == ANM_Scared) {
         mSomeCounter = 1;
     }
@@ -1378,7 +1378,7 @@ void dAcEremly_c::finalizeState_Scared() {}
 
 void dAcEremly_c::initializeState_Stun() {
     field_0xB6B = false;
-    mAcceleration = -3.f;
+    mGravity = -3.f;
     if (mAnimation != ANM_Piyo1 && mAnimation != ANM_Piyo2) {
         mMdl.setAnm("RemlyPiyo1", m3d::PLAY_MODE_4, 4.f);
         mAnimation = ANM_Piyo1;
@@ -1455,7 +1455,7 @@ void dAcEremly_c::initializeState_Water() {
     mMdl.setAnm("RemlySwim", m3d::PLAY_MODE_4, 4.f);
     mAnimation = ANM_Swim;
     field_0xB6B = false;
-    mAcceleration = 0.f;
+    mGravity = 0.f;
     mSpeed = 0.f;
     mSph.ClrAtSet();
     field_0xB68 = 0;
@@ -1488,14 +1488,14 @@ void dAcEremly_c::executeState_Water() {
             field_0xB6F = 1;
         } else if (field_0xB6F) {
             mStts.SetRank(5);
-            mAcceleration = -3.f;
+            mGravity = -3.f;
 
             if ((s32)++mNoGroundCounter > 30) {
                 changeState(StateID_Fly);
             }
         } else {
             mSpeed = 0.f;
-            mAcceleration = -3.f;
+            mGravity = -3.f;
             mStts.SetRank(5);
 
             if (mAnimation != ANM_SwimDamage && mAnimation != ANM_Water) {
@@ -1798,7 +1798,7 @@ void dAcEremly_c::initializeState_NightRun() {
     mSomeCounter2 = 0;
     field_0xB6B = false;
     mSph.ClrAtSet();
-    mAcceleration = -3.f;
+    mGravity = -3.f;
     mMdl.setRate(1.5f);
     mAnimTimer = 0;
     fn_177_77C0();
@@ -1952,7 +1952,7 @@ void dAcEremly_c::executeState_BirthWait() {
         mPosition.y += 10.f;
         mVelocity.set(0.f, 0.f, 0.f);
         mSpeed = 0.f;
-        mAcceleration = -3.f;
+        mGravity = -3.f;
         setActorProperty(AC_PROP_0x1);
 
         if (isScary()) {

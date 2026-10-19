@@ -23,8 +23,8 @@ bool dAcFishBase_c::createHeap() {
 }
 
 int dAcFishBase_c::create() {
-    mAcceleration = 0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = -40.0f;
     field_0xA7C = 0;
     field_0xA7E = 0;
     field_0xA80 = cM::rndF(65536.0f);

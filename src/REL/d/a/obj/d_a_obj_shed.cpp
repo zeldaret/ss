@@ -38,8 +38,8 @@ int dAcOShed_c::create() {
     CREATE_ALLOCATOR(dAcOShed_c);
     mBgW.SetCrrFunc(dBgS_MoveBGProc_Typical);
     dBgS::GetInstance()->Regist(&mBgW, this);
-    mAcceleration = 0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = -40.0f;
     if (mSceneFlag < 0xFF) {
         bool flag = SceneflagManager::sInstance->checkFlag(mRoomID, mSceneFlag);
         if (flag) {

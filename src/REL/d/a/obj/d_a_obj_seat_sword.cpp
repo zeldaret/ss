@@ -86,8 +86,8 @@ int dAcOSeatSword_c::create() {
         mPedestalMdl_s.setPriorityDraw(0x22, 0x9);
     }
 
-    mAcceleration = 0.f;
-    mMaxSpeed = -40.f;
+    mGravity = 0.f;
+    mMaxFallSpeed = -40.f;
 
     if (mSubtype == 1) {
         field_0x7E8 = l_inGroundRot;

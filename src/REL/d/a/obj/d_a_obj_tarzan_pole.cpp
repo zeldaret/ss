@@ -55,8 +55,8 @@ int dAcOTarzanPole_c::create() {
     mCollider.Set(sCcSrc);
     mCollider.SetStts(mStts);
 
-    mAcceleration = 0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = -40.0f;
 
     mFloat = (s32)(mParams & 0xFF) * 10.0f;
     if ((s32)(mParams & 0xFF) == 0xFF) {

@@ -254,12 +254,12 @@ void dAcObjBase_c::calcVelocity(const mVec3_c &pos, f32 speed) {
 
     mVelocity.x = v.x / speed;
     mVelocity.z = v.z / speed;
-    mVelocity.y = mAcceleration * speed * 0.5f;
+    mVelocity.y = mGravity * speed * 0.5f;
     mVelocity.y += v.y / speed;
 }
 
 void dAcObjBase_c::calcVelocity() {
-    f32 f = nw4r::ut::Max(mVelocity.y + mAcceleration, mMaxSpeed);
+    f32 f = nw4r::ut::Max(mVelocity.y + mGravity, mMaxFallSpeed);
     setXYZCirclePoint(mVelocity, mAngle.y, mSpeed, f);
 }
 
@@ -305,7 +305,7 @@ void dAcObjBase_c::calcSinkDepth(const cBgS_PolyInfo &gnd) {
             step = mShallowSinkRate;
         }
     }
-    sLib::chase(&mYOffset, target, step);
+    sLib::chase(&mSinkDepth, target, step);
 }
 
 void dAcObjBase_c::setGndNormal(const cBgS_PolyInfo &gnd) {

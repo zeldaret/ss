@@ -101,8 +101,8 @@ int dAcOChair_c::create() {
         mObjAcch.CrrPos(*dBgS::GetInstance());
     }
 
-    mAcceleration = -2.f;
-    mMaxSpeed = -40.f;
+    mGravity = -2.f;
+    mMaxFallSpeed = -40.f;
 
     field_0xB1B = 1;
     field_0xB1A = 1;

@@ -53,8 +53,8 @@ int dAcOTimeStageBg_c::actorCreate() {
     }
     CREATE_ALLOCATOR(dAcOTimeStageBg_c);
 
-    mAcceleration = 0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = -40.0f;
     updateMatrix();
     mSceneCallback.attach(mMdl1);
     mMdl1.setLocalMtx(mWorldMtx);

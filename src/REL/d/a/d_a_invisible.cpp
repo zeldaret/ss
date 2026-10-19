@@ -16,8 +16,8 @@ int dAcInvisible::create() {
     mStts.SetRank(9);
     mSph.SetStts(mStts);
     mCps.SetStts(mStts);
-    mAcceleration = 0.0;
-    mMaxSpeed = -40.0f;
+    mGravity = 0.0;
+    mMaxFallSpeed = -40.0f;
     mStateMgr.changeState(StateID_Wait);
     mBoundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
     return SUCCEEDED;

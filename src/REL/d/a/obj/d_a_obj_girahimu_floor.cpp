@@ -96,8 +96,8 @@ int dAcOGirahimuFloor_c::actorCreate() {
 
     mAnmMatClr[2].setFrame(0.0f, 0);
 
-    mAcceleration = 0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = -40.0f;
     mMdl.setPriorityDraw(0x22, 9);
     if (mType == TYPE_Generate) {
         mMdl.setAnm(mAnmMatClr[0]);

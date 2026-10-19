@@ -53,8 +53,8 @@ int dAcNpcHc_c::create() {
     mCollider.addCc(mSph, srcSph);
     mStts.SetRank(8);
     mCollider.SetStts(mStts);
-    mAcceleration = -5.f;
-    mMaxSpeed = -50.f;
+    mGravity = -5.f;
+    mMaxFallSpeed = -50.f;
     mBoundingBox.Set(mVec3_c(-200.f, -200.f, -200.f), mVec3_c(200.f, 200.f, 200.f));
     mRandomnessTimer = cM::rndF(65536.f);
     field_0x934 = mPosition;

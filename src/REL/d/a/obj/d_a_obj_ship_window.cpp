@@ -49,7 +49,7 @@ int dAcOshipWindow_c::actorCreate() {
     mOpenEventId = getFromParams(8, 0xFF);
     mCloseEventId = getFromParams(16, 0xFF);
     mEventOnce = getFromParams(24, 0x1);
-    mMaxSpeed = -40.0f;
+    mMaxFallSpeed = -40.0f;
     mRotation.z.set(0);
     mMdls[1].setPriorityDraw(0xF, 0);
     mMdls[0].setPriorityDraw(0xB, 0);

@@ -36,8 +36,8 @@ bool dAcOJunkRep_c::createHeap() {
 int dAcOJunkRep_c::create() {
     CREATE_ALLOCATOR(dAcOJunkRep_c);
 
-    mAcceleration = -1.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = -1.0f;
+    mMaxFallSpeed = -40.0f;
 
     mStateMgr.changeState(StateID_Wait);
 

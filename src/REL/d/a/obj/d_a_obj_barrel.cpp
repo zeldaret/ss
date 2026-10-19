@@ -193,8 +193,8 @@ int dAcOBarrel_c::actorCreate() {
     mSph.SetStts(mStts);
     mObjAcch.SetClrSpeedY();
 
-    mAcceleration = -4.f;
-    mMaxSpeed = -40.f;
+    mGravity = -4.f;
+    mMaxFallSpeed = -40.f;
 
     field_0xDDC = 0.f;
     field_0xDEC = mAng(0);
@@ -394,7 +394,7 @@ int dAcOBarrel_c::draw() {
 
     static mSphere_c sph(mVec3_c(0.f, 50.f, 0.f), 80.f);
 
-    if (mYOffset >= 0.f) {
+    if (mSinkDepth >= 0.f) {
         drawShadow(mShadow, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     }
 
@@ -402,7 +402,7 @@ int dAcOBarrel_c::draw() {
 }
 
 void dAcOBarrel_c::initializeState_Wait() {
-    mAcceleration = -4.f;
+    mGravity = -4.f;
     field_0xE0E = false;
 }
 void dAcOBarrel_c::executeState_Wait() {
@@ -439,7 +439,7 @@ void dAcOBarrel_c::executeState_Wait() {
             return;
         }
 
-        if (!field_0xE08 && !isType_0() && mYOffset < 0.f && fn_293_4BC0()) {
+        if (!field_0xE08 && !isType_0() && mSinkDepth < 0.f && fn_293_4BC0()) {
             mSpeed = 0.f;
             field_0xE00 = false;
             fn_293_5910();
@@ -666,7 +666,7 @@ void dAcOBarrel_c::executeState_Slope() {
             field_0xE00 = fn_293_4F80();
         }
 
-        if (!field_0xE08 && !isType_0() && mYOffset < 0.f && fn_293_4BC0()) {
+        if (!field_0xE08 && !isType_0() && mSinkDepth < 0.f && fn_293_4BC0()) {
             mSpeed = 0.f;
             field_0xE00 = false;
             fn_293_5910();
@@ -704,7 +704,7 @@ void dAcOBarrel_c::initializeState_Water() {
     field_0xDE4.x = cM::rndInt(0x100) + 0x900;
     field_0xDF2 = cM::rndInt(0x100) + 0x1000;
 
-    mAcceleration *= 0.25f;
+    mGravity *= 0.25f;
     mVelocity.y *= 0.25f;
 
     mStts.SetRank(9);
@@ -716,7 +716,7 @@ void dAcOBarrel_c::initializeState_Water() {
 }
 void dAcOBarrel_c::executeState_Water() {
     if (mType == dAcOBarrel_c::Type2 && 0 == sLib::calcTimer(&field_0xE16)) {
-        mVelocity.y = nw4r::ut::Max(mVelocity.y + mAcceleration * 0.2f, mMaxSpeed * 0.2f);
+        mVelocity.y = nw4r::ut::Max(mVelocity.y + mGravity * 0.2f, mMaxFallSpeed * 0.2f);
 
         if (mObjAcch.ChkGndHit()) {
             fn_293_4200();
@@ -728,8 +728,8 @@ void dAcOBarrel_c::executeState_Water() {
             mWaterEffect.execute(mObjAcch.GetWtrGroundH(), mObjAcch.GetGroundH());
         }
 
-        if (mType != dAcOBarrel_c::Type2 && nw4r::math::FAbs(field_0xDE0 + mAcceleration) < 0.1f &&
-            nw4r::math::FAbs(mVelocity.y + mAcceleration) < 0.1f) {
+        if (mType != dAcOBarrel_c::Type2 && nw4r::math::FAbs(field_0xDE0 + mGravity) < 0.1f &&
+            nw4r::math::FAbs(mVelocity.y + mGravity) < 0.1f) {
             mStateMgr.changeState(StateID_Water2);
         } else if (!fn_293_4C60()) {
             mStateMgr.changeState(StateID_Wait);
@@ -763,7 +763,7 @@ void dAcOBarrel_c::initializeState_Explode() {
     setActorProperty(AC_PROP_0x4);
     mSpeed = 0.f;
     mVelocity = mVec3_c::Zero;
-    mAcceleration = 0.f;
+    mGravity = 0.f;
 
     mSph.ClrTgSet();
     mSph.ClrCoSet();
@@ -887,7 +887,7 @@ void dAcOBarrel_c::fn_293_30D0() {
             }
         }
         AttentionManager *pAttnMgr = AttentionManager::GetInstance();
-        if (mYOffset >= 0.f) {
+        if (mSinkDepth >= 0.f) {
             pAttnMgr->addPickUpTarget(*this, 120.f);
             pAttnMgr->addUnk3Target(*this, 1, 500.f, -200.f, 200.f);
         }
@@ -1216,7 +1216,7 @@ bool dAcOBarrel_c::fn_293_45A0() {
         }
     }
 
-    if (mObjAcch.ChkGndHit() && mYOffset >= 0.f) {
+    if (mObjAcch.ChkGndHit() && mSinkDepth >= 0.f) {
         if ((!isType_0() && field_0xDDC < -500.f) || (isType_0() && field_0xDDC < -1000.f)) {
             return true;
         }
@@ -1264,7 +1264,7 @@ bool dAcOBarrel_c::fn_293_4D00() {
         !getLinkage().checkState(dLinkage_c::STATE_ACTIVE)                                 // ensure not Linked
         && mStateMgr.isState(StateID_Wait)                                                 // Must be on normal ground
         && !field_0xE02 && !field_0xE08                                                    //
-        && mYOffset >= 0.f                                                                 //
+        && mSinkDepth >= 0.f                                                               //
         && mObjAcch.ChkGndHit() && dBgS::GetInstance()->ChkMoveBG(mObjAcch.GetGnd(), true) //
         && isSpeedStopped() && isVerticalSpeedStopped()                                    // No Movement XZ or Y
         && !fn_293_4A90(mAng::d2s(0.09f))                                                  // Perfectly Flat Ground
@@ -1412,7 +1412,7 @@ inline f32 some_calc(f32 acc, f32 gnd, f32 pos) {
 void dAcOBarrel_c::fn_293_5850(f32 *pMult, bool reduceY) {
     f32 pos = mPosition.y;
     f32 gnd = mObjAcch.GetWtrGroundH();
-    field_0xDE0 = some_calc(mAcceleration, gnd, pos) / 50.f;
+    field_0xDE0 = some_calc(mGravity, gnd, pos) / 50.f;
 
     mSpeed *= 0.93f;
 

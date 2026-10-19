@@ -56,7 +56,7 @@ public:
     };
 
 public:
-    /* 0x0FC */ f32 mYOffset;
+    /* 0x0FC */ f32 mSinkDepth;
     /* 0x100 */ f32 mDeepSinkTarget;
     /* 0x104 */ f32 mShallowSinkTarget;
     /* 0x104 */ f32 mDeepSinkRate;
@@ -69,8 +69,8 @@ public:
     /* 0x130 */ mVec3_c mPositionCopy3;
     /* 0x13C */ mAng3_c mAngle;
     /* 0x144 */ f32 mSpeed;
-    /* 0x148 */ f32 mAcceleration;
-    /* 0x14C */ f32 mMaxSpeed;
+    /* 0x148 */ f32 mGravity;
+    /* 0x14C */ f32 mMaxFallSpeed;
     /* 0x150 */ mVec3_c mVelocity;
     /* 0x15C */ mMtx_c mWorldMtx;
     /* 0x18C */ cM3dGAab mBoundingBox;
@@ -123,7 +123,7 @@ public:
     }
 
     f32 getYOffset() const {
-        return mYOffset;
+        return mSinkDepth;
     }
 
     bool isFullyStopped(f32 speed = EGG::Math<f32>::epsilon()) const {
@@ -139,7 +139,7 @@ public:
     }
 
     bool checkAtDeepSinkDepth() const {
-        return mYOffset <= mDeepSinkTarget;
+        return mSinkDepth <= mDeepSinkTarget;
     }
 
     void unsetObjectProperty(u32 property) {

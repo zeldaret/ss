@@ -16,8 +16,8 @@ bool dAcNpcRivalLOD_c::createHeap() {
 int dAcNpcRivalLOD_c::create() {
     CREATE_ALLOCATOR(dAcNpcRivalLOD_c);
     0.0f; // float order, cool
-    mAcceleration = -1.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = -1.0f;
+    mMaxFallSpeed = -40.0f;
     setState(StateID_Wait);
     mBoundingBox.Set(mVec3_c(-110.0f, -30.0f, -130.0f), mVec3_c(130.0f, 190.0f, 110.0f));
     return SUCCEEDED;

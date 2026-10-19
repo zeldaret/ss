@@ -156,7 +156,7 @@ void dAcSalbageObj_c::initSalbageObj() {
             case BEHAVIOR_CARRY: {
                 mSpeed = 0.0f;
                 mVelocity.set(0.0f, 0.0f, 0.0f);
-                mAcceleration = 0.0f;
+                mGravity = 0.0f;
                 mSalvageIf.setHidden();
                 if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() != mSalvageIf.getSalvageObjId()) {
                     mStateMgr.changeState(StateID_Kill);
@@ -170,7 +170,7 @@ void dAcSalbageObj_c::initSalbageObj() {
             case BEHAVIOR_FLY: {
                 mSpeed = 0.0f;
                 mVelocity.set(0.0f, 0.0f, 0.0f);
-                mAcceleration = 0.0f;
+                mGravity = 0.0f;
                 mStateMgr.changeState(StateID_Fly);
                 break;
             }
@@ -180,11 +180,11 @@ void dAcSalbageObj_c::initSalbageObj() {
                     return;
                 } else {
                     mBehavior = BEHAVIOR_STATIONARY;
-                    mAcceleration = -1.0f;
-                    mMaxSpeed = -40.0f;
+                    mGravity = -1.0f;
+                    mMaxFallSpeed = -40.0f;
                     initCcAndBg();
                     mSpeed = 0.0f;
-                    mAcceleration = 0.0f;
+                    mGravity = 0.0f;
                     mVelocity.set(0.0f, 0.0f, 0.0f);
                     mStateMgr.changeState(StateID_Wait);
                 }
@@ -369,7 +369,7 @@ void dAcSalbageObj_c::initializeState_DemoThrow() {
     mAngle.x = 0;
     mAngle.y = mRotation.y;
     mAngle.z = 0;
-    mMaxSpeed = -40.0f;
+    mMaxFallSpeed = -40.0f;
     mBgObjAcch.Set(this, 1, &mBgAcchCir);
     mBgObjAcch.SetWaterNone();
     mBgObjAcch.SetRoofNone();

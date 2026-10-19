@@ -64,8 +64,8 @@ int dAcOTumbleWeed_c::actorCreate() {
     mDowsingTarget.initialize(DowsingTarget::SLOT_TREASURE, 0, nullptr, 0.0f);
     mDowsingTarget.doRegister();
 
-    mAcceleration = -2.f;
-    mMaxSpeed = -40.f;
+    mGravity = -2.f;
+    mMaxFallSpeed = -40.f;
 
     field_0x974 = 0.0f;
     field_0x98B = true;

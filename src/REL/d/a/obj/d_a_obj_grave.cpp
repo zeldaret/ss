@@ -93,8 +93,8 @@ int dAcOGrave_c::create() {
     mBgW.SetPushPullCallback(pushPullCb);
     mBgW.SetUnkCallback(unkCb);
     dBgS::GetInstance()->Regist(&mBgW, this);
-    mAcceleration = 0.f;
-    mMaxSpeed = -40.f;
+    mGravity = 0.f;
+    mMaxFallSpeed = -40.f;
     mOrigPos1 = mPosition;
     field_0x7F6 = true;
     if (mSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag)) {

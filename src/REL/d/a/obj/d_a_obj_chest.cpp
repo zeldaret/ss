@@ -114,8 +114,8 @@ int dAcOChest_c::create() {
     dBgS::GetInstance()->Regist(&mBgW, this);
     dBgS::GetInstance()->RegistBg(&mBgW, this);
 
-    mAcceleration = 0.0f;
-    mMaxSpeed = 0.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = 0.0f;
 
     mStateMgr.changeState(StateID_Wait);
 

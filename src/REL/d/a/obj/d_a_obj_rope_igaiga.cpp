@@ -86,8 +86,8 @@ int dAcOropeIgaiga_c::create() {
     mCollider.Set(sSphSrc);
     mCollider.SetStts(mStts);
     mCollider.ClrAtSet();
-    mAcceleration = 0.0f;
-    mMaxSpeed = -100.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = -100.0f;
     mInitTimer = 5;
     mPnts2Idx = 0xff;
     field_0x91E = -1;
@@ -184,7 +184,7 @@ void dAcOropeIgaiga_c::finalizeState_Init() {
 }
 
 void dAcOropeIgaiga_c::initializeState_Rope() {
-    mAcceleration = -3.0f;
+    mGravity = -3.0f;
 }
 
 void dAcOropeIgaiga_c::executeState_Rope() {
@@ -265,7 +265,7 @@ void dAcOropeIgaiga_c::finalizeState_Rope() {}
 
 void dAcOropeIgaiga_c::initializeState_Ground() {
     mVelocityYRelated = -1;
-    mAcceleration = -4.f;
+    mGravity = -4.f;
     mStts.SetRank(0);
     fn_257_1F20();
     mGroundTimer = 0x1e;
@@ -306,12 +306,12 @@ void dAcOropeIgaiga_c::executeState_Ground() {
             if (mVelocityYRelated > 0) {
                 mVelocity.y = 7.f * mVelocityYRelated;
             } else if (mVelocityYRelated == 0) {
-                mAcceleration = 0.f;
+                mGravity = 0.f;
                 mSpeed = 0.f;
             }
         }
     } else if (field_0x91E > 0) {
-        mAcceleration = -4.f;
+        mGravity = -4.f;
         mObjAcch.CrrPos(*dBgS::GetInstance());
     }
     if (mVelocityYRelated != 0 && !mObjAcch.ChkGndHit()) {
@@ -333,7 +333,7 @@ void dAcOropeIgaiga_c::executeState_Ground() {
 void dAcOropeIgaiga_c::finalizeState_Ground() {}
 
 void dAcOropeIgaiga_c::initializeState_Tree() {
-    mAcceleration = 0.0f;
+    mGravity = 0.0f;
 }
 
 void dAcOropeIgaiga_c::executeState_Tree() {
@@ -344,7 +344,7 @@ void dAcOropeIgaiga_c::executeState_Tree() {
         mStateMgr.changeState(StateID_Ground);
         f32 random = cM::rndF(2.f);
         mGroundTimer = 0;
-        mAcceleration = -(3.f + random);
+        mGravity = -(3.f + random);
     }
     fn_257_1DF0();
 }
@@ -355,7 +355,7 @@ void dAcOropeIgaiga_c::initializeState_Stick() {
     mStts.SetRank(0);
     mStickTimer = 10;
     mVelocity.y = 17.f;
-    mAcceleration = -3.f;
+    mGravity = -3.f;
     if (dAcPy_c::GetLink()->getCenterTranslation().y > mPosition.y) {
         mLinkHigher = true;
     } else {
@@ -446,7 +446,7 @@ void dAcOropeIgaiga_c::executeState_Stick() {
             mPosition.x = linkPos.x;
             mPosition.z = linkPos.z;
             if (mVelocityYRelated > 0) {
-                mAcceleration = -3.5f;
+                mGravity = -3.5f;
                 mRotation.x += mRotationXOffset;
                 calcVelocity();
                 mPosition += mVelocity;
@@ -657,13 +657,13 @@ void dAcOropeIgaiga_c::fn_257_20F0(f32 speed, f32 velocityY) {
     }
     mAngle.y += angleOffset;
     mVelocity.y = velocityY;
-    mAcceleration = -4.f;
+    mGravity = -4.f;
 }
 
 void dAcOropeIgaiga_c::fn_257_21A0() {
     mVelocityYRelated = 0;
     mVelocity.y = 0.f;
-    mAcceleration = 0.f;
+    mGravity = 0.f;
     mSpeed = 0.f;
     mRotationXOffset = 100;
 }
