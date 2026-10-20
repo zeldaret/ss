@@ -73,8 +73,8 @@ int dAcOScatterSand::actorCreate() {
     mCyl.Set(sSrcCyl);
     mCyl.SetStts(mStts);
 
-    mAcceleration = 0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = -40.0f;
 
     mBoundingBox.Set(
         mVec3_c(mScale.x * -60.0f, -50.0f, mScale.z * -60.0f),
@@ -338,6 +338,6 @@ bool dAcOScatterSand::isVisible() {
 }
 
 int dAcOScatterSand::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }

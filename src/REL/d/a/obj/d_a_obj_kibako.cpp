@@ -137,8 +137,8 @@ int dAcOkibako_c::actorCreate() {
     mCcBox.ClrCoSet();
 
     mSpawnPosition = mPosition;
-    mAcceleration = -4.0f;
-    mMaxSpeed = -80.0f;
+    mGravity = -4.0f;
+    mMaxFallSpeed = -80.0f;
 
     mGravityCheckTimer = -(5 + cM::rndInt(10));
 
@@ -148,14 +148,14 @@ int dAcOkibako_c::actorCreate() {
 
     if (mRestrictSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mRestrictSceneflag)) {
         mRestrictType = 2;
-        mAcceleration = 0.0f;
+        mGravity = 0.0f;
     }
 
     mbOnRope = false;
 
     if (mType == TYPE_HANG) {
         mAcch.CrrPos(*dBgS::GetInstance());
-        mAcceleration = 0.0f;
+        mGravity = 0.0f;
         mGravityCheckTimer = 0;
         changeState(StateID_RopeGrab);
         mBoundingBox.Set(mVec3_c(-750.0f, -800.0f, -250.0f), mVec3_c(100.0f, 200.0f, 1000.0f));
@@ -168,6 +168,8 @@ int dAcOkibako_c::actorCreate() {
 }
 
 int dAcOkibako_c::actorPostCreate() {
+    static const f32 sandDistanceThreshold = 900.0f;
+    static const f32 sandHeightThreshhold = 30.0f;
     if (mbOnPath && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mDestroySceneflag) &&
         mPath.getPath().getPoint(0) != nullptr) {
         mVec3_c pnt;
@@ -194,8 +196,8 @@ int dAcOkibako_c::actorPostCreate() {
             dAcObjBase_c *pVsd =
                 static_cast<dAcObjBase_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_VSD, parent));
             parent = pVsd;
-            if (pVsd != nullptr && nw4r::math::FAbs(pVsd->mPosition.y - mPosition.y) < 30.0f) {
-                if (mPosition.squareDistanceToXZ(pVsd->mPosition) < 900.0f) {
+            if (pVsd != nullptr && nw4r::math::FAbs(pVsd->mPosition.y - mPosition.y) < sandHeightThreshhold) {
+                if (mPosition.squareDistanceToXZ(pVsd->mPosition) < sandDistanceThreshold) {
                     mScatterSand.link(static_cast<dAcOScatterSand *>(pVsd));
                     break;
                 }
@@ -300,7 +302,7 @@ int dAcOkibako_c::draw() {
         return SUCCEEDED;
     }
 
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     if (mbDrawShadow) {
         static mSphere_c sSph(mVec3_c(0.0f, 75.0f, 0.0f), 175.0f);
 
@@ -309,19 +311,21 @@ int dAcOkibako_c::draw() {
             f = nw4r::ut::Max<f32>(f, 200.0f);
         }
 
-        drawShadow(mShadow, nullptr, mWorldMtx, &sSph, -1, -1, -1, -1, -1, f);
+        drawShadow(mShadow, nullptr, mWorldMtx, sSph, -1, -1, -1, -1, -1, f);
     }
 
     return SUCCEEDED;
 }
 
 void dAcOkibako_c::checkBreakHeight() {
+    static const f32 breakHeightThreshhold = 10000.0f;
+
     if (mAcch.GetGroundH() != -1e9f) {
         mGroundHeight = mAcch.GetGroundH();
         return;
     }
 
-    if (mGroundHeight - mPosition.y > 10000.0f) {
+    if (mGroundHeight - mPosition.y > breakHeightThreshhold) {
         breakBox();
     }
 }
@@ -332,29 +336,29 @@ bool dAcOkibako_c::checkHitBomb() {
 
 void dAcOkibako_c::updateGravity(bool isFree) {
     if (isFree) {
-        mAcceleration = 0.0f;
+        mGravity = 0.0f;
 
         if (mGravityCheckTimer > 0) {
             if (--mGravityCheckTimer == 0) {
-                mAcceleration = -4.0f;
+                mGravity = -4.0f;
             }
         } else if (mGravityCheckTimer == 0) {
             crrPos();
 
             if (mPosition.y != mOldPosition.y) {
                 mGravityCheckTimer = 0;
-                mAcceleration = -4.0f;
+                mGravity = -4.0f;
             } else {
                 mGravityCheckTimer = 10;
             }
         } else {
-            mAcceleration = -4.0f;
+            mGravity = -4.0f;
             mGravityCheckTimer++;
             crrPos();
         }
     } else {
         mGravityCheckTimer = 0;
-        mAcceleration = -4.0f;
+        mGravity = -4.0f;
         crrPos();
     }
 }
@@ -391,11 +395,12 @@ void dAcOkibako_c::breakBox() {
 }
 
 void dAcOkibako_c::updatePathGoalFlag() {
+    static const f32 pntDistanceThreshold = 2500.0f;
     if (mbOnPath) {
         const Vec *pPnt = mPath.getPath().getPoint(0);
         if (pPnt != nullptr) {
             mVec3_c distToPnt(mPosition.x - pPnt->x, mPosition.y - pPnt->y, mPosition.z - pPnt->z);
-            if (distToPnt.squareMagXZ() < 2500.0f) {
+            if (distToPnt.squareMagXZ() < pntDistanceThreshold) {
                 SceneflagManager::sInstance->setFlag(mRoomID, mDestroySceneflag);
                 return;
             }
@@ -405,8 +410,9 @@ void dAcOkibako_c::updatePathGoalFlag() {
 }
 
 void dAcOkibako_c::calcFall() {
+    static const f32 fallThreshhold = -300.0f;
     if (isState(StateID_Wait)) {
-        if (mFallDistance <= -300.0f && mAcch.ChkGndHit()) {
+        if (mFallDistance <= fallThreshhold && mAcch.ChkGndHit()) {
             startSound(SE_Kibako_LAND);
             mFallDistance = 0.0f;
         }
@@ -416,8 +422,8 @@ void dAcOkibako_c::calcFall() {
             mFallDistance = 0.0f;
         } else {
             mFallDistance += heightIncrement;
-            if (mFallDistance < -300.0f) {
-                mFallDistance = -300.0f;
+            if (mFallDistance < fallThreshhold) {
+                mFallDistance = fallThreshhold;
             }
         }
     }
@@ -431,7 +437,7 @@ void dAcOkibako_c::executeState_Wait() {
     if (mRestrictType == 1) {
         if (!mScatterSand.isLinked()) {
             mRestrictType = 0;
-            mAcceleration = -4.0f;
+            mGravity = -4.0f;
         }
     } else if (mRestrictType == 2) {
         dAcOScatterSand *pSand = mScatterSand.get();
@@ -501,8 +507,9 @@ void dAcOkibako_c::executeState_Fire() {
 void dAcOkibako_c::finalizeState_Fire() {}
 
 void dAcOkibako_c::initializeState_PushPull() {
+    static const f32 distanceScale = 0.1f;
     dAcPy_c::GetLinkM()->onFlags_0x360(0x10000);
-    mMoveTimer = s16(dAcPy_c::GetLink()->sPushRelatedConstant * 0.1f) + 1;
+    mMoveTimer = s16(dAcPy_c::GetLink()->sPushRelatedConstant * distanceScale) + 1;
 }
 void dAcOkibako_c::executeState_PushPull() {
     static const s16 sAngs[4] = {0x2000, 0x6000, -0x6000, -0x2000};
@@ -555,7 +562,8 @@ void dAcOkibako_c::finalizeState_PushPull() {
 }
 
 void dAcOkibako_c::initializeState_RopeGrab() {
-    mAcceleration = 0.0f;
+    static const int stateSet = 3;
+    mGravity = 0.0f;
     mbDrawShadow = true;
 }
 void dAcOkibako_c::executeState_RopeGrab() {
@@ -563,7 +571,7 @@ void dAcOkibako_c::executeState_RopeGrab() {
         return;
     }
 
-    mAcceleration = -4.0f;
+    mGravity = -4.0f;
     if (mAcch.ChkGndHit()) {
         startSound(SE_Kibako_LAND);
         breakBox();
@@ -597,11 +605,14 @@ bool dAcOkibako_c::checkCanTryMove(s16 dir, bool set) {
     static const s16 sAngs[3] = {0x4000, 0x0, -0x4000};
     mbAtLimit = false;
 
+    static const f32 pushExtend = 2.0f;
+    static const f32 probeIncrement = 73.0f;
+    static const f32 yOffset = 10.0f;
     mVec3_c start = mPosition;
     mVec3_c end = mPosition;
     for (int i = 0; i < 3; ++i) {
         start = mPosition;
-        f32 radius = 73.0f;
+        f32 radius = probeIncrement;
         getXZCirclePoint(start, dir, radius);
         if (i != 1) {
             getXZCirclePoint(start, dir + sAngs[i], radius);
@@ -610,7 +621,7 @@ bool dAcOkibako_c::checkCanTryMove(s16 dir, bool set) {
         start.y += 10.0f;
         end = start;
 
-        getXZCirclePoint(end, dir, dAcPy_c::GetLink()->sPushRelatedConstant + 2.0f);
+        getXZCirclePoint(end, dir, dAcPy_c::GetLink()->sPushRelatedConstant + pushExtend);
 
         if (dBgS_ObjLinChk::LineCross(&start, &end, this)) {
             f32 a = (dBgS_ObjLinChk::GetInstance().GetLinEnd() - start).absXZ();
@@ -639,12 +650,14 @@ bool dAcOkibako_c::checkCanTryMove(s16 dir, bool set) {
 }
 
 void dAcOkibako_c::checkPushPull() {
+    static const f32 distanceTheshold = 90000.0f;
+    static const f32 heightThreshhold = 15.0f;
     mVec3_c toPlayer = dAcPy_c::GetLinkM()->getPostionDifference(*this);
-    if (toPlayer.squareMagXZ() > 90000.0f) {
+    if (toPlayer.squareMagXZ() > distanceTheshold) {
         return;
     }
 
-    if (nw4r::math::FAbs(dAcPy_c::GetLinkM()->mPosition.y - mPosition.y) > 15.0f) {
+    if (nw4r::math::FAbs(dAcPy_c::GetLinkM()->mPosition.y - mPosition.y) > heightThreshhold) {
         field_0xDEA = 0;
         mBgW.ClrFlag0x4();
     } else {
@@ -697,8 +710,10 @@ dAcOsw_c *dAcOkibako_c::getSwitch(const mVec3_c &pos) {
 bool dAcOkibako_c::isSwitchInArea(const mVec3_c &pos) {
     static const s16 sAngs[4] = {0x2000, 0x6000, -0x6000, -0x2000};
 
+    static const f32 switchHeightAdjust = 10.0f;
+
     mVec3_c center = pos;
-    center.y -= 10.0f;
+    center.y -= switchHeightAdjust;
 
     dAcOsw_c *pSw = mSw.get();
     if (pSw == nullptr) {
@@ -707,7 +722,7 @@ bool dAcOkibako_c::isSwitchInArea(const mVec3_c &pos) {
 
     mVec3_c extent(150.0f, 30.0f, 150.0f);
     mArea.set(center, mRotation.y, extent, nullptr, 0.0f);
-    f32 radius = (pSw->getField_0x5E8() - 10.f) * 1.4142135f * 0.5f;
+    f32 radius = (pSw->getField_0x5E8() - switchHeightAdjust) * 1.4142135f * 0.5f;
     for (int i = 0; i < 4; ++i) {
         mVec3_c checkPos = pSw->mPosition;
         getXZCirclePoint(checkPos, sAngs[i] + pSw->mRotation.y, radius);
@@ -721,6 +736,7 @@ bool dAcOkibako_c::isSwitchInArea(const mVec3_c &pos) {
 }
 
 bool dAcOkibako_c::checkNotHittingNewSwitch() {
+    static const f32 probeIncrement = 15.0f;
     mVec3_c pos = mPreMovePosition;
     f32 radius = 75.0f;
     radius -= 20.0f;
@@ -732,12 +748,12 @@ bool dAcOkibako_c::checkNotHittingNewSwitch() {
     }
 
     mVec3_c checkPos = pos;
-    getXZCirclePoint(checkPos, mAngle.y + 0x4000, 15.0f);
+    getXZCirclePoint(checkPos, mAngle.y + 0x4000, probeIncrement);
 
     dAcOsw_c *pSw = getSwitch(checkPos);
     if (pSw == nullptr) {
         mVec3_c checkPos = pos;
-        getXZCirclePoint(checkPos, mAngle.y - 0x4000, 15.0f);
+        getXZCirclePoint(checkPos, mAngle.y - 0x4000, probeIncrement);
         pSw = getSwitch(checkPos);
     }
 

@@ -156,15 +156,17 @@ int dAcOpushBlk_c::actorCreate() {
     mCyl.SetStts(mStts);
     mCyl.ClrAtSet();
 
-    mAcceleration = -4.0f;
-    mMaxSpeed = -80.0f;
+    mGravity = -4.0f;
+    mMaxFallSpeed = -80.0f;
 
     if (dScGame_c::isCurrentStage("B301")) {
         mTentalusFightState = 1;
 
-        mAcceleration = -5.0f;
-        mMaxSpeed = -80.0f;
-        mMdlPresent.setTevColorAll(GX_TEVREG1, mColor(0x19, 0x19, 0x19, 0xFF), false);
+        mGravity = -5.0f;
+        mMaxFallSpeed = -80.0f;
+
+        static const u8 color = 0x19;
+        mMdlPresent.setTevColorAll(GX_TEVREG1, mColor(color, color, color, 0xFF), false);
     }
 
     for (int i = 0; i < 4; ++i) {
@@ -173,14 +175,14 @@ int dAcOpushBlk_c::actorCreate() {
 
     if (mRestrictSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mRestrictSceneflag)) {
         mRestrictType = 2;
-        mAcceleration = 0.0f;
+        mGravity = 0.0f;
     }
 
     mbDrawShadow = false;
 
     if (mType == TYPE_HANG && !switchActive) {
         mAcch.CrrPos(*dBgS::GetInstance());
-        mAcceleration = 0.0f;
+        mGravity = 0.0f;
         changeState(StateID_RopeGrab);
     } else {
         changeState(StateID_Wait);
@@ -195,6 +197,9 @@ int dAcOpushBlk_c::actorCreate() {
 }
 
 int dAcOpushBlk_c::actorPostCreate() {
+    static const f32 sandDistanceThreshold = 900.0f;
+    static const f32 sandHeightThreshhold = 30.0f;
+
     if (mbOnPath && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mGoalSceneflag) &&
         mPath.getPath().getPoint(0) != nullptr) {
         mVec3_c pnt;
@@ -224,8 +229,8 @@ int dAcOpushBlk_c::actorPostCreate() {
             dAcObjBase_c *pVsd =
                 static_cast<dAcObjBase_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_VSD, parent));
             parent = pVsd;
-            if (pVsd != nullptr && nw4r::math::FAbs(pVsd->mPosition.y - mPosition.y) < 30.0f) {
-                if (mPosition.squareDistanceToXZ(pVsd->mPosition) < 900.0f) {
+            if (pVsd != nullptr && nw4r::math::FAbs(pVsd->mPosition.y - mPosition.y) < sandHeightThreshhold) {
+                if (mPosition.squareDistanceToXZ(pVsd->mPosition) < sandDistanceThreshold) {
                     mScatterSand.link(static_cast<dAcOScatterSand *>(pVsd));
                     break;
                 }
@@ -331,13 +336,13 @@ int dAcOpushBlk_c::draw() {
     mbExecuteThisFrame = false;
     if (mType == TYPE_NORMAL) {
         if (mTime.isPast()) {
-            drawModelType1(&mMdlPast);
+            drawModel(&mMdlPast);
         }
         if (mTime.isPresent()) {
-            drawModelType1(&mMdlPresent);
+            drawModel(&mMdlPresent);
         }
     } else {
-        drawModelType1(&mMdlPresent);
+        drawModel(&mMdlPresent);
     }
 
     if (mbDrawShadow) {
@@ -348,7 +353,7 @@ int dAcOpushBlk_c::draw() {
             f = nw4r::ut::Max<f32>(f, 200.0f);
         }
 
-        drawShadow(mShadow, nullptr, mWorldMtx, &sSph, -1, -1, -1, -1, -1, f);
+        drawShadow(mShadow, nullptr, mWorldMtx, sSph, -1, -1, -1, -1, -1, f);
     }
 
     return SUCCEEDED;
@@ -403,7 +408,7 @@ void dAcOpushBlk_c::executeState_Wait() {
                 case 6: {
                     if (mAcch.ChkGndHit()) {
                         dJEffManager_c::spawnGroundEffect(
-                            mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.5f, field_0x1B0
+                            mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.5f, field_0x1B0
                         );
                         mTentalusFightState = 7;
                         mVelocity.y = 25.0f;
@@ -458,7 +463,7 @@ void dAcOpushBlk_c::executeState_Wait() {
     if (mRestrictType == 1) {
         if (!mScatterSand.isLinked()) {
             mRestrictType = 0;
-            mAcceleration = -4.0f;
+            mGravity = -4.0f;
         }
     } else if (mRestrictType == 2) {
         dAcOScatterSand *pSand = mScatterSand.get();
@@ -506,8 +511,9 @@ void dAcOpushBlk_c::finalizeState_Wait() {
 }
 
 void dAcOpushBlk_c::initializeState_Move() {
+    static const f32 distanceScale = 0.1f;
     dAcPy_c::GetLinkM()->onFlags_0x360(0x10000);
-    mMoveTimer = s16(dAcPy_c::GetLink()->sPushRelatedConstant * 0.1f) + 1;
+    mMoveTimer = s16(dAcPy_c::GetLink()->sPushRelatedConstant * distanceScale) + 1;
     if (dAcPy_c::GetLink()->mRotation.y.absDiff(mAngle.y) > 0x4000) {
         fn_217_2310();
     }
@@ -568,16 +574,17 @@ void dAcOpushBlk_c::finalizeState_Move() {
 }
 
 void dAcOpushBlk_c::initializeState_RopeGrab() {
+    static const int stateSet = 3;
     mbDrawShadow = true;
-    mAcceleration = 0.0f;
-    mLandSequenceState = 3;
+    mGravity = 0.0f;
+    mLandSequenceState = stateSet;
 }
 void dAcOpushBlk_c::executeState_RopeGrab() {
     if (mbOnRope) {
         return;
     }
 
-    mAcceleration = -4.0f;
+    mGravity = -4.0f;
     cLib::chasePosXZ(mPosition, mSpawnPosition, 5.0f);
     if (mLandSequenceState < 3) {
         sLib::addCalcAngle(mRotation.x.ref(), 0, 5, 1820, 182);
@@ -592,7 +599,7 @@ void dAcOpushBlk_c::executeState_RopeGrab() {
             startSound(SE_PushBlk_LAND);
         }
         if (mLandSequenceState == 2) {
-            dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.5f, field_0x1B0);
+            dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.5f, field_0x1B0);
         }
 
         if (mLandSequenceState == 0) {
@@ -615,6 +622,10 @@ bool dAcOpushBlk_c::checkCanTryMove(s16 dir, bool set) {
     static const s16 sAngs[3] = {0x4000, 0x0, -0x4000};
     mbAtLimit = false;
 
+    static const f32 pushExtend = 2.0f;
+    static const f32 probeIncrement = 73.0f;
+    static const f32 yOffset = 8.0f;
+
     f32 f8 = 8.0f;
     dAcOsw_c *pSw = mSw.get();
     if (pSw && pSw->mProfileName == fProfile::OBJ_SW) {
@@ -628,7 +639,7 @@ bool dAcOpushBlk_c::checkCanTryMove(s16 dir, bool set) {
     mVec3_c end = mPosition;
     for (int i = 0; i < 3; ++i) {
         start = mPosition;
-        f32 radius = 73.0f;
+        f32 radius = probeIncrement;
         getXZCirclePoint(start, dir, radius);
         if (i != 1) {
             getXZCirclePoint(start, dir + sAngs[i], radius);
@@ -637,7 +648,7 @@ bool dAcOpushBlk_c::checkCanTryMove(s16 dir, bool set) {
         start.y += f8;
         end = start;
 
-        getXZCirclePoint(end, dir, dAcPy_c::GetLink()->sPushRelatedConstant + 2.0f);
+        getXZCirclePoint(end, dir, dAcPy_c::GetLink()->sPushRelatedConstant + pushExtend);
 
         if (dBgS_ObjLinChk::LineCross(&start, &end, this)) {
             f32 a = (dBgS_ObjLinChk::GetInstance().GetLinEnd() - start).absXZ();
@@ -706,10 +717,11 @@ void dAcOpushBlk_c::checkMoveable() {
     }
 }
 void dAcOpushBlk_c::updateMoveBg() {
+    static const f32 heightThreshhold = 15.0f;
     if (!mbCanMove) {
         return;
     }
-    if (nw4r::math::FAbs(dAcPy_c::GetLink()->mPosition.y - mPosition.y) > 15.0f) {
+    if (nw4r::math::FAbs(dAcPy_c::GetLink()->mPosition.y - mPosition.y) > heightThreshhold) {
         mBgW.ClrFlag0x4();
     } else {
         mBgW.OnFlag0x04();
@@ -750,8 +762,10 @@ dAcOsw_c *dAcOpushBlk_c::getSwitch(const mVec3_c &pos) {
 bool dAcOpushBlk_c::isSwitchInArea(const mVec3_c &pos) {
     static const s16 sAngs[4] = {0x2000, 0x6000, -0x6000, -0x2000};
 
+    static const f32 switchHeightAdjust = 10.0f;
+
     mVec3_c center = pos;
-    center.y -= 10.0f;
+    center.y -= switchHeightAdjust;
 
     dAcOsw_c *pSw = mSw.get();
     if (pSw == nullptr) {
@@ -760,7 +774,7 @@ bool dAcOpushBlk_c::isSwitchInArea(const mVec3_c &pos) {
 
     mVec3_c extent(150.0f, 30.0f, 150.0f);
     mArea.set(center, mRotation.y, extent, nullptr, 0.0f);
-    f32 radius = (pSw->getField_0x5E8() - 10.f) * 1.4142135f * 0.5f;
+    f32 radius = (pSw->getField_0x5E8() - switchHeightAdjust) * 1.4142135f * 0.5f;
     for (int i = 0; i < 4; ++i) {
         mVec3_c checkPos = pSw->mPosition;
         getXZCirclePoint(checkPos, sAngs[i] + pSw->mRotation.y, radius);
@@ -774,6 +788,8 @@ bool dAcOpushBlk_c::isSwitchInArea(const mVec3_c &pos) {
 }
 
 bool dAcOpushBlk_c::checkNotHittingNewSwitch() {
+    static const f32 probeIncrement = 15.0f;
+
     mVec3_c pos = mPreMovePosition;
     f32 radius = 75.0f;
     radius -= 20.0f;
@@ -785,12 +801,12 @@ bool dAcOpushBlk_c::checkNotHittingNewSwitch() {
     }
 
     mVec3_c checkPos = pos;
-    getXZCirclePoint(checkPos, mAngle.y + 0x4000, 15.0f);
+    getXZCirclePoint(checkPos, mAngle.y + 0x4000, probeIncrement);
 
     dAcOsw_c *pSw = getSwitch(checkPos);
     if (pSw == nullptr) {
         mVec3_c checkPos = pos;
-        getXZCirclePoint(checkPos, mAngle.y - 0x4000, 15.0f);
+        getXZCirclePoint(checkPos, mAngle.y - 0x4000, probeIncrement);
         pSw = getSwitch(checkPos);
     }
 
@@ -809,10 +825,13 @@ bool dAcOpushBlk_c::checkNotHittingNewSwitch() {
 }
 
 void dAcOpushBlk_c::updatePathGoalFlag() {
+    static const f32 smallGrid = 100.0f;
+    static const f32 largeGrid = 6400.0f;
+
     if (!mbGoalSwitch && mbOnPath) {
         const Vec *pPnt = mPath.getPath().getPoint(0);
         if (pPnt != nullptr) {
-            f32 rad = !mbLargerRadius ? 100.0f : 6400.0f;
+            f32 rad = !mbLargerRadius ? smallGrid : largeGrid;
             mVec3_c distToPnt(mPosition.x - pPnt->x, mPosition.y - pPnt->y, mPosition.z - pPnt->z);
             if (distToPnt.squareMagXZ() < rad) {
                 SceneflagManager::sInstance->setFlag(mRoomID, mGoalSceneflag);
@@ -824,8 +843,10 @@ void dAcOpushBlk_c::updatePathGoalFlag() {
 }
 
 void dAcOpushBlk_c::calcFall() {
+    static const f32 fallThreshhold = -300.0f;
+
     if (isState(StateID_Wait)) {
-        if (mFallDistance <= -300.0f && mAcch.ChkGndHit()) {
+        if (mFallDistance <= fallThreshhold && mAcch.ChkGndHit()) {
             startSound(SE_PushBlk_LAND);
             mCyl.OnAtSet();
             mFallDistance = 0.0f;
@@ -836,8 +857,8 @@ void dAcOpushBlk_c::calcFall() {
             mFallDistance = 0.0f;
         } else {
             mFallDistance += heightIncrement;
-            if (mFallDistance < -300.0f) {
-                mFallDistance = -300.0f;
+            if (mFallDistance < fallThreshhold) {
+                mFallDistance = fallThreshhold;
             }
         }
     }
