@@ -55,8 +55,8 @@ int dAcOD3Dummy_c::create() {
     if (DungeonflagManager::sInstance->getCounterOrFlag(2, 8)) {
         registerBgs();
     }
-    mAcceleration = 0.f;
-    mMaxSpeed = 0.f;
+    mGravity = 0.f;
+    mMaxFallSpeed = 0.f;
     mStateMgr.changeState(StateID_Wait);
     mBoundingBox.Set(mVec3_c(-0.f, -0.f, -0.f), mVec3_c(0.f, 0.f, 0.f));
     return SUCCEEDED;
