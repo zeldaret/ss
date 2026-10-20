@@ -433,7 +433,7 @@ int dAcBlastboss_c::actorExecute() {
     mPositionCopy3 = v3;
 
     if (field_0x1132) {
-        fn_80030c20(0, 1500.0f, 50.0f, -200.0f, 200.0f);
+        fn_80030C20(0, 1500.0f, 50.0f, -200.0f, 200.0f);
     }
 
     nodeMtx.YrotS(mRotation.y);
@@ -1804,8 +1804,8 @@ void dAcBlastboss_c::executeState_Down() {
                 mLightingStrikeState = LIGHTNING_STRIKE_TRIGGER_END;
                 startSound(SE_BLasBos_LastHit);
                 mIsDead = true;
-                resetInteractionFlags(INTERACT_0x1000);
-                resetInteractionFlags(INTERACT_0x1);
+                unsetInteractionFlags(INTERACT_0x1000);
+                unsetInteractionFlags(INTERACT_0x1);
             } else if (mTimers[TIMER_0] == 0) {
                 if (cM::rnd() < 0.5f || mLightingStrikeState != LIGHTNING_STRIKE_STATE_NONE) {
                     setAnm("DownEscapeR", 10.0f);
@@ -1815,7 +1815,7 @@ void dAcBlastboss_c::executeState_Down() {
                 setAnmRate(0.65f);
                 mSubState = SUB_STATE_5;
                 field_0x11C8 = 0.0f;
-                resetInteractionFlags(INTERACT_0x1);
+                unsetInteractionFlags(INTERACT_0x1);
                 if (mLightingStrikeState != LIGHTNING_STRIKE_STATE_NONE) {
                     mLightingStrikeState = LIGHTNING_STRIKE_WAIT;
                     field_0x2D00 = 0.0f;

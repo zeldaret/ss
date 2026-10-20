@@ -1655,10 +1655,10 @@ int dAcEKs_c::actorExecute() {
         } else {
             mPositionCopy3.y += 40.f;
         }
-        fn_80030c20(0x2, 700, 50, -500, 500);
+        fn_80030C20(0x2, 700, 50, -500, 500);
     }
 
-    fn_80030400(mMdl.getModel(), 100, false, field_0xDBF);
+    setDamageFlash(mMdl.getModel(), 100, false, field_0xDBF);
 
     if (field_0xD30 != 0) {
         if (checkObjectProperty(OBJ_PROP_0x1)) {
@@ -2736,7 +2736,7 @@ void dAcEKs_c::executeState_Stun() {
                 field_0xDA9 = 1;
                 if (dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd()) == POLY_ATTR_LAVA) {
                     dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 1, field_0x1B0);
-                    resetInteractionFlags(0x1);
+                    unsetInteractionFlags(0x1);
                     startSound(SE_EKs_V_DEATH2);
                     unsetActorProperty(AC_PROP_0x1);
                     kill(false);
@@ -2760,7 +2760,7 @@ void dAcEKs_c::executeState_Stun() {
                 holdSound(SE_E_PIYORI_LV);
             }
             if (mAcch.ChkWaterIn()) {
-                resetInteractionFlags(0x1);
+                unsetInteractionFlags(0x1);
                 startSound(SE_EKs_V_DEATH2);
                 unsetActorProperty(AC_PROP_0x1);
                 kill(false);
@@ -2777,7 +2777,7 @@ void dAcEKs_c::executeState_Stun() {
                     mHealth = 0;
                 } else {
                     if (field_0xD76 <= 0) {
-                        resetInteractionFlags(0x1);
+                        unsetInteractionFlags(0x1);
                         mAcch.SetGroundUpY(30);
                         mAngle.y = mRotation.y;
                         if (mType == EKS_ELECTRIC) {
@@ -2800,14 +2800,14 @@ void dAcEKs_c::executeState_Stun() {
             field_0xD0C = 1.f;
             setAnim("Deliver", 4, 1, 0);
             mHealth = 0;
-            resetInteractionFlags(0x1);
+            unsetInteractionFlags(0x1);
         } break;
         case 2: {
             bool b = false;
             if (field_0xDCD != 0) {
                 field_0xDCD--;
             } else {
-                b = fn_80030570(mMdl.getModel(), 1, 1);
+                b = setDeathFadeout(mMdl.getModel(), 1, 1.0f);
             }
             mMdl.play();
             if (mMdl.getAnm().isStop() && b) {
@@ -2820,7 +2820,7 @@ void dAcEKs_c::finalizeState_Stun() {
     field_0xC10.y = 0.f;
     mGravity = 0.f;
     mSph.OnCoSet();
-    resetInteractionFlags(0x1);
+    unsetInteractionFlags(0x1);
     if (mType == EKS_FIRE) {
         mSph.SetCo_0x8000();
         field_0xD20 = 400.f;

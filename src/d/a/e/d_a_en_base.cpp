@@ -2,7 +2,9 @@
 
 #include "c/c_math.h"
 #include "common.h"
+#include "d/a/d_a_base.h"
 #include "d/a/d_a_player.h"
+#include "d/a/npc/d_a_ordinary_npc.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_bomb.h"
 #include "d/col/bg/d_bg_pc.h"
@@ -18,13 +20,23 @@
 #include "f/f_base.h"
 #include "f/f_list_mg.h"
 #include "f/f_profile_name.h"
+#include "m/m_color.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/g3d_camera.h"
+#include "nw4r/g3d/g3d_scnmdl.h"
+#include "nw4r/g3d/res/g3d_resmat.h"
+#include "nw4r/g3d/res/g3d_resuser.h"
+#include "nw4r/types_nw4r.h"
+#include "rvl/GX/GXTypes.h"
+#include "s/s_Math.h"
 #include "sized_string.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/d_emitter.h"
 
 const dAcEnData dAcEnBase_c::sDefaultEnData = {};
+s32 dAcEnBase_c::lbl_80571930 = 3; // No clue
+s32 dAcEnBase_c::lbl_80571934 = 3; // No clue
+mVec3_c dAcEnBase_c::lbl_80597020; // No clue
 
 fLiMgBa_c dAcEnBase_c::sEnemyList;
 
@@ -420,6 +432,160 @@ bool dAcEnBase_c::lineCrossPlayer(f32 height) {
     return dBgS_ObjLinChk::LineCross(&start, &end, nullptr);
 }
 
+void dAcEnBase_c::setDamageFlash(m3d::mdl_c &mdl, u8 red, bool bAdjust, u8 timer) {
+    mColor clr;
+    if (mHealth == 0) {
+        return;
+    }
+
+    if (timer == 0) {
+        if (!field_0x368 && !bAdjust) {
+            return;
+        }
+
+        if (!field_0x368) {
+            return;
+        }
+
+        if (field_0x368 < 1.0f) {
+            field_0x368 = 0.0f;
+            fn_80030980(mdl, 1, false);
+            return;
+        }
+        sLib::addCalcScaledDiff(&field_0x368, 0.1f, 0.9f, 10.0f);
+        red = field_0x368;
+
+    } else {
+        if (!field_0x368) {
+            fn_80030980(mdl, 0, false);
+        }
+        field_0x368 = red;
+    }
+
+    clr.r = red;
+    clr.g = 0;
+    clr.b = 0;
+    clr.a = 0xFF;
+
+    mdl.setTevKColorAll(GX_KCOLOR3, clr, false);
+    mLightingInfo.mTevK3Color = clr;
+    mLightingInfo.mUseTevK3 = true;
+}
+
+bool dAcEnBase_c::setDeathFadeout(m3d::mdl_c &mdl, u8 bAdjust, f32 rate) {
+    mColor clr;
+
+    if (bAdjust == 1) {
+        sLib::addCalcScaledDiff(&field_0x364, 255.0f, 0.9f, rate * 10.0f);
+        sLib::addCalcScaled(&field_0x368, 0.9f, rate * 10.0f);
+    }
+
+    fn_80030980(mdl, 0, false);
+
+    clr.r = field_0x368;
+    clr.g = 0;
+    clr.b = 0;
+    clr.a = 255.0f - field_0x364;
+
+    mdl.setTevKColorAll(GX_KCOLOR3, clr, false);
+
+    mLightingInfo.mTevK3Color = clr;
+    mLightingInfo.mUseTevK3 = true;
+
+    if (std::abs(field_0x364 - 255.0f) <= 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void dAcEnBase_c::fn_800306C0() {
+    field_0x368 = 0.0f;
+    field_0x364 = 0.0f;
+}
+
+void dAcEnBase_c::fn_800306D0() {
+    setInteractionFlags(INTERACT_0x100);
+    setActorProperty(AC_PROP_0x100);
+    unsetInteractionFlags(INTERACT_0x4);
+
+    setBattleBgmRelated(0);
+}
+void dAcEnBase_c::fn_80030700() {
+    unsetInteractionFlags(INTERACT_0x100);
+    unsetActorProperty(AC_PROP_0x100);
+    setInteractionFlags(INTERACT_0x4);
+
+    setBattleBgmRelated(2);
+}
+
+extern "C" dAcOrdinaryNpc_c *SCRAPPER_PTR;
+dAcObjBase_c *dAcEnBase_c::targetPlayerOrScrapper(f32 biasToScrapper) {
+    dAcPy_c *pPlayer = dAcPy_c::LINK;           // Change to getters once SCAPPER_PTR is defined
+    dAcOrdinaryNpc_c *pScrapper = SCRAPPER_PTR; // Change to getters once SCAPPER_PTR is defined
+
+    return pScrapper == nullptr || biasToScrapper + mPosition.squareDistanceToXZ(pPlayer->mPosition) <
+                                       mPosition.squareDistanceToXZ(pScrapper->mPosition) ?
+               (dAcObjBase_c *)pPlayer :
+               (dAcObjBase_c *)pScrapper;
+}
+
+void dAcEnBase_c::fn_800307E0(const mVec3_c &pPos, s32 val) {
+    if (lbl_80571934 > val) {
+        lbl_80571934 = val;
+        lbl_80597020 = pPos;
+    }
+}
+void dAcEnBase_c::fn_80030820() {
+    lbl_80571930 = lbl_80571934;
+    lbl_80571934 = 3;
+}
+
+bool dAcEnBase_c::fn_80030840(
+    const mVec3_c &start, const mVec3_c &end, f32 distance, const mAng target, const mAng thresh, bool checkCross
+) {
+    mVec3_c dist = end - start;
+    s16 a = (s32)dist.atan2sX_Z();
+    if (mAng(a - target).abs() <= thresh && dist.absXZ() <= distance) {
+        if (checkCross) {
+            mVec3_c startCross = start;
+            startCross.y += 100.0f;
+            mVec3_c endCross = end;
+            endCross.y += 100.0f;
+            if (!dBgS_ObjLinChk::LineCross(&startCross, &endCross, nullptr)) {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+    return false;
+}
+
+// NONMATCHING - Weird IsValid check on genMode
+void dAcEnBase_c::fn_80030980(m3d::mdl_c &mdl, u8 removeStage, bool markDirty) {
+    nw4r::g3d::ScnMdl *m = nw4r::g3d::ScnObj::DynamicCast<nw4r::g3d::ScnMdl>(mdl.getG3dObject());
+    if (m == nullptr) {
+        return;
+    }
+
+    nw4r::g3d::ResMdl resMdl = mdl.getResMdl();
+    for (u32 i = 0; i < resMdl.GetResMatNumEntries(); ++i) {
+        nw4r::g3d::ResMat resMat = resMdl.GetResMat(i);
+        nw4r::g3d::ResUserData resUserData = resMat.GetResUserData();
+
+        if (resUserData.IsValid() && resUserData.GetNumEntries() != 0) {
+            nw4r::g3d::ResUserDataEntry entry = resUserData.GetResUserDataEntry(0);
+            if (entry.GetName()[0] == 'E') {
+                nw4r::g3d::ScnMdl::CopiedMatAccess access(m, i);
+                nw4r::g3d::ResGenMode genMode = access.GetResGenMode(markDirty);
+
+                genMode.GXSetNumTevStages(genMode.GXGetNumTevStages() - removeStage);
+            }
+        }
+    }
+}
+
 bool dAcEnBase_c::isWithinCameraView(f32 w, f32 h) {
     nw4r::g3d::Camera cam = dStageMgr_c::GetInstance()->getCamera(0);
 
@@ -431,4 +597,12 @@ bool dAcEnBase_c::isWithinCameraView(f32 w, f32 h) {
 
     return ((width * w <= src.x) && (src.x < width * (1.0f - w))) &&
            ((height * h <= src.y) && src.y < height * (1.0f - h)) && ((near <= src.z) && (src.z < far));
+}
+
+void dAcEnBase_c::fn_80030C20(u32 flags, f32 f1, f32 f2, f32 f3, f32 f4) {
+    static u32 flag = 8;
+    if (mHealth == 0) {
+        flags |= flag;
+    }
+    AttentionManager::GetInstance()->addUnk3Target(*this, flags, f1, f2, f3, f4);
 }

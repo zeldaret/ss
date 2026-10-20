@@ -49,6 +49,7 @@ public:
         INTERACT_0x4 = (1 << 2),
         INTERACT_0x10 = (1 << 4),
         INTERACT_0x40 = (1 << 6),
+        INTERACT_0x100 = (1 << 8),
         INTERACT_0x1000 = (1 << 12),
         INTERACT_0x2000 = (1 << 13),
     };
@@ -80,7 +81,7 @@ public:
     void setInteractionFlags(u32 flag) {
         mInteractionFlags |= flag;
     }
-    void resetInteractionFlags(u32 flag) {
+    void unsetInteractionFlags(u32 flag) {
         mInteractionFlags &= ~flag;
     }
     void setFinalBlowPosition(const mVec3_c &v) {
@@ -131,17 +132,27 @@ public:
 
     bool lineCrossPlayer(f32 height);
 
-    void fn_80030400(m3d::mdl_c &, u8, bool, u8);
-    bool fn_80030570(m3d::mdl_c &, u8, f32); // lighting related
+    void setDamageFlash(m3d::mdl_c &mdl, u8 red, bool bAdjust, u8);
+
+    // Changes the model to fade to black. Returns true on completion
+    // bAdjust is used to scale the fade (1 -> scale, 0 -> dont scale)
+    //    when having multiple models, this is only true once for the set of calls
+    bool setDeathFadeout(m3d::mdl_c &mdl, u8 bAdjust, f32 rate);
+
+    void fn_800306C0();
+
     void fn_800306D0();
     void fn_80030700();
-    static void fn_800307E0(mVec3_c *pPos, s32);
-    dAcObjBase_c *targetPlayerOrScrapper(f32 biasToScrapper);
-    static void fn_80030980(m3d::mdl_c &, s32, bool markDirty);
-    bool isWithinCameraView(f32, f32);
-    void fn_80030c20(u32 flags, f32, f32, f32, f32);
 
-    bool ChkCrossPlayer(f32 height);
+    dAcObjBase_c *targetPlayerOrScrapper(f32 biasToScrapper);
+    static void fn_800307E0(const mVec3_c &pPos, s32);
+    static void fn_80030820();
+    static bool fn_80030840(
+        const mVec3_c &start, const mVec3_c &end, f32 distance, const mAng target, const mAng thresh, bool checkCross
+    );
+    static void fn_80030980(m3d::mdl_c &mdl, u8 removeStage, bool markDirty);
+    bool isWithinCameraView(f32, f32);
+    void fn_80030C20(u32 flags, f32, f32, f32, f32);
 
 public:
     /* 0x330 */ fLiNdBa_c mEnemyLink;
@@ -152,13 +163,19 @@ public:
     /* 0x346 */ u8 field_0x346;
     /* 0x347 */ u8 _0x347[0x358 - 0x347];
     /* 0x358 */ mVec3_c mFinalBlowPosition;
-    /* 0x364 */ u8 _0x364[0x374 - 0x364];
+    /* 0x364 */ f32 field_0x364;
+    /* 0x364 */ f32 field_0x368;
+    /* 0x36C */ u8 _0x36C[0x374 - 0x36C];
     /* 0x374 */ const dAcEnData *mpEnemyData;
 
 protected:
     // TODO: Make accessors for this list to auto-convert to dAcEnBase?
     static fLiMgBa_c sEnemyList;
     static const dAcEnData sDefaultEnData;
+
+    static s32 lbl_80571930;     // No clue
+    static s32 lbl_80571934;     // No clue
+    static mVec3_c lbl_80597020; // No clue
 };
 
 #endif

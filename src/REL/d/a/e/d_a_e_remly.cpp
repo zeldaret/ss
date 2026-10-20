@@ -546,11 +546,11 @@ int dAcEremly_c::actorExecute() {
         if (!isScary()) {
             setInteractionFlags(INTERACT_0x2000);
         }
-        fn_80030c20(3, 600.f, radius, -400.f, 400.f);
+        fn_80030C20(3, 600.f, radius, -400.f, 400.f);
     }
 
     sLib::calcTimer(&field_0xB52);
-    fn_80030400(mMdl.getModel(), 100, false, field_0xB52);
+    setDamageFlash(mMdl.getModel(), 100, false, field_0xB52);
     return SUCCEEDED;
 }
 
