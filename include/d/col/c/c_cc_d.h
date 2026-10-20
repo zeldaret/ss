@@ -349,7 +349,7 @@ enum dCcD_ObjAtType {
     /* 0x 0000 2000 */ AT_TYPE_ARROW = (1 << 13),
     /* 0x 0000 4000 */ AT_TYPE_CLAWSHOT = (1 << 14),
     /* 0x 0000 8000 */ AT_TYPE_0x8000 = (1 << 15),
-    /* 0x 0001 0000 */ AT_TYPE_BELLOWS = (1 << 16),
+    /* 0x 0001 0000 */ AT_TYPE_BELLOWS = (1 << 16), // AT_TYPE_MODIFERS?
     /* 0x 0002 0000 */ AT_TYPE_0x20000 = (1 << 17),
     /* 0x 0004 0000 */ AT_TYPE_0x40000 = (1 << 18),
     /* 0x 0008 0000 */ AT_TYPE_GLITTERING_SPORES = (1 << 19),
@@ -711,6 +711,12 @@ public:
     void Set_0x50(u32 val) {
         field_0x50 = val;
     }
+    u32 Get_0x50() const {
+        return field_0x50;
+    }
+    bool Chk_0x50(u32 val) const {
+        return field_0x50 & val;
+    }
 
 public:
     /* 0x1C */ cCcD_SrcGObjTg mSrc;
@@ -844,7 +850,7 @@ public:
     s32 GetTgAtCutDir() const;
     s16 GetTgAtCutAng() const;
     bool ChkTgBit8() const;
-    u8 GetTg_0x4A() const;
+    u16 GetTg_0x4A() const;
     dAcObjBase_c *GetTgActor();
     const mVec3_c &GetTgAtHitDir() const;
 
@@ -1146,6 +1152,13 @@ public:
     }
     u32 ChkTg_0x40000000() {
         return mTg.MskSPrm(0x40000000);
+    }
+
+    u32 GetTg_0x50() const {
+        return mTg.Get_0x50();
+    }
+    u32 ChkTg_0x50(u32 val) const {
+        return mTg.Chk_0x50(val);
     }
 
     // Co

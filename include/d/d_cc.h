@@ -53,7 +53,9 @@ public:
 
     typedef void (*ccCbFunc)(cCcD_Obj *obj, void *cbArg);
     void foreachCc(ccCbFunc f, void *cbArg) const;
-    void foreachCc2(ccCbFunc f, void *cbArg) const;
+
+    typedef void (*ccCbFuncConst)(cCcD_Obj *obj, const void *cbArg);
+    void foreachCc(ccCbFuncConst f, const void *cbArg) const;
 
     typedef bool (cCcD_Obj::*ccPtmf)();
     cCcD_Obj *find(ccPtmf f) const;

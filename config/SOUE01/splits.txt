@@ -152,6 +152,7 @@ d/a/e/d_a_en_base.cpp:
 	.data       start:0x80501638 end:0x805016E0
 	.sdata      start:0x80571930 end:0x80571948
 	.sbss       start:0x80575098 end:0x805750A0
+	.sdata2     start:0x80576CC8 end:0x80576D10
 	.bss        start:0x80597020 end:0x80597030
 
 d/a/npc/d_a_npc.cpp:

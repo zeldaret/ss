@@ -1129,7 +1129,7 @@ void dAcOBarrel_c::fn_293_4200() {
                 PARTICLE_RESOURCE_ID_MAPPING_658_, emitPosition, nullptr, &mScale, nullptr, nullptr, 0, 0
             );
         }
-        dAcEnBase_c::fn_800307E0(&mPosition, 0);
+        dAcEnBase_c::fn_800307E0(mPosition, 0);
         startSound(SE_Barrel_BOMB);
         mStateMgr.changeState(StateID_Explode);
 

@@ -552,7 +552,7 @@ void dAcBomb_c::initializeState_Explode() {
     }
 
     dLightEnv_c::GetPInstance()->setBPM8_Type10_2(&mPosition);
-    dAcEnBase_c::fn_800307E0(&mPosition, 0);
+    dAcEnBase_c::fn_800307E0(mPosition, 0);
 }
 void dAcBomb_c::executeState_Explode() {
     if (--mFuseTime >= -3) {

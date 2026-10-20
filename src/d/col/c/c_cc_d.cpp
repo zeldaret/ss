@@ -498,7 +498,7 @@ bool cCcD_Obj::ChkTgBit8() const {
     return mTg.MskAtHitSPrm(0x100);
 }
 
-u8 cCcD_Obj::GetTg_0x4A() const {
+u16 cCcD_Obj::GetTg_0x4A() const {
     return mTg.field_0x4A;
 }
 

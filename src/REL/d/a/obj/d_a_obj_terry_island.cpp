@@ -135,7 +135,7 @@ void dAcOterryIsland_c::executeState_Wait() {
             changeState(StateID_Vanish);
         } else if (isHitBellows()) {
             changeState(StateID_Vacuum);
-        } else if (isHitWind()) {
+        } else if (isHitWater()) {
             changeState(StateID_Smoke);
         }
     } else {
@@ -190,6 +190,6 @@ bool dAcOterryIsland_c::isHitBomb() {
 bool dAcOterryIsland_c::isHitBellows() {
     return mCcFire.ChkTgHit() && mCcFire.ChkTgAtHitType(AT_TYPE_BELLOWS);
 }
-bool dAcOterryIsland_c::isHitWind() {
-    return mCcFire.ChkTgHit() && mCcFire.GetTgDamageFlags() & 0x40;
+bool dAcOterryIsland_c::isHitWater() {
+    return mCcFire.ChkTgHit() && mCcFire.GetTgDamageFlags() & AT_MOD_WATER;
 }

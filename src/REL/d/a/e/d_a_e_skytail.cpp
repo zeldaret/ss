@@ -1004,9 +1004,9 @@ void dAcESkytail_c::executeState_Dead() {
 
     bool bVar = false;
     if (mDeadStateTimer > 15) {
-        bVar = fn_80030570(mBodyMdl.getModel(), 1, 2.0f);
+        bVar = setDeathFadeout(mBodyMdl.getModel(), 1, 2.0f);
         for (int i = 0; i < (s32)ARRAY_LENGTH(mAntennaMdl); ++i) {
-            fn_80030570(mAntennaMdl[i].getModel(), 0, 2.0f);
+            setDeathFadeout(mAntennaMdl[i].getModel(), 0, 2.0f);
         }
     }
 

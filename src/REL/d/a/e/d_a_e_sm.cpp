@@ -690,7 +690,7 @@ int dAcEsm_c::actorExecute() {
     }
 
     if (field_0xBC8 == 0 && !mStateMgr.isState(StateID_Absorption)) {
-        fn_80030c20(3, 700.f, 50.f, -200.f, 200.f);
+        fn_80030C20(3, 700.f, 50.f, -200.f, 200.f);
     }
 
     if (field_0xBBF != 3 && mScaleTarget.z != mScale.z) {
@@ -913,7 +913,7 @@ bool dAcEsm_c::fn_187_42C0() {
             sValueFromPlayer = 0;
         }
 
-        if (mHealth != 0 && !fn_187_6B10() && !ChkCrossPlayer(0.f) && !mStateMgr.isState(StateID_Absorption) &&
+        if (mHealth != 0 && !fn_187_6B10() && !lineCrossPlayer(0.f) && !mStateMgr.isState(StateID_Absorption) &&
             !mStateMgr.isState(StateID_BirthJump)) {
             mStateMgr.changeState(StateID_Absorption);
             return true;

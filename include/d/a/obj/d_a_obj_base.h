@@ -59,9 +59,9 @@ public:
     /* 0x0FC */ f32 mSinkDepth;
     /* 0x100 */ f32 mDeepSinkTarget;
     /* 0x104 */ f32 mShallowSinkTarget;
-    /* 0x104 */ f32 mDeepSinkRate;
-    /* 0x104 */ f32 mShallowSinkRate;
-    /* 0x104 */ f32 mDefaultSinkRate;
+    /* 0x108 */ f32 mDeepSinkRate;
+    /* 0x10C */ f32 mShallowSinkRate;
+    /* 0x110 */ f32 mDefaultSinkRate;
     /* 0x114 */ u16 mTargetFiTextID;
     /* 0x116 */ u8 mTargetFiRelated;
     /* 0x118 */ mVec3_c mOldPosition;
