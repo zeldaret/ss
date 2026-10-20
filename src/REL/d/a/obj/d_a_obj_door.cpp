@@ -307,7 +307,7 @@ int dAcOdoor_c::actorCreate() {
         if (mSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag)) {
             mLock.link(
                 static_cast<dAcOLock_c *>(
-                    create(this, fProfile::OBJ_SHUTTER_LOCK, 0, nullptr, nullptr, nullptr, 0, 0x3F)
+                    createChildAttached(fProfile::OBJ_SHUTTER_LOCK, 0, nullptr, nullptr, nullptr, 0, 0x3F)
                 )
             );
         }
@@ -1268,16 +1268,16 @@ int dAcOdoor_c::actorExecute() {
 int dAcOdoor_c::draw() {
     if (isTimeEffected()) {
         if (!mTimeBits.getPast()) {
-            drawModelType1(&mMdl1);
+            drawModel(&mMdl1);
         }
         if (!mTimeBits.getPresent()) {
-            drawModelType1(&mMdl0);
+            drawModel(&mMdl0);
         }
     } else {
         if (getType() == DOOR_TEMPLE_MAIN) {
-            drawModelType1(&mAnmChr.getModel());
+            drawModel(&mAnmChr.getModel());
         } else {
-            drawModelType1(&mMdl0);
+            drawModel(&mMdl0);
         }
     }
     return SUCCEEDED;

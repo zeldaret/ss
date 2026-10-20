@@ -60,7 +60,7 @@ int dAcOlavaF200_c::actorExecute() {
 
 int dAcOlavaF200_c::draw() {
     for (int i = 0; i < 2; i++) {
-        drawModelType1(&mModels[i]);
+        drawModel(&mModels[i]);
     }
     return SUCCEEDED;
 }

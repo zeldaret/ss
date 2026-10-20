@@ -91,7 +91,7 @@ int dAcOutajimaIsland_c::actorExecute() {
 }
 
 int dAcOutajimaIsland_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

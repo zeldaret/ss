@@ -47,7 +47,7 @@ public:
     virtual void unkVirtFunc_0x6C() override;
     virtual void doInteraction(s32) override;
 
-    virtual void *getObjectListEntry() override;
+    virtual fLiNdBa_c *getObjectListEntry() override;
 
     STATE_FUNC_DECLARE(dAcTbox_c, DugOut);
     STATE_FUNC_DECLARE(dAcTbox_c, WaitAppear);

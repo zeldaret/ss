@@ -284,8 +284,8 @@ void dItemMdlPut_c::setLocalMtx(const mMtx_c &mtx) {
 
 void dItemMdlPut_c::draw() {
     switch (mDrawMode) {
-        case DrawMode_Put: mpItem->fn_8002ECD0(&mPutMdl, 7); break;
-        case DrawMode_Get: mpItem->fn_8002ECD0(&mGetMdl, 6); break;
+        case DrawMode_Put: mpItem->drawModel(&mPutMdl, 7); break;
+        case DrawMode_Get: mpItem->drawModel(&mGetMdl, 6); break;
     }
 }
 
@@ -560,9 +560,9 @@ void dItemMdlShield_c::setLocalMtx(const mMtx_c &mtx) {
 
 void dItemMdlShield_c::draw() {
     if (mDrawMode == DrawMode_Get) {
-        mpItem->fn_8002ECD0(&mMdl, 6);
+        mpItem->drawModel(&mMdl, 6);
     } else {
-        mpItem->fn_8002ECD0(&mMdl, 7);
+        mpItem->drawModel(&mMdl, 7);
     }
 }
 
@@ -828,9 +828,9 @@ void dItemMdlBottle_c::draw() {
     }
 
     if (mDrawMode == DrawMode_Get) {
-        mpItem->fn_8002ECD0(&mMdl.getModel(), 6);
+        mpItem->drawModel(&mMdl.getModel(), 6);
     } else {
-        mpItem->fn_8002ECD0(&mMdl.getModel(), 7);
+        mpItem->drawModel(&mMdl.getModel(), 7);
     }
 }
 
@@ -967,11 +967,11 @@ void dItemMdlTear_c::draw() {
     switch (mDrawMode) {
         case DrawMode_Put:
             mPutAnmTexSrt.play();
-            mpItem->fn_8002ECD0(&mPutMdl, 7);
+            mpItem->drawModel(&mPutMdl, 7);
             break;
         case DrawMode_Get:
             mGetAnmTexSrt.play();
-            mpItem->fn_8002ECD0(&mGetMdl, 6);
+            mpItem->drawModel(&mGetMdl, 6);
             break;
     }
 }
@@ -1038,8 +1038,8 @@ void dItemMdlFirefly_c::setLocalMtx(const mMtx_c &mtx) {
 
 void dItemMdlFirefly_c::draw() {
     switch (mDrawMode) {
-        case DrawMode_Put: mpItem->fn_8002ECD0(&mMdl, 7); break;
-        case DrawMode_Get: mpItem->fn_8002ECD0(&mMdl, 6); break;
+        case DrawMode_Put: mpItem->drawModel(&mMdl, 7); break;
+        case DrawMode_Get: mpItem->drawModel(&mMdl, 6); break;
     }
     mAnmMatClr.play();
 }
@@ -1314,8 +1314,8 @@ void dItemMdlPotion_c::draw() {
     mAnmChr.play();
     mAnmTexSrt.play();
     switch (mDrawMode) {
-        case DrawMode_Put: mpItem->fn_8002ECD0(&mMdl, 7); break;
-        case DrawMode_Get: mpItem->fn_8002ECD0(&mMdl, 6); break;
+        case DrawMode_Put: mpItem->drawModel(&mMdl, 7); break;
+        case DrawMode_Get: mpItem->drawModel(&mMdl, 6); break;
     }
 }
 

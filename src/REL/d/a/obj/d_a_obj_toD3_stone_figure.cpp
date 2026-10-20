@@ -91,7 +91,7 @@ int dAcOtoD3StoneFigure_c::actorExecute() {
 
 int dAcOtoD3StoneFigure_c::draw() {
     if (dScGame_c::currentSpawnInfo.layer != 0x12) {
-        drawModelType1(&mMdl);
+        drawModel(&mMdl);
     }
     return SUCCEEDED;
 }

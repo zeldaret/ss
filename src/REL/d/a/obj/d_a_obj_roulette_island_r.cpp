@@ -104,8 +104,8 @@ int dAcOrouletteIslandR_c::actorExecute() {
 }
 
 int dAcOrouletteIslandR_c::draw() {
-    drawModelType1(&mMdl);
-    drawModelType1(&mMdl_s);
+    drawModel(&mMdl);
+    drawModel(&mMdl_s);
     return SUCCEEDED;
 }
 void dAcOrouletteIslandR_c::initializeState_Wait() {

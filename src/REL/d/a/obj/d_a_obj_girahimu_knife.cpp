@@ -69,10 +69,10 @@ void dAcObjGirahimuKnife_c::init() {
     sSomething2 = 1;
     field_0x793 = true;
     field_0x750.set(0.0f, 0.0f, 0.0f);
-    mAcceleration = 0.0f;
+    mGravity = 0.0f;
     field_0x792 = true;
     mStts.SetRank(12);
-    mMaxSpeed = -6000.0f;
+    mMaxFallSpeed = -6000.0f;
     mBoundingBox.Set(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
     field_0x75C.set(1.2f, 0.0f, 1.2f);
     field_0x774 = 20.0f;
@@ -102,7 +102,7 @@ int dAcObjGirahimuKnife_c::actorExecute() {
 
     executeState();
 
-    mVelocity.y -= mAcceleration;
+    mVelocity.y -= mGravity;
     mPosition += mVelocity;
 
     mSph1.SetAtVec(mVelocity);
@@ -131,8 +131,8 @@ int dAcObjGirahimuKnife_c::actorExecute() {
 int dAcObjGirahimuKnife_c::draw() {
     static mSphere_c sph(mVec3_c(0.0f, 60.0f, 0.0f), 100.0f);
     f32 f = mPosition.y;
-    drawModelType1(&mMdl);
-    fn_8002edb0(mShadow, mMdl, &sph, -1, -1, f);
+    drawModel(&mMdl);
+    drawShadow(mShadow, mMdl, sph, -1, -1, f);
     return SUCCEEDED;
 }
 
@@ -176,7 +176,7 @@ void dAcObjGirahimuKnife_c::initializeState_Attack() {
     mSph1.ClrCoSet();
     mSph0.ClrCoSet();
 
-    mAcceleration = 0.0f;
+    mGravity = 0.0f;
     field_0x78C = true;
 
     if (mState != 6) {
@@ -235,7 +235,7 @@ void dAcObjGirahimuKnife_c::initializeState_AttackEnd() {
 }
 void dAcObjGirahimuKnife_c::executeState_AttackEnd() {
     mVelocity.set(0.0f, 0.0f, 0.0f);
-    mAcceleration = 0.0f;
+    mGravity = 0.0f;
     if (field_0x6D0 <= 0 && sLib::chase(&field_0x75C.y, 0.0f, 0.1f)) {
         deleteRequest();
     }
@@ -244,7 +244,7 @@ void dAcObjGirahimuKnife_c::finalizeState_AttackEnd() {}
 
 void dAcObjGirahimuKnife_c::initializeState_Return() {
     mSph1.SetAt_0xE(0);
-    mAcceleration = 1.0f;
+    mGravity = 1.0f;
 
     mVec3_c v0 = field_0x6D8;
     mVec3_c v1 = mPosition - field_0x6D8;
@@ -278,7 +278,7 @@ void dAcObjGirahimuKnife_c::executeState_Return() {
 void dAcObjGirahimuKnife_c::finalizeState_Return() {}
 
 void dAcObjGirahimuKnife_c::initializeState_Hit() {
-    mAcceleration = 1.0f;
+    mGravity = 1.0f;
     mSph1.ClrAtSet();
     if (mState == 8) {
         mSph1.ClrAtSet();

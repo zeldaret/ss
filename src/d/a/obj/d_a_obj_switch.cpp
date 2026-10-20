@@ -207,7 +207,7 @@ int dAcOsw_c::actorExecuteInEvent() {
 }
 
 int dAcOsw_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
 
     return SUCCEEDED;
 }

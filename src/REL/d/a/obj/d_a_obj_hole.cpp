@@ -54,7 +54,7 @@ int dAcOhole_c::actorExecute() {
 }
 
 int dAcOhole_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

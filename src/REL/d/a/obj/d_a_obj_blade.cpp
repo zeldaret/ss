@@ -37,6 +37,6 @@ int dAcOblade_c::actorExecute() {
 }
 
 int dAcOblade_c::draw() {
-    drawModelType1(&mMdl.getModel());
+    drawModel(&mMdl.getModel());
     return SUCCEEDED;
 }

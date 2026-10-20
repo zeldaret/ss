@@ -71,8 +71,8 @@ int dAcOMoveElec_c::create() {
     mStts.SetRank(13);
     mCc.Set(sSrcUnk);
     mCc.SetStts(mStts);
-    mAcceleration = 0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = -40.0f;
     mCc.SetField_0xB4(1);
     mEffect.init(this);
     mMdl.setAnm("D301DamageWall", m3d::PLAY_MODE_4);
@@ -125,7 +125,7 @@ int dAcOMoveElec_c::actorExecute() {
 }
 
 int dAcOMoveElec_c::draw() {
-    drawModelType1(&mMdl.getModel());
+    drawModel(&mMdl.getModel());
     return SUCCEEDED;
 }
 

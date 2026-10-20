@@ -121,9 +121,9 @@ void dEnemySwordMdl_c::calc(const mMtx_c &mtx, const mVec3_c &v1, bool mass) {
 
 bool dEnemySwordMdl_c::entry(dAcObjBase_c *obj, dShadowCircle_c *shadow, mSphere_c *sph) {
     if (dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL) {
-        obj->fn_8002ECD0(&mMdl, 7);
+        obj->drawModel(&mMdl, 7);
     } else {
-        obj->drawModelType1(&mMdl);
+        obj->drawModel(&mMdl);
     }
     mProc.entry();
     if (shadow != nullptr && sph != nullptr) {

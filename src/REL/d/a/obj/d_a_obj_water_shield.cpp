@@ -47,7 +47,7 @@ int dAcOwaterShield_c::actorExecute() {
 }
 
 int dAcOwaterShield_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

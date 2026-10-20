@@ -757,7 +757,7 @@ void dAcGirahimu2_c::initializeState_UpAttack() {
     mCallback.field_0x04E = false;
     mCallback.field_0x088 = false;
     mSubstateTimer = 2;
-    mAcceleration = -8.0f;
+    mGravity = -8.0f;
     mSpeed = 0.0f;
     mSpeedTarget = 0.0f;
     mMdlSwordA.fn_8006B7A0(0x210000);
@@ -815,7 +815,7 @@ void dAcGirahimu2_c::executeState_UpAttack() {
 void dAcGirahimu2_c::finalizeState_UpAttack() {
     mMdlSwordA.disable();
     mMdlSwordB.disable();
-    mAcceleration = -6.0f;
+    mGravity = -6.0f;
     mSubstate = 0;
     mSpeed = 0.0f;
     mSpeedTarget = 0.0f;
@@ -1953,7 +1953,7 @@ int dAcGirahimu2_c::actorExecute() {
     if (mbOnGround) {
         calcVelocity();
     } else {
-        mVelocity.y += mAcceleration;
+        mVelocity.y += mGravity;
     }
 
     mPosition += mTeleportDodgeAmount;

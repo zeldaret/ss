@@ -930,12 +930,12 @@ void dAcOivyRope_c::fn_256_D850() {
                 }
                 mMtx_c m;
                 m.transS(field_0xF68);
-                drawShadow(mShadow, nullptr, m, &sph, -1, idk, -1, -1, -1, val);
+                drawShadow(mShadow, nullptr, m, sph, -1, idk, -1, -1, -1, val);
             }
         } else {
             mMtx_c m;
             m.transS(fn_256_D730(mSegmentCount - 1));
-            drawShadow(mShadow, nullptr, m, &sph, -1, -1, -1, -1, -1, 175.f);
+            drawShadow(mShadow, nullptr, m, sph, -1, -1, -1, -1, -1, 175.f);
         }
     }
 }

@@ -87,7 +87,7 @@ int dAcEhb_leaf_c::actorExecute() {
 
 int dAcEhb_leaf_c::draw() {
     if (!isHidden()) {
-        drawModelType1(&mModel.getModel());
+        drawModel(&mModel.getModel());
     }
 
     return SUCCEEDED;

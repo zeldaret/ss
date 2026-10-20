@@ -86,8 +86,8 @@ int dAcOSeatSword_c::create() {
         mPedestalMdl_s.setPriorityDraw(0x22, 0x9);
     }
 
-    mAcceleration = 0.f;
-    mMaxSpeed = -40.f;
+    mGravity = 0.f;
+    mMaxFallSpeed = -40.f;
 
     if (mSubtype == 1) {
         field_0x7E8 = l_inGroundRot;
@@ -179,12 +179,12 @@ void dAcOSeatSword_c::registerInEvent() {
 
 int dAcOSeatSword_c::draw() {
     if (!mStateMgr.isState(StateID_Get)) {
-        drawModelType1(&mSwordMdl);
+        drawModel(&mSwordMdl);
     }
 
-    drawModelType1(&mPedestalMdl);
+    drawModel(&mPedestalMdl);
     if (mSubtype == 1) {
-        drawModelType1(&mPedestalMdl_s);
+        drawModel(&mPedestalMdl_s);
     }
 
     return SUCCEEDED;

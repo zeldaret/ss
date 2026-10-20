@@ -119,7 +119,7 @@ int dAcOstreamLava_c::actorExecute() {
 
 int dAcOstreamLava_c::draw() {
     if (!mHideActor) {
-        drawModelType1(&mModel);
+        drawModel(&mModel);
     }
     return SUCCEEDED;
 }

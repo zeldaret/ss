@@ -330,7 +330,7 @@ void dAcEKs_c::fn_155_A60() {
                     }
                     mSpeed = 65.f;
                     mAcchCir.SetWall(20.f, 60.f);
-                    mAcceleration = -6.f;
+                    mGravity = -6.f;
                     field_0xD5E = 5;
                     mAcch.SetGroundUpY(0.f);
 
@@ -361,7 +361,7 @@ void dAcEKs_c::fn_155_A60() {
                         field_0xDA9 = 1;
                     }
                     if (mHealth == 0) {
-                        mAcceleration = -4.f;
+                        mGravity = -4.f;
                         field_0xD92 = field_0xD98 * 0.2f;
                         field_0xD94 = field_0xD96 * 0.1f;
                     }
@@ -374,7 +374,7 @@ void dAcEKs_c::fn_155_A60() {
                     if (mHealth == 0) {
                         mSpeed = 65.f;
                         mAcchCir.SetWall(20, 60);
-                        mAcceleration = -6.f;
+                        mGravity = -6.f;
                         field_0xD5E = 5;
                         mAcch.SetGroundUpY(0);
                         unsetActorProperty(AC_PROP_0x1);
@@ -1342,8 +1342,8 @@ int dAcEKs_c::actorCreate() {
     mSph.Set(sSrcSph);
     mSph.SetStts(mStts);
 
-    mAcceleration = 0.f;
-    mMaxSpeed = -40.f;
+    mGravity = 0.f;
+    mMaxFallSpeed = -40.f;
 
     setStartingPosition(mPosition);
     field_0xBE0 = mPosition;
@@ -1747,7 +1747,7 @@ int dAcEKs_c::draw() {
         }
     }
 
-    drawModelType1(&mMdl.getModel());
+    drawModel(&mMdl.getModel());
 
     if (!isState(StateID_Wait)) {
         field_0xD18 = mPosition.y - mAcch.GetGroundH();
@@ -1757,7 +1757,7 @@ int dAcEKs_c::draw() {
             50.f + dAcEKs_HIO_c::sInstance.getZero1()
         );
         field_0xAE4.transS(mPosition);
-        drawShadow(mShadow, nullptr, field_0xAE4, &sph, -1, -1, -1, -1, -1, field_0xD18);
+        drawShadow(mShadow, nullptr, field_0xAE4, sph, -1, -1, -1, -1, -1, field_0xD18);
     }
 
     return SUCCEEDED;
@@ -2635,7 +2635,7 @@ void dAcEKs_c::executeState_Damage() {
         }
 
         if (mAcch.ChkGroundLanding() && field_0xDB5 != 0) {
-            dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 1, field_0x1B0);
+            dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 1, field_0x1B0);
             field_0xDB5 = 0;
         }
 
@@ -2688,7 +2688,7 @@ void dAcEKs_c::initializeState_Stun() {
     field_0xDA5 = 0;
     mAngle.y = cLib::targetAngleY(dAcPy_c::GetLink()->mPosition, mPosition);
     mSpeed = 30.f;
-    mAcceleration = -2.5f;
+    mGravity = -2.5f;
     field_0xD5C = 5;
     mStunSoundTimer = cM::rndInt(20) + 20;
     mAcch.SetGroundUpY(0);
@@ -2729,17 +2729,13 @@ void dAcEKs_c::executeState_Stun() {
             }
             if (mAcch.ChkGndHit()) {
                 if (field_0xDB5 != 0) {
-                    dJEffManager_c::spawnGroundEffect(
-                        mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 1, field_0x1B0
-                    );
+                    dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 1, field_0x1B0);
                     field_0xDB5 = 0;
                 }
                 field_0xD5C = 0;
                 field_0xDA9 = 1;
                 if (dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd()) == POLY_ATTR_LAVA) {
-                    dJEffManager_c::spawnGroundEffect(
-                        mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 1, field_0x1B0
-                    );
+                    dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 1, field_0x1B0);
                     resetInteractionFlags(0x1);
                     startSound(SE_EKs_V_DEATH2);
                     unsetActorProperty(AC_PROP_0x1);
@@ -2822,7 +2818,7 @@ void dAcEKs_c::executeState_Stun() {
 }
 void dAcEKs_c::finalizeState_Stun() {
     field_0xC10.y = 0.f;
-    mAcceleration = 0.f;
+    mGravity = 0.f;
     mSph.OnCoSet();
     resetInteractionFlags(0x1);
     if (mType == EKS_FIRE) {
@@ -2853,7 +2849,7 @@ void dAcEKs_c::initializeState_WindBlow() {
         field_0xD20 = 0.f;
         mLightInfluence.SetScale(0);
     }
-    mAcceleration = -0.5f;
+    mGravity = -0.5f;
     mAcch.ClrRoofNone();
     mAcchCir.SetWall(20, 60);
     mAcch.SetRoofCrrHeight(55);
@@ -2869,7 +2865,7 @@ void dAcEKs_c::executeState_WindBlow() {
     }
 
     if (mAcch.ChkGroundLanding() && dBgS::GetInstance()->GetSpecialCode(mAcch.GetGnd()) == POLY_ATTR_LAVA) {
-        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 1, field_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 1, field_0x1B0);
         startSound(SE_EKs_V_DEATH2);
         unsetActorProperty(AC_PROP_0x1);
         kill(false);
@@ -2945,7 +2941,7 @@ void dAcEKs_c::executeState_WindBlow() {
 }
 void dAcEKs_c::finalizeState_WindBlow() {
     mSpeed = 0.f;
-    mAcceleration = 0.f;
+    mGravity = 0.f;
     mVelocity.y = 0.f;
     mRotation.x = 0;
     mAngle.set(mRotation);

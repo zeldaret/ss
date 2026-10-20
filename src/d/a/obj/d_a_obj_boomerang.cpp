@@ -565,11 +565,11 @@ int dAcBoomerang_c::draw() {
     if (mStateMgr.isState(StateID_EventReturnWait) || dAcPy_c::GetLink2()->checkModelUpdateFlag(0x10000 | 0x80)) {
         return SUCCEEDED;
     }
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     if (!mStateMgr.isState(StateID_Wait)) {
         mProc.entry();
         static mSphere_c sph(mVec3_c::Zero, 50.f);
-        drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
+        drawShadow(mShadow, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
     }
     return SUCCEEDED;
 }

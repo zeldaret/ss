@@ -41,8 +41,8 @@ bool dAcOOctGrass_c::createHeap() {
 
 int dAcOOctGrass_c::create() {
     CREATE_ALLOCATOR(dAcOOctGrass_c);
-    mAcceleration = 0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = -40.0f;
     if ((mParams & 0xF) != 0) {
         mMdl.setPriorityDraw(0x1C, 9);
     }
@@ -66,7 +66,7 @@ int dAcOOctGrass_c::actorExecute() {
 }
 
 int dAcOOctGrass_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

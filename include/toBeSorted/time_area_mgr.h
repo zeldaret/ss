@@ -73,6 +73,7 @@ public:
     f32 fn_800B9CE0(const mVec3_c &position);
 
     static bool fn_800BBD40();
+    static bool fn_800BBE00();
 
     bool isInLanayruMiningFacility() const {
         return mIsInLanayruMiningFacility;

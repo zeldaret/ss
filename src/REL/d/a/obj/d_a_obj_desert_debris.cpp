@@ -55,7 +55,7 @@ int dAcOdesertDebris_c::actorExecute() {
 }
 
 int dAcOdesertDebris_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

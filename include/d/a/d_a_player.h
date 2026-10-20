@@ -9,6 +9,8 @@
 #include "d/d_player_mdl.h"
 #include "m/m_angle.h"
 #include "m/m_color.h"
+#include "m/m_mtx.h"
+#include "m/m_sphere.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
@@ -121,6 +123,9 @@ public:
     static bool isInMinigameHarpPlaying();
     static bool isInMinigameRollerCoaster();
     static bool isInMinigameSprialChargeTutorial();
+
+    bool updateShadow(const m3d::smdl_c &mdl);
+    bool updateShadow(const mSphere_c &sph, const mMtx_c &mtx);
 
 public:
     f32 getField_0x4564() const {

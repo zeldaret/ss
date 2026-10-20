@@ -165,7 +165,7 @@ public:
     create(int count, u8 unk1, int unk2, u16 texBufferSize, u32 drawOpaPriority, nw4r::g3d::ResMdl mdl, u32 heapSize);
     void reset();
 
-    bool addCircle(mShadowCircle_c *circle, u32 priority, u32 unk);
+    bool addCircle(mShadowCircle_c *circle, u32 priority, bool unk);
     void removeCircle(mShadowCircle_c *circle);
 
     void drawAllShadows();

@@ -46,7 +46,7 @@ int dAcOsunLight_c::actorExecute() {
 
 int dAcOsunLight_c::draw() {
     if (isDay()) {
-        drawModelType1(&mModel);
+        drawModel(&mModel);
     }
     return SUCCEEDED;
 }

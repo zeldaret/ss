@@ -78,7 +78,7 @@ int dAcOutajima_c::actorExecute() {
 
 int dAcOutajima_c::draw() {
     for (int i = 0; i < 2; i++) {
-        drawModelType1(&mMdls[i]);
+        drawModel(&mMdls[i]);
     }
     return SUCCEEDED;
 }

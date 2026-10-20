@@ -60,9 +60,9 @@ int dAcOpaint_c::actorExecute() {
 }
 
 int dAcOpaint_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     static mSphere_c sph(mVec3_c(0.0f, 0.0f, 0.0f), 100.0f);
-    fn_8002edb0(mShadow, mMdl, &sph, -1, -1, 0.0f);
+    drawShadow(mShadow, mMdl, sph, -1, -1, 0.0f);
     return SUCCEEDED;
 }
 

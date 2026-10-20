@@ -98,6 +98,6 @@ bool dBgW_Base::ChkReady() const {
     return true;
 }
 
-void dBgW_Base::Set0x2F(u8 val) {
+void dBgW_Base::Set0x2F(s32 val) {
     field_0x2F = val;
 }

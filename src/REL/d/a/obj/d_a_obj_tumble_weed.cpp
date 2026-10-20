@@ -64,8 +64,8 @@ int dAcOTumbleWeed_c::actorCreate() {
     mDowsingTarget.initialize(DowsingTarget::SLOT_TREASURE, 0, nullptr, 0.0f);
     mDowsingTarget.doRegister();
 
-    mAcceleration = -2.f;
-    mMaxSpeed = -40.f;
+    mGravity = -2.f;
+    mMaxFallSpeed = -40.f;
 
     field_0x974 = 0.0f;
     field_0x98B = true;
@@ -154,11 +154,11 @@ int dAcOTumbleWeed_c::actorExecute() {
 }
 
 int dAcOTumbleWeed_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
 
     static mSphere_c sph(mVec3_c(0.f, 30.f, 0.f), 50.f);
     if (0.f < mScale.x) {
-        drawShadow(mShdw, nullptr, mShadowMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
+        drawShadow(mShdw, nullptr, mShadowMtx, sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     }
 
     return SUCCEEDED;

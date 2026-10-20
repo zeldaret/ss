@@ -270,8 +270,8 @@ int dAcESkytail_c::create() {
     for (int i = 0; i < (s32)ARRAY_LENGTH(mCc); ++i) {
         mCc[i].SetC(mPosition);
     }
-    mAcceleration = -0.0f;
-    mMaxSpeed = -80.0f;
+    mGravity = -0.0f;
+    mMaxFallSpeed = -80.0f;
     mHealth = 4;
     mSpeed = 70.0f;
     field_0x13B6 = 0;
@@ -524,9 +524,9 @@ int dAcESkytail_c::actorExecute() {
 }
 
 int dAcESkytail_c::draw() {
-    drawModelType1(&mBodyMdl.getModel());
+    drawModel(&mBodyMdl.getModel());
     for (int i = 0; i < (s32)ARRAY_LENGTH(mAntennaMdl); ++i) {
-        drawModelType1(&mAntennaMdl[i].getModel());
+        drawModel(&mAntennaMdl[i].getModel());
     }
     return SUCCEEDED;
 }

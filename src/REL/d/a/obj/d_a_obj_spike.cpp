@@ -83,7 +83,7 @@ int dAcOspike_c::actorExecute() {
 }
 
 int dAcOspike_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

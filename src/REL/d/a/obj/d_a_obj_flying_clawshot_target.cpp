@@ -162,7 +162,7 @@ int dAcOFlyingClawshotTarget_c::actorExecute() {
 }
 
 int dAcOFlyingClawshotTarget_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
 
     return SUCCEEDED;
 }

@@ -210,8 +210,8 @@ int dAcBomb_c::create() {
 
     mBoundingBox.Set(sHIO.getBBoxMin(), sHIO.getBBoxMax());
 
-    mAcceleration = dAcPy_c::getBombAcceleration();
-    mMaxSpeed = dAcPy_c::getBombMaxSpeed();
+    mGravity = dAcPy_c::getBombAcceleration();
+    mMaxFallSpeed = dAcPy_c::getBombMaxSpeed();
 
     mFuseTime = dAcPy_c::getBombExplodeTimer();
 
@@ -234,8 +234,8 @@ int dAcBomb_c::create() {
             setFlag(dAcBomb_c::FLAG_PLAYER_MAKE);
             if (checkWaterIn()) {
                 setFlag(dAcBomb_c::FLAG_UNDERWATER);
-                mAcceleration = dAcPy_c::getBombAcceleration_1();
-                mMaxSpeed = dAcPy_c::getBombMaxSpeed_1();
+                mGravity = dAcPy_c::getBombAcceleration_1();
+                mMaxFallSpeed = dAcPy_c::getBombMaxSpeed_1();
             }
             changeState(StateID_Carry);
         } break;
@@ -517,7 +517,7 @@ void dAcBomb_c::initializeState_Explode() {
 
     mSpeed = 0.0f;
     mVelocity = mVec3_c::Zero;
-    mAcceleration = 0.0f;
+    mGravity = 0.0f;
 
     mSph.ClrTgSet();
     mSph.ClrCoSet();
@@ -681,8 +681,8 @@ void dAcBomb_c::executeState_Wait() {
         gndAngle = 0;
     }
 
-    f32 prevAccel = mAcceleration;
-    mVelocity.y = nw4r::ut::Max(mVelocity.y + mAcceleration, mMaxSpeed);
+    f32 prevAccel = mGravity;
+    mVelocity.y = nw4r::ut::Max(mVelocity.y + mGravity, mMaxFallSpeed);
     bombVelocity.y = mVelocity.y;
     mPosition += bombVelocity;
     mPosition += mStts.GetCcMove();
@@ -693,7 +693,7 @@ void dAcBomb_c::executeState_Wait() {
             mVelocity.y = 0.0f;
         }
     }
-    mAcceleration = prevAccel;
+    mGravity = prevAccel;
     f32 prevVelocityY = mVelocity.y;
     s16 a0 = 0;
     s16 a1 = 0;
@@ -711,7 +711,7 @@ void dAcBomb_c::executeState_Wait() {
     f32 sinkTarget = 0.0f;
     f32 sinkRate = 4.0f;
     mVec3_c force = mVec3_c::Zero;
-    f32 sinkValue = mYOffset;
+    f32 sinkValue = mSinkDepth;
     if (mAcch.ChkGndHit() && !mLinkage.checkState(dLinkage_c::STATE_ACTIVE)) {
         s32 attr = dBgS::GetInstance()->GetSpecialCode(mAcch.mGnd);
         if (attr == POLY_ATTR_CURSED_WATER) {
@@ -722,8 +722,8 @@ void dAcBomb_c::executeState_Wait() {
             }
             sinkRate = nw4r::math::FAbs(prevVelocityY);
             mVelocity.y = prevVelocityY;
-            mAcceleration = dAcPy_c::getBombAcceleration_1();
-            mMaxSpeed = dAcPy_c::getBombMaxSpeed_1();
+            mGravity = dAcPy_c::getBombAcceleration_1();
+            mMaxFallSpeed = dAcPy_c::getBombMaxSpeed_1();
         } else if (attr == POLY_ATTR_SAND_DEEP_INSTANT || attr == POLY_ATTR_SAND_DEEP_SLOW ||
                    attr == POLY_ATTR_SAND_MED) {
             sinkTarget = -10.0f;
@@ -735,7 +735,7 @@ void dAcBomb_c::executeState_Wait() {
     }
     cLib::addCalcPosXZ(&mStreamForce, force, 0.5f, 10.0f, 3.0f);
     sLib::chase(&sinkValue, sinkTarget, sinkRate);
-    mYOffset = sinkValue;
+    mSinkDepth = sinkValue;
     if (sinkValue <= -60.0f) {
         setFlag(dAcBomb_c::FLAG_DELETE_BOMB);
     }
@@ -784,7 +784,7 @@ void dAcBomb_c::executeState_Wait() {
         if (prevVelocityY < -5.0f) {
             startSoundWithFloatParam(SE_BM_BOUND, prevVelocityY * -1.0f);
             if (dBgS::GetInstance()->GetPolyAtt0(mAcch.GetGnd()) != POLY_ATT_0_LAVA) {
-                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 0.8f, field_0x1B0);
+                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 0.8f, field_0x1B0);
             }
         }
 
@@ -994,8 +994,8 @@ void dAcBomb_c::setBombColor() {
             if ( 
             // Is controlled - and by player
             // And Controlling Actor (player) as objprop 0x200 set
-               (mLinkage.checkState(dLinkage_c::STATE_ACTIVE) && static_cast<dAcObjBase_c *>(mLinkage.getControllingActor())->isPlayer()) 
-               && ((pObj = static_cast<dAcObjBase_c *>(mLinkage.getControllingActor())) && pObj->checkObjectProperty(OBJ_PROP_0x200)) 
+               (mLinkage.checkState(dLinkage_c::STATE_ACTIVE) &&mLinkage.getControllingActor()->isPlayer()) 
+               && ((pObj = mLinkage.getControllingActor()) && pObj->checkObjectProperty(OBJ_PROP_0x200)) 
             // OOOOR this bomb has it set.
                || checkObjectProperty(OBJ_PROP_0x200)
             ) {
@@ -1156,8 +1156,8 @@ int dAcBomb_c::actorExecute() {
                 mSpeed *= 0.5f;
                 mVelocity.y *= 0.5f;
 
-                mAcceleration = dAcPy_c::getBombAcceleration_1();
-                mMaxSpeed = dAcPy_c::getBombMaxSpeed_1();
+                mGravity = dAcPy_c::getBombAcceleration_1();
+                mMaxFallSpeed = dAcPy_c::getBombMaxSpeed_1();
             }
 
             if (checkFlag(dAcBomb_c::FLAG_DELETE_BOMB)) {
@@ -1167,8 +1167,8 @@ int dAcBomb_c::actorExecute() {
             }
         } else {
             unsetFlag(dAcBomb_c::FLAG_UNDERWATER);
-            mAcceleration = dAcPy_c::getBombAcceleration();
-            mMaxSpeed = dAcPy_c::getBombMaxSpeed();
+            mGravity = dAcPy_c::getBombAcceleration();
+            mMaxFallSpeed = dAcPy_c::getBombMaxSpeed();
         }
 
         if (mSpeed > 1.0f || f > 1.0f) {
@@ -1250,12 +1250,12 @@ int dAcBomb_c::draw() {
         return SUCCEEDED;
     }
 
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
 
     mSphere_c sph(mVec3_c(0.0f, mScale.x * sHIO.getBombScale(), 0.0f), mScale.x * sHIO.getBombScale());
 
     if (!isState(StateID_FlowerWait)) {
-        drawShadow(mShdw, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
+        drawShadow(mShdw, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
     }
     return SUCCEEDED;
 }

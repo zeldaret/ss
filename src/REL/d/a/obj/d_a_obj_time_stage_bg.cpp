@@ -53,8 +53,8 @@ int dAcOTimeStageBg_c::actorCreate() {
     }
     CREATE_ALLOCATOR(dAcOTimeStageBg_c);
 
-    mAcceleration = 0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = -40.0f;
     updateMatrix();
     mSceneCallback.attach(mMdl1);
     mMdl1.setLocalMtx(mWorldMtx);
@@ -103,12 +103,12 @@ int dAcOTimeStageBg_c::actorExecute() {
 int dAcOTimeStageBg_c::draw() {
     if (field_0x3F8 > 0.0f) {
         if (!secondMdl() || field_0x3F8 != 255.0f) {
-            drawModelType1(&mMdl1);
+            drawModel(&mMdl1);
         }
     }
 
     if (secondMdl() && field_0x3F8 == 255.0f) {
-        drawModelType1(&mMdl2);
+        drawModel(&mMdl2);
     }
     return SUCCEEDED;
 }

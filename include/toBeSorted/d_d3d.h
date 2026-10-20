@@ -3,11 +3,13 @@
 
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/d_light_env.h"
 #include "egg/egg_types.h"
 #include "m/m3d/m_anmmdl.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m3d/m_mdl.h"
 #include "m/m3d/m_proc.h"
+#include "m/m3d/m_smdl.h"
 #include "m/m_color.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
@@ -28,6 +30,8 @@ void createLightTextures();
 void fn_80016860();
 void clearList();
 void fn_80017500();
+
+void setLight(m3d::smdl_c *pMdl, int lightSetIdx, ActorLighting *pLighting);
 
 class AnmMdlWrapper : public m3d::mdlAnmChr {
 public:
@@ -207,7 +211,7 @@ public:
         doDraw();
     }
 
-    void fn_800192F0(u8, const mMtx_c&, u8);
+    void fn_800192F0(u8, const mMtx_c &, u8);
 
 private:
     void doRemove();

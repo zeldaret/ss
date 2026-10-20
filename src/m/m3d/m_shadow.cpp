@@ -123,7 +123,7 @@ void mShadow_c::reset() {
     swapHeaps();
 }
 
-bool mShadow_c::addCircle(mShadowCircle_c *circle, u32 priority, u32 isMdl) {
+bool mShadow_c::addCircle(mShadowCircle_c *circle, u32 priority, bool isMdl) {
     if (circle->mpChild != nullptr) {
         // Already linked, OK
         return true;
@@ -189,7 +189,7 @@ bool mShadow_c::drawMdl(
     mShadowCircle_c *circle, u32 priority, scnLeaf_c &mdl, const mSphere_c &sph, mVec3_c &pos, mColor color, u32 param9,
     f32 dist
 ) {
-    if (!addCircle(circle, priority, 1)) {
+    if (!addCircle(circle, priority, true)) {
         return false;
     }
 
@@ -234,7 +234,7 @@ bool mShadow_c::drawTexObj(
     mShadowCircle_c *circle, u32 priority, const GXTexObj *texObj, const mMtx_c &mtx, const mSphere_c &sph,
     mVec3_c &pos, mColor color, u32 param9, f32 dist
 ) {
-    if (!addCircle(circle, priority, 0)) {
+    if (!addCircle(circle, priority, false)) {
         return false;
     }
 

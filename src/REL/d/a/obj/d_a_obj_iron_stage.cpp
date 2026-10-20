@@ -36,6 +36,6 @@ int dAcOironStage_c::actorExecute() {
 }
 
 int dAcOironStage_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }

@@ -22,8 +22,8 @@ bool dAcOPoolCock_c::createHeap() {
 int dAcOPoolCock_c::actorCreate() {
     CREATE_ALLOCATOR(dAcOPoolCock_c);
 
-    mAcceleration = -0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = -0.0f;
+    mMaxFallSpeed = -40.0f;
     mOpenSceneflag = mParams & 0xFF;
     mOpenDirection = mVec3_c::Ez;
     mOpenDirection.rotY(mRotation.y);
@@ -76,8 +76,8 @@ int dAcOPoolCock_c::actorExecute() {
 
 int dAcOPoolCock_c::draw() {
     if (mOpenProgress < 400.0f) {
-        drawModelType1(&mModels[0]);
-        drawModelType1(&mModels[1]);
+        drawModel(&mModels[0]);
+        drawModel(&mModels[1]);
     }
     return SUCCEEDED;
 }

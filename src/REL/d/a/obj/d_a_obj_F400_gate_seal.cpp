@@ -110,6 +110,6 @@ int dAcOF400GateSeal_c::actorExecute() {
 }
 
 int dAcOF400GateSeal_c::draw() {
-    dAcObjBase_c::drawModelType1(&mMdl);
+    dAcObjBase_c::drawModel(&mMdl);
     return SUCCEEDED;
 }

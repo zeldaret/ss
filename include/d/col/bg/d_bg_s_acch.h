@@ -140,7 +140,7 @@ public:
         /* 0x 0020 0000 */ GND_THIN_CELLING_OFF = (1 << 21),
         /* 0x 0040 0000 */ WALL_SORT = (1 << 22),
         /* 0x 0080 0000 */ LINE_DOWN = (1 << 23),
-
+        /* 0x 0100 0000 */ ACCH_FLAG_0x1000000 = (1 << 24),
         /* 0x 0200 0000 */ ACCH_FLAG_0x2000000 = (1 << 25),
         /* 0x 0400 0000 */ ACCH_FLAG_0x4000000 = (1 << 26),
         /* 0x 0800 0000 */ ACCH_FLAG_0x8000000 = (1 << 27),
@@ -280,6 +280,9 @@ public:
     }
     void SetWaterNone() {
         mFlags |= WATER_NONE;
+    }
+    void SetGroundSink() {
+        mFlags |= ACCH_FLAG_0x1000000;
     }
     bool ChkWallHit() {
         return mFlags & WALL_HIT;

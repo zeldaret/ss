@@ -2,12 +2,10 @@
 #define D_A_OBJ_JUNK_REPAIRING_H
 
 #include "d/a/obj/d_a_obj_base.h"
-#include "m/m3d/m_shadow.h"
+#include "d/d_shadow.h"
 #include "m/m3d/m_smdl.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-
-class dMyShadowCircle_c : public m3d::mShadowCircle_c {};
 
 class dAcOJunkRep_c : public dAcObjBase_c {
 public:
@@ -39,7 +37,7 @@ private:
     m3d::smdl_c *mpModelToUse;
     m3d::smdl_c mModel1;
     m3d::smdl_c mModel2;
-    dMyShadowCircle_c mShadow;
+    dShadowCircle_c mShadow;
     STATE_MGR_DECLARE(dAcOJunkRep_c);
 };
 
