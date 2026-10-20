@@ -1082,6 +1082,9 @@ public:
     u32 ChkTgNoConHit() const {
         return mTg.MskSPrm(0x100);
     }
+    void ClrTgNoConHit() {
+        mTg.OffSPrm(0x100);
+    }
     u32 ChkTgStopNoConHit() const {
         return mTg.MskSPrm(0x100000);
     }

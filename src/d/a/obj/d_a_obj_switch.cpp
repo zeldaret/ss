@@ -1,6 +1,7 @@
 #include "d/a/obj/d_a_obj_switch.h"
 
 #include "d/a/d_a_player.h"
+#include "d/a/obj/d_a_obj_scattersand.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_w.h"
 #include "d/d_linkage.h"
@@ -60,7 +61,7 @@ void dAcOsw_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *in
 
     if (!(link && link->checkActionFlags(0xC70852))) {
         if (!sw->someInteractCheck(link != nullptr)) {
-            if (!sw->checkOnFlag() && sw->mObjRef.get() == nullptr && link != nullptr && sw->field_0x5F1 == 0 &&
+            if (!sw->checkOnFlag() && sw->mObjRef.get() == nullptr && link != nullptr && sw->mNumBoxesOn == 0 &&
                 sw->mStateMgr.isState(StateID_On)) {
                 link->onFlags_0x360(0x8000);
             }
@@ -129,7 +130,7 @@ int dAcOsw_c::actorPostCreate() {
         parent = static_cast<dAcBase_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_VSD, parent));
         if (parent != nullptr && nw4r::math::FAbs(parent->mPosition.y - mPosition.y) < 30.0f) {
             if (getSquareDistanceTo(parent->mPosition) < 900.0f) {
-                mObjRef.link(static_cast<dAcOScatterSand_tmp *>(parent));
+                mObjRef.link(static_cast<dAcOScatterSand *>(parent));
                 break;
             }
         }
@@ -197,7 +198,7 @@ int dAcOsw_c::actorExecute() {
     mCollision.Move();
     field_0x5F3 = 0;
     mActivatedByPlayer = 0;
-    field_0x5F2 = field_0x5F1;
+    field_0x5F2 = mNumBoxesOn;
     return SUCCEEDED;
 }
 
@@ -224,16 +225,16 @@ void dAcOsw_c::initializeState_OnWait() {
 }
 void dAcOsw_c::executeState_OnWait() {
     sLib::chase(&mScale.y, 0.8f, 0.12f);
-    if (field_0x5F1 != 0) {
+    if (mNumBoxesOn != 0) {
         field_0x5F3 = 1;
     }
 
-    dAcOScatterSand_tmp *ac = mObjRef.get();
+    dAcOScatterSand *ac = mObjRef.get();
 
     if (ac != nullptr) {
-        if (ac != nullptr && (ac->getSomeScale() * 100.0f) <= 40.0f && !ac->field_0x6E4) {
-            ac->field_0x6E4 = true;
-            ac->field_0x6DC = 10;
+        if (ac != nullptr && (ac->getSomeScale() * 100.0f) <= 40.0f && !ac->getField_0x6E4()) {
+            ac->setField_0x6E4(true);
+            ac->setField_0x6DC(10);
         }
     } else {
         if (field_0x5F3 != 0) {
@@ -271,7 +272,7 @@ void dAcOsw_c::initializeState_OffWait() {
     mButtonCtrl.mElevation = -20.0f;
 }
 void dAcOsw_c::executeState_OffWait() {
-    if (field_0x5F1 != 0) {
+    if (mNumBoxesOn != 0) {
         field_0x5F3 = 1;
     }
     if (mSwitchType != 1 && sLib::calcTimer(&field_0x5EC) == 0 && field_0x5F3 == 0) {

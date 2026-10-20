@@ -12,12 +12,7 @@
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/d_flow_mgr.h"
-
-struct dTimeBits {
-    dTimeBits() : field_0x00(false), field_0x01(false) {}
-    bool field_0x00;
-    bool field_0x01;
-};
+#include "toBeSorted/past_present.h"
 
 class dAcOLock_c;
 
@@ -292,7 +287,7 @@ private:
     /* 0x42C */ dFlowMgr_c mFlowMgr;
     /* 0x4E8 */ dEmitter_c mEmmiterL;
     /* 0x51C */ dEmitter_c mEmmiterR;
-    /* 0x550 */ dTimeBits mTimeBits;
+    /* 0x550 */ dPastPresent_c mTimeBits;
     /* 0x554 */ dAcRef_c<dAcOdoor_c> mConnectedDoor; ///< When the door is a double door, this is its pair
     /* 0x560 */ dAcRef_c<dAcOLock_c> mLock;
     /* 0x56C */ dAcRef_c<dAcObjBase_c> mObjRef; ///< TODO(Zeldex) This is probably the Sandship stage for boss

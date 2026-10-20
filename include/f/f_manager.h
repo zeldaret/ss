@@ -52,6 +52,10 @@ public:
         m_StopProcInf &= flags;
     }
 
+    u16 getExecuteOrder() const {
+        return execute_node.getOrder();
+    }
+
 private:
     fTrNdBa_c connect_node;   ///< The node in ::m_connectManage.
     fLiNdPrio_c execute_node; ///< The node in ::m_executeManage.

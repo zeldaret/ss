@@ -143,6 +143,9 @@ public:
     void setPosition(const mVec3_c &r) {
         mPosition = r;
     }
+    const mVec3_c &getScale() const {
+        return mScale;
+    }
     void setScale(const mVec3_c &r) {
         mScale = r;
     }

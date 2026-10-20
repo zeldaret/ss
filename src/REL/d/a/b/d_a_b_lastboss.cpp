@@ -2999,7 +2999,7 @@ bool dAcBlastboss_c::checkForLinkSwordBySwordHit() {
     return ret;
 }
 
-inline f32 getScale() {
+inline f32 GetScale() {
     s32 scale = 95;
     return scale / 100.0f;
 }
@@ -3264,7 +3264,7 @@ void dAcBlastboss_c::executeLightningStrike() {
         cam->setEventCamView(tmp1, field_0x2D04, field_0x2CFC, 0.0f);
         if (b2) {
             mtx1.transS(0.5f, 0.5f, 0.0f);
-            mtx1.scaleM(getScale(), getScale(), 0.0f);
+            mtx1.scaleM(GetScale(), GetScale(), 0.0f);
             mtx1.transM(-0.5f, -0.5f, 0.0f);
             dStageMgr_c::GetInstance()->procfn_800192F0(0x96, mtx1, 0x32);
         }
