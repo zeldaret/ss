@@ -1586,7 +1586,7 @@ int dAcEKs_c::actorExecute() {
     }
 
     if (!isState(StateID_WindBlow)) {
-        if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_BELLOWS) && mSph.GetTgDamageFlags() == 0x8) {
+        if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_BELLOWS) && mSph.GetTgDamageFlags() == AT_MOD_WIND) {
             if (field_0xDA6 != 0) {
                 mCurrentState = EKS_STATE_WindBlow;
                 if (mTgRef.isLinked()) {
@@ -2880,7 +2880,7 @@ void dAcEKs_c::executeState_WindBlow() {
     }
 
     if (nw4r::math::FAbs(mSpeed) < 1.0f) {
-        if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_BELLOWS) && mSph.GetTgDamageFlags() == 0x8) {
+        if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_BELLOWS) && mSph.GetTgDamageFlags() == AT_MOD_WIND) {
             mAngle.y = cLib::targetAngleY(dAcPy_c::GetLink()->mPosition, mPosition);
             mAngle.x = cLib::targetAngleX(dAcPy_c::GetLink()->mPosition, mPosition);
             s32 t = 7281;

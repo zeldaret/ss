@@ -35,7 +35,7 @@ public:
 
     bool isHitBomb();
     bool isHitBellows();
-    bool isHitWind();
+    bool isHitWater();
 
 private:
     /* 0x330 */ m3d::smdl_c mMdl;

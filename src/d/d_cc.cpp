@@ -54,7 +54,7 @@ void dColliderLinkedList::foreachCc(ccCbFunc f, void *cbArg) const {
 }
 
 // What's the difference between these two?
-void dColliderLinkedList::foreachCc2(ccCbFunc f, void *cbArg) const {
+void dColliderLinkedList::foreachCc(ccCbFuncConst f, const void *cbArg) const {
     LinkedColliderNode *nd = static_cast<LinkedColliderNode *>(mList.getFirst());
     while (nd != nullptr) {
         f(nd->mpCcDObj, cbArg);

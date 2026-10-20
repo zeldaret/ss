@@ -278,7 +278,7 @@ public:
     /* vt 0x1E0 */ virtual UNKWORD vt_0x1E0() {
         return 0;
     }
-    /* vt 0x1E4 */ virtual dAcObjBase_c *checkRefArrayAtIndex() {
+    /* vt 0x1E4 */ virtual dAcObjBase_c *checkRefArrayAtIndex(s32) {
         return nullptr;
     }
     /* vt 0x1E8 */ virtual s32 sizeOfActorRefs_16() {
@@ -649,9 +649,6 @@ public:
     static s32 getCurrentSwordTypeInline() {
         return sCurrentSword;
     }
-
-    // Checks through beetle actor references and
-    static dAcBomb_c *getBombWithinRadius(dAcBase_c *, const mVec3_c &, f32);
 
     static bool isInEvent();
     bool isAttackingLeft() const;

@@ -2064,7 +2064,7 @@ bool dAcBlastboss_c::checkDamage() {
             case 6: {
                 startSound(SE_BLasBos_SwordBySword);
                 // TODO inline?
-                if (tgHit->GetTgDamageFlags() & 0x4) {
+                if (tgHit->GetTgDamageFlags() & AT_MOD_ELECTRIC) {
                     v.x = 0.0f;
                     v.y = 0.0f;
                     v.z = 20.0f;
@@ -2169,8 +2169,7 @@ bool dAcBlastboss_c::checkDamage() {
                     break;
                 }
 
-                // TODO inline?
-                if (tgHit->GetTgDamageFlags() & 4) {
+                if (tgHit->GetTgDamageFlags() & AT_MOD_ELECTRIC) {
                     v.x = 0.0f;
                     v.y = 0.0f;
                     v.z = 20.0f;

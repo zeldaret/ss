@@ -315,7 +315,7 @@ int dAcEremly_c::actorExecute() {
     }
 
     if ((cCounter_c::GetGameFrame() & 0xF) == 0) {
-        dAcBomb_c *pBomb = dAcPy_c::getBombWithinRadius(this, mPosition, 600.f);
+        dAcBomb_c *pBomb = isPlayerOwnedBombNearby(mPosition, 600.f);
         if (pBomb != nullptr) {
             mNearbyBombRef.link(pBomb);
             field_0xB6C = 1;

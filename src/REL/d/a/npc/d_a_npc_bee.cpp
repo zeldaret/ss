@@ -44,7 +44,7 @@ static dCcD_SrcSph beeColliderSrc = {
     /* mObjInf */
     {/* mObjAt */ {AT_TYPE_0x2000000, 0x20000F, {0, 0, 0}, 1, 0, 0, 0, CUT_DIR_NONE, 0},
      /* mObjTg */ {AT_TYPE_BUGNET | AT_TYPE_BELLOWS | AT_TYPE_BOMB, 0x00004011, {0, 00, 0x40F}, 8, CUT_DIR_NONE},
-                   /* mObjCo */ {0}},
+     /* mObjCo */ {0}},
     /* mSphInf */
     {15.0f}
 };
@@ -488,10 +488,8 @@ void dAcNpcBee_c::handleBeeFlyingStates(dAcNpcBeeSingleBee *bee) {
         if (bee->mSpeed >= 10.f && mSporeActor != mAttackActor) {
             bee->mCollider.OnAtSet();
         }
-    } else if (
-        bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_TO_HIVE ||
-        bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_UP
-    ) {
+    } else if (bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_TO_HIVE ||
+               bee->mBeeState == dAcNpcBeeSingleBee::BEE_STATE_FLY_UP) {
         isFlyingAway = true;
         offsetToTarget = bee->mTargetPos - bee->mPos;
         f32 distToTarget;
