@@ -261,7 +261,7 @@ void dAcOCtrlPnl_c::finishMove() {
     sIsInSkykeepPuzzle = false;
     savePuzzleState();
     if (mD3DummyRef.isLinked()) {
-        mD3DummyRef.get()->setField_0x1570(1);
+        mD3DummyRef.get()->setUpdateTilePositionsSignal(1);
     }
     if (changed) {
         mStateMgr.changeState(StateID_EndEvent);
@@ -477,7 +477,7 @@ void dAcOCtrlPnl_c::handleControl() {
                 dAcOD3Dummy_c *dummy = mD3DummyRef.get();
                 if (dummy != nullptr) {
                     savePuzzleState();
-                    dummy->setField_0x1570(1);
+                    dummy->setUpdateTilePositionsSignal(1);
                 }
             }
             allowInteraction = false;
