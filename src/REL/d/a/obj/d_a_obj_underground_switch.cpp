@@ -87,7 +87,7 @@ int dAcOUgSwitch_c::actorExecuteInEvent() {
 }
 
 int dAcOUgSwitch_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

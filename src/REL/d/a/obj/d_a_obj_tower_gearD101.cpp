@@ -38,8 +38,8 @@ int dAcOTowerGearD101_c::actorCreate() {
     nw4r::g3d::ResMdl mdl = mMdl.getResMdl();
     mMdlCallback.init(mdl.GetResNode("model0").GetID());
     mMdl.setCallback(&mMdlCallback);
-    mAcceleration = 0.0f;
-    mMaxSpeed = 0.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = 0.0f;
     mStateMgr.changeState(StateID_Wait);
 
     mVec3_c s = field_0x3AC;
@@ -77,7 +77,7 @@ int dAcOTowerGearD101_c::actorExecute() {
 }
 
 int dAcOTowerGearD101_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

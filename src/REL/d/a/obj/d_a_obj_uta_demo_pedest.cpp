@@ -55,6 +55,6 @@ int dAcOutaDemoPedest_c::actorExecute() {
 }
 
 int dAcOutaDemoPedest_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }

@@ -60,7 +60,7 @@ int dAcOtenijima_c::actorExecute() {
 }
 
 int dAcOtenijima_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }
 

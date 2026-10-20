@@ -65,7 +65,7 @@ int dAcOappearBridge_c::actorExecute() {
 }
 
 int dAcOappearBridge_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }
 

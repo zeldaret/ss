@@ -100,8 +100,8 @@ int dAcOinsectIsland_c::actorExecute() {
 }
 
 int dAcOinsectIsland_c::draw() {
-    drawModelType1(&mMainMdl);
-    drawModelType1(&mWtrMdl0);
-    drawModelType1(&mWtrMdl1);
+    drawModel(&mMainMdl);
+    drawModel(&mWtrMdl0);
+    drawModel(&mWtrMdl1);
     return SUCCEEDED;
 }

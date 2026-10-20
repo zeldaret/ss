@@ -75,7 +75,7 @@ int dAcOpinwheel_c::actorExecute() {
 }
 
 int dAcOpinwheel_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

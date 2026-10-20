@@ -108,10 +108,10 @@ int dAcOtreasureIsland_c::actorExecute() {
 }
 
 int dAcOtreasureIsland_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     if (subtype == 2) {
-        drawModelType1(&mWater00);
-        drawModelType1(&mWater01);
+        drawModel(&mWater00);
+        drawModel(&mWater01);
     }
     return SUCCEEDED;
 }

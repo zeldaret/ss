@@ -1518,7 +1518,7 @@ void dAcGirahimuBase_c::executeState_BackStep() {
         case 2: {
             mbOnGround = false;
             if (mVelocity.y <= 0.0f && mAcch.ChkGndHit() && mPosition.y <= mStartingPos.y + 100.0f) {
-                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0);
+                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.0f, field_0x1B0);
                 mAngle.y = mVelocity.atan2sX_Z();
                 mSpeedTarget = 0.0f;
                 mSpeed = mVelocity.absXZ();
@@ -2194,8 +2194,8 @@ void dAcGirahimuBase_c::createCollision() {
     mBoundingBox.Set(mVec3_c(-100.0f, -500.0f, -100.0f), mVec3_c(100.0f, 1000.0f, 100.0f));
 
     mAnmIDBody = ANM_NONE;
-    mAcceleration = -6.0f;
-    mMaxSpeed = -80.0f;
+    mGravity = -6.0f;
+    mMaxFallSpeed = -80.0f;
     mSpeedChangeFactor = 0.5f;
     field_0xD7C = true;
     mWarpScale.set(1.05f, 1.05f, 1.05f);
@@ -2895,10 +2895,10 @@ void dAcGirahimuBase_c::calcJumpMovement(f32 f0, f32 f1) {
     mVec3_c v0(0.0f, 0.0f, f0);
     v0.rotY(mAngle.y);
     v0 += mPosition;
-    { mAcceleration = 5.0f; } // used to force rodata pool in preamble
-    mAcceleration = _weird_zero + 6.0f;
+    { mGravity = 5.0f; } // used to force rodata pool in preamble
+    mGravity = _weird_zero + 6.0f;
     calcVelocity(v0, f1);
-    mAcceleration = -mAcceleration;
+    mGravity = -mGravity;
 }
 
 int dAcGirahimuBase_c::draw() {
@@ -2906,12 +2906,12 @@ int dAcGirahimuBase_c::draw() {
         return SUCCEEDED;
     }
 
-    drawModelType1(&mMdlBody);
-    drawModelType1(&mMdlPias);
+    drawModel(&mMdlBody);
+    drawModel(&mMdlPias);
     static mSphere_c bodySph(mVec3_c(0.0f, 100.0f, 0.0f), 300.0f);
     static mSphere_c swordSph(mVec3_c(0.0f, 0.0f, 0.0f), 0.0f);
 
-    fn_8002edb0(mShadow, mMdlBody, &bodySph, -1, -1, 0.0f);
+    drawShadow(mShadow, mMdlBody, bodySph, -1, -1, 0.0f);
     if (mbHoldingSwordA) {
         mMdlSwordA.entry(this, nullptr, nullptr);
         m3d::mShadow_c::GetInstance()->addMdlToCircle(&mShadow, mMdlSwordA.mMdl, swordSph);

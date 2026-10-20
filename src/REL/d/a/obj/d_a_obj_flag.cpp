@@ -104,8 +104,8 @@ int dAcOFlag_c::actorCreate() {
     mCps.SetR(sSrcCps.mCpsInf.mRadius * mScale.x);
     mCps.SetStts(mStts);
 
-    mAcceleration = -9.8f;
-    mMaxSpeed = 0.f;
+    mGravity = -9.8f;
+    mMaxFallSpeed = 0.f;
     mStateMgr.changeState(StateID_Wait);
 
     if (type == 1) {
@@ -210,7 +210,7 @@ int dAcOFlag_c::actorExecute() {
 }
 
 int dAcOFlag_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

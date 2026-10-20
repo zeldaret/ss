@@ -85,11 +85,11 @@ void dItemMdlStaminaFruit_c::draw() {
     switch (mDrawMode) {
         case DrawMode_Put:
             mPutAnmTexSrt.play();
-            mpItem->fn_8002ECD0(&mPutMdl, 7);
+            mpItem->drawModel(&mPutMdl, 7);
             break;
         case DrawMode_Get:
             mGetAnmTexSrt.play();
-            mpItem->fn_8002ECD0(&mGetMdl, 6);
+            mpItem->drawModel(&mGetMdl, 6);
             break;
     }
 }

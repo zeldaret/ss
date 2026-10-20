@@ -63,6 +63,10 @@ public:
         return mState == state;
     }
 
+    void setState(State_e state) {
+        mState = state;
+    }
+
     bool checkType_1_3_5_6_9() const {
         return mType == CONNECTION_1 || mType == CONNECTION_3 || mType == CONNECTION_5 || mType == CONNECTION_6 ||
                mType == CONNECTION_9;
@@ -87,8 +91,8 @@ public:
         return field_0xA0->getArrowOffsetPosAndAngle(param_1, param_2, param_3, param_4, param_5);
     }
 
-    dAcBase_c *getControllingActor() {
-        return static_cast<dAcBase_c *>(mControllingActor.p_owner);
+    dAcObjBase_c *getControllingActor() {
+        return (dAcObjBase_c *)(mControllingActor.p_owner);
     }
 
     void setField_0x8C_0x90(f32 f0, f32 f1) {

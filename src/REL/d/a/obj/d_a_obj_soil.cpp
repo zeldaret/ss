@@ -1,4 +1,5 @@
 #include "d/a/obj/d_a_obj_soil.h"
+
 #include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_base.h"
@@ -52,19 +53,12 @@ s32 useUnused() {
         240.f,
         240.f,
     };
-    static const s32 a2[] = {
-        1,
-        0x000F0000,
-        0x459C4000,
-        0x006E6950,
-        0
-    };
+    static const s32 a2[] = {1, 0x000F0000, 0x459C4000, 0x006E6950, 0};
     return (s32)a1 + (s32)a2;
 }
 
-
 bool dAcOsoil_c::createHeap() {
-    void* data = getOarcResFile("MoundShovel");
+    void *data = getOarcResFile("MoundShovel");
     if (data == nullptr) {
         return false;
     }
@@ -74,19 +68,19 @@ bool dAcOsoil_c::createHeap() {
     mModels[MODEL_COVERED].setPriorityDraw(0x22, field_0x793 ? 0x82 : 9);
     setModelColorFromParams(&mColors[MODEL_COVERED], mModels[MODEL_COVERED]);
     if (isSubtypeVentOrDrop()) {
-        static const char* oarcResForType[4] = {
+        static const char *oarcResForType[4] = {
             "HoleShovel",
             "HoleShovel",
             "MudShovel",
             "MudShovel",
         };
-        static const char* mdlForType[4] = {
+        static const char *mdlForType[4] = {
             "HoleShovel",
             "HoleShovel",
             "MudShovel",
             "MudShovel",
         };
-        void* subtypeData = getOarcResFile(oarcResForType[getSubtype()]);
+        void *subtypeData = getOarcResFile(oarcResForType[getSubtype()]);
         if (subtypeData == nullptr) {
             return false;
         }
@@ -118,7 +112,7 @@ int dAcOsoil_c::actorCreate() {
     }
     if (getFromParams(0x13, 1) == 0 && mItemSubtype == ITEMTYPE_DROP && mSubtype != SUBTYPE_TBOX) {
         mForInsects = true;
-    } 
+    }
     if (!mForInsects) {
         mCountInParams = getFromParams(0xC, 0xF);
         if (mCountInParams == 0) {
@@ -145,8 +139,8 @@ int dAcOsoil_c::actorCreate() {
     mStts.SetRank(0);
     mCollider.Set(sCylSrc);
     mCollider.SetStts(mStts);
-    mAcceleration = 0.f;
-    mMaxSpeed = -40.f;
+    mGravity = 0.f;
+    mMaxFallSpeed = -40.f;
     updateMatrix();
     if (isSubtypeVentOrDrop()) {
         mModels[MODEL_DUG_UP].setLocalMtx(mWorldMtx);
@@ -194,9 +188,9 @@ int dAcOsoil_c::actorPostCreate() {
         }
     }
     if (mForInsects) {
-        dTgInsect_c* tgInsect = nullptr;
+        dTgInsect_c *tgInsect = nullptr;
         do {
-            tgInsect = static_cast<dTgInsect_c*>(fManager_c::searchBaseByProfName(fProfile::TAG_INSECT, tgInsect));
+            tgInsect = static_cast<dTgInsect_c *>(fManager_c::searchBaseByProfName(fProfile::TAG_INSECT, tgInsect));
             if (tgInsect != nullptr) {
                 f32 dist = tgInsect->mPosition.squareDistanceToXZ(mPosition);
                 if (dist < 10000.f) {
@@ -204,9 +198,10 @@ int dAcOsoil_c::actorPostCreate() {
                     break;
                 }
             }
-        } while(tgInsect != nullptr);
+        } while (tgInsect != nullptr);
     }
-    if (mSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag) && dScGame_c::currentSpawnInfo.stageName == "F401") {
+    if (mSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag) &&
+        dScGame_c::currentSpawnInfo.stageName == "F401") {
         mColors[MODEL_DUG_UP].a = 0xFF;
         mModelIndex = MODEL_DUG_UP;
         mModels[MODEL_DUG_UP].setTevColorAll(GX_TEVREG1, mColors[MODEL_DUG_UP], false);
@@ -223,7 +218,6 @@ int dAcOsoil_c::actorPostCreate() {
     return SUCCEEDED;
 }
 
-
 int dAcOsoil_c::doDelete() {
     if (mAlwaysLoaded) {
         changeLoadedEntitiesNoSet();
@@ -232,13 +226,13 @@ int dAcOsoil_c::doDelete() {
 }
 
 extern "C" dAcBase_c *getCurrentEventActor();
-extern "C" bool AcItem__isKeyPiece2(dAcItem_c*);
+extern "C" bool AcItem__isKeyPiece2(dAcItem_c *);
 int dAcOsoil_c::actorExecute() {
     if (mShouldSetFlagInEvent) {
         if (EventManager::isInEvent()) {
             if (EventManager::isCurrentEvent("DefaultGetItem") || EventManager::isCurrentEvent("ItemGetGorgeous")) {
                 if (mItemSubtype == ITEMTYPE_KEY_PIECE) {
-                    if (AcItem__isKeyPiece2(static_cast<dAcItem_c*>(getCurrentEventActor()))) {
+                    if (AcItem__isKeyPiece2(static_cast<dAcItem_c *>(getCurrentEventActor()))) {
                         mShouldSetFlagInEvent = false;
                         SceneflagManager::sInstance->setFlag(mRoomID, mSceneflag);
                     }
@@ -281,16 +275,16 @@ int dAcOsoil_c::draw() {
     if (isSubtypeVentOrDrop()) {
         if (mStateMgr.isState(StateID_Ready)) {
             if (mHideCover) {
-                drawModelType1(&mModels[MODEL_DUG_UP]);
+                drawModel(&mModels[MODEL_DUG_UP]);
             } else {
-                drawModelType1(&mModels[MODEL_COVERED]);
-                drawModelType1(&mModels[MODEL_DUG_UP]);
+                drawModel(&mModels[MODEL_COVERED]);
+                drawModel(&mModels[MODEL_DUG_UP]);
             }
         } else {
-            drawModelType1(&mModels[mModelIndex]);
+            drawModel(&mModels[mModelIndex]);
         }
-    } else if(mModelIndex == MODEL_COVERED) {
-        drawModelType1(&mModels[MODEL_COVERED]);
+    } else if (mModelIndex == MODEL_COVERED) {
+        drawModel(&mModels[MODEL_COVERED]);
     }
     return SUCCEEDED;
 }
@@ -416,10 +410,10 @@ void dAcOsoil_c::finalizeState_Ready() {
 void dAcOsoil_c::tryLinkTbox() {
     if (mSubtype == SUBTYPE_TBOX && !mHasTriedTboxLink) {
         mHasTriedTboxLink = true;
-        dAcTbox_c* tbox = nullptr;
+        dAcTbox_c *tbox = nullptr;
         f32 minDist = 100.f;
         do {
-            tbox = static_cast<dAcTbox_c*>(fManager_c::searchBaseByProfName(fProfile::TBOX, tbox));
+            tbox = static_cast<dAcTbox_c *>(fManager_c::searchBaseByProfName(fProfile::TBOX, tbox));
             if (tbox != nullptr) {
                 f32 dist = tbox->mPosition.squareDistanceToXZ(mPosition);
                 if (dist < minDist) {
@@ -427,9 +421,9 @@ void dAcOsoil_c::tryLinkTbox() {
                     mTboxLink.link(tbox);
                 }
             }
-        } while(tbox != nullptr);
+        } while (tbox != nullptr);
         if (mTboxLink.isLinked()) {
-            dAcTbox_c* tbox = mTboxLink.get();
+            dAcTbox_c *tbox = mTboxLink.get();
             if (tbox->hasBeenOpened() == true) {
                 mStateMgr.changeState(StateID_Hole);
                 mInteractionDisabled = true;
@@ -470,7 +464,7 @@ void dAcOsoil_c::giveItemFinal() {
         }
     } else if (mInsectLink.isLinked()) {
         calcItemAndInsectSpawnPos();
-        dTgInsect_c* tgInsect = mInsectLink.get();
+        dTgInsect_c *tgInsect = mInsectLink.get();
         tgInsect->reveal(&mItemAndInsectSpawnPos);
     }
 }
@@ -485,7 +479,7 @@ void dAcOsoil_c::fn_255_1A50() {
     if (mFinalDigTimer != 0 && --mFinalDigTimer == 0) {
         if (mSubtype == SUBTYPE_TBOX) {
             if (!mTboxPrepared && mTboxLink.isLinked()) {
-                dAcTbox_c* tbox = mTboxLink.get();
+                dAcTbox_c *tbox = mTboxLink.get();
                 tbox->unsetActorProperty(AC_PROP_0x40000000);
                 tbox->unsetObjectProperty(OBJ_PROP_0x200);
                 tbox->mRotation.y = tbox->getXZAngleToPlayer();
@@ -496,8 +490,8 @@ void dAcOsoil_c::fn_255_1A50() {
         }
     }
     if (mTboxPrepared) {
-        if (mTboxLink.isLinked())  {
-            dAcTbox_c* tbox = mTboxLink.get();
+        if (mTboxLink.isLinked()) {
+            dAcTbox_c *tbox = mTboxLink.get();
             if (tbox->mScale.x >= 1) {
                 mTboxPrepared = false;
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
@@ -508,12 +502,14 @@ void dAcOsoil_c::fn_255_1A50() {
     }
 }
 
-bool dAcOsoil_c::checkCoHit(bool* pOut) {
+bool dAcOsoil_c::checkCoHit(bool *pOut) {
     bool hitByWind = false;
     *pOut = false;
     if (mCollider.ChkCoHit()) {
-        dAcObjBase_c* actor = mCollider.GetCoActor();
-        if (actor != nullptr && (actor->mProfileName == fProfile::OBJ_WIND || actor->mProfileName == fProfile::OBJ_WIND02 || actor->mProfileName == fProfile::OBJ_WIND03)) {
+        dAcObjBase_c *actor = mCollider.GetCoActor();
+        if (actor != nullptr &&
+            (actor->mProfileName == fProfile::OBJ_WIND || actor->mProfileName == fProfile::OBJ_WIND02 ||
+             actor->mProfileName == fProfile::OBJ_WIND03)) {
             hitByWind = true;
         } else {
             *pOut = true;
@@ -522,17 +518,14 @@ bool dAcOsoil_c::checkCoHit(bool* pOut) {
     return hitByWind;
 }
 
-void dAcOsoil_c::setModelColorFromParams(GXColor* pOutColor, m3d::smdl_c& mdl) {
+void dAcOsoil_c::setModelColorFromParams(GXColor *pOutColor, m3d::smdl_c &mdl) {
     u32 param = getFromParams(0x14, 0xF);
     if (param >= 5) {
         param = 0;
     }
     static const mColor colors[5] = {
-        mColor(0x6E, 0x69, 0x50, 0xFF),
-        mColor(0xB4, 0x8C, 0, 0xFF),
-        mColor(0xC8, 0x96, 0x50, 0xFF),
-        mColor(0x8C, 0x6E, 0x46, 0xFF),
-        mColor(0x8C, 0x82, 0x64, 0xFF),
+        mColor(0x6E, 0x69, 0x50, 0xFF), mColor(0xB4, 0x8C, 0, 0xFF),    mColor(0xC8, 0x96, 0x50, 0xFF),
+        mColor(0x8C, 0x6E, 0x46, 0xFF), mColor(0x8C, 0x82, 0x64, 0xFF),
     };
     *pOutColor = colors[param];
     mdl.setTevColorAll(GX_TEVREG1, *pOutColor, false);
@@ -570,7 +563,7 @@ void dAcOsoil_c::handleModelsOpacities() {
         return;
     }
     if (dAcPy_c::LINK->mPosition.squareDistance(mPosition) < 1000000.f) {
-        dCamera_c* camera = dScGame_c::getCamera();
+        dCamera_c *camera = dScGame_c::getCamera();
         if (camera != nullptr) {
             f32 dist = (camera->getPosition() - mPosition).y * (1.f / 80.f);
             if (dist < 0.1f) {
@@ -592,18 +585,7 @@ void dAcOsoil_c::handleModelsOpacities() {
 }
 
 s32 moreUnusedd() {
-    static const s32 stuff[] = {
-        0x49742400,
-        0x42a00000,
-        0x3c4ccccd,
-        0x41f00000,
-        0x42c80000,
-        0x0000001e,
-        0x00000014,
-        0x00000032,
-        0x461c4000,
-        0x40a00000,
-        0x48afc800
-    };
-    return (s32) stuff;
+    static const s32 stuff[] = {0x49742400, 0x42a00000, 0x3c4ccccd, 0x41f00000, 0x42c80000, 0x0000001e,
+                                0x00000014, 0x00000032, 0x461c4000, 0x40a00000, 0x48afc800};
+    return (s32)stuff;
 }

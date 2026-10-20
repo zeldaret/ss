@@ -37,8 +37,8 @@ bool dAcOF302Light_c::createHeap() {
 int dAcOF302Light_c::actorCreate() {
     field_0x440 = getFromParams(0, 0xFF);
     CREATE_ALLOCATOR(dAcOF302Light_c);
-    mAcceleration = 0.f;
-    mMaxSpeed = -40.f;
+    mGravity = 0.f;
+    mMaxFallSpeed = -40.f;
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     if (field_0x440 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, field_0x440)) {
@@ -92,7 +92,7 @@ int dAcOF302Light_c::actorExecuteInEvent() {
 }
 
 int dAcOF302Light_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

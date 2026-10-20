@@ -324,7 +324,7 @@ int dAcOTowerHandD101_c::actorExecuteInEvent() {
 }
 
 int dAcOTowerHandD101_c::draw() {
-    drawModelType1(&mMdl.getModel());
+    drawModel(&mMdl.getModel());
     return SUCCEEDED;
 }
 

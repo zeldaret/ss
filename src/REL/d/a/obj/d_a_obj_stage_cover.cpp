@@ -35,7 +35,7 @@ int dAcOstageCover_c::actorExecute() {
 }
 
 int dAcOstageCover_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }
 

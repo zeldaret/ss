@@ -883,7 +883,7 @@ int dAcGirahimu_c::actorExecute() {
     if (mbOnGround) {
         calcVelocity();
     } else {
-        mVelocity.y += mAcceleration;
+        mVelocity.y += mGravity;
     }
 
     mPosition += mTeleportDodgeAmount;

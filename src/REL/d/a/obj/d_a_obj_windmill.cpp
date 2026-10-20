@@ -123,7 +123,7 @@ int dAcOwindmill_c::actorExecute() {
 }
 
 int dAcOwindmill_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

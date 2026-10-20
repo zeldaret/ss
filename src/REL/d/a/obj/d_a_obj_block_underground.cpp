@@ -203,7 +203,7 @@ int dAcOBlockUnderground::actorExecute() {
 
 int dAcOBlockUnderground::draw() {
     if (dAcPy_c::GetLink()->checkActionFlagsCont(0x400000)) {
-        drawModelType1(&mMdl);
+        drawModel(&mMdl);
     }
     return SUCCEEDED;
 }

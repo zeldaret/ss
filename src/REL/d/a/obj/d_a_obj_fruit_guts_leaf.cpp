@@ -90,7 +90,7 @@ int dAcOFruitGutsLeaf_c::actorExecute() {
 }
 
 int dAcOFruitGutsLeaf_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

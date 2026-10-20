@@ -46,6 +46,6 @@ int dAcOutajimaLv2_c::actorExecute() {
 }
 
 int dAcOutajimaLv2_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }

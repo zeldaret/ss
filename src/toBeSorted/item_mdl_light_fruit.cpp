@@ -5,7 +5,6 @@
 #include "d/a/d_a_itembase.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 
-
 bool dItemMdlLightFruit_c::isMdlForItemId(u16 itemId) {
     return itemId == ITEM_LIGHT_FRUIT;
 }
@@ -93,11 +92,11 @@ void dItemMdlLightFruit_c::draw() {
     switch (mDrawMode) {
         case DrawMode_Put:
             mPutAnmTexSrt.play();
-            mpItem->fn_8002ECD0(&mPutMdl, 7);
+            mpItem->drawModel(&mPutMdl, 7);
             break;
         case DrawMode_Get:
             mGetAnmTexSrt.play();
-            mpItem->fn_8002ECD0(&mGetMdl, 6);
+            mpItem->drawModel(&mGetMdl, 6);
             break;
     }
 }

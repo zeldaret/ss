@@ -87,8 +87,8 @@ const dAcOMushRoom_HIO_c dAcOMushRoom_HIO_c::sInstance = {
 };
 
 static const Vec sRadius[4] = {
-    {105.0f, 90.0f, 210.0f},
-    {105.0f, 90.0f, 205.0f},
+    {105.0f,  90.0f, 210.0f},
+    {105.0f,  90.0f, 205.0f},
     {105.0f, 135.0f, 312.0f},
     {105.0f, 135.0f, 312.0f},
 };
@@ -230,8 +230,8 @@ int dAcOMushRoom_c::create() {
 
     CREATE_ALLOCATOR_SIZE(dAcOMushRoom_c, 0x2000);
     initCc();
-    mAcceleration = 0.0f;
-    mMaxSpeed = 0.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = 0.0f;
     changeState(StateID_Init);
     mBoundingBox.Set(sBboxMin[getType()], sBboxMax[getType()]);
     field_0x7BC = 0.0f;
@@ -308,12 +308,12 @@ int dAcOMushRoom_c::actorExecute() {
 }
 
 int dAcOMushRoom_c::draw() {
-    drawModelType1(mMdl.getMdl());
+    drawModel(mMdl.getMdl());
     mSphere_c sph(mVec3_c(0.0f, getShadowOffsetY(), 0.0f), getRadiusX() * 2.0f);
     if (getType() == TYPE_MushroomD) {
-        drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, 0xC8, 0xB4, 0xE6, 0xFF, 0.0f);
+        drawShadow(mShadow, nullptr, mWorldMtx, sph, -1, 0xC8, 0xB4, 0xE6, 0xFF, 0.0f);
     } else {
-        drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, 0.0f);
+        drawShadow(mShadow, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, 0.0f);
     }
 
     if (mCameraIdx >= 0) {
@@ -450,7 +450,7 @@ void dAcOMushRoom_c::executeState_Wait() {
                 s32 type = getType();
                 mVec3_c pos = mPosition + sOffsets[type] * mScale.y;
 
-                if (dAcObjBase_c::create(this, fProfile::OBJ_SPORE, p1, &pos, nullptr, nullptr, 0, 0x3F)) {
+                if (dAcObjBase_c::createChildAttached(fProfile::OBJ_SPORE, p1, &pos, nullptr, nullptr, 0, 0x3F)) {
                     field_0x892 = false;
                 }
                 startCloudEmitter();

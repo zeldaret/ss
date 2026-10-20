@@ -86,7 +86,7 @@ void dAcKnightLeaderBird_c::updateSpineMtx() {
 void dAcKnightLeaderBird_c::initializeState_Wait() {
     mSpeed = 0.0f;
     mVelocity.set(0.0f, 0.0f, 0.0f);
-    mAcceleration = 0.0f;
+    mGravity = 0.0f;
     changeBirdAction(sBirdLordAnmName, BIRD_ACTION_GLIDE, m3d::PLAY_MODE_4, 8.0f);
 }
 void dAcKnightLeaderBird_c::executeState_Wait() {}

@@ -36,6 +36,6 @@ int dAcOdisplayOnlyNbs_c::actorExecute() {
 }
 
 int dAcOdisplayOnlyNbs_c::draw() {
-    drawModelType1(&mModel);
+    drawModel(&mModel);
     return SUCCEEDED;
 }

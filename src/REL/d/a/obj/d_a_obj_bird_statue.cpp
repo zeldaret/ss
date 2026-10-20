@@ -34,6 +34,6 @@ int dAcOBirdStatue_c::create() {
 }
 
 int dAcOBirdStatue_c::draw() {
-    dAcObjBase_c::drawModelType1(&mMdl);
+    dAcObjBase_c::drawModel(&mMdl);
     return SUCCEEDED;
 }

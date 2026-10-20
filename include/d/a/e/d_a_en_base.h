@@ -5,6 +5,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_cc.h"
 #include "f/f_list_mg.h"
+#include "f/f_list_nd.h"
 #include "m/m3d/m_mdl.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
@@ -36,7 +37,7 @@ public:
     virtual void postExecute(MAIN_STATE_e state) override;
     virtual int preDraw() override;
 
-    virtual void *getObjectListEntry() override {
+    virtual fLiNdBa_c *getObjectListEntry() override {
         return &mEnemyLink;
     }
 

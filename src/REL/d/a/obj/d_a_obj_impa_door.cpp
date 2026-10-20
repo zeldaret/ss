@@ -39,7 +39,7 @@ int dAcOimpaDoor_c::actorExecute() {
 }
 
 int dAcOimpaDoor_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

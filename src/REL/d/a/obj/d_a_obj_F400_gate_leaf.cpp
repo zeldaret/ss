@@ -47,7 +47,7 @@ int dAcOF400GateLeaf_c::draw() {
     StoryflagManager *storyFlagManager = StoryflagManager::sInstance;
     u32 counterIdx = getStoryflag();
     if (!storyFlagManager->getCounterOrFlag(counterIdx)) {
-        dAcObjBase_c::drawModelType1(&mMdl);
+        dAcObjBase_c::drawModel(&mMdl);
     }
     return SUCCEEDED;
 }

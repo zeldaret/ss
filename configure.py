@@ -437,7 +437,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/d_emitter_callbacks.cpp"),
             Object(Matching, "toBeSorted/sound_info.cpp"),
             Object(NonMatching, "d/a/d_a_base.cpp"),
-            Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
+            Object(Matching, "d/a/obj/d_a_obj_base.cpp"),
             Object(NonMatching, "d/a/e/d_a_en_base.cpp"),
             Object(NonMatching, "d/a/npc/d_a_npc.cpp"),
             Object(NonMatching, "toBeSorted/d_npc_common.cpp"),

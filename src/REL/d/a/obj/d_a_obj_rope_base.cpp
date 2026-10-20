@@ -44,6 +44,6 @@ int dAcOropeBase_c::actorExecute() {
 }
 
 int dAcOropeBase_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }

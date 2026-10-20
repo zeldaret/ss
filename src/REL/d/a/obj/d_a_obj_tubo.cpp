@@ -75,15 +75,15 @@ int dAcOtubo_c::actorCreate() {
     mEff_0x91C.setIsSmall(true);
     int unkParam = getParams_0x3000();
     if (unkParam != 1 && unkParam != 2) {
-        fn_8002EA30(-60.f, -20.f, 2.f, 1.f, 4.f, &mObjAcch);
+        setSinkDepths(-60.f, -20.f, 2.f, 1.f, 4.f, &mObjAcch);
     }
     mStts.SetRank(5);
     mSph.Set(sSphSrc);
     mSph.SetStts(mStts);
     mSph.ClrAtSet();
 
-    mAcceleration = -4.f;
-    mMaxSpeed = -40.f;
+    mGravity = -4.f;
+    mMaxFallSpeed = -40.f;
     mbMovingForward = 0;
     field_0x9D8 = 2.f;
 
@@ -201,12 +201,12 @@ void dAcOtubo_c::registerInEvent() {
 }
 
 int dAcOtubo_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
 
     static mSphere_c sph(mVec3_c(0.f, 30.f, 0.f), 40.f);
 
-    if (mYOffset >= 0.f) {
-        drawShadow(mShdw, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
+    if (mSinkDepth >= 0.f) {
+        drawShadow(mShdw, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, mPosition.y - mObjAcch.GetGroundH());
     }
     return SUCCEEDED;
 }
@@ -216,7 +216,7 @@ void dAcOtubo_c::executeState_Wait() {
     if (mObjAcch.ChkGroundLanding()) {
         if (!mbField_0x9EF || !EventManager::isInEvent()) {
             if (field_0x9F6 == 2) {
-                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0);
+                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.0f, field_0x1B0);
             }
             if (mbField_0x9F3) {
                 startSound(SE_Tubo_PUT);
@@ -225,7 +225,7 @@ void dAcOtubo_c::executeState_Wait() {
             if (checkOnLava()) {
                 if (field_0x9F6 != 2) {
                     dJEffManager_c::spawnGroundEffect(
-                        mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0
+                        mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.0f, field_0x1B0
                     );
                 }
                 startSound(SE_O_FALL_LAVA_S);
@@ -359,7 +359,7 @@ void dAcOtubo_c::initializeState_Slope() {
 }
 void dAcOtubo_c::executeState_Slope() {
     if (mObjAcch.ChkGroundLanding()) {
-        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 0, 1.0f, field_0x1B0);
     } else if (mObjAcch.ChkGndHit()) {
         field_0x9DC = 0.f;
         addPickupTarget();
@@ -580,7 +580,7 @@ void dAcOtubo_c::fn_272_2670() {
     }
 
     if (mObjAcch.ChkGndHit()) {
-        if (mYOffset >= 0.f && !checkCarryType()) {
+        if (mSinkDepth >= 0.f && !checkCarryType()) {
             field_0x9DC = 0.f;
         } else if (checkInvalidGround()) {
             mSpeed = 0.0f;
@@ -603,8 +603,8 @@ void dAcOtubo_c::fn_272_2670() {
     mEff_0x91C.execute(waterH, groundH);
 
     if (checkSubmerged()) {
-        mAcceleration = -0.8f;
-        mMaxSpeed = -7.f;
+        mGravity = -0.8f;
+        mMaxFallSpeed = -7.f;
         field_0x9DC = 0.f;
         cLib::addCalcPosXZ(&mVelocity, mVec3_c::Zero, 0.05f, 1.0f, 0.2f);
         mSpeed = EGG::Math<f32>::sqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z);
@@ -613,8 +613,8 @@ void dAcOtubo_c::fn_272_2670() {
         }
         mbSubmerged = true;
     } else {
-        mAcceleration = -4.f;
-        mMaxSpeed = -40.f;
+        mGravity = -4.f;
+        mMaxFallSpeed = -40.f;
         mbSubmerged = false;
         if (checkCarryType()) {
             mStateMgr.changeState(StateID_Grab);
@@ -641,7 +641,7 @@ void dAcOtubo_c::attemptDestroy() {
         return;
     }
 
-    if (mObjAcch.ChkGndHit() && mYOffset >= 0.f && !checkCarryType()) {
+    if (mObjAcch.ChkGndHit() && mSinkDepth >= 0.f && !checkCarryType()) {
         if ((field_0x9DC < -100.f && !mbField_0x9EE) || fn_272_3660()) {
             destroy();
             return;
@@ -666,7 +666,7 @@ void dAcOtubo_c::attemptDestroy() {
 
     if (mObjAcch.ChkRoofHit()) {
         destroy();
-    } else if (!mbField_0x9EF && checkYOffsetField_0x100() && getParams_0x3000() != 1) {
+    } else if (!mbField_0x9EF && checkAtDeepSinkDepth() && getParams_0x3000() != 1) {
         killNoItemDrop();
     } else if (fn_272_38A0()) {
         destroy();
@@ -763,7 +763,7 @@ void dAcOtubo_c::adjustSpeed() {
     step *= gndAngle.cos();
 
     if (gndAngle < mAng::d2s(5) || mAng::fromVec(pla.GetN()).absDiff(mAngle.y) > mAng::d2s(90)) {
-        f32 stepSize = mYOffset;
+        f32 stepSize = mSinkDepth;
         sLib::chase(&mSpeed, 0.f, step + stepSize * -0.05f);
     } else {
         if (!mbMovingForward) {

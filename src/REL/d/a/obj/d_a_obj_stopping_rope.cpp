@@ -36,7 +36,7 @@ int dAcOStoppingRope_c::actorExecute() {
 }
 
 int dAcOStoppingRope_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

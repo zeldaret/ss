@@ -17,7 +17,7 @@ int dAcBirdBase_c::doDelete() {
 }
 
 int dAcBirdBase_c::draw() {
-    drawModelType1(&mMdl.getModel());
+    drawModel(&mMdl.getModel());
     return SUCCEEDED;
 }
 

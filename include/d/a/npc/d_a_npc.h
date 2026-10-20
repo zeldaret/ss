@@ -6,6 +6,7 @@
 #include "d/a/d_a_itembase.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_message.h"
+#include "f/f_list_nd.h"
 #include "libms/flowfile.h"
 #include "m/m3d/m_anmchr.h"
 #include "m/m3d/m_anmtexsrt.h"
@@ -374,7 +375,7 @@ public:
     }
     /* vt 0x0E8 */ virtual void acNpc_vt_0xE8();
 
-    /* vt 0x074 */ virtual void *getObjectListEntry() override {
+    /* vt 0x074 */ virtual fLiNdBa_c *getObjectListEntry() override {
         return &mNpcListEntry;
     }
 

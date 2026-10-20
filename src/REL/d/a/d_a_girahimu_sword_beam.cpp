@@ -80,7 +80,7 @@ int dAcGirahimuSwordBeam_c::create() {
         mRotation.z -= 0x4000;
     }
     transformMatrix();
-    mMaxSpeed = -60.0f;
+    mMaxFallSpeed = -60.0f;
 
     mEmitter0.init(this);
     mEmitter1.init(this);
@@ -220,7 +220,7 @@ int dAcGirahimuSwordBeam_c::actorExecute() {
 
 int dAcGirahimuSwordBeam_c::draw() {
     mSphere_c sph(mVec3_c(0.0f, 0.0f, 0.0f), field_0xB0C);
-    drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, field_0xB10, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
+    drawShadow(mShadow, nullptr, mWorldMtx, sph, -1, field_0xB10, -1, -1, -1, mPosition.y - mAcch.GetGroundH());
     return SUCCEEDED;
 }
 

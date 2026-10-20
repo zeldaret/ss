@@ -78,8 +78,8 @@ int dAcOFairy_c::create() {
     mAcchCir.SetWall(20.0f, 150.0f);
     mObjAcch.SetWaterNone();
     mObjAcch.SetGndThinCellingOff();
-    mAcceleration = 0.0f;
-    mMaxSpeed = -40.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = -40.0f;
 
     setPosYWaveParams();
     int rnd = cM::rndInt(40);
@@ -255,12 +255,12 @@ int dAcOFairy_c::actorExecute() {
 
 int dAcOFairy_c::draw() {
     if (!mStateMgr.isState(StateID_CatchDemo)) {
-        drawModelType1(&mModel.getModel());
+        drawModel(&mModel.getModel());
 
         if (!isCuring()) {
             static mSphere_c sph(mVec3_c(0.0f, 0.0f, 0.0f), 10.0f);
             f32 f = mObjAcch.GetGroundH();
-            drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, mPosition.y - f);
+            drawShadow(mShadow, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, mPosition.y - f);
         }
     }
 

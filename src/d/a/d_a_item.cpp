@@ -784,8 +784,8 @@ int dAcItem_c::create() {
     mObjAcch.SetRoofCrrHeight(50.0f);
     mObjAcch.SetClrSpeedY();
     mObjAcch.SetField_0xC(4);
-    mAcceleration = -2.0f;
-    mMaxSpeed = -80.0f;
+    mGravity = -2.0f;
+    mMaxFallSpeed = -80.0f;
 
     mGetItemPouchSlot = sGetItemPouchSlot;
     mItemQuantity = sGetItemQuantity;
@@ -1049,8 +1049,9 @@ int dAcItem_c::create() {
         if (type == TEAR_MAX) {
             type = TEAR_FARON;
         }
-        dAcObjBase_c *forceSign =
-            dAcObjBase_c::create(this, fProfile::OBJ_FORCE_SIGN, type & 0xFF, nullptr, nullptr, nullptr, nullptr, 0x3F);
+        dAcObjBase_c *forceSign = dAcObjBase_c::createChildAttached(
+            fProfile::OBJ_FORCE_SIGN, type & 0xFF, nullptr, nullptr, nullptr, nullptr, 0x3F
+        );
         if (forceSign != nullptr) {
             mForceSignRef.link(forceSign);
         }
@@ -1253,7 +1254,7 @@ int dAcItem_c::actorExecute() {
     mCyl.ClrCoHit();
     field_0xD65 = 0;
     if ((isAnyRupeeV() || mId == ITEM_STAMINA_FRUIT) && field_0xD66 && mObjAcch.ChkGroundLanding()) {
-        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 1, 0.7f, field_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mGndNormal, 1, 0.7f, field_0x1B0);
     }
 
     if (isStarryFireflyV() && !checkObjectProperty(OBJ_PROP_0x200)) {
@@ -1305,13 +1306,13 @@ int dAcItem_c::draw() {
             /* nothing */
         } else if (mMdlScaleType == 2) {
             mSphere_c v(mVec3_c(0.0f, 0.0f, 0.0f), getItemFlagStruct(getItemId())->field_0x02);
-            drawShadow(mShdw, nullptr, mWorldMtx, &v, -1, -1, -1, -1, -1, field_0xD18);
+            drawShadow(mShdw, nullptr, mWorldMtx, v, -1, -1, -1, -1, -1, field_0xD18);
         } else {
             mSphere_c v(
                 mVec3_c(0.0f, field_0xCD8 * 0.5f * getItemFlagStruct(getItemId())->field_0x01, 0.0f),
                 field_0xCD8 * getItemFlagStruct(getItemId())->field_0x02
             );
-            drawShadow(mShdw, nullptr, mWorldMtx, &v, -1, -1, -1, -1, -1, field_0xD18);
+            drawShadow(mShdw, nullptr, mWorldMtx, v, -1, -1, -1, -1, -1, field_0xD18);
         }
     }
     return SUCCEEDED;
@@ -1366,7 +1367,7 @@ void dAcItem_c::initializeState_Wait() {
     }
     mMdlScaleType = 0;
     mSinkOffset = 0.0f;
-    mYOffset = 0.0f;
+    mSinkDepth = 0.0f;
 }
 
 void dAcItem_c::executeState_Wait() {
@@ -1594,33 +1595,33 @@ void dAcItem_c::executeState_Wait() {
                 }
 
                 switch (which) {
-                    case 1: mAcceleration = (this->*mFnGetRupeeGravity)(); break;
-                    case 2: mAcceleration = (this->*mFnGetGravity1)(); break;
+                    case 1: mGravity = (this->*mFnGetRupeeGravity)(); break;
+                    case 2: mGravity = (this->*mFnGetGravity1)(); break;
                 }
             } else if (isHeartV()) {
                 if (field_0xD52) {
                     if (mFnGetHeartGravity != nullptr) {
-                        mAcceleration = (this->*mFnGetHeartGravity)();
+                        mGravity = (this->*mFnGetHeartGravity)();
                     }
                 } else {
                     if (mFnGetGravity1 != nullptr) {
-                        mAcceleration = (this->*mFnGetGravity1)();
+                        mGravity = (this->*mFnGetGravity1)();
                     }
                 }
             } else {
                 if (mFnGetRupeeGravity == nullptr || !field_0xD62) {
                     if (mFnGetGravity1 != nullptr) {
-                        mAcceleration = (this->*mFnGetGravity1)();
+                        mGravity = (this->*mFnGetGravity1)();
                     }
                 } else {
                     if (mFnGetRupeeGravity != nullptr) {
-                        mAcceleration = (this->*mFnGetRupeeGravity)();
+                        mGravity = (this->*mFnGetRupeeGravity)();
                     }
                 }
             }
 
             if (mFnGetGravity4 != nullptr) {
-                mMaxSpeed = (this->*mFnGetGravity4)();
+                mMaxFallSpeed = (this->*mFnGetGravity4)();
             }
 
             fn_80256F20();
@@ -1658,7 +1659,7 @@ void dAcItem_c::executeState_Wait() {
                 mSinkOffset = 0.0f;
             }
 
-            mYOffset = mSinkOffset;
+            mSinkDepth = mSinkOffset;
             if (isAnyTear() && mObjAcch.ChkGroundLanding()) {
                 startSoundWithFloatParam(SE_Item_A43_FALL, mVelocity.y);
             }
@@ -1725,7 +1726,7 @@ void dAcItem_c::finalizeState_Wait() {
     mObjAcch.SetRoofNone();
     mObjAcch.Clr_0x2000000();
     mSinkOffset = 0.0f;
-    mYOffset = 0.0f;
+    mSinkDepth = 0.0f;
     if (isTriforce() && mEff_0x928.hasEmitters()) {
         mEff_0x928.remove(true);
     }

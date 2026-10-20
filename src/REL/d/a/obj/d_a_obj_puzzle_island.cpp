@@ -59,6 +59,6 @@ int dAcOpuzzleIsland_c::actorExecute() {
 }
 
 int dAcOpuzzleIsland_c::draw() {
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }

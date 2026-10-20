@@ -127,8 +127,8 @@ int dAcODungeonShip_c::create() {
     mStts.SetRank(2);
     mCc.Set(sCcSrc);
     mCc.SetStts(mStts);
-    mAcceleration = 0.0f;
-    mMaxSpeed = 0.0f;
+    mGravity = 0.0f;
+    mMaxFallSpeed = 0.0f;
     mBoundingBox.Set(mVec3_c(-6000.0f, -500.0f, -2000.0f), mVec3_c(5000.0f, 4000.0f, 2000.0f));
     if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, (mParams >> 0x10) & 0xFF)) {
         dBgS::GetInstance()->RegistBg(&mBg, this);
@@ -209,7 +209,7 @@ int dAcODungeonShip_c::actorExecute() {
 int dAcODungeonShip_c::draw() {
     mMdl.mProc.mCallback.field_0x08 = field_0x862;
     mMdl.mProc.mCallback.field_0x09 = 1;
-    drawModelType1(&mMdl);
+    drawModel(&mMdl);
     return SUCCEEDED;
 }
 

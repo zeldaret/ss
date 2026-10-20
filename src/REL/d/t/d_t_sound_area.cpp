@@ -18,7 +18,7 @@ void float_ordering() {
 int dTgSndAr_c::create() {
     mScale *= 0.01f;
     if (dTgSndMg_c::GetInstance() == nullptr) {
-        dAcObjBase_c::createActorUnkGroup3(fProfile::SOUND_AREA_MGR, mRoomID, 0, nullptr, nullptr, nullptr, -1);
+        dAcObjBase_c::createStageActor(fProfile::SOUND_AREA_MGR, mRoomID, 0, nullptr, nullptr, nullptr, -1);
     }
 
     switch (getTypeFromParams()) {

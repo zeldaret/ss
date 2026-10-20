@@ -144,7 +144,7 @@ const float dAcOgrassCoil_c::sSqDistThreshold = 1000000.f;
 const u32 dAcOgrassCoil_c::lbl_268_rodata_4C = 2;
 
 int dAcOgrassCoil_c::draw() {
-    drawModelType1(&mMdl[mCut]);
+    drawModel(&mMdl[mCut]);
     return SUCCEEDED;
 }
 

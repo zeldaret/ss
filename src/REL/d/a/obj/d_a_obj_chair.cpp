@@ -101,8 +101,8 @@ int dAcOChair_c::create() {
         mObjAcch.CrrPos(*dBgS::GetInstance());
     }
 
-    mAcceleration = -2.f;
-    mMaxSpeed = -40.f;
+    mGravity = -2.f;
+    mMaxFallSpeed = -40.f;
 
     field_0xB1B = 1;
     field_0xB1A = 1;
@@ -187,9 +187,9 @@ int dAcOChair_c::actorExecute() {
 
 int dAcOChair_c::draw() {
     if (!isBench()) {
-        drawModelType1(&mMdl);
+        drawModel(&mMdl);
         static mSphere_c sph(mVec3_c(0.f, 40.f, 0.f), 80.f);
-        drawShadow(mShadow, nullptr, mWorldMtx, &sph, -1, -1, -1, -1, -1, 0.f);
+        drawShadow(mShadow, nullptr, mWorldMtx, sph, -1, -1, -1, -1, -1, 0.f);
     }
     return SUCCEEDED;
 }
