@@ -204,6 +204,7 @@ struct dNpcMdlCallbackNode {
  */
 class dNpcMdlCallbackMulti_c : public m3d::callback_c {
 public:
+    dNpcMdlCallbackMulti_c() : mpHead(nullptr), mpTail(nullptr), mNumNodes(0) {}
     virtual ~dNpcMdlCallbackMulti_c() {
         clearList();
     }
