@@ -9,8 +9,16 @@
 
 class dAcNpcChef_c : public dAcOrdinaryNpc_c {
 public:
-    dAcNpcChef_c() {}
+    dAcNpcChef_c() : dAcOrdinaryNpc_c(&mCyl, &mAcch) {}
     virtual ~dAcNpcChef_c() {}
+
+    /* vt 0x208 */ virtual UNKTYPE acOrdinaryNpc_vt_0x208() override;
+    /* vt 0x20C */ virtual UNKTYPE acOrdinaryNpc_vt_0x20C() override;
+    /* vt 0x210 */ virtual UNKTYPE acOrdinaryNpc_vt_0x210() override;
+    /* vt 0x218 */ virtual UNKTYPE acOrdinaryNpc_vt_0x218() override;
+    /* vt 0x21C */ virtual UNKTYPE acOrdinaryNpc_vt_0x21C() override;
+    /* vt 0x220 */ virtual UNKTYPE acOrdinaryNpc_vt_0x220() override;
+    /* vt 0x224 */ virtual UNKTYPE acOrdinaryNpc_vt_0x224() override;
 
 private:
     /* 0x AB4 */ dShadowCircle_c mShadow;

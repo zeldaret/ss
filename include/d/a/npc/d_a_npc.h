@@ -223,6 +223,68 @@ private:
     /* 0x0C */ s32 mNumNodes;
 };
 
+class dNpcCallbackAngHelper_c {
+    /* vt 0x08 */ virtual void
+    set(UNKWORD, const mAng3_c &, const mAng3_c &, const mAng3_c &, dNpcMdlCallbackAng_c &, dNpcMdlCallbackAng_c &,
+        dNpcMdlCallbackAng_c &);
+};
+class dNpcCallbackAngThing0_c {
+public:
+    virtual void vt_0x08(/* TODO PARAMS*/); // 8003a1a0
+    /* 0x04 */ bool field_0x04;
+    /* 0x0C */ dNpcCallbackAngHelper_c *mpHelper;
+};
+
+class dNpcReference_c {
+public:
+    /* 0x00 */ dAcObjRef_c mRef;
+    /* 0x0C */ UNKWORD field_0x0C;
+    /* 0x10 */ mVec3_c field_0x10;
+
+    dNpcReference_c() : field_0x0C(0), field_0x10(0.0f, 0.0f, 0.0f) {}
+    /* vt 0x08 */ virtual ~dNpcReference_c() {}
+};
+
+class dNpcUnknown3_c {
+    dNpcCallbackAngThing0_c field_0x18;
+    dNpcCallbackAngHelper_c field_0x28;
+};
+
+class dNpcUnknown2_c {
+public:
+    /* 0x00 */ mAng field_0x00;
+    /* 0x02 */ mAng field_0x02;
+    /* 0x04 */ mAng field_0x04;
+    /* 0x06 */ mAng field_0x06;
+    /* 0x08 */ u8 field_0x08;
+    /* 0x09 */ u8 field_0x09;
+    /* 0x0C */ dNpcUnknown3_c *field_0x0C;
+
+    // fn_8003AA30
+    void setTarget(dNpcMdlCallbackAng_c *, dNpcMdlCallbackAng_c *, dNpcMdlCallbackAng_c *, UNKTYPE *);
+    // fn_8003AAA0
+    void resetTarget(dNpcMdlCallbackAng_c *, dNpcMdlCallbackAng_c *, dNpcMdlCallbackAng_c *, UNKTYPE *);
+};
+class dNpcUnknown1_c {
+    /* 0x00 */ dNpcUnknown2_c field_0x00;
+    /* 0x18 */ dNpcCallbackAngThing0_c field_0x18;
+    /* 0x28 */ dNpcCallbackAngHelper_c field_0x28;
+    /* 0x30 */ f32 field_0x30;
+    /* 0x34 */ f32 field_0x34;
+    /* 0x38 */ f32 field_0x38;
+    /* 0x3C */ f32 field_0x3C;
+};
+class dNpcUnknown0_c {
+public:
+    /* 0x00 */ dAcNpc_c *mpNpc;
+    /* 0x04 */ dAcObjRef_c field_0x04;
+    /* 0x10 */ dNpcReference_c field_0x10;
+    /* 0x30 */ dNpcReference_c field_0x30;
+    /* 0x50 */ dNpcReference_c field_0x50;
+    /* 0x70 */ dNpcUnknown1_c field_0x70;
+    /* vt 0x08 */ virtual ~dNpcUnknown0_c();
+};
+
 // NPC-specific "flow" / MSBF code
 class dFlowNpc_c : public dFlow_c {
 public:
@@ -522,7 +584,7 @@ protected:
     static const char *sNeckNodeName;
     static const char *sSpine2NodeName;
 
-private:
+protected:
     void addToNpcList();
     void loadMainPos(f32 offsetY1, f32 offsetY2);
     void loadMainPos(const mVec3_c *offset);
@@ -538,6 +600,9 @@ private:
     /* 0x4A4 */ u8 field_0x4A4[0x4C0 - 0x4A4];
     /* 0x4C0 */ STATE_MGR_DECLARE(dAcNpc_c);
     /* 0x4FC */ u8 field_0x4FC[0x684 - 0x4FC];
+
+    /* 0x5AC */ dNpcUnknown0_c field_0x5AC;
+    /* 0x684 */
     /* 0x684 */ u8 field_0x684;
     /* 0x685 */ u8 field_0x685[0x6E4 - 0x685];
 
