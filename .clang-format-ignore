@@ -2,3 +2,5 @@
 **/JSystem/**
 # Ignore SND Files - Copied from https://github.com/muff1n1634/nw4r_snd_mid2010, https://github.com/kiwi515/ogws
 **/nw4r/snd/**
+# Ignore Some PPEABI Files
+**/PowerPC_EABI_Support/MSL/MSL_C++/MSL_Common/**
