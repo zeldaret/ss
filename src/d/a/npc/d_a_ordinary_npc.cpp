@@ -112,12 +112,20 @@ void dAcOrdinaryNpc_c::finalizeState_Walk() {}
 void dAcOrdinaryNpc_c::initializeState_LookAwaySt() {
     acOrdinaryNpc_vt_0x2BC(-1.0f);
 }
-void dAcOrdinaryNpc_c::executeState_LookAwaySt() {}
+void dAcOrdinaryNpc_c::executeState_LookAwaySt() {
+    acOrdinaryNpc_vt_0x30C();
+}
 void dAcOrdinaryNpc_c::finalizeState_LookAwaySt() {}
 
-void dAcOrdinaryNpc_c::initializeState_LookAway() {}
-void dAcOrdinaryNpc_c::executeState_LookAway() {}
-void dAcOrdinaryNpc_c::finalizeState_LookAway() {}
+void dAcOrdinaryNpc_c::initializeState_LookAway() {
+    acOrdinaryNpc_vt_0x2B0(-1.0f);
+}
+void dAcOrdinaryNpc_c::executeState_LookAway() {
+    acOrdinaryNpc_vt_0x2C0();
+}
+void dAcOrdinaryNpc_c::finalizeState_LookAway() {
+    acOrdinaryNpc_vt_0x338();
+}
 
 void dAcOrdinaryNpc_c::initializeState_Turn() {}
 void dAcOrdinaryNpc_c::executeState_Turn() {}
