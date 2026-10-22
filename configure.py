@@ -1255,7 +1255,7 @@ config.libs = [
         "math",
         [
             Object(NonMatching, "egg/math/eggMath.cpp"),
-            Object(NonMatching, "egg/math/eggMatrix.cpp"),
+            Object(Matching, "egg/math/eggMatrix.cpp"),
             Object(NonMatching, "egg/math/eggQuat.cpp"),
             Object(Matching, "egg/math/eggVector.cpp"),
         ],

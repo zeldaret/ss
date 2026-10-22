@@ -239,17 +239,22 @@ void Matrix34f::makeT(const Vector3f &t) {
     m[2][3] = t.z;
 }
 
+static inline f32 getQuatW(const Quatf &q) { return q.w; }
+static inline f32 getQuatX(const Quatf &q) { return q.v.x; }
+static inline f32 getQuatY(const Quatf &q) { return q.v.y; }
+static inline f32 getQuatZ(const Quatf &q) { return q.v.z; }
+
 void Matrix34f::fromQuat(const Quatf &q) {
     m[0][0] = 1.0f - (2 * q.v.y * q.v.y) - (2.0f * q.v.z * q.v.z);
-    m[0][1] = (2.0f * q.v.x * q.v.y) - (2.0f * q.w * q.v.z);
-    m[0][2] = (2.0f * q.v.x * q.v.z) + (2.0f * q.w * q.v.y);
+    m[0][1] = (2.0f * q.v.x * q.v.y) - (2.0f * getQuatW(q) * getQuatZ(q));
+    m[0][2] = (2.0f * q.v.x * q.v.z) + (2.0f * getQuatW(q) * getQuatY(q));
 
-    m[1][0] = (2.0f * q.v.x * q.v.y) + (2.0f * q.w * q.v.z);
+    m[1][0] = (2.0f * q.v.x * q.v.y) + (2.0f * getQuatW(q) * getQuatZ(q));
     m[1][1] = 1.0f - (2.0f * q.v.x * q.v.x) - (2.0f * q.v.z * q.v.z);
-    m[1][2] = (2.0f * q.v.y * q.v.z) - (2.0f * q.w * q.v.x);
+    m[1][2] = (2.0f * q.v.y * q.v.z) - (2.0f * getQuatW(q) * getQuatX(q));
 
-    m[2][0] = (2.0f * q.v.x * q.v.z) - (2.0f * q.w * q.v.y);
-    m[2][1] = (2.0f * q.v.y * q.v.z) + (2.0f * q.w * q.v.x);
+    m[2][0] = (2.0f * q.v.x * q.v.z) - (2.0f * getQuatW(q) * getQuatY(q));
+    m[2][1] = (2.0f * q.v.y * q.v.z) + (2.0f * getQuatW(q) * getQuatX(q));
     m[2][2] = 1.0f - (2.0f * q.v.x * q.v.x) - (2.0f * q.v.y * q.v.y);
 
     m[2][3] = 0.0f;
@@ -329,7 +334,7 @@ void Matrix34f::toQuat(Quatf &q) const {
         q.v.y = -q.v.y;
         q.v.z = -q.v.z;
     }
-    q.multScalar(Math<f32>::inv(Math<f32>::sqrt(q.w * q.w + q.v.dot(q.v))));
+    q.multScalar(Math<f32>::inv(Math<f32>::sqrt(q.w * q.w + q.v.x * q.v.x + q.v.y * q.v.y + q.v.z * q.v.z)));
 }
 
 void Matrix34f::slerpTo(const Matrix34f &m2, Matrix34f &out, f32 t) const {

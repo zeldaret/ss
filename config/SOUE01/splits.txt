@@ -5013,7 +5013,7 @@ egg/math/eggMath.cpp:
 egg/math/eggMatrix.cpp:
 	.text       start:0x8049AC70 end:0x8049B388 align:16
 	.ctors      start:0x804DB990 end:0x804DB994
-	.sdata2     start:0x8057F368 end:0x8057F380
+	.sdata2     start:0x8057F368 end:0x8057F37C
 	.bss        start:0x80674C00 end:0x80674C30
 
 egg/math/eggQuat.cpp:
