@@ -5,7 +5,7 @@
 
 namespace EGG {
 
-class File {
+class __declspec(novtable) File {
 public:
     File() : mIsOpen(false) {}
 

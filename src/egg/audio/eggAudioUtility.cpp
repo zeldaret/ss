@@ -92,4 +92,7 @@ void AudioUtility::HBM::exit(bool arg) {
     AudioRmtSpeakerMgr::connectAllByForce();
 }
 
+#pragma section ".sdata" ".sdata"
+__declspec(section ".sdata") extern volatile const u8 sAudioUtilityPad[4] = {0};
+
 } // namespace EGG

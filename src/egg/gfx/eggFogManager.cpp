@@ -6,6 +6,9 @@
 
 namespace EGG {
 
+extern template class __declspec(novtable) IBinary<FogManager>;
+template void IBinary<FogManager>::SetBinaryInner(const IBinary<FogManager>::Bin &, const IBinary<FogManager>::Bin &, f32);
+
 FogManager::FogManager(const u16 num) : mFlag(0), mCount(num), mCount2(num) {
     mpFog = new Fog[num];
 }

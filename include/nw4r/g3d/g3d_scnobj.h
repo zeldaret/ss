@@ -252,7 +252,7 @@ public:
  * IScnObjCallback
  *
  ******************************************************************************/
-class IScnObjCallback {
+class __declspec(novtable) IScnObjCallback {
 public:
     virtual ~IScnObjCallback() {} // at 0x8
 

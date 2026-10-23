@@ -5,7 +5,7 @@
 
 namespace EGG {
 
-class Fader {
+class __declspec(novtable) Fader {
 public:
     enum EStatus {
         STATUS_PREPARE_IN,

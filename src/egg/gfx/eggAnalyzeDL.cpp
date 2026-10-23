@@ -1,11 +1,11 @@
-#include "egg/gfx/eggAnalizeDL.h"
+#include "egg/gfx/eggAnalyzeDL.h"
 
 #include "nw4r/g3d/res/g3d_resshp.h"
 #include "nw4r/g3d/res/g3d_resvtx.h"
 
 namespace EGG {
 
-AnalizeDL::AnalizeDL(nw4r::g3d::ResShp shp) {
+AnalyzeDL::AnalyzeDL(nw4r::g3d::ResShp shp) {
     mpData = shp.GetPrimDLTag().GetDL();
     mBufSize = shp.GetPrimDLTag().GetBufSize();
     mCursor = 0;
@@ -28,7 +28,7 @@ AnalizeDL::AnalizeDL(nw4r::g3d::ResShp shp) {
     }
 }
 
-AnalizeDL::Status AnalizeDL::step() {
+AnalyzeDL::Status AnalyzeDL::step() {
     if (mBufSize <= mCursor) {
         mStatus = STATUS_END;
     } else if (field_0x1CC == 0) {
@@ -146,9 +146,9 @@ AnalizeDL::Status AnalizeDL::step() {
 }
 
 static const s8 sArr1[] = {0, -1, 1, 2};
-static const u8 sArr2[] = {1, 1, 2, 2, 4, 0};
+__declspec(section ".sdata2") static const u8 sArr2[12] = {1, 1, 2, 2, 4, 0};
 
-void AnalizeDL::init() {
+void AnalyzeDL::init() {
     for (int k = 0, i = 0; mVtxDescList[i].attr != GX_VA_NULL; k++, i++) {
         // Likely a fakematch
         int x = sArr1[mVtxDescList[i++, --i].type];
@@ -174,7 +174,7 @@ void AnalizeDL::init() {
     }
 }
 
-const AnalizeDL::VtxResult &AnalizeDL::getVtxResult() const {
+const AnalyzeDL::VtxResult &AnalyzeDL::getVtxResult() const {
     return mVtxResult;
 }
 

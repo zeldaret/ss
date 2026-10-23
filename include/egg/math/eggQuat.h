@@ -10,7 +10,17 @@ struct Quatf {
     Quatf() {}
     Quatf(f32 f, const Vector3f &v) : w(f), v(v) {}
     Quatf(f32 f, f32 x, f32 y, f32 z) : w(f), v(Vector3f(x, y, z)) {}
+#ifndef EGG_QUAT_NO_DTOR
     ~Quatf() {}
+#endif
+
+#if defined(EGG_QUAT_INTERNAL)
+    Quatf &operator=(const Quatf &other) {
+        v = other.v;
+        w = other.w;
+        return *this;
+    }
+#endif
 
     friend Quatf operator*(const Quatf &q, const Vector3f &vec) {
         Vector3f crossed = q.v.cross(vec);

@@ -1,12 +1,12 @@
-#ifndef EGG_ANALIZE_DL_H
-#define EGG_ANALIZE_DL_H
+#ifndef EGG_ANALYZE_DL_H
+#define EGG_ANALYZE_DL_H
 
 #include "nw4r/g3d/res/g3d_resshp.h"
 #include "rvl/GX/GXAttr.h"
 
 namespace EGG {
 
-class AnalizeDL {
+class AnalyzeDL {
 public:
     enum Status {
         STATUS_NONE,
@@ -48,8 +48,8 @@ private:
     void init();
 
 public:
-    AnalizeDL(nw4r::g3d::ResShp shp);
-    virtual ~AnalizeDL() {}
+    AnalyzeDL(nw4r::g3d::ResShp shp);
+    virtual ~AnalyzeDL() {}
 
     Status step();
     const VtxResult &getVtxResult() const;

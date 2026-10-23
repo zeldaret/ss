@@ -23,6 +23,11 @@
 
 namespace EGG {
 
+extern template class __declspec(novtable) IBinary<LightTexture>;
+template void IBinary<LightTexture>::SetBinaryInner(
+    const IBinary<LightTexture>::Bin &, const IBinary<LightTexture>::Bin &, f32
+);
+
 #define NUM_CPU_TEX 18
 
 static CpuTexture *sCpuTexArray[NUM_CPU_TEX];
@@ -749,5 +754,8 @@ void LightTexture::GetBinaryInner(Bin *pOutBin) const {
 size_t LightTexture::GetBinarySize() const {
     return sizeof(Bin) + (mNumData - 1) * sizeof(SubData);
 }
+
+#pragma section ".sdata" ".sdata"
+__declspec(section ".sdata") extern volatile const u8 sLightTexturePad[4] = {0};
 
 } // namespace EGG

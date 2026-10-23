@@ -72,7 +72,7 @@ void ConfigurationData::initMemory() {
     }
 
     mSystemHeap = ExpHeap::create(mSystemHeapSize, mRootHeapMem1, 0);
-    mSystemHeap->setName("EGGSystem");
+    mSystemHeap->setName("EGGSystem\0\0");
     mSystemHeap->becomeCurrentHeap();
 }
 

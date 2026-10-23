@@ -8,7 +8,7 @@
 
 namespace EGG {
 
-class BaseCamera {
+class __declspec(novtable) BaseCamera {
 public:
     BaseCamera() {}
     virtual Matrix34f &getViewMatrix() = 0;

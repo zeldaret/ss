@@ -17,8 +17,13 @@
 
 namespace EGG {
 
-static const GXColor sDefaultColor = {0, 0, 0, 0xFF};
+extern template class __declspec(novtable) IBinary<ScreenEffectBlur>;
+template void IBinary<ScreenEffectBlur>::SetBinaryInner(
+    const IBinary<ScreenEffectBlur>::Bin &, const IBinary<ScreenEffectBlur>::Bin &, f32
+);
+
 static const GXColor sDefaultColor2 = {0x80, 0x80, 0x80, 0x80};
+static const GXColor sDefaultColor = {0, 0, 0, 0xFF};
 
 ScreenEffectBlur::ScreenEffectBlur()
     : field_0x0C(3),

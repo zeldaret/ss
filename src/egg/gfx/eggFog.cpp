@@ -6,9 +6,12 @@
 
 namespace EGG {
 
+extern template class __declspec(novtable) IBinary<Fog>;
+template void IBinary<Fog>::SetBinaryInner(const IBinary<Fog>::Bin &, const IBinary<Fog>::Bin &, f32);
+
 template <>
 const char *IBinary<Fog>::GetBinaryType() {
-    return "FOGD";
+    return "FOGD\0\0\0";
 }
 
 template <>
@@ -66,5 +69,8 @@ void Fog::SetBinaryInner(const Bin &, const Bin &, f32) {
 }
 
 Fog::~Fog() {}
+
+extern volatile const f32 sFogOne = 1.0f;
+extern volatile const f64 sFogDouble = 4503599627370496.0;
 
 } // namespace EGG

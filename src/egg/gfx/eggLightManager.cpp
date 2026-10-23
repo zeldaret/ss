@@ -20,6 +20,9 @@
 
 namespace EGG {
 
+extern template class __declspec(novtable) IBinary<LightManager>;
+template void IBinary<LightManager>::SetBinaryInner(const IBinary<LightManager>::Bin &, const IBinary<LightManager>::Bin &, f32);
+
 LightManager::LightManager(u32 numEggObjects, u32 numAmbientObject, u8 numGxObjsPerEggObj) {
     Counts c;
     c.mNumEggLightObjects = numEggObjects;
@@ -314,5 +317,11 @@ size_t LightManager::GetBinarySize() const {
     return sizeof(Bin) + sizeof(LightObject::Bin) * (mSavedCounts.mNumEggLightObjects - 1) +
            sizeof(BinAmbient) * mSavedCounts.mNumAmbientObjects;
 }
+
+#pragma section ".sdata2" ".sdata2"
+__declspec(section ".sdata2") extern volatile const u32 sLightManagerZero = 0;
+#pragma section ".text"
+extern volatile const f32 sLightManagerOne = 1.0f;
+extern volatile const f64 sLightManagerDouble = 4503599627370496.0;
 
 } // namespace EGG

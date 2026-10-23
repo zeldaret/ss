@@ -1254,16 +1254,16 @@ config.libs = [
     EGGLib(
         "math",
         [
-            Object(NonMatching, "egg/math/eggMath.cpp"),
+            Object(Matching, "egg/math/eggMath.cpp"),
             Object(Matching, "egg/math/eggMatrix.cpp"),
-            Object(NonMatching, "egg/math/eggQuat.cpp"),
+            Object(Matching, "egg/math/eggQuat.cpp"),
             Object(Matching, "egg/math/eggVector.cpp"),
         ],
     ),
     EGGLib(
         "prim",
         [
-            Object(Matching, "egg/prim/eggAssert.cpp"),
+            Object(NonMatching, "egg/prim/eggAssert.cpp"),
         ],
     ),
     EGGLib(
@@ -1272,7 +1272,7 @@ config.libs = [
             Object(Matching, "egg/gfx/eggCamera.cpp"),
             Object(Matching, "egg/gfx/eggPalette.cpp"),
             Object(Matching, "egg/gfx/eggTexture.cpp"),
-            Object(Matching, "egg/gfx/eggAnalizeDL.cpp"),
+            Object(Matching, "egg/gfx/eggAnalyzeDL.cpp"),
             Object(Matching, "egg/gfx/eggCapTexture.cpp"),
             Object(NonMatching, "egg/gfx/eggCpuTexture.cpp"),
             Object(NonMatching, "egg/gfx/eggDrawGX.cpp"),
@@ -1312,7 +1312,7 @@ config.libs = [
         "audio",
         [
             Object(Matching, "egg/audio/eggAudioArcPlayerMgr.cpp"),
-            Object(Matching, "egg/audio/eggAudioExpMgr.cpp"),
+            Object(NonMatching, "egg/audio/eggAudioExpMgr.cpp"),
             Object(Matching, "egg/audio/eggAudioHeapMgr.cpp"),
             Object(Matching, "egg/audio/eggAudioMgr.cpp"),
             Object(Matching, "egg/audio/eggAudioRmtSpeakerMgr.cpp"),

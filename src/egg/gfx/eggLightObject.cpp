@@ -20,9 +20,12 @@
 
 namespace EGG {
 
+extern template class __declspec(novtable) IBinary<LightObject>;
+template void IBinary<LightObject>::SetBinaryInner(const IBinary<LightObject>::Bin &, const IBinary<LightObject>::Bin &, f32);
+
 template <>
 const char *IBinary<LightObject>::GetBinaryType() {
-    return "LOBJ";
+    return "LOBJ\0\0\0";
 }
 
 template <>

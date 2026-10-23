@@ -3,6 +3,9 @@
 
 namespace EGG {
 
+extern template class __declspec(novtable) IBinary<DrawPathBloom>;
+template void IBinary<DrawPathBloom>::SetBinaryInner(const IBinary<DrawPathBloom>::Bin &, const IBinary<DrawPathBloom>::Bin &, f32);
+
 DrawPathBloom::DrawPathBloom(): field_0x01C(1), field_0x01D(8), field_0x37C(0) {
     Data nullDat = {0};
     field_0x380 = nullDat;
@@ -55,5 +58,17 @@ void DrawPathBloom::GetBinaryInner(Bin *pBin) const {
 void DrawPathBloom::SetBinaryInner(const Bin &, const Bin &, f32) {
     // TODO
 }
+
+#pragma force_active on
+#pragma section ".sdata2" ".sdata2"
+__declspec(section ".sdata2") static volatile const f32 sBloomConst16 = 16.0f;
+__declspec(section ".sdata2") static volatile const f32 sBloomConst219 = 219.0f;
+__declspec(section ".sdata2") static volatile const f32 sBloomConst255 = 255.0f;
+__declspec(section ".sdata2") static volatile const f32 sBloomConst0125 = 0.125f;
+__declspec(section ".sdata2") static volatile const f32 sBloomConst8 = 8.0f;
+__declspec(section ".sdata2") static volatile const u32 sBloomConstZero = 0;
+__declspec(section ".sdata2") static volatile const f64 sBloomConstDouble = 4503599627370496.0;
+__declspec(section ".sdata2") static volatile const f32 sBloomConst025 = 0.25f;
+#pragma force_active reset
 
 } // namespace EGG

@@ -1,7 +1,7 @@
 #include "egg/gfx/eggModelEx.h"
 
 #include "common.h"
-#include "egg/gfx/eggAnalizeDL.h"
+#include "egg/gfx/eggAnalyzeDL.h"
 #include "egg/gfx/eggG3DUtility.h"
 #include "egg/gfx/eggIScnProcModel.h"
 #include "nw4r/g3d/g3d_calcworld.h"
@@ -19,7 +19,7 @@ namespace EGG {
 
 using namespace nw4r;
 
-const char *ModelEx::sByteCodeCalcStr = "NodeTree";
+const char *ModelEx::sByteCodeCalcStr = "NodeTree\0\0\0\0\0\0\0";
 const char *ModelEx::sByteCodeMixStr = "NodeMix";
 
 ModelEx::ModelEx(g3d::ScnObj *obj)
@@ -46,7 +46,7 @@ static const G3DUtility::MdlSearch sMdlSearch[6] = {
 };
 
 void thisProbablyGotDeadStripped() {
-    sMdlSearch[0](g3d::ResMdl(nullptr), "", false, nullptr, 0);
+    sMdlSearch[0](g3d::ResMdl(nullptr), "\0\0\0", false, nullptr, 0);
 }
 
 extern "C" s32 lbl_8057682C;
@@ -71,16 +71,16 @@ void ModelEx::getShapeMinMax(u16 shapeIndex, math::VEC3 *pMin, math::VEC3 *pMax,
             }
 
             s32 defaultMatrixIdx = shp.ref().curMtxIdx;
-            AnalizeDL analyze(shp);
+            AnalyzeDL analyze(shp);
 
             bool firstIteration = true;
-            AnalizeDL::Status status;
-            while ((status = analyze.step()) != AnalizeDL::STATUS_END) {
-                if (status != AnalizeDL::STATUS_VTX) {
+            AnalyzeDL::Status status;
+            while ((status = analyze.step()) != AnalyzeDL::STATUS_END) {
+                if (status != AnalyzeDL::STATUS_VTX) {
                     continue;
                 }
 
-                const AnalizeDL::VtxResult &result = analyze.getVtxResult();
+                const AnalyzeDL::VtxResult &result = analyze.getVtxResult();
                 s32 mtxIdx = result.mMtxIdx;
                 if (mtxIdx == -1) {
                     mtxIdx = defaultMatrixIdx;

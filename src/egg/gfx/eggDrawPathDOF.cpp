@@ -17,6 +17,9 @@
 
 namespace EGG {
 
+extern template class __declspec(novtable) IBinary<DrawPathDOF>;
+template void IBinary<DrawPathDOF>::SetBinaryInner(const IBinary<DrawPathDOF>::Bin &, const IBinary<DrawPathDOF>::Bin &, f32);
+
 DrawPathDOF::DrawPathDOF()
     : field_0x1C(1),
       field_0x20(1),
@@ -79,8 +82,9 @@ void DrawPathDOF::updateShimmer() {
     }
 }
 
-static int sMaskDofArray[] = {0, 1, 2};
-static u8 sBlurArray[] = {4, 2, 1, 0};
+extern volatile const u8 sDofArray[] = {0, 1, 2, 0};
+static const int sMaskDofArray[] = {0, 1, 2};
+static const u8 sBlurArray[] = {4, 2, 1, 0};
 
 void DrawPathDOF::internalResetForDraw() {
     // Tons of regswaps...

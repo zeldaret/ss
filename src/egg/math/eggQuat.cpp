@@ -1,4 +1,8 @@
+#define EGG_QUAT_INTERNAL
+#define EGG_QUAT_NO_DTOR
 #include "egg/math/eggQuat.h"
+#undef EGG_QUAT_INTERNAL
+#undef EGG_QUAT_NO_DTOR
 
 namespace EGG {
 
@@ -73,6 +77,7 @@ void Quatf::setRPY(f32 roll, f32 pitch, f32 yaw) {
 }
 
 void Quatf::setAxisRotation(const Vector3f &axis, f32 rot) {
+    0.5f;
     2.0f; // force sdata2 ordering
     const f32 half_angle = rot * 0.5f;
     const f32 cos = Math<f32>::cos(half_angle);

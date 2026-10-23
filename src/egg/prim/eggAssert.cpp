@@ -156,7 +156,7 @@ void system_halt(const char *file, u32 line, const char *msg, va_list list) {
                 }
                 const char *sym = getMapSymbol((void *)stack[1]);
                 if (sym != nullptr) {
-                    nw4r::db::DirectPrint_Printf(2, line, "%d:%s\n", counter, sym);
+                    nw4r::db::DirectPrint_Printf(2, line, "%d:%s\n\0", counter, sym);
                 } else {
                     nw4r::db::DirectPrint_Printf(2, line, "LR Save[%d]:%p\n", counter, (void *)stack[1]);
                 }

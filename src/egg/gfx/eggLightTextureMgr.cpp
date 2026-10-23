@@ -19,6 +19,9 @@
 
 namespace EGG {
 
+extern template class __declspec(novtable) IBinary<LightTextureManager>;
+template void IBinary<LightTextureManager>::SetBinaryInner(const IBinary<LightTextureManager>::Bin &, const IBinary<LightTextureManager>::Bin &, f32);
+
 LightTextureManager::LightTextureManager(const LightManager *lightMgr) {
     mFlags = 0x78;
     mTextureCount = 0;

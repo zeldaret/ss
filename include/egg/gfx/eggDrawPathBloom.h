@@ -12,6 +12,8 @@
 namespace EGG {
 
 class DrawPathBloom : public DrawPathBase, public IBinary<DrawPathBloom> {
+    friend class IBinary<DrawPathBloom>;
+
     struct BinData {};
 
     // Size 0x20?

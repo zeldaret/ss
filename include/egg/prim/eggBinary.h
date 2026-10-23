@@ -15,7 +15,7 @@ namespace EGG {
  *           that describes the binary type.
  */
 template <class T>
-class IBinary {
+class __declspec(novtable) IBinary {
 public:
 #pragma pack(push, 1)
     struct BinHeader {
@@ -77,7 +77,7 @@ void IBinary<T>::GetBinary(void *pData) const {
     for (int i = 0; i < 4; i++) {
         pBin->mHeader.mType[i] = GetBinaryType()[i];
     }
-    typename T::BinData zeroedDatat = {0};
+    typename T::BinData zeroedDatat = {};
     pBin->mData = zeroedDatat;
     GetBinaryInner(pBin);
 }

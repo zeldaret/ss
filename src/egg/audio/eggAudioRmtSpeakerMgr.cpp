@@ -145,4 +145,7 @@ u8 AudioRmtSpeakerMgr::getWpadVolume() {
     return sAudioRmtSpeakerWpadVolume;
 }
 
+#pragma section ".sdata" ".sdata"
+__declspec(section ".sdata") extern volatile const u8 sAudioRmtSpeakerPad[4] = {0};
+
 } // namespace EGG
