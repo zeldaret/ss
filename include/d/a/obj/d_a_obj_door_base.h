@@ -16,8 +16,6 @@ public:
     virtual bool canOpen() = 0;
     virtual bool hasVisitedRoom();
     virtual void setFencePermission(u8 fenceId);
-    // Called on every door by dTgShutterFenceForbiddance_c. Only dAcOShutter_c overrides it:
-    // its field_0x605 becomes false
     virtual void clearFencePermission();
 
     static dAcObjDoor_c *getNextDoor(dAcObjDoor_c *door);
