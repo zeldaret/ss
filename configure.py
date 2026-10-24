@@ -607,7 +607,7 @@ config.libs = [
             Object(Matching, "d/lyt/d_lyt_fader.cpp"),
             Object(Matching, "d/lyt/d_screen_fader.cpp"),
             Object(NonMatching, "d/a/d_a_bird_base.cpp"),
-            Object(NonMatching, "d/a/d_a_door_base.cpp"),
+            Object(Matching, "d/a/d_a_door_base.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_map_markers.cpp"),
             Object(NonMatching, "d/d_pouch.cpp"),
             Object(NonMatching, "toBeSorted/d_beacon.cpp"),
@@ -2956,7 +2956,7 @@ config.libs = [
     Rel(NonMatching, "d_t_ship_slope", "REL/d/t/d_t_ship_slope.cpp"),
     Rel(Matching, "d_t_ship_window", "REL/d/t/d_t_ship_window.cpp"),
     Rel(
-        NonMatching,
+        Matching,
         "d_t_shutter_fence_forbiddance",
         "REL/d/t/d_t_shutter_fence_forbiddance.cpp",
     ),

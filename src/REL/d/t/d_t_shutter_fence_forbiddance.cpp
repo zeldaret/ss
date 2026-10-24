@@ -1,6 +1,7 @@
 #include "d/t/d_t_shutter_fence_forbiddance.h"
 
 #include "common.h"
+#include "d/a/obj/d_a_obj_door_base.h"
 #include "f/f_base.h"
 
 SPECIAL_ACTOR_PROFILE(
@@ -27,7 +28,10 @@ int dTgShutterFenceForbiddance_c::create() {
     return SUCCEEDED;
 }
 
-// TODO after finding out more about d_a_obj_door_base
 int dTgShutterFenceForbiddance_c::actorExecute() {
+    for (dAcObjDoor_c *door = dAcObjDoor_c::getNextDoor(nullptr); door != nullptr;
+         door = dAcObjDoor_c::getNextDoor(door)) {
+        door->clearFencePermission();
+    }
     return SUCCEEDED;
 }

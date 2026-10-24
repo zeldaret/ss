@@ -6,7 +6,7 @@
 #include "f/f_list_mg.h"
 
 // Ghidra: ActorDoorBase
-//   size:
+//   size: 0x33C
 // non-official name
 class dAcObjDoor_c : public dAcObjBase_c {
 public:
@@ -15,11 +15,14 @@ public:
 
     virtual bool canOpen() = 0;
     virtual bool hasVisitedRoom();
-    virtual void vt_0x88();
-    virtual void vt_0x8C();
+    virtual void setFencePermission(u8 fenceId);
+    virtual void clearFencePermission();
+
+    static dAcObjDoor_c *getNextDoor(dAcObjDoor_c *door);
+    static fLiNdBa_c *getNextNode(dAcObjDoor_c *door);
 
 protected:
-    dAcRef_c<dAcObjDoor_c> mDoorRef;
+    /* 0x330 */ fLiNdBa_c mDoorNode;
 
 private:
     static fLiMgBa_c sDoorList;
