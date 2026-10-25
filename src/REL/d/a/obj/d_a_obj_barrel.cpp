@@ -367,7 +367,7 @@ int dAcOBarrel_c::actorExecute() {
 void dAcOBarrel_c::registerInEvent() {
     if (mStateMgr.isState(StateID_Wait) && mObjAcch.ChkGndHit()) {
         const dAcObjBase_c *pObj = dBgS::GetInstance()->GetActorPointer(mObjAcch.GetGnd());
-        if (pObj && EventManager::FUN_800a0570(pObj)) {
+        if (pObj && EventManager::isActorInEvent((dAcBase_c*)pObj)) {
             setActorProperty(AC_PROP_0x4);
         }
     }

@@ -102,10 +102,10 @@ public:
     void startOpenEvent(void *zevData);
 
     /** Self Explanatory */
-    static void doorPullEventCallback(void *);
+    static void doorPullEventCallback(dAcBase_c *);
 
     /** Self Explanatory */
-    static void doorPushEventCallback(void *);
+    static void doorPushEventCallback(dAcBase_c *);
 
     /** Self Explanatory */
     void startDoorPullLockedEvent(void *zevData);
@@ -117,19 +117,19 @@ public:
     void startLockedEvent(void *zevData);
 
     /** Self Explanatory */
-    static void pullLockedEventCallback(void *);
+    static void pullLockedEventCallback(dAcBase_c *);
 
     /** Self Explanatory */
-    static void pushLockedEventCallback(void *);
+    static void pushLockedEventCallback(dAcBase_c *);
 
     /** Self Explanatory */
     void startUnlockEvent();
 
     /** Self Explanatory */
-    static void unlockEventCallback(void *);
+    static void unlockEventCallback(dAcBase_c *);
 
     /** Self Explanatory */
-    static void openCallbackCommon(void *);
+    static void openCallbackCommon(dAcBase_c *);
 
     /** Returns if the door is physically locked with the dAcOLock_c Actor */
     s32 getLockParameter();

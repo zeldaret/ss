@@ -152,6 +152,10 @@ public:
         return &mMapRelated;
     }
 
+    bool isFaderSettled() const {
+        return mFader.isSettled();
+    }
+
     bool isFadedOut() const {
         return mFader.isStatus(mFaderBase_c::FADED_OUT);
     }

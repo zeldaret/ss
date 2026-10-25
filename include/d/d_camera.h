@@ -132,12 +132,24 @@ public:
     mAng getYAngle() const;
     mAng getXZAngle() const;
     void apply();
-    
+
     bool fn_8019E3C0() const;
     void enterMap();
     void leaveMap();
     bool fn_8019E4D0() const;
     f32 fn_8019EB90();
+
+    void setField_0x2A0(u8 val) {
+        field_0x2A0 = val;
+    }
+
+    void setField_0x2A1(u8 val) {
+        field_0x2A1 = val;
+    }
+
+    void setField_0x1FC(u8 val) {
+        field_0x1FC = val;
+    }
 
 private:
     void onFlag(u32 flag) {

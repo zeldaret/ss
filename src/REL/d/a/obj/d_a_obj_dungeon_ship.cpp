@@ -51,13 +51,13 @@ const f32 dAcODungeonShip_c::someFloats[18] = {
     150.0f, 100.0f, 0.0f, 0.0f,   0.0f, 4000.0f, 2000.0f, 0.0f,  0.0f,
 };
 
-void dAcODungeonShip_c::eventIn_Wrapper(void *arg) {
+void dAcODungeonShip_c::eventIn_Wrapper(dAcBase_c *arg) {
     if (arg != nullptr) {
         static_cast<dAcODungeonShip_c *>(arg)->eventIn();
     }
 }
 
-void dAcODungeonShip_c::eventEnd_Wrapper(void *arg) {
+void dAcODungeonShip_c::eventEnd_Wrapper(dAcBase_c *arg) {
     if (arg != nullptr) {
         static_cast<dAcODungeonShip_c *>(arg)->eventEnd();
     }
@@ -312,7 +312,7 @@ void dAcODungeonShip_c::finalizeState_Transparency() {}
 
 void dAcODungeonShip_c::initializeState_AppearEvent() {
     if (mAppearEvent != 0xFF) {
-        Event ev(mAppearEvent, mRoomID, 0x100001, (void *)&eventIn_Wrapper, (void *)&eventEnd_Wrapper);
+        Event ev(mAppearEvent, mRoomID, 0x100001, eventIn_Wrapper, eventEnd_Wrapper);
         mEvent.scheduleEvent(ev, 0);
     }
 }
@@ -375,7 +375,7 @@ void dAcODungeonShip_c::executeState_AppearEvent() {
                 default: mEvent.advanceNext(); break;
             }
         } else {
-            Event ev(mAppearEvent, mRoomID, 0x100001, (void *)&eventIn_Wrapper, (void *)&eventEnd_Wrapper);
+            Event ev(mAppearEvent, mRoomID, 0x100001, eventIn_Wrapper, eventEnd_Wrapper);
             mEvent.scheduleEvent(ev, 0);
         }
     } else {

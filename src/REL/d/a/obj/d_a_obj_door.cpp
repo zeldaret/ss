@@ -1343,7 +1343,7 @@ void dAcOdoor_c::startPullEventWithoutCallback(void *zevData) {
 }
 
 void dAcOdoor_c::startPullEventWithCallback(void *zevData) {
-    Event event(DoorPull, zevData, 100, createBits(0x100001, 0x2), (void *)doorPullEventCallback, nullptr);
+    Event event(DoorPull, zevData, 100, createBits(0x100001, 0x2), doorPullEventCallback, nullptr);
     mEventRelated.scheduleEvent(event, 0);
 }
 
@@ -1353,7 +1353,7 @@ void dAcOdoor_c::startPushEventWithoutCallback(void *zevData) {
 }
 
 void dAcOdoor_c::startPushEventWithCallback(void *zevData) {
-    Event event(DoorPush, zevData, 100, createBits(0x100001, 0x2), (void *)doorPushEventCallback, nullptr);
+    Event event(DoorPush, zevData, 100, createBits(0x100001, 0x2), doorPushEventCallback, nullptr);
     mEventRelated.scheduleEvent(event, 0);
 }
 
@@ -1385,21 +1385,21 @@ void dAcOdoor_c::startOpenEvent(void *zevData) {
     }
 }
 
-void dAcOdoor_c::doorPullEventCallback(void *pDoor) {
+void dAcOdoor_c::doorPullEventCallback(dAcBase_c *pDoor) {
     openCallbackCommon(pDoor);
 }
 
-void dAcOdoor_c::doorPushEventCallback(void *pDoor) {
+void dAcOdoor_c::doorPushEventCallback(dAcBase_c *pDoor) {
     openCallbackCommon(pDoor);
 }
 
 void dAcOdoor_c::startDoorPullLockedEvent(void *zevData) {
-    Event event(DoorPullLock, zevData, 100, 0x100001, (void *)pullLockedEventCallback, nullptr);
+    Event event(DoorPullLock, zevData, 100, 0x100001, pullLockedEventCallback, nullptr);
     mEventRelated.scheduleEvent(event, 0);
 }
 
 void dAcOdoor_c::startDoorPushLockedEvent(void *zevData) {
-    Event event(DoorPushLock, zevData, 100, 0x100001, (void *)pushLockedEventCallback, nullptr);
+    Event event(DoorPushLock, zevData, 100, 0x100001, pushLockedEventCallback, nullptr);
     mEventRelated.scheduleEvent(event, 0);
 }
 
@@ -1411,7 +1411,7 @@ void dAcOdoor_c::startLockedEvent(void *zevData) {
     }
 }
 
-void dAcOdoor_c::pullLockedEventCallback(void *vDoor) {
+void dAcOdoor_c::pullLockedEventCallback(dAcBase_c *vDoor) {
     dAcOdoor_c *pDoor = static_cast<dAcOdoor_c *>(vDoor);
     if (pDoor->hasFlowEntryPoint()) {
         pDoor->playInteractionLocked();
@@ -1422,7 +1422,7 @@ void dAcOdoor_c::pullLockedEventCallback(void *vDoor) {
     }
 }
 
-void dAcOdoor_c::pushLockedEventCallback(void *vDoor) {
+void dAcOdoor_c::pushLockedEventCallback(dAcBase_c *vDoor) {
     dAcOdoor_c *pDoor = static_cast<dAcOdoor_c *>(vDoor);
     if (pDoor->hasFlowEntryPoint()) {
         pDoor->playInteractionLocked();
@@ -1434,13 +1434,13 @@ void dAcOdoor_c::pushLockedEventCallback(void *vDoor) {
 }
 
 void dAcOdoor_c::startUnlockEvent() {
-    Event event("ShutterUnlock", 100, 0x100001, (void *)unlockEventCallback, nullptr);
+    Event event("ShutterUnlock", 100, 0x100001, unlockEventCallback, nullptr);
     mEventRelated.scheduleEvent(event, 0);
 }
 
 extern "C" void increaseSmallKeyCounter(int amt);
 
-void dAcOdoor_c::unlockEventCallback(void *vDoor) {
+void dAcOdoor_c::unlockEventCallback(dAcBase_c *vDoor) {
     dAcOdoor_c *pDoor = static_cast<dAcOdoor_c *>(vDoor);
     void *zevData = getOarcZev("DoorAnim");
     if (pDoor->checkPullDoor()) {
@@ -1450,7 +1450,7 @@ void dAcOdoor_c::unlockEventCallback(void *vDoor) {
                 EventManager::setEvent(pDoor, &event, nullptr);
             } break;
             case 1: {
-                Event event(DoorPull, zevData, 100, createBits(0x100001, 0x2), (void *)doorPullEventCallback, nullptr);
+                Event event(DoorPull, zevData, 100, createBits(0x100001, 0x2), doorPullEventCallback, nullptr);
                 EventManager::setEvent(pDoor, &event, nullptr);
             } break;
         }
@@ -1462,7 +1462,7 @@ void dAcOdoor_c::unlockEventCallback(void *vDoor) {
                 EventManager::setEvent(pDoor, &event, nullptr);
             } break;
             case 1: {
-                Event event(DoorPull, zevData, 100, createBits(0x100001, 0x2), (void *)doorPullEventCallback, nullptr);
+                Event event(DoorPull, zevData, 100, createBits(0x100001, 0x2), doorPullEventCallback, nullptr);
                 EventManager::setEvent(pDoor, &event, nullptr);
             } break;
         }
@@ -1475,7 +1475,7 @@ void dAcOdoor_c::unlockEventCallback(void *vDoor) {
     increaseSmallKeyCounter(-1);
 }
 
-void dAcOdoor_c::openCallbackCommon(void *vDoor) {
+void dAcOdoor_c::openCallbackCommon(dAcBase_c *vDoor) {
     if (vDoor == nullptr) {
         return;
     }

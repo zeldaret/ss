@@ -18,10 +18,10 @@ public:
         : mStateMgr(*this), mEvent(*this, nullptr), mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
     virtual ~dAcOChest_c() {}
 
-    static void changeStateOpenCallback(dAcOChest_c *);
-    static void changeStateWaitCallback(dAcOChest_c *);
-    static void changeStateFailCallback(dAcOChest_c *);
-    static void changeStateWait2Callback(dAcOChest_c *);
+    static void changeStateOpenCallback(dAcBase_c *);
+    static void changeStateWaitCallback(dAcBase_c *);
+    static void changeStateFailCallback(dAcBase_c *);
+    static void changeStateWait2Callback(dAcBase_c *);
 
     virtual bool createHeap() override;
     virtual int create() override;

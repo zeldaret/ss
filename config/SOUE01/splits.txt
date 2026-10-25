@@ -468,14 +468,20 @@ toBeSorted/dowsing_target.cpp:
 	.sdata2     start:0x80579640 end:0x80579670
 	.bss        start:0x805A2FB0 end:0x805A3010
 
-toBeSorted/d_event_2.cpp:
+d/d_zev.cpp:
 	.text       start:0x80098580 end:0x800A17DC align:16
 	.ctors      start:0x804DB6C0 end:0x804DB6C4
+	.rodata     start:0x804E36B8 end:0x804E36C8
+	.data       start:0x8050F560 end:0x8050FD28
+	.sdata      start:0x805720D8 end:0x80572148
 	.sbss       start:0x80575378 end:0x80575388
+	.sdata2     start:0x80579670 end:0x80579680
+	.bss        start:0x805A3010 end:0x805A6088
 
 toBeSorted/d_event_director.cpp:
 	.text       start:0x800A17E0 end:0x800A505C align:16
 	.sbss       start:0x80575388 end:0x80575390
+	.bss        start:0x805A6088 end:0x805A60A8
 
 toBeSorted/minigame_mgr.cpp:
 	.text       start:0x800A5060 end:0x800A5608 align:16

@@ -225,14 +225,13 @@ int dAcOsoil_c::doDelete() {
     return SUCCEEDED;
 }
 
-extern "C" dAcBase_c *getCurrentEventActor();
 extern "C" bool AcItem__isKeyPiece2(dAcItem_c *);
 int dAcOsoil_c::actorExecute() {
     if (mShouldSetFlagInEvent) {
         if (EventManager::isInEvent()) {
             if (EventManager::isCurrentEvent("DefaultGetItem") || EventManager::isCurrentEvent("ItemGetGorgeous")) {
                 if (mItemSubtype == ITEMTYPE_KEY_PIECE) {
-                    if (AcItem__isKeyPiece2(static_cast<dAcItem_c *>(getCurrentEventActor()))) {
+                    if (AcItem__isKeyPiece2(static_cast<dAcItem_c *>(EventManager::getCurrentEventActor()))) {
                         mShouldSetFlagInEvent = false;
                         SceneflagManager::sInstance->setFlag(mRoomID, mSceneflag);
                     }

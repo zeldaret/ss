@@ -1066,7 +1066,7 @@ void dAcBomb_c::registerInEvent() {
 
     const dAcObjBase_c *pObj = dBgS::GetInstance()->GetActorPointer(mAcch.GetGnd());
     if (pObj != nullptr && pObj->mProfileName != fProfile::OBJ_CANNON) {
-        if (pObj->checkActorProperty(AC_PROP_0x4) || EventManager::FUN_800a0570(pObj)) {
+        if (pObj->checkActorProperty(AC_PROP_0x4) || EventManager::isActorInEvent((dAcBase_c*)pObj)) {
             setActorProperty(AC_PROP_0x4);
         }
     }

@@ -16,6 +16,7 @@ public:
     /* vt 0x20 */ virtual ~dCameraEvent_c() {}
 
     void fn_800918E0(s32, s16);
+    void fn_80091B90();
 
 private:
     /* 0x2C */ u8 field_0x2C[0x48 - 0x2C];

@@ -15,6 +15,7 @@
 #include "s/s_State.hpp"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
+#include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
 #include "toBeSorted/unk_save_time.h"
@@ -233,9 +234,8 @@ void dScGame_c::clearSpawnInfo() {
     mSpawnInfo.setSpawnData("", 0, 0, 0, mVec3_c::Zero, 0);
 }
 
-extern "C" void processEventFlags();
 void dScGame_c::triggerExit(s32 room, u16 exitIndex, s32 forcedNight, s32 forcedTrial) {
-    processEventFlags();
+    EventManager::processEventFlags();
     // TODO
 }
 

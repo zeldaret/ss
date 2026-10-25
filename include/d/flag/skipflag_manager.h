@@ -12,7 +12,7 @@ public:
     void setCommitFlag(u16 flag);
     void copyFromSave();
     void setFlag(u16 flag);
-    bool checkFlag(u16 flag);
+    u16 checkFlag(u16 flag);
     bool commit();
     static SkipflagManager *sInstance;
 

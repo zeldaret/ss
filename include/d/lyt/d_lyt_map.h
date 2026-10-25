@@ -764,6 +764,10 @@ private:
         mEventDone = done;
     }
 
+    void cancelEvent() {
+        mEventCanceled = true;
+    }
+
     /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMapMain_c);
     /* 0x004C */ dFlowMgrBase_c mFlowMgr;
     /* 0x00A4 */ dFlow_c mFlow;
@@ -997,6 +1001,10 @@ public:
 
     const dMapSaveObjDefinition *getSaveObjDefinition(s32 statueIdx) const {
         return mMapMain.getSaveObjDefinition(mMapMain.mMapEventArg1, statueIdx);
+    }
+
+    void cancelEvent() {
+        mMapMain.cancelEvent();
     }
 
     void fadeOut();

@@ -39,6 +39,14 @@ public:
     dAcRef_c() : dAcRefBase_c(nullptr) {}
     ~dAcRef_c() {}
 
+    void set(T *ref) {
+        if (ref != nullptr) {
+            link(ref);
+        } else {
+            unlink();
+        }
+    }
+
     void link(T *ref) {
         fLiNdBa_c::link(ref);
     }
@@ -244,8 +252,8 @@ public:
     u32 getFirstBitParams2() const;
     static dAcBase_c *findActor(char *objName, dAcBase_c *parent);
     static dAcBase_c *searchActor(dAcBase_c *parent);
-    // Kinda performs the code of the first param on every actor (second param is optional parent)
-    static void forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *parent);
+    // Kinda performs the code of the first param on every actor
+    static void forEveryActor(dAcBase_c *func(dAcBase_c *, void *), void *cbArg);
     mAng getXZAngleToPlayer() const;
     // returns true if under the distThresh, False if not. the actual distance is returned in outDist
     bool getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDist);

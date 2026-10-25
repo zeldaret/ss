@@ -110,7 +110,7 @@ int dAcObjBase_c::preExecute() {
         setObjectProperty(OBJ_PROP_0x80);
     } else if (checkObjectProperty(OBJ_PROP_0x1)) {
         if (checkActorProperty(AC_PROP_0x1) && checkActorProperty(AC_PROP_0x10000000)) {
-            if (!(EventManager::checkFlag(0x10) || EventManager::FUN_800a0570(this) ||
+            if (!(EventManager::checkFlagSafe(0x10) || EventManager::isActorInEvent(this) ||
                   (checkActorProperty(AC_PROP_0x1000) && dTimeAreaMgr_c::fn_800BBE00()))) {
                 if (!dTimeAreaMgr_c::fn_800BBD40() || !dTgViewClip_c::checkForceOn(mViewClipIdx)) {
                     return false;
@@ -160,7 +160,7 @@ int dAcObjBase_c::preDraw() {
     aabb.Set((nw4r::math::AABB *)(&mBoundingBox), m);
 
     f32 cull = dTgViewClip_c::getCull(mViewClipIdx, mCullingDistance);
-    if (EventManager::checkFlag(0x20)) {
+    if (EventManager::checkFlagSafe(0x20)) {
         cull = FLT_MAX;
     }
     if (cull < 0.0f) {

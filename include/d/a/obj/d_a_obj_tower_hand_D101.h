@@ -84,7 +84,7 @@ private:
     void setHoldFlag();
     void unsetHoldFlag();
 
-    static void eventCallback(void *self);
+    static void eventCallback(dAcBase_c *self);
 
     static void
     transformMtx(const mVec3_c &localTranslation, const mAng3_c &rotation, const mVec3_c &offset, mVec3_c &result);

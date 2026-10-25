@@ -591,11 +591,9 @@ void dLytControlGame_c::openPause() {
     }
 }
 
-extern "C" dAcBase_c *getCurrentEventActor();
-
 void dLytControlGame_c::openPauseDemo() {
     if (canOpenPause() == true) {
-        dAcItem_c *item = static_cast<dAcItem_c *>(getCurrentEventActor());
+        dAcItem_c *item = static_cast<dAcItem_c *>(EventManager::getCurrentEventActor());
         if (item != nullptr) {
             mItemForPauseDemo = item->getItemId_i();
             mCommand = CMD_PAUSE;

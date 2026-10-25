@@ -39,7 +39,7 @@ void SkipflagManager::setFlag(u16 flag) {
     setCommitFlag(flag);
 }
 
-bool SkipflagManager::checkFlag(u16 flag) {
+u16 SkipflagManager::checkFlag(u16 flag) {
     u16 *savedSkipflags = FileManager::GetInstance()->getSkipFlags();
     return mFlagHelper.checkFlag(flag / 16, flag % 16, savedSkipflags, 0x10);
 }

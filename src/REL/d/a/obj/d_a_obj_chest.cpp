@@ -47,32 +47,32 @@ STATE_DEFINE(dAcOChest_c, OpenEvent);
 STATE_DEFINE(dAcOChest_c, FailEvent);
 STATE_DEFINE(dAcOChest_c, OrderOpenEventAfter);
 
-void dAcOChest_c::changeStateOpenCallback(dAcOChest_c *chest) {
+void dAcOChest_c::changeStateOpenCallback(dAcBase_c *chest) {
     if (chest == nullptr) {
         return;
     }
-    chest->changeStateOpen();
+    static_cast<dAcOChest_c*>(chest)->changeStateOpen();
 }
 
-void dAcOChest_c::changeStateWaitCallback(dAcOChest_c *chest) {
+void dAcOChest_c::changeStateWaitCallback(dAcBase_c *chest) {
     if (chest == nullptr) {
         return;
     }
-    chest->changeStateWait();
+    static_cast<dAcOChest_c*>(chest)->changeStateWait();
 }
 
-void dAcOChest_c::changeStateFailCallback(dAcOChest_c *chest) {
+void dAcOChest_c::changeStateFailCallback(dAcBase_c *chest) {
     if (chest == nullptr) {
         return;
     }
-    chest->changeStateFail();
+    static_cast<dAcOChest_c*>(chest)->changeStateFail();
 }
 
-void dAcOChest_c::changeStateWait2Callback(dAcOChest_c *chest) {
+void dAcOChest_c::changeStateWait2Callback(dAcBase_c *chest) {
     if (chest == nullptr) {
         return;
     }
-    chest->changeStateWait2();
+    static_cast<dAcOChest_c*>(chest)->changeStateWait2();
 }
 
 bool dAcOChest_c::createHeap() {
@@ -193,7 +193,7 @@ void dAcOChest_c::executeState_OrderOpenEventAfter() {
     if (mGaveItem && EventManager::sInstance->isInEvent0Or7()) {
         char *name = getName();
         void *data = getOarcZev(name);
-        Event event(CHEST_OPEN_AFTER, data, 400, 0x100001, nullptr, (void *)changeStateWaitCallback);
+        Event event(CHEST_OPEN_AFTER, data, 400, 0x100001, nullptr, changeStateWaitCallback);
         mEvent.scheduleEvent(event, 0);
     } else if (EventManager::sInstance->isInEvent(this, CHEST_OPEN_AFTER)) {
         ITEM_ID itemId = (ITEM_ID)getFromParams(0x8, 0xFF);
@@ -222,10 +222,10 @@ void dAcOChest_c::doInteraction(s32 _unused) {
     void *data = getOarcZev(name);
 
     if (hasBeenOpened()) {
-        Event event(CHEST_FAIL, data, 100, 0x100001, (void *)changeStateFailCallback, (void *)changeStateWait2Callback);
+        Event event(CHEST_FAIL, data, 100, 0x100001, changeStateFailCallback, changeStateWait2Callback);
         mEvent.scheduleEvent(event, 0);
     } else {
-        Event event(CHEST_OPEN, data, 100, 0x100001, (void *)changeStateOpenCallback, nullptr);
+        Event event(CHEST_OPEN, data, 100, 0x100001, changeStateOpenCallback, nullptr);
         mEvent.scheduleEvent(event, 0);
     }
 }

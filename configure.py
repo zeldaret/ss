@@ -494,7 +494,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/attention.cpp"),
             Object(NonMatching, "toBeSorted/d_t_camera.cpp"),
             Object(Matching, "toBeSorted/dowsing_target.cpp"),
-            Object(NonMatching, "toBeSorted/d_event_2.cpp"),
+            Object(NonMatching, "d/d_zev.cpp"),
             Object(NonMatching, "toBeSorted/d_event_director.cpp"),
             Object(NonMatching, "toBeSorted/minigame_mgr.cpp"),
             Object(NonMatching, "toBeSorted/salvage_mgr.cpp"),

@@ -1965,8 +1965,8 @@ void dAcTbox_c::initializeState_Open() {
         mItemRef.link(item);
         const char *evName;
         if (dAcItem_c::getItemGetTboxEventName(itemId, &evName)) {
-            Event ev(evName, 300, 4, (void *)dAcItem_c::itemGetEventStart, (void *)dAcItem_c::itemGetEventEnd);
-            EventManager::changeOwnEvent(this, item, &ev, 0);
+            Event ev(evName, 300, 4, dAcItem_c::itemGetEventStart, dAcItem_c::itemGetEventEnd);
+            EventManager::changeOwnEvent(this, item, &ev, nullptr);
         }
     }
     field_0x11C0.set(-61.0f, 0.0f, -90.0f);
@@ -2202,9 +2202,8 @@ void dAcTbox_c::doInteraction(s32 _unused) {
     }
 }
 
-extern "C" dAcBase_c *getCurrentEventActor();
 void dAcTbox_c::registerInEvent() {
-    if (getCurrentEventActor() == mItemRef.get()) {
+    if (EventManager::getCurrentEventActor() == mItemRef.get()) {
         if (EventManager::isCurrentEvent("ItemGetDefaultTBox") || EventManager::isCurrentEvent("ItemGetGorgeousTBox")) {
             field_0x11F4 |= 0x8;
         }

@@ -256,7 +256,7 @@ void dLytMsgWindow_c::executeState_Invisible() {
 void dLytMsgWindow_c::finalizeState_Invisible() {}
 
 void dLytMsgWindow_c::initializeState_In() {
-    dAcObjBase_c *obj = EventManager::fn_800A08F0(fBase_c::ACTOR);
+    dAcObjBase_c *obj = (dAcObjBase_c*)EventManager::getSpeakerIfGroup(fBase_c::ACTOR);
     u32 param = 0;
     if (mpTagProcessor->getField_0x90D() == 1) {
         param = 0;
@@ -767,7 +767,7 @@ bool dLytMsgWindow_c::setCurrentLabelName(const char *name, bool storeFile) {
         mName = name;
         mMsgIdx = idx;
         if (field_0x1220 == 0) {
-            dAcBase_c *ac = EventManager::fn_800A08F0(fBase_c::ACTOR);
+            dAcBase_c *ac = EventManager::getSpeakerIfGroup(fBase_c::ACTOR);
             dSndPlayerMgr_c::GetInstance()->setMsgActor(mMsgIdx, ac);
         }
         return true;

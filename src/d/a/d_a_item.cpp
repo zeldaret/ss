@@ -2102,7 +2102,7 @@ void dAcItem_c::initializeState_WaitTBoxGetDemo() {
 void dAcItem_c::executeState_WaitTBoxGetDemo() {
     const char *name;
     getItemGetTboxEventName(getItemId(), &name);
-    Event ev(name, 1, 0x100001, (void *)itemGetEventStart, (void *)itemGetEventEnd);
+    Event ev(name, 1, 0x100001, itemGetEventStart, itemGetEventEnd);
     EventManager::alsoSetAsCurrentEvent(this, &ev, nullptr);
 }
 
@@ -2299,7 +2299,7 @@ void dAcItem_c::itemGetEventStart(dAcBase_c *arg) {
     item->setObtainedItemId(item->getItemId(), true);
     if (item->mId == ITEM_DUNGEON_MAP_FI && ItemflagManager::sInstance->getItemCounterOrFlag(0x32) == 0) {
         Event ev("fays_map_guide", 100, 0x100001, nullptr, nullptr);
-        EventManager::changeOwnEvent(item, dAcNpcTalkKensei_c::GetInstance(), &ev, 0);
+        EventManager::changeOwnEvent(item, dAcNpcTalkKensei_c::GetInstance(), &ev, nullptr);
     }
 }
 

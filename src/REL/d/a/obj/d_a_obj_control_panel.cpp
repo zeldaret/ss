@@ -74,28 +74,28 @@ STATE_DEFINE(dAcOCtrlPnl_c, Wait);
 STATE_DEFINE(dAcOCtrlPnl_c, Control);
 STATE_DEFINE(dAcOCtrlPnl_c, EndEvent);
 
-void enterMoveCb(void *actor) {
+void enterMoveCb(dAcBase_c *actor) {
     if (actor == nullptr) {
         return;
     }
     static_cast<dAcOCtrlPnl_c *>(actor)->enterMove();
 }
 
-void finishMoveCb(void *actor) {
+void finishMoveCb(dAcBase_c *actor) {
     if (actor == nullptr) {
         return;
     }
     static_cast<dAcOCtrlPnl_c *>(actor)->finishMove();
 }
 
-void afterControlPanelFirstCb(void *actor) {
+void afterControlPanelFirstCb(dAcBase_c *actor) {
     if (actor == nullptr) {
         return;
     }
     static_cast<dAcOCtrlPnl_c *>(actor)->afterControlPanelFirst();
 }
 
-void afterControlPanelCb(void *actor) {
+void afterControlPanelCb(dAcBase_c *actor) {
     if (actor == nullptr) {
         return;
     }
@@ -242,7 +242,7 @@ void dAcOCtrlPnl_c::finalizeState_EndEvent() {
 }
 
 void dAcOCtrlPnl_c::doInteraction(s32) {
-    Event event(eventName, getOarcZev("ControlPanel"), 100, 0x100001, (void *)enterMoveCb, (void *)finishMoveCb);
+    Event event(eventName, getOarcZev("ControlPanel"), 100, 0x100001, enterMoveCb, finishMoveCb);
     mEvent.scheduleEvent(event, 0);
 }
 
@@ -405,10 +405,10 @@ void dAcOCtrlPnl_c::handleEvent() {
             void *zev = getOarcZev("ControlPanel");
             if (changedPuzzle()) {
                 if (isFirstTime()) {
-                    Event event(firstAfterEvent, zev, 100, 0x100001, nullptr, (void *)afterControlPanelFirstCb);
+                    Event event(firstAfterEvent, zev, 100, 0x100001, nullptr, afterControlPanelFirstCb);
                     EventManager::setEvent(this, &event, nullptr);
                 } else {
-                    Event event(afterEvent, zev, 100, 0x100001, nullptr, (void *)afterControlPanelCb);
+                    Event event(afterEvent, zev, 100, 0x100001, nullptr, afterControlPanelCb);
                     EventManager::setEvent(this, &event, nullptr);
                 }
             }

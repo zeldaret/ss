@@ -53,9 +53,9 @@ private:
     void fn_485_1DF0();
     void fn_485_1EE0();
 
-    static void eventIn_Wrapper(void *arg);
+    static void eventIn_Wrapper(dAcBase_c *arg);
     void eventIn();
-    static void eventEnd_Wrapper(void *arg);
+    static void eventEnd_Wrapper(dAcBase_c *arg);
     void eventEnd();
 
     static dCcD_SrcCps sCcSrc;

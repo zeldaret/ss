@@ -46,6 +46,8 @@ add_relocations:
 extract:
   - symbol: DOL_BACKUP_FONT
     header: d/dol_backup_error_font.inc
+  - symbol: DEFAULT_ZEV_DAT
+    header: d/dol_default_zev_dat.inc
 
 modules:
 - object: orig/SOUE01/files/rels.arc:rels/d_a_asura_bulletNP.rel

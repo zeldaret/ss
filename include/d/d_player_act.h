@@ -472,7 +472,10 @@ public:
         UPDATE_MODEL_SWORD = 0x20,
         UPDATE_MODEL_SHIELD = 0x40,
 
+        UPDATE_MODEL_0x2000 = 0x2000,
+
         UPDATE_MODEL_BEETLE = 0x10000000,
+        UPDATE_MODEL_0x20000000 = 0x20000000,
     };
 
     enum SwordAndMoreStates_e {

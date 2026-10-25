@@ -479,7 +479,7 @@ void dSndStateMgr_c::calcEvent() {
     }
 }
 
-void dSndStateMgr_c::setEvent(const char *eventName) {
+void dSndStateMgr_c::setEvent(const char *eventName, UNKWORD unused) {
     if (eventName == nullptr) {
         return;
     }
@@ -545,13 +545,13 @@ void dSndStateMgr_c::setEvent(const char *eventName) {
             s32 i3 = 0;
             SizedString<64> eventLabel;
             if (mSoundEventId == SND_EVENT_JMAP) {
-                s32 eventRoomId = EventManager::getCurrentEventRoomId();
+                s32 toolDataId = EventManager::getCurrentToolDataId();
                 // UB: Cannot pass object of non-POD type 'SizedString<32>' through variadic method
-                eventLabel.sprintf("%s_R%d_JMAP_%d", mStageName, mRoomId, eventRoomId);
+                eventLabel.sprintf("%s_R%d_JMAP_%d", mStageName, mRoomId, toolDataId);
             } else if (mSoundEventId == SND_EVENT_JMAPAllMove) {
-                s32 eventRoomId = EventManager::getCurrentEventRoomId();
+                s32 toolDataId = EventManager::getCurrentToolDataId();
                 // UB: Cannot pass object of non-POD type 'SizedString<32>' through variadic method
-                eventLabel.sprintf("%s_R%d_JMAPAllMove_%d", mStageName, mRoomId, eventRoomId);
+                eventLabel.sprintf("%s_R%d_JMAPAllMove_%d", mStageName, mRoomId, toolDataId);
             } else {
                 eventLabel.sprintf("%s", &mEventName);
             }

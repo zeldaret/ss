@@ -166,7 +166,7 @@ public:
     }
 
     void setStbEventName(const char *eventName);
-    void setEvent(const char *eventName);
+    void setEvent(const char *eventName, UNKWORD unused);
     // not sure, subtype is unused
     bool isActiveDemoMaybe(s32 subtype) const;
     bool isInEvent(const char *eventName);

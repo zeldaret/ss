@@ -531,11 +531,11 @@ inline u32 getFlags() {
 }
 
 void dAcOTowerHandD101_c::doEvent() {
-    Event e = Event(getEventId(), mRoomID, getFlags(), (void *)&eventCallback, nullptr);
+    Event e = Event(getEventId(), mRoomID, getFlags(), eventCallback, nullptr);
     getEventStuff().scheduleEvent(e, 0);
 }
 
-void dAcOTowerHandD101_c::eventCallback(void *arg) {
+void dAcOTowerHandD101_c::eventCallback(dAcBase_c *arg) {
     dAcOTowerHandD101_c *self = static_cast<dAcOTowerHandD101_c *>(arg);
     self->mFlags |= 1;
     dAcPy_c *link = dAcPy_c::LINK;

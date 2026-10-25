@@ -90,12 +90,24 @@ public:
     void fn_80117380();
     const char *fn_80117390(bool) const;
 
-    // This function appears to be related to a compiler quirk.
-    // 0x800D7B40 is in d_lyt_meter, but calling a static method
+    // These functions appear to be related to a compiler quirk.
+    // E.g. 0x800D7B40 is in d_lyt_meter, but calling a static method
     // on an instance via dLytMsgWindow_c::getInstance()->fn_800D7B40()
     // causes the method to be emitted there.
     static u16 fn_800D7B40() {
         return sInstance->mEntryPointToTrigger;
+    }
+
+    static void setField_0x819(u8 val) {
+        sInstance->field_0x819 = val;
+    }
+
+    static void setField_0x81A(u8 val) {
+        sInstance->field_0x81A = val;
+    }
+
+    static void setField_0x81B(u8 val) {
+        sInstance->field_0x81B = val;
     }
 
     dTagProcessor_c *getTagProcessor() const {

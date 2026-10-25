@@ -236,7 +236,7 @@ int dAcBase_c::preExecute() {
         }
 
         if (EventManager::isInEvent() && mJStudioActor == nullptr && !EventManager::isInEvent0Or7() &&
-            !EventManager::FUN_800a0ba0() && !EventManager::FUN_800a0570(this) && !checkActorProperty(AC_PROP_0x4)) {
+            !EventManager::FUN_800a0ba0() && !EventManager::isActorInEvent(this) && !checkActorProperty(AC_PROP_0x4)) {
             return NOT_READY;
         }
     }
@@ -392,11 +392,11 @@ dAcBase_c *dAcBase_c::searchActor(dAcBase_c *parent) {
     return foundActor ? foundActor : (dAcBase_c *)fManager_c::searchBaseByGroupType(STAGE, parent);
 }
 
-void dAcBase_c::forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *parent) {
+void dAcBase_c::forEveryActor(dAcBase_c *func(dAcBase_c *, void *), void *cbArg) {
     dAcBase_c *foundActor = searchActor(nullptr);
 
     while (foundActor != nullptr) {
-        dAcBase_c *nextActor = (dAcBase_c *)func(foundActor, parent);
+        dAcBase_c *nextActor = func(foundActor, cbArg);
         foundActor = searchActor(nextActor);
     }
 }
