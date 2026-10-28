@@ -234,7 +234,7 @@ void dScGame_c::clearSpawnInfo() {
 }
 
 extern "C" void processEventFlags();
-void dScGame_c::triggerExit(s32 room, u16 exitIndex, s32 forcedNight, s32 forcedTrial) {
+void dScGame_c::triggerExit(s32 room, u32 exitIndex, s32 forcedNight, s32 forcedTrial) {
     processEventFlags();
     // TODO
 }

@@ -138,7 +138,7 @@ public:
     virtual int draw() override;
     virtual void deleteReady() override;
 
-    void triggerExit(s32 room, u16 exitIndex, s32 forcedNight = 2, s32 forcedTrial = 2);
+    void triggerExit(s32 room, u32 exitIndex, s32 forcedNight = 2, s32 forcedTrial = 2);
     void triggerEntrance(
         const char *stageName, u8 roomid, u8 layer, u8 entrance, int forcedNight = SpawnInfo::RETAIN_TOD,
         int forcedTrial = SpawnInfo::RETAIN_TRIAL, u8 transitionType = dFader_c::FADER_BLACK,

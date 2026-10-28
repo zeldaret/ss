@@ -374,7 +374,7 @@ void dAcOChest_c::stateOpenUpdate2() {
                     YRot = targetAngle;
                     mEvent.advanceNext();
                 }
-                player->setPosYRot(playerPosition, YRot, 0, 0, 0);
+                player->setPosYRot(&playerPosition, YRot, 0, 0, 0);
             } else {
                 mEvent.advanceNext();
             }
