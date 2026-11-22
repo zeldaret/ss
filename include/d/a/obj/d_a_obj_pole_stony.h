@@ -8,6 +8,9 @@
 #include "egg/math/eggMatrix.h"
 #include "egg/math/eggVector.h"
 #include "m/m3d/m_smdl.h"
+#include "m/m_angle.h"
+#include "m/m_mtx.h"
+#include "m/m_vec.h"
 
 class dAcOPoleStony_c : public dAcObjBase_c {
 public:
@@ -23,10 +26,10 @@ private:
     
     /* 0x330 */ m3d::smdl_c field_0x330[4];
     /* 0x3a0 */ dCcD_Cyl field_0x3a0;
-    /* 0x4f0 */ EGG::Matrix34f field_0x4f0[4];
-    /* 0x5b0 */ EGG::Vector3f field_0x5b0[4];
-    /* 0x5e0 */ EGG::Vector3f field_0x5e0[4];
-    /* 0x610 */ EGG::Vector3s field_0x610;
+    /* 0x4f0 */ mMtx_c field_0x4f0[4];
+    /* 0x5b0 */ mVec3_c field_0x5b0[4];
+    /* 0x5e0 */ mVec3_c field_0x5e0[4];
+    /* 0x610 */ mAng3_c field_0x610;
     /* 0x628 */ bool field_0x628;
 
 };
