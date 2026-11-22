@@ -1,4 +1,6 @@
 #include "d/a/obj/d_a_obj_pole_stony.h"
+#include "common.h"
+#include "d/d_heap_alloc.h"
 #include "f/f_base.h"
 #include "m/m3d/m_smdl.h"
 
@@ -48,4 +50,16 @@ bool dAcOPoleStony_c::createHeap() {
     }
     
     return true;
+}
+
+void fn_307_180() {
+    
+}
+
+dAcOPoleStony_c* fn_307_70(dAcOPoleStony_c* param_1,int param_2)
+{
+  if ((param_1 != nullptr) && (param_2 > 0)) {
+    operator delete[](param_1);
+  }
+  return param_1;
 }

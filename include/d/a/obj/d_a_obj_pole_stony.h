@@ -5,6 +5,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/cc/d_cc_d.h"
 #include "egg/egg_types.h"
+#include "egg/math/eggMatrix.h"
 #include "egg/math/eggVector.h"
 #include "m/m3d/m_smdl.h"
 
@@ -15,6 +16,8 @@ public:
 
     int draw();
     bool createHeap();
+    void fn_307_180();
+    dAcOPoleStony_c* fn_307_70(dAcOPoleStony_c* param_1, int param_2);
 
 private:
     
