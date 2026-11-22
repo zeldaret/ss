@@ -59,7 +59,7 @@ void fn_307_180() {
 dAcOPoleStony_c* fn_307_70(dAcOPoleStony_c* param_1,int param_2)
 {
   if ((param_1 != nullptr) && (param_2 > 0)) {
-    operator delete[](param_1);
+    operator delete(param_1);
   }
   return param_1;
 }
